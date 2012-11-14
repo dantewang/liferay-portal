@@ -111,6 +111,106 @@
 
 		start, end, null);
 	}
+
+	/**
+	 * Returns the ${entity.humanNames} before and after the current ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
+	 *
+	 * @param ${entity.PKVarName} the primary key of the current ${entity.humanName}
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next ${entity.humanName}
+	 * @throws ${packagePath}.${noSuchEntity}Exception if a ${entity.humanName} with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name}[] findBy${finder.name}_PrevAndNext(${entity.PKClassName} ${entity.PKVarName},
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name},
+	</#list>
+
+	OrderByComparator orderByComparator) throws ${noSuchEntity}Exception, SystemException {
+		${entity.name} ${entity.varName} = findByPrimaryKey(${entity.PKVarName});
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			${entity.name}[] array = new ${entity.name}Impl[3];
+
+			array[0] =
+				getBy${finder.name}_PrevAndNext(
+					session, ${entity.varName},
+
+					<#list finderColsList as finderCol>
+						${finderCol.name},
+					</#list>
+
+					orderByComparator, true);
+
+			array[1] = ${entity.varName};
+
+			array[2] =
+				getBy${finder.name}_PrevAndNext(
+					session, ${entity.varName},
+
+					<#list finderColsList as finderCol>
+						${finderCol.name},
+					</#list>
+
+					orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected ${entity.name} getBy${finder.name}_PrevAndNext(
+		Session session, ${entity.name} ${entity.varName},
+
+		<#list finderColsList as finderCol>
+			${finderCol.type} ${finderCol.name},
+		</#list>
+
+		OrderByComparator orderByComparator, boolean previous) {
+
+		<#include "persistence_impl_get_by_prev_and_next_query.ftl">
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		<#include "persistence_impl_finder_qpos.ftl">
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(${entity.varName});
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<${entity.name}> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
 </#if>
 
 <#-- Case 4 : finder.isUnique() == false && finder.isCollection() == false -->
@@ -429,106 +529,6 @@ OrderByComparator orderByComparator) throws SystemException {
 </#if>
 
 <#if finder.isCollection()>
-	/**
-	 * Returns the ${entity.humanNames} before and after the current ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
-	 *
-	 * @param ${entity.PKVarName} the primary key of the current ${entity.humanName}
-	<#list finderColsList as finderCol>
-	 * @param ${finderCol.name} the ${finderCol.humanName}
-	</#list>
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next ${entity.humanName}
-	 * @throws ${packagePath}.${noSuchEntity}Exception if a ${entity.humanName} with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ${entity.name}[] findBy${finder.name}_PrevAndNext(${entity.PKClassName} ${entity.PKVarName},
-
-	<#list finderColsList as finderCol>
-		${finderCol.type} ${finderCol.name},
-	</#list>
-
-	OrderByComparator orderByComparator) throws ${noSuchEntity}Exception, SystemException {
-		${entity.name} ${entity.varName} = findByPrimaryKey(${entity.PKVarName});
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			${entity.name}[] array = new ${entity.name}Impl[3];
-
-			array[0] =
-				getBy${finder.name}_PrevAndNext(
-					session, ${entity.varName},
-
-					<#list finderColsList as finderCol>
-						${finderCol.name},
-					</#list>
-
-					orderByComparator, true);
-
-			array[1] = ${entity.varName};
-
-			array[2] =
-				getBy${finder.name}_PrevAndNext(
-					session, ${entity.varName},
-
-					<#list finderColsList as finderCol>
-						${finderCol.name},
-					</#list>
-
-					orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected ${entity.name} getBy${finder.name}_PrevAndNext(
-		Session session, ${entity.name} ${entity.varName},
-
-		<#list finderColsList as finderCol>
-			${finderCol.type} ${finderCol.name},
-		</#list>
-
-		OrderByComparator orderByComparator, boolean previous) {
-
-		<#include "persistence_impl_get_by_prev_and_next_query.ftl">
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		<#include "persistence_impl_finder_qpos.ftl">
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(${entity.varName});
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<${entity.name}> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
 	<#if finder.hasArrayableOperator()>
 		/**
 		 * Returns all the ${entity.humanNames} where ${finder.getHumanConditions(true)}.
