@@ -1,6 +1,57 @@
 <#assign finderColsList = finder.getColumns()>
 
-<#if finder.isCollection()>
+<#--
+	Basic cases table:
+	+---------------------------+-------------------------------+-------------------------------+
+	|							|finder.isCollection() == true	|finder.isCollection() == false	|
+	+---------------------------+-------------------------------+-------------------------------+
+	|finder.isUnique() == true	|			case 1				|			case 2				|
+	+---------------------------+-------------------------------+-------------------------------+
+	|finder.isUnique() == false	|			case 3				|			case 4				|
+	+---------------------------+-------------------------------+-------------------------------+
+
+	Combination cases table1:
+
+	+---------------------------+-------------------------------+-------------------------------+
+	|							|finder.isCollection() == true	|finder.isCollection() == false	|
+	+---------------------------+---------------------------------------------------------------+
+	|finder.isUnique() == true	|							case 5								|
+	+---------------------------+---------------------------------------------------------------+
+	|finder.isUnique() == false	|							case 6								|
+	+---------------------------+---------------------------------------------------------------+
+
+	Combination cases table2:
+
+	+---------------------------+-------------------------------+-------------------------------+
+	|							|finder.isCollection() == true	|finder.isCollection() == false	|
+	+---------------------------+-------------------------------+-------------------------------+
+	|finder.isUnique() == true	|								|								|
+	+---------------------------|			case 7				|			case 8				|
+	|finder.isUnique() == false	|								|								|
+	+---------------------------+-------------------------------+-------------------------------+
+
+	There are 8 cases in total, 4 basic cases as shown in the first table.
+
+	When a scenario covers two close basic cases, to avoid duplicate code, we combine them into a new case and remove them from basic cases.]
+	case 1 + case 2	->	case 5
+	case 3 + case 4	->	case 6
+	case 1 + case 3	->	case 7
+	case 2 + case 4	->	case 8
+-->
+
+<#-- Case 1 : finder.isUnique() == true && finder.isCollection() == true -->
+
+<#if finder.isUnique() && finder.isCollection()>
+</#if>
+
+<#-- Case 2 : finder.isUnique() == true && finder.isCollection() == false -->
+
+<#if finder.isUnique() && !finder.isCollection()>
+</#if>
+
+<#-- Case 3 : finder.isUnique() == false && finder.isCollection() == true -->
+
+<#if !finder.isUnique() && finder.isCollection()>
 	/**
 	 * Returns all the ${entity.humanNames} where ${finder.getHumanConditions(false)}.
 	 *
@@ -60,7 +111,34 @@
 
 		start, end, null);
 	}
+</#if>
 
+<#-- Case 4 : finder.isUnique() == false && finder.isCollection() == false -->
+
+<#if !finder.isUnique() && !finder.isCollection()>
+</#if>
+
+<#-- Case 5 : finder.isUnique() == true -->
+
+<#if finder.isUnique()>
+</#if>
+
+<#-- Case 6 : finder.isUnique() == false -->
+
+<#if !finder.isUnique()>
+</#if>
+
+<#-- Case 7 : finder.isCollection() == true -->
+
+<#if finder.isCollection()>
+</#if>
+
+<#-- Case 8 : finder.isCollection() == false -->
+
+<#if !finder.isCollection()>
+</#if>
+
+<#if finder.isCollection()>
 	/**
 	 * Returns an ordered range of all the ${entity.humanNames} where ${finder.getHumanConditions(false)}.
 	 *
