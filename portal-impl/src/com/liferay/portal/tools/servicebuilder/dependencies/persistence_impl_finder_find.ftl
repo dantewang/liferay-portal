@@ -32,7 +32,7 @@
 
 	There are 8 cases in total, 4 basic cases as shown in the first table.
 
-	When a scenario covers two close basic cases, to avoid duplicate code, we combine them into a new case and remove them from basic cases.]
+	When a scenario covers two close basic cases, to avoid duplicate code, we combine them into a new case and remove them from basic cases.
 	case 1 + case 2	->	case 5
 	case 3 + case 4	->	case 6
 	case 1 + case 3	->	case 7
@@ -126,6 +126,128 @@
 <#-- Case 6 : finder.isUnique() == false -->
 
 <#if !finder.isUnique()>
+/**
+ * Returns an ordered range of all the ${entity.humanNames} where ${finder.getHumanConditions(false)}.
+ *
+ * <p>
+ * <#include "range_comment.ftl">
+ * </p>
+ *
+<#list finderColsList as finderCol>
+ * @param ${finderCol.name} the ${finderCol.humanName}
+</#list>
+ * @param start the lower bound of the range of ${entity.humanNames}
+ * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
+ * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+ * @return the ordered range of matching ${entity.humanNames}
+ * @throws SystemException if a system exception occurred
+ */
+<#if finder.isCollection()>
+	public
+<#else>
+	protected
+</#if>
+
+List<${entity.name}> findBy${finder.name}(
+
+<#list finderColsList as finderCol>
+	${finderCol.type} ${finderCol.name},
+</#list>
+
+int start, int end, OrderByComparator orderByComparator) throws SystemException {
+	FinderPath finderPath = null;
+	Object[] finderArgs = null;
+
+	<#if !finder.hasCustomComparator()>
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case};
+			finderArgs = new Object[] {
+				<#list finderColsList as finderCol>
+					${finderCol.name}
+
+					<#if finderCol_has_next>
+						,
+					</#if>
+				</#list>
+			};
+		}
+		else {
+	</#if>
+
+	finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case};
+	finderArgs = new Object[] {
+		<#list finderColsList as finderCol>
+			${finderCol.name},
+		</#list>
+
+		start, end, orderByComparator
+	};
+
+	<#if !finder.hasCustomComparator()>
+		}
+	</#if>
+
+	List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(finderPath, finderArgs, this);
+
+	if ((list != null) && !list.isEmpty()) {
+		for (${entity.name} ${entity.varName} : list) {
+			if (
+				<#list finderColsList as finderCol>
+					<#if finderCol.isPrimitiveType(false)>
+						(${finderCol.name} != ${entity.varName}.get${finderCol.methodName}())
+					<#else>
+						!Validator.equals(${finderCol.name}, ${entity.varName}.get${finderCol.methodName}())
+					</#if>
+
+					<#if finderCol_has_next>
+						||
+					</#if>
+				</#list>
+			) {
+				list = null;
+
+				break;
+			}
+		}
+	}
+
+	if (list == null) {
+		<#include "persistence_impl_find_by_query.ftl">
+
+		String sql = query.toString();
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Query q = session.createQuery(sql);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			<#include "persistence_impl_finder_qpos.ftl">
+
+			list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			if (list == null) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+			}
+			else {
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+
+			closeSession(session);
+		}
+	}
+
+	return list;
+}
 </#if>
 
 <#-- Case 7 : finder.isCollection() == true -->
@@ -139,123 +261,6 @@
 </#if>
 
 <#if finder.isCollection()>
-	/**
-	 * Returns an ordered range of all the ${entity.humanNames} where ${finder.getHumanConditions(false)}.
-	 *
-	 * <p>
-	 * <#include "range_comment.ftl">
-	 * </p>
-	 *
-	<#list finderColsList as finderCol>
-	 * @param ${finderCol.name} the ${finderCol.humanName}
-	</#list>
-	 * @param start the lower bound of the range of ${entity.humanNames}
-	 * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching ${entity.humanNames}
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<${entity.name}> findBy${finder.name}(
-
-	<#list finderColsList as finderCol>
-		${finderCol.type} ${finderCol.name},
-	</#list>
-
-	int start, int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		<#if !finder.hasCustomComparator()>
-			if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
-				finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case};
-				finderArgs = new Object[] {
-					<#list finderColsList as finderCol>
-						${finderCol.name}
-
-						<#if finderCol_has_next>
-							,
-						</#if>
-					</#list>
-				};
-			}
-			else {
-		</#if>
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case};
-		finderArgs = new Object[] {
-			<#list finderColsList as finderCol>
-				${finderCol.name},
-			</#list>
-
-			start, end, orderByComparator
-		};
-
-		<#if !finder.hasCustomComparator()>
-			}
-		</#if>
-
-		List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(finderPath, finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (${entity.name} ${entity.varName} : list) {
-				if (
-					<#list finderColsList as finderCol>
-						<#if finderCol.isPrimitiveType(false)>
-							(${finderCol.name} != ${entity.varName}.get${finderCol.methodName}())
-						<#else>
-							!Validator.equals(${finderCol.name}, ${entity.varName}.get${finderCol.methodName}())
-						</#if>
-
-						<#if finderCol_has_next>
-							||
-						</#if>
-					</#list>
-				) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			<#include "persistence_impl_find_by_query.ftl">
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				<#include "persistence_impl_finder_qpos.ftl">
-
-				list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
 	/**
 	 * Returns the first ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
 	 *
