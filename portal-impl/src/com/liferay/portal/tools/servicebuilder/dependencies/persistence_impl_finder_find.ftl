@@ -735,14 +735,6 @@ OrderByComparator orderByComparator) throws SystemException {
 <#-- Case 7 : finder.isCollection() == true -->
 
 <#if finder.isCollection()>
-</#if>
-
-<#-- Case 8 : finder.isCollection() == false -->
-
-<#if !finder.isCollection()>
-</#if>
-
-<#if finder.isCollection()>
 	<#if finder.hasArrayableOperator()>
 		/**
 		 * Returns all the ${entity.humanNames} where ${finder.getHumanConditions(true)}.
@@ -961,7 +953,14 @@ OrderByComparator orderByComparator) throws SystemException {
 			return list;
 		}
 	</#if>
+</#if>
 
+<#-- Case 8 : finder.isCollection() == false -->
+
+<#if !finder.isCollection()>
+</#if>
+
+<#if finder.isCollection()>
 	<#if entity.isPermissionCheckEnabled(finder)>
 		/**
 		 * Returns all the ${entity.humanNames} that the user has permission to view where ${finder.getHumanConditions(false)}.
