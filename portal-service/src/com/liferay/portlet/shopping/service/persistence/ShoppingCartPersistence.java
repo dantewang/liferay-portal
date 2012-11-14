@@ -38,69 +38,6 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 	 */
 
 	/**
-	* Caches the shopping cart in the entity cache if it is enabled.
-	*
-	* @param shoppingCart the shopping cart
-	*/
-	public void cacheResult(
-		com.liferay.portlet.shopping.model.ShoppingCart shoppingCart);
-
-	/**
-	* Caches the shopping carts in the entity cache if it is enabled.
-	*
-	* @param shoppingCarts the shopping carts
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.shopping.model.ShoppingCart> shoppingCarts);
-
-	/**
-	* Creates a new shopping cart with the primary key. Does not add the shopping cart to the database.
-	*
-	* @param cartId the primary key for the new shopping cart
-	* @return the new shopping cart
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCart create(long cartId);
-
-	/**
-	* Removes the shopping cart with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param cartId the primary key of the shopping cart
-	* @return the shopping cart that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchCartException if a shopping cart with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCart remove(long cartId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchCartException;
-
-	public com.liferay.portlet.shopping.model.ShoppingCart updateImpl(
-		com.liferay.portlet.shopping.model.ShoppingCart shoppingCart)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the shopping cart with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchCartException} if it could not be found.
-	*
-	* @param cartId the primary key of the shopping cart
-	* @return the shopping cart
-	* @throws com.liferay.portlet.shopping.NoSuchCartException if a shopping cart with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCart findByPrimaryKey(
-		long cartId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchCartException;
-
-	/**
-	* Returns the shopping cart with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param cartId the primary key of the shopping cart
-	* @return the shopping cart, or <code>null</code> if a shopping cart with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCart fetchByPrimaryKey(
-		long cartId) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the shopping carts where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -218,6 +155,25 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchCartException;
+
+	/**
+	* Removes all the shopping carts where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of shopping carts where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching shopping carts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the shopping carts where userId = &#63;.
@@ -338,6 +294,25 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 			com.liferay.portlet.shopping.NoSuchCartException;
 
 	/**
+	* Removes all the shopping carts where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of shopping carts where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching shopping carts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the shopping cart where groupId = &#63; and userId = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchCartException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -375,6 +350,93 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 	public com.liferay.portlet.shopping.model.ShoppingCart fetchByG_U(
 		long groupId, long userId, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the shopping cart where groupId = &#63; and userId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the shopping cart that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart removeByG_U(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCartException;
+
+	/**
+	* Returns the number of shopping carts where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the number of matching shopping carts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_U(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the shopping cart in the entity cache if it is enabled.
+	*
+	* @param shoppingCart the shopping cart
+	*/
+	public void cacheResult(
+		com.liferay.portlet.shopping.model.ShoppingCart shoppingCart);
+
+	/**
+	* Caches the shopping carts in the entity cache if it is enabled.
+	*
+	* @param shoppingCarts the shopping carts
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.shopping.model.ShoppingCart> shoppingCarts);
+
+	/**
+	* Creates a new shopping cart with the primary key. Does not add the shopping cart to the database.
+	*
+	* @param cartId the primary key for the new shopping cart
+	* @return the new shopping cart
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart create(long cartId);
+
+	/**
+	* Removes the shopping cart with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param cartId the primary key of the shopping cart
+	* @return the shopping cart that was removed
+	* @throws com.liferay.portlet.shopping.NoSuchCartException if a shopping cart with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart remove(long cartId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCartException;
+
+	public com.liferay.portlet.shopping.model.ShoppingCart updateImpl(
+		com.liferay.portlet.shopping.model.ShoppingCart shoppingCart)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the shopping cart with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchCartException} if it could not be found.
+	*
+	* @param cartId the primary key of the shopping cart
+	* @return the shopping cart
+	* @throws com.liferay.portlet.shopping.NoSuchCartException if a shopping cart with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart findByPrimaryKey(
+		long cartId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCartException;
+
+	/**
+	* Returns the shopping cart with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param cartId the primary key of the shopping cart
+	* @return the shopping cart, or <code>null</code> if a shopping cart with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart fetchByPrimaryKey(
+		long cartId) throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the shopping carts.
@@ -420,73 +482,11 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the shopping carts where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the shopping carts where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the shopping cart where groupId = &#63; and userId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @return the shopping cart that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCart removeByG_U(
-		long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchCartException;
-
-	/**
 	* Removes all the shopping carts from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping carts where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching shopping carts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping carts where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching shopping carts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping carts where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @return the number of matching shopping carts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_U(long groupId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

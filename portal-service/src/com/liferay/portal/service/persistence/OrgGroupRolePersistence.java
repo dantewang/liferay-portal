@@ -36,71 +36,6 @@ public interface OrgGroupRolePersistence extends BasePersistence<OrgGroupRole> {
 	 */
 
 	/**
-	* Caches the org group role in the entity cache if it is enabled.
-	*
-	* @param orgGroupRole the org group role
-	*/
-	public void cacheResult(com.liferay.portal.model.OrgGroupRole orgGroupRole);
-
-	/**
-	* Caches the org group roles in the entity cache if it is enabled.
-	*
-	* @param orgGroupRoles the org group roles
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.OrgGroupRole> orgGroupRoles);
-
-	/**
-	* Creates a new org group role with the primary key. Does not add the org group role to the database.
-	*
-	* @param orgGroupRolePK the primary key for the new org group role
-	* @return the new org group role
-	*/
-	public com.liferay.portal.model.OrgGroupRole create(
-		com.liferay.portal.service.persistence.OrgGroupRolePK orgGroupRolePK);
-
-	/**
-	* Removes the org group role with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param orgGroupRolePK the primary key of the org group role
-	* @return the org group role that was removed
-	* @throws com.liferay.portal.NoSuchOrgGroupRoleException if a org group role with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.OrgGroupRole remove(
-		com.liferay.portal.service.persistence.OrgGroupRolePK orgGroupRolePK)
-		throws com.liferay.portal.NoSuchOrgGroupRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.OrgGroupRole updateImpl(
-		com.liferay.portal.model.OrgGroupRole orgGroupRole)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the org group role with the primary key or throws a {@link com.liferay.portal.NoSuchOrgGroupRoleException} if it could not be found.
-	*
-	* @param orgGroupRolePK the primary key of the org group role
-	* @return the org group role
-	* @throws com.liferay.portal.NoSuchOrgGroupRoleException if a org group role with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.OrgGroupRole findByPrimaryKey(
-		com.liferay.portal.service.persistence.OrgGroupRolePK orgGroupRolePK)
-		throws com.liferay.portal.NoSuchOrgGroupRoleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the org group role with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param orgGroupRolePK the primary key of the org group role
-	* @return the org group role, or <code>null</code> if a org group role with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.OrgGroupRole fetchByPrimaryKey(
-		com.liferay.portal.service.persistence.OrgGroupRolePK orgGroupRolePK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the org group roles where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -219,6 +154,25 @@ public interface OrgGroupRolePersistence extends BasePersistence<OrgGroupRole> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchOrgGroupRoleException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the org group roles where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of org group roles where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching org group roles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the org group roles where roleId = &#63;.
@@ -340,6 +294,90 @@ public interface OrgGroupRolePersistence extends BasePersistence<OrgGroupRole> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the org group roles where roleId = &#63; from the database.
+	*
+	* @param roleId the role ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByRoleId(long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of org group roles where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the number of matching org group roles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByRoleId(long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the org group role in the entity cache if it is enabled.
+	*
+	* @param orgGroupRole the org group role
+	*/
+	public void cacheResult(com.liferay.portal.model.OrgGroupRole orgGroupRole);
+
+	/**
+	* Caches the org group roles in the entity cache if it is enabled.
+	*
+	* @param orgGroupRoles the org group roles
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.OrgGroupRole> orgGroupRoles);
+
+	/**
+	* Creates a new org group role with the primary key. Does not add the org group role to the database.
+	*
+	* @param orgGroupRolePK the primary key for the new org group role
+	* @return the new org group role
+	*/
+	public com.liferay.portal.model.OrgGroupRole create(
+		com.liferay.portal.service.persistence.OrgGroupRolePK orgGroupRolePK);
+
+	/**
+	* Removes the org group role with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param orgGroupRolePK the primary key of the org group role
+	* @return the org group role that was removed
+	* @throws com.liferay.portal.NoSuchOrgGroupRoleException if a org group role with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.OrgGroupRole remove(
+		com.liferay.portal.service.persistence.OrgGroupRolePK orgGroupRolePK)
+		throws com.liferay.portal.NoSuchOrgGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.OrgGroupRole updateImpl(
+		com.liferay.portal.model.OrgGroupRole orgGroupRole)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the org group role with the primary key or throws a {@link com.liferay.portal.NoSuchOrgGroupRoleException} if it could not be found.
+	*
+	* @param orgGroupRolePK the primary key of the org group role
+	* @return the org group role
+	* @throws com.liferay.portal.NoSuchOrgGroupRoleException if a org group role with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.OrgGroupRole findByPrimaryKey(
+		com.liferay.portal.service.persistence.OrgGroupRolePK orgGroupRolePK)
+		throws com.liferay.portal.NoSuchOrgGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the org group role with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param orgGroupRolePK the primary key of the org group role
+	* @return the org group role, or <code>null</code> if a org group role with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.OrgGroupRole fetchByPrimaryKey(
+		com.liferay.portal.service.persistence.OrgGroupRolePK orgGroupRolePK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the org group roles.
 	*
 	* @return the org group roles
@@ -383,49 +421,11 @@ public interface OrgGroupRolePersistence extends BasePersistence<OrgGroupRole> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the org group roles where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the org group roles where roleId = &#63; from the database.
-	*
-	* @param roleId the role ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByRoleId(long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the org group roles from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of org group roles where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching org group roles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of org group roles where roleId = &#63;.
-	*
-	* @param roleId the role ID
-	* @return the number of matching org group roles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByRoleId(long roleId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

@@ -38,72 +38,6 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 	 */
 
 	/**
-	* Caches the document library folder in the entity cache if it is enabled.
-	*
-	* @param dlFolder the document library folder
-	*/
-	public void cacheResult(
-		com.liferay.portlet.documentlibrary.model.DLFolder dlFolder);
-
-	/**
-	* Caches the document library folders in the entity cache if it is enabled.
-	*
-	* @param dlFolders the document library folders
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.documentlibrary.model.DLFolder> dlFolders);
-
-	/**
-	* Creates a new document library folder with the primary key. Does not add the document library folder to the database.
-	*
-	* @param folderId the primary key for the new document library folder
-	* @return the new document library folder
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFolder create(
-		long folderId);
-
-	/**
-	* Removes the document library folder with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param folderId the primary key of the document library folder
-	* @return the document library folder that was removed
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFolder remove(
-		long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFolderException;
-
-	public com.liferay.portlet.documentlibrary.model.DLFolder updateImpl(
-		com.liferay.portlet.documentlibrary.model.DLFolder dlFolder)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the document library folder with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFolderException} if it could not be found.
-	*
-	* @param folderId the primary key of the document library folder
-	* @return the document library folder
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFolder findByPrimaryKey(
-		long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFolderException;
-
-	/**
-	* Returns the document library folder with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param folderId the primary key of the document library folder
-	* @return the document library folder, or <code>null</code> if a document library folder with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFolder fetchByPrimaryKey(
-		long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the document library folders where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -223,6 +157,25 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 			com.liferay.portlet.documentlibrary.NoSuchFolderException;
 
 	/**
+	* Removes all the document library folders where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the document library folder where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFolderException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -259,6 +212,30 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 	*/
 	public com.liferay.portlet.documentlibrary.model.DLFolder fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the document library folder where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the document library folder that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFolder removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFolderException;
+
+	/**
+	* Returns the number of document library folders where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -387,6 +364,27 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.documentlibrary.NoSuchFolderException;
+
+	/**
+	* Removes all the document library folders where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the document library folders where groupId = &#63;.
@@ -571,6 +569,35 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 			com.liferay.portlet.documentlibrary.NoSuchFolderException;
 
 	/**
+	* Removes all the document library folders where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching document library folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the document library folders where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -690,6 +717,25 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 			com.liferay.portlet.documentlibrary.NoSuchFolderException;
 
 	/**
+	* Removes all the document library folders where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the document library folder where repositoryId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFolderException} if it could not be found.
 	*
 	* @param repositoryId the repository ID
@@ -723,6 +769,28 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 	*/
 	public com.liferay.portlet.documentlibrary.model.DLFolder fetchByRepositoryId(
 		long repositoryId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the document library folder where repositoryId = &#63; from the database.
+	*
+	* @param repositoryId the repository ID
+	* @return the document library folder that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFolder removeByRepositoryId(
+		long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFolderException;
+
+	/**
+	* Returns the number of document library folders where repositoryId = &#63;.
+	*
+	* @param repositoryId the repository ID
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByRepositoryId(long repositoryId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -920,6 +988,38 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 			com.liferay.portlet.documentlibrary.NoSuchFolderException;
 
 	/**
+	* Removes all the document library folders where groupId = &#63; and parentFolderId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_P(long groupId, long parentFolderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders where groupId = &#63; and parentFolderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P(long groupId, long parentFolderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @return the number of matching document library folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_P(long groupId, long parentFolderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the document library folders where parentFolderId = &#63; and name = &#63;.
 	*
 	* @param parentFolderId the parent folder ID
@@ -1045,6 +1145,27 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.documentlibrary.NoSuchFolderException;
+
+	/**
+	* Removes all the document library folders where parentFolderId = &#63; and name = &#63; from the database.
+	*
+	* @param parentFolderId the parent folder ID
+	* @param name the name
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByP_N(long parentFolderId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders where parentFolderId = &#63; and name = &#63;.
+	*
+	* @param parentFolderId the parent folder ID
+	* @param name the name
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByP_N(long parentFolderId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63;.
@@ -1255,6 +1376,44 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 			com.liferay.portlet.documentlibrary.NoSuchFolderException;
 
 	/**
+	* Removes all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param mountPoint the mount point
+	* @param parentFolderId the parent folder ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_M_P(long groupId, boolean mountPoint,
+		long parentFolderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param mountPoint the mount point
+	* @param parentFolderId the parent folder ID
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_M_P(long groupId, boolean mountPoint,
+		long parentFolderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders that the user has permission to view where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param mountPoint the mount point
+	* @param parentFolderId the parent folder ID
+	* @return the number of matching document library folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_M_P(long groupId, boolean mountPoint,
+		long parentFolderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the document library folder where groupId = &#63; and parentFolderId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFolderException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -1295,6 +1454,33 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 	public com.liferay.portlet.documentlibrary.model.DLFolder fetchByG_P_N(
 		long groupId, long parentFolderId, java.lang.String name,
 		boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the document library folder where groupId = &#63; and parentFolderId = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param name the name
+	* @return the document library folder that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFolder removeByG_P_N(
+		long groupId, long parentFolderId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFolderException;
+
+	/**
+	* Returns the number of document library folders where groupId = &#63; and parentFolderId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param name the name
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P_N(long groupId, long parentFolderId,
+		java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -1502,6 +1688,41 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.documentlibrary.NoSuchFolderException;
+
+	/**
+	* Removes all the document library folders where groupId = &#63; and parentFolderId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_P_S(long groupId, long parentFolderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders where groupId = &#63; and parentFolderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P_S(long groupId, long parentFolderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @return the number of matching document library folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_P_S(long groupId, long parentFolderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and hidden = &#63;.
@@ -1728,6 +1949,47 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 			com.liferay.portlet.documentlibrary.NoSuchFolderException;
 
 	/**
+	* Removes all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and hidden = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param mountPoint the mount point
+	* @param parentFolderId the parent folder ID
+	* @param hidden the hidden
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_M_P_H(long groupId, boolean mountPoint,
+		long parentFolderId, boolean hidden)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and hidden = &#63;.
+	*
+	* @param groupId the group ID
+	* @param mountPoint the mount point
+	* @param parentFolderId the parent folder ID
+	* @param hidden the hidden
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_M_P_H(long groupId, boolean mountPoint,
+		long parentFolderId, boolean hidden)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders that the user has permission to view where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and hidden = &#63;.
+	*
+	* @param groupId the group ID
+	* @param mountPoint the mount point
+	* @param parentFolderId the parent folder ID
+	* @param hidden the hidden
+	* @return the number of matching document library folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_M_P_H(long groupId, boolean mountPoint,
+		long parentFolderId, boolean hidden)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and status = &#63;.
 	*
 	* @param groupId the group ID
@@ -1952,6 +2214,113 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 			com.liferay.portlet.documentlibrary.NoSuchFolderException;
 
 	/**
+	* Removes all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param mountPoint the mount point
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_M_P_S(long groupId, boolean mountPoint,
+		long parentFolderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param mountPoint the mount point
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_M_P_S(long groupId, boolean mountPoint,
+		long parentFolderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library folders that the user has permission to view where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param mountPoint the mount point
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @return the number of matching document library folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_M_P_S(long groupId, boolean mountPoint,
+		long parentFolderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the document library folder in the entity cache if it is enabled.
+	*
+	* @param dlFolder the document library folder
+	*/
+	public void cacheResult(
+		com.liferay.portlet.documentlibrary.model.DLFolder dlFolder);
+
+	/**
+	* Caches the document library folders in the entity cache if it is enabled.
+	*
+	* @param dlFolders the document library folders
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.documentlibrary.model.DLFolder> dlFolders);
+
+	/**
+	* Creates a new document library folder with the primary key. Does not add the document library folder to the database.
+	*
+	* @param folderId the primary key for the new document library folder
+	* @return the new document library folder
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFolder create(
+		long folderId);
+
+	/**
+	* Removes the document library folder with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param folderId the primary key of the document library folder
+	* @return the document library folder that was removed
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFolder remove(
+		long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFolderException;
+
+	public com.liferay.portlet.documentlibrary.model.DLFolder updateImpl(
+		com.liferay.portlet.documentlibrary.model.DLFolder dlFolder)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the document library folder with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFolderException} if it could not be found.
+	*
+	* @param folderId the primary key of the document library folder
+	* @return the document library folder
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFolder findByPrimaryKey(
+		long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFolderException;
+
+	/**
+	* Returns the document library folder with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param folderId the primary key of the document library folder
+	* @return the document library folder, or <code>null</code> if a document library folder with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFolder fetchByPrimaryKey(
+		long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the document library folders.
 	*
 	* @return the document library folders
@@ -1995,380 +2364,11 @@ public interface DLFolderPersistence extends BasePersistence<DLFolder> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the document library folders where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the document library folder where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the document library folder that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFolder removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFolderException;
-
-	/**
-	* Removes all the document library folders where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the document library folders where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the document library folders where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the document library folder where repositoryId = &#63; from the database.
-	*
-	* @param repositoryId the repository ID
-	* @return the document library folder that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFolder removeByRepositoryId(
-		long repositoryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFolderException;
-
-	/**
-	* Removes all the document library folders where groupId = &#63; and parentFolderId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_P(long groupId, long parentFolderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the document library folders where parentFolderId = &#63; and name = &#63; from the database.
-	*
-	* @param parentFolderId the parent folder ID
-	* @param name the name
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByP_N(long parentFolderId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param mountPoint the mount point
-	* @param parentFolderId the parent folder ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_M_P(long groupId, boolean mountPoint,
-		long parentFolderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the document library folder where groupId = &#63; and parentFolderId = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @param name the name
-	* @return the document library folder that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFolder removeByG_P_N(
-		long groupId, long parentFolderId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFolderException;
-
-	/**
-	* Removes all the document library folders where groupId = &#63; and parentFolderId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_P_S(long groupId, long parentFolderId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and hidden = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param mountPoint the mount point
-	* @param parentFolderId the parent folder ID
-	* @param hidden the hidden
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_M_P_H(long groupId, boolean mountPoint,
-		long parentFolderId, boolean hidden)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param mountPoint the mount point
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_M_P_S(long groupId, boolean mountPoint,
-		long parentFolderId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the document library folders from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching document library folders that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where repositoryId = &#63;.
-	*
-	* @param repositoryId the repository ID
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByRepositoryId(long repositoryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where groupId = &#63; and parentFolderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P(long groupId, long parentFolderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @return the number of matching document library folders that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_P(long groupId, long parentFolderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where parentFolderId = &#63; and name = &#63;.
-	*
-	* @param parentFolderId the parent folder ID
-	* @param name the name
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByP_N(long parentFolderId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param mountPoint the mount point
-	* @param parentFolderId the parent folder ID
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_M_P(long groupId, boolean mountPoint,
-		long parentFolderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders that the user has permission to view where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param mountPoint the mount point
-	* @param parentFolderId the parent folder ID
-	* @return the number of matching document library folders that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_M_P(long groupId, boolean mountPoint,
-		long parentFolderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where groupId = &#63; and parentFolderId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @param name the name
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P_N(long groupId, long parentFolderId,
-		java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where groupId = &#63; and parentFolderId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P_S(long groupId, long parentFolderId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @return the number of matching document library folders that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_P_S(long groupId, long parentFolderId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and hidden = &#63;.
-	*
-	* @param groupId the group ID
-	* @param mountPoint the mount point
-	* @param parentFolderId the parent folder ID
-	* @param hidden the hidden
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_M_P_H(long groupId, boolean mountPoint,
-		long parentFolderId, boolean hidden)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders that the user has permission to view where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and hidden = &#63;.
-	*
-	* @param groupId the group ID
-	* @param mountPoint the mount point
-	* @param parentFolderId the parent folder ID
-	* @param hidden the hidden
-	* @return the number of matching document library folders that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_M_P_H(long groupId, boolean mountPoint,
-		long parentFolderId, boolean hidden)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param mountPoint the mount point
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @return the number of matching document library folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_M_P_S(long groupId, boolean mountPoint,
-		long parentFolderId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library folders that the user has permission to view where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param mountPoint the mount point
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @return the number of matching document library folders that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_M_P_S(long groupId, boolean mountPoint,
-		long parentFolderId, int status)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

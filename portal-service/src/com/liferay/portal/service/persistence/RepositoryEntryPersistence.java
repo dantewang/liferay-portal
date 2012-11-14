@@ -36,72 +36,6 @@ public interface RepositoryEntryPersistence extends BasePersistence<RepositoryEn
 	 */
 
 	/**
-	* Caches the repository entry in the entity cache if it is enabled.
-	*
-	* @param repositoryEntry the repository entry
-	*/
-	public void cacheResult(
-		com.liferay.portal.model.RepositoryEntry repositoryEntry);
-
-	/**
-	* Caches the repository entries in the entity cache if it is enabled.
-	*
-	* @param repositoryEntries the repository entries
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.RepositoryEntry> repositoryEntries);
-
-	/**
-	* Creates a new repository entry with the primary key. Does not add the repository entry to the database.
-	*
-	* @param repositoryEntryId the primary key for the new repository entry
-	* @return the new repository entry
-	*/
-	public com.liferay.portal.model.RepositoryEntry create(
-		long repositoryEntryId);
-
-	/**
-	* Removes the repository entry with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param repositoryEntryId the primary key of the repository entry
-	* @return the repository entry that was removed
-	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.RepositoryEntry remove(
-		long repositoryEntryId)
-		throws com.liferay.portal.NoSuchRepositoryEntryException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.RepositoryEntry updateImpl(
-		com.liferay.portal.model.RepositoryEntry repositoryEntry)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the repository entry with the primary key or throws a {@link com.liferay.portal.NoSuchRepositoryEntryException} if it could not be found.
-	*
-	* @param repositoryEntryId the primary key of the repository entry
-	* @return the repository entry
-	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.RepositoryEntry findByPrimaryKey(
-		long repositoryEntryId)
-		throws com.liferay.portal.NoSuchRepositoryEntryException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the repository entry with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param repositoryEntryId the primary key of the repository entry
-	* @return the repository entry, or <code>null</code> if a repository entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.RepositoryEntry fetchByPrimaryKey(
-		long repositoryEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the repository entries where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -221,6 +155,25 @@ public interface RepositoryEntryPersistence extends BasePersistence<RepositoryEn
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the repository entries where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of repository entries where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching repository entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the repository entry where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portal.NoSuchRepositoryEntryException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -257,6 +210,30 @@ public interface RepositoryEntryPersistence extends BasePersistence<RepositoryEn
 	*/
 	public com.liferay.portal.model.RepositoryEntry fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the repository entry where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the repository entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.RepositoryEntry removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.NoSuchRepositoryEntryException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of repository entries where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching repository entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -379,6 +356,25 @@ public interface RepositoryEntryPersistence extends BasePersistence<RepositoryEn
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the repository entries where repositoryId = &#63; from the database.
+	*
+	* @param repositoryId the repository ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByRepositoryId(long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of repository entries where repositoryId = &#63;.
+	*
+	* @param repositoryId the repository ID
+	* @return the number of matching repository entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByRepositoryId(long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the repository entry where repositoryId = &#63; and mappedId = &#63; or throws a {@link com.liferay.portal.NoSuchRepositoryEntryException} if it could not be found.
 	*
 	* @param repositoryId the repository ID
@@ -415,6 +411,96 @@ public interface RepositoryEntryPersistence extends BasePersistence<RepositoryEn
 	*/
 	public com.liferay.portal.model.RepositoryEntry fetchByR_M(
 		long repositoryId, java.lang.String mappedId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the repository entry where repositoryId = &#63; and mappedId = &#63; from the database.
+	*
+	* @param repositoryId the repository ID
+	* @param mappedId the mapped ID
+	* @return the repository entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.RepositoryEntry removeByR_M(
+		long repositoryId, java.lang.String mappedId)
+		throws com.liferay.portal.NoSuchRepositoryEntryException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of repository entries where repositoryId = &#63; and mappedId = &#63;.
+	*
+	* @param repositoryId the repository ID
+	* @param mappedId the mapped ID
+	* @return the number of matching repository entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByR_M(long repositoryId, java.lang.String mappedId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the repository entry in the entity cache if it is enabled.
+	*
+	* @param repositoryEntry the repository entry
+	*/
+	public void cacheResult(
+		com.liferay.portal.model.RepositoryEntry repositoryEntry);
+
+	/**
+	* Caches the repository entries in the entity cache if it is enabled.
+	*
+	* @param repositoryEntries the repository entries
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.RepositoryEntry> repositoryEntries);
+
+	/**
+	* Creates a new repository entry with the primary key. Does not add the repository entry to the database.
+	*
+	* @param repositoryEntryId the primary key for the new repository entry
+	* @return the new repository entry
+	*/
+	public com.liferay.portal.model.RepositoryEntry create(
+		long repositoryEntryId);
+
+	/**
+	* Removes the repository entry with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param repositoryEntryId the primary key of the repository entry
+	* @return the repository entry that was removed
+	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.RepositoryEntry remove(
+		long repositoryEntryId)
+		throws com.liferay.portal.NoSuchRepositoryEntryException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.RepositoryEntry updateImpl(
+		com.liferay.portal.model.RepositoryEntry repositoryEntry)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the repository entry with the primary key or throws a {@link com.liferay.portal.NoSuchRepositoryEntryException} if it could not be found.
+	*
+	* @param repositoryEntryId the primary key of the repository entry
+	* @return the repository entry
+	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.RepositoryEntry findByPrimaryKey(
+		long repositoryEntryId)
+		throws com.liferay.portal.NoSuchRepositoryEntryException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the repository entry with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param repositoryEntryId the primary key of the repository entry
+	* @return the repository entry, or <code>null</code> if a repository entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.RepositoryEntry fetchByPrimaryKey(
+		long repositoryEntryId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -461,97 +547,11 @@ public interface RepositoryEntryPersistence extends BasePersistence<RepositoryEn
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the repository entries where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the repository entry where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the repository entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.RepositoryEntry removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.NoSuchRepositoryEntryException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the repository entries where repositoryId = &#63; from the database.
-	*
-	* @param repositoryId the repository ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByRepositoryId(long repositoryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the repository entry where repositoryId = &#63; and mappedId = &#63; from the database.
-	*
-	* @param repositoryId the repository ID
-	* @param mappedId the mapped ID
-	* @return the repository entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.RepositoryEntry removeByR_M(
-		long repositoryId, java.lang.String mappedId)
-		throws com.liferay.portal.NoSuchRepositoryEntryException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the repository entries from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of repository entries where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching repository entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of repository entries where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching repository entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of repository entries where repositoryId = &#63;.
-	*
-	* @param repositoryId the repository ID
-	* @return the number of matching repository entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByRepositoryId(long repositoryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of repository entries where repositoryId = &#63; and mappedId = &#63;.
-	*
-	* @param repositoryId the repository ID
-	* @param mappedId the mapped ID
-	* @return the number of matching repository entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByR_M(long repositoryId, java.lang.String mappedId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

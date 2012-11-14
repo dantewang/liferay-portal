@@ -72,15 +72,6 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_FETCH_BY_VALUE = new FinderPath(ClassNameModelImpl.ENTITY_CACHE_ENABLED,
-			ClassNameModelImpl.FINDER_CACHE_ENABLED, ClassNameImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByValue",
-			new String[] { String.class.getName() },
-			ClassNameModelImpl.VALUE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_VALUE = new FinderPath(ClassNameModelImpl.ENTITY_CACHE_ENABLED,
-			ClassNameModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByValue",
-			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ClassNameModelImpl.ENTITY_CACHE_ENABLED,
 			ClassNameModelImpl.FINDER_CACHE_ENABLED, ClassNameImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
@@ -90,6 +81,246 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ClassNameModelImpl.ENTITY_CACHE_ENABLED,
 			ClassNameModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_FETCH_BY_VALUE = new FinderPath(ClassNameModelImpl.ENTITY_CACHE_ENABLED,
+			ClassNameModelImpl.FINDER_CACHE_ENABLED, ClassNameImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByValue",
+			new String[] { String.class.getName() },
+			ClassNameModelImpl.VALUE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_VALUE = new FinderPath(ClassNameModelImpl.ENTITY_CACHE_ENABLED,
+			ClassNameModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByValue",
+			new String[] { String.class.getName() });
+
+	/**
+	 * Returns the class name where value = &#63; or throws a {@link com.liferay.portal.NoSuchClassNameException} if it could not be found.
+	 *
+	 * @param value the value
+	 * @return the matching class name
+	 * @throws com.liferay.portal.NoSuchClassNameException if a matching class name could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ClassName findByValue(String value)
+		throws NoSuchClassNameException, SystemException {
+		ClassName className = fetchByValue(value);
+
+		if (className == null) {
+			StringBundler msg = new StringBundler(4);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("value=");
+			msg.append(value);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new NoSuchClassNameException(msg.toString());
+		}
+
+		return className;
+	}
+
+	/**
+	 * Returns the class name where value = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param value the value
+	 * @return the matching class name, or <code>null</code> if a matching class name could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ClassName fetchByValue(String value) throws SystemException {
+		return fetchByValue(value, true);
+	}
+
+	/**
+	 * Returns the class name where value = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param value the value
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching class name, or <code>null</code> if a matching class name could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ClassName fetchByValue(String value, boolean retrieveFromCache)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { value };
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_VALUE,
+					finderArgs, this);
+		}
+
+		if (result instanceof ClassName) {
+			ClassName className = (ClassName)result;
+
+			if (!Validator.equals(value, className.getValue())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_SELECT_CLASSNAME_WHERE);
+
+			if (value == null) {
+				query.append(_FINDER_COLUMN_VALUE_VALUE_1);
+			}
+			else {
+				if (value.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_VALUE_VALUE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_VALUE_VALUE_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (value != null) {
+					qPos.add(value);
+				}
+
+				List<ClassName> list = q.list();
+
+				result = list;
+
+				ClassName className = null;
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_VALUE,
+						finderArgs, list);
+				}
+				else {
+					className = list.get(0);
+
+					cacheResult(className);
+
+					if ((className.getValue() == null) ||
+							!className.getValue().equals(value)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_VALUE,
+							finderArgs, className);
+					}
+				}
+
+				return className;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_VALUE,
+						finderArgs);
+				}
+
+				closeSession(session);
+			}
+		}
+		else {
+			if (result instanceof List<?>) {
+				return null;
+			}
+			else {
+				return (ClassName)result;
+			}
+		}
+	}
+
+	/**
+	 * Removes the class name where value = &#63; from the database.
+	 *
+	 * @param value the value
+	 * @return the class name that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ClassName removeByValue(String value)
+		throws NoSuchClassNameException, SystemException {
+		ClassName className = findByValue(value);
+
+		return remove(className);
+	}
+
+	/**
+	 * Returns the number of class names where value = &#63;.
+	 *
+	 * @param value the value
+	 * @return the number of matching class names
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByValue(String value) throws SystemException {
+		Object[] finderArgs = new Object[] { value };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_VALUE,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_CLASSNAME_WHERE);
+
+			if (value == null) {
+				query.append(_FINDER_COLUMN_VALUE_VALUE_1);
+			}
+			else {
+				if (value.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_VALUE_VALUE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_VALUE_VALUE_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (value != null) {
+					qPos.add(value);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_VALUE,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_VALUE_VALUE_1 = "className.value IS NULL";
+	private static final String _FINDER_COLUMN_VALUE_VALUE_2 = "className.value = ?";
+	private static final String _FINDER_COLUMN_VALUE_VALUE_3 = "(className.value IS NULL OR className.value = ?)";
 
 	/**
 	 * Caches the class name in the entity cache if it is enabled.
@@ -460,154 +691,6 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 	}
 
 	/**
-	 * Returns the class name where value = &#63; or throws a {@link com.liferay.portal.NoSuchClassNameException} if it could not be found.
-	 *
-	 * @param value the value
-	 * @return the matching class name
-	 * @throws com.liferay.portal.NoSuchClassNameException if a matching class name could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ClassName findByValue(String value)
-		throws NoSuchClassNameException, SystemException {
-		ClassName className = fetchByValue(value);
-
-		if (className == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("value=");
-			msg.append(value);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchClassNameException(msg.toString());
-		}
-
-		return className;
-	}
-
-	/**
-	 * Returns the class name where value = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param value the value
-	 * @return the matching class name, or <code>null</code> if a matching class name could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ClassName fetchByValue(String value) throws SystemException {
-		return fetchByValue(value, true);
-	}
-
-	/**
-	 * Returns the class name where value = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param value the value
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching class name, or <code>null</code> if a matching class name could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ClassName fetchByValue(String value, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { value };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_VALUE,
-					finderArgs, this);
-		}
-
-		if (result instanceof ClassName) {
-			ClassName className = (ClassName)result;
-
-			if (!Validator.equals(value, className.getValue())) {
-				result = null;
-			}
-		}
-
-		if (result == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_SELECT_CLASSNAME_WHERE);
-
-			if (value == null) {
-				query.append(_FINDER_COLUMN_VALUE_VALUE_1);
-			}
-			else {
-				if (value.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_VALUE_VALUE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_VALUE_VALUE_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (value != null) {
-					qPos.add(value);
-				}
-
-				List<ClassName> list = q.list();
-
-				result = list;
-
-				ClassName className = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_VALUE,
-						finderArgs, list);
-				}
-				else {
-					className = list.get(0);
-
-					cacheResult(className);
-
-					if ((className.getValue() == null) ||
-							!className.getValue().equals(value)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_VALUE,
-							finderArgs, className);
-					}
-				}
-
-				return className;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_VALUE,
-						finderArgs);
-				}
-
-				closeSession(session);
-			}
-		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (ClassName)result;
-			}
-		}
-	}
-
-	/**
 	 * Returns all the class names.
 	 *
 	 * @return the class names
@@ -723,20 +806,6 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 	}
 
 	/**
-	 * Removes the class name where value = &#63; from the database.
-	 *
-	 * @param value the value
-	 * @return the class name that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ClassName removeByValue(String value)
-		throws NoSuchClassNameException, SystemException {
-		ClassName className = findByValue(value);
-
-		return remove(className);
-	}
-
-	/**
 	 * Removes all the class names from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -745,71 +814,6 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 		for (ClassName className : findAll()) {
 			remove(className);
 		}
-	}
-
-	/**
-	 * Returns the number of class names where value = &#63;.
-	 *
-	 * @param value the value
-	 * @return the number of matching class names
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByValue(String value) throws SystemException {
-		Object[] finderArgs = new Object[] { value };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_VALUE,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_CLASSNAME_WHERE);
-
-			if (value == null) {
-				query.append(_FINDER_COLUMN_VALUE_VALUE_1);
-			}
-			else {
-				if (value.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_VALUE_VALUE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_VALUE_VALUE_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (value != null) {
-					qPos.add(value);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_VALUE,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1007,9 +1011,6 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 	private static final String _SQL_SELECT_CLASSNAME_WHERE = "SELECT className FROM ClassName className WHERE ";
 	private static final String _SQL_COUNT_CLASSNAME = "SELECT COUNT(className) FROM ClassName className";
 	private static final String _SQL_COUNT_CLASSNAME_WHERE = "SELECT COUNT(className) FROM ClassName className WHERE ";
-	private static final String _FINDER_COLUMN_VALUE_VALUE_1 = "className.value IS NULL";
-	private static final String _FINDER_COLUMN_VALUE_VALUE_2 = "className.value = ?";
-	private static final String _FINDER_COLUMN_VALUE_VALUE_3 = "(className.value IS NULL OR className.value = ?)";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "className.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ClassName exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ClassName exists with the key {";

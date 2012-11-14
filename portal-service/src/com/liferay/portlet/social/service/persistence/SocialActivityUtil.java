@@ -111,86 +111,6 @@ public class SocialActivityUtil {
 	}
 
 	/**
-	* Caches the social activity in the entity cache if it is enabled.
-	*
-	* @param socialActivity the social activity
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.social.model.SocialActivity socialActivity) {
-		getPersistence().cacheResult(socialActivity);
-	}
-
-	/**
-	* Caches the social activities in the entity cache if it is enabled.
-	*
-	* @param socialActivities the social activities
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.social.model.SocialActivity> socialActivities) {
-		getPersistence().cacheResult(socialActivities);
-	}
-
-	/**
-	* Creates a new social activity with the primary key. Does not add the social activity to the database.
-	*
-	* @param activityId the primary key for the new social activity
-	* @return the new social activity
-	*/
-	public static com.liferay.portlet.social.model.SocialActivity create(
-		long activityId) {
-		return getPersistence().create(activityId);
-	}
-
-	/**
-	* Removes the social activity with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param activityId the primary key of the social activity
-	* @return the social activity that was removed
-	* @throws com.liferay.portlet.social.NoSuchActivityException if a social activity with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivity remove(
-		long activityId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityException {
-		return getPersistence().remove(activityId);
-	}
-
-	public static com.liferay.portlet.social.model.SocialActivity updateImpl(
-		com.liferay.portlet.social.model.SocialActivity socialActivity)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(socialActivity);
-	}
-
-	/**
-	* Returns the social activity with the primary key or throws a {@link com.liferay.portlet.social.NoSuchActivityException} if it could not be found.
-	*
-	* @param activityId the primary key of the social activity
-	* @return the social activity
-	* @throws com.liferay.portlet.social.NoSuchActivityException if a social activity with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivity findByPrimaryKey(
-		long activityId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityException {
-		return getPersistence().findByPrimaryKey(activityId);
-	}
-
-	/**
-	* Returns the social activity with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param activityId the primary key of the social activity
-	* @return the social activity, or <code>null</code> if a social activity with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivity fetchByPrimaryKey(
-		long activityId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(activityId);
-	}
-
-	/**
 	* Returns all the social activities where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -326,6 +246,29 @@ public class SocialActivityUtil {
 		return getPersistence()
 				   .findByGroupId_PrevAndNext(activityId, groupId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the social activities where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of social activities where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching social activities
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
 	}
 
 	/**
@@ -471,6 +414,29 @@ public class SocialActivityUtil {
 	}
 
 	/**
+	* Removes all the social activities where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of social activities where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching social activities
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
+	}
+
+	/**
 	* Returns all the social activities where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -608,6 +574,29 @@ public class SocialActivityUtil {
 	}
 
 	/**
+	* Removes all the social activities where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUserId(userId);
+	}
+
+	/**
+	* Returns the number of social activities where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching social activities
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUserId(userId);
+	}
+
+	/**
 	* Returns the social activity where mirrorActivityId = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivityException} if it could not be found.
 	*
 	* @param mirrorActivityId the mirror activity ID
@@ -648,6 +637,32 @@ public class SocialActivityUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByMirrorActivityId(mirrorActivityId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the social activity where mirrorActivityId = &#63; from the database.
+	*
+	* @param mirrorActivityId the mirror activity ID
+	* @return the social activity that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivity removeByMirrorActivityId(
+		long mirrorActivityId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityException {
+		return getPersistence().removeByMirrorActivityId(mirrorActivityId);
+	}
+
+	/**
+	* Returns the number of social activities where mirrorActivityId = &#63;.
+	*
+	* @param mirrorActivityId the mirror activity ID
+	* @return the number of matching social activities
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByMirrorActivityId(long mirrorActivityId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByMirrorActivityId(mirrorActivityId);
 	}
 
 	/**
@@ -793,6 +808,29 @@ public class SocialActivityUtil {
 	}
 
 	/**
+	* Removes all the social activities where classNameId = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByClassNameId(long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByClassNameId(classNameId);
+	}
+
+	/**
+	* Returns the number of social activities where classNameId = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @return the number of matching social activities
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByClassNameId(long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByClassNameId(classNameId);
+	}
+
+	/**
 	* Returns all the social activities where receiverUserId = &#63;.
 	*
 	* @param receiverUserId the receiver user ID
@@ -934,6 +972,29 @@ public class SocialActivityUtil {
 		return getPersistence()
 				   .findByReceiverUserId_PrevAndNext(activityId,
 			receiverUserId, orderByComparator);
+	}
+
+	/**
+	* Removes all the social activities where receiverUserId = &#63; from the database.
+	*
+	* @param receiverUserId the receiver user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByReceiverUserId(long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByReceiverUserId(receiverUserId);
+	}
+
+	/**
+	* Returns the number of social activities where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the number of matching social activities
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByReceiverUserId(long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByReceiverUserId(receiverUserId);
 	}
 
 	/**
@@ -1085,6 +1146,31 @@ public class SocialActivityUtil {
 		return getPersistence()
 				   .findByC_C_PrevAndNext(activityId, classNameId, classPK,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the social activities where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of social activities where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching social activities
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C(classNameId, classPK);
 	}
 
 	/**
@@ -1252,6 +1338,36 @@ public class SocialActivityUtil {
 		return getPersistence()
 				   .findByM_C_C_PrevAndNext(activityId, mirrorActivityId,
 			classNameId, classPK, orderByComparator);
+	}
+
+	/**
+	* Removes all the social activities where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param mirrorActivityId the mirror activity ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByM_C_C(long mirrorActivityId, long classNameId,
+		long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByM_C_C(mirrorActivityId, classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of social activities where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param mirrorActivityId the mirror activity ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching social activities
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByM_C_C(long mirrorActivityId, long classNameId,
+		long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByM_C_C(mirrorActivityId, classNameId, classPK);
 	}
 
 	/**
@@ -1454,6 +1570,45 @@ public class SocialActivityUtil {
 	}
 
 	/**
+	* Removes all the social activities where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_U_C_C_T_R(long groupId, long userId,
+		long classNameId, long classPK, int type, long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByG_U_C_C_T_R(groupId, userId, classNameId, classPK, type,
+			receiverUserId);
+	}
+
+	/**
+	* Returns the number of social activities where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @return the number of matching social activities
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U_C_C_T_R(long groupId, long userId,
+		long classNameId, long classPK, int type, long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByG_U_C_C_T_R(groupId, userId, classNameId, classPK,
+			type, receiverUserId);
+	}
+
+	/**
 	* Returns the social activity where groupId = &#63; and userId = &#63; and createDate = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivityException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -1523,6 +1678,131 @@ public class SocialActivityUtil {
 	}
 
 	/**
+	* Removes the social activity where groupId = &#63; and userId = &#63; and createDate = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param createDate the create date
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @return the social activity that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivity removeByG_U_CD_C_C_T_R(
+		long groupId, long userId, long createDate, long classNameId,
+		long classPK, int type, long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityException {
+		return getPersistence()
+				   .removeByG_U_CD_C_C_T_R(groupId, userId, createDate,
+			classNameId, classPK, type, receiverUserId);
+	}
+
+	/**
+	* Returns the number of social activities where groupId = &#63; and userId = &#63; and createDate = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param createDate the create date
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @return the number of matching social activities
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U_CD_C_C_T_R(long groupId, long userId,
+		long createDate, long classNameId, long classPK, int type,
+		long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByG_U_CD_C_C_T_R(groupId, userId, createDate,
+			classNameId, classPK, type, receiverUserId);
+	}
+
+	/**
+	* Caches the social activity in the entity cache if it is enabled.
+	*
+	* @param socialActivity the social activity
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.social.model.SocialActivity socialActivity) {
+		getPersistence().cacheResult(socialActivity);
+	}
+
+	/**
+	* Caches the social activities in the entity cache if it is enabled.
+	*
+	* @param socialActivities the social activities
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.social.model.SocialActivity> socialActivities) {
+		getPersistence().cacheResult(socialActivities);
+	}
+
+	/**
+	* Creates a new social activity with the primary key. Does not add the social activity to the database.
+	*
+	* @param activityId the primary key for the new social activity
+	* @return the new social activity
+	*/
+	public static com.liferay.portlet.social.model.SocialActivity create(
+		long activityId) {
+		return getPersistence().create(activityId);
+	}
+
+	/**
+	* Removes the social activity with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param activityId the primary key of the social activity
+	* @return the social activity that was removed
+	* @throws com.liferay.portlet.social.NoSuchActivityException if a social activity with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivity remove(
+		long activityId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityException {
+		return getPersistence().remove(activityId);
+	}
+
+	public static com.liferay.portlet.social.model.SocialActivity updateImpl(
+		com.liferay.portlet.social.model.SocialActivity socialActivity)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(socialActivity);
+	}
+
+	/**
+	* Returns the social activity with the primary key or throws a {@link com.liferay.portlet.social.NoSuchActivityException} if it could not be found.
+	*
+	* @param activityId the primary key of the social activity
+	* @return the social activity
+	* @throws com.liferay.portlet.social.NoSuchActivityException if a social activity with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivity findByPrimaryKey(
+		long activityId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityException {
+		return getPersistence().findByPrimaryKey(activityId);
+	}
+
+	/**
+	* Returns the social activity with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param activityId the primary key of the social activity
+	* @return the social activity, or <code>null</code> if a social activity with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivity fetchByPrimaryKey(
+		long activityId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(activityId);
+	}
+
+	/**
 	* Returns all the social activities.
 	*
 	* @return the social activities
@@ -1572,143 +1852,6 @@ public class SocialActivityUtil {
 	}
 
 	/**
-	* Removes all the social activities where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes all the social activities where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
-	* Removes all the social activities where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUserId(userId);
-	}
-
-	/**
-	* Removes the social activity where mirrorActivityId = &#63; from the database.
-	*
-	* @param mirrorActivityId the mirror activity ID
-	* @return the social activity that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivity removeByMirrorActivityId(
-		long mirrorActivityId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityException {
-		return getPersistence().removeByMirrorActivityId(mirrorActivityId);
-	}
-
-	/**
-	* Removes all the social activities where classNameId = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByClassNameId(long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByClassNameId(classNameId);
-	}
-
-	/**
-	* Removes all the social activities where receiverUserId = &#63; from the database.
-	*
-	* @param receiverUserId the receiver user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByReceiverUserId(long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByReceiverUserId(receiverUserId);
-	}
-
-	/**
-	* Removes all the social activities where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Removes all the social activities where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param mirrorActivityId the mirror activity ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByM_C_C(long mirrorActivityId, long classNameId,
-		long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByM_C_C(mirrorActivityId, classNameId, classPK);
-	}
-
-	/**
-	* Removes all the social activities where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param receiverUserId the receiver user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_U_C_C_T_R(long groupId, long userId,
-		long classNameId, long classPK, int type, long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByG_U_C_C_T_R(groupId, userId, classNameId, classPK, type,
-			receiverUserId);
-	}
-
-	/**
-	* Removes the social activity where groupId = &#63; and userId = &#63; and createDate = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param createDate the create date
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param receiverUserId the receiver user ID
-	* @return the social activity that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivity removeByG_U_CD_C_C_T_R(
-		long groupId, long userId, long createDate, long classNameId,
-		long classPK, int type, long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityException {
-		return getPersistence()
-				   .removeByG_U_CD_C_C_T_R(groupId, userId, createDate,
-			classNameId, classPK, type, receiverUserId);
-	}
-
-	/**
 	* Removes all the social activities from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1716,149 +1859,6 @@ public class SocialActivityUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of social activities where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching social activities
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of social activities where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching social activities
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of social activities where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching social activities
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUserId(userId);
-	}
-
-	/**
-	* Returns the number of social activities where mirrorActivityId = &#63;.
-	*
-	* @param mirrorActivityId the mirror activity ID
-	* @return the number of matching social activities
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByMirrorActivityId(long mirrorActivityId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByMirrorActivityId(mirrorActivityId);
-	}
-
-	/**
-	* Returns the number of social activities where classNameId = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @return the number of matching social activities
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByClassNameId(long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByClassNameId(classNameId);
-	}
-
-	/**
-	* Returns the number of social activities where receiverUserId = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @return the number of matching social activities
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByReceiverUserId(long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByReceiverUserId(receiverUserId);
-	}
-
-	/**
-	* Returns the number of social activities where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching social activities
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Returns the number of social activities where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param mirrorActivityId the mirror activity ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching social activities
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByM_C_C(long mirrorActivityId, long classNameId,
-		long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByM_C_C(mirrorActivityId, classNameId, classPK);
-	}
-
-	/**
-	* Returns the number of social activities where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param receiverUserId the receiver user ID
-	* @return the number of matching social activities
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U_C_C_T_R(long groupId, long userId,
-		long classNameId, long classPK, int type, long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByG_U_C_C_T_R(groupId, userId, classNameId, classPK,
-			type, receiverUserId);
-	}
-
-	/**
-	* Returns the number of social activities where groupId = &#63; and userId = &#63; and createDate = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param createDate the create date
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param receiverUserId the receiver user ID
-	* @return the number of matching social activities
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U_CD_C_C_T_R(long groupId, long userId,
-		long createDate, long classNameId, long classPK, int type,
-		long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByG_U_CD_C_C_T_R(groupId, userId, createDate,
-			classNameId, classPK, type, receiverUserId);
 	}
 
 	/**

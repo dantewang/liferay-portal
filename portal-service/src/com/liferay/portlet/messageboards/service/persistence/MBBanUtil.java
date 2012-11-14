@@ -109,85 +109,6 @@ public class MBBanUtil {
 	}
 
 	/**
-	* Caches the message boards ban in the entity cache if it is enabled.
-	*
-	* @param mbBan the message boards ban
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.messageboards.model.MBBan mbBan) {
-		getPersistence().cacheResult(mbBan);
-	}
-
-	/**
-	* Caches the message boards bans in the entity cache if it is enabled.
-	*
-	* @param mbBans the message boards bans
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.messageboards.model.MBBan> mbBans) {
-		getPersistence().cacheResult(mbBans);
-	}
-
-	/**
-	* Creates a new message boards ban with the primary key. Does not add the message boards ban to the database.
-	*
-	* @param banId the primary key for the new message boards ban
-	* @return the new message boards ban
-	*/
-	public static com.liferay.portlet.messageboards.model.MBBan create(
-		long banId) {
-		return getPersistence().create(banId);
-	}
-
-	/**
-	* Removes the message boards ban with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param banId the primary key of the message boards ban
-	* @return the message boards ban that was removed
-	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a message boards ban with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBBan remove(
-		long banId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchBanException {
-		return getPersistence().remove(banId);
-	}
-
-	public static com.liferay.portlet.messageboards.model.MBBan updateImpl(
-		com.liferay.portlet.messageboards.model.MBBan mbBan)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(mbBan);
-	}
-
-	/**
-	* Returns the message boards ban with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchBanException} if it could not be found.
-	*
-	* @param banId the primary key of the message boards ban
-	* @return the message boards ban
-	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a message boards ban with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBBan findByPrimaryKey(
-		long banId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchBanException {
-		return getPersistence().findByPrimaryKey(banId);
-	}
-
-	/**
-	* Returns the message boards ban with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param banId the primary key of the message boards ban
-	* @return the message boards ban, or <code>null</code> if a message boards ban with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBBan fetchByPrimaryKey(
-		long banId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(banId);
-	}
-
-	/**
 	* Returns all the message boards bans where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -325,6 +246,29 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Removes all the message boards bans where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of message boards bans where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching message boards bans
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
 	* Returns all the message boards bans where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -458,6 +402,29 @@ public class MBBanUtil {
 			com.liferay.portlet.messageboards.NoSuchBanException {
 		return getPersistence()
 				   .findByUserId_PrevAndNext(banId, userId, orderByComparator);
+	}
+
+	/**
+	* Removes all the message boards bans where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUserId(userId);
+	}
+
+	/**
+	* Returns the number of message boards bans where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching message boards bans
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUserId(userId);
 	}
 
 	/**
@@ -603,6 +570,29 @@ public class MBBanUtil {
 	}
 
 	/**
+	* Removes all the message boards bans where banUserId = &#63; from the database.
+	*
+	* @param banUserId the ban user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByBanUserId(long banUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByBanUserId(banUserId);
+	}
+
+	/**
+	* Returns the number of message boards bans where banUserId = &#63;.
+	*
+	* @param banUserId the ban user ID
+	* @return the number of matching message boards bans
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByBanUserId(long banUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByBanUserId(banUserId);
+	}
+
+	/**
 	* Returns the message boards ban where groupId = &#63; and banUserId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchBanException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -645,6 +635,113 @@ public class MBBanUtil {
 		long groupId, long banUserId, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByG_B(groupId, banUserId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the message boards ban where groupId = &#63; and banUserId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param banUserId the ban user ID
+	* @return the message boards ban that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan removeByG_B(
+		long groupId, long banUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence().removeByG_B(groupId, banUserId);
+	}
+
+	/**
+	* Returns the number of message boards bans where groupId = &#63; and banUserId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param banUserId the ban user ID
+	* @return the number of matching message boards bans
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_B(long groupId, long banUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_B(groupId, banUserId);
+	}
+
+	/**
+	* Caches the message boards ban in the entity cache if it is enabled.
+	*
+	* @param mbBan the message boards ban
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.messageboards.model.MBBan mbBan) {
+		getPersistence().cacheResult(mbBan);
+	}
+
+	/**
+	* Caches the message boards bans in the entity cache if it is enabled.
+	*
+	* @param mbBans the message boards bans
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.messageboards.model.MBBan> mbBans) {
+		getPersistence().cacheResult(mbBans);
+	}
+
+	/**
+	* Creates a new message boards ban with the primary key. Does not add the message boards ban to the database.
+	*
+	* @param banId the primary key for the new message boards ban
+	* @return the new message boards ban
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan create(
+		long banId) {
+		return getPersistence().create(banId);
+	}
+
+	/**
+	* Removes the message boards ban with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param banId the primary key of the message boards ban
+	* @return the message boards ban that was removed
+	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a message boards ban with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan remove(
+		long banId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence().remove(banId);
+	}
+
+	public static com.liferay.portlet.messageboards.model.MBBan updateImpl(
+		com.liferay.portlet.messageboards.model.MBBan mbBan)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(mbBan);
+	}
+
+	/**
+	* Returns the message boards ban with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchBanException} if it could not be found.
+	*
+	* @param banId the primary key of the message boards ban
+	* @return the message boards ban
+	* @throws com.liferay.portlet.messageboards.NoSuchBanException if a message boards ban with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan findByPrimaryKey(
+		long banId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchBanException {
+		return getPersistence().findByPrimaryKey(banId);
+	}
+
+	/**
+	* Returns the message boards ban with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param banId the primary key of the message boards ban
+	* @return the message boards ban, or <code>null</code> if a message boards ban with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBBan fetchByPrimaryKey(
+		long banId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(banId);
 	}
 
 	/**
@@ -697,54 +794,6 @@ public class MBBanUtil {
 	}
 
 	/**
-	* Removes all the message boards bans where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes all the message boards bans where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUserId(userId);
-	}
-
-	/**
-	* Removes all the message boards bans where banUserId = &#63; from the database.
-	*
-	* @param banUserId the ban user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByBanUserId(long banUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByBanUserId(banUserId);
-	}
-
-	/**
-	* Removes the message boards ban where groupId = &#63; and banUserId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param banUserId the ban user ID
-	* @return the message boards ban that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBBan removeByG_B(
-		long groupId, long banUserId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchBanException {
-		return getPersistence().removeByG_B(groupId, banUserId);
-	}
-
-	/**
 	* Removes all the message boards bans from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -752,55 +801,6 @@ public class MBBanUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of message boards bans where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching message boards bans
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of message boards bans where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching message boards bans
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUserId(userId);
-	}
-
-	/**
-	* Returns the number of message boards bans where banUserId = &#63;.
-	*
-	* @param banUserId the ban user ID
-	* @return the number of matching message boards bans
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByBanUserId(long banUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByBanUserId(banUserId);
-	}
-
-	/**
-	* Returns the number of message boards bans where groupId = &#63; and banUserId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param banUserId the ban user ID
-	* @return the number of matching message boards bans
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_B(long groupId, long banUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_B(groupId, banUserId);
 	}
 
 	/**

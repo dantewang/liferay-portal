@@ -111,86 +111,6 @@ public class DDMStructureUtil {
 	}
 
 	/**
-	* Caches the d d m structure in the entity cache if it is enabled.
-	*
-	* @param ddmStructure the d d m structure
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.dynamicdatamapping.model.DDMStructure ddmStructure) {
-		getPersistence().cacheResult(ddmStructure);
-	}
-
-	/**
-	* Caches the d d m structures in the entity cache if it is enabled.
-	*
-	* @param ddmStructures the d d m structures
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> ddmStructures) {
-		getPersistence().cacheResult(ddmStructures);
-	}
-
-	/**
-	* Creates a new d d m structure with the primary key. Does not add the d d m structure to the database.
-	*
-	* @param structureId the primary key for the new d d m structure
-	* @return the new d d m structure
-	*/
-	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure create(
-		long structureId) {
-		return getPersistence().create(structureId);
-	}
-
-	/**
-	* Removes the d d m structure with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param structureId the primary key of the d d m structure
-	* @return the d d m structure that was removed
-	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureException if a d d m structure with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure remove(
-		long structureId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatamapping.NoSuchStructureException {
-		return getPersistence().remove(structureId);
-	}
-
-	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure updateImpl(
-		com.liferay.portlet.dynamicdatamapping.model.DDMStructure ddmStructure)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(ddmStructure);
-	}
-
-	/**
-	* Returns the d d m structure with the primary key or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchStructureException} if it could not be found.
-	*
-	* @param structureId the primary key of the d d m structure
-	* @return the d d m structure
-	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureException if a d d m structure with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure findByPrimaryKey(
-		long structureId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatamapping.NoSuchStructureException {
-		return getPersistence().findByPrimaryKey(structureId);
-	}
-
-	/**
-	* Returns the d d m structure with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param structureId the primary key of the d d m structure
-	* @return the d d m structure, or <code>null</code> if a d d m structure with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure fetchByPrimaryKey(
-		long structureId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(structureId);
-	}
-
-	/**
 	* Returns all the d d m structures where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -327,6 +247,29 @@ public class DDMStructureUtil {
 	}
 
 	/**
+	* Removes all the d d m structures where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of d d m structures where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching d d m structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
+	}
+
+	/**
 	* Returns the d d m structure where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchStructureException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -369,6 +312,34 @@ public class DDMStructureUtil {
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUUID_G(uuid, groupId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the d d m structure where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the d d m structure that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatamapping.NoSuchStructureException {
+		return getPersistence().removeByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns the number of d d m structures where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching d d m structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUUID_G(java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUUID_G(uuid, groupId);
 	}
 
 	/**
@@ -519,6 +490,31 @@ public class DDMStructureUtil {
 		return getPersistence()
 				   .findByUuid_C_PrevAndNext(structureId, uuid, companyId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the d d m structures where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns the number of d d m structures where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching d d m structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid_C(uuid, companyId);
 	}
 
 	/**
@@ -846,6 +842,65 @@ public class DDMStructureUtil {
 	}
 
 	/**
+	* Removes all the d d m structures where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of d d m structures where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching d d m structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of d d m structures where groupId = any &#63;.
+	*
+	* @param groupIds the group IDs
+	* @return the number of matching d d m structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long[] groupIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupIds);
+	}
+
+	/**
+	* Returns the number of d d m structures that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching d d m structures that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of d d m structures that the user has permission to view where groupId = any &#63;.
+	*
+	* @param groupIds the group IDs
+	* @return the number of matching d d m structures that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByGroupId(long[] groupIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByGroupId(groupIds);
+	}
+
+	/**
 	* Returns all the d d m structures where classNameId = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -988,6 +1043,29 @@ public class DDMStructureUtil {
 	}
 
 	/**
+	* Removes all the d d m structures where classNameId = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByClassNameId(long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByClassNameId(classNameId);
+	}
+
+	/**
+	* Returns the number of d d m structures where classNameId = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @return the number of matching d d m structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByClassNameId(long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByClassNameId(classNameId);
+	}
+
+	/**
 	* Returns the d d m structure where groupId = &#63; and structureKey = &#63; or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchStructureException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -1031,6 +1109,34 @@ public class DDMStructureUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_S(groupId, structureKey, retrieveFromCache);
+	}
+
+	/**
+	* Removes the d d m structure where groupId = &#63; and structureKey = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param structureKey the structure key
+	* @return the d d m structure that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure removeByG_S(
+		long groupId, java.lang.String structureKey)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatamapping.NoSuchStructureException {
+		return getPersistence().removeByG_S(groupId, structureKey);
+	}
+
+	/**
+	* Returns the number of d d m structures where groupId = &#63; and structureKey = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureKey the structure key
+	* @return the number of matching d d m structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_S(long groupId, java.lang.String structureKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_S(groupId, structureKey);
 	}
 
 	/**
@@ -1182,6 +1288,31 @@ public class DDMStructureUtil {
 		return getPersistence()
 				   .findByC_C_PrevAndNext(structureId, companyId, classNameId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the d d m structures where companyId = &#63; and classNameId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_C(long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_C(companyId, classNameId);
+	}
+
+	/**
+	* Returns the number of d d m structures where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @return the number of matching d d m structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C(long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C(companyId, classNameId);
 	}
 
 	/**
@@ -1439,6 +1570,130 @@ public class DDMStructureUtil {
 	}
 
 	/**
+	* Removes all the d d m structures where groupId = &#63; and name = &#63; and description = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param description the description
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_N_D(long groupId, java.lang.String name,
+		java.lang.String description)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_N_D(groupId, name, description);
+	}
+
+	/**
+	* Returns the number of d d m structures where groupId = &#63; and name = &#63; and description = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param description the description
+	* @return the number of matching d d m structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_N_D(long groupId, java.lang.String name,
+		java.lang.String description)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_N_D(groupId, name, description);
+	}
+
+	/**
+	* Returns the number of d d m structures that the user has permission to view where groupId = &#63; and name = &#63; and description = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param description the description
+	* @return the number of matching d d m structures that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_N_D(long groupId, java.lang.String name,
+		java.lang.String description)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_N_D(groupId, name, description);
+	}
+
+	/**
+	* Caches the d d m structure in the entity cache if it is enabled.
+	*
+	* @param ddmStructure the d d m structure
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.dynamicdatamapping.model.DDMStructure ddmStructure) {
+		getPersistence().cacheResult(ddmStructure);
+	}
+
+	/**
+	* Caches the d d m structures in the entity cache if it is enabled.
+	*
+	* @param ddmStructures the d d m structures
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> ddmStructures) {
+		getPersistence().cacheResult(ddmStructures);
+	}
+
+	/**
+	* Creates a new d d m structure with the primary key. Does not add the d d m structure to the database.
+	*
+	* @param structureId the primary key for the new d d m structure
+	* @return the new d d m structure
+	*/
+	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure create(
+		long structureId) {
+		return getPersistence().create(structureId);
+	}
+
+	/**
+	* Removes the d d m structure with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param structureId the primary key of the d d m structure
+	* @return the d d m structure that was removed
+	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureException if a d d m structure with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure remove(
+		long structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatamapping.NoSuchStructureException {
+		return getPersistence().remove(structureId);
+	}
+
+	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure updateImpl(
+		com.liferay.portlet.dynamicdatamapping.model.DDMStructure ddmStructure)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(ddmStructure);
+	}
+
+	/**
+	* Returns the d d m structure with the primary key or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchStructureException} if it could not be found.
+	*
+	* @param structureId the primary key of the d d m structure
+	* @return the d d m structure
+	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStructureException if a d d m structure with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure findByPrimaryKey(
+		long structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatamapping.NoSuchStructureException {
+		return getPersistence().findByPrimaryKey(structureId);
+	}
+
+	/**
+	* Returns the d d m structure with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param structureId the primary key of the d d m structure
+	* @return the d d m structure, or <code>null</code> if a d d m structure with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure fetchByPrimaryKey(
+		long structureId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(structureId);
+	}
+
+	/**
 	* Returns all the d d m structures.
 	*
 	* @return the d d m structures
@@ -1488,107 +1743,6 @@ public class DDMStructureUtil {
 	}
 
 	/**
-	* Removes all the d d m structures where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes the d d m structure where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the d d m structure that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatamapping.NoSuchStructureException {
-		return getPersistence().removeByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Removes all the d d m structures where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Removes all the d d m structures where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes all the d d m structures where classNameId = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByClassNameId(long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByClassNameId(classNameId);
-	}
-
-	/**
-	* Removes the d d m structure where groupId = &#63; and structureKey = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param structureKey the structure key
-	* @return the d d m structure that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.dynamicdatamapping.model.DDMStructure removeByG_S(
-		long groupId, java.lang.String structureKey)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatamapping.NoSuchStructureException {
-		return getPersistence().removeByG_S(groupId, structureKey);
-	}
-
-	/**
-	* Removes all the d d m structures where companyId = &#63; and classNameId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_C(long companyId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_C(companyId, classNameId);
-	}
-
-	/**
-	* Removes all the d d m structures where groupId = &#63; and name = &#63; and description = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @param description the description
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_N_D(long groupId, java.lang.String name,
-		java.lang.String description)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_N_D(groupId, name, description);
-	}
-
-	/**
 	* Removes all the d d m structures from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1596,160 +1750,6 @@ public class DDMStructureUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of d d m structures where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching d d m structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of d d m structures where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching d d m structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Returns the number of d d m structures where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching d d m structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Returns the number of d d m structures where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching d d m structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of d d m structures where groupId = any &#63;.
-	*
-	* @param groupIds the group IDs
-	* @return the number of matching d d m structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long[] groupIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupIds);
-	}
-
-	/**
-	* Returns the number of d d m structures that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching d d m structures that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of d d m structures that the user has permission to view where groupId = any &#63;.
-	*
-	* @param groupIds the group IDs
-	* @return the number of matching d d m structures that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByGroupId(long[] groupIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByGroupId(groupIds);
-	}
-
-	/**
-	* Returns the number of d d m structures where classNameId = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @return the number of matching d d m structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByClassNameId(long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByClassNameId(classNameId);
-	}
-
-	/**
-	* Returns the number of d d m structures where groupId = &#63; and structureKey = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureKey the structure key
-	* @return the number of matching d d m structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_S(long groupId, java.lang.String structureKey)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_S(groupId, structureKey);
-	}
-
-	/**
-	* Returns the number of d d m structures where companyId = &#63; and classNameId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @return the number of matching d d m structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C(long companyId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C(companyId, classNameId);
-	}
-
-	/**
-	* Returns the number of d d m structures where groupId = &#63; and name = &#63; and description = &#63;.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @param description the description
-	* @return the number of matching d d m structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_N_D(long groupId, java.lang.String name,
-		java.lang.String description)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_N_D(groupId, name, description);
-	}
-
-	/**
-	* Returns the number of d d m structures that the user has permission to view where groupId = &#63; and name = &#63; and description = &#63;.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @param description the description
-	* @return the number of matching d d m structures that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_N_D(long groupId, java.lang.String name,
-		java.lang.String description)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_N_D(groupId, name, description);
 	}
 
 	/**

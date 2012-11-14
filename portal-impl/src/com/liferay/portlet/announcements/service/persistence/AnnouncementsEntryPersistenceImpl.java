@@ -82,6 +82,17 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
 			AnnouncementsEntryImpl.class,
@@ -102,580 +113,6 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			AnnouncementsEntryModelImpl.UUID_COLUMN_BITMASK |
-			AnnouncementsEntryModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
-		new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
-			new String[] { Long.class.getName() },
-			AnnouncementsEntryModelImpl.USERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			AnnouncementsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			AnnouncementsEntryModelImpl.CLASSPK_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_A = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_A",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_A",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			},
-			AnnouncementsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			AnnouncementsEntryModelImpl.CLASSPK_COLUMN_BITMASK |
-			AnnouncementsEntryModelImpl.ALERT_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_A = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_A",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the announcements entry in the entity cache if it is enabled.
-	 *
-	 * @param announcementsEntry the announcements entry
-	 */
-	public void cacheResult(AnnouncementsEntry announcementsEntry) {
-		EntityCacheUtil.putResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class, announcementsEntry.getPrimaryKey(),
-			announcementsEntry);
-
-		announcementsEntry.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the announcements entries in the entity cache if it is enabled.
-	 *
-	 * @param announcementsEntries the announcements entries
-	 */
-	public void cacheResult(List<AnnouncementsEntry> announcementsEntries) {
-		for (AnnouncementsEntry announcementsEntry : announcementsEntries) {
-			if (EntityCacheUtil.getResult(
-						AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-						AnnouncementsEntryImpl.class,
-						announcementsEntry.getPrimaryKey()) == null) {
-				cacheResult(announcementsEntry);
-			}
-			else {
-				announcementsEntry.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all announcements entries.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(AnnouncementsEntryImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(AnnouncementsEntryImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the announcements entry.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(AnnouncementsEntry announcementsEntry) {
-		EntityCacheUtil.removeResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class, announcementsEntry.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<AnnouncementsEntry> announcementsEntries) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (AnnouncementsEntry announcementsEntry : announcementsEntries) {
-			EntityCacheUtil.removeResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-				AnnouncementsEntryImpl.class, announcementsEntry.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new announcements entry with the primary key. Does not add the announcements entry to the database.
-	 *
-	 * @param entryId the primary key for the new announcements entry
-	 * @return the new announcements entry
-	 */
-	public AnnouncementsEntry create(long entryId) {
-		AnnouncementsEntry announcementsEntry = new AnnouncementsEntryImpl();
-
-		announcementsEntry.setNew(true);
-		announcementsEntry.setPrimaryKey(entryId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		announcementsEntry.setUuid(uuid);
-
-		return announcementsEntry;
-	}
-
-	/**
-	 * Removes the announcements entry with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param entryId the primary key of the announcements entry
-	 * @return the announcements entry that was removed
-	 * @throws com.liferay.portlet.announcements.NoSuchEntryException if a announcements entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AnnouncementsEntry remove(long entryId)
-		throws NoSuchEntryException, SystemException {
-		return remove(Long.valueOf(entryId));
-	}
-
-	/**
-	 * Removes the announcements entry with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the announcements entry
-	 * @return the announcements entry that was removed
-	 * @throws com.liferay.portlet.announcements.NoSuchEntryException if a announcements entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public AnnouncementsEntry remove(Serializable primaryKey)
-		throws NoSuchEntryException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			AnnouncementsEntry announcementsEntry = (AnnouncementsEntry)session.get(AnnouncementsEntryImpl.class,
-					primaryKey);
-
-			if (announcementsEntry == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(announcementsEntry);
-		}
-		catch (NoSuchEntryException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected AnnouncementsEntry removeImpl(
-		AnnouncementsEntry announcementsEntry) throws SystemException {
-		announcementsEntry = toUnwrappedModel(announcementsEntry);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(announcementsEntry)) {
-				announcementsEntry = (AnnouncementsEntry)session.get(AnnouncementsEntryImpl.class,
-						announcementsEntry.getPrimaryKeyObj());
-			}
-
-			if (announcementsEntry != null) {
-				session.delete(announcementsEntry);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (announcementsEntry != null) {
-			clearCache(announcementsEntry);
-		}
-
-		return announcementsEntry;
-	}
-
-	@Override
-	public AnnouncementsEntry updateImpl(
-		com.liferay.portlet.announcements.model.AnnouncementsEntry announcementsEntry)
-		throws SystemException {
-		announcementsEntry = toUnwrappedModel(announcementsEntry);
-
-		boolean isNew = announcementsEntry.isNew();
-
-		AnnouncementsEntryModelImpl announcementsEntryModelImpl = (AnnouncementsEntryModelImpl)announcementsEntry;
-
-		if (Validator.isNull(announcementsEntry.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			announcementsEntry.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (announcementsEntry.isNew()) {
-				session.save(announcementsEntry);
-
-				announcementsEntry.setNew(false);
-			}
-			else {
-				session.merge(announcementsEntry);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !AnnouncementsEntryModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((announcementsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						announcementsEntryModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { announcementsEntryModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((announcementsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						announcementsEntryModelImpl.getOriginalUuid(),
-						Long.valueOf(announcementsEntryModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						announcementsEntryModelImpl.getUuid(),
-						Long.valueOf(announcementsEntryModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((announcementsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(announcementsEntryModelImpl.getOriginalUserId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(announcementsEntryModelImpl.getUserId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
-					args);
-			}
-
-			if ((announcementsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(announcementsEntryModelImpl.getOriginalClassNameId()),
-						Long.valueOf(announcementsEntryModelImpl.getOriginalClassPK())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(announcementsEntryModelImpl.getClassNameId()),
-						Long.valueOf(announcementsEntryModelImpl.getClassPK())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
-					args);
-			}
-
-			if ((announcementsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(announcementsEntryModelImpl.getOriginalClassNameId()),
-						Long.valueOf(announcementsEntryModelImpl.getOriginalClassPK()),
-						Boolean.valueOf(announcementsEntryModelImpl.getOriginalAlert())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_A, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(announcementsEntryModelImpl.getClassNameId()),
-						Long.valueOf(announcementsEntryModelImpl.getClassPK()),
-						Boolean.valueOf(announcementsEntryModelImpl.getAlert())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_A, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class, announcementsEntry.getPrimaryKey(),
-			announcementsEntry);
-
-		return announcementsEntry;
-	}
-
-	protected AnnouncementsEntry toUnwrappedModel(
-		AnnouncementsEntry announcementsEntry) {
-		if (announcementsEntry instanceof AnnouncementsEntryImpl) {
-			return announcementsEntry;
-		}
-
-		AnnouncementsEntryImpl announcementsEntryImpl = new AnnouncementsEntryImpl();
-
-		announcementsEntryImpl.setNew(announcementsEntry.isNew());
-		announcementsEntryImpl.setPrimaryKey(announcementsEntry.getPrimaryKey());
-
-		announcementsEntryImpl.setUuid(announcementsEntry.getUuid());
-		announcementsEntryImpl.setEntryId(announcementsEntry.getEntryId());
-		announcementsEntryImpl.setCompanyId(announcementsEntry.getCompanyId());
-		announcementsEntryImpl.setUserId(announcementsEntry.getUserId());
-		announcementsEntryImpl.setUserName(announcementsEntry.getUserName());
-		announcementsEntryImpl.setCreateDate(announcementsEntry.getCreateDate());
-		announcementsEntryImpl.setModifiedDate(announcementsEntry.getModifiedDate());
-		announcementsEntryImpl.setClassNameId(announcementsEntry.getClassNameId());
-		announcementsEntryImpl.setClassPK(announcementsEntry.getClassPK());
-		announcementsEntryImpl.setTitle(announcementsEntry.getTitle());
-		announcementsEntryImpl.setContent(announcementsEntry.getContent());
-		announcementsEntryImpl.setUrl(announcementsEntry.getUrl());
-		announcementsEntryImpl.setType(announcementsEntry.getType());
-		announcementsEntryImpl.setDisplayDate(announcementsEntry.getDisplayDate());
-		announcementsEntryImpl.setExpirationDate(announcementsEntry.getExpirationDate());
-		announcementsEntryImpl.setPriority(announcementsEntry.getPriority());
-		announcementsEntryImpl.setAlert(announcementsEntry.isAlert());
-
-		return announcementsEntryImpl;
-	}
-
-	/**
-	 * Returns the announcements entry with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the announcements entry
-	 * @return the announcements entry
-	 * @throws com.liferay.portal.NoSuchModelException if a announcements entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public AnnouncementsEntry findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the announcements entry with the primary key or throws a {@link com.liferay.portlet.announcements.NoSuchEntryException} if it could not be found.
-	 *
-	 * @param entryId the primary key of the announcements entry
-	 * @return the announcements entry
-	 * @throws com.liferay.portlet.announcements.NoSuchEntryException if a announcements entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AnnouncementsEntry findByPrimaryKey(long entryId)
-		throws NoSuchEntryException, SystemException {
-		AnnouncementsEntry announcementsEntry = fetchByPrimaryKey(entryId);
-
-		if (announcementsEntry == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + entryId);
-			}
-
-			throw new NoSuchEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				entryId);
-		}
-
-		return announcementsEntry;
-	}
-
-	/**
-	 * Returns the announcements entry with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the announcements entry
-	 * @return the announcements entry, or <code>null</code> if a announcements entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public AnnouncementsEntry fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the announcements entry with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param entryId the primary key of the announcements entry
-	 * @return the announcements entry, or <code>null</code> if a announcements entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AnnouncementsEntry fetchByPrimaryKey(long entryId)
-		throws SystemException {
-		AnnouncementsEntry announcementsEntry = (AnnouncementsEntry)EntityCacheUtil.getResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-				AnnouncementsEntryImpl.class, entryId);
-
-		if (announcementsEntry == _nullAnnouncementsEntry) {
-			return null;
-		}
-
-		if (announcementsEntry == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				announcementsEntry = (AnnouncementsEntry)session.get(AnnouncementsEntryImpl.class,
-						Long.valueOf(entryId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (announcementsEntry != null) {
-					cacheResult(announcementsEntry);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-						AnnouncementsEntryImpl.class, entryId,
-						_nullAnnouncementsEntry);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return announcementsEntry;
-	}
 
 	/**
 	 * Returns all the announcements entries where uuid = &#63;.
@@ -1416,6 +853,169 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the announcements entries where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (AnnouncementsEntry announcementsEntry : findByUuid(uuid)) {
+			remove(announcementsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of announcements entries where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching announcements entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of announcements entries that the user has permission to view where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching announcements entries that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByUuid(String uuid) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByUuid(uuid);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
+
+		if (uuid == null) {
+			query.append(_FINDER_COLUMN_UUID_UUID_1);
+		}
+		else {
+			if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_UUID_3);
+			}
+			else {
+				query.append(_FINDER_COLUMN_UUID_UUID_2);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				AnnouncementsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			if (uuid != null) {
+				qPos.add(uuid);
+			}
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "announcementsEntry.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "announcementsEntry.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(announcementsEntry.uuid IS NULL OR announcementsEntry.uuid = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			AnnouncementsEntryModelImpl.UUID_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the announcements entries where uuid = &#63; and companyId = &#63;.
@@ -2204,6 +1804,184 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	}
 
 	/**
+	 * Removes all the announcements entries where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (AnnouncementsEntry announcementsEntry : findByUuid_C(uuid,
+				companyId)) {
+			remove(announcementsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of announcements entries where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching announcements entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of announcements entries that the user has permission to view where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching announcements entries that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByUuid_C(uuid, companyId);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
+
+		if (uuid == null) {
+			query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+		}
+		else {
+			if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+			}
+			else {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+			}
+		}
+
+		query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				AnnouncementsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			if (uuid != null) {
+				qPos.add(uuid);
+			}
+
+			qPos.add(companyId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "announcementsEntry.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "announcementsEntry.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(announcementsEntry.uuid IS NULL OR announcementsEntry.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "announcementsEntry.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
+		new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
+			new String[] { Long.class.getName() },
+			AnnouncementsEntryModelImpl.USERID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the announcements entries where userId = &#63;.
 	 *
 	 * @param userId the user ID
@@ -2896,6 +2674,142 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the announcements entries where userId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUserId(long userId) throws SystemException {
+		for (AnnouncementsEntry announcementsEntry : findByUserId(userId)) {
+			remove(announcementsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of announcements entries where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the number of matching announcements entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUserId(long userId) throws SystemException {
+		Object[] finderArgs = new Object[] { userId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of announcements entries that the user has permission to view where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the number of matching announcements entries that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByUserId(long userId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByUserId(userId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				AnnouncementsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(userId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_USERID_USERID_2 = "announcementsEntry.userId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			AnnouncementsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.CLASSPK_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the announcements entries where classNameId = &#63; and classPK = &#63;.
@@ -3633,6 +3547,166 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the announcements entries where classNameId = &#63; and classPK = &#63; from the database.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_C(long classNameId, long classPK)
+		throws SystemException {
+		for (AnnouncementsEntry announcementsEntry : findByC_C(classNameId,
+				classPK)) {
+			remove(announcementsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of announcements entries where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the number of matching announcements entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_C(long classNameId, long classPK)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { classNameId, classPK };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of announcements entries that the user has permission to view where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the number of matching announcements entries that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByC_C(long classNameId, long classPK)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByC_C(classNameId, classPK);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+		query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				AnnouncementsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(classNameId);
+
+			qPos.add(classPK);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "announcementsEntry.classNameId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_CLASSPK_2 = "announcementsEntry.classPK = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_A = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_A",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_A",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			AnnouncementsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.CLASSPK_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.ALERT_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_A = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_A",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
 
 	/**
 	 * Returns all the announcements entries where classNameId = &#63; and classPK = &#63; and alert = &#63;.
@@ -4415,175 +4489,6 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	}
 
 	/**
-	 * Returns all the announcements entries.
-	 *
-	 * @return the announcements entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AnnouncementsEntry> findAll() throws SystemException {
-		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the announcements entries.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of announcements entries
-	 * @param end the upper bound of the range of announcements entries (not inclusive)
-	 * @return the range of announcements entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AnnouncementsEntry> findAll(int start, int end)
-		throws SystemException {
-		return findAll(start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the announcements entries.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of announcements entries
-	 * @param end the upper bound of the range of announcements entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of announcements entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AnnouncementsEntry> findAll(int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if (list == null) {
-			StringBundler query = null;
-			String sql = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 3));
-
-				query.append(_SQL_SELECT_ANNOUNCEMENTSENTRY);
-
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-
-				sql = query.toString();
-			}
-			else {
-				sql = _SQL_SELECT_ANNOUNCEMENTSENTRY.concat(AnnouncementsEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				if (orderByComparator == null) {
-					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-				}
-				else {
-					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Removes all the announcements entries where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (AnnouncementsEntry announcementsEntry : findByUuid(uuid)) {
-			remove(announcementsEntry);
-		}
-	}
-
-	/**
-	 * Removes all the announcements entries where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (AnnouncementsEntry announcementsEntry : findByUuid_C(uuid,
-				companyId)) {
-			remove(announcementsEntry);
-		}
-	}
-
-	/**
-	 * Removes all the announcements entries where userId = &#63; from the database.
-	 *
-	 * @param userId the user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUserId(long userId) throws SystemException {
-		for (AnnouncementsEntry announcementsEntry : findByUserId(userId)) {
-			remove(announcementsEntry);
-		}
-	}
-
-	/**
-	 * Removes all the announcements entries where classNameId = &#63; and classPK = &#63; from the database.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_C(long classNameId, long classPK)
-		throws SystemException {
-		for (AnnouncementsEntry announcementsEntry : findByC_C(classNameId,
-				classPK)) {
-			remove(announcementsEntry);
-		}
-	}
-
-	/**
 	 * Removes all the announcements entries where classNameId = &#63; and classPK = &#63; and alert = &#63; from the database.
 	 *
 	 * @param classNameId the class name ID
@@ -4596,493 +4501,6 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 		for (AnnouncementsEntry announcementsEntry : findByC_C_A(classNameId,
 				classPK, alert)) {
 			remove(announcementsEntry);
-		}
-	}
-
-	/**
-	 * Removes all the announcements entries from the database.
-	 *
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeAll() throws SystemException {
-		for (AnnouncementsEntry announcementsEntry : findAll()) {
-			remove(announcementsEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of announcements entries where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching announcements entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of announcements entries that the user has permission to view where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching announcements entries that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByUuid(String uuid) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByUuid(uuid);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
-
-		if (uuid == null) {
-			query.append(_FINDER_COLUMN_UUID_UUID_1);
-		}
-		else {
-			if (uuid.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_UUID_UUID_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_UUID_UUID_2);
-			}
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				AnnouncementsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			if (uuid != null) {
-				qPos.add(uuid);
-			}
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of announcements entries where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching announcements entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of announcements entries that the user has permission to view where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching announcements entries that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByUuid_C(uuid, companyId);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
-
-		if (uuid == null) {
-			query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-		}
-		else {
-			if (uuid.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-			}
-		}
-
-		query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				AnnouncementsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			if (uuid != null) {
-				qPos.add(uuid);
-			}
-
-			qPos.add(companyId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of announcements entries where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @return the number of matching announcements entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUserId(long userId) throws SystemException {
-		Object[] finderArgs = new Object[] { userId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of announcements entries that the user has permission to view where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @return the number of matching announcements entries that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByUserId(long userId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByUserId(userId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				AnnouncementsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(userId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of announcements entries where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @return the number of matching announcements entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_C(long classNameId, long classPK)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { classNameId, classPK };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of announcements entries that the user has permission to view where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @return the number of matching announcements entries that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByC_C(long classNameId, long classPK)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByC_C(classNameId, classPK);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-		query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				AnnouncementsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(classNameId);
-
-			qPos.add(classPK);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
 		}
 	}
 
@@ -5209,6 +4627,606 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 		}
 	}
 
+	private static final String _FINDER_COLUMN_C_C_A_CLASSNAMEID_2 = "announcementsEntry.classNameId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_A_CLASSPK_2 = "announcementsEntry.classPK = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_A_ALERT_2 = "announcementsEntry.alert = ?";
+
+	/**
+	 * Caches the announcements entry in the entity cache if it is enabled.
+	 *
+	 * @param announcementsEntry the announcements entry
+	 */
+	public void cacheResult(AnnouncementsEntry announcementsEntry) {
+		EntityCacheUtil.putResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class, announcementsEntry.getPrimaryKey(),
+			announcementsEntry);
+
+		announcementsEntry.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the announcements entries in the entity cache if it is enabled.
+	 *
+	 * @param announcementsEntries the announcements entries
+	 */
+	public void cacheResult(List<AnnouncementsEntry> announcementsEntries) {
+		for (AnnouncementsEntry announcementsEntry : announcementsEntries) {
+			if (EntityCacheUtil.getResult(
+						AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+						AnnouncementsEntryImpl.class,
+						announcementsEntry.getPrimaryKey()) == null) {
+				cacheResult(announcementsEntry);
+			}
+			else {
+				announcementsEntry.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all announcements entries.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(AnnouncementsEntryImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(AnnouncementsEntryImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the announcements entry.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(AnnouncementsEntry announcementsEntry) {
+		EntityCacheUtil.removeResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class, announcementsEntry.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<AnnouncementsEntry> announcementsEntries) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (AnnouncementsEntry announcementsEntry : announcementsEntries) {
+			EntityCacheUtil.removeResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+				AnnouncementsEntryImpl.class, announcementsEntry.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new announcements entry with the primary key. Does not add the announcements entry to the database.
+	 *
+	 * @param entryId the primary key for the new announcements entry
+	 * @return the new announcements entry
+	 */
+	public AnnouncementsEntry create(long entryId) {
+		AnnouncementsEntry announcementsEntry = new AnnouncementsEntryImpl();
+
+		announcementsEntry.setNew(true);
+		announcementsEntry.setPrimaryKey(entryId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		announcementsEntry.setUuid(uuid);
+
+		return announcementsEntry;
+	}
+
+	/**
+	 * Removes the announcements entry with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param entryId the primary key of the announcements entry
+	 * @return the announcements entry that was removed
+	 * @throws com.liferay.portlet.announcements.NoSuchEntryException if a announcements entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AnnouncementsEntry remove(long entryId)
+		throws NoSuchEntryException, SystemException {
+		return remove(Long.valueOf(entryId));
+	}
+
+	/**
+	 * Removes the announcements entry with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the announcements entry
+	 * @return the announcements entry that was removed
+	 * @throws com.liferay.portlet.announcements.NoSuchEntryException if a announcements entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public AnnouncementsEntry remove(Serializable primaryKey)
+		throws NoSuchEntryException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			AnnouncementsEntry announcementsEntry = (AnnouncementsEntry)session.get(AnnouncementsEntryImpl.class,
+					primaryKey);
+
+			if (announcementsEntry == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(announcementsEntry);
+		}
+		catch (NoSuchEntryException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected AnnouncementsEntry removeImpl(
+		AnnouncementsEntry announcementsEntry) throws SystemException {
+		announcementsEntry = toUnwrappedModel(announcementsEntry);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(announcementsEntry)) {
+				announcementsEntry = (AnnouncementsEntry)session.get(AnnouncementsEntryImpl.class,
+						announcementsEntry.getPrimaryKeyObj());
+			}
+
+			if (announcementsEntry != null) {
+				session.delete(announcementsEntry);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (announcementsEntry != null) {
+			clearCache(announcementsEntry);
+		}
+
+		return announcementsEntry;
+	}
+
+	@Override
+	public AnnouncementsEntry updateImpl(
+		com.liferay.portlet.announcements.model.AnnouncementsEntry announcementsEntry)
+		throws SystemException {
+		announcementsEntry = toUnwrappedModel(announcementsEntry);
+
+		boolean isNew = announcementsEntry.isNew();
+
+		AnnouncementsEntryModelImpl announcementsEntryModelImpl = (AnnouncementsEntryModelImpl)announcementsEntry;
+
+		if (Validator.isNull(announcementsEntry.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			announcementsEntry.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (announcementsEntry.isNew()) {
+				session.save(announcementsEntry);
+
+				announcementsEntry.setNew(false);
+			}
+			else {
+				session.merge(announcementsEntry);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !AnnouncementsEntryModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((announcementsEntryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						announcementsEntryModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { announcementsEntryModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((announcementsEntryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						announcementsEntryModelImpl.getOriginalUuid(),
+						Long.valueOf(announcementsEntryModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						announcementsEntryModelImpl.getUuid(),
+						Long.valueOf(announcementsEntryModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((announcementsEntryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(announcementsEntryModelImpl.getOriginalUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(announcementsEntryModelImpl.getUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
+			}
+
+			if ((announcementsEntryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(announcementsEntryModelImpl.getOriginalClassNameId()),
+						Long.valueOf(announcementsEntryModelImpl.getOriginalClassPK())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(announcementsEntryModelImpl.getClassNameId()),
+						Long.valueOf(announcementsEntryModelImpl.getClassPK())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
+			}
+
+			if ((announcementsEntryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(announcementsEntryModelImpl.getOriginalClassNameId()),
+						Long.valueOf(announcementsEntryModelImpl.getOriginalClassPK()),
+						Boolean.valueOf(announcementsEntryModelImpl.getOriginalAlert())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(announcementsEntryModelImpl.getClassNameId()),
+						Long.valueOf(announcementsEntryModelImpl.getClassPK()),
+						Boolean.valueOf(announcementsEntryModelImpl.getAlert())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class, announcementsEntry.getPrimaryKey(),
+			announcementsEntry);
+
+		return announcementsEntry;
+	}
+
+	protected AnnouncementsEntry toUnwrappedModel(
+		AnnouncementsEntry announcementsEntry) {
+		if (announcementsEntry instanceof AnnouncementsEntryImpl) {
+			return announcementsEntry;
+		}
+
+		AnnouncementsEntryImpl announcementsEntryImpl = new AnnouncementsEntryImpl();
+
+		announcementsEntryImpl.setNew(announcementsEntry.isNew());
+		announcementsEntryImpl.setPrimaryKey(announcementsEntry.getPrimaryKey());
+
+		announcementsEntryImpl.setUuid(announcementsEntry.getUuid());
+		announcementsEntryImpl.setEntryId(announcementsEntry.getEntryId());
+		announcementsEntryImpl.setCompanyId(announcementsEntry.getCompanyId());
+		announcementsEntryImpl.setUserId(announcementsEntry.getUserId());
+		announcementsEntryImpl.setUserName(announcementsEntry.getUserName());
+		announcementsEntryImpl.setCreateDate(announcementsEntry.getCreateDate());
+		announcementsEntryImpl.setModifiedDate(announcementsEntry.getModifiedDate());
+		announcementsEntryImpl.setClassNameId(announcementsEntry.getClassNameId());
+		announcementsEntryImpl.setClassPK(announcementsEntry.getClassPK());
+		announcementsEntryImpl.setTitle(announcementsEntry.getTitle());
+		announcementsEntryImpl.setContent(announcementsEntry.getContent());
+		announcementsEntryImpl.setUrl(announcementsEntry.getUrl());
+		announcementsEntryImpl.setType(announcementsEntry.getType());
+		announcementsEntryImpl.setDisplayDate(announcementsEntry.getDisplayDate());
+		announcementsEntryImpl.setExpirationDate(announcementsEntry.getExpirationDate());
+		announcementsEntryImpl.setPriority(announcementsEntry.getPriority());
+		announcementsEntryImpl.setAlert(announcementsEntry.isAlert());
+
+		return announcementsEntryImpl;
+	}
+
+	/**
+	 * Returns the announcements entry with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the announcements entry
+	 * @return the announcements entry
+	 * @throws com.liferay.portal.NoSuchModelException if a announcements entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public AnnouncementsEntry findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the announcements entry with the primary key or throws a {@link com.liferay.portlet.announcements.NoSuchEntryException} if it could not be found.
+	 *
+	 * @param entryId the primary key of the announcements entry
+	 * @return the announcements entry
+	 * @throws com.liferay.portlet.announcements.NoSuchEntryException if a announcements entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AnnouncementsEntry findByPrimaryKey(long entryId)
+		throws NoSuchEntryException, SystemException {
+		AnnouncementsEntry announcementsEntry = fetchByPrimaryKey(entryId);
+
+		if (announcementsEntry == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + entryId);
+			}
+
+			throw new NoSuchEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				entryId);
+		}
+
+		return announcementsEntry;
+	}
+
+	/**
+	 * Returns the announcements entry with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the announcements entry
+	 * @return the announcements entry, or <code>null</code> if a announcements entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public AnnouncementsEntry fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the announcements entry with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param entryId the primary key of the announcements entry
+	 * @return the announcements entry, or <code>null</code> if a announcements entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AnnouncementsEntry fetchByPrimaryKey(long entryId)
+		throws SystemException {
+		AnnouncementsEntry announcementsEntry = (AnnouncementsEntry)EntityCacheUtil.getResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+				AnnouncementsEntryImpl.class, entryId);
+
+		if (announcementsEntry == _nullAnnouncementsEntry) {
+			return null;
+		}
+
+		if (announcementsEntry == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				announcementsEntry = (AnnouncementsEntry)session.get(AnnouncementsEntryImpl.class,
+						Long.valueOf(entryId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (announcementsEntry != null) {
+					cacheResult(announcementsEntry);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+						AnnouncementsEntryImpl.class, entryId,
+						_nullAnnouncementsEntry);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return announcementsEntry;
+	}
+
+	/**
+	 * Returns all the announcements entries.
+	 *
+	 * @return the announcements entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AnnouncementsEntry> findAll() throws SystemException {
+		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the announcements entries.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of announcements entries
+	 * @param end the upper bound of the range of announcements entries (not inclusive)
+	 * @return the range of announcements entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AnnouncementsEntry> findAll(int start, int end)
+		throws SystemException {
+		return findAll(start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the announcements entries.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of announcements entries
+	 * @param end the upper bound of the range of announcements entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of announcements entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AnnouncementsEntry> findAll(int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
+
+		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+			String sql = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(2 +
+						(orderByComparator.getOrderByFields().length * 3));
+
+				query.append(_SQL_SELECT_ANNOUNCEMENTSENTRY);
+
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+
+				sql = query.toString();
+			}
+			else {
+				sql = _SQL_SELECT_ANNOUNCEMENTSENTRY.concat(AnnouncementsEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				if (orderByComparator == null) {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+				}
+				else {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the announcements entries from the database.
+	 *
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeAll() throws SystemException {
+		for (AnnouncementsEntry announcementsEntry : findAll()) {
+			remove(announcementsEntry);
+		}
+	}
+
 	/**
 	 * Returns the number of announcements entries.
 	 *
@@ -5300,19 +5318,6 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	private static final String _SQL_SELECT_ANNOUNCEMENTSENTRY_WHERE = "SELECT announcementsEntry FROM AnnouncementsEntry announcementsEntry WHERE ";
 	private static final String _SQL_COUNT_ANNOUNCEMENTSENTRY = "SELECT COUNT(announcementsEntry) FROM AnnouncementsEntry announcementsEntry";
 	private static final String _SQL_COUNT_ANNOUNCEMENTSENTRY_WHERE = "SELECT COUNT(announcementsEntry) FROM AnnouncementsEntry announcementsEntry WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "announcementsEntry.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "announcementsEntry.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(announcementsEntry.uuid IS NULL OR announcementsEntry.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "announcementsEntry.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "announcementsEntry.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(announcementsEntry.uuid IS NULL OR announcementsEntry.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "announcementsEntry.companyId = ?";
-	private static final String _FINDER_COLUMN_USERID_USERID_2 = "announcementsEntry.userId = ?";
-	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "announcementsEntry.classNameId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_CLASSPK_2 = "announcementsEntry.classPK = ?";
-	private static final String _FINDER_COLUMN_C_C_A_CLASSNAMEID_2 = "announcementsEntry.classNameId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_A_CLASSPK_2 = "announcementsEntry.classPK = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_A_ALERT_2 = "announcementsEntry.alert = ?";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "announcementsEntry.entryId";
 	private static final String _FILTER_SQL_SELECT_ANNOUNCEMENTSENTRY_WHERE = "SELECT DISTINCT {announcementsEntry.*} FROM AnnouncementsEntry announcementsEntry WHERE ";
 	private static final String _FILTER_SQL_SELECT_ANNOUNCEMENTSENTRY_NO_INLINE_DISTINCT_WHERE_1 =

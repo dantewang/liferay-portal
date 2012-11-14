@@ -110,86 +110,6 @@ public class UserGroupRoleUtil {
 	}
 
 	/**
-	* Caches the user group role in the entity cache if it is enabled.
-	*
-	* @param userGroupRole the user group role
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.UserGroupRole userGroupRole) {
-		getPersistence().cacheResult(userGroupRole);
-	}
-
-	/**
-	* Caches the user group roles in the entity cache if it is enabled.
-	*
-	* @param userGroupRoles the user group roles
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.UserGroupRole> userGroupRoles) {
-		getPersistence().cacheResult(userGroupRoles);
-	}
-
-	/**
-	* Creates a new user group role with the primary key. Does not add the user group role to the database.
-	*
-	* @param userGroupRolePK the primary key for the new user group role
-	* @return the new user group role
-	*/
-	public static com.liferay.portal.model.UserGroupRole create(
-		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK) {
-		return getPersistence().create(userGroupRolePK);
-	}
-
-	/**
-	* Removes the user group role with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param userGroupRolePK the primary key of the user group role
-	* @return the user group role that was removed
-	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.UserGroupRole remove(
-		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK)
-		throws com.liferay.portal.NoSuchUserGroupRoleException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(userGroupRolePK);
-	}
-
-	public static com.liferay.portal.model.UserGroupRole updateImpl(
-		com.liferay.portal.model.UserGroupRole userGroupRole)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(userGroupRole);
-	}
-
-	/**
-	* Returns the user group role with the primary key or throws a {@link com.liferay.portal.NoSuchUserGroupRoleException} if it could not be found.
-	*
-	* @param userGroupRolePK the primary key of the user group role
-	* @return the user group role
-	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.UserGroupRole findByPrimaryKey(
-		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK)
-		throws com.liferay.portal.NoSuchUserGroupRoleException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(userGroupRolePK);
-	}
-
-	/**
-	* Returns the user group role with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param userGroupRolePK the primary key of the user group role
-	* @return the user group role, or <code>null</code> if a user group role with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.UserGroupRole fetchByPrimaryKey(
-		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(userGroupRolePK);
-	}
-
-	/**
 	* Returns all the user group roles where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -325,6 +245,29 @@ public class UserGroupRoleUtil {
 		return getPersistence()
 				   .findByUserId_PrevAndNext(userGroupRolePK, userId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the user group roles where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUserId(userId);
+	}
+
+	/**
+	* Returns the number of user group roles where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching user group roles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUserId(userId);
 	}
 
 	/**
@@ -467,6 +410,29 @@ public class UserGroupRoleUtil {
 	}
 
 	/**
+	* Removes all the user group roles where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of user group roles where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching user group roles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
 	* Returns all the user group roles where roleId = &#63;.
 	*
 	* @param roleId the role ID
@@ -602,6 +568,29 @@ public class UserGroupRoleUtil {
 		return getPersistence()
 				   .findByRoleId_PrevAndNext(userGroupRolePK, roleId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the user group roles where roleId = &#63; from the database.
+	*
+	* @param roleId the role ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByRoleId(long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByRoleId(roleId);
+	}
+
+	/**
+	* Returns the number of user group roles where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the number of matching user group roles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByRoleId(long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByRoleId(roleId);
 	}
 
 	/**
@@ -756,6 +745,31 @@ public class UserGroupRoleUtil {
 	}
 
 	/**
+	* Removes all the user group roles where userId = &#63; and groupId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByU_G(long userId, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByU_G(userId, groupId);
+	}
+
+	/**
+	* Returns the number of user group roles where userId = &#63; and groupId = &#63;.
+	*
+	* @param userId the user ID
+	* @param groupId the group ID
+	* @return the number of matching user group roles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByU_G(long userId, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByU_G(userId, groupId);
+	}
+
+	/**
 	* Returns all the user group roles where groupId = &#63; and roleId = &#63;.
 	*
 	* @param groupId the group ID
@@ -907,6 +921,111 @@ public class UserGroupRoleUtil {
 	}
 
 	/**
+	* Removes all the user group roles where groupId = &#63; and roleId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param roleId the role ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_R(long groupId, long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_R(groupId, roleId);
+	}
+
+	/**
+	* Returns the number of user group roles where groupId = &#63; and roleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param roleId the role ID
+	* @return the number of matching user group roles
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_R(long groupId, long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_R(groupId, roleId);
+	}
+
+	/**
+	* Caches the user group role in the entity cache if it is enabled.
+	*
+	* @param userGroupRole the user group role
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.UserGroupRole userGroupRole) {
+		getPersistence().cacheResult(userGroupRole);
+	}
+
+	/**
+	* Caches the user group roles in the entity cache if it is enabled.
+	*
+	* @param userGroupRoles the user group roles
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.UserGroupRole> userGroupRoles) {
+		getPersistence().cacheResult(userGroupRoles);
+	}
+
+	/**
+	* Creates a new user group role with the primary key. Does not add the user group role to the database.
+	*
+	* @param userGroupRolePK the primary key for the new user group role
+	* @return the new user group role
+	*/
+	public static com.liferay.portal.model.UserGroupRole create(
+		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK) {
+		return getPersistence().create(userGroupRolePK);
+	}
+
+	/**
+	* Removes the user group role with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param userGroupRolePK the primary key of the user group role
+	* @return the user group role that was removed
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroupRole remove(
+		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(userGroupRolePK);
+	}
+
+	public static com.liferay.portal.model.UserGroupRole updateImpl(
+		com.liferay.portal.model.UserGroupRole userGroupRole)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(userGroupRole);
+	}
+
+	/**
+	* Returns the user group role with the primary key or throws a {@link com.liferay.portal.NoSuchUserGroupRoleException} if it could not be found.
+	*
+	* @param userGroupRolePK the primary key of the user group role
+	* @return the user group role
+	* @throws com.liferay.portal.NoSuchUserGroupRoleException if a user group role with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroupRole findByPrimaryKey(
+		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK)
+		throws com.liferay.portal.NoSuchUserGroupRoleException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(userGroupRolePK);
+	}
+
+	/**
+	* Returns the user group role with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param userGroupRolePK the primary key of the user group role
+	* @return the user group role, or <code>null</code> if a user group role with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroupRole fetchByPrimaryKey(
+		com.liferay.portal.service.persistence.UserGroupRolePK userGroupRolePK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(userGroupRolePK);
+	}
+
+	/**
 	* Returns all the user group roles.
 	*
 	* @return the user group roles
@@ -956,63 +1075,6 @@ public class UserGroupRoleUtil {
 	}
 
 	/**
-	* Removes all the user group roles where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUserId(userId);
-	}
-
-	/**
-	* Removes all the user group roles where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes all the user group roles where roleId = &#63; from the database.
-	*
-	* @param roleId the role ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByRoleId(long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByRoleId(roleId);
-	}
-
-	/**
-	* Removes all the user group roles where userId = &#63; and groupId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByU_G(long userId, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByU_G(userId, groupId);
-	}
-
-	/**
-	* Removes all the user group roles where groupId = &#63; and roleId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param roleId the role ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_R(long groupId, long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_R(groupId, roleId);
-	}
-
-	/**
 	* Removes all the user group roles from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1020,68 +1082,6 @@ public class UserGroupRoleUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of user group roles where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching user group roles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUserId(userId);
-	}
-
-	/**
-	* Returns the number of user group roles where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching user group roles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of user group roles where roleId = &#63;.
-	*
-	* @param roleId the role ID
-	* @return the number of matching user group roles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByRoleId(long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByRoleId(roleId);
-	}
-
-	/**
-	* Returns the number of user group roles where userId = &#63; and groupId = &#63;.
-	*
-	* @param userId the user ID
-	* @param groupId the group ID
-	* @return the number of matching user group roles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByU_G(long userId, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByU_G(userId, groupId);
-	}
-
-	/**
-	* Returns the number of user group roles where groupId = &#63; and roleId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param roleId the role ID
-	* @return the number of matching user group roles
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_R(long groupId, long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_R(groupId, roleId);
 	}
 
 	/**

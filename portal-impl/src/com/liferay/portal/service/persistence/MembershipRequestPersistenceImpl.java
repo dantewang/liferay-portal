@@ -71,6 +71,17 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
+			MembershipRequestImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
+			MembershipRequestImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
 			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
 			MembershipRequestImpl.class,
@@ -92,523 +103,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
-			MembershipRequestImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
-		new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
-			MembershipRequestImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
-			new String[] { Long.class.getName() },
-			MembershipRequestModelImpl.USERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
-			MembershipRequestImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_S",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
-			MembershipRequestImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_S",
-			new String[] { Long.class.getName(), Integer.class.getName() },
-			MembershipRequestModelImpl.GROUPID_COLUMN_BITMASK |
-			MembershipRequestModelImpl.STATUSID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
-			MembershipRequestImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_U_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
-			MembershipRequestImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			},
-			MembershipRequestModelImpl.GROUPID_COLUMN_BITMASK |
-			MembershipRequestModelImpl.USERID_COLUMN_BITMASK |
-			MembershipRequestModelImpl.STATUSID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_U_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_U_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
-			MembershipRequestImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
-			MembershipRequestImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the membership request in the entity cache if it is enabled.
-	 *
-	 * @param membershipRequest the membership request
-	 */
-	public void cacheResult(MembershipRequest membershipRequest) {
-		EntityCacheUtil.putResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestImpl.class, membershipRequest.getPrimaryKey(),
-			membershipRequest);
-
-		membershipRequest.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the membership requests in the entity cache if it is enabled.
-	 *
-	 * @param membershipRequests the membership requests
-	 */
-	public void cacheResult(List<MembershipRequest> membershipRequests) {
-		for (MembershipRequest membershipRequest : membershipRequests) {
-			if (EntityCacheUtil.getResult(
-						MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-						MembershipRequestImpl.class,
-						membershipRequest.getPrimaryKey()) == null) {
-				cacheResult(membershipRequest);
-			}
-			else {
-				membershipRequest.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all membership requests.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(MembershipRequestImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(MembershipRequestImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the membership request.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(MembershipRequest membershipRequest) {
-		EntityCacheUtil.removeResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestImpl.class, membershipRequest.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<MembershipRequest> membershipRequests) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (MembershipRequest membershipRequest : membershipRequests) {
-			EntityCacheUtil.removeResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-				MembershipRequestImpl.class, membershipRequest.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new membership request with the primary key. Does not add the membership request to the database.
-	 *
-	 * @param membershipRequestId the primary key for the new membership request
-	 * @return the new membership request
-	 */
-	public MembershipRequest create(long membershipRequestId) {
-		MembershipRequest membershipRequest = new MembershipRequestImpl();
-
-		membershipRequest.setNew(true);
-		membershipRequest.setPrimaryKey(membershipRequestId);
-
-		return membershipRequest;
-	}
-
-	/**
-	 * Removes the membership request with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param membershipRequestId the primary key of the membership request
-	 * @return the membership request that was removed
-	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MembershipRequest remove(long membershipRequestId)
-		throws NoSuchMembershipRequestException, SystemException {
-		return remove(Long.valueOf(membershipRequestId));
-	}
-
-	/**
-	 * Removes the membership request with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the membership request
-	 * @return the membership request that was removed
-	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MembershipRequest remove(Serializable primaryKey)
-		throws NoSuchMembershipRequestException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			MembershipRequest membershipRequest = (MembershipRequest)session.get(MembershipRequestImpl.class,
-					primaryKey);
-
-			if (membershipRequest == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchMembershipRequestException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(membershipRequest);
-		}
-		catch (NoSuchMembershipRequestException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected MembershipRequest removeImpl(MembershipRequest membershipRequest)
-		throws SystemException {
-		membershipRequest = toUnwrappedModel(membershipRequest);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(membershipRequest)) {
-				membershipRequest = (MembershipRequest)session.get(MembershipRequestImpl.class,
-						membershipRequest.getPrimaryKeyObj());
-			}
-
-			if (membershipRequest != null) {
-				session.delete(membershipRequest);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (membershipRequest != null) {
-			clearCache(membershipRequest);
-		}
-
-		return membershipRequest;
-	}
-
-	@Override
-	public MembershipRequest updateImpl(
-		com.liferay.portal.model.MembershipRequest membershipRequest)
-		throws SystemException {
-		membershipRequest = toUnwrappedModel(membershipRequest);
-
-		boolean isNew = membershipRequest.isNew();
-
-		MembershipRequestModelImpl membershipRequestModelImpl = (MembershipRequestModelImpl)membershipRequest;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (membershipRequest.isNew()) {
-				session.save(membershipRequest);
-
-				membershipRequest.setNew(false);
-			}
-			else {
-				session.merge(membershipRequest);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !MembershipRequestModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((membershipRequestModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(membershipRequestModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(membershipRequestModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((membershipRequestModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(membershipRequestModelImpl.getOriginalUserId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(membershipRequestModelImpl.getUserId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
-					args);
-			}
-
-			if ((membershipRequestModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(membershipRequestModelImpl.getOriginalGroupId()),
-						Integer.valueOf(membershipRequestModelImpl.getOriginalStatusId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(membershipRequestModelImpl.getGroupId()),
-						Integer.valueOf(membershipRequestModelImpl.getStatusId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
-					args);
-			}
-
-			if ((membershipRequestModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(membershipRequestModelImpl.getOriginalGroupId()),
-						Long.valueOf(membershipRequestModelImpl.getOriginalUserId()),
-						Integer.valueOf(membershipRequestModelImpl.getOriginalStatusId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(membershipRequestModelImpl.getGroupId()),
-						Long.valueOf(membershipRequestModelImpl.getUserId()),
-						Integer.valueOf(membershipRequestModelImpl.getStatusId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-			MembershipRequestImpl.class, membershipRequest.getPrimaryKey(),
-			membershipRequest);
-
-		return membershipRequest;
-	}
-
-	protected MembershipRequest toUnwrappedModel(
-		MembershipRequest membershipRequest) {
-		if (membershipRequest instanceof MembershipRequestImpl) {
-			return membershipRequest;
-		}
-
-		MembershipRequestImpl membershipRequestImpl = new MembershipRequestImpl();
-
-		membershipRequestImpl.setNew(membershipRequest.isNew());
-		membershipRequestImpl.setPrimaryKey(membershipRequest.getPrimaryKey());
-
-		membershipRequestImpl.setMembershipRequestId(membershipRequest.getMembershipRequestId());
-		membershipRequestImpl.setGroupId(membershipRequest.getGroupId());
-		membershipRequestImpl.setCompanyId(membershipRequest.getCompanyId());
-		membershipRequestImpl.setUserId(membershipRequest.getUserId());
-		membershipRequestImpl.setCreateDate(membershipRequest.getCreateDate());
-		membershipRequestImpl.setComments(membershipRequest.getComments());
-		membershipRequestImpl.setReplyComments(membershipRequest.getReplyComments());
-		membershipRequestImpl.setReplyDate(membershipRequest.getReplyDate());
-		membershipRequestImpl.setReplierUserId(membershipRequest.getReplierUserId());
-		membershipRequestImpl.setStatusId(membershipRequest.getStatusId());
-
-		return membershipRequestImpl;
-	}
-
-	/**
-	 * Returns the membership request with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the membership request
-	 * @return the membership request
-	 * @throws com.liferay.portal.NoSuchModelException if a membership request with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MembershipRequest findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the membership request with the primary key or throws a {@link com.liferay.portal.NoSuchMembershipRequestException} if it could not be found.
-	 *
-	 * @param membershipRequestId the primary key of the membership request
-	 * @return the membership request
-	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MembershipRequest findByPrimaryKey(long membershipRequestId)
-		throws NoSuchMembershipRequestException, SystemException {
-		MembershipRequest membershipRequest = fetchByPrimaryKey(membershipRequestId);
-
-		if (membershipRequest == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					membershipRequestId);
-			}
-
-			throw new NoSuchMembershipRequestException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				membershipRequestId);
-		}
-
-		return membershipRequest;
-	}
-
-	/**
-	 * Returns the membership request with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the membership request
-	 * @return the membership request, or <code>null</code> if a membership request with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MembershipRequest fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the membership request with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param membershipRequestId the primary key of the membership request
-	 * @return the membership request, or <code>null</code> if a membership request with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MembershipRequest fetchByPrimaryKey(long membershipRequestId)
-		throws SystemException {
-		MembershipRequest membershipRequest = (MembershipRequest)EntityCacheUtil.getResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-				MembershipRequestImpl.class, membershipRequestId);
-
-		if (membershipRequest == _nullMembershipRequest) {
-			return null;
-		}
-
-		if (membershipRequest == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				membershipRequest = (MembershipRequest)session.get(MembershipRequestImpl.class,
-						Long.valueOf(membershipRequestId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (membershipRequest != null) {
-					cacheResult(membershipRequest);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
-						MembershipRequestImpl.class, membershipRequestId,
-						_nullMembershipRequest);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return membershipRequest;
-	}
 
 	/**
 	 * Returns all the membership requests where groupId = &#63;.
@@ -994,6 +488,94 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	}
 
 	/**
+	 * Removes all the membership requests where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (MembershipRequest membershipRequest : findByGroupId(groupId)) {
+			remove(membershipRequest);
+		}
+	}
+
+	/**
+	 * Returns the number of membership requests where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching membership requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MEMBERSHIPREQUEST_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "membershipRequest.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
+			MembershipRequestImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
+		new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
+			MembershipRequestImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
+			new String[] { Long.class.getName() },
+			MembershipRequestModelImpl.USERID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the membership requests where userId = &#63;.
 	 *
 	 * @param userId the user ID
@@ -1375,6 +957,94 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the membership requests where userId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUserId(long userId) throws SystemException {
+		for (MembershipRequest membershipRequest : findByUserId(userId)) {
+			remove(membershipRequest);
+		}
+	}
+
+	/**
+	 * Returns the number of membership requests where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the number of matching membership requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUserId(long userId) throws SystemException {
+		Object[] finderArgs = new Object[] { userId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MEMBERSHIPREQUEST_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_USERID_USERID_2 = "membershipRequest.userId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
+			MembershipRequestImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_S",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
+			MembershipRequestImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_S",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			MembershipRequestModelImpl.GROUPID_COLUMN_BITMASK |
+			MembershipRequestModelImpl.STATUSID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
 
 	/**
 	 * Returns all the membership requests where groupId = &#63; and statusId = &#63;.
@@ -1786,6 +1456,110 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the membership requests where groupId = &#63; and statusId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param statusId the status ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_S(long groupId, int statusId)
+		throws SystemException {
+		for (MembershipRequest membershipRequest : findByG_S(groupId, statusId)) {
+			remove(membershipRequest);
+		}
+	}
+
+	/**
+	 * Returns the number of membership requests where groupId = &#63; and statusId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param statusId the status ID
+	 * @return the number of matching membership requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_S(long groupId, int statusId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, statusId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_S,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_MEMBERSHIPREQUEST_WHERE);
+
+			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_S_STATUSID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(statusId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_S, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "membershipRequest.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_S_STATUSID_2 = "membershipRequest.statusId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
+			MembershipRequestImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_U_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED,
+			MembershipRequestImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			},
+			MembershipRequestModelImpl.GROUPID_COLUMN_BITMASK |
+			MembershipRequestModelImpl.USERID_COLUMN_BITMASK |
+			MembershipRequestModelImpl.STATUSID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_U_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_U_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			});
 
 	/**
 	 * Returns all the membership requests where groupId = &#63; and userId = &#63; and statusId = &#63;.
@@ -2225,6 +1999,525 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	}
 
 	/**
+	 * Removes all the membership requests where groupId = &#63; and userId = &#63; and statusId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param statusId the status ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_U_S(long groupId, long userId, int statusId)
+		throws SystemException {
+		for (MembershipRequest membershipRequest : findByG_U_S(groupId, userId,
+				statusId)) {
+			remove(membershipRequest);
+		}
+	}
+
+	/**
+	 * Returns the number of membership requests where groupId = &#63; and userId = &#63; and statusId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param statusId the status ID
+	 * @return the number of matching membership requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_U_S(long groupId, long userId, int statusId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, userId, statusId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_U_S,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_MEMBERSHIPREQUEST_WHERE);
+
+			query.append(_FINDER_COLUMN_G_U_S_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_U_S_USERID_2);
+
+			query.append(_FINDER_COLUMN_G_U_S_STATUSID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(userId);
+
+				qPos.add(statusId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U_S,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_U_S_GROUPID_2 = "membershipRequest.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_U_S_USERID_2 = "membershipRequest.userId = ? AND ";
+	private static final String _FINDER_COLUMN_G_U_S_STATUSID_2 = "membershipRequest.statusId = ?";
+
+	/**
+	 * Caches the membership request in the entity cache if it is enabled.
+	 *
+	 * @param membershipRequest the membership request
+	 */
+	public void cacheResult(MembershipRequest membershipRequest) {
+		EntityCacheUtil.putResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestImpl.class, membershipRequest.getPrimaryKey(),
+			membershipRequest);
+
+		membershipRequest.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the membership requests in the entity cache if it is enabled.
+	 *
+	 * @param membershipRequests the membership requests
+	 */
+	public void cacheResult(List<MembershipRequest> membershipRequests) {
+		for (MembershipRequest membershipRequest : membershipRequests) {
+			if (EntityCacheUtil.getResult(
+						MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+						MembershipRequestImpl.class,
+						membershipRequest.getPrimaryKey()) == null) {
+				cacheResult(membershipRequest);
+			}
+			else {
+				membershipRequest.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all membership requests.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(MembershipRequestImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(MembershipRequestImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the membership request.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(MembershipRequest membershipRequest) {
+		EntityCacheUtil.removeResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestImpl.class, membershipRequest.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<MembershipRequest> membershipRequests) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (MembershipRequest membershipRequest : membershipRequests) {
+			EntityCacheUtil.removeResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+				MembershipRequestImpl.class, membershipRequest.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new membership request with the primary key. Does not add the membership request to the database.
+	 *
+	 * @param membershipRequestId the primary key for the new membership request
+	 * @return the new membership request
+	 */
+	public MembershipRequest create(long membershipRequestId) {
+		MembershipRequest membershipRequest = new MembershipRequestImpl();
+
+		membershipRequest.setNew(true);
+		membershipRequest.setPrimaryKey(membershipRequestId);
+
+		return membershipRequest;
+	}
+
+	/**
+	 * Removes the membership request with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param membershipRequestId the primary key of the membership request
+	 * @return the membership request that was removed
+	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MembershipRequest remove(long membershipRequestId)
+		throws NoSuchMembershipRequestException, SystemException {
+		return remove(Long.valueOf(membershipRequestId));
+	}
+
+	/**
+	 * Removes the membership request with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the membership request
+	 * @return the membership request that was removed
+	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MembershipRequest remove(Serializable primaryKey)
+		throws NoSuchMembershipRequestException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			MembershipRequest membershipRequest = (MembershipRequest)session.get(MembershipRequestImpl.class,
+					primaryKey);
+
+			if (membershipRequest == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchMembershipRequestException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(membershipRequest);
+		}
+		catch (NoSuchMembershipRequestException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected MembershipRequest removeImpl(MembershipRequest membershipRequest)
+		throws SystemException {
+		membershipRequest = toUnwrappedModel(membershipRequest);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(membershipRequest)) {
+				membershipRequest = (MembershipRequest)session.get(MembershipRequestImpl.class,
+						membershipRequest.getPrimaryKeyObj());
+			}
+
+			if (membershipRequest != null) {
+				session.delete(membershipRequest);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (membershipRequest != null) {
+			clearCache(membershipRequest);
+		}
+
+		return membershipRequest;
+	}
+
+	@Override
+	public MembershipRequest updateImpl(
+		com.liferay.portal.model.MembershipRequest membershipRequest)
+		throws SystemException {
+		membershipRequest = toUnwrappedModel(membershipRequest);
+
+		boolean isNew = membershipRequest.isNew();
+
+		MembershipRequestModelImpl membershipRequestModelImpl = (MembershipRequestModelImpl)membershipRequest;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (membershipRequest.isNew()) {
+				session.save(membershipRequest);
+
+				membershipRequest.setNew(false);
+			}
+			else {
+				session.merge(membershipRequest);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !MembershipRequestModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((membershipRequestModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(membershipRequestModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(membershipRequestModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+
+			if ((membershipRequestModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(membershipRequestModelImpl.getOriginalUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(membershipRequestModelImpl.getUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
+			}
+
+			if ((membershipRequestModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(membershipRequestModelImpl.getOriginalGroupId()),
+						Integer.valueOf(membershipRequestModelImpl.getOriginalStatusId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(membershipRequestModelImpl.getGroupId()),
+						Integer.valueOf(membershipRequestModelImpl.getStatusId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+					args);
+			}
+
+			if ((membershipRequestModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(membershipRequestModelImpl.getOriginalGroupId()),
+						Long.valueOf(membershipRequestModelImpl.getOriginalUserId()),
+						Integer.valueOf(membershipRequestModelImpl.getOriginalStatusId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(membershipRequestModelImpl.getGroupId()),
+						Long.valueOf(membershipRequestModelImpl.getUserId()),
+						Integer.valueOf(membershipRequestModelImpl.getStatusId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+			MembershipRequestImpl.class, membershipRequest.getPrimaryKey(),
+			membershipRequest);
+
+		return membershipRequest;
+	}
+
+	protected MembershipRequest toUnwrappedModel(
+		MembershipRequest membershipRequest) {
+		if (membershipRequest instanceof MembershipRequestImpl) {
+			return membershipRequest;
+		}
+
+		MembershipRequestImpl membershipRequestImpl = new MembershipRequestImpl();
+
+		membershipRequestImpl.setNew(membershipRequest.isNew());
+		membershipRequestImpl.setPrimaryKey(membershipRequest.getPrimaryKey());
+
+		membershipRequestImpl.setMembershipRequestId(membershipRequest.getMembershipRequestId());
+		membershipRequestImpl.setGroupId(membershipRequest.getGroupId());
+		membershipRequestImpl.setCompanyId(membershipRequest.getCompanyId());
+		membershipRequestImpl.setUserId(membershipRequest.getUserId());
+		membershipRequestImpl.setCreateDate(membershipRequest.getCreateDate());
+		membershipRequestImpl.setComments(membershipRequest.getComments());
+		membershipRequestImpl.setReplyComments(membershipRequest.getReplyComments());
+		membershipRequestImpl.setReplyDate(membershipRequest.getReplyDate());
+		membershipRequestImpl.setReplierUserId(membershipRequest.getReplierUserId());
+		membershipRequestImpl.setStatusId(membershipRequest.getStatusId());
+
+		return membershipRequestImpl;
+	}
+
+	/**
+	 * Returns the membership request with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the membership request
+	 * @return the membership request
+	 * @throws com.liferay.portal.NoSuchModelException if a membership request with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MembershipRequest findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the membership request with the primary key or throws a {@link com.liferay.portal.NoSuchMembershipRequestException} if it could not be found.
+	 *
+	 * @param membershipRequestId the primary key of the membership request
+	 * @return the membership request
+	 * @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MembershipRequest findByPrimaryKey(long membershipRequestId)
+		throws NoSuchMembershipRequestException, SystemException {
+		MembershipRequest membershipRequest = fetchByPrimaryKey(membershipRequestId);
+
+		if (membershipRequest == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					membershipRequestId);
+			}
+
+			throw new NoSuchMembershipRequestException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				membershipRequestId);
+		}
+
+		return membershipRequest;
+	}
+
+	/**
+	 * Returns the membership request with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the membership request
+	 * @return the membership request, or <code>null</code> if a membership request with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MembershipRequest fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the membership request with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param membershipRequestId the primary key of the membership request
+	 * @return the membership request, or <code>null</code> if a membership request with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MembershipRequest fetchByPrimaryKey(long membershipRequestId)
+		throws SystemException {
+		MembershipRequest membershipRequest = (MembershipRequest)EntityCacheUtil.getResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+				MembershipRequestImpl.class, membershipRequestId);
+
+		if (membershipRequest == _nullMembershipRequest) {
+			return null;
+		}
+
+		if (membershipRequest == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				membershipRequest = (MembershipRequest)session.get(MembershipRequestImpl.class,
+						Long.valueOf(membershipRequestId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (membershipRequest != null) {
+					cacheResult(membershipRequest);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+						MembershipRequestImpl.class, membershipRequestId,
+						_nullMembershipRequest);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return membershipRequest;
+	}
+
+	/**
 	 * Returns all the membership requests.
 	 *
 	 * @return the membership requests
@@ -2340,60 +2633,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	}
 
 	/**
-	 * Removes all the membership requests where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (MembershipRequest membershipRequest : findByGroupId(groupId)) {
-			remove(membershipRequest);
-		}
-	}
-
-	/**
-	 * Removes all the membership requests where userId = &#63; from the database.
-	 *
-	 * @param userId the user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUserId(long userId) throws SystemException {
-		for (MembershipRequest membershipRequest : findByUserId(userId)) {
-			remove(membershipRequest);
-		}
-	}
-
-	/**
-	 * Removes all the membership requests where groupId = &#63; and statusId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param statusId the status ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_S(long groupId, int statusId)
-		throws SystemException {
-		for (MembershipRequest membershipRequest : findByG_S(groupId, statusId)) {
-			remove(membershipRequest);
-		}
-	}
-
-	/**
-	 * Removes all the membership requests where groupId = &#63; and userId = &#63; and statusId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param statusId the status ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_U_S(long groupId, long userId, int statusId)
-		throws SystemException {
-		for (MembershipRequest membershipRequest : findByG_U_S(groupId, userId,
-				statusId)) {
-			remove(membershipRequest);
-		}
-	}
-
-	/**
 	 * Removes all the membership requests from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2402,234 +2641,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 		for (MembershipRequest membershipRequest : findAll()) {
 			remove(membershipRequest);
 		}
-	}
-
-	/**
-	 * Returns the number of membership requests where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching membership requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MEMBERSHIPREQUEST_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of membership requests where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @return the number of matching membership requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUserId(long userId) throws SystemException {
-		Object[] finderArgs = new Object[] { userId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MEMBERSHIPREQUEST_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of membership requests where groupId = &#63; and statusId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param statusId the status ID
-	 * @return the number of matching membership requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_S(long groupId, int statusId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, statusId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_MEMBERSHIPREQUEST_WHERE);
-
-			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_S_STATUSID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(statusId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_S, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of membership requests where groupId = &#63; and userId = &#63; and statusId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param statusId the status ID
-	 * @return the number of matching membership requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_U_S(long groupId, long userId, int statusId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, userId, statusId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_U_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_MEMBERSHIPREQUEST_WHERE);
-
-			query.append(_FINDER_COLUMN_G_U_S_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_U_S_USERID_2);
-
-			query.append(_FINDER_COLUMN_G_U_S_STATUSID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(userId);
-
-				qPos.add(statusId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U_S,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -2827,13 +2838,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	private static final String _SQL_SELECT_MEMBERSHIPREQUEST_WHERE = "SELECT membershipRequest FROM MembershipRequest membershipRequest WHERE ";
 	private static final String _SQL_COUNT_MEMBERSHIPREQUEST = "SELECT COUNT(membershipRequest) FROM MembershipRequest membershipRequest";
 	private static final String _SQL_COUNT_MEMBERSHIPREQUEST_WHERE = "SELECT COUNT(membershipRequest) FROM MembershipRequest membershipRequest WHERE ";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "membershipRequest.groupId = ?";
-	private static final String _FINDER_COLUMN_USERID_USERID_2 = "membershipRequest.userId = ?";
-	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "membershipRequest.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_S_STATUSID_2 = "membershipRequest.statusId = ?";
-	private static final String _FINDER_COLUMN_G_U_S_GROUPID_2 = "membershipRequest.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_U_S_USERID_2 = "membershipRequest.userId = ? AND ";
-	private static final String _FINDER_COLUMN_G_U_S_STATUSID_2 = "membershipRequest.statusId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "membershipRequest.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No MembershipRequest exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No MembershipRequest exists with the key {";

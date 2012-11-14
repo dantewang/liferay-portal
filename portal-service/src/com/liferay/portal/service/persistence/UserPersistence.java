@@ -36,66 +36,6 @@ public interface UserPersistence extends BasePersistence<User> {
 	 */
 
 	/**
-	* Caches the user in the entity cache if it is enabled.
-	*
-	* @param user the user
-	*/
-	public void cacheResult(com.liferay.portal.model.User user);
-
-	/**
-	* Caches the users in the entity cache if it is enabled.
-	*
-	* @param users the users
-	*/
-	public void cacheResult(java.util.List<com.liferay.portal.model.User> users);
-
-	/**
-	* Creates a new user with the primary key. Does not add the user to the database.
-	*
-	* @param userId the primary key for the new user
-	* @return the new user
-	*/
-	public com.liferay.portal.model.User create(long userId);
-
-	/**
-	* Removes the user with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param userId the primary key of the user
-	* @return the user that was removed
-	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User remove(long userId)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.User updateImpl(
-		com.liferay.portal.model.User user)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user with the primary key or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
-	*
-	* @param userId the primary key of the user
-	* @return the user
-	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User findByPrimaryKey(long userId)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param userId the primary key of the user
-	* @return the user, or <code>null</code> if a user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User fetchByPrimaryKey(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the users where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -213,6 +153,25 @@ public interface UserPersistence extends BasePersistence<User> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the users where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the users where uuid = &#63; and companyId = &#63;.
@@ -342,6 +301,27 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the users where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the users where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -458,6 +438,25 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the users where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the user where contactId = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
 	*
 	* @param contactId the contact ID
@@ -489,6 +488,27 @@ public interface UserPersistence extends BasePersistence<User> {
 	*/
 	public com.liferay.portal.model.User fetchByContactId(long contactId,
 		boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the user where contactId = &#63; from the database.
+	*
+	* @param contactId the contact ID
+	* @return the user that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User removeByContactId(long contactId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where contactId = &#63;.
+	*
+	* @param contactId the contact ID
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByContactId(long contactId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -611,6 +631,25 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the users where emailAddress = &#63; from the database.
+	*
+	* @param emailAddress the email address
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByEmailAddress(java.lang.String emailAddress)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where emailAddress = &#63;.
+	*
+	* @param emailAddress the email address
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByEmailAddress(java.lang.String emailAddress)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the user where portraitId = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
 	*
 	* @param portraitId the portrait ID
@@ -642,6 +681,27 @@ public interface UserPersistence extends BasePersistence<User> {
 	*/
 	public com.liferay.portal.model.User fetchByPortraitId(long portraitId,
 		boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the user where portraitId = &#63; from the database.
+	*
+	* @param portraitId the portrait ID
+	* @return the user that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User removeByPortraitId(long portraitId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where portraitId = &#63;.
+	*
+	* @param portraitId the portrait ID
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByPortraitId(long portraitId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -679,6 +739,29 @@ public interface UserPersistence extends BasePersistence<User> {
 	*/
 	public com.liferay.portal.model.User fetchByC_U(long companyId,
 		long userId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the user where companyId = &#63; and userId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @return the user that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User removeByC_U(long companyId, long userId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where companyId = &#63; and userId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_U(long companyId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -809,6 +892,27 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the users where companyId = &#63; and createDate = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_CD(long companyId, java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where companyId = &#63; and createDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_CD(long companyId, java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the users where companyId = &#63; and modifiedDate = &#63;.
 	*
 	* @param companyId the company ID
@@ -936,6 +1040,27 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the users where companyId = &#63; and modifiedDate = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_MD(long companyId, java.util.Date modifiedDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where companyId = &#63; and modifiedDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_MD(long companyId, java.util.Date modifiedDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the user where companyId = &#63; and defaultUser = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
 	*
 	* @param companyId the company ID
@@ -972,6 +1097,30 @@ public interface UserPersistence extends BasePersistence<User> {
 	*/
 	public com.liferay.portal.model.User fetchByC_DU(long companyId,
 		boolean defaultUser, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the user where companyId = &#63; and defaultUser = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param defaultUser the default user
+	* @return the user that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User removeByC_DU(long companyId,
+		boolean defaultUser)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where companyId = &#63; and defaultUser = &#63;.
+	*
+	* @param companyId the company ID
+	* @param defaultUser the default user
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_DU(long companyId, boolean defaultUser)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -1014,6 +1163,30 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the user where companyId = &#63; and screenName = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param screenName the screen name
+	* @return the user that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User removeByC_SN(long companyId,
+		java.lang.String screenName)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where companyId = &#63; and screenName = &#63;.
+	*
+	* @param companyId the company ID
+	* @param screenName the screen name
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_SN(long companyId, java.lang.String screenName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the user where companyId = &#63; and emailAddress = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
 	*
 	* @param companyId the company ID
@@ -1050,6 +1223,30 @@ public interface UserPersistence extends BasePersistence<User> {
 	*/
 	public com.liferay.portal.model.User fetchByC_EA(long companyId,
 		java.lang.String emailAddress, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the user where companyId = &#63; and emailAddress = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param emailAddress the email address
+	* @return the user that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User removeByC_EA(long companyId,
+		java.lang.String emailAddress)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where companyId = &#63; and emailAddress = &#63;.
+	*
+	* @param companyId the company ID
+	* @param emailAddress the email address
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_EA(long companyId, java.lang.String emailAddress)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -1092,6 +1289,30 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the user where companyId = &#63; and facebookId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param facebookId the facebook ID
+	* @return the user that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User removeByC_FID(long companyId,
+		long facebookId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where companyId = &#63; and facebookId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param facebookId the facebook ID
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_FID(long companyId, long facebookId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the user where companyId = &#63; and openId = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
 	*
 	* @param companyId the company ID
@@ -1128,6 +1349,30 @@ public interface UserPersistence extends BasePersistence<User> {
 	*/
 	public com.liferay.portal.model.User fetchByC_O(long companyId,
 		java.lang.String openId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the user where companyId = &#63; and openId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param openId the open ID
+	* @return the user that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User removeByC_O(long companyId,
+		java.lang.String openId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where companyId = &#63; and openId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param openId the open ID
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_O(long companyId, java.lang.String openId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -1256,6 +1501,27 @@ public interface UserPersistence extends BasePersistence<User> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the users where companyId = &#63; and status = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_S(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_S(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the users where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
@@ -1396,6 +1662,91 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the users where companyId = &#63; and createDate = &#63; and modifiedDate = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @param modifiedDate the modified date
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_CD_MD(long companyId, java.util.Date createDate,
+		java.util.Date modifiedDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of users where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @param modifiedDate the modified date
+	* @return the number of matching users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_CD_MD(long companyId, java.util.Date createDate,
+		java.util.Date modifiedDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the user in the entity cache if it is enabled.
+	*
+	* @param user the user
+	*/
+	public void cacheResult(com.liferay.portal.model.User user);
+
+	/**
+	* Caches the users in the entity cache if it is enabled.
+	*
+	* @param users the users
+	*/
+	public void cacheResult(java.util.List<com.liferay.portal.model.User> users);
+
+	/**
+	* Creates a new user with the primary key. Does not add the user to the database.
+	*
+	* @param userId the primary key for the new user
+	* @return the new user
+	*/
+	public com.liferay.portal.model.User create(long userId);
+
+	/**
+	* Removes the user with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param userId the primary key of the user
+	* @return the user that was removed
+	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User remove(long userId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.User updateImpl(
+		com.liferay.portal.model.User user)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the user with the primary key or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
+	*
+	* @param userId the primary key of the user
+	* @return the user
+	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByPrimaryKey(long userId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the user with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param userId the primary key of the user
+	* @return the user, or <code>null</code> if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByPrimaryKey(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the users.
 	*
 	* @return the users
@@ -1438,362 +1789,11 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the users where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the users where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the users where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the user where contactId = &#63; from the database.
-	*
-	* @param contactId the contact ID
-	* @return the user that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User removeByContactId(long contactId)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the users where emailAddress = &#63; from the database.
-	*
-	* @param emailAddress the email address
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByEmailAddress(java.lang.String emailAddress)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the user where portraitId = &#63; from the database.
-	*
-	* @param portraitId the portrait ID
-	* @return the user that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User removeByPortraitId(long portraitId)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the user where companyId = &#63; and userId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @return the user that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User removeByC_U(long companyId, long userId)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the users where companyId = &#63; and createDate = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param createDate the create date
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_CD(long companyId, java.util.Date createDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the users where companyId = &#63; and modifiedDate = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param modifiedDate the modified date
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_MD(long companyId, java.util.Date modifiedDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the user where companyId = &#63; and defaultUser = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param defaultUser the default user
-	* @return the user that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User removeByC_DU(long companyId,
-		boolean defaultUser)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the user where companyId = &#63; and screenName = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param screenName the screen name
-	* @return the user that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User removeByC_SN(long companyId,
-		java.lang.String screenName)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the user where companyId = &#63; and emailAddress = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param emailAddress the email address
-	* @return the user that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User removeByC_EA(long companyId,
-		java.lang.String emailAddress)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the user where companyId = &#63; and facebookId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param facebookId the facebook ID
-	* @return the user that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User removeByC_FID(long companyId,
-		long facebookId)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the user where companyId = &#63; and openId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param openId the open ID
-	* @return the user that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User removeByC_O(long companyId,
-		java.lang.String openId)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the users where companyId = &#63; and status = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_S(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the users where companyId = &#63; and createDate = &#63; and modifiedDate = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param createDate the create date
-	* @param modifiedDate the modified date
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_CD_MD(long companyId, java.util.Date createDate,
-		java.util.Date modifiedDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the users from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where contactId = &#63;.
-	*
-	* @param contactId the contact ID
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByContactId(long contactId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where emailAddress = &#63;.
-	*
-	* @param emailAddress the email address
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByEmailAddress(java.lang.String emailAddress)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where portraitId = &#63;.
-	*
-	* @param portraitId the portrait ID
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByPortraitId(long portraitId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where companyId = &#63; and userId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_U(long companyId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where companyId = &#63; and createDate = &#63;.
-	*
-	* @param companyId the company ID
-	* @param createDate the create date
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_CD(long companyId, java.util.Date createDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where companyId = &#63; and modifiedDate = &#63;.
-	*
-	* @param companyId the company ID
-	* @param modifiedDate the modified date
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_MD(long companyId, java.util.Date modifiedDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where companyId = &#63; and defaultUser = &#63;.
-	*
-	* @param companyId the company ID
-	* @param defaultUser the default user
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_DU(long companyId, boolean defaultUser)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where companyId = &#63; and screenName = &#63;.
-	*
-	* @param companyId the company ID
-	* @param screenName the screen name
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_SN(long companyId, java.lang.String screenName)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where companyId = &#63; and emailAddress = &#63;.
-	*
-	* @param companyId the company ID
-	* @param emailAddress the email address
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_EA(long companyId, java.lang.String emailAddress)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where companyId = &#63; and facebookId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param facebookId the facebook ID
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_FID(long companyId, long facebookId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where companyId = &#63; and openId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param openId the open ID
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_O(long companyId, java.lang.String openId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where companyId = &#63; and status = &#63;.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_S(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of users where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
-	*
-	* @param companyId the company ID
-	* @param createDate the create date
-	* @param modifiedDate the modified date
-	* @return the number of matching users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_CD_MD(long companyId, java.util.Date createDate,
-		java.util.Date modifiedDate)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

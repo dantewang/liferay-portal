@@ -112,86 +112,6 @@ public class ShoppingOrderItemUtil {
 	}
 
 	/**
-	* Caches the shopping order item in the entity cache if it is enabled.
-	*
-	* @param shoppingOrderItem the shopping order item
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.shopping.model.ShoppingOrderItem shoppingOrderItem) {
-		getPersistence().cacheResult(shoppingOrderItem);
-	}
-
-	/**
-	* Caches the shopping order items in the entity cache if it is enabled.
-	*
-	* @param shoppingOrderItems the shopping order items
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.shopping.model.ShoppingOrderItem> shoppingOrderItems) {
-		getPersistence().cacheResult(shoppingOrderItems);
-	}
-
-	/**
-	* Creates a new shopping order item with the primary key. Does not add the shopping order item to the database.
-	*
-	* @param orderItemId the primary key for the new shopping order item
-	* @return the new shopping order item
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingOrderItem create(
-		long orderItemId) {
-		return getPersistence().create(orderItemId);
-	}
-
-	/**
-	* Removes the shopping order item with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param orderItemId the primary key of the shopping order item
-	* @return the shopping order item that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingOrderItem remove(
-		long orderItemId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchOrderItemException {
-		return getPersistence().remove(orderItemId);
-	}
-
-	public static com.liferay.portlet.shopping.model.ShoppingOrderItem updateImpl(
-		com.liferay.portlet.shopping.model.ShoppingOrderItem shoppingOrderItem)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(shoppingOrderItem);
-	}
-
-	/**
-	* Returns the shopping order item with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchOrderItemException} if it could not be found.
-	*
-	* @param orderItemId the primary key of the shopping order item
-	* @return the shopping order item
-	* @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingOrderItem findByPrimaryKey(
-		long orderItemId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchOrderItemException {
-		return getPersistence().findByPrimaryKey(orderItemId);
-	}
-
-	/**
-	* Returns the shopping order item with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param orderItemId the primary key of the shopping order item
-	* @return the shopping order item, or <code>null</code> if a shopping order item with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingOrderItem fetchByPrimaryKey(
-		long orderItemId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(orderItemId);
-	}
-
-	/**
 	* Returns all the shopping order items where orderId = &#63;.
 	*
 	* @param orderId the order ID
@@ -330,6 +250,109 @@ public class ShoppingOrderItemUtil {
 	}
 
 	/**
+	* Removes all the shopping order items where orderId = &#63; from the database.
+	*
+	* @param orderId the order ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByOrderId(long orderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByOrderId(orderId);
+	}
+
+	/**
+	* Returns the number of shopping order items where orderId = &#63;.
+	*
+	* @param orderId the order ID
+	* @return the number of matching shopping order items
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByOrderId(long orderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByOrderId(orderId);
+	}
+
+	/**
+	* Caches the shopping order item in the entity cache if it is enabled.
+	*
+	* @param shoppingOrderItem the shopping order item
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.shopping.model.ShoppingOrderItem shoppingOrderItem) {
+		getPersistence().cacheResult(shoppingOrderItem);
+	}
+
+	/**
+	* Caches the shopping order items in the entity cache if it is enabled.
+	*
+	* @param shoppingOrderItems the shopping order items
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.shopping.model.ShoppingOrderItem> shoppingOrderItems) {
+		getPersistence().cacheResult(shoppingOrderItems);
+	}
+
+	/**
+	* Creates a new shopping order item with the primary key. Does not add the shopping order item to the database.
+	*
+	* @param orderItemId the primary key for the new shopping order item
+	* @return the new shopping order item
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingOrderItem create(
+		long orderItemId) {
+		return getPersistence().create(orderItemId);
+	}
+
+	/**
+	* Removes the shopping order item with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param orderItemId the primary key of the shopping order item
+	* @return the shopping order item that was removed
+	* @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingOrderItem remove(
+		long orderItemId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderItemException {
+		return getPersistence().remove(orderItemId);
+	}
+
+	public static com.liferay.portlet.shopping.model.ShoppingOrderItem updateImpl(
+		com.liferay.portlet.shopping.model.ShoppingOrderItem shoppingOrderItem)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(shoppingOrderItem);
+	}
+
+	/**
+	* Returns the shopping order item with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchOrderItemException} if it could not be found.
+	*
+	* @param orderItemId the primary key of the shopping order item
+	* @return the shopping order item
+	* @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingOrderItem findByPrimaryKey(
+		long orderItemId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderItemException {
+		return getPersistence().findByPrimaryKey(orderItemId);
+	}
+
+	/**
+	* Returns the shopping order item with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param orderItemId the primary key of the shopping order item
+	* @return the shopping order item, or <code>null</code> if a shopping order item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingOrderItem fetchByPrimaryKey(
+		long orderItemId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(orderItemId);
+	}
+
+	/**
 	* Returns all the shopping order items.
 	*
 	* @return the shopping order items
@@ -379,17 +402,6 @@ public class ShoppingOrderItemUtil {
 	}
 
 	/**
-	* Removes all the shopping order items where orderId = &#63; from the database.
-	*
-	* @param orderId the order ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByOrderId(long orderId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByOrderId(orderId);
-	}
-
-	/**
 	* Removes all the shopping order items from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -397,18 +409,6 @@ public class ShoppingOrderItemUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of shopping order items where orderId = &#63;.
-	*
-	* @param orderId the order ID
-	* @return the number of matching shopping order items
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByOrderId(long orderId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByOrderId(orderId);
 	}
 
 	/**

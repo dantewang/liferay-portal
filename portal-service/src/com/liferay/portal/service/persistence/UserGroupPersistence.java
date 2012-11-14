@@ -36,68 +36,6 @@ public interface UserGroupPersistence extends BasePersistence<UserGroup> {
 	 */
 
 	/**
-	* Caches the user group in the entity cache if it is enabled.
-	*
-	* @param userGroup the user group
-	*/
-	public void cacheResult(com.liferay.portal.model.UserGroup userGroup);
-
-	/**
-	* Caches the user groups in the entity cache if it is enabled.
-	*
-	* @param userGroups the user groups
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.UserGroup> userGroups);
-
-	/**
-	* Creates a new user group with the primary key. Does not add the user group to the database.
-	*
-	* @param userGroupId the primary key for the new user group
-	* @return the new user group
-	*/
-	public com.liferay.portal.model.UserGroup create(long userGroupId);
-
-	/**
-	* Removes the user group with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param userGroupId the primary key of the user group
-	* @return the user group that was removed
-	* @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserGroup remove(long userGroupId)
-		throws com.liferay.portal.NoSuchUserGroupException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.UserGroup updateImpl(
-		com.liferay.portal.model.UserGroup userGroup)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user group with the primary key or throws a {@link com.liferay.portal.NoSuchUserGroupException} if it could not be found.
-	*
-	* @param userGroupId the primary key of the user group
-	* @return the user group
-	* @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserGroup findByPrimaryKey(long userGroupId)
-		throws com.liferay.portal.NoSuchUserGroupException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user group with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param userGroupId the primary key of the user group
-	* @return the user group, or <code>null</code> if a user group with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserGroup fetchByPrimaryKey(
-		long userGroupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the user groups where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -278,6 +216,35 @@ public interface UserGroupPersistence extends BasePersistence<UserGroup> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchUserGroupException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the user groups where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user groups where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching user groups
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user groups that the user has permission to view where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching user groups that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the user groups where companyId = &#63; and parentUserGroupId = &#63;.
@@ -474,6 +441,38 @@ public interface UserGroupPersistence extends BasePersistence<UserGroup> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the user groups where companyId = &#63; and parentUserGroupId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_P(long companyId, long parentUserGroupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user groups where companyId = &#63; and parentUserGroupId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @return the number of matching user groups
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_P(long companyId, long parentUserGroupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user groups that the user has permission to view where companyId = &#63; and parentUserGroupId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @return the number of matching user groups that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByC_P(long companyId, long parentUserGroupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the user group where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchUserGroupException} if it could not be found.
 	*
 	* @param companyId the company ID
@@ -510,6 +509,92 @@ public interface UserGroupPersistence extends BasePersistence<UserGroup> {
 	*/
 	public com.liferay.portal.model.UserGroup fetchByC_N(long companyId,
 		java.lang.String name, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the user group where companyId = &#63; and name = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the user group that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroup removeByC_N(long companyId,
+		java.lang.String name)
+		throws com.liferay.portal.NoSuchUserGroupException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user groups where companyId = &#63; and name = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the number of matching user groups
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_N(long companyId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the user group in the entity cache if it is enabled.
+	*
+	* @param userGroup the user group
+	*/
+	public void cacheResult(com.liferay.portal.model.UserGroup userGroup);
+
+	/**
+	* Caches the user groups in the entity cache if it is enabled.
+	*
+	* @param userGroups the user groups
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.UserGroup> userGroups);
+
+	/**
+	* Creates a new user group with the primary key. Does not add the user group to the database.
+	*
+	* @param userGroupId the primary key for the new user group
+	* @return the new user group
+	*/
+	public com.liferay.portal.model.UserGroup create(long userGroupId);
+
+	/**
+	* Removes the user group with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param userGroupId the primary key of the user group
+	* @return the user group that was removed
+	* @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroup remove(long userGroupId)
+		throws com.liferay.portal.NoSuchUserGroupException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.UserGroup updateImpl(
+		com.liferay.portal.model.UserGroup userGroup)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the user group with the primary key or throws a {@link com.liferay.portal.NoSuchUserGroupException} if it could not be found.
+	*
+	* @param userGroupId the primary key of the user group
+	* @return the user group
+	* @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroup findByPrimaryKey(long userGroupId)
+		throws com.liferay.portal.NoSuchUserGroupException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the user group with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param userGroupId the primary key of the user group
+	* @return the user group, or <code>null</code> if a user group with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserGroup fetchByPrimaryKey(
+		long userGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -556,96 +641,11 @@ public interface UserGroupPersistence extends BasePersistence<UserGroup> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the user groups where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the user groups where companyId = &#63; and parentUserGroupId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param parentUserGroupId the parent user group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_P(long companyId, long parentUserGroupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the user group where companyId = &#63; and name = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @return the user group that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserGroup removeByC_N(long companyId,
-		java.lang.String name)
-		throws com.liferay.portal.NoSuchUserGroupException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the user groups from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user groups where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching user groups
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user groups that the user has permission to view where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching user groups that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user groups where companyId = &#63; and parentUserGroupId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param parentUserGroupId the parent user group ID
-	* @return the number of matching user groups
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_P(long companyId, long parentUserGroupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user groups that the user has permission to view where companyId = &#63; and parentUserGroupId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param parentUserGroupId the parent user group ID
-	* @return the number of matching user groups that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByC_P(long companyId, long parentUserGroupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user groups where companyId = &#63; and name = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @return the number of matching user groups
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_N(long companyId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

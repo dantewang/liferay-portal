@@ -36,69 +36,6 @@ public interface OrganizationPersistence extends BasePersistence<Organization> {
 	 */
 
 	/**
-	* Caches the organization in the entity cache if it is enabled.
-	*
-	* @param organization the organization
-	*/
-	public void cacheResult(com.liferay.portal.model.Organization organization);
-
-	/**
-	* Caches the organizations in the entity cache if it is enabled.
-	*
-	* @param organizations the organizations
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.Organization> organizations);
-
-	/**
-	* Creates a new organization with the primary key. Does not add the organization to the database.
-	*
-	* @param organizationId the primary key for the new organization
-	* @return the new organization
-	*/
-	public com.liferay.portal.model.Organization create(long organizationId);
-
-	/**
-	* Removes the organization with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param organizationId the primary key of the organization
-	* @return the organization that was removed
-	* @throws com.liferay.portal.NoSuchOrganizationException if a organization with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Organization remove(long organizationId)
-		throws com.liferay.portal.NoSuchOrganizationException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.Organization updateImpl(
-		com.liferay.portal.model.Organization organization)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the organization with the primary key or throws a {@link com.liferay.portal.NoSuchOrganizationException} if it could not be found.
-	*
-	* @param organizationId the primary key of the organization
-	* @return the organization
-	* @throws com.liferay.portal.NoSuchOrganizationException if a organization with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Organization findByPrimaryKey(
-		long organizationId)
-		throws com.liferay.portal.NoSuchOrganizationException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the organization with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param organizationId the primary key of the organization
-	* @return the organization, or <code>null</code> if a organization with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Organization fetchByPrimaryKey(
-		long organizationId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the organizations where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -281,6 +218,35 @@ public interface OrganizationPersistence extends BasePersistence<Organization> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the organizations where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of organizations where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching organizations
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of organizations that the user has permission to view where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching organizations that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the organizations where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -461,6 +427,35 @@ public interface OrganizationPersistence extends BasePersistence<Organization> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchOrganizationException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the organizations where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByLocations(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of organizations where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching organizations
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByLocations(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of organizations that the user has permission to view where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching organizations that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByLocations(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the organizations where companyId = &#63; and parentOrganizationId = &#63;.
@@ -657,6 +652,38 @@ public interface OrganizationPersistence extends BasePersistence<Organization> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the organizations where companyId = &#63; and parentOrganizationId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param parentOrganizationId the parent organization ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_P(long companyId, long parentOrganizationId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of organizations where companyId = &#63; and parentOrganizationId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentOrganizationId the parent organization ID
+	* @return the number of matching organizations
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_P(long companyId, long parentOrganizationId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of organizations that the user has permission to view where companyId = &#63; and parentOrganizationId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentOrganizationId the parent organization ID
+	* @return the number of matching organizations that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByC_P(long companyId, long parentOrganizationId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the organization where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchOrganizationException} if it could not be found.
 	*
 	* @param companyId the company ID
@@ -693,6 +720,93 @@ public interface OrganizationPersistence extends BasePersistence<Organization> {
 	*/
 	public com.liferay.portal.model.Organization fetchByC_N(long companyId,
 		java.lang.String name, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the organization where companyId = &#63; and name = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the organization that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Organization removeByC_N(long companyId,
+		java.lang.String name)
+		throws com.liferay.portal.NoSuchOrganizationException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of organizations where companyId = &#63; and name = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the number of matching organizations
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_N(long companyId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the organization in the entity cache if it is enabled.
+	*
+	* @param organization the organization
+	*/
+	public void cacheResult(com.liferay.portal.model.Organization organization);
+
+	/**
+	* Caches the organizations in the entity cache if it is enabled.
+	*
+	* @param organizations the organizations
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.Organization> organizations);
+
+	/**
+	* Creates a new organization with the primary key. Does not add the organization to the database.
+	*
+	* @param organizationId the primary key for the new organization
+	* @return the new organization
+	*/
+	public com.liferay.portal.model.Organization create(long organizationId);
+
+	/**
+	* Removes the organization with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param organizationId the primary key of the organization
+	* @return the organization that was removed
+	* @throws com.liferay.portal.NoSuchOrganizationException if a organization with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Organization remove(long organizationId)
+		throws com.liferay.portal.NoSuchOrganizationException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.Organization updateImpl(
+		com.liferay.portal.model.Organization organization)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the organization with the primary key or throws a {@link com.liferay.portal.NoSuchOrganizationException} if it could not be found.
+	*
+	* @param organizationId the primary key of the organization
+	* @return the organization
+	* @throws com.liferay.portal.NoSuchOrganizationException if a organization with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Organization findByPrimaryKey(
+		long organizationId)
+		throws com.liferay.portal.NoSuchOrganizationException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the organization with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param organizationId the primary key of the organization
+	* @return the organization, or <code>null</code> if a organization with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Organization fetchByPrimaryKey(
+		long organizationId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -739,125 +853,11 @@ public interface OrganizationPersistence extends BasePersistence<Organization> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the organizations where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the organizations where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByLocations(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the organizations where companyId = &#63; and parentOrganizationId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param parentOrganizationId the parent organization ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_P(long companyId, long parentOrganizationId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the organization where companyId = &#63; and name = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @return the organization that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Organization removeByC_N(long companyId,
-		java.lang.String name)
-		throws com.liferay.portal.NoSuchOrganizationException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the organizations from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of organizations where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching organizations
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of organizations that the user has permission to view where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching organizations that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of organizations where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching organizations
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByLocations(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of organizations that the user has permission to view where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching organizations that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByLocations(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of organizations where companyId = &#63; and parentOrganizationId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param parentOrganizationId the parent organization ID
-	* @return the number of matching organizations
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_P(long companyId, long parentOrganizationId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of organizations that the user has permission to view where companyId = &#63; and parentOrganizationId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param parentOrganizationId the parent organization ID
-	* @return the number of matching organizations that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByC_P(long companyId, long parentOrganizationId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of organizations where companyId = &#63; and name = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @return the number of matching organizations
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_N(long companyId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

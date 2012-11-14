@@ -36,72 +36,6 @@ public interface LayoutSetBranchPersistence extends BasePersistence<LayoutSetBra
 	 */
 
 	/**
-	* Caches the layout set branch in the entity cache if it is enabled.
-	*
-	* @param layoutSetBranch the layout set branch
-	*/
-	public void cacheResult(
-		com.liferay.portal.model.LayoutSetBranch layoutSetBranch);
-
-	/**
-	* Caches the layout set branchs in the entity cache if it is enabled.
-	*
-	* @param layoutSetBranchs the layout set branchs
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.LayoutSetBranch> layoutSetBranchs);
-
-	/**
-	* Creates a new layout set branch with the primary key. Does not add the layout set branch to the database.
-	*
-	* @param layoutSetBranchId the primary key for the new layout set branch
-	* @return the new layout set branch
-	*/
-	public com.liferay.portal.model.LayoutSetBranch create(
-		long layoutSetBranchId);
-
-	/**
-	* Removes the layout set branch with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param layoutSetBranchId the primary key of the layout set branch
-	* @return the layout set branch that was removed
-	* @throws com.liferay.portal.NoSuchLayoutSetBranchException if a layout set branch with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.LayoutSetBranch remove(
-		long layoutSetBranchId)
-		throws com.liferay.portal.NoSuchLayoutSetBranchException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.LayoutSetBranch updateImpl(
-		com.liferay.portal.model.LayoutSetBranch layoutSetBranch)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the layout set branch with the primary key or throws a {@link com.liferay.portal.NoSuchLayoutSetBranchException} if it could not be found.
-	*
-	* @param layoutSetBranchId the primary key of the layout set branch
-	* @return the layout set branch
-	* @throws com.liferay.portal.NoSuchLayoutSetBranchException if a layout set branch with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.LayoutSetBranch findByPrimaryKey(
-		long layoutSetBranchId)
-		throws com.liferay.portal.NoSuchLayoutSetBranchException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the layout set branch with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param layoutSetBranchId the primary key of the layout set branch
-	* @return the layout set branch, or <code>null</code> if a layout set branch with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.LayoutSetBranch fetchByPrimaryKey(
-		long layoutSetBranchId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the layout set branchs where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -282,6 +216,35 @@ public interface LayoutSetBranchPersistence extends BasePersistence<LayoutSetBra
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchLayoutSetBranchException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the layout set branchs where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layout set branchs where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching layout set branchs
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layout set branchs that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching layout set branchs that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the layout set branchs where groupId = &#63; and privateLayout = &#63;.
@@ -478,6 +441,38 @@ public interface LayoutSetBranchPersistence extends BasePersistence<LayoutSetBra
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the layout set branchs where groupId = &#63; and privateLayout = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_P(long groupId, boolean privateLayout)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layout set branchs where groupId = &#63; and privateLayout = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @return the number of matching layout set branchs
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P(long groupId, boolean privateLayout)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layout set branchs that the user has permission to view where groupId = &#63; and privateLayout = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @return the number of matching layout set branchs that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_P(long groupId, boolean privateLayout)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the layout set branch where groupId = &#63; and privateLayout = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutSetBranchException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -517,6 +512,99 @@ public interface LayoutSetBranchPersistence extends BasePersistence<LayoutSetBra
 	*/
 	public com.liferay.portal.model.LayoutSetBranch fetchByG_P_N(long groupId,
 		boolean privateLayout, java.lang.String name, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the layout set branch where groupId = &#63; and privateLayout = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param name the name
+	* @return the layout set branch that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSetBranch removeByG_P_N(
+		long groupId, boolean privateLayout, java.lang.String name)
+		throws com.liferay.portal.NoSuchLayoutSetBranchException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layout set branchs where groupId = &#63; and privateLayout = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param name the name
+	* @return the number of matching layout set branchs
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P_N(long groupId, boolean privateLayout,
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the layout set branch in the entity cache if it is enabled.
+	*
+	* @param layoutSetBranch the layout set branch
+	*/
+	public void cacheResult(
+		com.liferay.portal.model.LayoutSetBranch layoutSetBranch);
+
+	/**
+	* Caches the layout set branchs in the entity cache if it is enabled.
+	*
+	* @param layoutSetBranchs the layout set branchs
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.LayoutSetBranch> layoutSetBranchs);
+
+	/**
+	* Creates a new layout set branch with the primary key. Does not add the layout set branch to the database.
+	*
+	* @param layoutSetBranchId the primary key for the new layout set branch
+	* @return the new layout set branch
+	*/
+	public com.liferay.portal.model.LayoutSetBranch create(
+		long layoutSetBranchId);
+
+	/**
+	* Removes the layout set branch with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param layoutSetBranchId the primary key of the layout set branch
+	* @return the layout set branch that was removed
+	* @throws com.liferay.portal.NoSuchLayoutSetBranchException if a layout set branch with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSetBranch remove(
+		long layoutSetBranchId)
+		throws com.liferay.portal.NoSuchLayoutSetBranchException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.LayoutSetBranch updateImpl(
+		com.liferay.portal.model.LayoutSetBranch layoutSetBranch)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the layout set branch with the primary key or throws a {@link com.liferay.portal.NoSuchLayoutSetBranchException} if it could not be found.
+	*
+	* @param layoutSetBranchId the primary key of the layout set branch
+	* @return the layout set branch
+	* @throws com.liferay.portal.NoSuchLayoutSetBranchException if a layout set branch with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSetBranch findByPrimaryKey(
+		long layoutSetBranchId)
+		throws com.liferay.portal.NoSuchLayoutSetBranchException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the layout set branch with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param layoutSetBranchId the primary key of the layout set branch
+	* @return the layout set branch, or <code>null</code> if a layout set branch with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.LayoutSetBranch fetchByPrimaryKey(
+		long layoutSetBranchId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -563,99 +651,11 @@ public interface LayoutSetBranchPersistence extends BasePersistence<LayoutSetBra
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the layout set branchs where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the layout set branchs where groupId = &#63; and privateLayout = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_P(long groupId, boolean privateLayout)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the layout set branch where groupId = &#63; and privateLayout = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param name the name
-	* @return the layout set branch that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.LayoutSetBranch removeByG_P_N(
-		long groupId, boolean privateLayout, java.lang.String name)
-		throws com.liferay.portal.NoSuchLayoutSetBranchException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the layout set branchs from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layout set branchs where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching layout set branchs
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layout set branchs that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching layout set branchs that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layout set branchs where groupId = &#63; and privateLayout = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @return the number of matching layout set branchs
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P(long groupId, boolean privateLayout)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layout set branchs that the user has permission to view where groupId = &#63; and privateLayout = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @return the number of matching layout set branchs that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_P(long groupId, boolean privateLayout)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layout set branchs where groupId = &#63; and privateLayout = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param name the name
-	* @return the number of matching layout set branchs
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P_N(long groupId, boolean privateLayout,
-		java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

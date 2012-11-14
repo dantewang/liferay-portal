@@ -36,66 +36,6 @@ public interface LockPersistence extends BasePersistence<Lock> {
 	 */
 
 	/**
-	* Caches the lock in the entity cache if it is enabled.
-	*
-	* @param lock the lock
-	*/
-	public void cacheResult(com.liferay.portal.model.Lock lock);
-
-	/**
-	* Caches the locks in the entity cache if it is enabled.
-	*
-	* @param locks the locks
-	*/
-	public void cacheResult(java.util.List<com.liferay.portal.model.Lock> locks);
-
-	/**
-	* Creates a new lock with the primary key. Does not add the lock to the database.
-	*
-	* @param lockId the primary key for the new lock
-	* @return the new lock
-	*/
-	public com.liferay.portal.model.Lock create(long lockId);
-
-	/**
-	* Removes the lock with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param lockId the primary key of the lock
-	* @return the lock that was removed
-	* @throws com.liferay.portal.NoSuchLockException if a lock with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Lock remove(long lockId)
-		throws com.liferay.portal.NoSuchLockException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.Lock updateImpl(
-		com.liferay.portal.model.Lock lock)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the lock with the primary key or throws a {@link com.liferay.portal.NoSuchLockException} if it could not be found.
-	*
-	* @param lockId the primary key of the lock
-	* @return the lock
-	* @throws com.liferay.portal.NoSuchLockException if a lock with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Lock findByPrimaryKey(long lockId)
-		throws com.liferay.portal.NoSuchLockException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the lock with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param lockId the primary key of the lock
-	* @return the lock, or <code>null</code> if a lock with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Lock fetchByPrimaryKey(long lockId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the locks where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -213,6 +153,25 @@ public interface LockPersistence extends BasePersistence<Lock> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchLockException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the locks where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of locks where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching locks
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the locks where uuid = &#63; and companyId = &#63;.
@@ -342,6 +301,27 @@ public interface LockPersistence extends BasePersistence<Lock> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the locks where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of locks where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching locks
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the locks where expirationDate &lt; &#63;.
 	*
 	* @param expirationDate the expiration date
@@ -461,6 +441,25 @@ public interface LockPersistence extends BasePersistence<Lock> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the locks where expirationDate &lt; &#63; from the database.
+	*
+	* @param expirationDate the expiration date
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByLtExpirationDate(java.util.Date expirationDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of locks where expirationDate &lt; &#63;.
+	*
+	* @param expirationDate the expiration date
+	* @return the number of matching locks
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByLtExpirationDate(java.util.Date expirationDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the lock where className = &#63; and key = &#63; or throws a {@link com.liferay.portal.NoSuchLockException} if it could not be found.
 	*
 	* @param className the class name
@@ -498,6 +497,30 @@ public interface LockPersistence extends BasePersistence<Lock> {
 	public com.liferay.portal.model.Lock fetchByC_K(
 		java.lang.String className, java.lang.String key,
 		boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the lock where className = &#63; and key = &#63; from the database.
+	*
+	* @param className the class name
+	* @param key the key
+	* @return the lock that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Lock removeByC_K(
+		java.lang.String className, java.lang.String key)
+		throws com.liferay.portal.NoSuchLockException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of locks where className = &#63; and key = &#63;.
+	*
+	* @param className the class name
+	* @param key the key
+	* @return the number of matching locks
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_K(java.lang.String className, java.lang.String key)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -544,6 +567,93 @@ public interface LockPersistence extends BasePersistence<Lock> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the lock where className = &#63; and key = &#63; and owner = &#63; from the database.
+	*
+	* @param className the class name
+	* @param key the key
+	* @param owner the owner
+	* @return the lock that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Lock removeByC_K_O(
+		java.lang.String className, java.lang.String key, java.lang.String owner)
+		throws com.liferay.portal.NoSuchLockException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of locks where className = &#63; and key = &#63; and owner = &#63;.
+	*
+	* @param className the class name
+	* @param key the key
+	* @param owner the owner
+	* @return the number of matching locks
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_K_O(java.lang.String className, java.lang.String key,
+		java.lang.String owner)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the lock in the entity cache if it is enabled.
+	*
+	* @param lock the lock
+	*/
+	public void cacheResult(com.liferay.portal.model.Lock lock);
+
+	/**
+	* Caches the locks in the entity cache if it is enabled.
+	*
+	* @param locks the locks
+	*/
+	public void cacheResult(java.util.List<com.liferay.portal.model.Lock> locks);
+
+	/**
+	* Creates a new lock with the primary key. Does not add the lock to the database.
+	*
+	* @param lockId the primary key for the new lock
+	* @return the new lock
+	*/
+	public com.liferay.portal.model.Lock create(long lockId);
+
+	/**
+	* Removes the lock with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param lockId the primary key of the lock
+	* @return the lock that was removed
+	* @throws com.liferay.portal.NoSuchLockException if a lock with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Lock remove(long lockId)
+		throws com.liferay.portal.NoSuchLockException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.Lock updateImpl(
+		com.liferay.portal.model.Lock lock)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the lock with the primary key or throws a {@link com.liferay.portal.NoSuchLockException} if it could not be found.
+	*
+	* @param lockId the primary key of the lock
+	* @return the lock
+	* @throws com.liferay.portal.NoSuchLockException if a lock with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Lock findByPrimaryKey(long lockId)
+		throws com.liferay.portal.NoSuchLockException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the lock with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param lockId the primary key of the lock
+	* @return the lock, or <code>null</code> if a lock with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Lock fetchByPrimaryKey(long lockId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the locks.
 	*
 	* @return the locks
@@ -586,121 +696,11 @@ public interface LockPersistence extends BasePersistence<Lock> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the locks where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the locks where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the locks where expirationDate &lt; &#63; from the database.
-	*
-	* @param expirationDate the expiration date
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByLtExpirationDate(java.util.Date expirationDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the lock where className = &#63; and key = &#63; from the database.
-	*
-	* @param className the class name
-	* @param key the key
-	* @return the lock that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Lock removeByC_K(
-		java.lang.String className, java.lang.String key)
-		throws com.liferay.portal.NoSuchLockException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the lock where className = &#63; and key = &#63; and owner = &#63; from the database.
-	*
-	* @param className the class name
-	* @param key the key
-	* @param owner the owner
-	* @return the lock that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Lock removeByC_K_O(
-		java.lang.String className, java.lang.String key, java.lang.String owner)
-		throws com.liferay.portal.NoSuchLockException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the locks from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of locks where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching locks
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of locks where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching locks
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of locks where expirationDate &lt; &#63;.
-	*
-	* @param expirationDate the expiration date
-	* @return the number of matching locks
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByLtExpirationDate(java.util.Date expirationDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of locks where className = &#63; and key = &#63;.
-	*
-	* @param className the class name
-	* @param key the key
-	* @return the number of matching locks
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_K(java.lang.String className, java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of locks where className = &#63; and key = &#63; and owner = &#63;.
-	*
-	* @param className the class name
-	* @param key the key
-	* @param owner the owner
-	* @return the number of matching locks
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_K_O(java.lang.String className, java.lang.String key,
-		java.lang.String owner)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

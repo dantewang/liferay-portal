@@ -111,86 +111,6 @@ public class PasswordPolicyRelUtil {
 	}
 
 	/**
-	* Caches the password policy rel in the entity cache if it is enabled.
-	*
-	* @param passwordPolicyRel the password policy rel
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.PasswordPolicyRel passwordPolicyRel) {
-		getPersistence().cacheResult(passwordPolicyRel);
-	}
-
-	/**
-	* Caches the password policy rels in the entity cache if it is enabled.
-	*
-	* @param passwordPolicyRels the password policy rels
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.PasswordPolicyRel> passwordPolicyRels) {
-		getPersistence().cacheResult(passwordPolicyRels);
-	}
-
-	/**
-	* Creates a new password policy rel with the primary key. Does not add the password policy rel to the database.
-	*
-	* @param passwordPolicyRelId the primary key for the new password policy rel
-	* @return the new password policy rel
-	*/
-	public static com.liferay.portal.model.PasswordPolicyRel create(
-		long passwordPolicyRelId) {
-		return getPersistence().create(passwordPolicyRelId);
-	}
-
-	/**
-	* Removes the password policy rel with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param passwordPolicyRelId the primary key of the password policy rel
-	* @return the password policy rel that was removed
-	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a password policy rel with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PasswordPolicyRel remove(
-		long passwordPolicyRelId)
-		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(passwordPolicyRelId);
-	}
-
-	public static com.liferay.portal.model.PasswordPolicyRel updateImpl(
-		com.liferay.portal.model.PasswordPolicyRel passwordPolicyRel)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(passwordPolicyRel);
-	}
-
-	/**
-	* Returns the password policy rel with the primary key or throws a {@link com.liferay.portal.NoSuchPasswordPolicyRelException} if it could not be found.
-	*
-	* @param passwordPolicyRelId the primary key of the password policy rel
-	* @return the password policy rel
-	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a password policy rel with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PasswordPolicyRel findByPrimaryKey(
-		long passwordPolicyRelId)
-		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(passwordPolicyRelId);
-	}
-
-	/**
-	* Returns the password policy rel with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param passwordPolicyRelId the primary key of the password policy rel
-	* @return the password policy rel, or <code>null</code> if a password policy rel with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PasswordPolicyRel fetchByPrimaryKey(
-		long passwordPolicyRelId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(passwordPolicyRelId);
-	}
-
-	/**
 	* Returns all the password policy rels where passwordPolicyId = &#63;.
 	*
 	* @param passwordPolicyId the password policy ID
@@ -339,6 +259,29 @@ public class PasswordPolicyRelUtil {
 	}
 
 	/**
+	* Removes all the password policy rels where passwordPolicyId = &#63; from the database.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByPasswordPolicyId(long passwordPolicyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByPasswordPolicyId(passwordPolicyId);
+	}
+
+	/**
+	* Returns the number of password policy rels where passwordPolicyId = &#63;.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @return the number of matching password policy rels
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByPasswordPolicyId(long passwordPolicyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByPasswordPolicyId(passwordPolicyId);
+	}
+
+	/**
 	* Returns the password policy rel where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portal.NoSuchPasswordPolicyRelException} if it could not be found.
 	*
 	* @param classNameId the class name ID
@@ -382,6 +325,34 @@ public class PasswordPolicyRelUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_C(classNameId, classPK, retrieveFromCache);
+	}
+
+	/**
+	* Removes the password policy rel where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the password policy rel that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordPolicyRel removeByC_C(
+		long classNameId, long classPK)
+		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of password policy rels where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching password policy rels
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C(classNameId, classPK);
 	}
 
 	/**
@@ -438,6 +409,119 @@ public class PasswordPolicyRelUtil {
 	}
 
 	/**
+	* Removes the password policy rel where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the password policy rel that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordPolicyRel removeByP_C_C(
+		long passwordPolicyId, long classNameId, long classPK)
+		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .removeByP_C_C(passwordPolicyId, classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of password policy rels where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param passwordPolicyId the password policy ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching password policy rels
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByP_C_C(long passwordPolicyId, long classNameId,
+		long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByP_C_C(passwordPolicyId, classNameId, classPK);
+	}
+
+	/**
+	* Caches the password policy rel in the entity cache if it is enabled.
+	*
+	* @param passwordPolicyRel the password policy rel
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.PasswordPolicyRel passwordPolicyRel) {
+		getPersistence().cacheResult(passwordPolicyRel);
+	}
+
+	/**
+	* Caches the password policy rels in the entity cache if it is enabled.
+	*
+	* @param passwordPolicyRels the password policy rels
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.PasswordPolicyRel> passwordPolicyRels) {
+		getPersistence().cacheResult(passwordPolicyRels);
+	}
+
+	/**
+	* Creates a new password policy rel with the primary key. Does not add the password policy rel to the database.
+	*
+	* @param passwordPolicyRelId the primary key for the new password policy rel
+	* @return the new password policy rel
+	*/
+	public static com.liferay.portal.model.PasswordPolicyRel create(
+		long passwordPolicyRelId) {
+		return getPersistence().create(passwordPolicyRelId);
+	}
+
+	/**
+	* Removes the password policy rel with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param passwordPolicyRelId the primary key of the password policy rel
+	* @return the password policy rel that was removed
+	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a password policy rel with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordPolicyRel remove(
+		long passwordPolicyRelId)
+		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(passwordPolicyRelId);
+	}
+
+	public static com.liferay.portal.model.PasswordPolicyRel updateImpl(
+		com.liferay.portal.model.PasswordPolicyRel passwordPolicyRel)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(passwordPolicyRel);
+	}
+
+	/**
+	* Returns the password policy rel with the primary key or throws a {@link com.liferay.portal.NoSuchPasswordPolicyRelException} if it could not be found.
+	*
+	* @param passwordPolicyRelId the primary key of the password policy rel
+	* @return the password policy rel
+	* @throws com.liferay.portal.NoSuchPasswordPolicyRelException if a password policy rel with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordPolicyRel findByPrimaryKey(
+		long passwordPolicyRelId)
+		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(passwordPolicyRelId);
+	}
+
+	/**
+	* Returns the password policy rel with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param passwordPolicyRelId the primary key of the password policy rel
+	* @return the password policy rel, or <code>null</code> if a password policy rel with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordPolicyRel fetchByPrimaryKey(
+		long passwordPolicyRelId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(passwordPolicyRelId);
+	}
+
+	/**
 	* Returns all the password policy rels.
 	*
 	* @return the password policy rels
@@ -487,49 +571,6 @@ public class PasswordPolicyRelUtil {
 	}
 
 	/**
-	* Removes all the password policy rels where passwordPolicyId = &#63; from the database.
-	*
-	* @param passwordPolicyId the password policy ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByPasswordPolicyId(long passwordPolicyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByPasswordPolicyId(passwordPolicyId);
-	}
-
-	/**
-	* Removes the password policy rel where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the password policy rel that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PasswordPolicyRel removeByC_C(
-		long classNameId, long classPK)
-		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Removes the password policy rel where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param passwordPolicyId the password policy ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the password policy rel that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PasswordPolicyRel removeByP_C_C(
-		long passwordPolicyId, long classNameId, long classPK)
-		throws com.liferay.portal.NoSuchPasswordPolicyRelException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .removeByP_C_C(passwordPolicyId, classNameId, classPK);
-	}
-
-	/**
 	* Removes all the password policy rels from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -537,47 +578,6 @@ public class PasswordPolicyRelUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of password policy rels where passwordPolicyId = &#63;.
-	*
-	* @param passwordPolicyId the password policy ID
-	* @return the number of matching password policy rels
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByPasswordPolicyId(long passwordPolicyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByPasswordPolicyId(passwordPolicyId);
-	}
-
-	/**
-	* Returns the number of password policy rels where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching password policy rels
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Returns the number of password policy rels where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param passwordPolicyId the password policy ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching password policy rels
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByP_C_C(long passwordPolicyId, long classNameId,
-		long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByP_C_C(passwordPolicyId, classNameId, classPK);
 	}
 
 	/**

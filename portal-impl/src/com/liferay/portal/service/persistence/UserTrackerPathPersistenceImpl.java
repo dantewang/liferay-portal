@@ -71,6 +71,17 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
+			UserTrackerPathModelImpl.FINDER_CACHE_ENABLED,
+			UserTrackerPathImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
+			UserTrackerPathModelImpl.FINDER_CACHE_ENABLED,
+			UserTrackerPathImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
+			UserTrackerPathModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERTRACKERID =
 		new FinderPath(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
 			UserTrackerPathModelImpl.FINDER_CACHE_ENABLED,
@@ -93,383 +104,6 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 			UserTrackerPathModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserTrackerId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
-			UserTrackerPathModelImpl.FINDER_CACHE_ENABLED,
-			UserTrackerPathImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
-			UserTrackerPathModelImpl.FINDER_CACHE_ENABLED,
-			UserTrackerPathImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
-			UserTrackerPathModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the user tracker path in the entity cache if it is enabled.
-	 *
-	 * @param userTrackerPath the user tracker path
-	 */
-	public void cacheResult(UserTrackerPath userTrackerPath) {
-		EntityCacheUtil.putResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
-			UserTrackerPathImpl.class, userTrackerPath.getPrimaryKey(),
-			userTrackerPath);
-
-		userTrackerPath.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the user tracker paths in the entity cache if it is enabled.
-	 *
-	 * @param userTrackerPaths the user tracker paths
-	 */
-	public void cacheResult(List<UserTrackerPath> userTrackerPaths) {
-		for (UserTrackerPath userTrackerPath : userTrackerPaths) {
-			if (EntityCacheUtil.getResult(
-						UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
-						UserTrackerPathImpl.class,
-						userTrackerPath.getPrimaryKey()) == null) {
-				cacheResult(userTrackerPath);
-			}
-			else {
-				userTrackerPath.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all user tracker paths.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(UserTrackerPathImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(UserTrackerPathImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the user tracker path.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(UserTrackerPath userTrackerPath) {
-		EntityCacheUtil.removeResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
-			UserTrackerPathImpl.class, userTrackerPath.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<UserTrackerPath> userTrackerPaths) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (UserTrackerPath userTrackerPath : userTrackerPaths) {
-			EntityCacheUtil.removeResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
-				UserTrackerPathImpl.class, userTrackerPath.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new user tracker path with the primary key. Does not add the user tracker path to the database.
-	 *
-	 * @param userTrackerPathId the primary key for the new user tracker path
-	 * @return the new user tracker path
-	 */
-	public UserTrackerPath create(long userTrackerPathId) {
-		UserTrackerPath userTrackerPath = new UserTrackerPathImpl();
-
-		userTrackerPath.setNew(true);
-		userTrackerPath.setPrimaryKey(userTrackerPathId);
-
-		return userTrackerPath;
-	}
-
-	/**
-	 * Removes the user tracker path with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param userTrackerPathId the primary key of the user tracker path
-	 * @return the user tracker path that was removed
-	 * @throws com.liferay.portal.NoSuchUserTrackerPathException if a user tracker path with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserTrackerPath remove(long userTrackerPathId)
-		throws NoSuchUserTrackerPathException, SystemException {
-		return remove(Long.valueOf(userTrackerPathId));
-	}
-
-	/**
-	 * Removes the user tracker path with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the user tracker path
-	 * @return the user tracker path that was removed
-	 * @throws com.liferay.portal.NoSuchUserTrackerPathException if a user tracker path with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public UserTrackerPath remove(Serializable primaryKey)
-		throws NoSuchUserTrackerPathException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			UserTrackerPath userTrackerPath = (UserTrackerPath)session.get(UserTrackerPathImpl.class,
-					primaryKey);
-
-			if (userTrackerPath == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchUserTrackerPathException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(userTrackerPath);
-		}
-		catch (NoSuchUserTrackerPathException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected UserTrackerPath removeImpl(UserTrackerPath userTrackerPath)
-		throws SystemException {
-		userTrackerPath = toUnwrappedModel(userTrackerPath);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(userTrackerPath)) {
-				userTrackerPath = (UserTrackerPath)session.get(UserTrackerPathImpl.class,
-						userTrackerPath.getPrimaryKeyObj());
-			}
-
-			if (userTrackerPath != null) {
-				session.delete(userTrackerPath);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (userTrackerPath != null) {
-			clearCache(userTrackerPath);
-		}
-
-		return userTrackerPath;
-	}
-
-	@Override
-	public UserTrackerPath updateImpl(
-		com.liferay.portal.model.UserTrackerPath userTrackerPath)
-		throws SystemException {
-		userTrackerPath = toUnwrappedModel(userTrackerPath);
-
-		boolean isNew = userTrackerPath.isNew();
-
-		UserTrackerPathModelImpl userTrackerPathModelImpl = (UserTrackerPathModelImpl)userTrackerPath;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (userTrackerPath.isNew()) {
-				session.save(userTrackerPath);
-
-				userTrackerPath.setNew(false);
-			}
-			else {
-				session.merge(userTrackerPath);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !UserTrackerPathModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((userTrackerPathModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERTRACKERID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(userTrackerPathModelImpl.getOriginalUserTrackerId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERTRACKERID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERTRACKERID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(userTrackerPathModelImpl.getUserTrackerId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERTRACKERID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERTRACKERID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
-			UserTrackerPathImpl.class, userTrackerPath.getPrimaryKey(),
-			userTrackerPath);
-
-		return userTrackerPath;
-	}
-
-	protected UserTrackerPath toUnwrappedModel(UserTrackerPath userTrackerPath) {
-		if (userTrackerPath instanceof UserTrackerPathImpl) {
-			return userTrackerPath;
-		}
-
-		UserTrackerPathImpl userTrackerPathImpl = new UserTrackerPathImpl();
-
-		userTrackerPathImpl.setNew(userTrackerPath.isNew());
-		userTrackerPathImpl.setPrimaryKey(userTrackerPath.getPrimaryKey());
-
-		userTrackerPathImpl.setUserTrackerPathId(userTrackerPath.getUserTrackerPathId());
-		userTrackerPathImpl.setUserTrackerId(userTrackerPath.getUserTrackerId());
-		userTrackerPathImpl.setPath(userTrackerPath.getPath());
-		userTrackerPathImpl.setPathDate(userTrackerPath.getPathDate());
-
-		return userTrackerPathImpl;
-	}
-
-	/**
-	 * Returns the user tracker path with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the user tracker path
-	 * @return the user tracker path
-	 * @throws com.liferay.portal.NoSuchModelException if a user tracker path with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public UserTrackerPath findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the user tracker path with the primary key or throws a {@link com.liferay.portal.NoSuchUserTrackerPathException} if it could not be found.
-	 *
-	 * @param userTrackerPathId the primary key of the user tracker path
-	 * @return the user tracker path
-	 * @throws com.liferay.portal.NoSuchUserTrackerPathException if a user tracker path with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserTrackerPath findByPrimaryKey(long userTrackerPathId)
-		throws NoSuchUserTrackerPathException, SystemException {
-		UserTrackerPath userTrackerPath = fetchByPrimaryKey(userTrackerPathId);
-
-		if (userTrackerPath == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + userTrackerPathId);
-			}
-
-			throw new NoSuchUserTrackerPathException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				userTrackerPathId);
-		}
-
-		return userTrackerPath;
-	}
-
-	/**
-	 * Returns the user tracker path with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the user tracker path
-	 * @return the user tracker path, or <code>null</code> if a user tracker path with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public UserTrackerPath fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the user tracker path with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param userTrackerPathId the primary key of the user tracker path
-	 * @return the user tracker path, or <code>null</code> if a user tracker path with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserTrackerPath fetchByPrimaryKey(long userTrackerPathId)
-		throws SystemException {
-		UserTrackerPath userTrackerPath = (UserTrackerPath)EntityCacheUtil.getResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
-				UserTrackerPathImpl.class, userTrackerPathId);
-
-		if (userTrackerPath == _nullUserTrackerPath) {
-			return null;
-		}
-
-		if (userTrackerPath == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				userTrackerPath = (UserTrackerPath)session.get(UserTrackerPathImpl.class,
-						Long.valueOf(userTrackerPathId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (userTrackerPath != null) {
-					cacheResult(userTrackerPath);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
-						UserTrackerPathImpl.class, userTrackerPathId,
-						_nullUserTrackerPath);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return userTrackerPath;
-	}
 
 	/**
 	 * Returns all the user tracker paths where userTrackerId = &#63;.
@@ -853,6 +487,442 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	}
 
 	/**
+	 * Removes all the user tracker paths where userTrackerId = &#63; from the database.
+	 *
+	 * @param userTrackerId the user tracker ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUserTrackerId(long userTrackerId)
+		throws SystemException {
+		for (UserTrackerPath userTrackerPath : findByUserTrackerId(
+				userTrackerId)) {
+			remove(userTrackerPath);
+		}
+	}
+
+	/**
+	 * Returns the number of user tracker paths where userTrackerId = &#63;.
+	 *
+	 * @param userTrackerId the user tracker ID
+	 * @return the number of matching user tracker paths
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUserTrackerId(long userTrackerId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { userTrackerId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERTRACKERID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_USERTRACKERPATH_WHERE);
+
+			query.append(_FINDER_COLUMN_USERTRACKERID_USERTRACKERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userTrackerId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERTRACKERID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_USERTRACKERID_USERTRACKERID_2 = "userTrackerPath.userTrackerId = ?";
+
+	/**
+	 * Caches the user tracker path in the entity cache if it is enabled.
+	 *
+	 * @param userTrackerPath the user tracker path
+	 */
+	public void cacheResult(UserTrackerPath userTrackerPath) {
+		EntityCacheUtil.putResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
+			UserTrackerPathImpl.class, userTrackerPath.getPrimaryKey(),
+			userTrackerPath);
+
+		userTrackerPath.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the user tracker paths in the entity cache if it is enabled.
+	 *
+	 * @param userTrackerPaths the user tracker paths
+	 */
+	public void cacheResult(List<UserTrackerPath> userTrackerPaths) {
+		for (UserTrackerPath userTrackerPath : userTrackerPaths) {
+			if (EntityCacheUtil.getResult(
+						UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
+						UserTrackerPathImpl.class,
+						userTrackerPath.getPrimaryKey()) == null) {
+				cacheResult(userTrackerPath);
+			}
+			else {
+				userTrackerPath.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all user tracker paths.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(UserTrackerPathImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(UserTrackerPathImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the user tracker path.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(UserTrackerPath userTrackerPath) {
+		EntityCacheUtil.removeResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
+			UserTrackerPathImpl.class, userTrackerPath.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<UserTrackerPath> userTrackerPaths) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (UserTrackerPath userTrackerPath : userTrackerPaths) {
+			EntityCacheUtil.removeResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
+				UserTrackerPathImpl.class, userTrackerPath.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new user tracker path with the primary key. Does not add the user tracker path to the database.
+	 *
+	 * @param userTrackerPathId the primary key for the new user tracker path
+	 * @return the new user tracker path
+	 */
+	public UserTrackerPath create(long userTrackerPathId) {
+		UserTrackerPath userTrackerPath = new UserTrackerPathImpl();
+
+		userTrackerPath.setNew(true);
+		userTrackerPath.setPrimaryKey(userTrackerPathId);
+
+		return userTrackerPath;
+	}
+
+	/**
+	 * Removes the user tracker path with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param userTrackerPathId the primary key of the user tracker path
+	 * @return the user tracker path that was removed
+	 * @throws com.liferay.portal.NoSuchUserTrackerPathException if a user tracker path with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserTrackerPath remove(long userTrackerPathId)
+		throws NoSuchUserTrackerPathException, SystemException {
+		return remove(Long.valueOf(userTrackerPathId));
+	}
+
+	/**
+	 * Removes the user tracker path with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the user tracker path
+	 * @return the user tracker path that was removed
+	 * @throws com.liferay.portal.NoSuchUserTrackerPathException if a user tracker path with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public UserTrackerPath remove(Serializable primaryKey)
+		throws NoSuchUserTrackerPathException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			UserTrackerPath userTrackerPath = (UserTrackerPath)session.get(UserTrackerPathImpl.class,
+					primaryKey);
+
+			if (userTrackerPath == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchUserTrackerPathException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(userTrackerPath);
+		}
+		catch (NoSuchUserTrackerPathException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected UserTrackerPath removeImpl(UserTrackerPath userTrackerPath)
+		throws SystemException {
+		userTrackerPath = toUnwrappedModel(userTrackerPath);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(userTrackerPath)) {
+				userTrackerPath = (UserTrackerPath)session.get(UserTrackerPathImpl.class,
+						userTrackerPath.getPrimaryKeyObj());
+			}
+
+			if (userTrackerPath != null) {
+				session.delete(userTrackerPath);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (userTrackerPath != null) {
+			clearCache(userTrackerPath);
+		}
+
+		return userTrackerPath;
+	}
+
+	@Override
+	public UserTrackerPath updateImpl(
+		com.liferay.portal.model.UserTrackerPath userTrackerPath)
+		throws SystemException {
+		userTrackerPath = toUnwrappedModel(userTrackerPath);
+
+		boolean isNew = userTrackerPath.isNew();
+
+		UserTrackerPathModelImpl userTrackerPathModelImpl = (UserTrackerPathModelImpl)userTrackerPath;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (userTrackerPath.isNew()) {
+				session.save(userTrackerPath);
+
+				userTrackerPath.setNew(false);
+			}
+			else {
+				session.merge(userTrackerPath);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !UserTrackerPathModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((userTrackerPathModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERTRACKERID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(userTrackerPathModelImpl.getOriginalUserTrackerId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERTRACKERID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERTRACKERID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(userTrackerPathModelImpl.getUserTrackerId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERTRACKERID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERTRACKERID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
+			UserTrackerPathImpl.class, userTrackerPath.getPrimaryKey(),
+			userTrackerPath);
+
+		return userTrackerPath;
+	}
+
+	protected UserTrackerPath toUnwrappedModel(UserTrackerPath userTrackerPath) {
+		if (userTrackerPath instanceof UserTrackerPathImpl) {
+			return userTrackerPath;
+		}
+
+		UserTrackerPathImpl userTrackerPathImpl = new UserTrackerPathImpl();
+
+		userTrackerPathImpl.setNew(userTrackerPath.isNew());
+		userTrackerPathImpl.setPrimaryKey(userTrackerPath.getPrimaryKey());
+
+		userTrackerPathImpl.setUserTrackerPathId(userTrackerPath.getUserTrackerPathId());
+		userTrackerPathImpl.setUserTrackerId(userTrackerPath.getUserTrackerId());
+		userTrackerPathImpl.setPath(userTrackerPath.getPath());
+		userTrackerPathImpl.setPathDate(userTrackerPath.getPathDate());
+
+		return userTrackerPathImpl;
+	}
+
+	/**
+	 * Returns the user tracker path with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the user tracker path
+	 * @return the user tracker path
+	 * @throws com.liferay.portal.NoSuchModelException if a user tracker path with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public UserTrackerPath findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the user tracker path with the primary key or throws a {@link com.liferay.portal.NoSuchUserTrackerPathException} if it could not be found.
+	 *
+	 * @param userTrackerPathId the primary key of the user tracker path
+	 * @return the user tracker path
+	 * @throws com.liferay.portal.NoSuchUserTrackerPathException if a user tracker path with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserTrackerPath findByPrimaryKey(long userTrackerPathId)
+		throws NoSuchUserTrackerPathException, SystemException {
+		UserTrackerPath userTrackerPath = fetchByPrimaryKey(userTrackerPathId);
+
+		if (userTrackerPath == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + userTrackerPathId);
+			}
+
+			throw new NoSuchUserTrackerPathException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				userTrackerPathId);
+		}
+
+		return userTrackerPath;
+	}
+
+	/**
+	 * Returns the user tracker path with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the user tracker path
+	 * @return the user tracker path, or <code>null</code> if a user tracker path with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public UserTrackerPath fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the user tracker path with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param userTrackerPathId the primary key of the user tracker path
+	 * @return the user tracker path, or <code>null</code> if a user tracker path with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserTrackerPath fetchByPrimaryKey(long userTrackerPathId)
+		throws SystemException {
+		UserTrackerPath userTrackerPath = (UserTrackerPath)EntityCacheUtil.getResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
+				UserTrackerPathImpl.class, userTrackerPathId);
+
+		if (userTrackerPath == _nullUserTrackerPath) {
+			return null;
+		}
+
+		if (userTrackerPath == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				userTrackerPath = (UserTrackerPath)session.get(UserTrackerPathImpl.class,
+						Long.valueOf(userTrackerPathId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (userTrackerPath != null) {
+					cacheResult(userTrackerPath);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
+						UserTrackerPathImpl.class, userTrackerPathId,
+						_nullUserTrackerPath);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return userTrackerPath;
+	}
+
+	/**
 	 * Returns all the user tracker paths.
 	 *
 	 * @return the user tracker paths
@@ -968,20 +1038,6 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	}
 
 	/**
-	 * Removes all the user tracker paths where userTrackerId = &#63; from the database.
-	 *
-	 * @param userTrackerId the user tracker ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUserTrackerId(long userTrackerId)
-		throws SystemException {
-		for (UserTrackerPath userTrackerPath : findByUserTrackerId(
-				userTrackerId)) {
-			remove(userTrackerPath);
-		}
-	}
-
-	/**
 	 * Removes all the user tracker paths from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -990,60 +1046,6 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 		for (UserTrackerPath userTrackerPath : findAll()) {
 			remove(userTrackerPath);
 		}
-	}
-
-	/**
-	 * Returns the number of user tracker paths where userTrackerId = &#63;.
-	 *
-	 * @param userTrackerId the user tracker ID
-	 * @return the number of matching user tracker paths
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUserTrackerId(long userTrackerId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { userTrackerId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERTRACKERID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_USERTRACKERPATH_WHERE);
-
-			query.append(_FINDER_COLUMN_USERTRACKERID_USERTRACKERID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userTrackerId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERTRACKERID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1241,7 +1243,6 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	private static final String _SQL_SELECT_USERTRACKERPATH_WHERE = "SELECT userTrackerPath FROM UserTrackerPath userTrackerPath WHERE ";
 	private static final String _SQL_COUNT_USERTRACKERPATH = "SELECT COUNT(userTrackerPath) FROM UserTrackerPath userTrackerPath";
 	private static final String _SQL_COUNT_USERTRACKERPATH_WHERE = "SELECT COUNT(userTrackerPath) FROM UserTrackerPath userTrackerPath WHERE ";
-	private static final String _FINDER_COLUMN_USERTRACKERID_USERTRACKERID_2 = "userTrackerPath.userTrackerId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "userTrackerPath.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No UserTrackerPath exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No UserTrackerPath exists with the key {";

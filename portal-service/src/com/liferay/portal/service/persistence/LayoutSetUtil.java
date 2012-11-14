@@ -110,83 +110,6 @@ public class LayoutSetUtil {
 	}
 
 	/**
-	* Caches the layout set in the entity cache if it is enabled.
-	*
-	* @param layoutSet the layout set
-	*/
-	public static void cacheResult(com.liferay.portal.model.LayoutSet layoutSet) {
-		getPersistence().cacheResult(layoutSet);
-	}
-
-	/**
-	* Caches the layout sets in the entity cache if it is enabled.
-	*
-	* @param layoutSets the layout sets
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.LayoutSet> layoutSets) {
-		getPersistence().cacheResult(layoutSets);
-	}
-
-	/**
-	* Creates a new layout set with the primary key. Does not add the layout set to the database.
-	*
-	* @param layoutSetId the primary key for the new layout set
-	* @return the new layout set
-	*/
-	public static com.liferay.portal.model.LayoutSet create(long layoutSetId) {
-		return getPersistence().create(layoutSetId);
-	}
-
-	/**
-	* Removes the layout set with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param layoutSetId the primary key of the layout set
-	* @return the layout set that was removed
-	* @throws com.liferay.portal.NoSuchLayoutSetException if a layout set with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.LayoutSet remove(long layoutSetId)
-		throws com.liferay.portal.NoSuchLayoutSetException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(layoutSetId);
-	}
-
-	public static com.liferay.portal.model.LayoutSet updateImpl(
-		com.liferay.portal.model.LayoutSet layoutSet)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(layoutSet);
-	}
-
-	/**
-	* Returns the layout set with the primary key or throws a {@link com.liferay.portal.NoSuchLayoutSetException} if it could not be found.
-	*
-	* @param layoutSetId the primary key of the layout set
-	* @return the layout set
-	* @throws com.liferay.portal.NoSuchLayoutSetException if a layout set with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.LayoutSet findByPrimaryKey(
-		long layoutSetId)
-		throws com.liferay.portal.NoSuchLayoutSetException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(layoutSetId);
-	}
-
-	/**
-	* Returns the layout set with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param layoutSetId the primary key of the layout set
-	* @return the layout set, or <code>null</code> if a layout set with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.LayoutSet fetchByPrimaryKey(
-		long layoutSetId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(layoutSetId);
-	}
-
-	/**
 	* Returns all the layout sets where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -322,6 +245,29 @@ public class LayoutSetUtil {
 		return getPersistence()
 				   .findByGroupId_PrevAndNext(layoutSetId, groupId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the layout sets where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of layout sets where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching layout sets
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
 	}
 
 	/**
@@ -475,6 +421,32 @@ public class LayoutSetUtil {
 	}
 
 	/**
+	* Removes all the layout sets where layoutSetPrototypeUuid = &#63; from the database.
+	*
+	* @param layoutSetPrototypeUuid the layout set prototype uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByLayoutSetPrototypeUuid(
+		java.lang.String layoutSetPrototypeUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByLayoutSetPrototypeUuid(layoutSetPrototypeUuid);
+	}
+
+	/**
+	* Returns the number of layout sets where layoutSetPrototypeUuid = &#63;.
+	*
+	* @param layoutSetPrototypeUuid the layout set prototype uuid
+	* @return the number of matching layout sets
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByLayoutSetPrototypeUuid(
+		java.lang.String layoutSetPrototypeUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByLayoutSetPrototypeUuid(layoutSetPrototypeUuid);
+	}
+
+	/**
 	* Returns the layout set where groupId = &#63; and privateLayout = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutSetException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -518,6 +490,111 @@ public class LayoutSetUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_P(groupId, privateLayout, retrieveFromCache);
+	}
+
+	/**
+	* Removes the layout set where groupId = &#63; and privateLayout = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @return the layout set that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.LayoutSet removeByG_P(long groupId,
+		boolean privateLayout)
+		throws com.liferay.portal.NoSuchLayoutSetException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByG_P(groupId, privateLayout);
+	}
+
+	/**
+	* Returns the number of layout sets where groupId = &#63; and privateLayout = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @return the number of matching layout sets
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_P(long groupId, boolean privateLayout)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_P(groupId, privateLayout);
+	}
+
+	/**
+	* Caches the layout set in the entity cache if it is enabled.
+	*
+	* @param layoutSet the layout set
+	*/
+	public static void cacheResult(com.liferay.portal.model.LayoutSet layoutSet) {
+		getPersistence().cacheResult(layoutSet);
+	}
+
+	/**
+	* Caches the layout sets in the entity cache if it is enabled.
+	*
+	* @param layoutSets the layout sets
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.LayoutSet> layoutSets) {
+		getPersistence().cacheResult(layoutSets);
+	}
+
+	/**
+	* Creates a new layout set with the primary key. Does not add the layout set to the database.
+	*
+	* @param layoutSetId the primary key for the new layout set
+	* @return the new layout set
+	*/
+	public static com.liferay.portal.model.LayoutSet create(long layoutSetId) {
+		return getPersistence().create(layoutSetId);
+	}
+
+	/**
+	* Removes the layout set with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param layoutSetId the primary key of the layout set
+	* @return the layout set that was removed
+	* @throws com.liferay.portal.NoSuchLayoutSetException if a layout set with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.LayoutSet remove(long layoutSetId)
+		throws com.liferay.portal.NoSuchLayoutSetException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(layoutSetId);
+	}
+
+	public static com.liferay.portal.model.LayoutSet updateImpl(
+		com.liferay.portal.model.LayoutSet layoutSet)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(layoutSet);
+	}
+
+	/**
+	* Returns the layout set with the primary key or throws a {@link com.liferay.portal.NoSuchLayoutSetException} if it could not be found.
+	*
+	* @param layoutSetId the primary key of the layout set
+	* @return the layout set
+	* @throws com.liferay.portal.NoSuchLayoutSetException if a layout set with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.LayoutSet findByPrimaryKey(
+		long layoutSetId)
+		throws com.liferay.portal.NoSuchLayoutSetException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(layoutSetId);
+	}
+
+	/**
+	* Returns the layout set with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param layoutSetId the primary key of the layout set
+	* @return the layout set, or <code>null</code> if a layout set with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.LayoutSet fetchByPrimaryKey(
+		long layoutSetId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(layoutSetId);
 	}
 
 	/**
@@ -570,44 +647,6 @@ public class LayoutSetUtil {
 	}
 
 	/**
-	* Removes all the layout sets where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes all the layout sets where layoutSetPrototypeUuid = &#63; from the database.
-	*
-	* @param layoutSetPrototypeUuid the layout set prototype uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByLayoutSetPrototypeUuid(
-		java.lang.String layoutSetPrototypeUuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByLayoutSetPrototypeUuid(layoutSetPrototypeUuid);
-	}
-
-	/**
-	* Removes the layout set where groupId = &#63; and privateLayout = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @return the layout set that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.LayoutSet removeByG_P(long groupId,
-		boolean privateLayout)
-		throws com.liferay.portal.NoSuchLayoutSetException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByG_P(groupId, privateLayout);
-	}
-
-	/**
 	* Removes all the layout sets from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -615,45 +654,6 @@ public class LayoutSetUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of layout sets where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching layout sets
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of layout sets where layoutSetPrototypeUuid = &#63;.
-	*
-	* @param layoutSetPrototypeUuid the layout set prototype uuid
-	* @return the number of matching layout sets
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByLayoutSetPrototypeUuid(
-		java.lang.String layoutSetPrototypeUuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByLayoutSetPrototypeUuid(layoutSetPrototypeUuid);
-	}
-
-	/**
-	* Returns the number of layout sets where groupId = &#63; and privateLayout = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @return the number of matching layout sets
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_P(long groupId, boolean privateLayout)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_P(groupId, privateLayout);
 	}
 
 	/**

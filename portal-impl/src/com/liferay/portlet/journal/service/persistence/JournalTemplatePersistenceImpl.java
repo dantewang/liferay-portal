@@ -81,6 +81,17 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
 			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -101,755 +112,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			JournalTemplateModelImpl.UUID_COLUMN_BITMASK |
-			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			JournalTemplateModelImpl.UUID_COLUMN_BITMASK |
-			JournalTemplateModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_TEMPLATEID =
-		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByTemplateId",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID =
-		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByTemplateId",
-			new String[] { String.class.getName() },
-			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_TEMPLATEID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByTemplateId",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID =
-		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByStructureId",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID =
-		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStructureId",
-			new String[] { String.class.getName() },
-			JournalTemplateModelImpl.STRUCTUREID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStructureId",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_SMALLIMAGEID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchBySmallImageId", new String[] { Long.class.getName() },
-			JournalTemplateModelImpl.SMALLIMAGEID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_SMALLIMAGEID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBySmallImageId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_G_T = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByG_T",
-			new String[] { Long.class.getName(), String.class.getName() },
-			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK |
-			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_T = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_T",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByG_S",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_S",
-			new String[] { Long.class.getName(), String.class.getName() },
-			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK |
-			JournalTemplateModelImpl.STRUCTUREID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
-			JournalTemplateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the journal template in the entity cache if it is enabled.
-	 *
-	 * @param journalTemplate the journal template
-	 */
-	public void cacheResult(JournalTemplate journalTemplate) {
-		EntityCacheUtil.putResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateImpl.class, journalTemplate.getPrimaryKey(),
-			journalTemplate);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				journalTemplate.getUuid(),
-				Long.valueOf(journalTemplate.getGroupId())
-			}, journalTemplate);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-			new Object[] { Long.valueOf(journalTemplate.getSmallImageId()) },
-			journalTemplate);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_T,
-			new Object[] {
-				Long.valueOf(journalTemplate.getGroupId()),
-				
-			journalTemplate.getTemplateId()
-			}, journalTemplate);
-
-		journalTemplate.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the journal templates in the entity cache if it is enabled.
-	 *
-	 * @param journalTemplates the journal templates
-	 */
-	public void cacheResult(List<JournalTemplate> journalTemplates) {
-		for (JournalTemplate journalTemplate : journalTemplates) {
-			if (EntityCacheUtil.getResult(
-						JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-						JournalTemplateImpl.class,
-						journalTemplate.getPrimaryKey()) == null) {
-				cacheResult(journalTemplate);
-			}
-			else {
-				journalTemplate.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all journal templates.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(JournalTemplateImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(JournalTemplateImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the journal template.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(JournalTemplate journalTemplate) {
-		EntityCacheUtil.removeResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateImpl.class, journalTemplate.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(journalTemplate);
-	}
-
-	@Override
-	public void clearCache(List<JournalTemplate> journalTemplates) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (JournalTemplate journalTemplate : journalTemplates) {
-			EntityCacheUtil.removeResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-				JournalTemplateImpl.class, journalTemplate.getPrimaryKey());
-
-			clearUniqueFindersCache(journalTemplate);
-		}
-	}
-
-	protected void clearUniqueFindersCache(JournalTemplate journalTemplate) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				journalTemplate.getUuid(),
-				Long.valueOf(journalTemplate.getGroupId())
-			});
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-			new Object[] { Long.valueOf(journalTemplate.getSmallImageId()) });
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_T,
-			new Object[] {
-				Long.valueOf(journalTemplate.getGroupId()),
-				
-			journalTemplate.getTemplateId()
-			});
-	}
-
-	/**
-	 * Creates a new journal template with the primary key. Does not add the journal template to the database.
-	 *
-	 * @param id the primary key for the new journal template
-	 * @return the new journal template
-	 */
-	public JournalTemplate create(long id) {
-		JournalTemplate journalTemplate = new JournalTemplateImpl();
-
-		journalTemplate.setNew(true);
-		journalTemplate.setPrimaryKey(id);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		journalTemplate.setUuid(uuid);
-
-		return journalTemplate;
-	}
-
-	/**
-	 * Removes the journal template with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param id the primary key of the journal template
-	 * @return the journal template that was removed
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate remove(long id)
-		throws NoSuchTemplateException, SystemException {
-		return remove(Long.valueOf(id));
-	}
-
-	/**
-	 * Removes the journal template with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the journal template
-	 * @return the journal template that was removed
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JournalTemplate remove(Serializable primaryKey)
-		throws NoSuchTemplateException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			JournalTemplate journalTemplate = (JournalTemplate)session.get(JournalTemplateImpl.class,
-					primaryKey);
-
-			if (journalTemplate == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchTemplateException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(journalTemplate);
-		}
-		catch (NoSuchTemplateException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected JournalTemplate removeImpl(JournalTemplate journalTemplate)
-		throws SystemException {
-		journalTemplate = toUnwrappedModel(journalTemplate);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(journalTemplate)) {
-				journalTemplate = (JournalTemplate)session.get(JournalTemplateImpl.class,
-						journalTemplate.getPrimaryKeyObj());
-			}
-
-			if (journalTemplate != null) {
-				session.delete(journalTemplate);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (journalTemplate != null) {
-			clearCache(journalTemplate);
-		}
-
-		return journalTemplate;
-	}
-
-	@Override
-	public JournalTemplate updateImpl(
-		com.liferay.portlet.journal.model.JournalTemplate journalTemplate)
-		throws SystemException {
-		journalTemplate = toUnwrappedModel(journalTemplate);
-
-		boolean isNew = journalTemplate.isNew();
-
-		JournalTemplateModelImpl journalTemplateModelImpl = (JournalTemplateModelImpl)journalTemplate;
-
-		if (Validator.isNull(journalTemplate.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			journalTemplate.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (journalTemplate.isNew()) {
-				session.save(journalTemplate);
-
-				journalTemplate.setNew(false);
-			}
-			else {
-				session.merge(journalTemplate);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !JournalTemplateModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((journalTemplateModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalTemplateModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { journalTemplateModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((journalTemplateModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalTemplateModelImpl.getOriginalUuid(),
-						Long.valueOf(journalTemplateModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						journalTemplateModelImpl.getUuid(),
-						Long.valueOf(journalTemplateModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((journalTemplateModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(journalTemplateModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(journalTemplateModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((journalTemplateModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalTemplateModelImpl.getOriginalTemplateId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TEMPLATEID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID,
-					args);
-
-				args = new Object[] { journalTemplateModelImpl.getTemplateId() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TEMPLATEID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID,
-					args);
-			}
-
-			if ((journalTemplateModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalTemplateModelImpl.getOriginalStructureId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
-					args);
-
-				args = new Object[] { journalTemplateModelImpl.getStructureId() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
-					args);
-			}
-
-			if ((journalTemplateModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(journalTemplateModelImpl.getOriginalGroupId()),
-						
-						journalTemplateModelImpl.getOriginalStructureId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(journalTemplateModelImpl.getGroupId()),
-						
-						journalTemplateModelImpl.getStructureId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-			JournalTemplateImpl.class, journalTemplate.getPrimaryKey(),
-			journalTemplate);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-				new Object[] {
-					journalTemplate.getUuid(),
-					Long.valueOf(journalTemplate.getGroupId())
-				}, journalTemplate);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-				new Object[] { Long.valueOf(journalTemplate.getSmallImageId()) },
-				journalTemplate);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_T,
-				new Object[] {
-					Long.valueOf(journalTemplate.getGroupId()),
-					
-				journalTemplate.getTemplateId()
-				}, journalTemplate);
-		}
-		else {
-			if ((journalTemplateModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalTemplateModelImpl.getOriginalUuid(),
-						Long.valueOf(journalTemplateModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
-						journalTemplate.getUuid(),
-						Long.valueOf(journalTemplate.getGroupId())
-					}, journalTemplate);
-			}
-
-			if ((journalTemplateModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_SMALLIMAGEID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(journalTemplateModelImpl.getOriginalSmallImageId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SMALLIMAGEID,
-					args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-					args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
-					new Object[] { Long.valueOf(
-							journalTemplate.getSmallImageId()) },
-					journalTemplate);
-			}
-
-			if ((journalTemplateModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_G_T.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(journalTemplateModelImpl.getOriginalGroupId()),
-						
-						journalTemplateModelImpl.getOriginalTemplateId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_T, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_T,
-					new Object[] {
-						Long.valueOf(journalTemplate.getGroupId()),
-						
-					journalTemplate.getTemplateId()
-					}, journalTemplate);
-			}
-		}
-
-		return journalTemplate;
-	}
-
-	protected JournalTemplate toUnwrappedModel(JournalTemplate journalTemplate) {
-		if (journalTemplate instanceof JournalTemplateImpl) {
-			return journalTemplate;
-		}
-
-		JournalTemplateImpl journalTemplateImpl = new JournalTemplateImpl();
-
-		journalTemplateImpl.setNew(journalTemplate.isNew());
-		journalTemplateImpl.setPrimaryKey(journalTemplate.getPrimaryKey());
-
-		journalTemplateImpl.setUuid(journalTemplate.getUuid());
-		journalTemplateImpl.setId(journalTemplate.getId());
-		journalTemplateImpl.setGroupId(journalTemplate.getGroupId());
-		journalTemplateImpl.setCompanyId(journalTemplate.getCompanyId());
-		journalTemplateImpl.setUserId(journalTemplate.getUserId());
-		journalTemplateImpl.setUserName(journalTemplate.getUserName());
-		journalTemplateImpl.setCreateDate(journalTemplate.getCreateDate());
-		journalTemplateImpl.setModifiedDate(journalTemplate.getModifiedDate());
-		journalTemplateImpl.setTemplateId(journalTemplate.getTemplateId());
-		journalTemplateImpl.setStructureId(journalTemplate.getStructureId());
-		journalTemplateImpl.setName(journalTemplate.getName());
-		journalTemplateImpl.setDescription(journalTemplate.getDescription());
-		journalTemplateImpl.setXsl(journalTemplate.getXsl());
-		journalTemplateImpl.setLangType(journalTemplate.getLangType());
-		journalTemplateImpl.setCacheable(journalTemplate.isCacheable());
-		journalTemplateImpl.setSmallImage(journalTemplate.isSmallImage());
-		journalTemplateImpl.setSmallImageId(journalTemplate.getSmallImageId());
-		journalTemplateImpl.setSmallImageURL(journalTemplate.getSmallImageURL());
-
-		return journalTemplateImpl;
-	}
-
-	/**
-	 * Returns the journal template with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the journal template
-	 * @return the journal template
-	 * @throws com.liferay.portal.NoSuchModelException if a journal template with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JournalTemplate findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the journal template with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
-	 *
-	 * @param id the primary key of the journal template
-	 * @return the journal template
-	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate findByPrimaryKey(long id)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = fetchByPrimaryKey(id);
-
-		if (journalTemplate == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + id);
-			}
-
-			throw new NoSuchTemplateException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				id);
-		}
-
-		return journalTemplate;
-	}
-
-	/**
-	 * Returns the journal template with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the journal template
-	 * @return the journal template, or <code>null</code> if a journal template with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JournalTemplate fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the journal template with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param id the primary key of the journal template
-	 * @return the journal template, or <code>null</code> if a journal template with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate fetchByPrimaryKey(long id) throws SystemException {
-		JournalTemplate journalTemplate = (JournalTemplate)EntityCacheUtil.getResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-				JournalTemplateImpl.class, id);
-
-		if (journalTemplate == _nullJournalTemplate) {
-			return null;
-		}
-
-		if (journalTemplate == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				journalTemplate = (JournalTemplate)session.get(JournalTemplateImpl.class,
-						Long.valueOf(id));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (journalTemplate != null) {
-					cacheResult(journalTemplate);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-						JournalTemplateImpl.class, id, _nullJournalTemplate);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return journalTemplate;
-	}
 
 	/**
 	 * Returns all the journal templates where uuid = &#63;.
@@ -1257,6 +519,98 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	}
 
 	/**
+	 * Removes all the journal templates where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (JournalTemplate journalTemplate : findByUuid(uuid)) {
+			remove(journalTemplate);
+		}
+	}
+
+	/**
+	 * Returns the number of journal templates where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "journalTemplate.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "journalTemplate.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(journalTemplate.uuid IS NULL OR journalTemplate.uuid = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalTemplateModelImpl.UUID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns the journal template where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
 	 *
 	 * @param uuid the uuid
@@ -1418,6 +772,119 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			}
 		}
 	}
+
+	/**
+	 * Removes the journal template where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the journal template that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate removeByUUID_G(String uuid, long groupId)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = findByUUID_G(uuid, groupId);
+
+		return remove(journalTemplate);
+	}
+
+	/**
+	 * Returns the number of journal templates where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUUID_G(String uuid, long groupId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "journalTemplate.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "journalTemplate.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(journalTemplate.uuid IS NULL OR journalTemplate.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "journalTemplate.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalTemplateModelImpl.UUID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the journal templates where uuid = &#63; and companyId = &#63;.
@@ -1853,6 +1320,117 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the journal templates where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (JournalTemplate journalTemplate : findByUuid_C(uuid, companyId)) {
+			remove(journalTemplate);
+		}
+	}
+
+	/**
+	 * Returns the number of journal templates where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "journalTemplate.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "journalTemplate.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(journalTemplate.uuid IS NULL OR journalTemplate.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "journalTemplate.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByGroupId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the journal templates where groupId = &#63;.
@@ -2549,6 +2127,143 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	}
 
 	/**
+	 * Removes all the journal templates where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (JournalTemplate journalTemplate : findByGroupId(groupId)) {
+			remove(journalTemplate);
+		}
+	}
+
+	/**
+	 * Returns the number of journal templates where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of journal templates that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching journal templates that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_JOURNALTEMPLATE_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				JournalTemplate.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "journalTemplate.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_TEMPLATEID =
+		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByTemplateId",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID =
+		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByTemplateId",
+			new String[] { String.class.getName() },
+			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_TEMPLATEID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByTemplateId",
+			new String[] { String.class.getName() });
+
+	/**
 	 * Returns all the journal templates where templateId = &#63;.
 	 *
 	 * @param templateId the template ID
@@ -2955,6 +2670,109 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the journal templates where templateId = &#63; from the database.
+	 *
+	 * @param templateId the template ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByTemplateId(String templateId) throws SystemException {
+		for (JournalTemplate journalTemplate : findByTemplateId(templateId)) {
+			remove(journalTemplate);
+		}
+	}
+
+	/**
+	 * Returns the number of journal templates where templateId = &#63;.
+	 *
+	 * @param templateId the template ID
+	 * @return the number of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByTemplateId(String templateId) throws SystemException {
+		Object[] finderArgs = new Object[] { templateId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_TEMPLATEID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
+
+			if (templateId == null) {
+				query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_1);
+			}
+			else {
+				if (templateId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (templateId != null) {
+					qPos.add(templateId);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TEMPLATEID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_TEMPLATEID_TEMPLATEID_1 = "journalTemplate.templateId IS NULL";
+	private static final String _FINDER_COLUMN_TEMPLATEID_TEMPLATEID_2 = "journalTemplate.templateId = ?";
+	private static final String _FINDER_COLUMN_TEMPLATEID_TEMPLATEID_3 = "(journalTemplate.templateId IS NULL OR journalTemplate.templateId = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID =
+		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByStructureId",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID =
+		new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStructureId",
+			new String[] { String.class.getName() },
+			JournalTemplateModelImpl.STRUCTUREID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStructureId",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the journal templates where structureId = &#63;.
@@ -3366,6 +3184,97 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	}
 
 	/**
+	 * Removes all the journal templates where structureId = &#63; from the database.
+	 *
+	 * @param structureId the structure ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByStructureId(String structureId)
+		throws SystemException {
+		for (JournalTemplate journalTemplate : findByStructureId(structureId)) {
+			remove(journalTemplate);
+		}
+	}
+
+	/**
+	 * Returns the number of journal templates where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the number of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByStructureId(String structureId) throws SystemException {
+		Object[] finderArgs = new Object[] { structureId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
+
+			if (structureId == null) {
+				query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1);
+			}
+			else {
+				if (structureId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (structureId != null) {
+					qPos.add(structureId);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1 = "journalTemplate.structureId IS NULL";
+	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2 = "journalTemplate.structureId = ?";
+	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3 = "(journalTemplate.structureId IS NULL OR journalTemplate.structureId = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_SMALLIMAGEID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchBySmallImageId", new String[] { Long.class.getName() },
+			JournalTemplateModelImpl.SMALLIMAGEID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_SMALLIMAGEID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBySmallImageId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns the journal template where smallImageId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
 	 *
 	 * @param smallImageId the small image ID
@@ -3502,6 +3411,85 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			}
 		}
 	}
+
+	/**
+	 * Removes the journal template where smallImageId = &#63; from the database.
+	 *
+	 * @param smallImageId the small image ID
+	 * @return the journal template that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate removeBySmallImageId(long smallImageId)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = findBySmallImageId(smallImageId);
+
+		return remove(journalTemplate);
+	}
+
+	/**
+	 * Returns the number of journal templates where smallImageId = &#63;.
+	 *
+	 * @param smallImageId the small image ID
+	 * @return the number of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countBySmallImageId(long smallImageId) throws SystemException {
+		Object[] finderArgs = new Object[] { smallImageId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_SMALLIMAGEID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
+
+			query.append(_FINDER_COLUMN_SMALLIMAGEID_SMALLIMAGEID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(smallImageId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_SMALLIMAGEID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_SMALLIMAGEID_SMALLIMAGEID_2 = "journalTemplate.smallImageId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_G_T = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByG_T",
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_T = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_T",
+			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
 	 * Returns the journal template where groupId = &#63; and templateId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
@@ -3666,6 +3654,118 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 			}
 		}
 	}
+
+	/**
+	 * Removes the journal template where groupId = &#63; and templateId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param templateId the template ID
+	 * @return the journal template that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate removeByG_T(long groupId, String templateId)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = findByG_T(groupId, templateId);
+
+		return remove(journalTemplate);
+	}
+
+	/**
+	 * Returns the number of journal templates where groupId = &#63; and templateId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param templateId the template ID
+	 * @return the number of matching journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_T(long groupId, String templateId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, templateId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_T,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_T_GROUPID_2);
+
+			if (templateId == null) {
+				query.append(_FINDER_COLUMN_G_T_TEMPLATEID_1);
+			}
+			else {
+				if (templateId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_T_TEMPLATEID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_T_TEMPLATEID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (templateId != null) {
+					qPos.add(templateId);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_T, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_T_GROUPID_2 = "journalTemplate.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_T_TEMPLATEID_1 = "journalTemplate.templateId IS NULL";
+	private static final String _FINDER_COLUMN_G_T_TEMPLATEID_2 = "journalTemplate.templateId = ?";
+	private static final String _FINDER_COLUMN_G_T_TEMPLATEID_3 = "(journalTemplate.templateId IS NULL OR journalTemplate.templateId = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_S",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED,
+			JournalTemplateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_S",
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.STRUCTUREID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
+			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
 	 * Returns all the journal templates where groupId = &#63; and structureId = &#63;.
@@ -4454,228 +4554,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	}
 
 	/**
-	 * Returns all the journal templates.
-	 *
-	 * @return the journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalTemplate> findAll() throws SystemException {
-		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the journal templates.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of journal templates
-	 * @param end the upper bound of the range of journal templates (not inclusive)
-	 * @return the range of journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalTemplate> findAll(int start, int end)
-		throws SystemException {
-		return findAll(start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal templates.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of journal templates
-	 * @param end the upper bound of the range of journal templates (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalTemplate> findAll(int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if (list == null) {
-			StringBundler query = null;
-			String sql = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 3));
-
-				query.append(_SQL_SELECT_JOURNALTEMPLATE);
-
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-
-				sql = query.toString();
-			}
-			else {
-				sql = _SQL_SELECT_JOURNALTEMPLATE.concat(JournalTemplateModelImpl.ORDER_BY_JPQL);
-			}
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				if (orderByComparator == null) {
-					list = (List<JournalTemplate>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-				}
-				else {
-					list = (List<JournalTemplate>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Removes all the journal templates where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (JournalTemplate journalTemplate : findByUuid(uuid)) {
-			remove(journalTemplate);
-		}
-	}
-
-	/**
-	 * Removes the journal template where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the journal template that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate removeByUUID_G(String uuid, long groupId)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = findByUUID_G(uuid, groupId);
-
-		return remove(journalTemplate);
-	}
-
-	/**
-	 * Removes all the journal templates where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (JournalTemplate journalTemplate : findByUuid_C(uuid, companyId)) {
-			remove(journalTemplate);
-		}
-	}
-
-	/**
-	 * Removes all the journal templates where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (JournalTemplate journalTemplate : findByGroupId(groupId)) {
-			remove(journalTemplate);
-		}
-	}
-
-	/**
-	 * Removes all the journal templates where templateId = &#63; from the database.
-	 *
-	 * @param templateId the template ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByTemplateId(String templateId) throws SystemException {
-		for (JournalTemplate journalTemplate : findByTemplateId(templateId)) {
-			remove(journalTemplate);
-		}
-	}
-
-	/**
-	 * Removes all the journal templates where structureId = &#63; from the database.
-	 *
-	 * @param structureId the structure ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByStructureId(String structureId)
-		throws SystemException {
-		for (JournalTemplate journalTemplate : findByStructureId(structureId)) {
-			remove(journalTemplate);
-		}
-	}
-
-	/**
-	 * Removes the journal template where smallImageId = &#63; from the database.
-	 *
-	 * @param smallImageId the small image ID
-	 * @return the journal template that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate removeBySmallImageId(long smallImageId)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = findBySmallImageId(smallImageId);
-
-		return remove(journalTemplate);
-	}
-
-	/**
-	 * Removes the journal template where groupId = &#63; and templateId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param templateId the template ID
-	 * @return the journal template that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalTemplate removeByG_T(long groupId, String templateId)
-		throws NoSuchTemplateException, SystemException {
-		JournalTemplate journalTemplate = findByG_T(groupId, templateId);
-
-		return remove(journalTemplate);
-	}
-
-	/**
 	 * Removes all the journal templates where groupId = &#63; and structureId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -4687,579 +4565,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 		for (JournalTemplate journalTemplate : findByG_S(groupId, structureId)) {
 			remove(journalTemplate);
 		}
-	}
-
-	/**
-	 * Removes all the journal templates from the database.
-	 *
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeAll() throws SystemException {
-		for (JournalTemplate journalTemplate : findAll()) {
-			remove(journalTemplate);
-		}
-	}
-
-	/**
-	 * Returns the number of journal templates where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal templates where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUUID_G(String uuid, long groupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal templates where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal templates where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal templates that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching journal templates that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_JOURNALTEMPLATE_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				JournalTemplate.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of journal templates where templateId = &#63;.
-	 *
-	 * @param templateId the template ID
-	 * @return the number of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByTemplateId(String templateId) throws SystemException {
-		Object[] finderArgs = new Object[] { templateId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_TEMPLATEID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
-
-			if (templateId == null) {
-				query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_1);
-			}
-			else {
-				if (templateId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_TEMPLATEID_TEMPLATEID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (templateId != null) {
-					qPos.add(templateId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TEMPLATEID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal templates where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @return the number of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByStructureId(String structureId) throws SystemException {
-		Object[] finderArgs = new Object[] { structureId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
-
-			if (structureId == null) {
-				query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1);
-			}
-			else {
-				if (structureId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (structureId != null) {
-					qPos.add(structureId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal templates where smallImageId = &#63;.
-	 *
-	 * @param smallImageId the small image ID
-	 * @return the number of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countBySmallImageId(long smallImageId) throws SystemException {
-		Object[] finderArgs = new Object[] { smallImageId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_SMALLIMAGEID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
-
-			query.append(_FINDER_COLUMN_SMALLIMAGEID_SMALLIMAGEID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(smallImageId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_SMALLIMAGEID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal templates where groupId = &#63; and templateId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param templateId the template ID
-	 * @return the number of matching journal templates
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_T(long groupId, String templateId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, templateId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_T,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JOURNALTEMPLATE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_T_GROUPID_2);
-
-			if (templateId == null) {
-				query.append(_FINDER_COLUMN_G_T_TEMPLATEID_1);
-			}
-			else {
-				if (templateId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_T_TEMPLATEID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_T_TEMPLATEID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (templateId != null) {
-					qPos.add(templateId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_T, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -5399,6 +4704,737 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 		}
 	}
 
+	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "journalTemplate.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_1 = "journalTemplate.structureId IS NULL";
+	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_2 = "journalTemplate.structureId = ?";
+	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_3 = "(journalTemplate.structureId IS NULL OR journalTemplate.structureId = ?)";
+
+	/**
+	 * Caches the journal template in the entity cache if it is enabled.
+	 *
+	 * @param journalTemplate the journal template
+	 */
+	public void cacheResult(JournalTemplate journalTemplate) {
+		EntityCacheUtil.putResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateImpl.class, journalTemplate.getPrimaryKey(),
+			journalTemplate);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				journalTemplate.getUuid(),
+				Long.valueOf(journalTemplate.getGroupId())
+			}, journalTemplate);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
+			new Object[] { Long.valueOf(journalTemplate.getSmallImageId()) },
+			journalTemplate);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_T,
+			new Object[] {
+				Long.valueOf(journalTemplate.getGroupId()),
+				
+			journalTemplate.getTemplateId()
+			}, journalTemplate);
+
+		journalTemplate.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the journal templates in the entity cache if it is enabled.
+	 *
+	 * @param journalTemplates the journal templates
+	 */
+	public void cacheResult(List<JournalTemplate> journalTemplates) {
+		for (JournalTemplate journalTemplate : journalTemplates) {
+			if (EntityCacheUtil.getResult(
+						JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+						JournalTemplateImpl.class,
+						journalTemplate.getPrimaryKey()) == null) {
+				cacheResult(journalTemplate);
+			}
+			else {
+				journalTemplate.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all journal templates.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(JournalTemplateImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(JournalTemplateImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the journal template.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(JournalTemplate journalTemplate) {
+		EntityCacheUtil.removeResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateImpl.class, journalTemplate.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(journalTemplate);
+	}
+
+	@Override
+	public void clearCache(List<JournalTemplate> journalTemplates) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (JournalTemplate journalTemplate : journalTemplates) {
+			EntityCacheUtil.removeResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+				JournalTemplateImpl.class, journalTemplate.getPrimaryKey());
+
+			clearUniqueFindersCache(journalTemplate);
+		}
+	}
+
+	protected void clearUniqueFindersCache(JournalTemplate journalTemplate) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				journalTemplate.getUuid(),
+				Long.valueOf(journalTemplate.getGroupId())
+			});
+
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
+			new Object[] { Long.valueOf(journalTemplate.getSmallImageId()) });
+
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_T,
+			new Object[] {
+				Long.valueOf(journalTemplate.getGroupId()),
+				
+			journalTemplate.getTemplateId()
+			});
+	}
+
+	/**
+	 * Creates a new journal template with the primary key. Does not add the journal template to the database.
+	 *
+	 * @param id the primary key for the new journal template
+	 * @return the new journal template
+	 */
+	public JournalTemplate create(long id) {
+		JournalTemplate journalTemplate = new JournalTemplateImpl();
+
+		journalTemplate.setNew(true);
+		journalTemplate.setPrimaryKey(id);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		journalTemplate.setUuid(uuid);
+
+		return journalTemplate;
+	}
+
+	/**
+	 * Removes the journal template with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param id the primary key of the journal template
+	 * @return the journal template that was removed
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate remove(long id)
+		throws NoSuchTemplateException, SystemException {
+		return remove(Long.valueOf(id));
+	}
+
+	/**
+	 * Removes the journal template with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the journal template
+	 * @return the journal template that was removed
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalTemplate remove(Serializable primaryKey)
+		throws NoSuchTemplateException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			JournalTemplate journalTemplate = (JournalTemplate)session.get(JournalTemplateImpl.class,
+					primaryKey);
+
+			if (journalTemplate == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchTemplateException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(journalTemplate);
+		}
+		catch (NoSuchTemplateException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected JournalTemplate removeImpl(JournalTemplate journalTemplate)
+		throws SystemException {
+		journalTemplate = toUnwrappedModel(journalTemplate);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(journalTemplate)) {
+				journalTemplate = (JournalTemplate)session.get(JournalTemplateImpl.class,
+						journalTemplate.getPrimaryKeyObj());
+			}
+
+			if (journalTemplate != null) {
+				session.delete(journalTemplate);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (journalTemplate != null) {
+			clearCache(journalTemplate);
+		}
+
+		return journalTemplate;
+	}
+
+	@Override
+	public JournalTemplate updateImpl(
+		com.liferay.portlet.journal.model.JournalTemplate journalTemplate)
+		throws SystemException {
+		journalTemplate = toUnwrappedModel(journalTemplate);
+
+		boolean isNew = journalTemplate.isNew();
+
+		JournalTemplateModelImpl journalTemplateModelImpl = (JournalTemplateModelImpl)journalTemplate;
+
+		if (Validator.isNull(journalTemplate.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			journalTemplate.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (journalTemplate.isNew()) {
+				session.save(journalTemplate);
+
+				journalTemplate.setNew(false);
+			}
+			else {
+				session.merge(journalTemplate);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !JournalTemplateModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((journalTemplateModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalTemplateModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { journalTemplateModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((journalTemplateModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalTemplateModelImpl.getOriginalUuid(),
+						Long.valueOf(journalTemplateModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						journalTemplateModelImpl.getUuid(),
+						Long.valueOf(journalTemplateModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((journalTemplateModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(journalTemplateModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(journalTemplateModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+
+			if ((journalTemplateModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalTemplateModelImpl.getOriginalTemplateId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TEMPLATEID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID,
+					args);
+
+				args = new Object[] { journalTemplateModelImpl.getTemplateId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TEMPLATEID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID,
+					args);
+			}
+
+			if ((journalTemplateModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalTemplateModelImpl.getOriginalStructureId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
+					args);
+
+				args = new Object[] { journalTemplateModelImpl.getStructureId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
+					args);
+			}
+
+			if ((journalTemplateModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(journalTemplateModelImpl.getOriginalGroupId()),
+						
+						journalTemplateModelImpl.getOriginalStructureId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(journalTemplateModelImpl.getGroupId()),
+						
+						journalTemplateModelImpl.getStructureId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+			JournalTemplateImpl.class, journalTemplate.getPrimaryKey(),
+			journalTemplate);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+				new Object[] {
+					journalTemplate.getUuid(),
+					Long.valueOf(journalTemplate.getGroupId())
+				}, journalTemplate);
+
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
+				new Object[] { Long.valueOf(journalTemplate.getSmallImageId()) },
+				journalTemplate);
+
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_T,
+				new Object[] {
+					Long.valueOf(journalTemplate.getGroupId()),
+					
+				journalTemplate.getTemplateId()
+				}, journalTemplate);
+		}
+		else {
+			if ((journalTemplateModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalTemplateModelImpl.getOriginalUuid(),
+						Long.valueOf(journalTemplateModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+					new Object[] {
+						journalTemplate.getUuid(),
+						Long.valueOf(journalTemplate.getGroupId())
+					}, journalTemplate);
+			}
+
+			if ((journalTemplateModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_SMALLIMAGEID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(journalTemplateModelImpl.getOriginalSmallImageId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SMALLIMAGEID,
+					args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
+					args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
+					new Object[] { Long.valueOf(
+							journalTemplate.getSmallImageId()) },
+					journalTemplate);
+			}
+
+			if ((journalTemplateModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_G_T.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(journalTemplateModelImpl.getOriginalGroupId()),
+						
+						journalTemplateModelImpl.getOriginalTemplateId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_T, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_T,
+					new Object[] {
+						Long.valueOf(journalTemplate.getGroupId()),
+						
+					journalTemplate.getTemplateId()
+					}, journalTemplate);
+			}
+		}
+
+		return journalTemplate;
+	}
+
+	protected JournalTemplate toUnwrappedModel(JournalTemplate journalTemplate) {
+		if (journalTemplate instanceof JournalTemplateImpl) {
+			return journalTemplate;
+		}
+
+		JournalTemplateImpl journalTemplateImpl = new JournalTemplateImpl();
+
+		journalTemplateImpl.setNew(journalTemplate.isNew());
+		journalTemplateImpl.setPrimaryKey(journalTemplate.getPrimaryKey());
+
+		journalTemplateImpl.setUuid(journalTemplate.getUuid());
+		journalTemplateImpl.setId(journalTemplate.getId());
+		journalTemplateImpl.setGroupId(journalTemplate.getGroupId());
+		journalTemplateImpl.setCompanyId(journalTemplate.getCompanyId());
+		journalTemplateImpl.setUserId(journalTemplate.getUserId());
+		journalTemplateImpl.setUserName(journalTemplate.getUserName());
+		journalTemplateImpl.setCreateDate(journalTemplate.getCreateDate());
+		journalTemplateImpl.setModifiedDate(journalTemplate.getModifiedDate());
+		journalTemplateImpl.setTemplateId(journalTemplate.getTemplateId());
+		journalTemplateImpl.setStructureId(journalTemplate.getStructureId());
+		journalTemplateImpl.setName(journalTemplate.getName());
+		journalTemplateImpl.setDescription(journalTemplate.getDescription());
+		journalTemplateImpl.setXsl(journalTemplate.getXsl());
+		journalTemplateImpl.setLangType(journalTemplate.getLangType());
+		journalTemplateImpl.setCacheable(journalTemplate.isCacheable());
+		journalTemplateImpl.setSmallImage(journalTemplate.isSmallImage());
+		journalTemplateImpl.setSmallImageId(journalTemplate.getSmallImageId());
+		journalTemplateImpl.setSmallImageURL(journalTemplate.getSmallImageURL());
+
+		return journalTemplateImpl;
+	}
+
+	/**
+	 * Returns the journal template with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the journal template
+	 * @return the journal template
+	 * @throws com.liferay.portal.NoSuchModelException if a journal template with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalTemplate findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the journal template with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
+	 *
+	 * @param id the primary key of the journal template
+	 * @return the journal template
+	 * @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate findByPrimaryKey(long id)
+		throws NoSuchTemplateException, SystemException {
+		JournalTemplate journalTemplate = fetchByPrimaryKey(id);
+
+		if (journalTemplate == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + id);
+			}
+
+			throw new NoSuchTemplateException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				id);
+		}
+
+		return journalTemplate;
+	}
+
+	/**
+	 * Returns the journal template with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the journal template
+	 * @return the journal template, or <code>null</code> if a journal template with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalTemplate fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the journal template with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param id the primary key of the journal template
+	 * @return the journal template, or <code>null</code> if a journal template with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalTemplate fetchByPrimaryKey(long id) throws SystemException {
+		JournalTemplate journalTemplate = (JournalTemplate)EntityCacheUtil.getResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+				JournalTemplateImpl.class, id);
+
+		if (journalTemplate == _nullJournalTemplate) {
+			return null;
+		}
+
+		if (journalTemplate == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				journalTemplate = (JournalTemplate)session.get(JournalTemplateImpl.class,
+						Long.valueOf(id));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (journalTemplate != null) {
+					cacheResult(journalTemplate);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+						JournalTemplateImpl.class, id, _nullJournalTemplate);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return journalTemplate;
+	}
+
+	/**
+	 * Returns all the journal templates.
+	 *
+	 * @return the journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalTemplate> findAll() throws SystemException {
+		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the journal templates.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of journal templates
+	 * @param end the upper bound of the range of journal templates (not inclusive)
+	 * @return the range of journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalTemplate> findAll(int start, int end)
+		throws SystemException {
+		return findAll(start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the journal templates.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of journal templates
+	 * @param end the upper bound of the range of journal templates (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of journal templates
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalTemplate> findAll(int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
+
+		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+			String sql = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(2 +
+						(orderByComparator.getOrderByFields().length * 3));
+
+				query.append(_SQL_SELECT_JOURNALTEMPLATE);
+
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+
+				sql = query.toString();
+			}
+			else {
+				sql = _SQL_SELECT_JOURNALTEMPLATE.concat(JournalTemplateModelImpl.ORDER_BY_JPQL);
+			}
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				if (orderByComparator == null) {
+					list = (List<JournalTemplate>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+				}
+				else {
+					list = (List<JournalTemplate>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the journal templates from the database.
+	 *
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeAll() throws SystemException {
+		for (JournalTemplate journalTemplate : findAll()) {
+			remove(journalTemplate);
+		}
+	}
+
 	/**
 	 * Returns the number of journal templates.
 	 *
@@ -5498,33 +5534,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	private static final String _SQL_SELECT_JOURNALTEMPLATE_WHERE = "SELECT journalTemplate FROM JournalTemplate journalTemplate WHERE ";
 	private static final String _SQL_COUNT_JOURNALTEMPLATE = "SELECT COUNT(journalTemplate) FROM JournalTemplate journalTemplate";
 	private static final String _SQL_COUNT_JOURNALTEMPLATE_WHERE = "SELECT COUNT(journalTemplate) FROM JournalTemplate journalTemplate WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "journalTemplate.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "journalTemplate.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(journalTemplate.uuid IS NULL OR journalTemplate.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "journalTemplate.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "journalTemplate.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(journalTemplate.uuid IS NULL OR journalTemplate.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "journalTemplate.groupId = ?";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "journalTemplate.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "journalTemplate.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(journalTemplate.uuid IS NULL OR journalTemplate.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "journalTemplate.companyId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "journalTemplate.groupId = ?";
-	private static final String _FINDER_COLUMN_TEMPLATEID_TEMPLATEID_1 = "journalTemplate.templateId IS NULL";
-	private static final String _FINDER_COLUMN_TEMPLATEID_TEMPLATEID_2 = "journalTemplate.templateId = ?";
-	private static final String _FINDER_COLUMN_TEMPLATEID_TEMPLATEID_3 = "(journalTemplate.templateId IS NULL OR journalTemplate.templateId = ?)";
-	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1 = "journalTemplate.structureId IS NULL";
-	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2 = "journalTemplate.structureId = ?";
-	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3 = "(journalTemplate.structureId IS NULL OR journalTemplate.structureId = ?)";
-	private static final String _FINDER_COLUMN_SMALLIMAGEID_SMALLIMAGEID_2 = "journalTemplate.smallImageId = ?";
-	private static final String _FINDER_COLUMN_G_T_GROUPID_2 = "journalTemplate.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_T_TEMPLATEID_1 = "journalTemplate.templateId IS NULL";
-	private static final String _FINDER_COLUMN_G_T_TEMPLATEID_2 = "journalTemplate.templateId = ?";
-	private static final String _FINDER_COLUMN_G_T_TEMPLATEID_3 = "(journalTemplate.templateId IS NULL OR journalTemplate.templateId = ?)";
-	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "journalTemplate.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_1 = "journalTemplate.structureId IS NULL";
-	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_2 = "journalTemplate.structureId = ?";
-	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_3 = "(journalTemplate.structureId IS NULL OR journalTemplate.structureId = ?)";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "journalTemplate.id_";
 	private static final String _FILTER_SQL_SELECT_JOURNALTEMPLATE_WHERE = "SELECT DISTINCT {journalTemplate.*} FROM JournalTemplate journalTemplate WHERE ";
 	private static final String _FILTER_SQL_SELECT_JOURNALTEMPLATE_NO_INLINE_DISTINCT_WHERE_1 =

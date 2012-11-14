@@ -111,86 +111,6 @@ public class DDLRecordUtil {
 	}
 
 	/**
-	* Caches the d d l record in the entity cache if it is enabled.
-	*
-	* @param ddlRecord the d d l record
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.dynamicdatalists.model.DDLRecord ddlRecord) {
-		getPersistence().cacheResult(ddlRecord);
-	}
-
-	/**
-	* Caches the d d l records in the entity cache if it is enabled.
-	*
-	* @param ddlRecords the d d l records
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.dynamicdatalists.model.DDLRecord> ddlRecords) {
-		getPersistence().cacheResult(ddlRecords);
-	}
-
-	/**
-	* Creates a new d d l record with the primary key. Does not add the d d l record to the database.
-	*
-	* @param recordId the primary key for the new d d l record
-	* @return the new d d l record
-	*/
-	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord create(
-		long recordId) {
-		return getPersistence().create(recordId);
-	}
-
-	/**
-	* Removes the d d l record with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param recordId the primary key of the d d l record
-	* @return the d d l record that was removed
-	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordException if a d d l record with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord remove(
-		long recordId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatalists.NoSuchRecordException {
-		return getPersistence().remove(recordId);
-	}
-
-	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord updateImpl(
-		com.liferay.portlet.dynamicdatalists.model.DDLRecord ddlRecord)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(ddlRecord);
-	}
-
-	/**
-	* Returns the d d l record with the primary key or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordException} if it could not be found.
-	*
-	* @param recordId the primary key of the d d l record
-	* @return the d d l record
-	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordException if a d d l record with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord findByPrimaryKey(
-		long recordId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatalists.NoSuchRecordException {
-		return getPersistence().findByPrimaryKey(recordId);
-	}
-
-	/**
-	* Returns the d d l record with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param recordId the primary key of the d d l record
-	* @return the d d l record, or <code>null</code> if a d d l record with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord fetchByPrimaryKey(
-		long recordId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(recordId);
-	}
-
-	/**
 	* Returns all the d d l records where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -327,6 +247,29 @@ public class DDLRecordUtil {
 	}
 
 	/**
+	* Removes all the d d l records where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of d d l records where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching d d l records
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
+	}
+
+	/**
 	* Returns the d d l record where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -369,6 +312,34 @@ public class DDLRecordUtil {
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUUID_G(uuid, groupId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the d d l record where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the d d l record that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordException {
+		return getPersistence().removeByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns the number of d d l records where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching d d l records
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUUID_G(java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUUID_G(uuid, groupId);
 	}
 
 	/**
@@ -522,6 +493,31 @@ public class DDLRecordUtil {
 	}
 
 	/**
+	* Removes all the d d l records where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns the number of d d l records where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching d d l records
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid_C(uuid, companyId);
+	}
+
+	/**
 	* Returns all the d d l records where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -664,6 +660,29 @@ public class DDLRecordUtil {
 	}
 
 	/**
+	* Removes all the d d l records where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of d d l records where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching d d l records
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
+	}
+
+	/**
 	* Returns all the d d l records where recordSetId = &#63;.
 	*
 	* @param recordSetId the record set ID
@@ -803,6 +822,29 @@ public class DDLRecordUtil {
 		return getPersistence()
 				   .findByRecordSetId_PrevAndNext(recordId, recordSetId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the d d l records where recordSetId = &#63; from the database.
+	*
+	* @param recordSetId the record set ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByRecordSetId(long recordSetId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByRecordSetId(recordSetId);
+	}
+
+	/**
+	* Returns the number of d d l records where recordSetId = &#63;.
+	*
+	* @param recordSetId the record set ID
+	* @return the number of matching d d l records
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByRecordSetId(long recordSetId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByRecordSetId(recordSetId);
 	}
 
 	/**
@@ -956,6 +998,111 @@ public class DDLRecordUtil {
 	}
 
 	/**
+	* Removes all the d d l records where recordSetId = &#63; and userId = &#63; from the database.
+	*
+	* @param recordSetId the record set ID
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByR_U(long recordSetId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByR_U(recordSetId, userId);
+	}
+
+	/**
+	* Returns the number of d d l records where recordSetId = &#63; and userId = &#63;.
+	*
+	* @param recordSetId the record set ID
+	* @param userId the user ID
+	* @return the number of matching d d l records
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByR_U(long recordSetId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByR_U(recordSetId, userId);
+	}
+
+	/**
+	* Caches the d d l record in the entity cache if it is enabled.
+	*
+	* @param ddlRecord the d d l record
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.dynamicdatalists.model.DDLRecord ddlRecord) {
+		getPersistence().cacheResult(ddlRecord);
+	}
+
+	/**
+	* Caches the d d l records in the entity cache if it is enabled.
+	*
+	* @param ddlRecords the d d l records
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.dynamicdatalists.model.DDLRecord> ddlRecords) {
+		getPersistence().cacheResult(ddlRecords);
+	}
+
+	/**
+	* Creates a new d d l record with the primary key. Does not add the d d l record to the database.
+	*
+	* @param recordId the primary key for the new d d l record
+	* @return the new d d l record
+	*/
+	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord create(
+		long recordId) {
+		return getPersistence().create(recordId);
+	}
+
+	/**
+	* Removes the d d l record with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param recordId the primary key of the d d l record
+	* @return the d d l record that was removed
+	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordException if a d d l record with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord remove(
+		long recordId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordException {
+		return getPersistence().remove(recordId);
+	}
+
+	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord updateImpl(
+		com.liferay.portlet.dynamicdatalists.model.DDLRecord ddlRecord)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(ddlRecord);
+	}
+
+	/**
+	* Returns the d d l record with the primary key or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordException} if it could not be found.
+	*
+	* @param recordId the primary key of the d d l record
+	* @return the d d l record
+	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordException if a d d l record with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord findByPrimaryKey(
+		long recordId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordException {
+		return getPersistence().findByPrimaryKey(recordId);
+	}
+
+	/**
+	* Returns the d d l record with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param recordId the primary key of the d d l record
+	* @return the d d l record, or <code>null</code> if a d d l record with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord fetchByPrimaryKey(
+		long recordId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(recordId);
+	}
+
+	/**
 	* Returns all the d d l records.
 	*
 	* @return the d d l records
@@ -1005,78 +1152,6 @@ public class DDLRecordUtil {
 	}
 
 	/**
-	* Removes all the d d l records where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes the d d l record where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the d d l record that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.dynamicdatalists.model.DDLRecord removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatalists.NoSuchRecordException {
-		return getPersistence().removeByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Removes all the d d l records where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Removes all the d d l records where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
-	* Removes all the d d l records where recordSetId = &#63; from the database.
-	*
-	* @param recordSetId the record set ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByRecordSetId(long recordSetId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByRecordSetId(recordSetId);
-	}
-
-	/**
-	* Removes all the d d l records where recordSetId = &#63; and userId = &#63; from the database.
-	*
-	* @param recordSetId the record set ID
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByR_U(long recordSetId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByR_U(recordSetId, userId);
-	}
-
-	/**
 	* Removes all the d d l records from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1084,81 +1159,6 @@ public class DDLRecordUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of d d l records where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching d d l records
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of d d l records where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching d d l records
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Returns the number of d d l records where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching d d l records
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Returns the number of d d l records where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching d d l records
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of d d l records where recordSetId = &#63;.
-	*
-	* @param recordSetId the record set ID
-	* @return the number of matching d d l records
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByRecordSetId(long recordSetId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByRecordSetId(recordSetId);
-	}
-
-	/**
-	* Returns the number of d d l records where recordSetId = &#63; and userId = &#63;.
-	*
-	* @param recordSetId the record set ID
-	* @param userId the user ID
-	* @return the number of matching d d l records
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByR_U(long recordSetId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByR_U(recordSetId, userId);
 	}
 
 	/**

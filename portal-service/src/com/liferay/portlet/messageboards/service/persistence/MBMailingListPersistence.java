@@ -38,72 +38,6 @@ public interface MBMailingListPersistence extends BasePersistence<MBMailingList>
 	 */
 
 	/**
-	* Caches the message boards mailing list in the entity cache if it is enabled.
-	*
-	* @param mbMailingList the message boards mailing list
-	*/
-	public void cacheResult(
-		com.liferay.portlet.messageboards.model.MBMailingList mbMailingList);
-
-	/**
-	* Caches the message boards mailing lists in the entity cache if it is enabled.
-	*
-	* @param mbMailingLists the message boards mailing lists
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.messageboards.model.MBMailingList> mbMailingLists);
-
-	/**
-	* Creates a new message boards mailing list with the primary key. Does not add the message boards mailing list to the database.
-	*
-	* @param mailingListId the primary key for the new message boards mailing list
-	* @return the new message boards mailing list
-	*/
-	public com.liferay.portlet.messageboards.model.MBMailingList create(
-		long mailingListId);
-
-	/**
-	* Removes the message boards mailing list with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param mailingListId the primary key of the message boards mailing list
-	* @return the message boards mailing list that was removed
-	* @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a message boards mailing list with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBMailingList remove(
-		long mailingListId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchMailingListException;
-
-	public com.liferay.portlet.messageboards.model.MBMailingList updateImpl(
-		com.liferay.portlet.messageboards.model.MBMailingList mbMailingList)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the message boards mailing list with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchMailingListException} if it could not be found.
-	*
-	* @param mailingListId the primary key of the message boards mailing list
-	* @return the message boards mailing list
-	* @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a message boards mailing list with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBMailingList findByPrimaryKey(
-		long mailingListId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchMailingListException;
-
-	/**
-	* Returns the message boards mailing list with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param mailingListId the primary key of the message boards mailing list
-	* @return the message boards mailing list, or <code>null</code> if a message boards mailing list with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBMailingList fetchByPrimaryKey(
-		long mailingListId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the message boards mailing lists where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -223,6 +157,25 @@ public interface MBMailingListPersistence extends BasePersistence<MBMailingList>
 			com.liferay.portlet.messageboards.NoSuchMailingListException;
 
 	/**
+	* Removes all the message boards mailing lists where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of message boards mailing lists where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching message boards mailing lists
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the message boards mailing list where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchMailingListException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -259,6 +212,30 @@ public interface MBMailingListPersistence extends BasePersistence<MBMailingList>
 	*/
 	public com.liferay.portlet.messageboards.model.MBMailingList fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the message boards mailing list where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the message boards mailing list that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBMailingList removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchMailingListException;
+
+	/**
+	* Returns the number of message boards mailing lists where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching message boards mailing lists
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -389,6 +366,27 @@ public interface MBMailingListPersistence extends BasePersistence<MBMailingList>
 			com.liferay.portlet.messageboards.NoSuchMailingListException;
 
 	/**
+	* Removes all the message boards mailing lists where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of message boards mailing lists where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching message boards mailing lists
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the message boards mailing lists where active = &#63;.
 	*
 	* @param active the active
@@ -508,6 +506,25 @@ public interface MBMailingListPersistence extends BasePersistence<MBMailingList>
 			com.liferay.portlet.messageboards.NoSuchMailingListException;
 
 	/**
+	* Removes all the message boards mailing lists where active = &#63; from the database.
+	*
+	* @param active the active
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByActive(boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of message boards mailing lists where active = &#63;.
+	*
+	* @param active the active
+	* @return the number of matching message boards mailing lists
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByActive(boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the message boards mailing list where groupId = &#63; and categoryId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchMailingListException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -544,6 +561,96 @@ public interface MBMailingListPersistence extends BasePersistence<MBMailingList>
 	*/
 	public com.liferay.portlet.messageboards.model.MBMailingList fetchByG_C(
 		long groupId, long categoryId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the message boards mailing list where groupId = &#63; and categoryId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the message boards mailing list that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBMailingList removeByG_C(
+		long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchMailingListException;
+
+	/**
+	* Returns the number of message boards mailing lists where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the number of matching message boards mailing lists
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_C(long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the message boards mailing list in the entity cache if it is enabled.
+	*
+	* @param mbMailingList the message boards mailing list
+	*/
+	public void cacheResult(
+		com.liferay.portlet.messageboards.model.MBMailingList mbMailingList);
+
+	/**
+	* Caches the message boards mailing lists in the entity cache if it is enabled.
+	*
+	* @param mbMailingLists the message boards mailing lists
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.messageboards.model.MBMailingList> mbMailingLists);
+
+	/**
+	* Creates a new message boards mailing list with the primary key. Does not add the message boards mailing list to the database.
+	*
+	* @param mailingListId the primary key for the new message boards mailing list
+	* @return the new message boards mailing list
+	*/
+	public com.liferay.portlet.messageboards.model.MBMailingList create(
+		long mailingListId);
+
+	/**
+	* Removes the message boards mailing list with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param mailingListId the primary key of the message boards mailing list
+	* @return the message boards mailing list that was removed
+	* @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a message boards mailing list with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBMailingList remove(
+		long mailingListId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchMailingListException;
+
+	public com.liferay.portlet.messageboards.model.MBMailingList updateImpl(
+		com.liferay.portlet.messageboards.model.MBMailingList mbMailingList)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the message boards mailing list with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchMailingListException} if it could not be found.
+	*
+	* @param mailingListId the primary key of the message boards mailing list
+	* @return the message boards mailing list
+	* @throws com.liferay.portlet.messageboards.NoSuchMailingListException if a message boards mailing list with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBMailingList findByPrimaryKey(
+		long mailingListId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchMailingListException;
+
+	/**
+	* Returns the message boards mailing list with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param mailingListId the primary key of the message boards mailing list
+	* @return the message boards mailing list, or <code>null</code> if a message boards mailing list with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBMailingList fetchByPrimaryKey(
+		long mailingListId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -590,118 +697,11 @@ public interface MBMailingListPersistence extends BasePersistence<MBMailingList>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the message boards mailing lists where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the message boards mailing list where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the message boards mailing list that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBMailingList removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchMailingListException;
-
-	/**
-	* Removes all the message boards mailing lists where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the message boards mailing lists where active = &#63; from the database.
-	*
-	* @param active the active
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByActive(boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the message boards mailing list where groupId = &#63; and categoryId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @return the message boards mailing list that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBMailingList removeByG_C(
-		long groupId, long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchMailingListException;
-
-	/**
 	* Removes all the message boards mailing lists from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards mailing lists where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching message boards mailing lists
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards mailing lists where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching message boards mailing lists
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards mailing lists where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching message boards mailing lists
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards mailing lists where active = &#63;.
-	*
-	* @param active the active
-	* @return the number of matching message boards mailing lists
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByActive(boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards mailing lists where groupId = &#63; and categoryId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @return the number of matching message boards mailing lists
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_C(long groupId, long categoryId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

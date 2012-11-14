@@ -73,6 +73,15 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			ImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_LTSIZE = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByLtSize",
@@ -86,350 +95,6 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 			ImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByLtSize",
 			new String[] { Integer.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the image in the entity cache if it is enabled.
-	 *
-	 * @param image the image
-	 */
-	public void cacheResult(Image image) {
-		EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageImpl.class, image.getPrimaryKey(), image);
-
-		image.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the images in the entity cache if it is enabled.
-	 *
-	 * @param images the images
-	 */
-	public void cacheResult(List<Image> images) {
-		for (Image image : images) {
-			if (EntityCacheUtil.getResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-						ImageImpl.class, image.getPrimaryKey()) == null) {
-				cacheResult(image);
-			}
-			else {
-				image.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all images.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(ImageImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(ImageImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the image.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(Image image) {
-		EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageImpl.class, image.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<Image> images) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (Image image : images) {
-			EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-				ImageImpl.class, image.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new image with the primary key. Does not add the image to the database.
-	 *
-	 * @param imageId the primary key for the new image
-	 * @return the new image
-	 */
-	public Image create(long imageId) {
-		Image image = new ImageImpl();
-
-		image.setNew(true);
-		image.setPrimaryKey(imageId);
-
-		return image;
-	}
-
-	/**
-	 * Removes the image with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param imageId the primary key of the image
-	 * @return the image that was removed
-	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Image remove(long imageId)
-		throws NoSuchImageException, SystemException {
-		return remove(Long.valueOf(imageId));
-	}
-
-	/**
-	 * Removes the image with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the image
-	 * @return the image that was removed
-	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Image remove(Serializable primaryKey)
-		throws NoSuchImageException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Image image = (Image)session.get(ImageImpl.class, primaryKey);
-
-			if (image == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchImageException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(image);
-		}
-		catch (NoSuchImageException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected Image removeImpl(Image image) throws SystemException {
-		image = toUnwrappedModel(image);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(image)) {
-				image = (Image)session.get(ImageImpl.class,
-						image.getPrimaryKeyObj());
-			}
-
-			if (image != null) {
-				session.delete(image);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (image != null) {
-			clearCache(image);
-		}
-
-		return image;
-	}
-
-	@Override
-	public Image updateImpl(com.liferay.portal.model.Image image)
-		throws SystemException {
-		image = toUnwrappedModel(image);
-
-		boolean isNew = image.isNew();
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (image.isNew()) {
-				session.save(image);
-
-				image.setNew(false);
-			}
-			else {
-				session.merge(image);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !ImageModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageImpl.class, image.getPrimaryKey(), image);
-
-		return image;
-	}
-
-	protected Image toUnwrappedModel(Image image) {
-		if (image instanceof ImageImpl) {
-			return image;
-		}
-
-		ImageImpl imageImpl = new ImageImpl();
-
-		imageImpl.setNew(image.isNew());
-		imageImpl.setPrimaryKey(image.getPrimaryKey());
-
-		imageImpl.setImageId(image.getImageId());
-		imageImpl.setModifiedDate(image.getModifiedDate());
-		imageImpl.setText(image.getText());
-		imageImpl.setType(image.getType());
-		imageImpl.setHeight(image.getHeight());
-		imageImpl.setWidth(image.getWidth());
-		imageImpl.setSize(image.getSize());
-
-		return imageImpl;
-	}
-
-	/**
-	 * Returns the image with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the image
-	 * @return the image
-	 * @throws com.liferay.portal.NoSuchModelException if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Image findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the image with the primary key or throws a {@link com.liferay.portal.NoSuchImageException} if it could not be found.
-	 *
-	 * @param imageId the primary key of the image
-	 * @return the image
-	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Image findByPrimaryKey(long imageId)
-		throws NoSuchImageException, SystemException {
-		Image image = fetchByPrimaryKey(imageId);
-
-		if (image == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + imageId);
-			}
-
-			throw new NoSuchImageException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				imageId);
-		}
-
-		return image;
-	}
-
-	/**
-	 * Returns the image with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the image
-	 * @return the image, or <code>null</code> if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Image fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the image with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param imageId the primary key of the image
-	 * @return the image, or <code>null</code> if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Image fetchByPrimaryKey(long imageId) throws SystemException {
-		Image image = (Image)EntityCacheUtil.getResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-				ImageImpl.class, imageId);
-
-		if (image == _nullImage) {
-			return null;
-		}
-
-		if (image == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				image = (Image)session.get(ImageImpl.class,
-						Long.valueOf(imageId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (image != null) {
-					cacheResult(image);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-						ImageImpl.class, imageId, _nullImage);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return image;
-	}
 
 	/**
 	 * Returns all the images where size &lt; &#63;.
@@ -800,6 +465,408 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	}
 
 	/**
+	 * Removes all the images where size &lt; &#63; from the database.
+	 *
+	 * @param size the size
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByLtSize(int size) throws SystemException {
+		for (Image image : findByLtSize(size)) {
+			remove(image);
+		}
+	}
+
+	/**
+	 * Returns the number of images where size &lt; &#63;.
+	 *
+	 * @param size the size
+	 * @return the number of matching images
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByLtSize(int size) throws SystemException {
+		Object[] finderArgs = new Object[] { size };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_IMAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_LTSIZE_SIZE_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(size);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_LTSIZE_SIZE_2 = "image.size < ?";
+
+	/**
+	 * Caches the image in the entity cache if it is enabled.
+	 *
+	 * @param image the image
+	 */
+	public void cacheResult(Image image) {
+		EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			ImageImpl.class, image.getPrimaryKey(), image);
+
+		image.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the images in the entity cache if it is enabled.
+	 *
+	 * @param images the images
+	 */
+	public void cacheResult(List<Image> images) {
+		for (Image image : images) {
+			if (EntityCacheUtil.getResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+						ImageImpl.class, image.getPrimaryKey()) == null) {
+				cacheResult(image);
+			}
+			else {
+				image.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all images.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(ImageImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(ImageImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the image.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(Image image) {
+		EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			ImageImpl.class, image.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<Image> images) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (Image image : images) {
+			EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+				ImageImpl.class, image.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new image with the primary key. Does not add the image to the database.
+	 *
+	 * @param imageId the primary key for the new image
+	 * @return the new image
+	 */
+	public Image create(long imageId) {
+		Image image = new ImageImpl();
+
+		image.setNew(true);
+		image.setPrimaryKey(imageId);
+
+		return image;
+	}
+
+	/**
+	 * Removes the image with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param imageId the primary key of the image
+	 * @return the image that was removed
+	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image remove(long imageId)
+		throws NoSuchImageException, SystemException {
+		return remove(Long.valueOf(imageId));
+	}
+
+	/**
+	 * Removes the image with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the image
+	 * @return the image that was removed
+	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Image remove(Serializable primaryKey)
+		throws NoSuchImageException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Image image = (Image)session.get(ImageImpl.class, primaryKey);
+
+			if (image == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchImageException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(image);
+		}
+		catch (NoSuchImageException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected Image removeImpl(Image image) throws SystemException {
+		image = toUnwrappedModel(image);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(image)) {
+				image = (Image)session.get(ImageImpl.class,
+						image.getPrimaryKeyObj());
+			}
+
+			if (image != null) {
+				session.delete(image);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (image != null) {
+			clearCache(image);
+		}
+
+		return image;
+	}
+
+	@Override
+	public Image updateImpl(com.liferay.portal.model.Image image)
+		throws SystemException {
+		image = toUnwrappedModel(image);
+
+		boolean isNew = image.isNew();
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (image.isNew()) {
+				session.save(image);
+
+				image.setNew(false);
+			}
+			else {
+				session.merge(image);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !ImageModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			ImageImpl.class, image.getPrimaryKey(), image);
+
+		return image;
+	}
+
+	protected Image toUnwrappedModel(Image image) {
+		if (image instanceof ImageImpl) {
+			return image;
+		}
+
+		ImageImpl imageImpl = new ImageImpl();
+
+		imageImpl.setNew(image.isNew());
+		imageImpl.setPrimaryKey(image.getPrimaryKey());
+
+		imageImpl.setImageId(image.getImageId());
+		imageImpl.setModifiedDate(image.getModifiedDate());
+		imageImpl.setText(image.getText());
+		imageImpl.setType(image.getType());
+		imageImpl.setHeight(image.getHeight());
+		imageImpl.setWidth(image.getWidth());
+		imageImpl.setSize(image.getSize());
+
+		return imageImpl;
+	}
+
+	/**
+	 * Returns the image with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the image
+	 * @return the image
+	 * @throws com.liferay.portal.NoSuchModelException if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Image findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the image with the primary key or throws a {@link com.liferay.portal.NoSuchImageException} if it could not be found.
+	 *
+	 * @param imageId the primary key of the image
+	 * @return the image
+	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image findByPrimaryKey(long imageId)
+		throws NoSuchImageException, SystemException {
+		Image image = fetchByPrimaryKey(imageId);
+
+		if (image == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + imageId);
+			}
+
+			throw new NoSuchImageException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				imageId);
+		}
+
+		return image;
+	}
+
+	/**
+	 * Returns the image with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the image
+	 * @return the image, or <code>null</code> if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Image fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the image with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param imageId the primary key of the image
+	 * @return the image, or <code>null</code> if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image fetchByPrimaryKey(long imageId) throws SystemException {
+		Image image = (Image)EntityCacheUtil.getResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+				ImageImpl.class, imageId);
+
+		if (image == _nullImage) {
+			return null;
+		}
+
+		if (image == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				image = (Image)session.get(ImageImpl.class,
+						Long.valueOf(imageId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (image != null) {
+					cacheResult(image);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+						ImageImpl.class, imageId, _nullImage);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return image;
+	}
+
+	/**
 	 * Returns all the images.
 	 *
 	 * @return the images
@@ -914,18 +981,6 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	}
 
 	/**
-	 * Removes all the images where size &lt; &#63; from the database.
-	 *
-	 * @param size the size
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByLtSize(int size) throws SystemException {
-		for (Image image : findByLtSize(size)) {
-			remove(image);
-		}
-	}
-
-	/**
 	 * Removes all the images from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -934,59 +989,6 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 		for (Image image : findAll()) {
 			remove(image);
 		}
-	}
-
-	/**
-	 * Returns the number of images where size &lt; &#63;.
-	 *
-	 * @param size the size
-	 * @return the number of matching images
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByLtSize(int size) throws SystemException {
-		Object[] finderArgs = new Object[] { size };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_IMAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_LTSIZE_SIZE_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(size);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1186,7 +1188,6 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	private static final String _SQL_SELECT_IMAGE_WHERE = "SELECT image FROM Image image WHERE ";
 	private static final String _SQL_COUNT_IMAGE = "SELECT COUNT(image) FROM Image image";
 	private static final String _SQL_COUNT_IMAGE_WHERE = "SELECT COUNT(image) FROM Image image WHERE ";
-	private static final String _FINDER_COLUMN_LTSIZE_SIZE_2 = "image.size < ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "image.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Image exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Image exists with the key {";

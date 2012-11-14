@@ -111,86 +111,6 @@ public class SCProductEntryUtil {
 	}
 
 	/**
-	* Caches the s c product entry in the entity cache if it is enabled.
-	*
-	* @param scProductEntry the s c product entry
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.softwarecatalog.model.SCProductEntry scProductEntry) {
-		getPersistence().cacheResult(scProductEntry);
-	}
-
-	/**
-	* Caches the s c product entries in the entity cache if it is enabled.
-	*
-	* @param scProductEntries the s c product entries
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.softwarecatalog.model.SCProductEntry> scProductEntries) {
-		getPersistence().cacheResult(scProductEntries);
-	}
-
-	/**
-	* Creates a new s c product entry with the primary key. Does not add the s c product entry to the database.
-	*
-	* @param productEntryId the primary key for the new s c product entry
-	* @return the new s c product entry
-	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry create(
-		long productEntryId) {
-		return getPersistence().create(productEntryId);
-	}
-
-	/**
-	* Removes the s c product entry with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param productEntryId the primary key of the s c product entry
-	* @return the s c product entry that was removed
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a s c product entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry remove(
-		long productEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchProductEntryException {
-		return getPersistence().remove(productEntryId);
-	}
-
-	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry updateImpl(
-		com.liferay.portlet.softwarecatalog.model.SCProductEntry scProductEntry)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(scProductEntry);
-	}
-
-	/**
-	* Returns the s c product entry with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductEntryException} if it could not be found.
-	*
-	* @param productEntryId the primary key of the s c product entry
-	* @return the s c product entry
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a s c product entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry findByPrimaryKey(
-		long productEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchProductEntryException {
-		return getPersistence().findByPrimaryKey(productEntryId);
-	}
-
-	/**
-	* Returns the s c product entry with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param productEntryId the primary key of the s c product entry
-	* @return the s c product entry, or <code>null</code> if a s c product entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry fetchByPrimaryKey(
-		long productEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(productEntryId);
-	}
-
-	/**
 	* Returns all the s c product entries where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -403,6 +323,41 @@ public class SCProductEntryUtil {
 	}
 
 	/**
+	* Removes all the s c product entries where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of s c product entries where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching s c product entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of s c product entries that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching s c product entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByGroupId(groupId);
+	}
+
+	/**
 	* Returns all the s c product entries where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -542,6 +497,29 @@ public class SCProductEntryUtil {
 		return getPersistence()
 				   .findByCompanyId_PrevAndNext(productEntryId, companyId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the s c product entries where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of s c product entries where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching s c product entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
 	}
 
 	/**
@@ -774,6 +752,44 @@ public class SCProductEntryUtil {
 	}
 
 	/**
+	* Removes all the s c product entries where groupId = &#63; and userId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_U(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_U(groupId, userId);
+	}
+
+	/**
+	* Returns the number of s c product entries where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the number of matching s c product entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_U(groupId, userId);
+	}
+
+	/**
+	* Returns the number of s c product entries that the user has permission to view where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the number of matching s c product entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_U(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_U(groupId, userId);
+	}
+
+	/**
 	* Returns the s c product entry where repoGroupId = &#63; and repoArtifactId = &#63; or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductEntryException} if it could not be found.
 	*
 	* @param repoGroupId the repo group ID
@@ -818,6 +834,115 @@ public class SCProductEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByRG_RA(repoGroupId, repoArtifactId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the s c product entry where repoGroupId = &#63; and repoArtifactId = &#63; from the database.
+	*
+	* @param repoGroupId the repo group ID
+	* @param repoArtifactId the repo artifact ID
+	* @return the s c product entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry removeByRG_RA(
+		java.lang.String repoGroupId, java.lang.String repoArtifactId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchProductEntryException {
+		return getPersistence().removeByRG_RA(repoGroupId, repoArtifactId);
+	}
+
+	/**
+	* Returns the number of s c product entries where repoGroupId = &#63; and repoArtifactId = &#63;.
+	*
+	* @param repoGroupId the repo group ID
+	* @param repoArtifactId the repo artifact ID
+	* @return the number of matching s c product entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByRG_RA(java.lang.String repoGroupId,
+		java.lang.String repoArtifactId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByRG_RA(repoGroupId, repoArtifactId);
+	}
+
+	/**
+	* Caches the s c product entry in the entity cache if it is enabled.
+	*
+	* @param scProductEntry the s c product entry
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.softwarecatalog.model.SCProductEntry scProductEntry) {
+		getPersistence().cacheResult(scProductEntry);
+	}
+
+	/**
+	* Caches the s c product entries in the entity cache if it is enabled.
+	*
+	* @param scProductEntries the s c product entries
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.softwarecatalog.model.SCProductEntry> scProductEntries) {
+		getPersistence().cacheResult(scProductEntries);
+	}
+
+	/**
+	* Creates a new s c product entry with the primary key. Does not add the s c product entry to the database.
+	*
+	* @param productEntryId the primary key for the new s c product entry
+	* @return the new s c product entry
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry create(
+		long productEntryId) {
+		return getPersistence().create(productEntryId);
+	}
+
+	/**
+	* Removes the s c product entry with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param productEntryId the primary key of the s c product entry
+	* @return the s c product entry that was removed
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a s c product entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry remove(
+		long productEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchProductEntryException {
+		return getPersistence().remove(productEntryId);
+	}
+
+	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry updateImpl(
+		com.liferay.portlet.softwarecatalog.model.SCProductEntry scProductEntry)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(scProductEntry);
+	}
+
+	/**
+	* Returns the s c product entry with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductEntryException} if it could not be found.
+	*
+	* @param productEntryId the primary key of the s c product entry
+	* @return the s c product entry
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a s c product entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry findByPrimaryKey(
+		long productEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchProductEntryException {
+		return getPersistence().findByPrimaryKey(productEntryId);
+	}
+
+	/**
+	* Returns the s c product entry with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param productEntryId the primary key of the s c product entry
+	* @return the s c product entry, or <code>null</code> if a s c product entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry fetchByPrimaryKey(
+		long productEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(productEntryId);
 	}
 
 	/**
@@ -870,55 +995,6 @@ public class SCProductEntryUtil {
 	}
 
 	/**
-	* Removes all the s c product entries where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes all the s c product entries where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
-	* Removes all the s c product entries where groupId = &#63; and userId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_U(long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_U(groupId, userId);
-	}
-
-	/**
-	* Removes the s c product entry where repoGroupId = &#63; and repoArtifactId = &#63; from the database.
-	*
-	* @param repoGroupId the repo group ID
-	* @param repoArtifactId the repo artifact ID
-	* @return the s c product entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCProductEntry removeByRG_RA(
-		java.lang.String repoGroupId, java.lang.String repoArtifactId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchProductEntryException {
-		return getPersistence().removeByRG_RA(repoGroupId, repoArtifactId);
-	}
-
-	/**
 	* Removes all the s c product entries from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -926,82 +1002,6 @@ public class SCProductEntryUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of s c product entries where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching s c product entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of s c product entries that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching s c product entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of s c product entries where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching s c product entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of s c product entries where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @return the number of matching s c product entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U(long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_U(groupId, userId);
-	}
-
-	/**
-	* Returns the number of s c product entries that the user has permission to view where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @return the number of matching s c product entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_U(long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_U(groupId, userId);
-	}
-
-	/**
-	* Returns the number of s c product entries where repoGroupId = &#63; and repoArtifactId = &#63;.
-	*
-	* @param repoGroupId the repo group ID
-	* @param repoArtifactId the repo artifact ID
-	* @return the number of matching s c product entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByRG_RA(java.lang.String repoGroupId,
-		java.lang.String repoArtifactId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByRG_RA(repoGroupId, repoArtifactId);
 	}
 
 	/**

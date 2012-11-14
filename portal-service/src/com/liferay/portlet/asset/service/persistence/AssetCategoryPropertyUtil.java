@@ -112,86 +112,6 @@ public class AssetCategoryPropertyUtil {
 	}
 
 	/**
-	* Caches the asset category property in the entity cache if it is enabled.
-	*
-	* @param assetCategoryProperty the asset category property
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.asset.model.AssetCategoryProperty assetCategoryProperty) {
-		getPersistence().cacheResult(assetCategoryProperty);
-	}
-
-	/**
-	* Caches the asset category properties in the entity cache if it is enabled.
-	*
-	* @param assetCategoryProperties the asset category properties
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.asset.model.AssetCategoryProperty> assetCategoryProperties) {
-		getPersistence().cacheResult(assetCategoryProperties);
-	}
-
-	/**
-	* Creates a new asset category property with the primary key. Does not add the asset category property to the database.
-	*
-	* @param categoryPropertyId the primary key for the new asset category property
-	* @return the new asset category property
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategoryProperty create(
-		long categoryPropertyId) {
-		return getPersistence().create(categoryPropertyId);
-	}
-
-	/**
-	* Removes the asset category property with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param categoryPropertyId the primary key of the asset category property
-	* @return the asset category property that was removed
-	* @throws com.liferay.portlet.asset.NoSuchCategoryPropertyException if a asset category property with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategoryProperty remove(
-		long categoryPropertyId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryPropertyException {
-		return getPersistence().remove(categoryPropertyId);
-	}
-
-	public static com.liferay.portlet.asset.model.AssetCategoryProperty updateImpl(
-		com.liferay.portlet.asset.model.AssetCategoryProperty assetCategoryProperty)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(assetCategoryProperty);
-	}
-
-	/**
-	* Returns the asset category property with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchCategoryPropertyException} if it could not be found.
-	*
-	* @param categoryPropertyId the primary key of the asset category property
-	* @return the asset category property
-	* @throws com.liferay.portlet.asset.NoSuchCategoryPropertyException if a asset category property with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategoryProperty findByPrimaryKey(
-		long categoryPropertyId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryPropertyException {
-		return getPersistence().findByPrimaryKey(categoryPropertyId);
-	}
-
-	/**
-	* Returns the asset category property with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param categoryPropertyId the primary key of the asset category property
-	* @return the asset category property, or <code>null</code> if a asset category property with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategoryProperty fetchByPrimaryKey(
-		long categoryPropertyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(categoryPropertyId);
-	}
-
-	/**
 	* Returns all the asset category properties where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -334,6 +254,29 @@ public class AssetCategoryPropertyUtil {
 	}
 
 	/**
+	* Removes all the asset category properties where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of asset category properties where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching asset category properties
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
+	}
+
+	/**
 	* Returns all the asset category properties where categoryId = &#63;.
 	*
 	* @param categoryId the category ID
@@ -473,6 +416,29 @@ public class AssetCategoryPropertyUtil {
 		return getPersistence()
 				   .findByCategoryId_PrevAndNext(categoryPropertyId,
 			categoryId, orderByComparator);
+	}
+
+	/**
+	* Removes all the asset category properties where categoryId = &#63; from the database.
+	*
+	* @param categoryId the category ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCategoryId(long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCategoryId(categoryId);
+	}
+
+	/**
+	* Returns the number of asset category properties where categoryId = &#63;.
+	*
+	* @param categoryId the category ID
+	* @return the number of matching asset category properties
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCategoryId(long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCategoryId(categoryId);
 	}
 
 	/**
@@ -625,6 +591,31 @@ public class AssetCategoryPropertyUtil {
 	}
 
 	/**
+	* Removes all the asset category properties where companyId = &#63; and key = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param key the key
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_K(long companyId, java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_K(companyId, key);
+	}
+
+	/**
+	* Returns the number of asset category properties where companyId = &#63; and key = &#63;.
+	*
+	* @param companyId the company ID
+	* @param key the key
+	* @return the number of matching asset category properties
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_K(long companyId, java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_K(companyId, key);
+	}
+
+	/**
 	* Returns the asset category property where categoryId = &#63; and key = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchCategoryPropertyException} if it could not be found.
 	*
 	* @param categoryId the category ID
@@ -667,6 +658,114 @@ public class AssetCategoryPropertyUtil {
 		long categoryId, java.lang.String key, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByCA_K(categoryId, key, retrieveFromCache);
+	}
+
+	/**
+	* Removes the asset category property where categoryId = &#63; and key = &#63; from the database.
+	*
+	* @param categoryId the category ID
+	* @param key the key
+	* @return the asset category property that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategoryProperty removeByCA_K(
+		long categoryId, java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryPropertyException {
+		return getPersistence().removeByCA_K(categoryId, key);
+	}
+
+	/**
+	* Returns the number of asset category properties where categoryId = &#63; and key = &#63;.
+	*
+	* @param categoryId the category ID
+	* @param key the key
+	* @return the number of matching asset category properties
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCA_K(long categoryId, java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCA_K(categoryId, key);
+	}
+
+	/**
+	* Caches the asset category property in the entity cache if it is enabled.
+	*
+	* @param assetCategoryProperty the asset category property
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.asset.model.AssetCategoryProperty assetCategoryProperty) {
+		getPersistence().cacheResult(assetCategoryProperty);
+	}
+
+	/**
+	* Caches the asset category properties in the entity cache if it is enabled.
+	*
+	* @param assetCategoryProperties the asset category properties
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.asset.model.AssetCategoryProperty> assetCategoryProperties) {
+		getPersistence().cacheResult(assetCategoryProperties);
+	}
+
+	/**
+	* Creates a new asset category property with the primary key. Does not add the asset category property to the database.
+	*
+	* @param categoryPropertyId the primary key for the new asset category property
+	* @return the new asset category property
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategoryProperty create(
+		long categoryPropertyId) {
+		return getPersistence().create(categoryPropertyId);
+	}
+
+	/**
+	* Removes the asset category property with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param categoryPropertyId the primary key of the asset category property
+	* @return the asset category property that was removed
+	* @throws com.liferay.portlet.asset.NoSuchCategoryPropertyException if a asset category property with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategoryProperty remove(
+		long categoryPropertyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryPropertyException {
+		return getPersistence().remove(categoryPropertyId);
+	}
+
+	public static com.liferay.portlet.asset.model.AssetCategoryProperty updateImpl(
+		com.liferay.portlet.asset.model.AssetCategoryProperty assetCategoryProperty)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(assetCategoryProperty);
+	}
+
+	/**
+	* Returns the asset category property with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchCategoryPropertyException} if it could not be found.
+	*
+	* @param categoryPropertyId the primary key of the asset category property
+	* @return the asset category property
+	* @throws com.liferay.portlet.asset.NoSuchCategoryPropertyException if a asset category property with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategoryProperty findByPrimaryKey(
+		long categoryPropertyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchCategoryPropertyException {
+		return getPersistence().findByPrimaryKey(categoryPropertyId);
+	}
+
+	/**
+	* Returns the asset category property with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param categoryPropertyId the primary key of the asset category property
+	* @return the asset category property, or <code>null</code> if a asset category property with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetCategoryProperty fetchByPrimaryKey(
+		long categoryPropertyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(categoryPropertyId);
 	}
 
 	/**
@@ -719,55 +818,6 @@ public class AssetCategoryPropertyUtil {
 	}
 
 	/**
-	* Removes all the asset category properties where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
-	* Removes all the asset category properties where categoryId = &#63; from the database.
-	*
-	* @param categoryId the category ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCategoryId(long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCategoryId(categoryId);
-	}
-
-	/**
-	* Removes all the asset category properties where companyId = &#63; and key = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param key the key
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_K(long companyId, java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_K(companyId, key);
-	}
-
-	/**
-	* Removes the asset category property where categoryId = &#63; and key = &#63; from the database.
-	*
-	* @param categoryId the category ID
-	* @param key the key
-	* @return the asset category property that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetCategoryProperty removeByCA_K(
-		long categoryId, java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchCategoryPropertyException {
-		return getPersistence().removeByCA_K(categoryId, key);
-	}
-
-	/**
 	* Removes all the asset category properties from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -775,56 +825,6 @@ public class AssetCategoryPropertyUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of asset category properties where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching asset category properties
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of asset category properties where categoryId = &#63;.
-	*
-	* @param categoryId the category ID
-	* @return the number of matching asset category properties
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCategoryId(long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCategoryId(categoryId);
-	}
-
-	/**
-	* Returns the number of asset category properties where companyId = &#63; and key = &#63;.
-	*
-	* @param companyId the company ID
-	* @param key the key
-	* @return the number of matching asset category properties
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_K(long companyId, java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_K(companyId, key);
-	}
-
-	/**
-	* Returns the number of asset category properties where categoryId = &#63; and key = &#63;.
-	*
-	* @param categoryId the category ID
-	* @param key the key
-	* @return the number of matching asset category properties
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCA_K(long categoryId, java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCA_K(categoryId, key);
 	}
 
 	/**

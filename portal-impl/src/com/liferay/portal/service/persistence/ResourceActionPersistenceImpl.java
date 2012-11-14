@@ -72,6 +72,17 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
+			ResourceActionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
+			ResourceActionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceActionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_NAME = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
 			ResourceActionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -92,431 +103,6 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 			ResourceActionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByName",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_N_A = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
-			ResourceActionImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByN_A",
-			new String[] { String.class.getName(), String.class.getName() },
-			ResourceActionModelImpl.NAME_COLUMN_BITMASK |
-			ResourceActionModelImpl.ACTIONID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_N_A = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-			ResourceActionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_A",
-			new String[] { String.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
-			ResourceActionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
-			ResourceActionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-			ResourceActionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the resource action in the entity cache if it is enabled.
-	 *
-	 * @param resourceAction the resource action
-	 */
-	public void cacheResult(ResourceAction resourceAction) {
-		EntityCacheUtil.putResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-			ResourceActionImpl.class, resourceAction.getPrimaryKey(),
-			resourceAction);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_N_A,
-			new Object[] { resourceAction.getName(), resourceAction.getActionId() },
-			resourceAction);
-
-		resourceAction.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the resource actions in the entity cache if it is enabled.
-	 *
-	 * @param resourceActions the resource actions
-	 */
-	public void cacheResult(List<ResourceAction> resourceActions) {
-		for (ResourceAction resourceAction : resourceActions) {
-			if (EntityCacheUtil.getResult(
-						ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-						ResourceActionImpl.class, resourceAction.getPrimaryKey()) == null) {
-				cacheResult(resourceAction);
-			}
-			else {
-				resourceAction.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all resource actions.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(ResourceActionImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(ResourceActionImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the resource action.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(ResourceAction resourceAction) {
-		EntityCacheUtil.removeResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-			ResourceActionImpl.class, resourceAction.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(resourceAction);
-	}
-
-	@Override
-	public void clearCache(List<ResourceAction> resourceActions) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (ResourceAction resourceAction : resourceActions) {
-			EntityCacheUtil.removeResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-				ResourceActionImpl.class, resourceAction.getPrimaryKey());
-
-			clearUniqueFindersCache(resourceAction);
-		}
-	}
-
-	protected void clearUniqueFindersCache(ResourceAction resourceAction) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_A,
-			new Object[] { resourceAction.getName(), resourceAction.getActionId() });
-	}
-
-	/**
-	 * Creates a new resource action with the primary key. Does not add the resource action to the database.
-	 *
-	 * @param resourceActionId the primary key for the new resource action
-	 * @return the new resource action
-	 */
-	public ResourceAction create(long resourceActionId) {
-		ResourceAction resourceAction = new ResourceActionImpl();
-
-		resourceAction.setNew(true);
-		resourceAction.setPrimaryKey(resourceActionId);
-
-		return resourceAction;
-	}
-
-	/**
-	 * Removes the resource action with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param resourceActionId the primary key of the resource action
-	 * @return the resource action that was removed
-	 * @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceAction remove(long resourceActionId)
-		throws NoSuchResourceActionException, SystemException {
-		return remove(Long.valueOf(resourceActionId));
-	}
-
-	/**
-	 * Removes the resource action with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the resource action
-	 * @return the resource action that was removed
-	 * @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ResourceAction remove(Serializable primaryKey)
-		throws NoSuchResourceActionException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			ResourceAction resourceAction = (ResourceAction)session.get(ResourceActionImpl.class,
-					primaryKey);
-
-			if (resourceAction == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchResourceActionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(resourceAction);
-		}
-		catch (NoSuchResourceActionException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected ResourceAction removeImpl(ResourceAction resourceAction)
-		throws SystemException {
-		resourceAction = toUnwrappedModel(resourceAction);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(resourceAction)) {
-				resourceAction = (ResourceAction)session.get(ResourceActionImpl.class,
-						resourceAction.getPrimaryKeyObj());
-			}
-
-			if (resourceAction != null) {
-				session.delete(resourceAction);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (resourceAction != null) {
-			clearCache(resourceAction);
-		}
-
-		return resourceAction;
-	}
-
-	@Override
-	public ResourceAction updateImpl(
-		com.liferay.portal.model.ResourceAction resourceAction)
-		throws SystemException {
-		resourceAction = toUnwrappedModel(resourceAction);
-
-		boolean isNew = resourceAction.isNew();
-
-		ResourceActionModelImpl resourceActionModelImpl = (ResourceActionModelImpl)resourceAction;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (resourceAction.isNew()) {
-				session.save(resourceAction);
-
-				resourceAction.setNew(false);
-			}
-			else {
-				session.merge(resourceAction);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !ResourceActionModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((resourceActionModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						resourceActionModelImpl.getOriginalName()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME,
-					args);
-
-				args = new Object[] { resourceActionModelImpl.getName() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-			ResourceActionImpl.class, resourceAction.getPrimaryKey(),
-			resourceAction);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_N_A,
-				new Object[] {
-					resourceAction.getName(),
-					
-				resourceAction.getActionId()
-				}, resourceAction);
-		}
-		else {
-			if ((resourceActionModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_N_A.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						resourceActionModelImpl.getOriginalName(),
-						
-						resourceActionModelImpl.getOriginalActionId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_N_A, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_A, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_N_A,
-					new Object[] {
-						resourceAction.getName(),
-						
-					resourceAction.getActionId()
-					}, resourceAction);
-			}
-		}
-
-		return resourceAction;
-	}
-
-	protected ResourceAction toUnwrappedModel(ResourceAction resourceAction) {
-		if (resourceAction instanceof ResourceActionImpl) {
-			return resourceAction;
-		}
-
-		ResourceActionImpl resourceActionImpl = new ResourceActionImpl();
-
-		resourceActionImpl.setNew(resourceAction.isNew());
-		resourceActionImpl.setPrimaryKey(resourceAction.getPrimaryKey());
-
-		resourceActionImpl.setResourceActionId(resourceAction.getResourceActionId());
-		resourceActionImpl.setName(resourceAction.getName());
-		resourceActionImpl.setActionId(resourceAction.getActionId());
-		resourceActionImpl.setBitwiseValue(resourceAction.getBitwiseValue());
-
-		return resourceActionImpl;
-	}
-
-	/**
-	 * Returns the resource action with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the resource action
-	 * @return the resource action
-	 * @throws com.liferay.portal.NoSuchModelException if a resource action with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ResourceAction findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the resource action with the primary key or throws a {@link com.liferay.portal.NoSuchResourceActionException} if it could not be found.
-	 *
-	 * @param resourceActionId the primary key of the resource action
-	 * @return the resource action
-	 * @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceAction findByPrimaryKey(long resourceActionId)
-		throws NoSuchResourceActionException, SystemException {
-		ResourceAction resourceAction = fetchByPrimaryKey(resourceActionId);
-
-		if (resourceAction == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + resourceActionId);
-			}
-
-			throw new NoSuchResourceActionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				resourceActionId);
-		}
-
-		return resourceAction;
-	}
-
-	/**
-	 * Returns the resource action with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the resource action
-	 * @return the resource action, or <code>null</code> if a resource action with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ResourceAction fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the resource action with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param resourceActionId the primary key of the resource action
-	 * @return the resource action, or <code>null</code> if a resource action with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceAction fetchByPrimaryKey(long resourceActionId)
-		throws SystemException {
-		ResourceAction resourceAction = (ResourceAction)EntityCacheUtil.getResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-				ResourceActionImpl.class, resourceActionId);
-
-		if (resourceAction == _nullResourceAction) {
-			return null;
-		}
-
-		if (resourceAction == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				resourceAction = (ResourceAction)session.get(ResourceActionImpl.class,
-						Long.valueOf(resourceActionId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (resourceAction != null) {
-					cacheResult(resourceAction);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-						ResourceActionImpl.class, resourceActionId,
-						_nullResourceAction);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return resourceAction;
-	}
 
 	/**
 	 * Returns all the resource actions where name = &#63;.
@@ -923,6 +509,97 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	}
 
 	/**
+	 * Removes all the resource actions where name = &#63; from the database.
+	 *
+	 * @param name the name
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByName(String name) throws SystemException {
+		for (ResourceAction resourceAction : findByName(name)) {
+			remove(resourceAction);
+		}
+	}
+
+	/**
+	 * Returns the number of resource actions where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the number of matching resource actions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByName(String name) throws SystemException {
+		Object[] finderArgs = new Object[] { name };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_NAME,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_RESOURCEACTION_WHERE);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_NAME_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_NAME_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_NAME_NAME_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_NAME_NAME_1 = "resourceAction.name IS NULL";
+	private static final String _FINDER_COLUMN_NAME_NAME_2 = "resourceAction.name = ?";
+	private static final String _FINDER_COLUMN_NAME_NAME_3 = "(resourceAction.name IS NULL OR resourceAction.name = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_N_A = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
+			ResourceActionImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByN_A",
+			new String[] { String.class.getName(), String.class.getName() },
+			ResourceActionModelImpl.NAME_COLUMN_BITMASK |
+			ResourceActionModelImpl.ACTIONID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_N_A = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceActionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_A",
+			new String[] { String.class.getName(), String.class.getName() });
+
+	/**
 	 * Returns the resource action where name = &#63; and actionId = &#63; or throws a {@link com.liferay.portal.NoSuchResourceActionException} if it could not be found.
 	 *
 	 * @param name the name
@@ -1099,6 +776,515 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	}
 
 	/**
+	 * Removes the resource action where name = &#63; and actionId = &#63; from the database.
+	 *
+	 * @param name the name
+	 * @param actionId the action ID
+	 * @return the resource action that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction removeByN_A(String name, String actionId)
+		throws NoSuchResourceActionException, SystemException {
+		ResourceAction resourceAction = findByN_A(name, actionId);
+
+		return remove(resourceAction);
+	}
+
+	/**
+	 * Returns the number of resource actions where name = &#63; and actionId = &#63;.
+	 *
+	 * @param name the name
+	 * @param actionId the action ID
+	 * @return the number of matching resource actions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByN_A(String name, String actionId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { name, actionId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_A,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_RESOURCEACTION_WHERE);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_N_A_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_N_A_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_N_A_NAME_2);
+				}
+			}
+
+			if (actionId == null) {
+				query.append(_FINDER_COLUMN_N_A_ACTIONID_1);
+			}
+			else {
+				if (actionId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_N_A_ACTIONID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_N_A_ACTIONID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				if (actionId != null) {
+					qPos.add(actionId);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_A, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_N_A_NAME_1 = "resourceAction.name IS NULL AND ";
+	private static final String _FINDER_COLUMN_N_A_NAME_2 = "lower(resourceAction.name) = lower(CAST_TEXT(?)) AND ";
+	private static final String _FINDER_COLUMN_N_A_NAME_3 = "(resourceAction.name IS NULL OR lower(resourceAction.name) = lower(CAST_TEXT(?))) AND ";
+	private static final String _FINDER_COLUMN_N_A_ACTIONID_1 = "resourceAction.actionId IS NULL";
+	private static final String _FINDER_COLUMN_N_A_ACTIONID_2 = "resourceAction.actionId = ?";
+	private static final String _FINDER_COLUMN_N_A_ACTIONID_3 = "(resourceAction.actionId IS NULL OR resourceAction.actionId = ?)";
+
+	/**
+	 * Caches the resource action in the entity cache if it is enabled.
+	 *
+	 * @param resourceAction the resource action
+	 */
+	public void cacheResult(ResourceAction resourceAction) {
+		EntityCacheUtil.putResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceActionImpl.class, resourceAction.getPrimaryKey(),
+			resourceAction);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_N_A,
+			new Object[] { resourceAction.getName(), resourceAction.getActionId() },
+			resourceAction);
+
+		resourceAction.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the resource actions in the entity cache if it is enabled.
+	 *
+	 * @param resourceActions the resource actions
+	 */
+	public void cacheResult(List<ResourceAction> resourceActions) {
+		for (ResourceAction resourceAction : resourceActions) {
+			if (EntityCacheUtil.getResult(
+						ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+						ResourceActionImpl.class, resourceAction.getPrimaryKey()) == null) {
+				cacheResult(resourceAction);
+			}
+			else {
+				resourceAction.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all resource actions.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(ResourceActionImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(ResourceActionImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the resource action.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(ResourceAction resourceAction) {
+		EntityCacheUtil.removeResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceActionImpl.class, resourceAction.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(resourceAction);
+	}
+
+	@Override
+	public void clearCache(List<ResourceAction> resourceActions) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (ResourceAction resourceAction : resourceActions) {
+			EntityCacheUtil.removeResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+				ResourceActionImpl.class, resourceAction.getPrimaryKey());
+
+			clearUniqueFindersCache(resourceAction);
+		}
+	}
+
+	protected void clearUniqueFindersCache(ResourceAction resourceAction) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_A,
+			new Object[] { resourceAction.getName(), resourceAction.getActionId() });
+	}
+
+	/**
+	 * Creates a new resource action with the primary key. Does not add the resource action to the database.
+	 *
+	 * @param resourceActionId the primary key for the new resource action
+	 * @return the new resource action
+	 */
+	public ResourceAction create(long resourceActionId) {
+		ResourceAction resourceAction = new ResourceActionImpl();
+
+		resourceAction.setNew(true);
+		resourceAction.setPrimaryKey(resourceActionId);
+
+		return resourceAction;
+	}
+
+	/**
+	 * Removes the resource action with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param resourceActionId the primary key of the resource action
+	 * @return the resource action that was removed
+	 * @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction remove(long resourceActionId)
+		throws NoSuchResourceActionException, SystemException {
+		return remove(Long.valueOf(resourceActionId));
+	}
+
+	/**
+	 * Removes the resource action with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the resource action
+	 * @return the resource action that was removed
+	 * @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ResourceAction remove(Serializable primaryKey)
+		throws NoSuchResourceActionException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			ResourceAction resourceAction = (ResourceAction)session.get(ResourceActionImpl.class,
+					primaryKey);
+
+			if (resourceAction == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchResourceActionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(resourceAction);
+		}
+		catch (NoSuchResourceActionException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected ResourceAction removeImpl(ResourceAction resourceAction)
+		throws SystemException {
+		resourceAction = toUnwrappedModel(resourceAction);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(resourceAction)) {
+				resourceAction = (ResourceAction)session.get(ResourceActionImpl.class,
+						resourceAction.getPrimaryKeyObj());
+			}
+
+			if (resourceAction != null) {
+				session.delete(resourceAction);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (resourceAction != null) {
+			clearCache(resourceAction);
+		}
+
+		return resourceAction;
+	}
+
+	@Override
+	public ResourceAction updateImpl(
+		com.liferay.portal.model.ResourceAction resourceAction)
+		throws SystemException {
+		resourceAction = toUnwrappedModel(resourceAction);
+
+		boolean isNew = resourceAction.isNew();
+
+		ResourceActionModelImpl resourceActionModelImpl = (ResourceActionModelImpl)resourceAction;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (resourceAction.isNew()) {
+				session.save(resourceAction);
+
+				resourceAction.setNew(false);
+			}
+			else {
+				session.merge(resourceAction);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !ResourceActionModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((resourceActionModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						resourceActionModelImpl.getOriginalName()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME,
+					args);
+
+				args = new Object[] { resourceActionModelImpl.getName() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceActionImpl.class, resourceAction.getPrimaryKey(),
+			resourceAction);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_N_A,
+				new Object[] {
+					resourceAction.getName(),
+					
+				resourceAction.getActionId()
+				}, resourceAction);
+		}
+		else {
+			if ((resourceActionModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_N_A.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						resourceActionModelImpl.getOriginalName(),
+						
+						resourceActionModelImpl.getOriginalActionId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_N_A, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_A, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_N_A,
+					new Object[] {
+						resourceAction.getName(),
+						
+					resourceAction.getActionId()
+					}, resourceAction);
+			}
+		}
+
+		return resourceAction;
+	}
+
+	protected ResourceAction toUnwrappedModel(ResourceAction resourceAction) {
+		if (resourceAction instanceof ResourceActionImpl) {
+			return resourceAction;
+		}
+
+		ResourceActionImpl resourceActionImpl = new ResourceActionImpl();
+
+		resourceActionImpl.setNew(resourceAction.isNew());
+		resourceActionImpl.setPrimaryKey(resourceAction.getPrimaryKey());
+
+		resourceActionImpl.setResourceActionId(resourceAction.getResourceActionId());
+		resourceActionImpl.setName(resourceAction.getName());
+		resourceActionImpl.setActionId(resourceAction.getActionId());
+		resourceActionImpl.setBitwiseValue(resourceAction.getBitwiseValue());
+
+		return resourceActionImpl;
+	}
+
+	/**
+	 * Returns the resource action with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the resource action
+	 * @return the resource action
+	 * @throws com.liferay.portal.NoSuchModelException if a resource action with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ResourceAction findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the resource action with the primary key or throws a {@link com.liferay.portal.NoSuchResourceActionException} if it could not be found.
+	 *
+	 * @param resourceActionId the primary key of the resource action
+	 * @return the resource action
+	 * @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction findByPrimaryKey(long resourceActionId)
+		throws NoSuchResourceActionException, SystemException {
+		ResourceAction resourceAction = fetchByPrimaryKey(resourceActionId);
+
+		if (resourceAction == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + resourceActionId);
+			}
+
+			throw new NoSuchResourceActionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				resourceActionId);
+		}
+
+		return resourceAction;
+	}
+
+	/**
+	 * Returns the resource action with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the resource action
+	 * @return the resource action, or <code>null</code> if a resource action with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ResourceAction fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the resource action with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param resourceActionId the primary key of the resource action
+	 * @return the resource action, or <code>null</code> if a resource action with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction fetchByPrimaryKey(long resourceActionId)
+		throws SystemException {
+		ResourceAction resourceAction = (ResourceAction)EntityCacheUtil.getResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+				ResourceActionImpl.class, resourceActionId);
+
+		if (resourceAction == _nullResourceAction) {
+			return null;
+		}
+
+		if (resourceAction == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				resourceAction = (ResourceAction)session.get(ResourceActionImpl.class,
+						Long.valueOf(resourceActionId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (resourceAction != null) {
+					cacheResult(resourceAction);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+						ResourceActionImpl.class, resourceActionId,
+						_nullResourceAction);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return resourceAction;
+	}
+
+	/**
 	 * Returns all the resource actions.
 	 *
 	 * @return the resource actions
@@ -1214,33 +1400,6 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	}
 
 	/**
-	 * Removes all the resource actions where name = &#63; from the database.
-	 *
-	 * @param name the name
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByName(String name) throws SystemException {
-		for (ResourceAction resourceAction : findByName(name)) {
-			remove(resourceAction);
-		}
-	}
-
-	/**
-	 * Removes the resource action where name = &#63; and actionId = &#63; from the database.
-	 *
-	 * @param name the name
-	 * @param actionId the action ID
-	 * @return the resource action that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceAction removeByN_A(String name, String actionId)
-		throws NoSuchResourceActionException, SystemException {
-		ResourceAction resourceAction = findByN_A(name, actionId);
-
-		return remove(resourceAction);
-	}
-
-	/**
 	 * Removes all the resource actions from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -1249,154 +1408,6 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 		for (ResourceAction resourceAction : findAll()) {
 			remove(resourceAction);
 		}
-	}
-
-	/**
-	 * Returns the number of resource actions where name = &#63;.
-	 *
-	 * @param name the name
-	 * @return the number of matching resource actions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByName(String name) throws SystemException {
-		Object[] finderArgs = new Object[] { name };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_NAME,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_RESOURCEACTION_WHERE);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_NAME_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_NAME_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_NAME_NAME_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of resource actions where name = &#63; and actionId = &#63;.
-	 *
-	 * @param name the name
-	 * @param actionId the action ID
-	 * @return the number of matching resource actions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByN_A(String name, String actionId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { name, actionId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_A,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_RESOURCEACTION_WHERE);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_N_A_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_N_A_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_N_A_NAME_2);
-				}
-			}
-
-			if (actionId == null) {
-				query.append(_FINDER_COLUMN_N_A_ACTIONID_1);
-			}
-			else {
-				if (actionId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_N_A_ACTIONID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_N_A_ACTIONID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				if (actionId != null) {
-					qPos.add(actionId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_A, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1594,15 +1605,6 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	private static final String _SQL_SELECT_RESOURCEACTION_WHERE = "SELECT resourceAction FROM ResourceAction resourceAction WHERE ";
 	private static final String _SQL_COUNT_RESOURCEACTION = "SELECT COUNT(resourceAction) FROM ResourceAction resourceAction";
 	private static final String _SQL_COUNT_RESOURCEACTION_WHERE = "SELECT COUNT(resourceAction) FROM ResourceAction resourceAction WHERE ";
-	private static final String _FINDER_COLUMN_NAME_NAME_1 = "resourceAction.name IS NULL";
-	private static final String _FINDER_COLUMN_NAME_NAME_2 = "resourceAction.name = ?";
-	private static final String _FINDER_COLUMN_NAME_NAME_3 = "(resourceAction.name IS NULL OR resourceAction.name = ?)";
-	private static final String _FINDER_COLUMN_N_A_NAME_1 = "resourceAction.name IS NULL AND ";
-	private static final String _FINDER_COLUMN_N_A_NAME_2 = "lower(resourceAction.name) = lower(CAST_TEXT(?)) AND ";
-	private static final String _FINDER_COLUMN_N_A_NAME_3 = "(resourceAction.name IS NULL OR lower(resourceAction.name) = lower(CAST_TEXT(?))) AND ";
-	private static final String _FINDER_COLUMN_N_A_ACTIONID_1 = "resourceAction.actionId IS NULL";
-	private static final String _FINDER_COLUMN_N_A_ACTIONID_2 = "resourceAction.actionId = ?";
-	private static final String _FINDER_COLUMN_N_A_ACTIONID_3 = "(resourceAction.actionId IS NULL OR resourceAction.actionId = ?)";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "resourceAction.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ResourceAction exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ResourceAction exists with the key {";

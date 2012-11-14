@@ -110,83 +110,6 @@ public class AssetTagUtil {
 	}
 
 	/**
-	* Caches the asset tag in the entity cache if it is enabled.
-	*
-	* @param assetTag the asset tag
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.asset.model.AssetTag assetTag) {
-		getPersistence().cacheResult(assetTag);
-	}
-
-	/**
-	* Caches the asset tags in the entity cache if it is enabled.
-	*
-	* @param assetTags the asset tags
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.asset.model.AssetTag> assetTags) {
-		getPersistence().cacheResult(assetTags);
-	}
-
-	/**
-	* Creates a new asset tag with the primary key. Does not add the asset tag to the database.
-	*
-	* @param tagId the primary key for the new asset tag
-	* @return the new asset tag
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag create(long tagId) {
-		return getPersistence().create(tagId);
-	}
-
-	/**
-	* Removes the asset tag with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param tagId the primary key of the asset tag
-	* @return the asset tag that was removed
-	* @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag remove(long tagId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagException {
-		return getPersistence().remove(tagId);
-	}
-
-	public static com.liferay.portlet.asset.model.AssetTag updateImpl(
-		com.liferay.portlet.asset.model.AssetTag assetTag)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(assetTag);
-	}
-
-	/**
-	* Returns the asset tag with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchTagException} if it could not be found.
-	*
-	* @param tagId the primary key of the asset tag
-	* @return the asset tag
-	* @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag findByPrimaryKey(
-		long tagId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagException {
-		return getPersistence().findByPrimaryKey(tagId);
-	}
-
-	/**
-	* Returns the asset tag with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param tagId the primary key of the asset tag
-	* @return the asset tag, or <code>null</code> if a asset tag with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag fetchByPrimaryKey(
-		long tagId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(tagId);
-	}
-
-	/**
 	* Returns all the asset tags where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -398,6 +321,41 @@ public class AssetTagUtil {
 	}
 
 	/**
+	* Removes all the asset tags where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of asset tags where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching asset tags
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of asset tags that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching asset tags that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByGroupId(groupId);
+	}
+
+	/**
 	* Returns the asset tag where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchTagException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -440,6 +398,111 @@ public class AssetTagUtil {
 		long groupId, java.lang.String name, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByG_N(groupId, name, retrieveFromCache);
+	}
+
+	/**
+	* Removes the asset tag where groupId = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the asset tag that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag removeByG_N(
+		long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().removeByG_N(groupId, name);
+	}
+
+	/**
+	* Returns the number of asset tags where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the number of matching asset tags
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_N(long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_N(groupId, name);
+	}
+
+	/**
+	* Caches the asset tag in the entity cache if it is enabled.
+	*
+	* @param assetTag the asset tag
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.asset.model.AssetTag assetTag) {
+		getPersistence().cacheResult(assetTag);
+	}
+
+	/**
+	* Caches the asset tags in the entity cache if it is enabled.
+	*
+	* @param assetTags the asset tags
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.asset.model.AssetTag> assetTags) {
+		getPersistence().cacheResult(assetTags);
+	}
+
+	/**
+	* Creates a new asset tag with the primary key. Does not add the asset tag to the database.
+	*
+	* @param tagId the primary key for the new asset tag
+	* @return the new asset tag
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag create(long tagId) {
+		return getPersistence().create(tagId);
+	}
+
+	/**
+	* Removes the asset tag with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param tagId the primary key of the asset tag
+	* @return the asset tag that was removed
+	* @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag remove(long tagId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().remove(tagId);
+	}
+
+	public static com.liferay.portlet.asset.model.AssetTag updateImpl(
+		com.liferay.portlet.asset.model.AssetTag assetTag)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(assetTag);
+	}
+
+	/**
+	* Returns the asset tag with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchTagException} if it could not be found.
+	*
+	* @param tagId the primary key of the asset tag
+	* @return the asset tag
+	* @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag findByPrimaryKey(
+		long tagId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagException {
+		return getPersistence().findByPrimaryKey(tagId);
+	}
+
+	/**
+	* Returns the asset tag with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param tagId the primary key of the asset tag
+	* @return the asset tag, or <code>null</code> if a asset tag with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTag fetchByPrimaryKey(
+		long tagId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(tagId);
 	}
 
 	/**
@@ -492,32 +555,6 @@ public class AssetTagUtil {
 	}
 
 	/**
-	* Removes all the asset tags where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes the asset tag where groupId = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the asset tag that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTag removeByG_N(
-		long groupId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagException {
-		return getPersistence().removeByG_N(groupId, name);
-	}
-
-	/**
 	* Removes all the asset tags from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -525,43 +562,6 @@ public class AssetTagUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of asset tags where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching asset tags
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of asset tags that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching asset tags that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of asset tags where groupId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the number of matching asset tags
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_N(long groupId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_N(groupId, name);
 	}
 
 	/**

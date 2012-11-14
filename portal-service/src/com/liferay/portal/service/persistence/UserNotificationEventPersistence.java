@@ -36,72 +36,6 @@ public interface UserNotificationEventPersistence extends BasePersistence<UserNo
 	 */
 
 	/**
-	* Caches the user notification event in the entity cache if it is enabled.
-	*
-	* @param userNotificationEvent the user notification event
-	*/
-	public void cacheResult(
-		com.liferay.portal.model.UserNotificationEvent userNotificationEvent);
-
-	/**
-	* Caches the user notification events in the entity cache if it is enabled.
-	*
-	* @param userNotificationEvents the user notification events
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.UserNotificationEvent> userNotificationEvents);
-
-	/**
-	* Creates a new user notification event with the primary key. Does not add the user notification event to the database.
-	*
-	* @param userNotificationEventId the primary key for the new user notification event
-	* @return the new user notification event
-	*/
-	public com.liferay.portal.model.UserNotificationEvent create(
-		long userNotificationEventId);
-
-	/**
-	* Removes the user notification event with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param userNotificationEventId the primary key of the user notification event
-	* @return the user notification event that was removed
-	* @throws com.liferay.portal.NoSuchUserNotificationEventException if a user notification event with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserNotificationEvent remove(
-		long userNotificationEventId)
-		throws com.liferay.portal.NoSuchUserNotificationEventException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.UserNotificationEvent updateImpl(
-		com.liferay.portal.model.UserNotificationEvent userNotificationEvent)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user notification event with the primary key or throws a {@link com.liferay.portal.NoSuchUserNotificationEventException} if it could not be found.
-	*
-	* @param userNotificationEventId the primary key of the user notification event
-	* @return the user notification event
-	* @throws com.liferay.portal.NoSuchUserNotificationEventException if a user notification event with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserNotificationEvent findByPrimaryKey(
-		long userNotificationEventId)
-		throws com.liferay.portal.NoSuchUserNotificationEventException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user notification event with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param userNotificationEventId the primary key of the user notification event
-	* @return the user notification event, or <code>null</code> if a user notification event with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserNotificationEvent fetchByPrimaryKey(
-		long userNotificationEventId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the user notification events where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -219,6 +153,25 @@ public interface UserNotificationEventPersistence extends BasePersistence<UserNo
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchUserNotificationEventException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the user notification events where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user notification events where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching user notification events
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the user notification events where uuid = &#63; and companyId = &#63;.
@@ -348,6 +301,27 @@ public interface UserNotificationEventPersistence extends BasePersistence<UserNo
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the user notification events where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user notification events where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching user notification events
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the user notification events where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -464,6 +438,25 @@ public interface UserNotificationEventPersistence extends BasePersistence<UserNo
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchUserNotificationEventException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the user notification events where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user notification events where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching user notification events
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the user notification events where userId = &#63; and archived = &#63;.
@@ -593,6 +586,93 @@ public interface UserNotificationEventPersistence extends BasePersistence<UserNo
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the user notification events where userId = &#63; and archived = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param archived the archived
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByU_A(long userId, boolean archived)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user notification events where userId = &#63; and archived = &#63;.
+	*
+	* @param userId the user ID
+	* @param archived the archived
+	* @return the number of matching user notification events
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByU_A(long userId, boolean archived)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the user notification event in the entity cache if it is enabled.
+	*
+	* @param userNotificationEvent the user notification event
+	*/
+	public void cacheResult(
+		com.liferay.portal.model.UserNotificationEvent userNotificationEvent);
+
+	/**
+	* Caches the user notification events in the entity cache if it is enabled.
+	*
+	* @param userNotificationEvents the user notification events
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.UserNotificationEvent> userNotificationEvents);
+
+	/**
+	* Creates a new user notification event with the primary key. Does not add the user notification event to the database.
+	*
+	* @param userNotificationEventId the primary key for the new user notification event
+	* @return the new user notification event
+	*/
+	public com.liferay.portal.model.UserNotificationEvent create(
+		long userNotificationEventId);
+
+	/**
+	* Removes the user notification event with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param userNotificationEventId the primary key of the user notification event
+	* @return the user notification event that was removed
+	* @throws com.liferay.portal.NoSuchUserNotificationEventException if a user notification event with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserNotificationEvent remove(
+		long userNotificationEventId)
+		throws com.liferay.portal.NoSuchUserNotificationEventException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.UserNotificationEvent updateImpl(
+		com.liferay.portal.model.UserNotificationEvent userNotificationEvent)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the user notification event with the primary key or throws a {@link com.liferay.portal.NoSuchUserNotificationEventException} if it could not be found.
+	*
+	* @param userNotificationEventId the primary key of the user notification event
+	* @return the user notification event
+	* @throws com.liferay.portal.NoSuchUserNotificationEventException if a user notification event with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserNotificationEvent findByPrimaryKey(
+		long userNotificationEventId)
+		throws com.liferay.portal.NoSuchUserNotificationEventException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the user notification event with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param userNotificationEventId the primary key of the user notification event
+	* @return the user notification event, or <code>null</code> if a user notification event with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserNotificationEvent fetchByPrimaryKey(
+		long userNotificationEventId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the user notification events.
 	*
 	* @return the user notification events
@@ -636,91 +716,11 @@ public interface UserNotificationEventPersistence extends BasePersistence<UserNo
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the user notification events where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the user notification events where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the user notification events where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the user notification events where userId = &#63; and archived = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param archived the archived
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByU_A(long userId, boolean archived)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the user notification events from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user notification events where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching user notification events
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user notification events where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching user notification events
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user notification events where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching user notification events
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user notification events where userId = &#63; and archived = &#63;.
-	*
-	* @param userId the user ID
-	* @param archived the archived
-	* @return the number of matching user notification events
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByU_A(long userId, boolean archived)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

@@ -112,86 +112,6 @@ public class DLFileEntryMetadataUtil {
 	}
 
 	/**
-	* Caches the document library file entry metadata in the entity cache if it is enabled.
-	*
-	* @param dlFileEntryMetadata the document library file entry metadata
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata dlFileEntryMetadata) {
-		getPersistence().cacheResult(dlFileEntryMetadata);
-	}
-
-	/**
-	* Caches the document library file entry metadatas in the entity cache if it is enabled.
-	*
-	* @param dlFileEntryMetadatas the document library file entry metadatas
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata> dlFileEntryMetadatas) {
-		getPersistence().cacheResult(dlFileEntryMetadatas);
-	}
-
-	/**
-	* Creates a new document library file entry metadata with the primary key. Does not add the document library file entry metadata to the database.
-	*
-	* @param fileEntryMetadataId the primary key for the new document library file entry metadata
-	* @return the new document library file entry metadata
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata create(
-		long fileEntryMetadataId) {
-		return getPersistence().create(fileEntryMetadataId);
-	}
-
-	/**
-	* Removes the document library file entry metadata with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param fileEntryMetadataId the primary key of the document library file entry metadata
-	* @return the document library file entry metadata that was removed
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata remove(
-		long fileEntryMetadataId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException {
-		return getPersistence().remove(fileEntryMetadataId);
-	}
-
-	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata updateImpl(
-		com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata dlFileEntryMetadata)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(dlFileEntryMetadata);
-	}
-
-	/**
-	* Returns the document library file entry metadata with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException} if it could not be found.
-	*
-	* @param fileEntryMetadataId the primary key of the document library file entry metadata
-	* @return the document library file entry metadata
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata findByPrimaryKey(
-		long fileEntryMetadataId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException {
-		return getPersistence().findByPrimaryKey(fileEntryMetadataId);
-	}
-
-	/**
-	* Returns the document library file entry metadata with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param fileEntryMetadataId the primary key of the document library file entry metadata
-	* @return the document library file entry metadata, or <code>null</code> if a document library file entry metadata with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata fetchByPrimaryKey(
-		long fileEntryMetadataId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(fileEntryMetadataId);
-	}
-
-	/**
 	* Returns all the document library file entry metadatas where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -326,6 +246,29 @@ public class DLFileEntryMetadataUtil {
 		return getPersistence()
 				   .findByUuid_PrevAndNext(fileEntryMetadataId, uuid,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the document library file entry metadatas where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of document library file entry metadatas where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching document library file entry metadatas
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
 	}
 
 	/**
@@ -477,6 +420,29 @@ public class DLFileEntryMetadataUtil {
 	}
 
 	/**
+	* Removes all the document library file entry metadatas where fileEntryTypeId = &#63; from the database.
+	*
+	* @param fileEntryTypeId the file entry type ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByFileEntryTypeId(long fileEntryTypeId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByFileEntryTypeId(fileEntryTypeId);
+	}
+
+	/**
+	* Returns the number of document library file entry metadatas where fileEntryTypeId = &#63;.
+	*
+	* @param fileEntryTypeId the file entry type ID
+	* @return the number of matching document library file entry metadatas
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByFileEntryTypeId(long fileEntryTypeId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByFileEntryTypeId(fileEntryTypeId);
+	}
+
+	/**
 	* Returns all the document library file entry metadatas where fileEntryId = &#63;.
 	*
 	* @param fileEntryId the file entry ID
@@ -616,6 +582,29 @@ public class DLFileEntryMetadataUtil {
 		return getPersistence()
 				   .findByFileEntryId_PrevAndNext(fileEntryMetadataId,
 			fileEntryId, orderByComparator);
+	}
+
+	/**
+	* Removes all the document library file entry metadatas where fileEntryId = &#63; from the database.
+	*
+	* @param fileEntryId the file entry ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByFileEntryId(long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByFileEntryId(fileEntryId);
+	}
+
+	/**
+	* Returns the number of document library file entry metadatas where fileEntryId = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @return the number of matching document library file entry metadatas
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByFileEntryId(long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByFileEntryId(fileEntryId);
 	}
 
 	/**
@@ -762,6 +751,29 @@ public class DLFileEntryMetadataUtil {
 	}
 
 	/**
+	* Removes all the document library file entry metadatas where fileVersionId = &#63; from the database.
+	*
+	* @param fileVersionId the file version ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByFileVersionId(long fileVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByFileVersionId(fileVersionId);
+	}
+
+	/**
+	* Returns the number of document library file entry metadatas where fileVersionId = &#63;.
+	*
+	* @param fileVersionId the file version ID
+	* @return the number of matching document library file entry metadatas
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByFileVersionId(long fileVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByFileVersionId(fileVersionId);
+	}
+
+	/**
 	* Returns the document library file entry metadata where DDMStructureId = &#63; and fileVersionId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException} if it could not be found.
 	*
 	* @param DDMStructureId the d d m structure ID
@@ -805,6 +817,114 @@ public class DLFileEntryMetadataUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByD_F(DDMStructureId, fileVersionId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the document library file entry metadata where DDMStructureId = &#63; and fileVersionId = &#63; from the database.
+	*
+	* @param DDMStructureId the d d m structure ID
+	* @param fileVersionId the file version ID
+	* @return the document library file entry metadata that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata removeByD_F(
+		long DDMStructureId, long fileVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException {
+		return getPersistence().removeByD_F(DDMStructureId, fileVersionId);
+	}
+
+	/**
+	* Returns the number of document library file entry metadatas where DDMStructureId = &#63; and fileVersionId = &#63;.
+	*
+	* @param DDMStructureId the d d m structure ID
+	* @param fileVersionId the file version ID
+	* @return the number of matching document library file entry metadatas
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByD_F(long DDMStructureId, long fileVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByD_F(DDMStructureId, fileVersionId);
+	}
+
+	/**
+	* Caches the document library file entry metadata in the entity cache if it is enabled.
+	*
+	* @param dlFileEntryMetadata the document library file entry metadata
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata dlFileEntryMetadata) {
+		getPersistence().cacheResult(dlFileEntryMetadata);
+	}
+
+	/**
+	* Caches the document library file entry metadatas in the entity cache if it is enabled.
+	*
+	* @param dlFileEntryMetadatas the document library file entry metadatas
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata> dlFileEntryMetadatas) {
+		getPersistence().cacheResult(dlFileEntryMetadatas);
+	}
+
+	/**
+	* Creates a new document library file entry metadata with the primary key. Does not add the document library file entry metadata to the database.
+	*
+	* @param fileEntryMetadataId the primary key for the new document library file entry metadata
+	* @return the new document library file entry metadata
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata create(
+		long fileEntryMetadataId) {
+		return getPersistence().create(fileEntryMetadataId);
+	}
+
+	/**
+	* Removes the document library file entry metadata with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param fileEntryMetadataId the primary key of the document library file entry metadata
+	* @return the document library file entry metadata that was removed
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata remove(
+		long fileEntryMetadataId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException {
+		return getPersistence().remove(fileEntryMetadataId);
+	}
+
+	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata updateImpl(
+		com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata dlFileEntryMetadata)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(dlFileEntryMetadata);
+	}
+
+	/**
+	* Returns the document library file entry metadata with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException} if it could not be found.
+	*
+	* @param fileEntryMetadataId the primary key of the document library file entry metadata
+	* @return the document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata findByPrimaryKey(
+		long fileEntryMetadataId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException {
+		return getPersistence().findByPrimaryKey(fileEntryMetadataId);
+	}
+
+	/**
+	* Returns the document library file entry metadata with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param fileEntryMetadataId the primary key of the document library file entry metadata
+	* @return the document library file entry metadata, or <code>null</code> if a document library file entry metadata with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata fetchByPrimaryKey(
+		long fileEntryMetadataId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(fileEntryMetadataId);
 	}
 
 	/**
@@ -857,65 +977,6 @@ public class DLFileEntryMetadataUtil {
 	}
 
 	/**
-	* Removes all the document library file entry metadatas where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes all the document library file entry metadatas where fileEntryTypeId = &#63; from the database.
-	*
-	* @param fileEntryTypeId the file entry type ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByFileEntryTypeId(long fileEntryTypeId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByFileEntryTypeId(fileEntryTypeId);
-	}
-
-	/**
-	* Removes all the document library file entry metadatas where fileEntryId = &#63; from the database.
-	*
-	* @param fileEntryId the file entry ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByFileEntryId(long fileEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByFileEntryId(fileEntryId);
-	}
-
-	/**
-	* Removes all the document library file entry metadatas where fileVersionId = &#63; from the database.
-	*
-	* @param fileVersionId the file version ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByFileVersionId(long fileVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByFileVersionId(fileVersionId);
-	}
-
-	/**
-	* Removes the document library file entry metadata where DDMStructureId = &#63; and fileVersionId = &#63; from the database.
-	*
-	* @param DDMStructureId the d d m structure ID
-	* @param fileVersionId the file version ID
-	* @return the document library file entry metadata that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata removeByD_F(
-		long DDMStructureId, long fileVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException {
-		return getPersistence().removeByD_F(DDMStructureId, fileVersionId);
-	}
-
-	/**
 	* Removes all the document library file entry metadatas from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -923,67 +984,6 @@ public class DLFileEntryMetadataUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of document library file entry metadatas where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching document library file entry metadatas
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of document library file entry metadatas where fileEntryTypeId = &#63;.
-	*
-	* @param fileEntryTypeId the file entry type ID
-	* @return the number of matching document library file entry metadatas
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByFileEntryTypeId(long fileEntryTypeId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByFileEntryTypeId(fileEntryTypeId);
-	}
-
-	/**
-	* Returns the number of document library file entry metadatas where fileEntryId = &#63;.
-	*
-	* @param fileEntryId the file entry ID
-	* @return the number of matching document library file entry metadatas
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByFileEntryId(long fileEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByFileEntryId(fileEntryId);
-	}
-
-	/**
-	* Returns the number of document library file entry metadatas where fileVersionId = &#63;.
-	*
-	* @param fileVersionId the file version ID
-	* @return the number of matching document library file entry metadatas
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByFileVersionId(long fileVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByFileVersionId(fileVersionId);
-	}
-
-	/**
-	* Returns the number of document library file entry metadatas where DDMStructureId = &#63; and fileVersionId = &#63;.
-	*
-	* @param DDMStructureId the d d m structure ID
-	* @param fileVersionId the file version ID
-	* @return the number of matching document library file entry metadatas
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByD_F(long DDMStructureId, long fileVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByD_F(DDMStructureId, fileVersionId);
 	}
 
 	/**

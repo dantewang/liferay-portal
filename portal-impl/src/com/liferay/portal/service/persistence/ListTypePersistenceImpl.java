@@ -72,6 +72,15 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+			ListTypeModelImpl.FINDER_CACHE_ENABLED, ListTypeImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+			ListTypeModelImpl.FINDER_CACHE_ENABLED, ListTypeImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+			ListTypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_TYPE = new FinderPath(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
 			ListTypeModelImpl.FINDER_CACHE_ENABLED, ListTypeImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByType",
@@ -90,367 +99,6 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 			ListTypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByType",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
-			ListTypeModelImpl.FINDER_CACHE_ENABLED, ListTypeImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
-			ListTypeModelImpl.FINDER_CACHE_ENABLED, ListTypeImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
-			ListTypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the list type in the entity cache if it is enabled.
-	 *
-	 * @param listType the list type
-	 */
-	public void cacheResult(ListType listType) {
-		EntityCacheUtil.putResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
-			ListTypeImpl.class, listType.getPrimaryKey(), listType);
-
-		listType.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the list types in the entity cache if it is enabled.
-	 *
-	 * @param listTypes the list types
-	 */
-	public void cacheResult(List<ListType> listTypes) {
-		for (ListType listType : listTypes) {
-			if (EntityCacheUtil.getResult(
-						ListTypeModelImpl.ENTITY_CACHE_ENABLED,
-						ListTypeImpl.class, listType.getPrimaryKey()) == null) {
-				cacheResult(listType);
-			}
-			else {
-				listType.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all list types.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(ListTypeImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(ListTypeImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the list type.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(ListType listType) {
-		EntityCacheUtil.removeResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
-			ListTypeImpl.class, listType.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<ListType> listTypes) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (ListType listType : listTypes) {
-			EntityCacheUtil.removeResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
-				ListTypeImpl.class, listType.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new list type with the primary key. Does not add the list type to the database.
-	 *
-	 * @param listTypeId the primary key for the new list type
-	 * @return the new list type
-	 */
-	public ListType create(int listTypeId) {
-		ListType listType = new ListTypeImpl();
-
-		listType.setNew(true);
-		listType.setPrimaryKey(listTypeId);
-
-		return listType;
-	}
-
-	/**
-	 * Removes the list type with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param listTypeId the primary key of the list type
-	 * @return the list type that was removed
-	 * @throws com.liferay.portal.NoSuchListTypeException if a list type with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ListType remove(int listTypeId)
-		throws NoSuchListTypeException, SystemException {
-		return remove(Integer.valueOf(listTypeId));
-	}
-
-	/**
-	 * Removes the list type with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the list type
-	 * @return the list type that was removed
-	 * @throws com.liferay.portal.NoSuchListTypeException if a list type with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ListType remove(Serializable primaryKey)
-		throws NoSuchListTypeException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			ListType listType = (ListType)session.get(ListTypeImpl.class,
-					primaryKey);
-
-			if (listType == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchListTypeException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(listType);
-		}
-		catch (NoSuchListTypeException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected ListType removeImpl(ListType listType) throws SystemException {
-		listType = toUnwrappedModel(listType);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(listType)) {
-				listType = (ListType)session.get(ListTypeImpl.class,
-						listType.getPrimaryKeyObj());
-			}
-
-			if (listType != null) {
-				session.delete(listType);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (listType != null) {
-			clearCache(listType);
-		}
-
-		return listType;
-	}
-
-	@Override
-	public ListType updateImpl(com.liferay.portal.model.ListType listType)
-		throws SystemException {
-		listType = toUnwrappedModel(listType);
-
-		boolean isNew = listType.isNew();
-
-		ListTypeModelImpl listTypeModelImpl = (ListTypeModelImpl)listType;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (listType.isNew()) {
-				session.save(listType);
-
-				listType.setNew(false);
-			}
-			else {
-				session.merge(listType);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !ListTypeModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((listTypeModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TYPE.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] { listTypeModelImpl.getOriginalType() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TYPE, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TYPE,
-					args);
-
-				args = new Object[] { listTypeModelImpl.getType() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TYPE, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TYPE,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
-			ListTypeImpl.class, listType.getPrimaryKey(), listType);
-
-		return listType;
-	}
-
-	protected ListType toUnwrappedModel(ListType listType) {
-		if (listType instanceof ListTypeImpl) {
-			return listType;
-		}
-
-		ListTypeImpl listTypeImpl = new ListTypeImpl();
-
-		listTypeImpl.setNew(listType.isNew());
-		listTypeImpl.setPrimaryKey(listType.getPrimaryKey());
-
-		listTypeImpl.setListTypeId(listType.getListTypeId());
-		listTypeImpl.setName(listType.getName());
-		listTypeImpl.setType(listType.getType());
-
-		return listTypeImpl;
-	}
-
-	/**
-	 * Returns the list type with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the list type
-	 * @return the list type
-	 * @throws com.liferay.portal.NoSuchModelException if a list type with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ListType findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Integer)primaryKey).intValue());
-	}
-
-	/**
-	 * Returns the list type with the primary key or throws a {@link com.liferay.portal.NoSuchListTypeException} if it could not be found.
-	 *
-	 * @param listTypeId the primary key of the list type
-	 * @return the list type
-	 * @throws com.liferay.portal.NoSuchListTypeException if a list type with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ListType findByPrimaryKey(int listTypeId)
-		throws NoSuchListTypeException, SystemException {
-		ListType listType = fetchByPrimaryKey(listTypeId);
-
-		if (listType == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + listTypeId);
-			}
-
-			throw new NoSuchListTypeException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				listTypeId);
-		}
-
-		return listType;
-	}
-
-	/**
-	 * Returns the list type with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the list type
-	 * @return the list type, or <code>null</code> if a list type with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ListType fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Integer)primaryKey).intValue());
-	}
-
-	/**
-	 * Returns the list type with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param listTypeId the primary key of the list type
-	 * @return the list type, or <code>null</code> if a list type with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ListType fetchByPrimaryKey(int listTypeId) throws SystemException {
-		ListType listType = (ListType)EntityCacheUtil.getResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
-				ListTypeImpl.class, listTypeId);
-
-		if (listType == _nullListType) {
-			return null;
-		}
-
-		if (listType == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				listType = (ListType)session.get(ListTypeImpl.class,
-						Integer.valueOf(listTypeId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (listType != null) {
-					cacheResult(listType);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
-						ListTypeImpl.class, listTypeId, _nullListType);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return listType;
-	}
 
 	/**
 	 * Returns all the list types where type = &#63;.
@@ -855,6 +503,439 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 	}
 
 	/**
+	 * Removes all the list types where type = &#63; from the database.
+	 *
+	 * @param type the type
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByType(String type) throws SystemException {
+		for (ListType listType : findByType(type)) {
+			remove(listType);
+		}
+	}
+
+	/**
+	 * Returns the number of list types where type = &#63;.
+	 *
+	 * @param type the type
+	 * @return the number of matching list types
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByType(String type) throws SystemException {
+		Object[] finderArgs = new Object[] { type };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_TYPE,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_LISTTYPE_WHERE);
+
+			if (type == null) {
+				query.append(_FINDER_COLUMN_TYPE_TYPE_1);
+			}
+			else {
+				if (type.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_TYPE_TYPE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_TYPE_TYPE_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (type != null) {
+					qPos.add(type);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TYPE,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_TYPE_TYPE_1 = "listType.type IS NULL";
+	private static final String _FINDER_COLUMN_TYPE_TYPE_2 = "listType.type = ?";
+	private static final String _FINDER_COLUMN_TYPE_TYPE_3 = "(listType.type IS NULL OR listType.type = ?)";
+
+	/**
+	 * Caches the list type in the entity cache if it is enabled.
+	 *
+	 * @param listType the list type
+	 */
+	public void cacheResult(ListType listType) {
+		EntityCacheUtil.putResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+			ListTypeImpl.class, listType.getPrimaryKey(), listType);
+
+		listType.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the list types in the entity cache if it is enabled.
+	 *
+	 * @param listTypes the list types
+	 */
+	public void cacheResult(List<ListType> listTypes) {
+		for (ListType listType : listTypes) {
+			if (EntityCacheUtil.getResult(
+						ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+						ListTypeImpl.class, listType.getPrimaryKey()) == null) {
+				cacheResult(listType);
+			}
+			else {
+				listType.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all list types.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(ListTypeImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(ListTypeImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the list type.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(ListType listType) {
+		EntityCacheUtil.removeResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+			ListTypeImpl.class, listType.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<ListType> listTypes) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (ListType listType : listTypes) {
+			EntityCacheUtil.removeResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+				ListTypeImpl.class, listType.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new list type with the primary key. Does not add the list type to the database.
+	 *
+	 * @param listTypeId the primary key for the new list type
+	 * @return the new list type
+	 */
+	public ListType create(int listTypeId) {
+		ListType listType = new ListTypeImpl();
+
+		listType.setNew(true);
+		listType.setPrimaryKey(listTypeId);
+
+		return listType;
+	}
+
+	/**
+	 * Removes the list type with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param listTypeId the primary key of the list type
+	 * @return the list type that was removed
+	 * @throws com.liferay.portal.NoSuchListTypeException if a list type with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ListType remove(int listTypeId)
+		throws NoSuchListTypeException, SystemException {
+		return remove(Integer.valueOf(listTypeId));
+	}
+
+	/**
+	 * Removes the list type with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the list type
+	 * @return the list type that was removed
+	 * @throws com.liferay.portal.NoSuchListTypeException if a list type with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ListType remove(Serializable primaryKey)
+		throws NoSuchListTypeException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			ListType listType = (ListType)session.get(ListTypeImpl.class,
+					primaryKey);
+
+			if (listType == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchListTypeException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(listType);
+		}
+		catch (NoSuchListTypeException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected ListType removeImpl(ListType listType) throws SystemException {
+		listType = toUnwrappedModel(listType);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(listType)) {
+				listType = (ListType)session.get(ListTypeImpl.class,
+						listType.getPrimaryKeyObj());
+			}
+
+			if (listType != null) {
+				session.delete(listType);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (listType != null) {
+			clearCache(listType);
+		}
+
+		return listType;
+	}
+
+	@Override
+	public ListType updateImpl(com.liferay.portal.model.ListType listType)
+		throws SystemException {
+		listType = toUnwrappedModel(listType);
+
+		boolean isNew = listType.isNew();
+
+		ListTypeModelImpl listTypeModelImpl = (ListTypeModelImpl)listType;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (listType.isNew()) {
+				session.save(listType);
+
+				listType.setNew(false);
+			}
+			else {
+				session.merge(listType);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !ListTypeModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((listTypeModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TYPE.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] { listTypeModelImpl.getOriginalType() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TYPE, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TYPE,
+					args);
+
+				args = new Object[] { listTypeModelImpl.getType() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TYPE, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TYPE,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+			ListTypeImpl.class, listType.getPrimaryKey(), listType);
+
+		return listType;
+	}
+
+	protected ListType toUnwrappedModel(ListType listType) {
+		if (listType instanceof ListTypeImpl) {
+			return listType;
+		}
+
+		ListTypeImpl listTypeImpl = new ListTypeImpl();
+
+		listTypeImpl.setNew(listType.isNew());
+		listTypeImpl.setPrimaryKey(listType.getPrimaryKey());
+
+		listTypeImpl.setListTypeId(listType.getListTypeId());
+		listTypeImpl.setName(listType.getName());
+		listTypeImpl.setType(listType.getType());
+
+		return listTypeImpl;
+	}
+
+	/**
+	 * Returns the list type with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the list type
+	 * @return the list type
+	 * @throws com.liferay.portal.NoSuchModelException if a list type with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ListType findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Integer)primaryKey).intValue());
+	}
+
+	/**
+	 * Returns the list type with the primary key or throws a {@link com.liferay.portal.NoSuchListTypeException} if it could not be found.
+	 *
+	 * @param listTypeId the primary key of the list type
+	 * @return the list type
+	 * @throws com.liferay.portal.NoSuchListTypeException if a list type with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ListType findByPrimaryKey(int listTypeId)
+		throws NoSuchListTypeException, SystemException {
+		ListType listType = fetchByPrimaryKey(listTypeId);
+
+		if (listType == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + listTypeId);
+			}
+
+			throw new NoSuchListTypeException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				listTypeId);
+		}
+
+		return listType;
+	}
+
+	/**
+	 * Returns the list type with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the list type
+	 * @return the list type, or <code>null</code> if a list type with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ListType fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Integer)primaryKey).intValue());
+	}
+
+	/**
+	 * Returns the list type with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param listTypeId the primary key of the list type
+	 * @return the list type, or <code>null</code> if a list type with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ListType fetchByPrimaryKey(int listTypeId) throws SystemException {
+		ListType listType = (ListType)EntityCacheUtil.getResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+				ListTypeImpl.class, listTypeId);
+
+		if (listType == _nullListType) {
+			return null;
+		}
+
+		if (listType == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				listType = (ListType)session.get(ListTypeImpl.class,
+						Integer.valueOf(listTypeId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (listType != null) {
+					cacheResult(listType);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+						ListTypeImpl.class, listTypeId, _nullListType);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return listType;
+	}
+
+	/**
 	 * Returns all the list types.
 	 *
 	 * @return the list types
@@ -969,18 +1050,6 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 	}
 
 	/**
-	 * Removes all the list types where type = &#63; from the database.
-	 *
-	 * @param type the type
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByType(String type) throws SystemException {
-		for (ListType listType : findByType(type)) {
-			remove(listType);
-		}
-	}
-
-	/**
 	 * Removes all the list types from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -989,71 +1058,6 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 		for (ListType listType : findAll()) {
 			remove(listType);
 		}
-	}
-
-	/**
-	 * Returns the number of list types where type = &#63;.
-	 *
-	 * @param type the type
-	 * @return the number of matching list types
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByType(String type) throws SystemException {
-		Object[] finderArgs = new Object[] { type };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_TYPE,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_LISTTYPE_WHERE);
-
-			if (type == null) {
-				query.append(_FINDER_COLUMN_TYPE_TYPE_1);
-			}
-			else {
-				if (type.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_TYPE_TYPE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_TYPE_TYPE_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (type != null) {
-					qPos.add(type);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TYPE,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1251,9 +1255,6 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 	private static final String _SQL_SELECT_LISTTYPE_WHERE = "SELECT listType FROM ListType listType WHERE ";
 	private static final String _SQL_COUNT_LISTTYPE = "SELECT COUNT(listType) FROM ListType listType";
 	private static final String _SQL_COUNT_LISTTYPE_WHERE = "SELECT COUNT(listType) FROM ListType listType WHERE ";
-	private static final String _FINDER_COLUMN_TYPE_TYPE_1 = "listType.type IS NULL";
-	private static final String _FINDER_COLUMN_TYPE_TYPE_2 = "listType.type = ?";
-	private static final String _FINDER_COLUMN_TYPE_TYPE_3 = "(listType.type IS NULL OR listType.type = ?)";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "listType.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ListType exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ListType exists with the key {";

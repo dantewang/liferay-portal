@@ -38,70 +38,6 @@ public interface TrashEntryPersistence extends BasePersistence<TrashEntry> {
 	 */
 
 	/**
-	* Caches the trash entry in the entity cache if it is enabled.
-	*
-	* @param trashEntry the trash entry
-	*/
-	public void cacheResult(
-		com.liferay.portlet.trash.model.TrashEntry trashEntry);
-
-	/**
-	* Caches the trash entries in the entity cache if it is enabled.
-	*
-	* @param trashEntries the trash entries
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.trash.model.TrashEntry> trashEntries);
-
-	/**
-	* Creates a new trash entry with the primary key. Does not add the trash entry to the database.
-	*
-	* @param entryId the primary key for the new trash entry
-	* @return the new trash entry
-	*/
-	public com.liferay.portlet.trash.model.TrashEntry create(long entryId);
-
-	/**
-	* Removes the trash entry with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param entryId the primary key of the trash entry
-	* @return the trash entry that was removed
-	* @throws com.liferay.portlet.trash.NoSuchEntryException if a trash entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.trash.model.TrashEntry remove(long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.trash.NoSuchEntryException;
-
-	public com.liferay.portlet.trash.model.TrashEntry updateImpl(
-		com.liferay.portlet.trash.model.TrashEntry trashEntry)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the trash entry with the primary key or throws a {@link com.liferay.portlet.trash.NoSuchEntryException} if it could not be found.
-	*
-	* @param entryId the primary key of the trash entry
-	* @return the trash entry
-	* @throws com.liferay.portlet.trash.NoSuchEntryException if a trash entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.trash.model.TrashEntry findByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.trash.NoSuchEntryException;
-
-	/**
-	* Returns the trash entry with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param entryId the primary key of the trash entry
-	* @return the trash entry, or <code>null</code> if a trash entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.trash.model.TrashEntry fetchByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the trash entries where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -221,6 +157,25 @@ public interface TrashEntryPersistence extends BasePersistence<TrashEntry> {
 			com.liferay.portlet.trash.NoSuchEntryException;
 
 	/**
+	* Removes all the trash entries where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of trash entries where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching trash entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the trash entries where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -338,6 +293,25 @@ public interface TrashEntryPersistence extends BasePersistence<TrashEntry> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.trash.NoSuchEntryException;
+
+	/**
+	* Removes all the trash entries where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of trash entries where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching trash entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the trash entries where groupId = &#63; and createDate &lt; &#63;.
@@ -467,6 +441,27 @@ public interface TrashEntryPersistence extends BasePersistence<TrashEntry> {
 			com.liferay.portlet.trash.NoSuchEntryException;
 
 	/**
+	* Removes all the trash entries where groupId = &#63; and createDate &lt; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param createDate the create date
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_LtCD(long groupId, java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of trash entries where groupId = &#63; and createDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param createDate the create date
+	* @return the number of matching trash entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_LtCD(long groupId, java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the trash entry where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.trash.NoSuchEntryException} if it could not be found.
 	*
 	* @param classNameId the class name ID
@@ -503,6 +498,94 @@ public interface TrashEntryPersistence extends BasePersistence<TrashEntry> {
 	*/
 	public com.liferay.portlet.trash.model.TrashEntry fetchByC_C(
 		long classNameId, long classPK, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the trash entry where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the trash entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.trash.model.TrashEntry removeByC_C(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException;
+
+	/**
+	* Returns the number of trash entries where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching trash entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the trash entry in the entity cache if it is enabled.
+	*
+	* @param trashEntry the trash entry
+	*/
+	public void cacheResult(
+		com.liferay.portlet.trash.model.TrashEntry trashEntry);
+
+	/**
+	* Caches the trash entries in the entity cache if it is enabled.
+	*
+	* @param trashEntries the trash entries
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.trash.model.TrashEntry> trashEntries);
+
+	/**
+	* Creates a new trash entry with the primary key. Does not add the trash entry to the database.
+	*
+	* @param entryId the primary key for the new trash entry
+	* @return the new trash entry
+	*/
+	public com.liferay.portlet.trash.model.TrashEntry create(long entryId);
+
+	/**
+	* Removes the trash entry with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param entryId the primary key of the trash entry
+	* @return the trash entry that was removed
+	* @throws com.liferay.portlet.trash.NoSuchEntryException if a trash entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.trash.model.TrashEntry remove(long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException;
+
+	public com.liferay.portlet.trash.model.TrashEntry updateImpl(
+		com.liferay.portlet.trash.model.TrashEntry trashEntry)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the trash entry with the primary key or throws a {@link com.liferay.portlet.trash.NoSuchEntryException} if it could not be found.
+	*
+	* @param entryId the primary key of the trash entry
+	* @return the trash entry
+	* @throws com.liferay.portlet.trash.NoSuchEntryException if a trash entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.trash.model.TrashEntry findByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException;
+
+	/**
+	* Returns the trash entry with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param entryId the primary key of the trash entry
+	* @return the trash entry, or <code>null</code> if a trash entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.trash.model.TrashEntry fetchByPrimaryKey(
+		long entryId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -549,94 +632,11 @@ public interface TrashEntryPersistence extends BasePersistence<TrashEntry> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the trash entries where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the trash entries where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the trash entries where groupId = &#63; and createDate &lt; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param createDate the create date
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_LtCD(long groupId, java.util.Date createDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the trash entry where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the trash entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.trash.model.TrashEntry removeByC_C(
-		long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.trash.NoSuchEntryException;
-
-	/**
 	* Removes all the trash entries from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of trash entries where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching trash entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of trash entries where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching trash entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of trash entries where groupId = &#63; and createDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param createDate the create date
-	* @return the number of matching trash entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_LtCD(long groupId, java.util.Date createDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of trash entries where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching trash entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_C(long classNameId, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

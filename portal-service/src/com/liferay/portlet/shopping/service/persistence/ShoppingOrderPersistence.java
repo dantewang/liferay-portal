@@ -38,70 +38,6 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	 */
 
 	/**
-	* Caches the shopping order in the entity cache if it is enabled.
-	*
-	* @param shoppingOrder the shopping order
-	*/
-	public void cacheResult(
-		com.liferay.portlet.shopping.model.ShoppingOrder shoppingOrder);
-
-	/**
-	* Caches the shopping orders in the entity cache if it is enabled.
-	*
-	* @param shoppingOrders the shopping orders
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.shopping.model.ShoppingOrder> shoppingOrders);
-
-	/**
-	* Creates a new shopping order with the primary key. Does not add the shopping order to the database.
-	*
-	* @param orderId the primary key for the new shopping order
-	* @return the new shopping order
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder create(long orderId);
-
-	/**
-	* Removes the shopping order with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param orderId the primary key of the shopping order
-	* @return the shopping order that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder remove(long orderId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchOrderException;
-
-	public com.liferay.portlet.shopping.model.ShoppingOrder updateImpl(
-		com.liferay.portlet.shopping.model.ShoppingOrder shoppingOrder)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the shopping order with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
-	*
-	* @param orderId the primary key of the shopping order
-	* @return the shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder findByPrimaryKey(
-		long orderId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchOrderException;
-
-	/**
-	* Returns the shopping order with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param orderId the primary key of the shopping order
-	* @return the shopping order, or <code>null</code> if a shopping order with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByPrimaryKey(
-		long orderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the shopping orders where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -284,6 +220,35 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 			com.liferay.portlet.shopping.NoSuchOrderException;
 
 	/**
+	* Removes all the shopping orders where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of shopping orders where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching shopping orders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of shopping orders that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching shopping orders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the shopping order where number = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
 	*
 	* @param number the number
@@ -320,6 +285,28 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the shopping order where number = &#63; from the database.
+	*
+	* @param number the number
+	* @return the shopping order that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder removeByNumber(
+		java.lang.String number)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the number of shopping orders where number = &#63;.
+	*
+	* @param number the number
+	* @return the number of matching shopping orders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByNumber(java.lang.String number)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the shopping order where ppTxnId = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
 	*
 	* @param ppTxnId the pp txn ID
@@ -353,6 +340,28 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	*/
 	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByPPTxnId(
 		java.lang.String ppTxnId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the shopping order where ppTxnId = &#63; from the database.
+	*
+	* @param ppTxnId the pp txn ID
+	* @return the shopping order that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder removeByPPTxnId(
+		java.lang.String ppTxnId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the number of shopping orders where ppTxnId = &#63;.
+	*
+	* @param ppTxnId the pp txn ID
+	* @return the number of matching shopping orders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByPPTxnId(java.lang.String ppTxnId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -566,6 +575,108 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 			com.liferay.portlet.shopping.NoSuchOrderException;
 
 	/**
+	* Removes all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_U_PPPS(long groupId, long userId,
+		java.lang.String ppPaymentStatus)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @return the number of matching shopping orders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_U_PPPS(long groupId, long userId,
+		java.lang.String ppPaymentStatus)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of shopping orders that the user has permission to view where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @return the number of matching shopping orders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_U_PPPS(long groupId, long userId,
+		java.lang.String ppPaymentStatus)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the shopping order in the entity cache if it is enabled.
+	*
+	* @param shoppingOrder the shopping order
+	*/
+	public void cacheResult(
+		com.liferay.portlet.shopping.model.ShoppingOrder shoppingOrder);
+
+	/**
+	* Caches the shopping orders in the entity cache if it is enabled.
+	*
+	* @param shoppingOrders the shopping orders
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.shopping.model.ShoppingOrder> shoppingOrders);
+
+	/**
+	* Creates a new shopping order with the primary key. Does not add the shopping order to the database.
+	*
+	* @param orderId the primary key for the new shopping order
+	* @return the new shopping order
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder create(long orderId);
+
+	/**
+	* Removes the shopping order with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param orderId the primary key of the shopping order
+	* @return the shopping order that was removed
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder remove(long orderId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	public com.liferay.portlet.shopping.model.ShoppingOrder updateImpl(
+		com.liferay.portlet.shopping.model.ShoppingOrder shoppingOrder)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the shopping order with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
+	*
+	* @param orderId the primary key of the shopping order
+	* @return the shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByPrimaryKey(
+		long orderId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the shopping order with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param orderId the primary key of the shopping order
+	* @return the shopping order, or <code>null</code> if a shopping order with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByPrimaryKey(
+		long orderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the shopping orders.
 	*
 	* @return the shopping orders
@@ -609,122 +720,11 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the shopping orders where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the shopping order where number = &#63; from the database.
-	*
-	* @param number the number
-	* @return the shopping order that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder removeByNumber(
-		java.lang.String number)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchOrderException;
-
-	/**
-	* Removes the shopping order where ppTxnId = &#63; from the database.
-	*
-	* @param ppTxnId the pp txn ID
-	* @return the shopping order that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder removeByPPTxnId(
-		java.lang.String ppTxnId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchOrderException;
-
-	/**
-	* Removes all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param ppPaymentStatus the pp payment status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_U_PPPS(long groupId, long userId,
-		java.lang.String ppPaymentStatus)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the shopping orders from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping orders where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching shopping orders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping orders that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching shopping orders that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping orders where number = &#63;.
-	*
-	* @param number the number
-	* @return the number of matching shopping orders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByNumber(java.lang.String number)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping orders where ppTxnId = &#63;.
-	*
-	* @param ppTxnId the pp txn ID
-	* @return the number of matching shopping orders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByPPTxnId(java.lang.String ppTxnId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param ppPaymentStatus the pp payment status
-	* @return the number of matching shopping orders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_U_PPPS(long groupId, long userId,
-		java.lang.String ppPaymentStatus)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping orders that the user has permission to view where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param ppPaymentStatus the pp payment status
-	* @return the number of matching shopping orders that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_U_PPPS(long groupId, long userId,
-		java.lang.String ppPaymentStatus)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

@@ -36,67 +36,6 @@ public interface ContactPersistence extends BasePersistence<Contact> {
 	 */
 
 	/**
-	* Caches the contact in the entity cache if it is enabled.
-	*
-	* @param contact the contact
-	*/
-	public void cacheResult(com.liferay.portal.model.Contact contact);
-
-	/**
-	* Caches the contacts in the entity cache if it is enabled.
-	*
-	* @param contacts the contacts
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.Contact> contacts);
-
-	/**
-	* Creates a new contact with the primary key. Does not add the contact to the database.
-	*
-	* @param contactId the primary key for the new contact
-	* @return the new contact
-	*/
-	public com.liferay.portal.model.Contact create(long contactId);
-
-	/**
-	* Removes the contact with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param contactId the primary key of the contact
-	* @return the contact that was removed
-	* @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Contact remove(long contactId)
-		throws com.liferay.portal.NoSuchContactException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.Contact updateImpl(
-		com.liferay.portal.model.Contact contact)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the contact with the primary key or throws a {@link com.liferay.portal.NoSuchContactException} if it could not be found.
-	*
-	* @param contactId the primary key of the contact
-	* @return the contact
-	* @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Contact findByPrimaryKey(long contactId)
-		throws com.liferay.portal.NoSuchContactException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the contact with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param contactId the primary key of the contact
-	* @return the contact, or <code>null</code> if a contact with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Contact fetchByPrimaryKey(long contactId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the contacts where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -216,6 +155,25 @@ public interface ContactPersistence extends BasePersistence<Contact> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the contacts where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of contacts where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching contacts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the contacts where accountId = &#63;.
 	*
 	* @param accountId the account ID
@@ -333,6 +291,25 @@ public interface ContactPersistence extends BasePersistence<Contact> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchContactException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the contacts where accountId = &#63; from the database.
+	*
+	* @param accountId the account ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByAccountId(long accountId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of contacts where accountId = &#63;.
+	*
+	* @param accountId the account ID
+	* @return the number of matching contacts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByAccountId(long accountId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the contacts where classNameId = &#63; and classPK = &#63;.
@@ -462,6 +439,88 @@ public interface ContactPersistence extends BasePersistence<Contact> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the contacts where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of contacts where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching contacts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the contact in the entity cache if it is enabled.
+	*
+	* @param contact the contact
+	*/
+	public void cacheResult(com.liferay.portal.model.Contact contact);
+
+	/**
+	* Caches the contacts in the entity cache if it is enabled.
+	*
+	* @param contacts the contacts
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.Contact> contacts);
+
+	/**
+	* Creates a new contact with the primary key. Does not add the contact to the database.
+	*
+	* @param contactId the primary key for the new contact
+	* @return the new contact
+	*/
+	public com.liferay.portal.model.Contact create(long contactId);
+
+	/**
+	* Removes the contact with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param contactId the primary key of the contact
+	* @return the contact that was removed
+	* @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Contact remove(long contactId)
+		throws com.liferay.portal.NoSuchContactException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.Contact updateImpl(
+		com.liferay.portal.model.Contact contact)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the contact with the primary key or throws a {@link com.liferay.portal.NoSuchContactException} if it could not be found.
+	*
+	* @param contactId the primary key of the contact
+	* @return the contact
+	* @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Contact findByPrimaryKey(long contactId)
+		throws com.liferay.portal.NoSuchContactException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the contact with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param contactId the primary key of the contact
+	* @return the contact, or <code>null</code> if a contact with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Contact fetchByPrimaryKey(long contactId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the contacts.
 	*
 	* @return the contacts
@@ -504,70 +563,11 @@ public interface ContactPersistence extends BasePersistence<Contact> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the contacts where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the contacts where accountId = &#63; from the database.
-	*
-	* @param accountId the account ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByAccountId(long accountId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the contacts where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the contacts from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of contacts where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching contacts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of contacts where accountId = &#63;.
-	*
-	* @param accountId the account ID
-	* @return the number of matching contacts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByAccountId(long accountId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of contacts where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching contacts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_C(long classNameId, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

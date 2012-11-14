@@ -111,86 +111,6 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
-	* Caches the document library file shortcut in the entity cache if it is enabled.
-	*
-	* @param dlFileShortcut the document library file shortcut
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.documentlibrary.model.DLFileShortcut dlFileShortcut) {
-		getPersistence().cacheResult(dlFileShortcut);
-	}
-
-	/**
-	* Caches the document library file shortcuts in the entity cache if it is enabled.
-	*
-	* @param dlFileShortcuts the document library file shortcuts
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.documentlibrary.model.DLFileShortcut> dlFileShortcuts) {
-		getPersistence().cacheResult(dlFileShortcuts);
-	}
-
-	/**
-	* Creates a new document library file shortcut with the primary key. Does not add the document library file shortcut to the database.
-	*
-	* @param fileShortcutId the primary key for the new document library file shortcut
-	* @return the new document library file shortcut
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut create(
-		long fileShortcutId) {
-		return getPersistence().create(fileShortcutId);
-	}
-
-	/**
-	* Removes the document library file shortcut with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param fileShortcutId the primary key of the document library file shortcut
-	* @return the document library file shortcut that was removed
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a document library file shortcut with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut remove(
-		long fileShortcutId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence().remove(fileShortcutId);
-	}
-
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut updateImpl(
-		com.liferay.portlet.documentlibrary.model.DLFileShortcut dlFileShortcut)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(dlFileShortcut);
-	}
-
-	/**
-	* Returns the document library file shortcut with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileShortcutException} if it could not be found.
-	*
-	* @param fileShortcutId the primary key of the document library file shortcut
-	* @return the document library file shortcut
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a document library file shortcut with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByPrimaryKey(
-		long fileShortcutId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence().findByPrimaryKey(fileShortcutId);
-	}
-
-	/**
-	* Returns the document library file shortcut with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param fileShortcutId the primary key of the document library file shortcut
-	* @return the document library file shortcut, or <code>null</code> if a document library file shortcut with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByPrimaryKey(
-		long fileShortcutId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(fileShortcutId);
-	}
-
-	/**
 	* Returns all the document library file shortcuts where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -328,6 +248,29 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Removes all the document library file shortcuts where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of document library file shortcuts where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching document library file shortcuts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
+	}
+
+	/**
 	* Returns the document library file shortcut where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileShortcutException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -370,6 +313,34 @@ public class DLFileShortcutUtil {
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUUID_G(uuid, groupId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the document library file shortcut where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the document library file shortcut that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().removeByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns the number of document library file shortcuts where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching document library file shortcuts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUUID_G(java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUUID_G(uuid, groupId);
 	}
 
 	/**
@@ -523,6 +494,31 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Removes all the document library file shortcuts where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns the number of document library file shortcuts where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching document library file shortcuts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid_C(uuid, companyId);
+	}
+
+	/**
 	* Returns all the document library file shortcuts where toFileEntryId = &#63;.
 	*
 	* @param toFileEntryId the to file entry ID
@@ -663,6 +659,29 @@ public class DLFileShortcutUtil {
 		return getPersistence()
 				   .findByToFileEntryId_PrevAndNext(fileShortcutId,
 			toFileEntryId, orderByComparator);
+	}
+
+	/**
+	* Removes all the document library file shortcuts where toFileEntryId = &#63; from the database.
+	*
+	* @param toFileEntryId the to file entry ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByToFileEntryId(long toFileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByToFileEntryId(toFileEntryId);
+	}
+
+	/**
+	* Returns the number of document library file shortcuts where toFileEntryId = &#63;.
+	*
+	* @param toFileEntryId the to file entry ID
+	* @return the number of matching document library file shortcuts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByToFileEntryId(long toFileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByToFileEntryId(toFileEntryId);
 	}
 
 	/**
@@ -892,6 +911,44 @@ public class DLFileShortcutUtil {
 		return getPersistence()
 				   .filterFindByG_F_PrevAndNext(fileShortcutId, groupId,
 			folderId, orderByComparator);
+	}
+
+	/**
+	* Removes all the document library file shortcuts where groupId = &#63; and folderId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_F(long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_F(groupId, folderId);
+	}
+
+	/**
+	* Returns the number of document library file shortcuts where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the number of matching document library file shortcuts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_F(long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_F(groupId, folderId);
+	}
+
+	/**
+	* Returns the number of document library file shortcuts that the user has permission to view where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the number of matching document library file shortcuts that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_F(long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_F(groupId, folderId);
 	}
 
 	/**
@@ -1140,6 +1197,48 @@ public class DLFileShortcutUtil {
 		return getPersistence()
 				   .filterFindByG_F_A_PrevAndNext(fileShortcutId, groupId,
 			folderId, active, orderByComparator);
+	}
+
+	/**
+	* Removes all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_F_A(long groupId, long folderId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_F_A(groupId, folderId, active);
+	}
+
+	/**
+	* Returns the number of document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @return the number of matching document library file shortcuts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_F_A(long groupId, long folderId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_F_A(groupId, folderId, active);
+	}
+
+	/**
+	* Returns the number of document library file shortcuts that the user has permission to view where groupId = &#63; and folderId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @return the number of matching document library file shortcuts that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_F_A(long groupId, long folderId,
+		boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_F_A(groupId, folderId, active);
 	}
 
 	/**
@@ -1409,6 +1508,134 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
+	* Removes all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_F_A_S(long groupId, long folderId,
+		boolean active, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_F_A_S(groupId, folderId, active, status);
+	}
+
+	/**
+	* Returns the number of document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @return the number of matching document library file shortcuts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_F_A_S(long groupId, long folderId,
+		boolean active, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_F_A_S(groupId, folderId, active, status);
+	}
+
+	/**
+	* Returns the number of document library file shortcuts that the user has permission to view where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param active the active
+	* @param status the status
+	* @return the number of matching document library file shortcuts that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_F_A_S(long groupId, long folderId,
+		boolean active, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_F_A_S(groupId, folderId, active, status);
+	}
+
+	/**
+	* Caches the document library file shortcut in the entity cache if it is enabled.
+	*
+	* @param dlFileShortcut the document library file shortcut
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.documentlibrary.model.DLFileShortcut dlFileShortcut) {
+		getPersistence().cacheResult(dlFileShortcut);
+	}
+
+	/**
+	* Caches the document library file shortcuts in the entity cache if it is enabled.
+	*
+	* @param dlFileShortcuts the document library file shortcuts
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.documentlibrary.model.DLFileShortcut> dlFileShortcuts) {
+		getPersistence().cacheResult(dlFileShortcuts);
+	}
+
+	/**
+	* Creates a new document library file shortcut with the primary key. Does not add the document library file shortcut to the database.
+	*
+	* @param fileShortcutId the primary key for the new document library file shortcut
+	* @return the new document library file shortcut
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut create(
+		long fileShortcutId) {
+		return getPersistence().create(fileShortcutId);
+	}
+
+	/**
+	* Removes the document library file shortcut with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param fileShortcutId the primary key of the document library file shortcut
+	* @return the document library file shortcut that was removed
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a document library file shortcut with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut remove(
+		long fileShortcutId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().remove(fileShortcutId);
+	}
+
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut updateImpl(
+		com.liferay.portlet.documentlibrary.model.DLFileShortcut dlFileShortcut)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(dlFileShortcut);
+	}
+
+	/**
+	* Returns the document library file shortcut with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileShortcutException} if it could not be found.
+	*
+	* @param fileShortcutId the primary key of the document library file shortcut
+	* @return the document library file shortcut
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileShortcutException if a document library file shortcut with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut findByPrimaryKey(
+		long fileShortcutId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
+		return getPersistence().findByPrimaryKey(fileShortcutId);
+	}
+
+	/**
+	* Returns the document library file shortcut with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param fileShortcutId the primary key of the document library file shortcut
+	* @return the document library file shortcut, or <code>null</code> if a document library file shortcut with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut fetchByPrimaryKey(
+		long fileShortcutId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(fileShortcutId);
+	}
+
+	/**
 	* Returns all the document library file shortcuts.
 	*
 	* @return the document library file shortcuts
@@ -1458,95 +1685,6 @@ public class DLFileShortcutUtil {
 	}
 
 	/**
-	* Removes all the document library file shortcuts where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes the document library file shortcut where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the document library file shortcut that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileShortcut removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileShortcutException {
-		return getPersistence().removeByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Removes all the document library file shortcuts where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Removes all the document library file shortcuts where toFileEntryId = &#63; from the database.
-	*
-	* @param toFileEntryId the to file entry ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByToFileEntryId(long toFileEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByToFileEntryId(toFileEntryId);
-	}
-
-	/**
-	* Removes all the document library file shortcuts where groupId = &#63; and folderId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_F(long groupId, long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_F(groupId, folderId);
-	}
-
-	/**
-	* Removes all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_F_A(long groupId, long folderId, boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_F_A(groupId, folderId, active);
-	}
-
-	/**
-	* Removes all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_F_A_S(long groupId, long folderId,
-		boolean active, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_F_A_S(groupId, folderId, active, status);
-	}
-
-	/**
 	* Removes all the document library file shortcuts from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1554,144 +1692,6 @@ public class DLFileShortcutUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of document library file shortcuts where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching document library file shortcuts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of document library file shortcuts where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching document library file shortcuts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Returns the number of document library file shortcuts where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching document library file shortcuts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Returns the number of document library file shortcuts where toFileEntryId = &#63;.
-	*
-	* @param toFileEntryId the to file entry ID
-	* @return the number of matching document library file shortcuts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByToFileEntryId(long toFileEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByToFileEntryId(toFileEntryId);
-	}
-
-	/**
-	* Returns the number of document library file shortcuts where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @return the number of matching document library file shortcuts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_F(long groupId, long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_F(groupId, folderId);
-	}
-
-	/**
-	* Returns the number of document library file shortcuts that the user has permission to view where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @return the number of matching document library file shortcuts that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_F(long groupId, long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_F(groupId, folderId);
-	}
-
-	/**
-	* Returns the number of document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @return the number of matching document library file shortcuts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_F_A(long groupId, long folderId, boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_F_A(groupId, folderId, active);
-	}
-
-	/**
-	* Returns the number of document library file shortcuts that the user has permission to view where groupId = &#63; and folderId = &#63; and active = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @return the number of matching document library file shortcuts that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_F_A(long groupId, long folderId,
-		boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_F_A(groupId, folderId, active);
-	}
-
-	/**
-	* Returns the number of document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param status the status
-	* @return the number of matching document library file shortcuts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_F_A_S(long groupId, long folderId,
-		boolean active, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_F_A_S(groupId, folderId, active, status);
-	}
-
-	/**
-	* Returns the number of document library file shortcuts that the user has permission to view where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param active the active
-	* @param status the status
-	* @return the number of matching document library file shortcuts that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_F_A_S(long groupId, long folderId,
-		boolean active, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_F_A_S(groupId, folderId, active, status);
 	}
 
 	/**

@@ -38,72 +38,6 @@ public interface JournalArticleImagePersistence extends BasePersistence<JournalA
 	 */
 
 	/**
-	* Caches the journal article image in the entity cache if it is enabled.
-	*
-	* @param journalArticleImage the journal article image
-	*/
-	public void cacheResult(
-		com.liferay.portlet.journal.model.JournalArticleImage journalArticleImage);
-
-	/**
-	* Caches the journal article images in the entity cache if it is enabled.
-	*
-	* @param journalArticleImages the journal article images
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.journal.model.JournalArticleImage> journalArticleImages);
-
-	/**
-	* Creates a new journal article image with the primary key. Does not add the journal article image to the database.
-	*
-	* @param articleImageId the primary key for the new journal article image
-	* @return the new journal article image
-	*/
-	public com.liferay.portlet.journal.model.JournalArticleImage create(
-		long articleImageId);
-
-	/**
-	* Removes the journal article image with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param articleImageId the primary key of the journal article image
-	* @return the journal article image that was removed
-	* @throws com.liferay.portlet.journal.NoSuchArticleImageException if a journal article image with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalArticleImage remove(
-		long articleImageId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleImageException;
-
-	public com.liferay.portlet.journal.model.JournalArticleImage updateImpl(
-		com.liferay.portlet.journal.model.JournalArticleImage journalArticleImage)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the journal article image with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchArticleImageException} if it could not be found.
-	*
-	* @param articleImageId the primary key of the journal article image
-	* @return the journal article image
-	* @throws com.liferay.portlet.journal.NoSuchArticleImageException if a journal article image with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalArticleImage findByPrimaryKey(
-		long articleImageId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleImageException;
-
-	/**
-	* Returns the journal article image with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param articleImageId the primary key of the journal article image
-	* @return the journal article image, or <code>null</code> if a journal article image with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalArticleImage fetchByPrimaryKey(
-		long articleImageId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the journal article images where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -223,6 +157,25 @@ public interface JournalArticleImagePersistence extends BasePersistence<JournalA
 			com.liferay.portlet.journal.NoSuchArticleImageException;
 
 	/**
+	* Removes all the journal article images where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal article images where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching journal article images
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal article images where tempImage = &#63;.
 	*
 	* @param tempImage the temp image
@@ -340,6 +293,25 @@ public interface JournalArticleImagePersistence extends BasePersistence<JournalA
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleImageException;
+
+	/**
+	* Removes all the journal article images where tempImage = &#63; from the database.
+	*
+	* @param tempImage the temp image
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByTempImage(boolean tempImage)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal article images where tempImage = &#63;.
+	*
+	* @param tempImage the temp image
+	* @return the number of matching journal article images
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByTempImage(boolean tempImage)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal article images where groupId = &#63; and articleId = &#63; and version = &#63;.
@@ -479,6 +451,31 @@ public interface JournalArticleImagePersistence extends BasePersistence<JournalA
 			com.liferay.portlet.journal.NoSuchArticleImageException;
 
 	/**
+	* Removes all the journal article images where groupId = &#63; and articleId = &#63; and version = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param version the version
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_A_V(long groupId, java.lang.String articleId,
+		double version)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal article images where groupId = &#63; and articleId = &#63; and version = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param version the version
+	* @return the number of matching journal article images
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_A_V(long groupId, java.lang.String articleId,
+		double version)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the journal article image where groupId = &#63; and articleId = &#63; and version = &#63; and elInstanceId = &#63; and elName = &#63; and languageId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchArticleImageException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -536,6 +533,108 @@ public interface JournalArticleImagePersistence extends BasePersistence<JournalA
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the journal article image where groupId = &#63; and articleId = &#63; and version = &#63; and elInstanceId = &#63; and elName = &#63; and languageId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param version the version
+	* @param elInstanceId the el instance ID
+	* @param elName the el name
+	* @param languageId the language ID
+	* @return the journal article image that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalArticleImage removeByG_A_V_E_E_L(
+		long groupId, java.lang.String articleId, double version,
+		java.lang.String elInstanceId, java.lang.String elName,
+		java.lang.String languageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleImageException;
+
+	/**
+	* Returns the number of journal article images where groupId = &#63; and articleId = &#63; and version = &#63; and elInstanceId = &#63; and elName = &#63; and languageId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param version the version
+	* @param elInstanceId the el instance ID
+	* @param elName the el name
+	* @param languageId the language ID
+	* @return the number of matching journal article images
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_A_V_E_E_L(long groupId, java.lang.String articleId,
+		double version, java.lang.String elInstanceId, java.lang.String elName,
+		java.lang.String languageId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the journal article image in the entity cache if it is enabled.
+	*
+	* @param journalArticleImage the journal article image
+	*/
+	public void cacheResult(
+		com.liferay.portlet.journal.model.JournalArticleImage journalArticleImage);
+
+	/**
+	* Caches the journal article images in the entity cache if it is enabled.
+	*
+	* @param journalArticleImages the journal article images
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.journal.model.JournalArticleImage> journalArticleImages);
+
+	/**
+	* Creates a new journal article image with the primary key. Does not add the journal article image to the database.
+	*
+	* @param articleImageId the primary key for the new journal article image
+	* @return the new journal article image
+	*/
+	public com.liferay.portlet.journal.model.JournalArticleImage create(
+		long articleImageId);
+
+	/**
+	* Removes the journal article image with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param articleImageId the primary key of the journal article image
+	* @return the journal article image that was removed
+	* @throws com.liferay.portlet.journal.NoSuchArticleImageException if a journal article image with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalArticleImage remove(
+		long articleImageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleImageException;
+
+	public com.liferay.portlet.journal.model.JournalArticleImage updateImpl(
+		com.liferay.portlet.journal.model.JournalArticleImage journalArticleImage)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the journal article image with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchArticleImageException} if it could not be found.
+	*
+	* @param articleImageId the primary key of the journal article image
+	* @return the journal article image
+	* @throws com.liferay.portlet.journal.NoSuchArticleImageException if a journal article image with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalArticleImage findByPrimaryKey(
+		long articleImageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleImageException;
+
+	/**
+	* Returns the journal article image with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param articleImageId the primary key of the journal article image
+	* @return the journal article image, or <code>null</code> if a journal article image with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalArticleImage fetchByPrimaryKey(
+		long articleImageId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal article images.
 	*
 	* @return the journal article images
@@ -579,110 +678,11 @@ public interface JournalArticleImagePersistence extends BasePersistence<JournalA
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the journal article images where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal article images where tempImage = &#63; from the database.
-	*
-	* @param tempImage the temp image
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByTempImage(boolean tempImage)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal article images where groupId = &#63; and articleId = &#63; and version = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param version the version
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_A_V(long groupId, java.lang.String articleId,
-		double version)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the journal article image where groupId = &#63; and articleId = &#63; and version = &#63; and elInstanceId = &#63; and elName = &#63; and languageId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param version the version
-	* @param elInstanceId the el instance ID
-	* @param elName the el name
-	* @param languageId the language ID
-	* @return the journal article image that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalArticleImage removeByG_A_V_E_E_L(
-		long groupId, java.lang.String articleId, double version,
-		java.lang.String elInstanceId, java.lang.String elName,
-		java.lang.String languageId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleImageException;
-
-	/**
 	* Removes all the journal article images from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal article images where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching journal article images
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal article images where tempImage = &#63;.
-	*
-	* @param tempImage the temp image
-	* @return the number of matching journal article images
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByTempImage(boolean tempImage)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal article images where groupId = &#63; and articleId = &#63; and version = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param version the version
-	* @return the number of matching journal article images
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_A_V(long groupId, java.lang.String articleId,
-		double version)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal article images where groupId = &#63; and articleId = &#63; and version = &#63; and elInstanceId = &#63; and elName = &#63; and languageId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param version the version
-	* @param elInstanceId the el instance ID
-	* @param elName the el name
-	* @param languageId the language ID
-	* @return the number of matching journal article images
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_A_V_E_E_L(long groupId, java.lang.String articleId,
-		double version, java.lang.String elInstanceId, java.lang.String elName,
-		java.lang.String languageId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

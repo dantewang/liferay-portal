@@ -83,6 +83,15 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+			UserGroupModelImpl.FINDER_CACHE_ENABLED, UserGroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+			UserGroupModelImpl.FINDER_CACHE_ENABLED, UserGroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+			UserGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
 		new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupModelImpl.FINDER_CACHE_ENABLED, UserGroupImpl.class,
@@ -103,508 +112,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 			UserGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_P = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED, UserGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_P",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED, UserGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_P",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			UserGroupModelImpl.COMPANYID_COLUMN_BITMASK |
-			UserGroupModelImpl.PARENTUSERGROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_N = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED, UserGroupImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
-			new String[] { Long.class.getName(), String.class.getName() },
-			UserGroupModelImpl.COMPANYID_COLUMN_BITMASK |
-			UserGroupModelImpl.NAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_N",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED, UserGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED, UserGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the user group in the entity cache if it is enabled.
-	 *
-	 * @param userGroup the user group
-	 */
-	public void cacheResult(UserGroup userGroup) {
-		EntityCacheUtil.putResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupImpl.class, userGroup.getPrimaryKey(), userGroup);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
-			new Object[] {
-				Long.valueOf(userGroup.getCompanyId()),
-				
-			userGroup.getName()
-			}, userGroup);
-
-		userGroup.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the user groups in the entity cache if it is enabled.
-	 *
-	 * @param userGroups the user groups
-	 */
-	public void cacheResult(List<UserGroup> userGroups) {
-		for (UserGroup userGroup : userGroups) {
-			if (EntityCacheUtil.getResult(
-						UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-						UserGroupImpl.class, userGroup.getPrimaryKey()) == null) {
-				cacheResult(userGroup);
-			}
-			else {
-				userGroup.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all user groups.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(UserGroupImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(UserGroupImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the user group.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(UserGroup userGroup) {
-		EntityCacheUtil.removeResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupImpl.class, userGroup.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(userGroup);
-	}
-
-	@Override
-	public void clearCache(List<UserGroup> userGroups) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (UserGroup userGroup : userGroups) {
-			EntityCacheUtil.removeResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-				UserGroupImpl.class, userGroup.getPrimaryKey());
-
-			clearUniqueFindersCache(userGroup);
-		}
-	}
-
-	protected void clearUniqueFindersCache(UserGroup userGroup) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
-			new Object[] {
-				Long.valueOf(userGroup.getCompanyId()),
-				
-			userGroup.getName()
-			});
-	}
-
-	/**
-	 * Creates a new user group with the primary key. Does not add the user group to the database.
-	 *
-	 * @param userGroupId the primary key for the new user group
-	 * @return the new user group
-	 */
-	public UserGroup create(long userGroupId) {
-		UserGroup userGroup = new UserGroupImpl();
-
-		userGroup.setNew(true);
-		userGroup.setPrimaryKey(userGroupId);
-
-		return userGroup;
-	}
-
-	/**
-	 * Removes the user group with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param userGroupId the primary key of the user group
-	 * @return the user group that was removed
-	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroup remove(long userGroupId)
-		throws NoSuchUserGroupException, SystemException {
-		return remove(Long.valueOf(userGroupId));
-	}
-
-	/**
-	 * Removes the user group with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the user group
-	 * @return the user group that was removed
-	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public UserGroup remove(Serializable primaryKey)
-		throws NoSuchUserGroupException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			UserGroup userGroup = (UserGroup)session.get(UserGroupImpl.class,
-					primaryKey);
-
-			if (userGroup == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchUserGroupException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(userGroup);
-		}
-		catch (NoSuchUserGroupException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected UserGroup removeImpl(UserGroup userGroup)
-		throws SystemException {
-		userGroup = toUnwrappedModel(userGroup);
-
-		try {
-			clearGroups.clear(userGroup.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
-		}
-
-		try {
-			clearTeams.clear(userGroup.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
-		}
-
-		try {
-			clearUsers.clear(userGroup.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(userGroup)) {
-				userGroup = (UserGroup)session.get(UserGroupImpl.class,
-						userGroup.getPrimaryKeyObj());
-			}
-
-			if (userGroup != null) {
-				session.delete(userGroup);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (userGroup != null) {
-			clearCache(userGroup);
-		}
-
-		return userGroup;
-	}
-
-	@Override
-	public UserGroup updateImpl(com.liferay.portal.model.UserGroup userGroup)
-		throws SystemException {
-		userGroup = toUnwrappedModel(userGroup);
-
-		boolean isNew = userGroup.isNew();
-
-		UserGroupModelImpl userGroupModelImpl = (UserGroupModelImpl)userGroup;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (userGroup.isNew()) {
-				session.save(userGroup);
-
-				userGroup.setNew(false);
-			}
-			else {
-				session.merge(userGroup);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !UserGroupModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((userGroupModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(userGroupModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(userGroupModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((userGroupModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(userGroupModelImpl.getOriginalCompanyId()),
-						Long.valueOf(userGroupModelImpl.getOriginalParentUserGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(userGroupModelImpl.getCompanyId()),
-						Long.valueOf(userGroupModelImpl.getParentUserGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupImpl.class, userGroup.getPrimaryKey(), userGroup);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
-				new Object[] {
-					Long.valueOf(userGroup.getCompanyId()),
-					
-				userGroup.getName()
-				}, userGroup);
-		}
-		else {
-			if ((userGroupModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_C_N.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(userGroupModelImpl.getOriginalCompanyId()),
-						
-						userGroupModelImpl.getOriginalName()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_N, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
-					new Object[] {
-						Long.valueOf(userGroup.getCompanyId()),
-						
-					userGroup.getName()
-					}, userGroup);
-			}
-		}
-
-		return userGroup;
-	}
-
-	protected UserGroup toUnwrappedModel(UserGroup userGroup) {
-		if (userGroup instanceof UserGroupImpl) {
-			return userGroup;
-		}
-
-		UserGroupImpl userGroupImpl = new UserGroupImpl();
-
-		userGroupImpl.setNew(userGroup.isNew());
-		userGroupImpl.setPrimaryKey(userGroup.getPrimaryKey());
-
-		userGroupImpl.setUserGroupId(userGroup.getUserGroupId());
-		userGroupImpl.setCompanyId(userGroup.getCompanyId());
-		userGroupImpl.setParentUserGroupId(userGroup.getParentUserGroupId());
-		userGroupImpl.setName(userGroup.getName());
-		userGroupImpl.setDescription(userGroup.getDescription());
-		userGroupImpl.setAddedByLDAPImport(userGroup.isAddedByLDAPImport());
-
-		return userGroupImpl;
-	}
-
-	/**
-	 * Returns the user group with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the user group
-	 * @return the user group
-	 * @throws com.liferay.portal.NoSuchModelException if a user group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public UserGroup findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the user group with the primary key or throws a {@link com.liferay.portal.NoSuchUserGroupException} if it could not be found.
-	 *
-	 * @param userGroupId the primary key of the user group
-	 * @return the user group
-	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroup findByPrimaryKey(long userGroupId)
-		throws NoSuchUserGroupException, SystemException {
-		UserGroup userGroup = fetchByPrimaryKey(userGroupId);
-
-		if (userGroup == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + userGroupId);
-			}
-
-			throw new NoSuchUserGroupException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				userGroupId);
-		}
-
-		return userGroup;
-	}
-
-	/**
-	 * Returns the user group with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the user group
-	 * @return the user group, or <code>null</code> if a user group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public UserGroup fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the user group with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param userGroupId the primary key of the user group
-	 * @return the user group, or <code>null</code> if a user group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroup fetchByPrimaryKey(long userGroupId)
-		throws SystemException {
-		UserGroup userGroup = (UserGroup)EntityCacheUtil.getResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-				UserGroupImpl.class, userGroupId);
-
-		if (userGroup == _nullUserGroup) {
-			return null;
-		}
-
-		if (userGroup == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				userGroup = (UserGroup)session.get(UserGroupImpl.class,
-						Long.valueOf(userGroupId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (userGroup != null) {
-					cacheResult(userGroup);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-						UserGroupImpl.class, userGroupId, _nullUserGroup);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return userGroup;
-	}
 
 	/**
 	 * Returns all the user groups where companyId = &#63;.
@@ -1297,6 +804,139 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the user groups where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (UserGroup userGroup : findByCompanyId(companyId)) {
+			remove(userGroup);
+		}
+	}
+
+	/**
+	 * Returns the number of user groups where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching user groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_USERGROUP_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of user groups that the user has permission to view where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching user groups that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByCompanyId(long companyId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByCompanyId(companyId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_USERGROUP_WHERE);
+
+		query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				UserGroup.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(companyId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "userGroup.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_P = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+			UserGroupModelImpl.FINDER_CACHE_ENABLED, UserGroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+			UserGroupModelImpl.FINDER_CACHE_ENABLED, UserGroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_P",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			UserGroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserGroupModelImpl.PARENTUSERGROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+			UserGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_P",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the user groups where companyId = &#63; and parentUserGroupId = &#63;.
@@ -2035,6 +1675,145 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	}
 
 	/**
+	 * Removes all the user groups where companyId = &#63; and parentUserGroupId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param parentUserGroupId the parent user group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_P(long companyId, long parentUserGroupId)
+		throws SystemException {
+		for (UserGroup userGroup : findByC_P(companyId, parentUserGroupId)) {
+			remove(userGroup);
+		}
+	}
+
+	/**
+	 * Returns the number of user groups where companyId = &#63; and parentUserGroupId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param parentUserGroupId the parent user group ID
+	 * @return the number of matching user groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_P(long companyId, long parentUserGroupId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { companyId, parentUserGroupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_P,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_USERGROUP_WHERE);
+
+			query.append(_FINDER_COLUMN_C_P_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_P_PARENTUSERGROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(parentUserGroupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_P, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of user groups that the user has permission to view where companyId = &#63; and parentUserGroupId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param parentUserGroupId the parent user group ID
+	 * @return the number of matching user groups that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByC_P(long companyId, long parentUserGroupId)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByC_P(companyId, parentUserGroupId);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_USERGROUP_WHERE);
+
+		query.append(_FINDER_COLUMN_C_P_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_C_P_PARENTUSERGROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				UserGroup.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(companyId);
+
+			qPos.add(parentUserGroupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_C_P_COMPANYID_2 = "userGroup.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_P_PARENTUSERGROUPID_2 = "userGroup.parentUserGroupId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_C_N = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+			UserGroupModelImpl.FINDER_CACHE_ENABLED, UserGroupImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
+			new String[] { Long.class.getName(), String.class.getName() },
+			UserGroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserGroupModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+			UserGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_N",
+			new String[] { Long.class.getName(), String.class.getName() });
+
+	/**
 	 * Returns the user group where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchUserGroupException} if it could not be found.
 	 *
 	 * @param companyId the company ID
@@ -2198,6 +1977,561 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	}
 
 	/**
+	 * Removes the user group where companyId = &#63; and name = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @return the user group that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroup removeByC_N(long companyId, String name)
+		throws NoSuchUserGroupException, SystemException {
+		UserGroup userGroup = findByC_N(companyId, name);
+
+		return remove(userGroup);
+	}
+
+	/**
+	 * Returns the number of user groups where companyId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @return the number of matching user groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_N(long companyId, String name)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { companyId, name };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_N,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_USERGROUP_WHERE);
+
+			query.append(_FINDER_COLUMN_C_N_COMPANYID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_C_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_C_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_C_N_NAME_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_N, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_N_COMPANYID_2 = "userGroup.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_N_NAME_1 = "userGroup.name IS NULL";
+	private static final String _FINDER_COLUMN_C_N_NAME_2 = "userGroup.name = ?";
+	private static final String _FINDER_COLUMN_C_N_NAME_3 = "(userGroup.name IS NULL OR userGroup.name = ?)";
+
+	/**
+	 * Caches the user group in the entity cache if it is enabled.
+	 *
+	 * @param userGroup the user group
+	 */
+	public void cacheResult(UserGroup userGroup) {
+		EntityCacheUtil.putResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+			UserGroupImpl.class, userGroup.getPrimaryKey(), userGroup);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
+			new Object[] {
+				Long.valueOf(userGroup.getCompanyId()),
+				
+			userGroup.getName()
+			}, userGroup);
+
+		userGroup.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the user groups in the entity cache if it is enabled.
+	 *
+	 * @param userGroups the user groups
+	 */
+	public void cacheResult(List<UserGroup> userGroups) {
+		for (UserGroup userGroup : userGroups) {
+			if (EntityCacheUtil.getResult(
+						UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+						UserGroupImpl.class, userGroup.getPrimaryKey()) == null) {
+				cacheResult(userGroup);
+			}
+			else {
+				userGroup.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all user groups.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(UserGroupImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(UserGroupImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the user group.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(UserGroup userGroup) {
+		EntityCacheUtil.removeResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+			UserGroupImpl.class, userGroup.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(userGroup);
+	}
+
+	@Override
+	public void clearCache(List<UserGroup> userGroups) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (UserGroup userGroup : userGroups) {
+			EntityCacheUtil.removeResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+				UserGroupImpl.class, userGroup.getPrimaryKey());
+
+			clearUniqueFindersCache(userGroup);
+		}
+	}
+
+	protected void clearUniqueFindersCache(UserGroup userGroup) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
+			new Object[] {
+				Long.valueOf(userGroup.getCompanyId()),
+				
+			userGroup.getName()
+			});
+	}
+
+	/**
+	 * Creates a new user group with the primary key. Does not add the user group to the database.
+	 *
+	 * @param userGroupId the primary key for the new user group
+	 * @return the new user group
+	 */
+	public UserGroup create(long userGroupId) {
+		UserGroup userGroup = new UserGroupImpl();
+
+		userGroup.setNew(true);
+		userGroup.setPrimaryKey(userGroupId);
+
+		return userGroup;
+	}
+
+	/**
+	 * Removes the user group with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param userGroupId the primary key of the user group
+	 * @return the user group that was removed
+	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroup remove(long userGroupId)
+		throws NoSuchUserGroupException, SystemException {
+		return remove(Long.valueOf(userGroupId));
+	}
+
+	/**
+	 * Removes the user group with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the user group
+	 * @return the user group that was removed
+	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public UserGroup remove(Serializable primaryKey)
+		throws NoSuchUserGroupException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			UserGroup userGroup = (UserGroup)session.get(UserGroupImpl.class,
+					primaryKey);
+
+			if (userGroup == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchUserGroupException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(userGroup);
+		}
+		catch (NoSuchUserGroupException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected UserGroup removeImpl(UserGroup userGroup)
+		throws SystemException {
+		userGroup = toUnwrappedModel(userGroup);
+
+		try {
+			clearGroups.clear(userGroup.getPrimaryKey());
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME);
+		}
+
+		try {
+			clearTeams.clear(userGroup.getPrimaryKey());
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
+		}
+
+		try {
+			clearUsers.clear(userGroup.getPrimaryKey());
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			FinderCacheUtil.clearCache(UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(userGroup)) {
+				userGroup = (UserGroup)session.get(UserGroupImpl.class,
+						userGroup.getPrimaryKeyObj());
+			}
+
+			if (userGroup != null) {
+				session.delete(userGroup);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (userGroup != null) {
+			clearCache(userGroup);
+		}
+
+		return userGroup;
+	}
+
+	@Override
+	public UserGroup updateImpl(com.liferay.portal.model.UserGroup userGroup)
+		throws SystemException {
+		userGroup = toUnwrappedModel(userGroup);
+
+		boolean isNew = userGroup.isNew();
+
+		UserGroupModelImpl userGroupModelImpl = (UserGroupModelImpl)userGroup;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (userGroup.isNew()) {
+				session.save(userGroup);
+
+				userGroup.setNew(false);
+			}
+			else {
+				session.merge(userGroup);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !UserGroupModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((userGroupModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(userGroupModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(userGroupModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+
+			if ((userGroupModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(userGroupModelImpl.getOriginalCompanyId()),
+						Long.valueOf(userGroupModelImpl.getOriginalParentUserGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(userGroupModelImpl.getCompanyId()),
+						Long.valueOf(userGroupModelImpl.getParentUserGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+			UserGroupImpl.class, userGroup.getPrimaryKey(), userGroup);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
+				new Object[] {
+					Long.valueOf(userGroup.getCompanyId()),
+					
+				userGroup.getName()
+				}, userGroup);
+		}
+		else {
+			if ((userGroupModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_C_N.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(userGroupModelImpl.getOriginalCompanyId()),
+						
+						userGroupModelImpl.getOriginalName()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_N, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
+					new Object[] {
+						Long.valueOf(userGroup.getCompanyId()),
+						
+					userGroup.getName()
+					}, userGroup);
+			}
+		}
+
+		return userGroup;
+	}
+
+	protected UserGroup toUnwrappedModel(UserGroup userGroup) {
+		if (userGroup instanceof UserGroupImpl) {
+			return userGroup;
+		}
+
+		UserGroupImpl userGroupImpl = new UserGroupImpl();
+
+		userGroupImpl.setNew(userGroup.isNew());
+		userGroupImpl.setPrimaryKey(userGroup.getPrimaryKey());
+
+		userGroupImpl.setUserGroupId(userGroup.getUserGroupId());
+		userGroupImpl.setCompanyId(userGroup.getCompanyId());
+		userGroupImpl.setParentUserGroupId(userGroup.getParentUserGroupId());
+		userGroupImpl.setName(userGroup.getName());
+		userGroupImpl.setDescription(userGroup.getDescription());
+		userGroupImpl.setAddedByLDAPImport(userGroup.isAddedByLDAPImport());
+
+		return userGroupImpl;
+	}
+
+	/**
+	 * Returns the user group with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the user group
+	 * @return the user group
+	 * @throws com.liferay.portal.NoSuchModelException if a user group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public UserGroup findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the user group with the primary key or throws a {@link com.liferay.portal.NoSuchUserGroupException} if it could not be found.
+	 *
+	 * @param userGroupId the primary key of the user group
+	 * @return the user group
+	 * @throws com.liferay.portal.NoSuchUserGroupException if a user group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroup findByPrimaryKey(long userGroupId)
+		throws NoSuchUserGroupException, SystemException {
+		UserGroup userGroup = fetchByPrimaryKey(userGroupId);
+
+		if (userGroup == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + userGroupId);
+			}
+
+			throw new NoSuchUserGroupException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				userGroupId);
+		}
+
+		return userGroup;
+	}
+
+	/**
+	 * Returns the user group with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the user group
+	 * @return the user group, or <code>null</code> if a user group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public UserGroup fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the user group with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param userGroupId the primary key of the user group
+	 * @return the user group, or <code>null</code> if a user group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroup fetchByPrimaryKey(long userGroupId)
+		throws SystemException {
+		UserGroup userGroup = (UserGroup)EntityCacheUtil.getResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+				UserGroupImpl.class, userGroupId);
+
+		if (userGroup == _nullUserGroup) {
+			return null;
+		}
+
+		if (userGroup == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				userGroup = (UserGroup)session.get(UserGroupImpl.class,
+						Long.valueOf(userGroupId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (userGroup != null) {
+					cacheResult(userGroup);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+						UserGroupImpl.class, userGroupId, _nullUserGroup);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return userGroup;
+	}
+
+	/**
 	 * Returns all the user groups.
 	 *
 	 * @return the user groups
@@ -2313,47 +2647,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	}
 
 	/**
-	 * Removes all the user groups where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (UserGroup userGroup : findByCompanyId(companyId)) {
-			remove(userGroup);
-		}
-	}
-
-	/**
-	 * Removes all the user groups where companyId = &#63; and parentUserGroupId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param parentUserGroupId the parent user group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_P(long companyId, long parentUserGroupId)
-		throws SystemException {
-		for (UserGroup userGroup : findByC_P(companyId, parentUserGroupId)) {
-			remove(userGroup);
-		}
-	}
-
-	/**
-	 * Removes the user group where companyId = &#63; and name = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @return the user group that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroup removeByC_N(long companyId, String name)
-		throws NoSuchUserGroupException, SystemException {
-		UserGroup userGroup = findByC_N(companyId, name);
-
-		return remove(userGroup);
-	}
-
-	/**
 	 * Removes all the user groups from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2362,289 +2655,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 		for (UserGroup userGroup : findAll()) {
 			remove(userGroup);
 		}
-	}
-
-	/**
-	 * Returns the number of user groups where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching user groups
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_USERGROUP_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of user groups that the user has permission to view where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching user groups that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByCompanyId(long companyId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByCompanyId(companyId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_USERGROUP_WHERE);
-
-		query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				UserGroup.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(companyId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of user groups where companyId = &#63; and parentUserGroupId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param parentUserGroupId the parent user group ID
-	 * @return the number of matching user groups
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_P(long companyId, long parentUserGroupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, parentUserGroupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_P,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_USERGROUP_WHERE);
-
-			query.append(_FINDER_COLUMN_C_P_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_P_PARENTUSERGROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(parentUserGroupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_P, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of user groups that the user has permission to view where companyId = &#63; and parentUserGroupId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param parentUserGroupId the parent user group ID
-	 * @return the number of matching user groups that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByC_P(long companyId, long parentUserGroupId)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByC_P(companyId, parentUserGroupId);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_USERGROUP_WHERE);
-
-		query.append(_FINDER_COLUMN_C_P_COMPANYID_2);
-
-		query.append(_FINDER_COLUMN_C_P_PARENTUSERGROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				UserGroup.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(companyId);
-
-			qPos.add(parentUserGroupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of user groups where companyId = &#63; and name = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @return the number of matching user groups
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_N(long companyId, String name)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, name };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_N,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_USERGROUP_WHERE);
-
-			query.append(_FINDER_COLUMN_C_N_COMPANYID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_C_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_N_NAME_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_N, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -4771,13 +4781,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	private static final String _SQL_GETUSERS = "SELECT {User_.*} FROM User_ INNER JOIN Users_UserGroups ON (Users_UserGroups.userId = User_.userId) WHERE (Users_UserGroups.userGroupId = ?)";
 	private static final String _SQL_GETUSERSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM Users_UserGroups WHERE userGroupId = ?";
 	private static final String _SQL_CONTAINSUSER = "SELECT COUNT(*) AS COUNT_VALUE FROM Users_UserGroups WHERE userGroupId = ? AND userId = ?";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "userGroup.companyId = ?";
-	private static final String _FINDER_COLUMN_C_P_COMPANYID_2 = "userGroup.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_P_PARENTUSERGROUPID_2 = "userGroup.parentUserGroupId = ?";
-	private static final String _FINDER_COLUMN_C_N_COMPANYID_2 = "userGroup.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_N_NAME_1 = "userGroup.name IS NULL";
-	private static final String _FINDER_COLUMN_C_N_NAME_2 = "userGroup.name = ?";
-	private static final String _FINDER_COLUMN_C_N_NAME_3 = "(userGroup.name IS NULL OR userGroup.name = ?)";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "userGroup.userGroupId";
 	private static final String _FILTER_SQL_SELECT_USERGROUP_WHERE = "SELECT DISTINCT {userGroup.*} FROM UserGroup userGroup WHERE ";
 	private static final String _FILTER_SQL_SELECT_USERGROUP_NO_INLINE_DISTINCT_WHERE_1 =

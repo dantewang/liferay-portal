@@ -111,86 +111,6 @@ public class WorkflowInstanceLinkUtil {
 	}
 
 	/**
-	* Caches the workflow instance link in the entity cache if it is enabled.
-	*
-	* @param workflowInstanceLink the workflow instance link
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.WorkflowInstanceLink workflowInstanceLink) {
-		getPersistence().cacheResult(workflowInstanceLink);
-	}
-
-	/**
-	* Caches the workflow instance links in the entity cache if it is enabled.
-	*
-	* @param workflowInstanceLinks the workflow instance links
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.WorkflowInstanceLink> workflowInstanceLinks) {
-		getPersistence().cacheResult(workflowInstanceLinks);
-	}
-
-	/**
-	* Creates a new workflow instance link with the primary key. Does not add the workflow instance link to the database.
-	*
-	* @param workflowInstanceLinkId the primary key for the new workflow instance link
-	* @return the new workflow instance link
-	*/
-	public static com.liferay.portal.model.WorkflowInstanceLink create(
-		long workflowInstanceLinkId) {
-		return getPersistence().create(workflowInstanceLinkId);
-	}
-
-	/**
-	* Removes the workflow instance link with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param workflowInstanceLinkId the primary key of the workflow instance link
-	* @return the workflow instance link that was removed
-	* @throws com.liferay.portal.NoSuchWorkflowInstanceLinkException if a workflow instance link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.WorkflowInstanceLink remove(
-		long workflowInstanceLinkId)
-		throws com.liferay.portal.NoSuchWorkflowInstanceLinkException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(workflowInstanceLinkId);
-	}
-
-	public static com.liferay.portal.model.WorkflowInstanceLink updateImpl(
-		com.liferay.portal.model.WorkflowInstanceLink workflowInstanceLink)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(workflowInstanceLink);
-	}
-
-	/**
-	* Returns the workflow instance link with the primary key or throws a {@link com.liferay.portal.NoSuchWorkflowInstanceLinkException} if it could not be found.
-	*
-	* @param workflowInstanceLinkId the primary key of the workflow instance link
-	* @return the workflow instance link
-	* @throws com.liferay.portal.NoSuchWorkflowInstanceLinkException if a workflow instance link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.WorkflowInstanceLink findByPrimaryKey(
-		long workflowInstanceLinkId)
-		throws com.liferay.portal.NoSuchWorkflowInstanceLinkException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(workflowInstanceLinkId);
-	}
-
-	/**
-	* Returns the workflow instance link with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param workflowInstanceLinkId the primary key of the workflow instance link
-	* @return the workflow instance link, or <code>null</code> if a workflow instance link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.WorkflowInstanceLink fetchByPrimaryKey(
-		long workflowInstanceLinkId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(workflowInstanceLinkId);
-	}
-
-	/**
 	* Returns all the workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63;.
 	*
 	* @param groupId the group ID
@@ -368,6 +288,119 @@ public class WorkflowInstanceLinkUtil {
 	}
 
 	/**
+	* Removes all the workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C_C_C(long groupId, long companyId,
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByG_C_C_C(groupId, companyId, classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching workflow instance links
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C_C_C(long groupId, long companyId,
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByG_C_C_C(groupId, companyId, classNameId, classPK);
+	}
+
+	/**
+	* Caches the workflow instance link in the entity cache if it is enabled.
+	*
+	* @param workflowInstanceLink the workflow instance link
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.WorkflowInstanceLink workflowInstanceLink) {
+		getPersistence().cacheResult(workflowInstanceLink);
+	}
+
+	/**
+	* Caches the workflow instance links in the entity cache if it is enabled.
+	*
+	* @param workflowInstanceLinks the workflow instance links
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.WorkflowInstanceLink> workflowInstanceLinks) {
+		getPersistence().cacheResult(workflowInstanceLinks);
+	}
+
+	/**
+	* Creates a new workflow instance link with the primary key. Does not add the workflow instance link to the database.
+	*
+	* @param workflowInstanceLinkId the primary key for the new workflow instance link
+	* @return the new workflow instance link
+	*/
+	public static com.liferay.portal.model.WorkflowInstanceLink create(
+		long workflowInstanceLinkId) {
+		return getPersistence().create(workflowInstanceLinkId);
+	}
+
+	/**
+	* Removes the workflow instance link with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param workflowInstanceLinkId the primary key of the workflow instance link
+	* @return the workflow instance link that was removed
+	* @throws com.liferay.portal.NoSuchWorkflowInstanceLinkException if a workflow instance link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowInstanceLink remove(
+		long workflowInstanceLinkId)
+		throws com.liferay.portal.NoSuchWorkflowInstanceLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(workflowInstanceLinkId);
+	}
+
+	public static com.liferay.portal.model.WorkflowInstanceLink updateImpl(
+		com.liferay.portal.model.WorkflowInstanceLink workflowInstanceLink)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(workflowInstanceLink);
+	}
+
+	/**
+	* Returns the workflow instance link with the primary key or throws a {@link com.liferay.portal.NoSuchWorkflowInstanceLinkException} if it could not be found.
+	*
+	* @param workflowInstanceLinkId the primary key of the workflow instance link
+	* @return the workflow instance link
+	* @throws com.liferay.portal.NoSuchWorkflowInstanceLinkException if a workflow instance link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowInstanceLink findByPrimaryKey(
+		long workflowInstanceLinkId)
+		throws com.liferay.portal.NoSuchWorkflowInstanceLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(workflowInstanceLinkId);
+	}
+
+	/**
+	* Returns the workflow instance link with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param workflowInstanceLinkId the primary key of the workflow instance link
+	* @return the workflow instance link, or <code>null</code> if a workflow instance link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowInstanceLink fetchByPrimaryKey(
+		long workflowInstanceLinkId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(workflowInstanceLinkId);
+	}
+
+	/**
 	* Returns all the workflow instance links.
 	*
 	* @return the workflow instance links
@@ -417,22 +450,6 @@ public class WorkflowInstanceLinkUtil {
 	}
 
 	/**
-	* Removes all the workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_C_C_C(long groupId, long companyId,
-		long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByG_C_C_C(groupId, companyId, classNameId, classPK);
-	}
-
-	/**
 	* Removes all the workflow instance links from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -440,23 +457,6 @@ public class WorkflowInstanceLinkUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param groupId the group ID
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching workflow instance links
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C_C_C(long groupId, long companyId,
-		long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByG_C_C_C(groupId, companyId, classNameId, classPK);
 	}
 
 	/**

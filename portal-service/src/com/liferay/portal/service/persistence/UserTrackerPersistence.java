@@ -36,69 +36,6 @@ public interface UserTrackerPersistence extends BasePersistence<UserTracker> {
 	 */
 
 	/**
-	* Caches the user tracker in the entity cache if it is enabled.
-	*
-	* @param userTracker the user tracker
-	*/
-	public void cacheResult(com.liferay.portal.model.UserTracker userTracker);
-
-	/**
-	* Caches the user trackers in the entity cache if it is enabled.
-	*
-	* @param userTrackers the user trackers
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.UserTracker> userTrackers);
-
-	/**
-	* Creates a new user tracker with the primary key. Does not add the user tracker to the database.
-	*
-	* @param userTrackerId the primary key for the new user tracker
-	* @return the new user tracker
-	*/
-	public com.liferay.portal.model.UserTracker create(long userTrackerId);
-
-	/**
-	* Removes the user tracker with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param userTrackerId the primary key of the user tracker
-	* @return the user tracker that was removed
-	* @throws com.liferay.portal.NoSuchUserTrackerException if a user tracker with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserTracker remove(long userTrackerId)
-		throws com.liferay.portal.NoSuchUserTrackerException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.UserTracker updateImpl(
-		com.liferay.portal.model.UserTracker userTracker)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user tracker with the primary key or throws a {@link com.liferay.portal.NoSuchUserTrackerException} if it could not be found.
-	*
-	* @param userTrackerId the primary key of the user tracker
-	* @return the user tracker
-	* @throws com.liferay.portal.NoSuchUserTrackerException if a user tracker with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserTracker findByPrimaryKey(
-		long userTrackerId)
-		throws com.liferay.portal.NoSuchUserTrackerException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user tracker with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param userTrackerId the primary key of the user tracker
-	* @return the user tracker, or <code>null</code> if a user tracker with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserTracker fetchByPrimaryKey(
-		long userTrackerId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the user trackers where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -218,6 +155,25 @@ public interface UserTrackerPersistence extends BasePersistence<UserTracker> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the user trackers where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user trackers where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching user trackers
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the user trackers where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -333,6 +289,25 @@ public interface UserTrackerPersistence extends BasePersistence<UserTracker> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchUserTrackerException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the user trackers where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user trackers where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching user trackers
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the user trackers where sessionId = &#63;.
@@ -454,6 +429,88 @@ public interface UserTrackerPersistence extends BasePersistence<UserTracker> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the user trackers where sessionId = &#63; from the database.
+	*
+	* @param sessionId the session ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeBySessionId(java.lang.String sessionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user trackers where sessionId = &#63;.
+	*
+	* @param sessionId the session ID
+	* @return the number of matching user trackers
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countBySessionId(java.lang.String sessionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the user tracker in the entity cache if it is enabled.
+	*
+	* @param userTracker the user tracker
+	*/
+	public void cacheResult(com.liferay.portal.model.UserTracker userTracker);
+
+	/**
+	* Caches the user trackers in the entity cache if it is enabled.
+	*
+	* @param userTrackers the user trackers
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.UserTracker> userTrackers);
+
+	/**
+	* Creates a new user tracker with the primary key. Does not add the user tracker to the database.
+	*
+	* @param userTrackerId the primary key for the new user tracker
+	* @return the new user tracker
+	*/
+	public com.liferay.portal.model.UserTracker create(long userTrackerId);
+
+	/**
+	* Removes the user tracker with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param userTrackerId the primary key of the user tracker
+	* @return the user tracker that was removed
+	* @throws com.liferay.portal.NoSuchUserTrackerException if a user tracker with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserTracker remove(long userTrackerId)
+		throws com.liferay.portal.NoSuchUserTrackerException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.UserTracker updateImpl(
+		com.liferay.portal.model.UserTracker userTracker)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the user tracker with the primary key or throws a {@link com.liferay.portal.NoSuchUserTrackerException} if it could not be found.
+	*
+	* @param userTrackerId the primary key of the user tracker
+	* @return the user tracker
+	* @throws com.liferay.portal.NoSuchUserTrackerException if a user tracker with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserTracker findByPrimaryKey(
+		long userTrackerId)
+		throws com.liferay.portal.NoSuchUserTrackerException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the user tracker with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param userTrackerId the primary key of the user tracker
+	* @return the user tracker, or <code>null</code> if a user tracker with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserTracker fetchByPrimaryKey(
+		long userTrackerId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the user trackers.
 	*
 	* @return the user trackers
@@ -497,68 +554,11 @@ public interface UserTrackerPersistence extends BasePersistence<UserTracker> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the user trackers where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the user trackers where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the user trackers where sessionId = &#63; from the database.
-	*
-	* @param sessionId the session ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeBySessionId(java.lang.String sessionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the user trackers from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user trackers where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching user trackers
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user trackers where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching user trackers
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user trackers where sessionId = &#63;.
-	*
-	* @param sessionId the session ID
-	* @return the number of matching user trackers
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countBySessionId(java.lang.String sessionId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

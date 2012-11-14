@@ -111,86 +111,6 @@ public class RatingsEntryUtil {
 	}
 
 	/**
-	* Caches the ratings entry in the entity cache if it is enabled.
-	*
-	* @param ratingsEntry the ratings entry
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.ratings.model.RatingsEntry ratingsEntry) {
-		getPersistence().cacheResult(ratingsEntry);
-	}
-
-	/**
-	* Caches the ratings entries in the entity cache if it is enabled.
-	*
-	* @param ratingsEntries the ratings entries
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.ratings.model.RatingsEntry> ratingsEntries) {
-		getPersistence().cacheResult(ratingsEntries);
-	}
-
-	/**
-	* Creates a new ratings entry with the primary key. Does not add the ratings entry to the database.
-	*
-	* @param entryId the primary key for the new ratings entry
-	* @return the new ratings entry
-	*/
-	public static com.liferay.portlet.ratings.model.RatingsEntry create(
-		long entryId) {
-		return getPersistence().create(entryId);
-	}
-
-	/**
-	* Removes the ratings entry with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param entryId the primary key of the ratings entry
-	* @return the ratings entry that was removed
-	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.ratings.model.RatingsEntry remove(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.ratings.NoSuchEntryException {
-		return getPersistence().remove(entryId);
-	}
-
-	public static com.liferay.portlet.ratings.model.RatingsEntry updateImpl(
-		com.liferay.portlet.ratings.model.RatingsEntry ratingsEntry)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(ratingsEntry);
-	}
-
-	/**
-	* Returns the ratings entry with the primary key or throws a {@link com.liferay.portlet.ratings.NoSuchEntryException} if it could not be found.
-	*
-	* @param entryId the primary key of the ratings entry
-	* @return the ratings entry
-	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.ratings.model.RatingsEntry findByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.ratings.NoSuchEntryException {
-		return getPersistence().findByPrimaryKey(entryId);
-	}
-
-	/**
-	* Returns the ratings entry with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param entryId the primary key of the ratings entry
-	* @return the ratings entry, or <code>null</code> if a ratings entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.ratings.model.RatingsEntry fetchByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(entryId);
-	}
-
-	/**
 	* Returns all the ratings entries where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -342,6 +262,31 @@ public class RatingsEntryUtil {
 	}
 
 	/**
+	* Removes all the ratings entries where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of ratings entries where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching ratings entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C(classNameId, classPK);
+	}
+
+	/**
 	* Returns the ratings entry where userId = &#63; and classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.ratings.NoSuchEntryException} if it could not be found.
 	*
 	* @param userId the user ID
@@ -388,6 +333,36 @@ public class RatingsEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByU_C_C(userId, classNameId, classPK, retrieveFromCache);
+	}
+
+	/**
+	* Removes the ratings entry where userId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the ratings entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.ratings.model.RatingsEntry removeByU_C_C(
+		long userId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.ratings.NoSuchEntryException {
+		return getPersistence().removeByU_C_C(userId, classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of ratings entries where userId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching ratings entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByU_C_C(long userId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByU_C_C(userId, classNameId, classPK);
 	}
 
 	/**
@@ -555,6 +530,114 @@ public class RatingsEntryUtil {
 	}
 
 	/**
+	* Removes all the ratings entries where classNameId = &#63; and classPK = &#63; and score = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param score the score
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_C_S(long classNameId, long classPK,
+		double score)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_C_S(classNameId, classPK, score);
+	}
+
+	/**
+	* Returns the number of ratings entries where classNameId = &#63; and classPK = &#63; and score = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param score the score
+	* @return the number of matching ratings entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C_S(long classNameId, long classPK, double score)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C_S(classNameId, classPK, score);
+	}
+
+	/**
+	* Caches the ratings entry in the entity cache if it is enabled.
+	*
+	* @param ratingsEntry the ratings entry
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.ratings.model.RatingsEntry ratingsEntry) {
+		getPersistence().cacheResult(ratingsEntry);
+	}
+
+	/**
+	* Caches the ratings entries in the entity cache if it is enabled.
+	*
+	* @param ratingsEntries the ratings entries
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.ratings.model.RatingsEntry> ratingsEntries) {
+		getPersistence().cacheResult(ratingsEntries);
+	}
+
+	/**
+	* Creates a new ratings entry with the primary key. Does not add the ratings entry to the database.
+	*
+	* @param entryId the primary key for the new ratings entry
+	* @return the new ratings entry
+	*/
+	public static com.liferay.portlet.ratings.model.RatingsEntry create(
+		long entryId) {
+		return getPersistence().create(entryId);
+	}
+
+	/**
+	* Removes the ratings entry with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param entryId the primary key of the ratings entry
+	* @return the ratings entry that was removed
+	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.ratings.model.RatingsEntry remove(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.ratings.NoSuchEntryException {
+		return getPersistence().remove(entryId);
+	}
+
+	public static com.liferay.portlet.ratings.model.RatingsEntry updateImpl(
+		com.liferay.portlet.ratings.model.RatingsEntry ratingsEntry)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(ratingsEntry);
+	}
+
+	/**
+	* Returns the ratings entry with the primary key or throws a {@link com.liferay.portlet.ratings.NoSuchEntryException} if it could not be found.
+	*
+	* @param entryId the primary key of the ratings entry
+	* @return the ratings entry
+	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.ratings.model.RatingsEntry findByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.ratings.NoSuchEntryException {
+		return getPersistence().findByPrimaryKey(entryId);
+	}
+
+	/**
+	* Returns the ratings entry with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param entryId the primary key of the ratings entry
+	* @return the ratings entry, or <code>null</code> if a ratings entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.ratings.model.RatingsEntry fetchByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(entryId);
+	}
+
+	/**
 	* Returns all the ratings entries.
 	*
 	* @return the ratings entries
@@ -604,48 +687,6 @@ public class RatingsEntryUtil {
 	}
 
 	/**
-	* Removes all the ratings entries where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Removes the ratings entry where userId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the ratings entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.ratings.model.RatingsEntry removeByU_C_C(
-		long userId, long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.ratings.NoSuchEntryException {
-		return getPersistence().removeByU_C_C(userId, classNameId, classPK);
-	}
-
-	/**
-	* Removes all the ratings entries where classNameId = &#63; and classPK = &#63; and score = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param score the score
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_C_S(long classNameId, long classPK,
-		double score)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_C_S(classNameId, classPK, score);
-	}
-
-	/**
 	* Removes all the ratings entries from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -653,47 +694,6 @@ public class RatingsEntryUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of ratings entries where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching ratings entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Returns the number of ratings entries where userId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching ratings entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByU_C_C(long userId, long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByU_C_C(userId, classNameId, classPK);
-	}
-
-	/**
-	* Returns the number of ratings entries where classNameId = &#63; and classPK = &#63; and score = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param score the score
-	* @return the number of matching ratings entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C_S(long classNameId, long classPK, double score)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C_S(classNameId, classPK, score);
 	}
 
 	/**

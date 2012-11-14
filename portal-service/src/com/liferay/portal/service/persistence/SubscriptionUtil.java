@@ -110,86 +110,6 @@ public class SubscriptionUtil {
 	}
 
 	/**
-	* Caches the subscription in the entity cache if it is enabled.
-	*
-	* @param subscription the subscription
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.Subscription subscription) {
-		getPersistence().cacheResult(subscription);
-	}
-
-	/**
-	* Caches the subscriptions in the entity cache if it is enabled.
-	*
-	* @param subscriptions the subscriptions
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.Subscription> subscriptions) {
-		getPersistence().cacheResult(subscriptions);
-	}
-
-	/**
-	* Creates a new subscription with the primary key. Does not add the subscription to the database.
-	*
-	* @param subscriptionId the primary key for the new subscription
-	* @return the new subscription
-	*/
-	public static com.liferay.portal.model.Subscription create(
-		long subscriptionId) {
-		return getPersistence().create(subscriptionId);
-	}
-
-	/**
-	* Removes the subscription with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param subscriptionId the primary key of the subscription
-	* @return the subscription that was removed
-	* @throws com.liferay.portal.NoSuchSubscriptionException if a subscription with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Subscription remove(
-		long subscriptionId)
-		throws com.liferay.portal.NoSuchSubscriptionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(subscriptionId);
-	}
-
-	public static com.liferay.portal.model.Subscription updateImpl(
-		com.liferay.portal.model.Subscription subscription)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(subscription);
-	}
-
-	/**
-	* Returns the subscription with the primary key or throws a {@link com.liferay.portal.NoSuchSubscriptionException} if it could not be found.
-	*
-	* @param subscriptionId the primary key of the subscription
-	* @return the subscription
-	* @throws com.liferay.portal.NoSuchSubscriptionException if a subscription with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Subscription findByPrimaryKey(
-		long subscriptionId)
-		throws com.liferay.portal.NoSuchSubscriptionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(subscriptionId);
-	}
-
-	/**
-	* Returns the subscription with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param subscriptionId the primary key of the subscription
-	* @return the subscription, or <code>null</code> if a subscription with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Subscription fetchByPrimaryKey(
-		long subscriptionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(subscriptionId);
-	}
-
-	/**
 	* Returns all the subscriptions where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -324,6 +244,29 @@ public class SubscriptionUtil {
 		return getPersistence()
 				   .findByUserId_PrevAndNext(subscriptionId, userId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the subscriptions where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUserId(userId);
+	}
+
+	/**
+	* Returns the number of subscriptions where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching subscriptions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUserId(userId);
 	}
 
 	/**
@@ -474,6 +417,31 @@ public class SubscriptionUtil {
 		return getPersistence()
 				   .findByU_C_PrevAndNext(subscriptionId, userId, classNameId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the subscriptions where userId = &#63; and classNameId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByU_C(long userId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByU_C(userId, classNameId);
+	}
+
+	/**
+	* Returns the number of subscriptions where userId = &#63; and classNameId = &#63;.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @return the number of matching subscriptions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByU_C(long userId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByU_C(userId, classNameId);
 	}
 
 	/**
@@ -641,6 +609,35 @@ public class SubscriptionUtil {
 	}
 
 	/**
+	* Removes all the subscriptions where companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_C_C(long companyId, long classNameId,
+		long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_C_C(companyId, classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of subscriptions where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching subscriptions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C_C(long companyId, long classNameId,
+		long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C_C(companyId, classNameId, classPK);
+	}
+
+	/**
 	* Returns the subscription where companyId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portal.NoSuchSubscriptionException} if it could not be found.
 	*
 	* @param companyId the company ID
@@ -697,6 +694,121 @@ public class SubscriptionUtil {
 	}
 
 	/**
+	* Removes the subscription where companyId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the subscription that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Subscription removeByC_U_C_C(
+		long companyId, long userId, long classNameId, long classPK)
+		throws com.liferay.portal.NoSuchSubscriptionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .removeByC_U_C_C(companyId, userId, classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of subscriptions where companyId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching subscriptions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_U_C_C(long companyId, long userId,
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByC_U_C_C(companyId, userId, classNameId, classPK);
+	}
+
+	/**
+	* Caches the subscription in the entity cache if it is enabled.
+	*
+	* @param subscription the subscription
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.Subscription subscription) {
+		getPersistence().cacheResult(subscription);
+	}
+
+	/**
+	* Caches the subscriptions in the entity cache if it is enabled.
+	*
+	* @param subscriptions the subscriptions
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.Subscription> subscriptions) {
+		getPersistence().cacheResult(subscriptions);
+	}
+
+	/**
+	* Creates a new subscription with the primary key. Does not add the subscription to the database.
+	*
+	* @param subscriptionId the primary key for the new subscription
+	* @return the new subscription
+	*/
+	public static com.liferay.portal.model.Subscription create(
+		long subscriptionId) {
+		return getPersistence().create(subscriptionId);
+	}
+
+	/**
+	* Removes the subscription with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param subscriptionId the primary key of the subscription
+	* @return the subscription that was removed
+	* @throws com.liferay.portal.NoSuchSubscriptionException if a subscription with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Subscription remove(
+		long subscriptionId)
+		throws com.liferay.portal.NoSuchSubscriptionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(subscriptionId);
+	}
+
+	public static com.liferay.portal.model.Subscription updateImpl(
+		com.liferay.portal.model.Subscription subscription)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(subscription);
+	}
+
+	/**
+	* Returns the subscription with the primary key or throws a {@link com.liferay.portal.NoSuchSubscriptionException} if it could not be found.
+	*
+	* @param subscriptionId the primary key of the subscription
+	* @return the subscription
+	* @throws com.liferay.portal.NoSuchSubscriptionException if a subscription with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Subscription findByPrimaryKey(
+		long subscriptionId)
+		throws com.liferay.portal.NoSuchSubscriptionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(subscriptionId);
+	}
+
+	/**
+	* Returns the subscription with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param subscriptionId the primary key of the subscription
+	* @return the subscription, or <code>null</code> if a subscription with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Subscription fetchByPrimaryKey(
+		long subscriptionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(subscriptionId);
+	}
+
+	/**
 	* Returns all the subscriptions.
 	*
 	* @return the subscriptions
@@ -746,61 +858,6 @@ public class SubscriptionUtil {
 	}
 
 	/**
-	* Removes all the subscriptions where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUserId(userId);
-	}
-
-	/**
-	* Removes all the subscriptions where userId = &#63; and classNameId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByU_C(long userId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByU_C(userId, classNameId);
-	}
-
-	/**
-	* Removes all the subscriptions where companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_C_C(long companyId, long classNameId,
-		long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_C_C(companyId, classNameId, classPK);
-	}
-
-	/**
-	* Removes the subscription where companyId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the subscription that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Subscription removeByC_U_C_C(
-		long companyId, long userId, long classNameId, long classPK)
-		throws com.liferay.portal.NoSuchSubscriptionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .removeByC_U_C_C(companyId, userId, classNameId, classPK);
-	}
-
-	/**
 	* Removes all the subscriptions from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -808,63 +865,6 @@ public class SubscriptionUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of subscriptions where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching subscriptions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUserId(userId);
-	}
-
-	/**
-	* Returns the number of subscriptions where userId = &#63; and classNameId = &#63;.
-	*
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @return the number of matching subscriptions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByU_C(long userId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByU_C(userId, classNameId);
-	}
-
-	/**
-	* Returns the number of subscriptions where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching subscriptions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C_C(long companyId, long classNameId,
-		long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C_C(companyId, classNameId, classPK);
-	}
-
-	/**
-	* Returns the number of subscriptions where companyId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching subscriptions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_U_C_C(long companyId, long userId,
-		long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByC_U_C_C(companyId, userId, classNameId, classPK);
 	}
 
 	/**

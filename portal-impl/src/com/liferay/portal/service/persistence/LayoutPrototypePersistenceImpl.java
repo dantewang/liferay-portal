@@ -75,6 +75,17 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
+			LayoutPrototypeImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
+			LayoutPrototypeImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
 			LayoutPrototypeImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -95,520 +106,6 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
-			LayoutPrototypeImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
-			LayoutPrototypeImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			LayoutPrototypeModelImpl.UUID_COLUMN_BITMASK |
-			LayoutPrototypeModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
-			LayoutPrototypeImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByCompanyId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
-			LayoutPrototypeImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			LayoutPrototypeModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_A = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
-			LayoutPrototypeImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByC_A",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
-			LayoutPrototypeImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_A",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			LayoutPrototypeModelImpl.COMPANYID_COLUMN_BITMASK |
-			LayoutPrototypeModelImpl.ACTIVE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_A = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_A",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
-			LayoutPrototypeImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
-			LayoutPrototypeImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the layout prototype in the entity cache if it is enabled.
-	 *
-	 * @param layoutPrototype the layout prototype
-	 */
-	public void cacheResult(LayoutPrototype layoutPrototype) {
-		EntityCacheUtil.putResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeImpl.class, layoutPrototype.getPrimaryKey(),
-			layoutPrototype);
-
-		layoutPrototype.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the layout prototypes in the entity cache if it is enabled.
-	 *
-	 * @param layoutPrototypes the layout prototypes
-	 */
-	public void cacheResult(List<LayoutPrototype> layoutPrototypes) {
-		for (LayoutPrototype layoutPrototype : layoutPrototypes) {
-			if (EntityCacheUtil.getResult(
-						LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-						LayoutPrototypeImpl.class,
-						layoutPrototype.getPrimaryKey()) == null) {
-				cacheResult(layoutPrototype);
-			}
-			else {
-				layoutPrototype.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all layout prototypes.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(LayoutPrototypeImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(LayoutPrototypeImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the layout prototype.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(LayoutPrototype layoutPrototype) {
-		EntityCacheUtil.removeResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeImpl.class, layoutPrototype.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<LayoutPrototype> layoutPrototypes) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (LayoutPrototype layoutPrototype : layoutPrototypes) {
-			EntityCacheUtil.removeResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-				LayoutPrototypeImpl.class, layoutPrototype.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new layout prototype with the primary key. Does not add the layout prototype to the database.
-	 *
-	 * @param layoutPrototypeId the primary key for the new layout prototype
-	 * @return the new layout prototype
-	 */
-	public LayoutPrototype create(long layoutPrototypeId) {
-		LayoutPrototype layoutPrototype = new LayoutPrototypeImpl();
-
-		layoutPrototype.setNew(true);
-		layoutPrototype.setPrimaryKey(layoutPrototypeId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		layoutPrototype.setUuid(uuid);
-
-		return layoutPrototype;
-	}
-
-	/**
-	 * Removes the layout prototype with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param layoutPrototypeId the primary key of the layout prototype
-	 * @return the layout prototype that was removed
-	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a layout prototype with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype remove(long layoutPrototypeId)
-		throws NoSuchLayoutPrototypeException, SystemException {
-		return remove(Long.valueOf(layoutPrototypeId));
-	}
-
-	/**
-	 * Removes the layout prototype with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the layout prototype
-	 * @return the layout prototype that was removed
-	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a layout prototype with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public LayoutPrototype remove(Serializable primaryKey)
-		throws NoSuchLayoutPrototypeException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			LayoutPrototype layoutPrototype = (LayoutPrototype)session.get(LayoutPrototypeImpl.class,
-					primaryKey);
-
-			if (layoutPrototype == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchLayoutPrototypeException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(layoutPrototype);
-		}
-		catch (NoSuchLayoutPrototypeException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected LayoutPrototype removeImpl(LayoutPrototype layoutPrototype)
-		throws SystemException {
-		layoutPrototype = toUnwrappedModel(layoutPrototype);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(layoutPrototype)) {
-				layoutPrototype = (LayoutPrototype)session.get(LayoutPrototypeImpl.class,
-						layoutPrototype.getPrimaryKeyObj());
-			}
-
-			if (layoutPrototype != null) {
-				session.delete(layoutPrototype);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (layoutPrototype != null) {
-			clearCache(layoutPrototype);
-		}
-
-		return layoutPrototype;
-	}
-
-	@Override
-	public LayoutPrototype updateImpl(
-		com.liferay.portal.model.LayoutPrototype layoutPrototype)
-		throws SystemException {
-		layoutPrototype = toUnwrappedModel(layoutPrototype);
-
-		boolean isNew = layoutPrototype.isNew();
-
-		LayoutPrototypeModelImpl layoutPrototypeModelImpl = (LayoutPrototypeModelImpl)layoutPrototype;
-
-		if (Validator.isNull(layoutPrototype.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			layoutPrototype.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (layoutPrototype.isNew()) {
-				session.save(layoutPrototype);
-
-				layoutPrototype.setNew(false);
-			}
-			else {
-				session.merge(layoutPrototype);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !LayoutPrototypeModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((layoutPrototypeModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						layoutPrototypeModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { layoutPrototypeModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((layoutPrototypeModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						layoutPrototypeModelImpl.getOriginalUuid(),
-						Long.valueOf(layoutPrototypeModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						layoutPrototypeModelImpl.getUuid(),
-						Long.valueOf(layoutPrototypeModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((layoutPrototypeModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(layoutPrototypeModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(layoutPrototypeModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((layoutPrototypeModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(layoutPrototypeModelImpl.getOriginalCompanyId()),
-						Boolean.valueOf(layoutPrototypeModelImpl.getOriginalActive())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_A, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(layoutPrototypeModelImpl.getCompanyId()),
-						Boolean.valueOf(layoutPrototypeModelImpl.getActive())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_A, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutPrototypeImpl.class, layoutPrototype.getPrimaryKey(),
-			layoutPrototype);
-
-		return layoutPrototype;
-	}
-
-	protected LayoutPrototype toUnwrappedModel(LayoutPrototype layoutPrototype) {
-		if (layoutPrototype instanceof LayoutPrototypeImpl) {
-			return layoutPrototype;
-		}
-
-		LayoutPrototypeImpl layoutPrototypeImpl = new LayoutPrototypeImpl();
-
-		layoutPrototypeImpl.setNew(layoutPrototype.isNew());
-		layoutPrototypeImpl.setPrimaryKey(layoutPrototype.getPrimaryKey());
-
-		layoutPrototypeImpl.setUuid(layoutPrototype.getUuid());
-		layoutPrototypeImpl.setLayoutPrototypeId(layoutPrototype.getLayoutPrototypeId());
-		layoutPrototypeImpl.setCompanyId(layoutPrototype.getCompanyId());
-		layoutPrototypeImpl.setName(layoutPrototype.getName());
-		layoutPrototypeImpl.setDescription(layoutPrototype.getDescription());
-		layoutPrototypeImpl.setSettings(layoutPrototype.getSettings());
-		layoutPrototypeImpl.setActive(layoutPrototype.isActive());
-
-		return layoutPrototypeImpl;
-	}
-
-	/**
-	 * Returns the layout prototype with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the layout prototype
-	 * @return the layout prototype
-	 * @throws com.liferay.portal.NoSuchModelException if a layout prototype with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public LayoutPrototype findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the layout prototype with the primary key or throws a {@link com.liferay.portal.NoSuchLayoutPrototypeException} if it could not be found.
-	 *
-	 * @param layoutPrototypeId the primary key of the layout prototype
-	 * @return the layout prototype
-	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a layout prototype with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype findByPrimaryKey(long layoutPrototypeId)
-		throws NoSuchLayoutPrototypeException, SystemException {
-		LayoutPrototype layoutPrototype = fetchByPrimaryKey(layoutPrototypeId);
-
-		if (layoutPrototype == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + layoutPrototypeId);
-			}
-
-			throw new NoSuchLayoutPrototypeException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				layoutPrototypeId);
-		}
-
-		return layoutPrototype;
-	}
-
-	/**
-	 * Returns the layout prototype with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the layout prototype
-	 * @return the layout prototype, or <code>null</code> if a layout prototype with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public LayoutPrototype fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the layout prototype with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param layoutPrototypeId the primary key of the layout prototype
-	 * @return the layout prototype, or <code>null</code> if a layout prototype with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype fetchByPrimaryKey(long layoutPrototypeId)
-		throws SystemException {
-		LayoutPrototype layoutPrototype = (LayoutPrototype)EntityCacheUtil.getResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-				LayoutPrototypeImpl.class, layoutPrototypeId);
-
-		if (layoutPrototype == _nullLayoutPrototype) {
-			return null;
-		}
-
-		if (layoutPrototype == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				layoutPrototype = (LayoutPrototype)session.get(LayoutPrototypeImpl.class,
-						Long.valueOf(layoutPrototypeId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (layoutPrototype != null) {
-					cacheResult(layoutPrototype);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
-						LayoutPrototypeImpl.class, layoutPrototypeId,
-						_nullLayoutPrototype);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return layoutPrototype;
-	}
 
 	/**
 	 * Returns all the layout prototypes where uuid = &#63;.
@@ -1324,6 +821,169 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the layout prototypes where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (LayoutPrototype layoutPrototype : findByUuid(uuid)) {
+			remove(layoutPrototype);
+		}
+	}
+
+	/**
+	 * Returns the number of layout prototypes where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching layout prototypes
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of layout prototypes that the user has permission to view where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching layout prototypes that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByUuid(String uuid) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByUuid(uuid);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
+
+		if (uuid == null) {
+			query.append(_FINDER_COLUMN_UUID_UUID_1);
+		}
+		else {
+			if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_UUID_3);
+			}
+			else {
+				query.append(_FINDER_COLUMN_UUID_UUID_2);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				LayoutPrototype.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			if (uuid != null) {
+				qPos.add(uuid);
+			}
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "layoutPrototype.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "layoutPrototype.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(layoutPrototype.uuid IS NULL OR layoutPrototype.uuid = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
+			LayoutPrototypeImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
+			LayoutPrototypeImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			LayoutPrototypeModelImpl.UUID_COLUMN_BITMASK |
+			LayoutPrototypeModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the layout prototypes where uuid = &#63; and companyId = &#63;.
@@ -2086,6 +1746,184 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	}
 
 	/**
+	 * Removes all the layout prototypes where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (LayoutPrototype layoutPrototype : findByUuid_C(uuid, companyId)) {
+			remove(layoutPrototype);
+		}
+	}
+
+	/**
+	 * Returns the number of layout prototypes where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching layout prototypes
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of layout prototypes that the user has permission to view where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching layout prototypes that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByUuid_C(uuid, companyId);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
+
+		if (uuid == null) {
+			query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+		}
+		else {
+			if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+			}
+			else {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+			}
+		}
+
+		query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				LayoutPrototype.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			if (uuid != null) {
+				qPos.add(uuid);
+			}
+
+			qPos.add(companyId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "layoutPrototype.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "layoutPrototype.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(layoutPrototype.uuid IS NULL OR layoutPrototype.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "layoutPrototype.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
+			LayoutPrototypeImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByCompanyId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
+			LayoutPrototypeImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			LayoutPrototypeModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the layout prototypes where companyId = &#63;.
 	 *
 	 * @param companyId the company ID
@@ -2757,6 +2595,142 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the layout prototypes where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (LayoutPrototype layoutPrototype : findByCompanyId(companyId)) {
+			remove(layoutPrototype);
+		}
+	}
+
+	/**
+	 * Returns the number of layout prototypes where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching layout prototypes
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of layout prototypes that the user has permission to view where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching layout prototypes that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByCompanyId(long companyId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByCompanyId(companyId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
+
+		query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				LayoutPrototype.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(companyId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "layoutPrototype.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_A = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
+			LayoutPrototypeImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByC_A",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED,
+			LayoutPrototypeImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_A",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			LayoutPrototypeModelImpl.COMPANYID_COLUMN_BITMASK |
+			LayoutPrototypeModelImpl.ACTIVE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_A = new FinderPath(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_A",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
 	 * Returns all the layout prototypes where companyId = &#63; and active = &#63;.
@@ -3471,6 +3445,574 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	}
 
 	/**
+	 * Removes all the layout prototypes where companyId = &#63; and active = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_A(long companyId, boolean active)
+		throws SystemException {
+		for (LayoutPrototype layoutPrototype : findByC_A(companyId, active)) {
+			remove(layoutPrototype);
+		}
+	}
+
+	/**
+	 * Returns the number of layout prototypes where companyId = &#63; and active = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @return the number of matching layout prototypes
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_A(long companyId, boolean active)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { companyId, active };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_A,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_A_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_A_ACTIVE_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(active);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_A, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of layout prototypes that the user has permission to view where companyId = &#63; and active = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @return the number of matching layout prototypes that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByC_A(long companyId, boolean active)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByC_A(companyId, active);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
+
+		query.append(_FINDER_COLUMN_C_A_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_C_A_ACTIVE_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				LayoutPrototype.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(companyId);
+
+			qPos.add(active);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_C_A_COMPANYID_2 = "layoutPrototype.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_A_ACTIVE_2 = "layoutPrototype.active = ?";
+
+	/**
+	 * Caches the layout prototype in the entity cache if it is enabled.
+	 *
+	 * @param layoutPrototype the layout prototype
+	 */
+	public void cacheResult(LayoutPrototype layoutPrototype) {
+		EntityCacheUtil.putResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeImpl.class, layoutPrototype.getPrimaryKey(),
+			layoutPrototype);
+
+		layoutPrototype.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the layout prototypes in the entity cache if it is enabled.
+	 *
+	 * @param layoutPrototypes the layout prototypes
+	 */
+	public void cacheResult(List<LayoutPrototype> layoutPrototypes) {
+		for (LayoutPrototype layoutPrototype : layoutPrototypes) {
+			if (EntityCacheUtil.getResult(
+						LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+						LayoutPrototypeImpl.class,
+						layoutPrototype.getPrimaryKey()) == null) {
+				cacheResult(layoutPrototype);
+			}
+			else {
+				layoutPrototype.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all layout prototypes.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(LayoutPrototypeImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(LayoutPrototypeImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the layout prototype.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(LayoutPrototype layoutPrototype) {
+		EntityCacheUtil.removeResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeImpl.class, layoutPrototype.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<LayoutPrototype> layoutPrototypes) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (LayoutPrototype layoutPrototype : layoutPrototypes) {
+			EntityCacheUtil.removeResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+				LayoutPrototypeImpl.class, layoutPrototype.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new layout prototype with the primary key. Does not add the layout prototype to the database.
+	 *
+	 * @param layoutPrototypeId the primary key for the new layout prototype
+	 * @return the new layout prototype
+	 */
+	public LayoutPrototype create(long layoutPrototypeId) {
+		LayoutPrototype layoutPrototype = new LayoutPrototypeImpl();
+
+		layoutPrototype.setNew(true);
+		layoutPrototype.setPrimaryKey(layoutPrototypeId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		layoutPrototype.setUuid(uuid);
+
+		return layoutPrototype;
+	}
+
+	/**
+	 * Removes the layout prototype with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param layoutPrototypeId the primary key of the layout prototype
+	 * @return the layout prototype that was removed
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a layout prototype with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype remove(long layoutPrototypeId)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		return remove(Long.valueOf(layoutPrototypeId));
+	}
+
+	/**
+	 * Removes the layout prototype with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the layout prototype
+	 * @return the layout prototype that was removed
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a layout prototype with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public LayoutPrototype remove(Serializable primaryKey)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			LayoutPrototype layoutPrototype = (LayoutPrototype)session.get(LayoutPrototypeImpl.class,
+					primaryKey);
+
+			if (layoutPrototype == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchLayoutPrototypeException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(layoutPrototype);
+		}
+		catch (NoSuchLayoutPrototypeException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected LayoutPrototype removeImpl(LayoutPrototype layoutPrototype)
+		throws SystemException {
+		layoutPrototype = toUnwrappedModel(layoutPrototype);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(layoutPrototype)) {
+				layoutPrototype = (LayoutPrototype)session.get(LayoutPrototypeImpl.class,
+						layoutPrototype.getPrimaryKeyObj());
+			}
+
+			if (layoutPrototype != null) {
+				session.delete(layoutPrototype);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (layoutPrototype != null) {
+			clearCache(layoutPrototype);
+		}
+
+		return layoutPrototype;
+	}
+
+	@Override
+	public LayoutPrototype updateImpl(
+		com.liferay.portal.model.LayoutPrototype layoutPrototype)
+		throws SystemException {
+		layoutPrototype = toUnwrappedModel(layoutPrototype);
+
+		boolean isNew = layoutPrototype.isNew();
+
+		LayoutPrototypeModelImpl layoutPrototypeModelImpl = (LayoutPrototypeModelImpl)layoutPrototype;
+
+		if (Validator.isNull(layoutPrototype.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			layoutPrototype.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (layoutPrototype.isNew()) {
+				session.save(layoutPrototype);
+
+				layoutPrototype.setNew(false);
+			}
+			else {
+				session.merge(layoutPrototype);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !LayoutPrototypeModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((layoutPrototypeModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						layoutPrototypeModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { layoutPrototypeModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((layoutPrototypeModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						layoutPrototypeModelImpl.getOriginalUuid(),
+						Long.valueOf(layoutPrototypeModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						layoutPrototypeModelImpl.getUuid(),
+						Long.valueOf(layoutPrototypeModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((layoutPrototypeModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(layoutPrototypeModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(layoutPrototypeModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+
+			if ((layoutPrototypeModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(layoutPrototypeModelImpl.getOriginalCompanyId()),
+						Boolean.valueOf(layoutPrototypeModelImpl.getOriginalActive())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(layoutPrototypeModelImpl.getCompanyId()),
+						Boolean.valueOf(layoutPrototypeModelImpl.getActive())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutPrototypeImpl.class, layoutPrototype.getPrimaryKey(),
+			layoutPrototype);
+
+		return layoutPrototype;
+	}
+
+	protected LayoutPrototype toUnwrappedModel(LayoutPrototype layoutPrototype) {
+		if (layoutPrototype instanceof LayoutPrototypeImpl) {
+			return layoutPrototype;
+		}
+
+		LayoutPrototypeImpl layoutPrototypeImpl = new LayoutPrototypeImpl();
+
+		layoutPrototypeImpl.setNew(layoutPrototype.isNew());
+		layoutPrototypeImpl.setPrimaryKey(layoutPrototype.getPrimaryKey());
+
+		layoutPrototypeImpl.setUuid(layoutPrototype.getUuid());
+		layoutPrototypeImpl.setLayoutPrototypeId(layoutPrototype.getLayoutPrototypeId());
+		layoutPrototypeImpl.setCompanyId(layoutPrototype.getCompanyId());
+		layoutPrototypeImpl.setName(layoutPrototype.getName());
+		layoutPrototypeImpl.setDescription(layoutPrototype.getDescription());
+		layoutPrototypeImpl.setSettings(layoutPrototype.getSettings());
+		layoutPrototypeImpl.setActive(layoutPrototype.isActive());
+
+		return layoutPrototypeImpl;
+	}
+
+	/**
+	 * Returns the layout prototype with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the layout prototype
+	 * @return the layout prototype
+	 * @throws com.liferay.portal.NoSuchModelException if a layout prototype with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public LayoutPrototype findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the layout prototype with the primary key or throws a {@link com.liferay.portal.NoSuchLayoutPrototypeException} if it could not be found.
+	 *
+	 * @param layoutPrototypeId the primary key of the layout prototype
+	 * @return the layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a layout prototype with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByPrimaryKey(long layoutPrototypeId)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		LayoutPrototype layoutPrototype = fetchByPrimaryKey(layoutPrototypeId);
+
+		if (layoutPrototype == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + layoutPrototypeId);
+			}
+
+			throw new NoSuchLayoutPrototypeException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				layoutPrototypeId);
+		}
+
+		return layoutPrototype;
+	}
+
+	/**
+	 * Returns the layout prototype with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the layout prototype
+	 * @return the layout prototype, or <code>null</code> if a layout prototype with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public LayoutPrototype fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the layout prototype with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param layoutPrototypeId the primary key of the layout prototype
+	 * @return the layout prototype, or <code>null</code> if a layout prototype with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByPrimaryKey(long layoutPrototypeId)
+		throws SystemException {
+		LayoutPrototype layoutPrototype = (LayoutPrototype)EntityCacheUtil.getResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+				LayoutPrototypeImpl.class, layoutPrototypeId);
+
+		if (layoutPrototype == _nullLayoutPrototype) {
+			return null;
+		}
+
+		if (layoutPrototype == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				layoutPrototype = (LayoutPrototype)session.get(LayoutPrototypeImpl.class,
+						Long.valueOf(layoutPrototypeId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (layoutPrototype != null) {
+					cacheResult(layoutPrototype);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(LayoutPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+						LayoutPrototypeImpl.class, layoutPrototypeId,
+						_nullLayoutPrototype);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return layoutPrototype;
+	}
+
+	/**
 	 * Returns all the layout prototypes.
 	 *
 	 * @return the layout prototypes
@@ -3586,58 +4128,6 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	}
 
 	/**
-	 * Removes all the layout prototypes where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (LayoutPrototype layoutPrototype : findByUuid(uuid)) {
-			remove(layoutPrototype);
-		}
-	}
-
-	/**
-	 * Removes all the layout prototypes where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (LayoutPrototype layoutPrototype : findByUuid_C(uuid, companyId)) {
-			remove(layoutPrototype);
-		}
-	}
-
-	/**
-	 * Removes all the layout prototypes where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (LayoutPrototype layoutPrototype : findByCompanyId(companyId)) {
-			remove(layoutPrototype);
-		}
-	}
-
-	/**
-	 * Removes all the layout prototypes where companyId = &#63; and active = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param active the active
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_A(long companyId, boolean active)
-		throws SystemException {
-		for (LayoutPrototype layoutPrototype : findByC_A(companyId, active)) {
-			remove(layoutPrototype);
-		}
-	}
-
-	/**
 	 * Removes all the layout prototypes from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -3645,482 +4135,6 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	public void removeAll() throws SystemException {
 		for (LayoutPrototype layoutPrototype : findAll()) {
 			remove(layoutPrototype);
-		}
-	}
-
-	/**
-	 * Returns the number of layout prototypes where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching layout prototypes
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of layout prototypes that the user has permission to view where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching layout prototypes that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByUuid(String uuid) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByUuid(uuid);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
-
-		if (uuid == null) {
-			query.append(_FINDER_COLUMN_UUID_UUID_1);
-		}
-		else {
-			if (uuid.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_UUID_UUID_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_UUID_UUID_2);
-			}
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				LayoutPrototype.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			if (uuid != null) {
-				qPos.add(uuid);
-			}
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of layout prototypes where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching layout prototypes
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of layout prototypes that the user has permission to view where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching layout prototypes that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByUuid_C(uuid, companyId);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
-
-		if (uuid == null) {
-			query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-		}
-		else {
-			if (uuid.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-			}
-		}
-
-		query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				LayoutPrototype.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			if (uuid != null) {
-				qPos.add(uuid);
-			}
-
-			qPos.add(companyId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of layout prototypes where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching layout prototypes
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of layout prototypes that the user has permission to view where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching layout prototypes that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByCompanyId(long companyId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByCompanyId(companyId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
-
-		query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				LayoutPrototype.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(companyId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of layout prototypes where companyId = &#63; and active = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param active the active
-	 * @return the number of matching layout prototypes
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_A(long companyId, boolean active)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, active };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_A,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_A_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_A_ACTIVE_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(active);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_A, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of layout prototypes that the user has permission to view where companyId = &#63; and active = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param active the active
-	 * @return the number of matching layout prototypes that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByC_A(long companyId, boolean active)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByC_A(companyId, active);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_LAYOUTPROTOTYPE_WHERE);
-
-		query.append(_FINDER_COLUMN_C_A_COMPANYID_2);
-
-		query.append(_FINDER_COLUMN_C_A_ACTIVE_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				LayoutPrototype.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(companyId);
-
-			qPos.add(active);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
 		}
 	}
 
@@ -4319,16 +4333,6 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	private static final String _SQL_SELECT_LAYOUTPROTOTYPE_WHERE = "SELECT layoutPrototype FROM LayoutPrototype layoutPrototype WHERE ";
 	private static final String _SQL_COUNT_LAYOUTPROTOTYPE = "SELECT COUNT(layoutPrototype) FROM LayoutPrototype layoutPrototype";
 	private static final String _SQL_COUNT_LAYOUTPROTOTYPE_WHERE = "SELECT COUNT(layoutPrototype) FROM LayoutPrototype layoutPrototype WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "layoutPrototype.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "layoutPrototype.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(layoutPrototype.uuid IS NULL OR layoutPrototype.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "layoutPrototype.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "layoutPrototype.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(layoutPrototype.uuid IS NULL OR layoutPrototype.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "layoutPrototype.companyId = ?";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "layoutPrototype.companyId = ?";
-	private static final String _FINDER_COLUMN_C_A_COMPANYID_2 = "layoutPrototype.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_A_ACTIVE_2 = "layoutPrototype.active = ?";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "layoutPrototype.layoutPrototypeId";
 	private static final String _FILTER_SQL_SELECT_LAYOUTPROTOTYPE_WHERE = "SELECT DISTINCT {layoutPrototype.*} FROM LayoutPrototype layoutPrototype WHERE ";
 	private static final String _FILTER_SQL_SELECT_LAYOUTPROTOTYPE_NO_INLINE_DISTINCT_WHERE_1 =

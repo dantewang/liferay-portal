@@ -82,6 +82,15 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
@@ -100,610 +109,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			MBCategoryModelImpl.UUID_COLUMN_BITMASK |
-			MBCategoryModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			MBCategoryModelImpl.UUID_COLUMN_BITMASK |
-			MBCategoryModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			MBCategoryModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			MBCategoryModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			MBCategoryModelImpl.GROUPID_COLUMN_BITMASK |
-			MBCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the message boards category in the entity cache if it is enabled.
-	 *
-	 * @param mbCategory the message boards category
-	 */
-	public void cacheResult(MBCategory mbCategory) {
-		EntityCacheUtil.putResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryImpl.class, mbCategory.getPrimaryKey(), mbCategory);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				mbCategory.getUuid(), Long.valueOf(mbCategory.getGroupId())
-			}, mbCategory);
-
-		mbCategory.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the message boards categories in the entity cache if it is enabled.
-	 *
-	 * @param mbCategories the message boards categories
-	 */
-	public void cacheResult(List<MBCategory> mbCategories) {
-		for (MBCategory mbCategory : mbCategories) {
-			if (EntityCacheUtil.getResult(
-						MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-						MBCategoryImpl.class, mbCategory.getPrimaryKey()) == null) {
-				cacheResult(mbCategory);
-			}
-			else {
-				mbCategory.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all message boards categories.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(MBCategoryImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(MBCategoryImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the message boards category.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(MBCategory mbCategory) {
-		EntityCacheUtil.removeResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryImpl.class, mbCategory.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(mbCategory);
-	}
-
-	@Override
-	public void clearCache(List<MBCategory> mbCategories) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (MBCategory mbCategory : mbCategories) {
-			EntityCacheUtil.removeResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-				MBCategoryImpl.class, mbCategory.getPrimaryKey());
-
-			clearUniqueFindersCache(mbCategory);
-		}
-	}
-
-	protected void clearUniqueFindersCache(MBCategory mbCategory) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				mbCategory.getUuid(), Long.valueOf(mbCategory.getGroupId())
-			});
-	}
-
-	/**
-	 * Creates a new message boards category with the primary key. Does not add the message boards category to the database.
-	 *
-	 * @param categoryId the primary key for the new message boards category
-	 * @return the new message boards category
-	 */
-	public MBCategory create(long categoryId) {
-		MBCategory mbCategory = new MBCategoryImpl();
-
-		mbCategory.setNew(true);
-		mbCategory.setPrimaryKey(categoryId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		mbCategory.setUuid(uuid);
-
-		return mbCategory;
-	}
-
-	/**
-	 * Removes the message boards category with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param categoryId the primary key of the message boards category
-	 * @return the message boards category that was removed
-	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBCategory remove(long categoryId)
-		throws NoSuchCategoryException, SystemException {
-		return remove(Long.valueOf(categoryId));
-	}
-
-	/**
-	 * Removes the message boards category with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the message boards category
-	 * @return the message boards category that was removed
-	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MBCategory remove(Serializable primaryKey)
-		throws NoSuchCategoryException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			MBCategory mbCategory = (MBCategory)session.get(MBCategoryImpl.class,
-					primaryKey);
-
-			if (mbCategory == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchCategoryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(mbCategory);
-		}
-		catch (NoSuchCategoryException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected MBCategory removeImpl(MBCategory mbCategory)
-		throws SystemException {
-		mbCategory = toUnwrappedModel(mbCategory);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(mbCategory)) {
-				mbCategory = (MBCategory)session.get(MBCategoryImpl.class,
-						mbCategory.getPrimaryKeyObj());
-			}
-
-			if (mbCategory != null) {
-				session.delete(mbCategory);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (mbCategory != null) {
-			clearCache(mbCategory);
-		}
-
-		return mbCategory;
-	}
-
-	@Override
-	public MBCategory updateImpl(
-		com.liferay.portlet.messageboards.model.MBCategory mbCategory)
-		throws SystemException {
-		mbCategory = toUnwrappedModel(mbCategory);
-
-		boolean isNew = mbCategory.isNew();
-
-		MBCategoryModelImpl mbCategoryModelImpl = (MBCategoryModelImpl)mbCategory;
-
-		if (Validator.isNull(mbCategory.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			mbCategory.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (mbCategory.isNew()) {
-				session.save(mbCategory);
-
-				mbCategory.setNew(false);
-			}
-			else {
-				session.merge(mbCategory);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !MBCategoryModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((mbCategoryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						mbCategoryModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { mbCategoryModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((mbCategoryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						mbCategoryModelImpl.getOriginalUuid(),
-						Long.valueOf(mbCategoryModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						mbCategoryModelImpl.getUuid(),
-						Long.valueOf(mbCategoryModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((mbCategoryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(mbCategoryModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(mbCategoryModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((mbCategoryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(mbCategoryModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(mbCategoryModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((mbCategoryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(mbCategoryModelImpl.getOriginalGroupId()),
-						Long.valueOf(mbCategoryModelImpl.getOriginalParentCategoryId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(mbCategoryModelImpl.getGroupId()),
-						Long.valueOf(mbCategoryModelImpl.getParentCategoryId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-			MBCategoryImpl.class, mbCategory.getPrimaryKey(), mbCategory);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-				new Object[] {
-					mbCategory.getUuid(), Long.valueOf(mbCategory.getGroupId())
-				}, mbCategory);
-		}
-		else {
-			if ((mbCategoryModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						mbCategoryModelImpl.getOriginalUuid(),
-						Long.valueOf(mbCategoryModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
-						mbCategory.getUuid(),
-						Long.valueOf(mbCategory.getGroupId())
-					}, mbCategory);
-			}
-		}
-
-		return mbCategory;
-	}
-
-	protected MBCategory toUnwrappedModel(MBCategory mbCategory) {
-		if (mbCategory instanceof MBCategoryImpl) {
-			return mbCategory;
-		}
-
-		MBCategoryImpl mbCategoryImpl = new MBCategoryImpl();
-
-		mbCategoryImpl.setNew(mbCategory.isNew());
-		mbCategoryImpl.setPrimaryKey(mbCategory.getPrimaryKey());
-
-		mbCategoryImpl.setUuid(mbCategory.getUuid());
-		mbCategoryImpl.setCategoryId(mbCategory.getCategoryId());
-		mbCategoryImpl.setGroupId(mbCategory.getGroupId());
-		mbCategoryImpl.setCompanyId(mbCategory.getCompanyId());
-		mbCategoryImpl.setUserId(mbCategory.getUserId());
-		mbCategoryImpl.setUserName(mbCategory.getUserName());
-		mbCategoryImpl.setCreateDate(mbCategory.getCreateDate());
-		mbCategoryImpl.setModifiedDate(mbCategory.getModifiedDate());
-		mbCategoryImpl.setParentCategoryId(mbCategory.getParentCategoryId());
-		mbCategoryImpl.setName(mbCategory.getName());
-		mbCategoryImpl.setDescription(mbCategory.getDescription());
-		mbCategoryImpl.setDisplayStyle(mbCategory.getDisplayStyle());
-		mbCategoryImpl.setThreadCount(mbCategory.getThreadCount());
-		mbCategoryImpl.setMessageCount(mbCategory.getMessageCount());
-		mbCategoryImpl.setLastPostDate(mbCategory.getLastPostDate());
-
-		return mbCategoryImpl;
-	}
-
-	/**
-	 * Returns the message boards category with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the message boards category
-	 * @return the message boards category
-	 * @throws com.liferay.portal.NoSuchModelException if a message boards category with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MBCategory findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the message boards category with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchCategoryException} if it could not be found.
-	 *
-	 * @param categoryId the primary key of the message boards category
-	 * @return the message boards category
-	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBCategory findByPrimaryKey(long categoryId)
-		throws NoSuchCategoryException, SystemException {
-		MBCategory mbCategory = fetchByPrimaryKey(categoryId);
-
-		if (mbCategory == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + categoryId);
-			}
-
-			throw new NoSuchCategoryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				categoryId);
-		}
-
-		return mbCategory;
-	}
-
-	/**
-	 * Returns the message boards category with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the message boards category
-	 * @return the message boards category, or <code>null</code> if a message boards category with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MBCategory fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the message boards category with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param categoryId the primary key of the message boards category
-	 * @return the message boards category, or <code>null</code> if a message boards category with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBCategory fetchByPrimaryKey(long categoryId)
-		throws SystemException {
-		MBCategory mbCategory = (MBCategory)EntityCacheUtil.getResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-				MBCategoryImpl.class, categoryId);
-
-		if (mbCategory == _nullMBCategory) {
-			return null;
-		}
-
-		if (mbCategory == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				mbCategory = (MBCategory)session.get(MBCategoryImpl.class,
-						Long.valueOf(categoryId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (mbCategory != null) {
-					cacheResult(mbCategory);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-						MBCategoryImpl.class, categoryId, _nullMBCategory);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return mbCategory;
-	}
 
 	/**
 	 * Returns all the message boards categories where uuid = &#63;.
@@ -1108,6 +513,97 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	}
 
 	/**
+	 * Removes all the message boards categories where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (MBCategory mbCategory : findByUuid(uuid)) {
+			remove(mbCategory);
+		}
+	}
+
+	/**
+	 * Returns the number of message boards categories where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching message boards categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MBCATEGORY_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "mbCategory.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "mbCategory.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(mbCategory.uuid IS NULL OR mbCategory.uuid = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			MBCategoryModelImpl.UUID_COLUMN_BITMASK |
+			MBCategoryModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns the message boards category where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchCategoryException} if it could not be found.
 	 *
 	 * @param uuid the uuid
@@ -1269,6 +765,117 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 			}
 		}
 	}
+
+	/**
+	 * Removes the message boards category where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the message boards category that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBCategory removeByUUID_G(String uuid, long groupId)
+		throws NoSuchCategoryException, SystemException {
+		MBCategory mbCategory = findByUUID_G(uuid, groupId);
+
+		return remove(mbCategory);
+	}
+
+	/**
+	 * Returns the number of message boards categories where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching message boards categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUUID_G(String uuid, long groupId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_MBCATEGORY_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "mbCategory.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "mbCategory.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(mbCategory.uuid IS NULL OR mbCategory.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "mbCategory.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			MBCategoryModelImpl.UUID_COLUMN_BITMASK |
+			MBCategoryModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the message boards categories where uuid = &#63; and companyId = &#63;.
@@ -1704,6 +1311,115 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the message boards categories where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (MBCategory mbCategory : findByUuid_C(uuid, companyId)) {
+			remove(mbCategory);
+		}
+	}
+
+	/**
+	 * Returns the number of message boards categories where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching message boards categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_MBCATEGORY_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "mbCategory.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "mbCategory.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(mbCategory.uuid IS NULL OR mbCategory.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "mbCategory.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			MBCategoryModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the message boards categories where groupId = &#63;.
@@ -2397,6 +2113,141 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	}
 
 	/**
+	 * Removes all the message boards categories where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (MBCategory mbCategory : findByGroupId(groupId)) {
+			remove(mbCategory);
+		}
+	}
+
+	/**
+	 * Returns the number of message boards categories where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching message boards categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MBCATEGORY_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of message boards categories that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching message boards categories that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_MBCATEGORY_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				MBCategory.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "mbCategory.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			MBCategoryModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the message boards categories where companyId = &#63;.
 	 *
 	 * @param companyId the company ID
@@ -2778,6 +2629,96 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the message boards categories where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (MBCategory mbCategory : findByCompanyId(companyId)) {
+			remove(mbCategory);
+		}
+	}
+
+	/**
+	 * Returns the number of message boards categories where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching message boards categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MBCATEGORY_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "mbCategory.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBCategoryModelImpl.GROUPID_COLUMN_BITMASK |
+			MBCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
+			new String[] { Long.class.getName(), Long.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the message boards categories where groupId = &#63; and parentCategoryId = &#63;.
@@ -3843,186 +3784,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	}
 
 	/**
-	 * Returns all the message boards categories.
-	 *
-	 * @return the message boards categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MBCategory> findAll() throws SystemException {
-		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the message boards categories.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of message boards categories
-	 * @param end the upper bound of the range of message boards categories (not inclusive)
-	 * @return the range of message boards categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MBCategory> findAll(int start, int end)
-		throws SystemException {
-		return findAll(start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the message boards categories.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of message boards categories
-	 * @param end the upper bound of the range of message boards categories (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of message boards categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MBCategory> findAll(int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<MBCategory> list = (List<MBCategory>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if (list == null) {
-			StringBundler query = null;
-			String sql = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 3));
-
-				query.append(_SQL_SELECT_MBCATEGORY);
-
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-
-				sql = query.toString();
-			}
-			else {
-				sql = _SQL_SELECT_MBCATEGORY.concat(MBCategoryModelImpl.ORDER_BY_JPQL);
-			}
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				if (orderByComparator == null) {
-					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-				}
-				else {
-					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Removes all the message boards categories where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (MBCategory mbCategory : findByUuid(uuid)) {
-			remove(mbCategory);
-		}
-	}
-
-	/**
-	 * Removes the message boards category where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the message boards category that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBCategory removeByUUID_G(String uuid, long groupId)
-		throws NoSuchCategoryException, SystemException {
-		MBCategory mbCategory = findByUUID_G(uuid, groupId);
-
-		return remove(mbCategory);
-	}
-
-	/**
-	 * Removes all the message boards categories where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (MBCategory mbCategory : findByUuid_C(uuid, companyId)) {
-			remove(mbCategory);
-		}
-	}
-
-	/**
-	 * Removes all the message boards categories where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (MBCategory mbCategory : findByGroupId(groupId)) {
-			remove(mbCategory);
-		}
-	}
-
-	/**
-	 * Removes all the message boards categories where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (MBCategory mbCategory : findByCompanyId(companyId)) {
-			remove(mbCategory);
-		}
-	}
-
-	/**
 	 * Removes all the message boards categories where groupId = &#63; and parentCategoryId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -4034,378 +3795,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 		for (MBCategory mbCategory : findByG_P(groupId, parentCategoryId)) {
 			remove(mbCategory);
 		}
-	}
-
-	/**
-	 * Removes all the message boards categories from the database.
-	 *
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeAll() throws SystemException {
-		for (MBCategory mbCategory : findAll()) {
-			remove(mbCategory);
-		}
-	}
-
-	/**
-	 * Returns the number of message boards categories where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching message boards categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MBCATEGORY_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of message boards categories where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching message boards categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUUID_G(String uuid, long groupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_MBCATEGORY_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of message boards categories where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching message boards categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_MBCATEGORY_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of message boards categories where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching message boards categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MBCATEGORY_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of message boards categories that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching message boards categories that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_MBCATEGORY_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				MBCategory.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of message boards categories where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching message boards categories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MBCATEGORY_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -4692,6 +4081,642 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 		}
 	}
 
+	private static final String _FINDER_COLUMN_G_P_GROUPID_2 = "mbCategory.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_GROUPID_5 = "(" +
+		_removeConjunction(_FINDER_COLUMN_G_P_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_PARENTCATEGORYID_2 = "mbCategory.parentCategoryId = ?";
+	private static final String _FINDER_COLUMN_G_P_PARENTCATEGORYID_5 = "(" +
+		_removeConjunction(_FINDER_COLUMN_G_P_PARENTCATEGORYID_2) + ")";
+
+	/**
+	 * Caches the message boards category in the entity cache if it is enabled.
+	 *
+	 * @param mbCategory the message boards category
+	 */
+	public void cacheResult(MBCategory mbCategory) {
+		EntityCacheUtil.putResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryImpl.class, mbCategory.getPrimaryKey(), mbCategory);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				mbCategory.getUuid(), Long.valueOf(mbCategory.getGroupId())
+			}, mbCategory);
+
+		mbCategory.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the message boards categories in the entity cache if it is enabled.
+	 *
+	 * @param mbCategories the message boards categories
+	 */
+	public void cacheResult(List<MBCategory> mbCategories) {
+		for (MBCategory mbCategory : mbCategories) {
+			if (EntityCacheUtil.getResult(
+						MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+						MBCategoryImpl.class, mbCategory.getPrimaryKey()) == null) {
+				cacheResult(mbCategory);
+			}
+			else {
+				mbCategory.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all message boards categories.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(MBCategoryImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(MBCategoryImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the message boards category.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(MBCategory mbCategory) {
+		EntityCacheUtil.removeResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryImpl.class, mbCategory.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(mbCategory);
+	}
+
+	@Override
+	public void clearCache(List<MBCategory> mbCategories) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (MBCategory mbCategory : mbCategories) {
+			EntityCacheUtil.removeResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+				MBCategoryImpl.class, mbCategory.getPrimaryKey());
+
+			clearUniqueFindersCache(mbCategory);
+		}
+	}
+
+	protected void clearUniqueFindersCache(MBCategory mbCategory) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				mbCategory.getUuid(), Long.valueOf(mbCategory.getGroupId())
+			});
+	}
+
+	/**
+	 * Creates a new message boards category with the primary key. Does not add the message boards category to the database.
+	 *
+	 * @param categoryId the primary key for the new message boards category
+	 * @return the new message boards category
+	 */
+	public MBCategory create(long categoryId) {
+		MBCategory mbCategory = new MBCategoryImpl();
+
+		mbCategory.setNew(true);
+		mbCategory.setPrimaryKey(categoryId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		mbCategory.setUuid(uuid);
+
+		return mbCategory;
+	}
+
+	/**
+	 * Removes the message boards category with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param categoryId the primary key of the message boards category
+	 * @return the message boards category that was removed
+	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBCategory remove(long categoryId)
+		throws NoSuchCategoryException, SystemException {
+		return remove(Long.valueOf(categoryId));
+	}
+
+	/**
+	 * Removes the message boards category with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the message boards category
+	 * @return the message boards category that was removed
+	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MBCategory remove(Serializable primaryKey)
+		throws NoSuchCategoryException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			MBCategory mbCategory = (MBCategory)session.get(MBCategoryImpl.class,
+					primaryKey);
+
+			if (mbCategory == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchCategoryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(mbCategory);
+		}
+		catch (NoSuchCategoryException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected MBCategory removeImpl(MBCategory mbCategory)
+		throws SystemException {
+		mbCategory = toUnwrappedModel(mbCategory);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(mbCategory)) {
+				mbCategory = (MBCategory)session.get(MBCategoryImpl.class,
+						mbCategory.getPrimaryKeyObj());
+			}
+
+			if (mbCategory != null) {
+				session.delete(mbCategory);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (mbCategory != null) {
+			clearCache(mbCategory);
+		}
+
+		return mbCategory;
+	}
+
+	@Override
+	public MBCategory updateImpl(
+		com.liferay.portlet.messageboards.model.MBCategory mbCategory)
+		throws SystemException {
+		mbCategory = toUnwrappedModel(mbCategory);
+
+		boolean isNew = mbCategory.isNew();
+
+		MBCategoryModelImpl mbCategoryModelImpl = (MBCategoryModelImpl)mbCategory;
+
+		if (Validator.isNull(mbCategory.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			mbCategory.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (mbCategory.isNew()) {
+				session.save(mbCategory);
+
+				mbCategory.setNew(false);
+			}
+			else {
+				session.merge(mbCategory);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !MBCategoryModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((mbCategoryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						mbCategoryModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { mbCategoryModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((mbCategoryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						mbCategoryModelImpl.getOriginalUuid(),
+						Long.valueOf(mbCategoryModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						mbCategoryModelImpl.getUuid(),
+						Long.valueOf(mbCategoryModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((mbCategoryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(mbCategoryModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(mbCategoryModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+
+			if ((mbCategoryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(mbCategoryModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(mbCategoryModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+
+			if ((mbCategoryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(mbCategoryModelImpl.getOriginalGroupId()),
+						Long.valueOf(mbCategoryModelImpl.getOriginalParentCategoryId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(mbCategoryModelImpl.getGroupId()),
+						Long.valueOf(mbCategoryModelImpl.getParentCategoryId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryImpl.class, mbCategory.getPrimaryKey(), mbCategory);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+				new Object[] {
+					mbCategory.getUuid(), Long.valueOf(mbCategory.getGroupId())
+				}, mbCategory);
+		}
+		else {
+			if ((mbCategoryModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						mbCategoryModelImpl.getOriginalUuid(),
+						Long.valueOf(mbCategoryModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+					new Object[] {
+						mbCategory.getUuid(),
+						Long.valueOf(mbCategory.getGroupId())
+					}, mbCategory);
+			}
+		}
+
+		return mbCategory;
+	}
+
+	protected MBCategory toUnwrappedModel(MBCategory mbCategory) {
+		if (mbCategory instanceof MBCategoryImpl) {
+			return mbCategory;
+		}
+
+		MBCategoryImpl mbCategoryImpl = new MBCategoryImpl();
+
+		mbCategoryImpl.setNew(mbCategory.isNew());
+		mbCategoryImpl.setPrimaryKey(mbCategory.getPrimaryKey());
+
+		mbCategoryImpl.setUuid(mbCategory.getUuid());
+		mbCategoryImpl.setCategoryId(mbCategory.getCategoryId());
+		mbCategoryImpl.setGroupId(mbCategory.getGroupId());
+		mbCategoryImpl.setCompanyId(mbCategory.getCompanyId());
+		mbCategoryImpl.setUserId(mbCategory.getUserId());
+		mbCategoryImpl.setUserName(mbCategory.getUserName());
+		mbCategoryImpl.setCreateDate(mbCategory.getCreateDate());
+		mbCategoryImpl.setModifiedDate(mbCategory.getModifiedDate());
+		mbCategoryImpl.setParentCategoryId(mbCategory.getParentCategoryId());
+		mbCategoryImpl.setName(mbCategory.getName());
+		mbCategoryImpl.setDescription(mbCategory.getDescription());
+		mbCategoryImpl.setDisplayStyle(mbCategory.getDisplayStyle());
+		mbCategoryImpl.setThreadCount(mbCategory.getThreadCount());
+		mbCategoryImpl.setMessageCount(mbCategory.getMessageCount());
+		mbCategoryImpl.setLastPostDate(mbCategory.getLastPostDate());
+
+		return mbCategoryImpl;
+	}
+
+	/**
+	 * Returns the message boards category with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the message boards category
+	 * @return the message boards category
+	 * @throws com.liferay.portal.NoSuchModelException if a message boards category with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MBCategory findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the message boards category with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchCategoryException} if it could not be found.
+	 *
+	 * @param categoryId the primary key of the message boards category
+	 * @return the message boards category
+	 * @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBCategory findByPrimaryKey(long categoryId)
+		throws NoSuchCategoryException, SystemException {
+		MBCategory mbCategory = fetchByPrimaryKey(categoryId);
+
+		if (mbCategory == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + categoryId);
+			}
+
+			throw new NoSuchCategoryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				categoryId);
+		}
+
+		return mbCategory;
+	}
+
+	/**
+	 * Returns the message boards category with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the message boards category
+	 * @return the message boards category, or <code>null</code> if a message boards category with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MBCategory fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the message boards category with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param categoryId the primary key of the message boards category
+	 * @return the message boards category, or <code>null</code> if a message boards category with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBCategory fetchByPrimaryKey(long categoryId)
+		throws SystemException {
+		MBCategory mbCategory = (MBCategory)EntityCacheUtil.getResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+				MBCategoryImpl.class, categoryId);
+
+		if (mbCategory == _nullMBCategory) {
+			return null;
+		}
+
+		if (mbCategory == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				mbCategory = (MBCategory)session.get(MBCategoryImpl.class,
+						Long.valueOf(categoryId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (mbCategory != null) {
+					cacheResult(mbCategory);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+						MBCategoryImpl.class, categoryId, _nullMBCategory);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return mbCategory;
+	}
+
+	/**
+	 * Returns all the message boards categories.
+	 *
+	 * @return the message boards categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MBCategory> findAll() throws SystemException {
+		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the message boards categories.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of message boards categories
+	 * @param end the upper bound of the range of message boards categories (not inclusive)
+	 * @return the range of message boards categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MBCategory> findAll(int start, int end)
+		throws SystemException {
+		return findAll(start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the message boards categories.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of message boards categories
+	 * @param end the upper bound of the range of message boards categories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of message boards categories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MBCategory> findAll(int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
+
+		List<MBCategory> list = (List<MBCategory>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+			String sql = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(2 +
+						(orderByComparator.getOrderByFields().length * 3));
+
+				query.append(_SQL_SELECT_MBCATEGORY);
+
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+
+				sql = query.toString();
+			}
+			else {
+				sql = _SQL_SELECT_MBCATEGORY.concat(MBCategoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				if (orderByComparator == null) {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+				}
+				else {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the message boards categories from the database.
+	 *
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeAll() throws SystemException {
+		for (MBCategory mbCategory : findAll()) {
+			remove(mbCategory);
+		}
+	}
+
 	/**
 	 * Returns the number of message boards categories.
 	 *
@@ -4791,25 +4816,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	private static final String _SQL_SELECT_MBCATEGORY_WHERE = "SELECT mbCategory FROM MBCategory mbCategory WHERE ";
 	private static final String _SQL_COUNT_MBCATEGORY = "SELECT COUNT(mbCategory) FROM MBCategory mbCategory";
 	private static final String _SQL_COUNT_MBCATEGORY_WHERE = "SELECT COUNT(mbCategory) FROM MBCategory mbCategory WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "mbCategory.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "mbCategory.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(mbCategory.uuid IS NULL OR mbCategory.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "mbCategory.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "mbCategory.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(mbCategory.uuid IS NULL OR mbCategory.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "mbCategory.groupId = ?";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "mbCategory.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "mbCategory.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(mbCategory.uuid IS NULL OR mbCategory.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "mbCategory.companyId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "mbCategory.groupId = ?";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "mbCategory.companyId = ?";
-	private static final String _FINDER_COLUMN_G_P_GROUPID_2 = "mbCategory.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_PARENTCATEGORYID_2 = "mbCategory.parentCategoryId = ?";
-	private static final String _FINDER_COLUMN_G_P_PARENTCATEGORYID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_PARENTCATEGORYID_2) + ")";
 
 	private static String _removeConjunction(String sql) {
 		int pos = sql.indexOf(" AND ");

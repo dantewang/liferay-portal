@@ -111,86 +111,6 @@ public class MembershipRequestUtil {
 	}
 
 	/**
-	* Caches the membership request in the entity cache if it is enabled.
-	*
-	* @param membershipRequest the membership request
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.MembershipRequest membershipRequest) {
-		getPersistence().cacheResult(membershipRequest);
-	}
-
-	/**
-	* Caches the membership requests in the entity cache if it is enabled.
-	*
-	* @param membershipRequests the membership requests
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.MembershipRequest> membershipRequests) {
-		getPersistence().cacheResult(membershipRequests);
-	}
-
-	/**
-	* Creates a new membership request with the primary key. Does not add the membership request to the database.
-	*
-	* @param membershipRequestId the primary key for the new membership request
-	* @return the new membership request
-	*/
-	public static com.liferay.portal.model.MembershipRequest create(
-		long membershipRequestId) {
-		return getPersistence().create(membershipRequestId);
-	}
-
-	/**
-	* Removes the membership request with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param membershipRequestId the primary key of the membership request
-	* @return the membership request that was removed
-	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.MembershipRequest remove(
-		long membershipRequestId)
-		throws com.liferay.portal.NoSuchMembershipRequestException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(membershipRequestId);
-	}
-
-	public static com.liferay.portal.model.MembershipRequest updateImpl(
-		com.liferay.portal.model.MembershipRequest membershipRequest)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(membershipRequest);
-	}
-
-	/**
-	* Returns the membership request with the primary key or throws a {@link com.liferay.portal.NoSuchMembershipRequestException} if it could not be found.
-	*
-	* @param membershipRequestId the primary key of the membership request
-	* @return the membership request
-	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.MembershipRequest findByPrimaryKey(
-		long membershipRequestId)
-		throws com.liferay.portal.NoSuchMembershipRequestException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(membershipRequestId);
-	}
-
-	/**
-	* Returns the membership request with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param membershipRequestId the primary key of the membership request
-	* @return the membership request, or <code>null</code> if a membership request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.MembershipRequest fetchByPrimaryKey(
-		long membershipRequestId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(membershipRequestId);
-	}
-
-	/**
 	* Returns all the membership requests where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -329,6 +249,29 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Removes all the membership requests where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of membership requests where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching membership requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
 	* Returns all the membership requests where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -463,6 +406,29 @@ public class MembershipRequestUtil {
 		return getPersistence()
 				   .findByUserId_PrevAndNext(membershipRequestId, userId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the membership requests where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUserId(userId);
+	}
+
+	/**
+	* Returns the number of membership requests where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching membership requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUserId(userId);
 	}
 
 	/**
@@ -613,6 +579,31 @@ public class MembershipRequestUtil {
 		return getPersistence()
 				   .findByG_S_PrevAndNext(membershipRequestId, groupId,
 			statusId, orderByComparator);
+	}
+
+	/**
+	* Removes all the membership requests where groupId = &#63; and statusId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param statusId the status ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_S(long groupId, int statusId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_S(groupId, statusId);
+	}
+
+	/**
+	* Returns the number of membership requests where groupId = &#63; and statusId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param statusId the status ID
+	* @return the number of matching membership requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_S(long groupId, int statusId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_S(groupId, statusId);
 	}
 
 	/**
@@ -780,6 +771,113 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Removes all the membership requests where groupId = &#63; and userId = &#63; and statusId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param statusId the status ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_U_S(long groupId, long userId, int statusId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_U_S(groupId, userId, statusId);
+	}
+
+	/**
+	* Returns the number of membership requests where groupId = &#63; and userId = &#63; and statusId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param statusId the status ID
+	* @return the number of matching membership requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U_S(long groupId, long userId, int statusId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_U_S(groupId, userId, statusId);
+	}
+
+	/**
+	* Caches the membership request in the entity cache if it is enabled.
+	*
+	* @param membershipRequest the membership request
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.MembershipRequest membershipRequest) {
+		getPersistence().cacheResult(membershipRequest);
+	}
+
+	/**
+	* Caches the membership requests in the entity cache if it is enabled.
+	*
+	* @param membershipRequests the membership requests
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.MembershipRequest> membershipRequests) {
+		getPersistence().cacheResult(membershipRequests);
+	}
+
+	/**
+	* Creates a new membership request with the primary key. Does not add the membership request to the database.
+	*
+	* @param membershipRequestId the primary key for the new membership request
+	* @return the new membership request
+	*/
+	public static com.liferay.portal.model.MembershipRequest create(
+		long membershipRequestId) {
+		return getPersistence().create(membershipRequestId);
+	}
+
+	/**
+	* Removes the membership request with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param membershipRequestId the primary key of the membership request
+	* @return the membership request that was removed
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest remove(
+		long membershipRequestId)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(membershipRequestId);
+	}
+
+	public static com.liferay.portal.model.MembershipRequest updateImpl(
+		com.liferay.portal.model.MembershipRequest membershipRequest)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(membershipRequest);
+	}
+
+	/**
+	* Returns the membership request with the primary key or throws a {@link com.liferay.portal.NoSuchMembershipRequestException} if it could not be found.
+	*
+	* @param membershipRequestId the primary key of the membership request
+	* @return the membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest findByPrimaryKey(
+		long membershipRequestId)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(membershipRequestId);
+	}
+
+	/**
+	* Returns the membership request with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param membershipRequestId the primary key of the membership request
+	* @return the membership request, or <code>null</code> if a membership request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest fetchByPrimaryKey(
+		long membershipRequestId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(membershipRequestId);
+	}
+
+	/**
 	* Returns all the membership requests.
 	*
 	* @return the membership requests
@@ -829,53 +927,6 @@ public class MembershipRequestUtil {
 	}
 
 	/**
-	* Removes all the membership requests where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes all the membership requests where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUserId(userId);
-	}
-
-	/**
-	* Removes all the membership requests where groupId = &#63; and statusId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param statusId the status ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_S(long groupId, int statusId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_S(groupId, statusId);
-	}
-
-	/**
-	* Removes all the membership requests where groupId = &#63; and userId = &#63; and statusId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param statusId the status ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_U_S(long groupId, long userId, int statusId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_U_S(groupId, userId, statusId);
-	}
-
-	/**
 	* Removes all the membership requests from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -883,57 +934,6 @@ public class MembershipRequestUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of membership requests where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching membership requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of membership requests where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching membership requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUserId(userId);
-	}
-
-	/**
-	* Returns the number of membership requests where groupId = &#63; and statusId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param statusId the status ID
-	* @return the number of matching membership requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_S(long groupId, int statusId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_S(groupId, statusId);
-	}
-
-	/**
-	* Returns the number of membership requests where groupId = &#63; and userId = &#63; and statusId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param statusId the status ID
-	* @return the number of matching membership requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U_S(long groupId, long userId, int statusId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_U_S(groupId, userId, statusId);
 	}
 
 	/**

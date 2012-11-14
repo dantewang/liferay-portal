@@ -38,69 +38,6 @@ public interface JournalTemplatePersistence extends BasePersistence<JournalTempl
 	 */
 
 	/**
-	* Caches the journal template in the entity cache if it is enabled.
-	*
-	* @param journalTemplate the journal template
-	*/
-	public void cacheResult(
-		com.liferay.portlet.journal.model.JournalTemplate journalTemplate);
-
-	/**
-	* Caches the journal templates in the entity cache if it is enabled.
-	*
-	* @param journalTemplates the journal templates
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.journal.model.JournalTemplate> journalTemplates);
-
-	/**
-	* Creates a new journal template with the primary key. Does not add the journal template to the database.
-	*
-	* @param id the primary key for the new journal template
-	* @return the new journal template
-	*/
-	public com.liferay.portlet.journal.model.JournalTemplate create(long id);
-
-	/**
-	* Removes the journal template with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param id the primary key of the journal template
-	* @return the journal template that was removed
-	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalTemplate remove(long id)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException;
-
-	public com.liferay.portlet.journal.model.JournalTemplate updateImpl(
-		com.liferay.portlet.journal.model.JournalTemplate journalTemplate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the journal template with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
-	*
-	* @param id the primary key of the journal template
-	* @return the journal template
-	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalTemplate findByPrimaryKey(
-		long id)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException;
-
-	/**
-	* Returns the journal template with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param id the primary key of the journal template
-	* @return the journal template, or <code>null</code> if a journal template with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalTemplate fetchByPrimaryKey(
-		long id) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the journal templates where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -220,6 +157,25 @@ public interface JournalTemplatePersistence extends BasePersistence<JournalTempl
 			com.liferay.portlet.journal.NoSuchTemplateException;
 
 	/**
+	* Removes all the journal templates where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal templates where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching journal templates
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the journal template where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -256,6 +212,30 @@ public interface JournalTemplatePersistence extends BasePersistence<JournalTempl
 	*/
 	public com.liferay.portlet.journal.model.JournalTemplate fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the journal template where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the journal template that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalTemplate removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException;
+
+	/**
+	* Returns the number of journal templates where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching journal templates
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -384,6 +364,27 @@ public interface JournalTemplatePersistence extends BasePersistence<JournalTempl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchTemplateException;
+
+	/**
+	* Removes all the journal templates where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal templates where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching journal templates
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal templates where groupId = &#63;.
@@ -568,6 +569,35 @@ public interface JournalTemplatePersistence extends BasePersistence<JournalTempl
 			com.liferay.portlet.journal.NoSuchTemplateException;
 
 	/**
+	* Removes all the journal templates where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal templates where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching journal templates
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal templates that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching journal templates that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal templates where templateId = &#63;.
 	*
 	* @param templateId the template ID
@@ -685,6 +715,25 @@ public interface JournalTemplatePersistence extends BasePersistence<JournalTempl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchTemplateException;
+
+	/**
+	* Removes all the journal templates where templateId = &#63; from the database.
+	*
+	* @param templateId the template ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByTemplateId(java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal templates where templateId = &#63;.
+	*
+	* @param templateId the template ID
+	* @return the number of matching journal templates
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByTemplateId(java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal templates where structureId = &#63;.
@@ -806,6 +855,25 @@ public interface JournalTemplatePersistence extends BasePersistence<JournalTempl
 			com.liferay.portlet.journal.NoSuchTemplateException;
 
 	/**
+	* Removes all the journal templates where structureId = &#63; from the database.
+	*
+	* @param structureId the structure ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByStructureId(java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal templates where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the number of matching journal templates
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByStructureId(java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the journal template where smallImageId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
 	*
 	* @param smallImageId the small image ID
@@ -839,6 +907,28 @@ public interface JournalTemplatePersistence extends BasePersistence<JournalTempl
 	*/
 	public com.liferay.portlet.journal.model.JournalTemplate fetchBySmallImageId(
 		long smallImageId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the journal template where smallImageId = &#63; from the database.
+	*
+	* @param smallImageId the small image ID
+	* @return the journal template that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalTemplate removeBySmallImageId(
+		long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException;
+
+	/**
+	* Returns the number of journal templates where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @return the number of matching journal templates
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countBySmallImageId(long smallImageId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -878,6 +968,30 @@ public interface JournalTemplatePersistence extends BasePersistence<JournalTempl
 	*/
 	public com.liferay.portlet.journal.model.JournalTemplate fetchByG_T(
 		long groupId, java.lang.String templateId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the journal template where groupId = &#63; and templateId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @return the journal template that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalTemplate removeByG_T(
+		long groupId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException;
+
+	/**
+	* Returns the number of journal templates where groupId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @return the number of matching journal templates
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_T(long groupId, java.lang.String templateId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -1075,6 +1189,101 @@ public interface JournalTemplatePersistence extends BasePersistence<JournalTempl
 			com.liferay.portlet.journal.NoSuchTemplateException;
 
 	/**
+	* Removes all the journal templates where groupId = &#63; and structureId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_S(long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal templates where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the number of matching journal templates
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_S(long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal templates that the user has permission to view where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the number of matching journal templates that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_S(long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the journal template in the entity cache if it is enabled.
+	*
+	* @param journalTemplate the journal template
+	*/
+	public void cacheResult(
+		com.liferay.portlet.journal.model.JournalTemplate journalTemplate);
+
+	/**
+	* Caches the journal templates in the entity cache if it is enabled.
+	*
+	* @param journalTemplates the journal templates
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.journal.model.JournalTemplate> journalTemplates);
+
+	/**
+	* Creates a new journal template with the primary key. Does not add the journal template to the database.
+	*
+	* @param id the primary key for the new journal template
+	* @return the new journal template
+	*/
+	public com.liferay.portlet.journal.model.JournalTemplate create(long id);
+
+	/**
+	* Removes the journal template with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param id the primary key of the journal template
+	* @return the journal template that was removed
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalTemplate remove(long id)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException;
+
+	public com.liferay.portlet.journal.model.JournalTemplate updateImpl(
+		com.liferay.portlet.journal.model.JournalTemplate journalTemplate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the journal template with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
+	*
+	* @param id the primary key of the journal template
+	* @return the journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalTemplate findByPrimaryKey(
+		long id)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException;
+
+	/**
+	* Returns the journal template with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param id the primary key of the journal template
+	* @return the journal template, or <code>null</code> if a journal template with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalTemplate fetchByPrimaryKey(
+		long id) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal templates.
 	*
 	* @return the journal templates
@@ -1118,220 +1327,11 @@ public interface JournalTemplatePersistence extends BasePersistence<JournalTempl
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the journal templates where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the journal template where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the journal template that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalTemplate removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException;
-
-	/**
-	* Removes all the journal templates where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal templates where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal templates where templateId = &#63; from the database.
-	*
-	* @param templateId the template ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByTemplateId(java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal templates where structureId = &#63; from the database.
-	*
-	* @param structureId the structure ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByStructureId(java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the journal template where smallImageId = &#63; from the database.
-	*
-	* @param smallImageId the small image ID
-	* @return the journal template that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalTemplate removeBySmallImageId(
-		long smallImageId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException;
-
-	/**
-	* Removes the journal template where groupId = &#63; and templateId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param templateId the template ID
-	* @return the journal template that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalTemplate removeByG_T(
-		long groupId, java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException;
-
-	/**
-	* Removes all the journal templates where groupId = &#63; and structureId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_S(long groupId, java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the journal templates from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal templates where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching journal templates
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal templates where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching journal templates
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal templates where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching journal templates
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal templates where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching journal templates
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal templates that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching journal templates that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal templates where templateId = &#63;.
-	*
-	* @param templateId the template ID
-	* @return the number of matching journal templates
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByTemplateId(java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal templates where structureId = &#63;.
-	*
-	* @param structureId the structure ID
-	* @return the number of matching journal templates
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByStructureId(java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal templates where smallImageId = &#63;.
-	*
-	* @param smallImageId the small image ID
-	* @return the number of matching journal templates
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countBySmallImageId(long smallImageId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal templates where groupId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param templateId the template ID
-	* @return the number of matching journal templates
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_T(long groupId, java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal templates where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @return the number of matching journal templates
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_S(long groupId, java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal templates that the user has permission to view where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @return the number of matching journal templates that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_S(long groupId, java.lang.String structureId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

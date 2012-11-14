@@ -111,86 +111,6 @@ public class ResourcePermissionUtil {
 	}
 
 	/**
-	* Caches the resource permission in the entity cache if it is enabled.
-	*
-	* @param resourcePermission the resource permission
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.ResourcePermission resourcePermission) {
-		getPersistence().cacheResult(resourcePermission);
-	}
-
-	/**
-	* Caches the resource permissions in the entity cache if it is enabled.
-	*
-	* @param resourcePermissions the resource permissions
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.ResourcePermission> resourcePermissions) {
-		getPersistence().cacheResult(resourcePermissions);
-	}
-
-	/**
-	* Creates a new resource permission with the primary key. Does not add the resource permission to the database.
-	*
-	* @param resourcePermissionId the primary key for the new resource permission
-	* @return the new resource permission
-	*/
-	public static com.liferay.portal.model.ResourcePermission create(
-		long resourcePermissionId) {
-		return getPersistence().create(resourcePermissionId);
-	}
-
-	/**
-	* Removes the resource permission with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param resourcePermissionId the primary key of the resource permission
-	* @return the resource permission that was removed
-	* @throws com.liferay.portal.NoSuchResourcePermissionException if a resource permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourcePermission remove(
-		long resourcePermissionId)
-		throws com.liferay.portal.NoSuchResourcePermissionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(resourcePermissionId);
-	}
-
-	public static com.liferay.portal.model.ResourcePermission updateImpl(
-		com.liferay.portal.model.ResourcePermission resourcePermission)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(resourcePermission);
-	}
-
-	/**
-	* Returns the resource permission with the primary key or throws a {@link com.liferay.portal.NoSuchResourcePermissionException} if it could not be found.
-	*
-	* @param resourcePermissionId the primary key of the resource permission
-	* @return the resource permission
-	* @throws com.liferay.portal.NoSuchResourcePermissionException if a resource permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourcePermission findByPrimaryKey(
-		long resourcePermissionId)
-		throws com.liferay.portal.NoSuchResourcePermissionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(resourcePermissionId);
-	}
-
-	/**
-	* Returns the resource permission with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param resourcePermissionId the primary key of the resource permission
-	* @return the resource permission, or <code>null</code> if a resource permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourcePermission fetchByPrimaryKey(
-		long resourcePermissionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(resourcePermissionId);
-	}
-
-	/**
 	* Returns all the resource permissions where scope = &#63;.
 	*
 	* @param scope the scope
@@ -385,6 +305,41 @@ public class ResourcePermissionUtil {
 	}
 
 	/**
+	* Removes all the resource permissions where scope = &#63; from the database.
+	*
+	* @param scope the scope
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByScope(int scope)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByScope(scope);
+	}
+
+	/**
+	* Returns the number of resource permissions where scope = &#63;.
+	*
+	* @param scope the scope
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByScope(int scope)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByScope(scope);
+	}
+
+	/**
+	* Returns the number of resource permissions where scope = any &#63;.
+	*
+	* @param scopes the scopes
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByScope(int[] scopes)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByScope(scopes);
+	}
+
+	/**
 	* Returns all the resource permissions where roleId = &#63;.
 	*
 	* @param roleId the role ID
@@ -519,6 +474,29 @@ public class ResourcePermissionUtil {
 		return getPersistence()
 				   .findByRoleId_PrevAndNext(resourcePermissionId, roleId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the resource permissions where roleId = &#63; from the database.
+	*
+	* @param roleId the role ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByRoleId(long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByRoleId(roleId);
+	}
+
+	/**
+	* Returns the number of resource permissions where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByRoleId(long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByRoleId(roleId);
 	}
 
 	/**
@@ -669,6 +647,31 @@ public class ResourcePermissionUtil {
 		return getPersistence()
 				   .findByC_P_PrevAndNext(resourcePermissionId, companyId,
 			primKey, orderByComparator);
+	}
+
+	/**
+	* Removes all the resource permissions where companyId = &#63; and primKey LIKE &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param primKey the prim key
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_P(long companyId, java.lang.String primKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_P(companyId, primKey);
+	}
+
+	/**
+	* Returns the number of resource permissions where companyId = &#63; and primKey LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param primKey the prim key
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_P(long companyId, java.lang.String primKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_P(companyId, primKey);
 	}
 
 	/**
@@ -829,6 +832,33 @@ public class ResourcePermissionUtil {
 		return getPersistence()
 				   .findByC_N_S_PrevAndNext(resourcePermissionId, companyId,
 			name, scope, orderByComparator);
+	}
+
+	/**
+	* Removes all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_N_S(long companyId, java.lang.String name,
+		int scope) throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_N_S(companyId, name, scope);
+	}
+
+	/**
+	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_N_S(long companyId, java.lang.String name,
+		int scope) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_N_S(companyId, name, scope);
 	}
 
 	/**
@@ -995,6 +1025,33 @@ public class ResourcePermissionUtil {
 		return getPersistence()
 				   .findByC_P_R_PrevAndNext(resourcePermissionId, companyId,
 			primKey, roleId, orderByComparator);
+	}
+
+	/**
+	* Removes all the resource permissions where companyId = &#63; and primKey = &#63; and roleId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param primKey the prim key
+	* @param roleId the role ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_P_R(long companyId, java.lang.String primKey,
+		long roleId) throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_P_R(companyId, primKey, roleId);
+	}
+
+	/**
+	* Returns the number of resource permissions where companyId = &#63; and primKey = &#63; and roleId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param primKey the prim key
+	* @param roleId the role ID
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_P_R(long companyId, java.lang.String primKey,
+		long roleId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_P_R(companyId, primKey, roleId);
 	}
 
 	/**
@@ -1178,6 +1235,37 @@ public class ResourcePermissionUtil {
 	}
 
 	/**
+	* Removes all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @param primKey the prim key
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_N_S_P(long companyId, java.lang.String name,
+		int scope, java.lang.String primKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_N_S_P(companyId, name, scope, primKey);
+	}
+
+	/**
+	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @param primKey the prim key
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_N_S_P(long companyId, java.lang.String name,
+		int scope, java.lang.String primKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_N_S_P(companyId, name, scope, primKey);
+	}
+
+	/**
 	* Returns all the resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and ownerId = &#63;.
 	*
 	* @param companyId the company ID
@@ -1355,6 +1443,37 @@ public class ResourcePermissionUtil {
 		return getPersistence()
 				   .findByC_N_P_O_PrevAndNext(resourcePermissionId, companyId,
 			name, primKey, ownerId, orderByComparator);
+	}
+
+	/**
+	* Removes all the resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and ownerId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param primKey the prim key
+	* @param ownerId the owner ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_N_P_O(long companyId, java.lang.String name,
+		java.lang.String primKey, long ownerId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_N_P_O(companyId, name, primKey, ownerId);
+	}
+
+	/**
+	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and ownerId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param primKey the prim key
+	* @param ownerId the owner ID
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_N_P_O(long companyId, java.lang.String name,
+		java.lang.String primKey, long ownerId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_N_P_O(companyId, name, primKey, ownerId);
 	}
 
 	/**
@@ -1625,6 +1744,59 @@ public class ResourcePermissionUtil {
 	}
 
 	/**
+	* Removes all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @param primKey the prim key
+	* @param roleId the role ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_N_S_P_R(long companyId, java.lang.String name,
+		int scope, java.lang.String primKey, long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByC_N_S_P_R(companyId, name, scope, primKey, roleId);
+	}
+
+	/**
+	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @param primKey the prim key
+	* @param roleId the role ID
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_N_S_P_R(long companyId, java.lang.String name,
+		int scope, java.lang.String primKey, long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByC_N_S_P_R(companyId, name, scope, primKey, roleId);
+	}
+
+	/**
+	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = any &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @param primKey the prim key
+	* @param roleIds the role IDs
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_N_S_P_R(long companyId, java.lang.String name,
+		int scope, java.lang.String primKey, long[] roleIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByC_N_S_P_R(companyId, name, scope, primKey, roleIds);
+	}
+
+	/**
 	* Returns all the resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and roleId = &#63; and actionIds = &#63;.
 	*
 	* @param companyId the company ID
@@ -1812,6 +1984,41 @@ public class ResourcePermissionUtil {
 		return getPersistence()
 				   .findByC_N_P_R_A_PrevAndNext(resourcePermissionId,
 			companyId, name, primKey, roleId, actionIds, orderByComparator);
+	}
+
+	/**
+	* Removes all the resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and roleId = &#63; and actionIds = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param primKey the prim key
+	* @param roleId the role ID
+	* @param actionIds the action IDs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_N_P_R_A(long companyId, java.lang.String name,
+		java.lang.String primKey, long roleId, long actionIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByC_N_P_R_A(companyId, name, primKey, roleId, actionIds);
+	}
+
+	/**
+	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and roleId = &#63; and actionIds = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param primKey the prim key
+	* @param roleId the role ID
+	* @param actionIds the action IDs
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_N_P_R_A(long companyId, java.lang.String name,
+		java.lang.String primKey, long roleId, long actionIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByC_N_P_R_A(companyId, name, primKey, roleId, actionIds);
 	}
 
 	/**
@@ -2098,6 +2305,66 @@ public class ResourcePermissionUtil {
 	}
 
 	/**
+	* Removes all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; and actionIds = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @param primKey the prim key
+	* @param roleId the role ID
+	* @param actionIds the action IDs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_N_S_P_R_A(long companyId,
+		java.lang.String name, int scope, java.lang.String primKey,
+		long roleId, long actionIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByC_N_S_P_R_A(companyId, name, scope, primKey, roleId,
+			actionIds);
+	}
+
+	/**
+	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; and actionIds = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @param primKey the prim key
+	* @param roleId the role ID
+	* @param actionIds the action IDs
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_N_S_P_R_A(long companyId, java.lang.String name,
+		int scope, java.lang.String primKey, long roleId, long actionIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByC_N_S_P_R_A(companyId, name, scope, primKey, roleId,
+			actionIds);
+	}
+
+	/**
+	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = any &#63; and actionIds = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @param primKey the prim key
+	* @param roleIds the role IDs
+	* @param actionIds the action IDs
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_N_S_P_R_A(long companyId, java.lang.String name,
+		int scope, java.lang.String primKey, long[] roleIds, long actionIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByC_N_S_P_R_A(companyId, name, scope, primKey,
+			roleIds, actionIds);
+	}
+
+	/**
 	* Returns the resource permission where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; and ownerId = &#63; and actionIds = &#63; or throws a {@link com.liferay.portal.NoSuchResourcePermissionException} if it could not be found.
 	*
 	* @param companyId the company ID
@@ -2168,6 +2435,131 @@ public class ResourcePermissionUtil {
 	}
 
 	/**
+	* Removes the resource permission where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; and ownerId = &#63; and actionIds = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @param primKey the prim key
+	* @param roleId the role ID
+	* @param ownerId the owner ID
+	* @param actionIds the action IDs
+	* @return the resource permission that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourcePermission removeByC_N_S_P_R_O_A(
+		long companyId, java.lang.String name, int scope,
+		java.lang.String primKey, long roleId, long ownerId, long actionIds)
+		throws com.liferay.portal.NoSuchResourcePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .removeByC_N_S_P_R_O_A(companyId, name, scope, primKey,
+			roleId, ownerId, actionIds);
+	}
+
+	/**
+	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; and ownerId = &#63; and actionIds = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param scope the scope
+	* @param primKey the prim key
+	* @param roleId the role ID
+	* @param ownerId the owner ID
+	* @param actionIds the action IDs
+	* @return the number of matching resource permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_N_S_P_R_O_A(long companyId,
+		java.lang.String name, int scope, java.lang.String primKey,
+		long roleId, long ownerId, long actionIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByC_N_S_P_R_O_A(companyId, name, scope, primKey,
+			roleId, ownerId, actionIds);
+	}
+
+	/**
+	* Caches the resource permission in the entity cache if it is enabled.
+	*
+	* @param resourcePermission the resource permission
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.ResourcePermission resourcePermission) {
+		getPersistence().cacheResult(resourcePermission);
+	}
+
+	/**
+	* Caches the resource permissions in the entity cache if it is enabled.
+	*
+	* @param resourcePermissions the resource permissions
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.ResourcePermission> resourcePermissions) {
+		getPersistence().cacheResult(resourcePermissions);
+	}
+
+	/**
+	* Creates a new resource permission with the primary key. Does not add the resource permission to the database.
+	*
+	* @param resourcePermissionId the primary key for the new resource permission
+	* @return the new resource permission
+	*/
+	public static com.liferay.portal.model.ResourcePermission create(
+		long resourcePermissionId) {
+		return getPersistence().create(resourcePermissionId);
+	}
+
+	/**
+	* Removes the resource permission with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param resourcePermissionId the primary key of the resource permission
+	* @return the resource permission that was removed
+	* @throws com.liferay.portal.NoSuchResourcePermissionException if a resource permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourcePermission remove(
+		long resourcePermissionId)
+		throws com.liferay.portal.NoSuchResourcePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(resourcePermissionId);
+	}
+
+	public static com.liferay.portal.model.ResourcePermission updateImpl(
+		com.liferay.portal.model.ResourcePermission resourcePermission)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(resourcePermission);
+	}
+
+	/**
+	* Returns the resource permission with the primary key or throws a {@link com.liferay.portal.NoSuchResourcePermissionException} if it could not be found.
+	*
+	* @param resourcePermissionId the primary key of the resource permission
+	* @return the resource permission
+	* @throws com.liferay.portal.NoSuchResourcePermissionException if a resource permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourcePermission findByPrimaryKey(
+		long resourcePermissionId)
+		throws com.liferay.portal.NoSuchResourcePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(resourcePermissionId);
+	}
+
+	/**
+	* Returns the resource permission with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param resourcePermissionId the primary key of the resource permission
+	* @return the resource permission, or <code>null</code> if a resource permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourcePermission fetchByPrimaryKey(
+		long resourcePermissionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(resourcePermissionId);
+	}
+
+	/**
 	* Returns all the resource permissions.
 	*
 	* @return the resource permissions
@@ -2217,173 +2609,6 @@ public class ResourcePermissionUtil {
 	}
 
 	/**
-	* Removes all the resource permissions where scope = &#63; from the database.
-	*
-	* @param scope the scope
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByScope(int scope)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByScope(scope);
-	}
-
-	/**
-	* Removes all the resource permissions where roleId = &#63; from the database.
-	*
-	* @param roleId the role ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByRoleId(long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByRoleId(roleId);
-	}
-
-	/**
-	* Removes all the resource permissions where companyId = &#63; and primKey LIKE &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param primKey the prim key
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_P(long companyId, java.lang.String primKey)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_P(companyId, primKey);
-	}
-
-	/**
-	* Removes all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_N_S(long companyId, java.lang.String name,
-		int scope) throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_N_S(companyId, name, scope);
-	}
-
-	/**
-	* Removes all the resource permissions where companyId = &#63; and primKey = &#63; and roleId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param primKey the prim key
-	* @param roleId the role ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_P_R(long companyId, java.lang.String primKey,
-		long roleId) throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_P_R(companyId, primKey, roleId);
-	}
-
-	/**
-	* Removes all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @param primKey the prim key
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_N_S_P(long companyId, java.lang.String name,
-		int scope, java.lang.String primKey)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_N_S_P(companyId, name, scope, primKey);
-	}
-
-	/**
-	* Removes all the resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and ownerId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param primKey the prim key
-	* @param ownerId the owner ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_N_P_O(long companyId, java.lang.String name,
-		java.lang.String primKey, long ownerId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_N_P_O(companyId, name, primKey, ownerId);
-	}
-
-	/**
-	* Removes all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @param primKey the prim key
-	* @param roleId the role ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_N_S_P_R(long companyId, java.lang.String name,
-		int scope, java.lang.String primKey, long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByC_N_S_P_R(companyId, name, scope, primKey, roleId);
-	}
-
-	/**
-	* Removes all the resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and roleId = &#63; and actionIds = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param primKey the prim key
-	* @param roleId the role ID
-	* @param actionIds the action IDs
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_N_P_R_A(long companyId, java.lang.String name,
-		java.lang.String primKey, long roleId, long actionIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByC_N_P_R_A(companyId, name, primKey, roleId, actionIds);
-	}
-
-	/**
-	* Removes all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; and actionIds = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @param primKey the prim key
-	* @param roleId the role ID
-	* @param actionIds the action IDs
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_N_S_P_R_A(long companyId,
-		java.lang.String name, int scope, java.lang.String primKey,
-		long roleId, long actionIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByC_N_S_P_R_A(companyId, name, scope, primKey, roleId,
-			actionIds);
-	}
-
-	/**
-	* Removes the resource permission where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; and ownerId = &#63; and actionIds = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @param primKey the prim key
-	* @param roleId the role ID
-	* @param ownerId the owner ID
-	* @param actionIds the action IDs
-	* @return the resource permission that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourcePermission removeByC_N_S_P_R_O_A(
-		long companyId, java.lang.String name, int scope,
-		java.lang.String primKey, long roleId, long ownerId, long actionIds)
-		throws com.liferay.portal.NoSuchResourcePermissionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .removeByC_N_S_P_R_O_A(companyId, name, scope, primKey,
-			roleId, ownerId, actionIds);
-	}
-
-	/**
 	* Removes all the resource permissions from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -2391,231 +2616,6 @@ public class ResourcePermissionUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of resource permissions where scope = &#63;.
-	*
-	* @param scope the scope
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByScope(int scope)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByScope(scope);
-	}
-
-	/**
-	* Returns the number of resource permissions where scope = any &#63;.
-	*
-	* @param scopes the scopes
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByScope(int[] scopes)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByScope(scopes);
-	}
-
-	/**
-	* Returns the number of resource permissions where roleId = &#63;.
-	*
-	* @param roleId the role ID
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByRoleId(long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByRoleId(roleId);
-	}
-
-	/**
-	* Returns the number of resource permissions where companyId = &#63; and primKey LIKE &#63;.
-	*
-	* @param companyId the company ID
-	* @param primKey the prim key
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_P(long companyId, java.lang.String primKey)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_P(companyId, primKey);
-	}
-
-	/**
-	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_N_S(long companyId, java.lang.String name,
-		int scope) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_N_S(companyId, name, scope);
-	}
-
-	/**
-	* Returns the number of resource permissions where companyId = &#63; and primKey = &#63; and roleId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param primKey the prim key
-	* @param roleId the role ID
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_P_R(long companyId, java.lang.String primKey,
-		long roleId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_P_R(companyId, primKey, roleId);
-	}
-
-	/**
-	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @param primKey the prim key
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_N_S_P(long companyId, java.lang.String name,
-		int scope, java.lang.String primKey)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_N_S_P(companyId, name, scope, primKey);
-	}
-
-	/**
-	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and ownerId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param primKey the prim key
-	* @param ownerId the owner ID
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_N_P_O(long companyId, java.lang.String name,
-		java.lang.String primKey, long ownerId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_N_P_O(companyId, name, primKey, ownerId);
-	}
-
-	/**
-	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @param primKey the prim key
-	* @param roleId the role ID
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_N_S_P_R(long companyId, java.lang.String name,
-		int scope, java.lang.String primKey, long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByC_N_S_P_R(companyId, name, scope, primKey, roleId);
-	}
-
-	/**
-	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = any &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @param primKey the prim key
-	* @param roleIds the role IDs
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_N_S_P_R(long companyId, java.lang.String name,
-		int scope, java.lang.String primKey, long[] roleIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByC_N_S_P_R(companyId, name, scope, primKey, roleIds);
-	}
-
-	/**
-	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and roleId = &#63; and actionIds = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param primKey the prim key
-	* @param roleId the role ID
-	* @param actionIds the action IDs
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_N_P_R_A(long companyId, java.lang.String name,
-		java.lang.String primKey, long roleId, long actionIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByC_N_P_R_A(companyId, name, primKey, roleId, actionIds);
-	}
-
-	/**
-	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; and actionIds = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @param primKey the prim key
-	* @param roleId the role ID
-	* @param actionIds the action IDs
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_N_S_P_R_A(long companyId, java.lang.String name,
-		int scope, java.lang.String primKey, long roleId, long actionIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByC_N_S_P_R_A(companyId, name, scope, primKey, roleId,
-			actionIds);
-	}
-
-	/**
-	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = any &#63; and actionIds = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @param primKey the prim key
-	* @param roleIds the role IDs
-	* @param actionIds the action IDs
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_N_S_P_R_A(long companyId, java.lang.String name,
-		int scope, java.lang.String primKey, long[] roleIds, long actionIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByC_N_S_P_R_A(companyId, name, scope, primKey,
-			roleIds, actionIds);
-	}
-
-	/**
-	* Returns the number of resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; and ownerId = &#63; and actionIds = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param scope the scope
-	* @param primKey the prim key
-	* @param roleId the role ID
-	* @param ownerId the owner ID
-	* @param actionIds the action IDs
-	* @return the number of matching resource permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_N_S_P_R_O_A(long companyId,
-		java.lang.String name, int scope, java.lang.String primKey,
-		long roleId, long ownerId, long actionIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByC_N_S_P_R_O_A(companyId, name, scope, primKey,
-			roleId, ownerId, actionIds);
 	}
 
 	/**

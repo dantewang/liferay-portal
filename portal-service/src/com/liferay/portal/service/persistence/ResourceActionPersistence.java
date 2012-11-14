@@ -36,70 +36,6 @@ public interface ResourceActionPersistence extends BasePersistence<ResourceActio
 	 */
 
 	/**
-	* Caches the resource action in the entity cache if it is enabled.
-	*
-	* @param resourceAction the resource action
-	*/
-	public void cacheResult(
-		com.liferay.portal.model.ResourceAction resourceAction);
-
-	/**
-	* Caches the resource actions in the entity cache if it is enabled.
-	*
-	* @param resourceActions the resource actions
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.ResourceAction> resourceActions);
-
-	/**
-	* Creates a new resource action with the primary key. Does not add the resource action to the database.
-	*
-	* @param resourceActionId the primary key for the new resource action
-	* @return the new resource action
-	*/
-	public com.liferay.portal.model.ResourceAction create(long resourceActionId);
-
-	/**
-	* Removes the resource action with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param resourceActionId the primary key of the resource action
-	* @return the resource action that was removed
-	* @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.ResourceAction remove(long resourceActionId)
-		throws com.liferay.portal.NoSuchResourceActionException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.ResourceAction updateImpl(
-		com.liferay.portal.model.ResourceAction resourceAction)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the resource action with the primary key or throws a {@link com.liferay.portal.NoSuchResourceActionException} if it could not be found.
-	*
-	* @param resourceActionId the primary key of the resource action
-	* @return the resource action
-	* @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.ResourceAction findByPrimaryKey(
-		long resourceActionId)
-		throws com.liferay.portal.NoSuchResourceActionException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the resource action with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param resourceActionId the primary key of the resource action
-	* @return the resource action, or <code>null</code> if a resource action with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.ResourceAction fetchByPrimaryKey(
-		long resourceActionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the resource actions where name = &#63;.
 	*
 	* @param name the name
@@ -219,6 +155,25 @@ public interface ResourceActionPersistence extends BasePersistence<ResourceActio
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the resource actions where name = &#63; from the database.
+	*
+	* @param name the name
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByName(java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of resource actions where name = &#63;.
+	*
+	* @param name the name
+	* @return the number of matching resource actions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByName(java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the resource action where name = &#63; and actionId = &#63; or throws a {@link com.liferay.portal.NoSuchResourceActionException} if it could not be found.
 	*
 	* @param name the name
@@ -256,6 +211,94 @@ public interface ResourceActionPersistence extends BasePersistence<ResourceActio
 	public com.liferay.portal.model.ResourceAction fetchByN_A(
 		java.lang.String name, java.lang.String actionId,
 		boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the resource action where name = &#63; and actionId = &#63; from the database.
+	*
+	* @param name the name
+	* @param actionId the action ID
+	* @return the resource action that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceAction removeByN_A(
+		java.lang.String name, java.lang.String actionId)
+		throws com.liferay.portal.NoSuchResourceActionException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of resource actions where name = &#63; and actionId = &#63;.
+	*
+	* @param name the name
+	* @param actionId the action ID
+	* @return the number of matching resource actions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_A(java.lang.String name, java.lang.String actionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the resource action in the entity cache if it is enabled.
+	*
+	* @param resourceAction the resource action
+	*/
+	public void cacheResult(
+		com.liferay.portal.model.ResourceAction resourceAction);
+
+	/**
+	* Caches the resource actions in the entity cache if it is enabled.
+	*
+	* @param resourceActions the resource actions
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.ResourceAction> resourceActions);
+
+	/**
+	* Creates a new resource action with the primary key. Does not add the resource action to the database.
+	*
+	* @param resourceActionId the primary key for the new resource action
+	* @return the new resource action
+	*/
+	public com.liferay.portal.model.ResourceAction create(long resourceActionId);
+
+	/**
+	* Removes the resource action with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param resourceActionId the primary key of the resource action
+	* @return the resource action that was removed
+	* @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceAction remove(long resourceActionId)
+		throws com.liferay.portal.NoSuchResourceActionException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.ResourceAction updateImpl(
+		com.liferay.portal.model.ResourceAction resourceAction)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the resource action with the primary key or throws a {@link com.liferay.portal.NoSuchResourceActionException} if it could not be found.
+	*
+	* @param resourceActionId the primary key of the resource action
+	* @return the resource action
+	* @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceAction findByPrimaryKey(
+		long resourceActionId)
+		throws com.liferay.portal.NoSuchResourceActionException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the resource action with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param resourceActionId the primary key of the resource action
+	* @return the resource action, or <code>null</code> if a resource action with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceAction fetchByPrimaryKey(
+		long resourceActionId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -302,54 +345,11 @@ public interface ResourceActionPersistence extends BasePersistence<ResourceActio
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the resource actions where name = &#63; from the database.
-	*
-	* @param name the name
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByName(java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the resource action where name = &#63; and actionId = &#63; from the database.
-	*
-	* @param name the name
-	* @param actionId the action ID
-	* @return the resource action that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.ResourceAction removeByN_A(
-		java.lang.String name, java.lang.String actionId)
-		throws com.liferay.portal.NoSuchResourceActionException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the resource actions from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of resource actions where name = &#63;.
-	*
-	* @param name the name
-	* @return the number of matching resource actions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByName(java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of resource actions where name = &#63; and actionId = &#63;.
-	*
-	* @param name the name
-	* @param actionId the action ID
-	* @return the number of matching resource actions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_A(java.lang.String name, java.lang.String actionId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

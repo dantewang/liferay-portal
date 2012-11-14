@@ -111,85 +111,6 @@ public class ShoppingItemUtil {
 	}
 
 	/**
-	* Caches the shopping item in the entity cache if it is enabled.
-	*
-	* @param shoppingItem the shopping item
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.shopping.model.ShoppingItem shoppingItem) {
-		getPersistence().cacheResult(shoppingItem);
-	}
-
-	/**
-	* Caches the shopping items in the entity cache if it is enabled.
-	*
-	* @param shoppingItems the shopping items
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.shopping.model.ShoppingItem> shoppingItems) {
-		getPersistence().cacheResult(shoppingItems);
-	}
-
-	/**
-	* Creates a new shopping item with the primary key. Does not add the shopping item to the database.
-	*
-	* @param itemId the primary key for the new shopping item
-	* @return the new shopping item
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem create(
-		long itemId) {
-		return getPersistence().create(itemId);
-	}
-
-	/**
-	* Removes the shopping item with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param itemId the primary key of the shopping item
-	* @return the shopping item that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchItemException if a shopping item with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem remove(
-		long itemId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().remove(itemId);
-	}
-
-	public static com.liferay.portlet.shopping.model.ShoppingItem updateImpl(
-		com.liferay.portlet.shopping.model.ShoppingItem shoppingItem)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(shoppingItem);
-	}
-
-	/**
-	* Returns the shopping item with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchItemException} if it could not be found.
-	*
-	* @param itemId the primary key of the shopping item
-	* @return the shopping item
-	* @throws com.liferay.portlet.shopping.NoSuchItemException if a shopping item with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem findByPrimaryKey(
-		long itemId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().findByPrimaryKey(itemId);
-	}
-
-	/**
-	* Returns the shopping item with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param itemId the primary key of the shopping item
-	* @return the shopping item, or <code>null</code> if a shopping item with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByPrimaryKey(
-		long itemId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(itemId);
-	}
-
-	/**
 	* Returns the shopping item where smallImageId = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchItemException} if it could not be found.
 	*
 	* @param smallImageId the small image ID
@@ -230,6 +151,32 @@ public class ShoppingItemUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchBySmallImageId(smallImageId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the shopping item where smallImageId = &#63; from the database.
+	*
+	* @param smallImageId the small image ID
+	* @return the shopping item that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem removeBySmallImageId(
+		long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence().removeBySmallImageId(smallImageId);
+	}
+
+	/**
+	* Returns the number of shopping items where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @return the number of matching shopping items
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countBySmallImageId(long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countBySmallImageId(smallImageId);
 	}
 
 	/**
@@ -276,6 +223,32 @@ public class ShoppingItemUtil {
 	}
 
 	/**
+	* Removes the shopping item where mediumImageId = &#63; from the database.
+	*
+	* @param mediumImageId the medium image ID
+	* @return the shopping item that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem removeByMediumImageId(
+		long mediumImageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence().removeByMediumImageId(mediumImageId);
+	}
+
+	/**
+	* Returns the number of shopping items where mediumImageId = &#63;.
+	*
+	* @param mediumImageId the medium image ID
+	* @return the number of matching shopping items
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByMediumImageId(long mediumImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByMediumImageId(mediumImageId);
+	}
+
+	/**
 	* Returns the shopping item where largeImageId = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchItemException} if it could not be found.
 	*
 	* @param largeImageId the large image ID
@@ -316,6 +289,32 @@ public class ShoppingItemUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByLargeImageId(largeImageId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the shopping item where largeImageId = &#63; from the database.
+	*
+	* @param largeImageId the large image ID
+	* @return the shopping item that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem removeByLargeImageId(
+		long largeImageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence().removeByLargeImageId(largeImageId);
+	}
+
+	/**
+	* Returns the number of shopping items where largeImageId = &#63;.
+	*
+	* @param largeImageId the large image ID
+	* @return the number of matching shopping items
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByLargeImageId(long largeImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByLargeImageId(largeImageId);
 	}
 
 	/**
@@ -548,6 +547,44 @@ public class ShoppingItemUtil {
 	}
 
 	/**
+	* Removes all the shopping items where groupId = &#63; and categoryId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C(long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_C(groupId, categoryId);
+	}
+
+	/**
+	* Returns the number of shopping items where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the number of matching shopping items
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C(long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_C(groupId, categoryId);
+	}
+
+	/**
+	* Returns the number of shopping items that the user has permission to view where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the number of matching shopping items that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_C(long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_C(groupId, categoryId);
+	}
+
+	/**
 	* Returns the shopping item where companyId = &#63; and sku = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchItemException} if it could not be found.
 	*
 	* @param companyId the company ID
@@ -590,6 +627,113 @@ public class ShoppingItemUtil {
 		long companyId, java.lang.String sku, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByC_S(companyId, sku, retrieveFromCache);
+	}
+
+	/**
+	* Removes the shopping item where companyId = &#63; and sku = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param sku the sku
+	* @return the shopping item that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem removeByC_S(
+		long companyId, java.lang.String sku)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence().removeByC_S(companyId, sku);
+	}
+
+	/**
+	* Returns the number of shopping items where companyId = &#63; and sku = &#63;.
+	*
+	* @param companyId the company ID
+	* @param sku the sku
+	* @return the number of matching shopping items
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_S(long companyId, java.lang.String sku)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_S(companyId, sku);
+	}
+
+	/**
+	* Caches the shopping item in the entity cache if it is enabled.
+	*
+	* @param shoppingItem the shopping item
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.shopping.model.ShoppingItem shoppingItem) {
+		getPersistence().cacheResult(shoppingItem);
+	}
+
+	/**
+	* Caches the shopping items in the entity cache if it is enabled.
+	*
+	* @param shoppingItems the shopping items
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.shopping.model.ShoppingItem> shoppingItems) {
+		getPersistence().cacheResult(shoppingItems);
+	}
+
+	/**
+	* Creates a new shopping item with the primary key. Does not add the shopping item to the database.
+	*
+	* @param itemId the primary key for the new shopping item
+	* @return the new shopping item
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem create(
+		long itemId) {
+		return getPersistence().create(itemId);
+	}
+
+	/**
+	* Removes the shopping item with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param itemId the primary key of the shopping item
+	* @return the shopping item that was removed
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a shopping item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem remove(
+		long itemId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence().remove(itemId);
+	}
+
+	public static com.liferay.portlet.shopping.model.ShoppingItem updateImpl(
+		com.liferay.portlet.shopping.model.ShoppingItem shoppingItem)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(shoppingItem);
+	}
+
+	/**
+	* Returns the shopping item with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchItemException} if it could not be found.
+	*
+	* @param itemId the primary key of the shopping item
+	* @return the shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a shopping item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByPrimaryKey(
+		long itemId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence().findByPrimaryKey(itemId);
+	}
+
+	/**
+	* Returns the shopping item with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param itemId the primary key of the shopping item
+	* @return the shopping item, or <code>null</code> if a shopping item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByPrimaryKey(
+		long itemId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(itemId);
 	}
 
 	/**
@@ -642,75 +786,6 @@ public class ShoppingItemUtil {
 	}
 
 	/**
-	* Removes the shopping item where smallImageId = &#63; from the database.
-	*
-	* @param smallImageId the small image ID
-	* @return the shopping item that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem removeBySmallImageId(
-		long smallImageId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().removeBySmallImageId(smallImageId);
-	}
-
-	/**
-	* Removes the shopping item where mediumImageId = &#63; from the database.
-	*
-	* @param mediumImageId the medium image ID
-	* @return the shopping item that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem removeByMediumImageId(
-		long mediumImageId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().removeByMediumImageId(mediumImageId);
-	}
-
-	/**
-	* Removes the shopping item where largeImageId = &#63; from the database.
-	*
-	* @param largeImageId the large image ID
-	* @return the shopping item that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem removeByLargeImageId(
-		long largeImageId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().removeByLargeImageId(largeImageId);
-	}
-
-	/**
-	* Removes all the shopping items where groupId = &#63; and categoryId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_C(long groupId, long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_C(groupId, categoryId);
-	}
-
-	/**
-	* Removes the shopping item where companyId = &#63; and sku = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param sku the sku
-	* @return the shopping item that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem removeByC_S(
-		long companyId, java.lang.String sku)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().removeByC_S(companyId, sku);
-	}
-
-	/**
 	* Removes all the shopping items from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -718,81 +793,6 @@ public class ShoppingItemUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of shopping items where smallImageId = &#63;.
-	*
-	* @param smallImageId the small image ID
-	* @return the number of matching shopping items
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countBySmallImageId(long smallImageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countBySmallImageId(smallImageId);
-	}
-
-	/**
-	* Returns the number of shopping items where mediumImageId = &#63;.
-	*
-	* @param mediumImageId the medium image ID
-	* @return the number of matching shopping items
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByMediumImageId(long mediumImageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByMediumImageId(mediumImageId);
-	}
-
-	/**
-	* Returns the number of shopping items where largeImageId = &#63;.
-	*
-	* @param largeImageId the large image ID
-	* @return the number of matching shopping items
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByLargeImageId(long largeImageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByLargeImageId(largeImageId);
-	}
-
-	/**
-	* Returns the number of shopping items where groupId = &#63; and categoryId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @return the number of matching shopping items
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C(long groupId, long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_C(groupId, categoryId);
-	}
-
-	/**
-	* Returns the number of shopping items that the user has permission to view where groupId = &#63; and categoryId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @return the number of matching shopping items that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_C(long groupId, long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_C(groupId, categoryId);
-	}
-
-	/**
-	* Returns the number of shopping items where companyId = &#63; and sku = &#63;.
-	*
-	* @param companyId the company ID
-	* @param sku the sku
-	* @return the number of matching shopping items
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_S(long companyId, java.lang.String sku)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_S(companyId, sku);
 	}
 
 	/**

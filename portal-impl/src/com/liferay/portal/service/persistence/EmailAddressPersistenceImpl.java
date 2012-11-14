@@ -71,6 +71,15 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
 		new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
@@ -91,564 +100,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
-		new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
-			new String[] { Long.class.getName() },
-			EmailAddressModelImpl.USERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
-			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_C",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_C",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			},
-			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
-			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			EmailAddressModelImpl.CLASSPK_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C_P = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_C_P",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P =
-		new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_C_P",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			},
-			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
-			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			EmailAddressModelImpl.CLASSPK_COLUMN_BITMASK |
-			EmailAddressModelImpl.PRIMARY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C_P = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C_P",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the email address in the entity cache if it is enabled.
-	 *
-	 * @param emailAddress the email address
-	 */
-	public void cacheResult(EmailAddress emailAddress) {
-		EntityCacheUtil.putResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressImpl.class, emailAddress.getPrimaryKey(), emailAddress);
-
-		emailAddress.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the email addresses in the entity cache if it is enabled.
-	 *
-	 * @param emailAddresses the email addresses
-	 */
-	public void cacheResult(List<EmailAddress> emailAddresses) {
-		for (EmailAddress emailAddress : emailAddresses) {
-			if (EntityCacheUtil.getResult(
-						EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-						EmailAddressImpl.class, emailAddress.getPrimaryKey()) == null) {
-				cacheResult(emailAddress);
-			}
-			else {
-				emailAddress.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all email addresses.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(EmailAddressImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(EmailAddressImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the email address.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(EmailAddress emailAddress) {
-		EntityCacheUtil.removeResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressImpl.class, emailAddress.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<EmailAddress> emailAddresses) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (EmailAddress emailAddress : emailAddresses) {
-			EntityCacheUtil.removeResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-				EmailAddressImpl.class, emailAddress.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new email address with the primary key. Does not add the email address to the database.
-	 *
-	 * @param emailAddressId the primary key for the new email address
-	 * @return the new email address
-	 */
-	public EmailAddress create(long emailAddressId) {
-		EmailAddress emailAddress = new EmailAddressImpl();
-
-		emailAddress.setNew(true);
-		emailAddress.setPrimaryKey(emailAddressId);
-
-		return emailAddress;
-	}
-
-	/**
-	 * Removes the email address with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param emailAddressId the primary key of the email address
-	 * @return the email address that was removed
-	 * @throws com.liferay.portal.NoSuchEmailAddressException if a email address with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public EmailAddress remove(long emailAddressId)
-		throws NoSuchEmailAddressException, SystemException {
-		return remove(Long.valueOf(emailAddressId));
-	}
-
-	/**
-	 * Removes the email address with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the email address
-	 * @return the email address that was removed
-	 * @throws com.liferay.portal.NoSuchEmailAddressException if a email address with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public EmailAddress remove(Serializable primaryKey)
-		throws NoSuchEmailAddressException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			EmailAddress emailAddress = (EmailAddress)session.get(EmailAddressImpl.class,
-					primaryKey);
-
-			if (emailAddress == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchEmailAddressException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(emailAddress);
-		}
-		catch (NoSuchEmailAddressException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected EmailAddress removeImpl(EmailAddress emailAddress)
-		throws SystemException {
-		emailAddress = toUnwrappedModel(emailAddress);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(emailAddress)) {
-				emailAddress = (EmailAddress)session.get(EmailAddressImpl.class,
-						emailAddress.getPrimaryKeyObj());
-			}
-
-			if (emailAddress != null) {
-				session.delete(emailAddress);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (emailAddress != null) {
-			clearCache(emailAddress);
-		}
-
-		return emailAddress;
-	}
-
-	@Override
-	public EmailAddress updateImpl(
-		com.liferay.portal.model.EmailAddress emailAddress)
-		throws SystemException {
-		emailAddress = toUnwrappedModel(emailAddress);
-
-		boolean isNew = emailAddress.isNew();
-
-		EmailAddressModelImpl emailAddressModelImpl = (EmailAddressModelImpl)emailAddress;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (emailAddress.isNew()) {
-				session.save(emailAddress);
-
-				emailAddress.setNew(false);
-			}
-			else {
-				session.merge(emailAddress);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !EmailAddressModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((emailAddressModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(emailAddressModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((emailAddressModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(emailAddressModelImpl.getOriginalUserId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(emailAddressModelImpl.getUserId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
-					args);
-			}
-
-			if ((emailAddressModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId()),
-						Long.valueOf(emailAddressModelImpl.getOriginalClassNameId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(emailAddressModelImpl.getCompanyId()),
-						Long.valueOf(emailAddressModelImpl.getClassNameId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
-					args);
-			}
-
-			if ((emailAddressModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId()),
-						Long.valueOf(emailAddressModelImpl.getOriginalClassNameId()),
-						Long.valueOf(emailAddressModelImpl.getOriginalClassPK())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(emailAddressModelImpl.getCompanyId()),
-						Long.valueOf(emailAddressModelImpl.getClassNameId()),
-						Long.valueOf(emailAddressModelImpl.getClassPK())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C,
-					args);
-			}
-
-			if ((emailAddressModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId()),
-						Long.valueOf(emailAddressModelImpl.getOriginalClassNameId()),
-						Long.valueOf(emailAddressModelImpl.getOriginalClassPK()),
-						Boolean.valueOf(emailAddressModelImpl.getOriginalPrimary())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(emailAddressModelImpl.getCompanyId()),
-						Long.valueOf(emailAddressModelImpl.getClassNameId()),
-						Long.valueOf(emailAddressModelImpl.getClassPK()),
-						Boolean.valueOf(emailAddressModelImpl.getPrimary())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressImpl.class, emailAddress.getPrimaryKey(), emailAddress);
-
-		return emailAddress;
-	}
-
-	protected EmailAddress toUnwrappedModel(EmailAddress emailAddress) {
-		if (emailAddress instanceof EmailAddressImpl) {
-			return emailAddress;
-		}
-
-		EmailAddressImpl emailAddressImpl = new EmailAddressImpl();
-
-		emailAddressImpl.setNew(emailAddress.isNew());
-		emailAddressImpl.setPrimaryKey(emailAddress.getPrimaryKey());
-
-		emailAddressImpl.setEmailAddressId(emailAddress.getEmailAddressId());
-		emailAddressImpl.setCompanyId(emailAddress.getCompanyId());
-		emailAddressImpl.setUserId(emailAddress.getUserId());
-		emailAddressImpl.setUserName(emailAddress.getUserName());
-		emailAddressImpl.setCreateDate(emailAddress.getCreateDate());
-		emailAddressImpl.setModifiedDate(emailAddress.getModifiedDate());
-		emailAddressImpl.setClassNameId(emailAddress.getClassNameId());
-		emailAddressImpl.setClassPK(emailAddress.getClassPK());
-		emailAddressImpl.setAddress(emailAddress.getAddress());
-		emailAddressImpl.setTypeId(emailAddress.getTypeId());
-		emailAddressImpl.setPrimary(emailAddress.isPrimary());
-
-		return emailAddressImpl;
-	}
-
-	/**
-	 * Returns the email address with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the email address
-	 * @return the email address
-	 * @throws com.liferay.portal.NoSuchModelException if a email address with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public EmailAddress findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the email address with the primary key or throws a {@link com.liferay.portal.NoSuchEmailAddressException} if it could not be found.
-	 *
-	 * @param emailAddressId the primary key of the email address
-	 * @return the email address
-	 * @throws com.liferay.portal.NoSuchEmailAddressException if a email address with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public EmailAddress findByPrimaryKey(long emailAddressId)
-		throws NoSuchEmailAddressException, SystemException {
-		EmailAddress emailAddress = fetchByPrimaryKey(emailAddressId);
-
-		if (emailAddress == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + emailAddressId);
-			}
-
-			throw new NoSuchEmailAddressException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				emailAddressId);
-		}
-
-		return emailAddress;
-	}
-
-	/**
-	 * Returns the email address with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the email address
-	 * @return the email address, or <code>null</code> if a email address with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public EmailAddress fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the email address with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param emailAddressId the primary key of the email address
-	 * @return the email address, or <code>null</code> if a email address with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public EmailAddress fetchByPrimaryKey(long emailAddressId)
-		throws SystemException {
-		EmailAddress emailAddress = (EmailAddress)EntityCacheUtil.getResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-				EmailAddressImpl.class, emailAddressId);
-
-		if (emailAddress == _nullEmailAddress) {
-			return null;
-		}
-
-		if (emailAddress == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				emailAddress = (EmailAddress)session.get(EmailAddressImpl.class,
-						Long.valueOf(emailAddressId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (emailAddress != null) {
-					cacheResult(emailAddress);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-						EmailAddressImpl.class, emailAddressId,
-						_nullEmailAddress);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return emailAddress;
-	}
 
 	/**
 	 * Returns all the email addresses where companyId = &#63;.
@@ -1034,6 +485,92 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	}
 
 	/**
+	 * Removes all the email addresses where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (EmailAddress emailAddress : findByCompanyId(companyId)) {
+			remove(emailAddress);
+		}
+	}
+
+	/**
+	 * Returns the number of email addresses where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching email addresses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_EMAILADDRESS_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "emailAddress.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
+		new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
+			new String[] { Long.class.getName() },
+			EmailAddressModelImpl.USERID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the email addresses where userId = &#63;.
 	 *
 	 * @param userId the user ID
@@ -1412,6 +949,92 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the email addresses where userId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUserId(long userId) throws SystemException {
+		for (EmailAddress emailAddress : findByUserId(userId)) {
+			remove(emailAddress);
+		}
+	}
+
+	/**
+	 * Returns the number of email addresses where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the number of matching email addresses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUserId(long userId) throws SystemException {
+		Object[] finderArgs = new Object[] { userId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_EMAILADDRESS_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_USERID_USERID_2 = "emailAddress.userId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the email addresses where companyId = &#63; and classNameId = &#63;.
@@ -1823,6 +1446,106 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the email addresses where companyId = &#63; and classNameId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_C(long companyId, long classNameId)
+		throws SystemException {
+		for (EmailAddress emailAddress : findByC_C(companyId, classNameId)) {
+			remove(emailAddress);
+		}
+	}
+
+	/**
+	 * Returns the number of email addresses where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @return the number of matching email addresses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_C(long companyId, long classNameId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { companyId, classNameId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_EMAILADDRESS_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_C_COMPANYID_2 = "emailAddress.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "emailAddress.classNameId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName()
+			},
+			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CLASSPK_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName()
+			});
 
 	/**
 	 * Returns all the email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -2260,6 +1983,119 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_C_C(long companyId, long classNameId, long classPK)
+		throws SystemException {
+		for (EmailAddress emailAddress : findByC_C_C(companyId, classNameId,
+				classPK)) {
+			remove(emailAddress);
+		}
+	}
+
+	/**
+	 * Returns the number of email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the number of matching email addresses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_C_C(long companyId, long classNameId, long classPK)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { companyId, classNameId, classPK };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_EMAILADDRESS_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_C_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_CLASSPK_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_C_C_COMPANYID_2 = "emailAddress.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_C_CLASSNAMEID_2 = "emailAddress.classNameId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_C_CLASSPK_2 = "emailAddress.classPK = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C_P = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_C_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P =
+		new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_C_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CLASSPK_COLUMN_BITMASK |
+			EmailAddressModelImpl.PRIMARY_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C_P = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
 
 	/**
 	 * Returns all the email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
@@ -2727,6 +2563,557 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	}
 
 	/**
+	 * Removes all the email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_C_C_P(long companyId, long classNameId, long classPK,
+		boolean primary) throws SystemException {
+		for (EmailAddress emailAddress : findByC_C_C_P(companyId, classNameId,
+				classPK, primary)) {
+			remove(emailAddress);
+		}
+	}
+
+	/**
+	 * Returns the number of email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @return the number of matching email addresses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_C_C_P(long companyId, long classNameId, long classPK,
+		boolean primary) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				companyId, classNameId, classPK, primary
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_C_P,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(5);
+
+			query.append(_SQL_COUNT_EMAILADDRESS_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_CLASSPK_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_PRIMARY_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				qPos.add(primary);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_C_P,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_C_C_P_COMPANYID_2 = "emailAddress.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_C_P_CLASSNAMEID_2 = "emailAddress.classNameId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_C_P_CLASSPK_2 = "emailAddress.classPK = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_C_P_PRIMARY_2 = "emailAddress.primary = ?";
+
+	/**
+	 * Caches the email address in the entity cache if it is enabled.
+	 *
+	 * @param emailAddress the email address
+	 */
+	public void cacheResult(EmailAddress emailAddress) {
+		EntityCacheUtil.putResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressImpl.class, emailAddress.getPrimaryKey(), emailAddress);
+
+		emailAddress.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the email addresses in the entity cache if it is enabled.
+	 *
+	 * @param emailAddresses the email addresses
+	 */
+	public void cacheResult(List<EmailAddress> emailAddresses) {
+		for (EmailAddress emailAddress : emailAddresses) {
+			if (EntityCacheUtil.getResult(
+						EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+						EmailAddressImpl.class, emailAddress.getPrimaryKey()) == null) {
+				cacheResult(emailAddress);
+			}
+			else {
+				emailAddress.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all email addresses.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(EmailAddressImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(EmailAddressImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the email address.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(EmailAddress emailAddress) {
+		EntityCacheUtil.removeResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressImpl.class, emailAddress.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<EmailAddress> emailAddresses) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (EmailAddress emailAddress : emailAddresses) {
+			EntityCacheUtil.removeResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+				EmailAddressImpl.class, emailAddress.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new email address with the primary key. Does not add the email address to the database.
+	 *
+	 * @param emailAddressId the primary key for the new email address
+	 * @return the new email address
+	 */
+	public EmailAddress create(long emailAddressId) {
+		EmailAddress emailAddress = new EmailAddressImpl();
+
+		emailAddress.setNew(true);
+		emailAddress.setPrimaryKey(emailAddressId);
+
+		return emailAddress;
+	}
+
+	/**
+	 * Removes the email address with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param emailAddressId the primary key of the email address
+	 * @return the email address that was removed
+	 * @throws com.liferay.portal.NoSuchEmailAddressException if a email address with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public EmailAddress remove(long emailAddressId)
+		throws NoSuchEmailAddressException, SystemException {
+		return remove(Long.valueOf(emailAddressId));
+	}
+
+	/**
+	 * Removes the email address with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the email address
+	 * @return the email address that was removed
+	 * @throws com.liferay.portal.NoSuchEmailAddressException if a email address with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public EmailAddress remove(Serializable primaryKey)
+		throws NoSuchEmailAddressException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			EmailAddress emailAddress = (EmailAddress)session.get(EmailAddressImpl.class,
+					primaryKey);
+
+			if (emailAddress == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchEmailAddressException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(emailAddress);
+		}
+		catch (NoSuchEmailAddressException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected EmailAddress removeImpl(EmailAddress emailAddress)
+		throws SystemException {
+		emailAddress = toUnwrappedModel(emailAddress);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(emailAddress)) {
+				emailAddress = (EmailAddress)session.get(EmailAddressImpl.class,
+						emailAddress.getPrimaryKeyObj());
+			}
+
+			if (emailAddress != null) {
+				session.delete(emailAddress);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (emailAddress != null) {
+			clearCache(emailAddress);
+		}
+
+		return emailAddress;
+	}
+
+	@Override
+	public EmailAddress updateImpl(
+		com.liferay.portal.model.EmailAddress emailAddress)
+		throws SystemException {
+		emailAddress = toUnwrappedModel(emailAddress);
+
+		boolean isNew = emailAddress.isNew();
+
+		EmailAddressModelImpl emailAddressModelImpl = (EmailAddressModelImpl)emailAddress;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (emailAddress.isNew()) {
+				session.save(emailAddress);
+
+				emailAddress.setNew(false);
+			}
+			else {
+				session.merge(emailAddress);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !EmailAddressModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((emailAddressModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(emailAddressModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+
+			if ((emailAddressModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(emailAddressModelImpl.getOriginalUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(emailAddressModelImpl.getUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
+			}
+
+			if ((emailAddressModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId()),
+						Long.valueOf(emailAddressModelImpl.getOriginalClassNameId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(emailAddressModelImpl.getCompanyId()),
+						Long.valueOf(emailAddressModelImpl.getClassNameId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
+			}
+
+			if ((emailAddressModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId()),
+						Long.valueOf(emailAddressModelImpl.getOriginalClassNameId()),
+						Long.valueOf(emailAddressModelImpl.getOriginalClassPK())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(emailAddressModelImpl.getCompanyId()),
+						Long.valueOf(emailAddressModelImpl.getClassNameId()),
+						Long.valueOf(emailAddressModelImpl.getClassPK())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C,
+					args);
+			}
+
+			if ((emailAddressModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId()),
+						Long.valueOf(emailAddressModelImpl.getOriginalClassNameId()),
+						Long.valueOf(emailAddressModelImpl.getOriginalClassPK()),
+						Boolean.valueOf(emailAddressModelImpl.getOriginalPrimary())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(emailAddressModelImpl.getCompanyId()),
+						Long.valueOf(emailAddressModelImpl.getClassNameId()),
+						Long.valueOf(emailAddressModelImpl.getClassPK()),
+						Boolean.valueOf(emailAddressModelImpl.getPrimary())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressImpl.class, emailAddress.getPrimaryKey(), emailAddress);
+
+		return emailAddress;
+	}
+
+	protected EmailAddress toUnwrappedModel(EmailAddress emailAddress) {
+		if (emailAddress instanceof EmailAddressImpl) {
+			return emailAddress;
+		}
+
+		EmailAddressImpl emailAddressImpl = new EmailAddressImpl();
+
+		emailAddressImpl.setNew(emailAddress.isNew());
+		emailAddressImpl.setPrimaryKey(emailAddress.getPrimaryKey());
+
+		emailAddressImpl.setEmailAddressId(emailAddress.getEmailAddressId());
+		emailAddressImpl.setCompanyId(emailAddress.getCompanyId());
+		emailAddressImpl.setUserId(emailAddress.getUserId());
+		emailAddressImpl.setUserName(emailAddress.getUserName());
+		emailAddressImpl.setCreateDate(emailAddress.getCreateDate());
+		emailAddressImpl.setModifiedDate(emailAddress.getModifiedDate());
+		emailAddressImpl.setClassNameId(emailAddress.getClassNameId());
+		emailAddressImpl.setClassPK(emailAddress.getClassPK());
+		emailAddressImpl.setAddress(emailAddress.getAddress());
+		emailAddressImpl.setTypeId(emailAddress.getTypeId());
+		emailAddressImpl.setPrimary(emailAddress.isPrimary());
+
+		return emailAddressImpl;
+	}
+
+	/**
+	 * Returns the email address with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the email address
+	 * @return the email address
+	 * @throws com.liferay.portal.NoSuchModelException if a email address with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public EmailAddress findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the email address with the primary key or throws a {@link com.liferay.portal.NoSuchEmailAddressException} if it could not be found.
+	 *
+	 * @param emailAddressId the primary key of the email address
+	 * @return the email address
+	 * @throws com.liferay.portal.NoSuchEmailAddressException if a email address with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public EmailAddress findByPrimaryKey(long emailAddressId)
+		throws NoSuchEmailAddressException, SystemException {
+		EmailAddress emailAddress = fetchByPrimaryKey(emailAddressId);
+
+		if (emailAddress == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + emailAddressId);
+			}
+
+			throw new NoSuchEmailAddressException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				emailAddressId);
+		}
+
+		return emailAddress;
+	}
+
+	/**
+	 * Returns the email address with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the email address
+	 * @return the email address, or <code>null</code> if a email address with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public EmailAddress fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the email address with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param emailAddressId the primary key of the email address
+	 * @return the email address, or <code>null</code> if a email address with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public EmailAddress fetchByPrimaryKey(long emailAddressId)
+		throws SystemException {
+		EmailAddress emailAddress = (EmailAddress)EntityCacheUtil.getResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+				EmailAddressImpl.class, emailAddressId);
+
+		if (emailAddress == _nullEmailAddress) {
+			return null;
+		}
+
+		if (emailAddress == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				emailAddress = (EmailAddress)session.get(EmailAddressImpl.class,
+						Long.valueOf(emailAddressId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (emailAddress != null) {
+					cacheResult(emailAddress);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+						EmailAddressImpl.class, emailAddressId,
+						_nullEmailAddress);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return emailAddress;
+	}
+
+	/**
 	 * Returns all the email addresses.
 	 *
 	 * @return the email addresses
@@ -2842,77 +3229,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	}
 
 	/**
-	 * Removes all the email addresses where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (EmailAddress emailAddress : findByCompanyId(companyId)) {
-			remove(emailAddress);
-		}
-	}
-
-	/**
-	 * Removes all the email addresses where userId = &#63; from the database.
-	 *
-	 * @param userId the user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUserId(long userId) throws SystemException {
-		for (EmailAddress emailAddress : findByUserId(userId)) {
-			remove(emailAddress);
-		}
-	}
-
-	/**
-	 * Removes all the email addresses where companyId = &#63; and classNameId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_C(long companyId, long classNameId)
-		throws SystemException {
-		for (EmailAddress emailAddress : findByC_C(companyId, classNameId)) {
-			remove(emailAddress);
-		}
-	}
-
-	/**
-	 * Removes all the email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_C_C(long companyId, long classNameId, long classPK)
-		throws SystemException {
-		for (EmailAddress emailAddress : findByC_C_C(companyId, classNameId,
-				classPK)) {
-			remove(emailAddress);
-		}
-	}
-
-	/**
-	 * Removes all the email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param primary the primary
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_C_C_P(long companyId, long classNameId, long classPK,
-		boolean primary) throws SystemException {
-		for (EmailAddress emailAddress : findByC_C_C_P(companyId, classNameId,
-				classPK, primary)) {
-			remove(emailAddress);
-		}
-	}
-
-	/**
 	 * Removes all the email addresses from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2921,306 +3237,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 		for (EmailAddress emailAddress : findAll()) {
 			remove(emailAddress);
 		}
-	}
-
-	/**
-	 * Returns the number of email addresses where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching email addresses
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_EMAILADDRESS_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of email addresses where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @return the number of matching email addresses
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUserId(long userId) throws SystemException {
-		Object[] finderArgs = new Object[] { userId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_EMAILADDRESS_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of email addresses where companyId = &#63; and classNameId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @return the number of matching email addresses
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_C(long companyId, long classNameId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, classNameId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_EMAILADDRESS_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(classNameId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @return the number of matching email addresses
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_C_C(long companyId, long classNameId, long classPK)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, classNameId, classPK };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_EMAILADDRESS_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_C_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_CLASSPK_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param primary the primary
-	 * @return the number of matching email addresses
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_C_C_P(long companyId, long classNameId, long classPK,
-		boolean primary) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				companyId, classNameId, classPK, primary
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_C_P,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(5);
-
-			query.append(_SQL_COUNT_EMAILADDRESS_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_CLASSPK_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_PRIMARY_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				qPos.add(primary);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_C_P,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -3418,17 +3434,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	private static final String _SQL_SELECT_EMAILADDRESS_WHERE = "SELECT emailAddress FROM EmailAddress emailAddress WHERE ";
 	private static final String _SQL_COUNT_EMAILADDRESS = "SELECT COUNT(emailAddress) FROM EmailAddress emailAddress";
 	private static final String _SQL_COUNT_EMAILADDRESS_WHERE = "SELECT COUNT(emailAddress) FROM EmailAddress emailAddress WHERE ";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "emailAddress.companyId = ?";
-	private static final String _FINDER_COLUMN_USERID_USERID_2 = "emailAddress.userId = ?";
-	private static final String _FINDER_COLUMN_C_C_COMPANYID_2 = "emailAddress.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "emailAddress.classNameId = ?";
-	private static final String _FINDER_COLUMN_C_C_C_COMPANYID_2 = "emailAddress.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_C_CLASSNAMEID_2 = "emailAddress.classNameId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_C_CLASSPK_2 = "emailAddress.classPK = ?";
-	private static final String _FINDER_COLUMN_C_C_C_P_COMPANYID_2 = "emailAddress.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_C_P_CLASSNAMEID_2 = "emailAddress.classNameId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_C_P_CLASSPK_2 = "emailAddress.classPK = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_C_P_PRIMARY_2 = "emailAddress.primary = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "emailAddress.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No EmailAddress exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No EmailAddress exists with the key {";

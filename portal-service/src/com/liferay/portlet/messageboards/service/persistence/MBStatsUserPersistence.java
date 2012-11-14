@@ -38,72 +38,6 @@ public interface MBStatsUserPersistence extends BasePersistence<MBStatsUser> {
 	 */
 
 	/**
-	* Caches the message boards stats user in the entity cache if it is enabled.
-	*
-	* @param mbStatsUser the message boards stats user
-	*/
-	public void cacheResult(
-		com.liferay.portlet.messageboards.model.MBStatsUser mbStatsUser);
-
-	/**
-	* Caches the message boards stats users in the entity cache if it is enabled.
-	*
-	* @param mbStatsUsers the message boards stats users
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.messageboards.model.MBStatsUser> mbStatsUsers);
-
-	/**
-	* Creates a new message boards stats user with the primary key. Does not add the message boards stats user to the database.
-	*
-	* @param statsUserId the primary key for the new message boards stats user
-	* @return the new message boards stats user
-	*/
-	public com.liferay.portlet.messageboards.model.MBStatsUser create(
-		long statsUserId);
-
-	/**
-	* Removes the message boards stats user with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param statsUserId the primary key of the message boards stats user
-	* @return the message boards stats user that was removed
-	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a message boards stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBStatsUser remove(
-		long statsUserId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchStatsUserException;
-
-	public com.liferay.portlet.messageboards.model.MBStatsUser updateImpl(
-		com.liferay.portlet.messageboards.model.MBStatsUser mbStatsUser)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the message boards stats user with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchStatsUserException} if it could not be found.
-	*
-	* @param statsUserId the primary key of the message boards stats user
-	* @return the message boards stats user
-	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a message boards stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBStatsUser findByPrimaryKey(
-		long statsUserId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchStatsUserException;
-
-	/**
-	* Returns the message boards stats user with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param statsUserId the primary key of the message boards stats user
-	* @return the message boards stats user, or <code>null</code> if a message boards stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBStatsUser fetchByPrimaryKey(
-		long statsUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the message boards stats users where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -221,6 +155,25 @@ public interface MBStatsUserPersistence extends BasePersistence<MBStatsUser> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.messageboards.NoSuchStatsUserException;
+
+	/**
+	* Removes all the message boards stats users where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of message boards stats users where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching message boards stats users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the message boards stats users where userId = &#63;.
@@ -341,6 +294,25 @@ public interface MBStatsUserPersistence extends BasePersistence<MBStatsUser> {
 			com.liferay.portlet.messageboards.NoSuchStatsUserException;
 
 	/**
+	* Removes all the message boards stats users where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of message boards stats users where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching message boards stats users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the message boards stats user where groupId = &#63; and userId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchStatsUserException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -377,6 +349,30 @@ public interface MBStatsUserPersistence extends BasePersistence<MBStatsUser> {
 	*/
 	public com.liferay.portlet.messageboards.model.MBStatsUser fetchByG_U(
 		long groupId, long userId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the message boards stats user where groupId = &#63; and userId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the message boards stats user that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBStatsUser removeByG_U(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException;
+
+	/**
+	* Returns the number of message boards stats users where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the number of matching message boards stats users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_U(long groupId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -515,6 +511,95 @@ public interface MBStatsUserPersistence extends BasePersistence<MBStatsUser> {
 			com.liferay.portlet.messageboards.NoSuchStatsUserException;
 
 	/**
+	* Removes all the message boards stats users where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param messageCount the message count
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_NotU_NotM(long groupId, long userId, int messageCount)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of message boards stats users where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param messageCount the message count
+	* @return the number of matching message boards stats users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_NotU_NotM(long groupId, long userId, int messageCount)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the message boards stats user in the entity cache if it is enabled.
+	*
+	* @param mbStatsUser the message boards stats user
+	*/
+	public void cacheResult(
+		com.liferay.portlet.messageboards.model.MBStatsUser mbStatsUser);
+
+	/**
+	* Caches the message boards stats users in the entity cache if it is enabled.
+	*
+	* @param mbStatsUsers the message boards stats users
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.messageboards.model.MBStatsUser> mbStatsUsers);
+
+	/**
+	* Creates a new message boards stats user with the primary key. Does not add the message boards stats user to the database.
+	*
+	* @param statsUserId the primary key for the new message boards stats user
+	* @return the new message boards stats user
+	*/
+	public com.liferay.portlet.messageboards.model.MBStatsUser create(
+		long statsUserId);
+
+	/**
+	* Removes the message boards stats user with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param statsUserId the primary key of the message boards stats user
+	* @return the message boards stats user that was removed
+	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a message boards stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBStatsUser remove(
+		long statsUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException;
+
+	public com.liferay.portlet.messageboards.model.MBStatsUser updateImpl(
+		com.liferay.portlet.messageboards.model.MBStatsUser mbStatsUser)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the message boards stats user with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchStatsUserException} if it could not be found.
+	*
+	* @param statsUserId the primary key of the message boards stats user
+	* @return the message boards stats user
+	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a message boards stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBStatsUser findByPrimaryKey(
+		long statsUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException;
+
+	/**
+	* Returns the message boards stats user with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param statsUserId the primary key of the message boards stats user
+	* @return the message boards stats user, or <code>null</code> if a message boards stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBStatsUser fetchByPrimaryKey(
+		long statsUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the message boards stats users.
 	*
 	* @return the message boards stats users
@@ -558,96 +643,11 @@ public interface MBStatsUserPersistence extends BasePersistence<MBStatsUser> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the message boards stats users where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the message boards stats users where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the message boards stats user where groupId = &#63; and userId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @return the message boards stats user that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBStatsUser removeByG_U(
-		long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchStatsUserException;
-
-	/**
-	* Removes all the message boards stats users where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param messageCount the message count
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_NotU_NotM(long groupId, long userId, int messageCount)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the message boards stats users from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards stats users where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching message boards stats users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards stats users where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching message boards stats users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards stats users where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @return the number of matching message boards stats users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_U(long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards stats users where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param messageCount the message count
-	* @return the number of matching message boards stats users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_NotU_NotM(long groupId, long userId, int messageCount)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

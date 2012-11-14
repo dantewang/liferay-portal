@@ -81,6 +81,15 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
+			TeamModelImpl.FINDER_CACHE_ENABLED, TeamImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
+			TeamModelImpl.FINDER_CACHE_ENABLED, TeamImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
+			TeamModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
 			TeamModelImpl.FINDER_CACHE_ENABLED, TeamImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
@@ -100,437 +109,6 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 			TeamModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_G_N = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
-			TeamModelImpl.FINDER_CACHE_ENABLED, TeamImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
-			new String[] { Long.class.getName(), String.class.getName() },
-			TeamModelImpl.GROUPID_COLUMN_BITMASK |
-			TeamModelImpl.NAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
-			TeamModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_N",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
-			TeamModelImpl.FINDER_CACHE_ENABLED, TeamImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
-			TeamModelImpl.FINDER_CACHE_ENABLED, TeamImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
-			TeamModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the team in the entity cache if it is enabled.
-	 *
-	 * @param team the team
-	 */
-	public void cacheResult(Team team) {
-		EntityCacheUtil.putResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
-			TeamImpl.class, team.getPrimaryKey(), team);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
-			new Object[] { Long.valueOf(team.getGroupId()), team.getName() },
-			team);
-
-		team.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the teams in the entity cache if it is enabled.
-	 *
-	 * @param teams the teams
-	 */
-	public void cacheResult(List<Team> teams) {
-		for (Team team : teams) {
-			if (EntityCacheUtil.getResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
-						TeamImpl.class, team.getPrimaryKey()) == null) {
-				cacheResult(team);
-			}
-			else {
-				team.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all teams.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(TeamImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(TeamImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the team.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(Team team) {
-		EntityCacheUtil.removeResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
-			TeamImpl.class, team.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(team);
-	}
-
-	@Override
-	public void clearCache(List<Team> teams) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (Team team : teams) {
-			EntityCacheUtil.removeResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
-				TeamImpl.class, team.getPrimaryKey());
-
-			clearUniqueFindersCache(team);
-		}
-	}
-
-	protected void clearUniqueFindersCache(Team team) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N,
-			new Object[] { Long.valueOf(team.getGroupId()), team.getName() });
-	}
-
-	/**
-	 * Creates a new team with the primary key. Does not add the team to the database.
-	 *
-	 * @param teamId the primary key for the new team
-	 * @return the new team
-	 */
-	public Team create(long teamId) {
-		Team team = new TeamImpl();
-
-		team.setNew(true);
-		team.setPrimaryKey(teamId);
-
-		return team;
-	}
-
-	/**
-	 * Removes the team with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param teamId the primary key of the team
-	 * @return the team that was removed
-	 * @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Team remove(long teamId) throws NoSuchTeamException, SystemException {
-		return remove(Long.valueOf(teamId));
-	}
-
-	/**
-	 * Removes the team with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the team
-	 * @return the team that was removed
-	 * @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Team remove(Serializable primaryKey)
-		throws NoSuchTeamException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Team team = (Team)session.get(TeamImpl.class, primaryKey);
-
-			if (team == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchTeamException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(team);
-		}
-		catch (NoSuchTeamException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected Team removeImpl(Team team) throws SystemException {
-		team = toUnwrappedModel(team);
-
-		try {
-			clearUsers.clear(team.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(TeamModelImpl.MAPPING_TABLE_USERS_TEAMS_NAME);
-		}
-
-		try {
-			clearUserGroups.clear(team.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(TeamModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(team)) {
-				team = (Team)session.get(TeamImpl.class, team.getPrimaryKeyObj());
-			}
-
-			if (team != null) {
-				session.delete(team);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (team != null) {
-			clearCache(team);
-		}
-
-		return team;
-	}
-
-	@Override
-	public Team updateImpl(com.liferay.portal.model.Team team)
-		throws SystemException {
-		team = toUnwrappedModel(team);
-
-		boolean isNew = team.isNew();
-
-		TeamModelImpl teamModelImpl = (TeamModelImpl)team;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (team.isNew()) {
-				session.save(team);
-
-				team.setNew(false);
-			}
-			else {
-				session.merge(team);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !TeamModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((teamModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(teamModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] { Long.valueOf(teamModelImpl.getGroupId()) };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
-			TeamImpl.class, team.getPrimaryKey(), team);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
-				new Object[] { Long.valueOf(team.getGroupId()), team.getName() },
-				team);
-		}
-		else {
-			if ((teamModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_G_N.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(teamModelImpl.getOriginalGroupId()),
-						
-						teamModelImpl.getOriginalName()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_N, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
-					new Object[] { Long.valueOf(team.getGroupId()), team.getName() },
-					team);
-			}
-		}
-
-		return team;
-	}
-
-	protected Team toUnwrappedModel(Team team) {
-		if (team instanceof TeamImpl) {
-			return team;
-		}
-
-		TeamImpl teamImpl = new TeamImpl();
-
-		teamImpl.setNew(team.isNew());
-		teamImpl.setPrimaryKey(team.getPrimaryKey());
-
-		teamImpl.setTeamId(team.getTeamId());
-		teamImpl.setCompanyId(team.getCompanyId());
-		teamImpl.setUserId(team.getUserId());
-		teamImpl.setUserName(team.getUserName());
-		teamImpl.setCreateDate(team.getCreateDate());
-		teamImpl.setModifiedDate(team.getModifiedDate());
-		teamImpl.setGroupId(team.getGroupId());
-		teamImpl.setName(team.getName());
-		teamImpl.setDescription(team.getDescription());
-
-		return teamImpl;
-	}
-
-	/**
-	 * Returns the team with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the team
-	 * @return the team
-	 * @throws com.liferay.portal.NoSuchModelException if a team with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Team findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the team with the primary key or throws a {@link com.liferay.portal.NoSuchTeamException} if it could not be found.
-	 *
-	 * @param teamId the primary key of the team
-	 * @return the team
-	 * @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Team findByPrimaryKey(long teamId)
-		throws NoSuchTeamException, SystemException {
-		Team team = fetchByPrimaryKey(teamId);
-
-		if (team == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + teamId);
-			}
-
-			throw new NoSuchTeamException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				teamId);
-		}
-
-		return team;
-	}
-
-	/**
-	 * Returns the team with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the team
-	 * @return the team, or <code>null</code> if a team with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Team fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the team with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param teamId the primary key of the team
-	 * @return the team, or <code>null</code> if a team with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Team fetchByPrimaryKey(long teamId) throws SystemException {
-		Team team = (Team)EntityCacheUtil.getResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
-				TeamImpl.class, teamId);
-
-		if (team == _nullTeam) {
-			return null;
-		}
-
-		if (team == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				team = (Team)session.get(TeamImpl.class, Long.valueOf(teamId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (team != null) {
-					cacheResult(team);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
-						TeamImpl.class, teamId, _nullTeam);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return team;
-	}
 
 	/**
 	 * Returns all the teams where groupId = &#63;.
@@ -1219,6 +797,131 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 	}
 
 	/**
+	 * Removes all the teams where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (Team team : findByGroupId(groupId)) {
+			remove(team);
+		}
+	}
+
+	/**
+	 * Returns the number of teams where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching teams
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_TEAM_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of teams that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching teams that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_TEAM_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				Team.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN,
+				groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "team.groupId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_G_N = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
+			TeamModelImpl.FINDER_CACHE_ENABLED, TeamImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
+			new String[] { Long.class.getName(), String.class.getName() },
+			TeamModelImpl.GROUPID_COLUMN_BITMASK |
+			TeamModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
+			TeamModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_N",
+			new String[] { Long.class.getName(), String.class.getName() });
+
+	/**
 	 * Returns the team where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchTeamException} if it could not be found.
 	 *
 	 * @param groupId the group ID
@@ -1381,6 +1084,508 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 	}
 
 	/**
+	 * Removes the team where groupId = &#63; and name = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the team that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Team removeByG_N(long groupId, String name)
+		throws NoSuchTeamException, SystemException {
+		Team team = findByG_N(groupId, name);
+
+		return remove(team);
+	}
+
+	/**
+	 * Returns the number of teams where groupId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the number of matching teams
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_N(long groupId, String name) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, name };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_N,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_TEAM_WHERE);
+
+			query.append(_FINDER_COLUMN_G_N_GROUPID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_G_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_N_NAME_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_N, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_N_GROUPID_2 = "team.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_N_NAME_1 = "team.name IS NULL";
+	private static final String _FINDER_COLUMN_G_N_NAME_2 = "team.name = ?";
+	private static final String _FINDER_COLUMN_G_N_NAME_3 = "(team.name IS NULL OR team.name = ?)";
+
+	/**
+	 * Caches the team in the entity cache if it is enabled.
+	 *
+	 * @param team the team
+	 */
+	public void cacheResult(Team team) {
+		EntityCacheUtil.putResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
+			TeamImpl.class, team.getPrimaryKey(), team);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
+			new Object[] { Long.valueOf(team.getGroupId()), team.getName() },
+			team);
+
+		team.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the teams in the entity cache if it is enabled.
+	 *
+	 * @param teams the teams
+	 */
+	public void cacheResult(List<Team> teams) {
+		for (Team team : teams) {
+			if (EntityCacheUtil.getResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
+						TeamImpl.class, team.getPrimaryKey()) == null) {
+				cacheResult(team);
+			}
+			else {
+				team.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all teams.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(TeamImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(TeamImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the team.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(Team team) {
+		EntityCacheUtil.removeResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
+			TeamImpl.class, team.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(team);
+	}
+
+	@Override
+	public void clearCache(List<Team> teams) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (Team team : teams) {
+			EntityCacheUtil.removeResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
+				TeamImpl.class, team.getPrimaryKey());
+
+			clearUniqueFindersCache(team);
+		}
+	}
+
+	protected void clearUniqueFindersCache(Team team) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N,
+			new Object[] { Long.valueOf(team.getGroupId()), team.getName() });
+	}
+
+	/**
+	 * Creates a new team with the primary key. Does not add the team to the database.
+	 *
+	 * @param teamId the primary key for the new team
+	 * @return the new team
+	 */
+	public Team create(long teamId) {
+		Team team = new TeamImpl();
+
+		team.setNew(true);
+		team.setPrimaryKey(teamId);
+
+		return team;
+	}
+
+	/**
+	 * Removes the team with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param teamId the primary key of the team
+	 * @return the team that was removed
+	 * @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Team remove(long teamId) throws NoSuchTeamException, SystemException {
+		return remove(Long.valueOf(teamId));
+	}
+
+	/**
+	 * Removes the team with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the team
+	 * @return the team that was removed
+	 * @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Team remove(Serializable primaryKey)
+		throws NoSuchTeamException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Team team = (Team)session.get(TeamImpl.class, primaryKey);
+
+			if (team == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchTeamException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(team);
+		}
+		catch (NoSuchTeamException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected Team removeImpl(Team team) throws SystemException {
+		team = toUnwrappedModel(team);
+
+		try {
+			clearUsers.clear(team.getPrimaryKey());
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			FinderCacheUtil.clearCache(TeamModelImpl.MAPPING_TABLE_USERS_TEAMS_NAME);
+		}
+
+		try {
+			clearUserGroups.clear(team.getPrimaryKey());
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			FinderCacheUtil.clearCache(TeamModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(team)) {
+				team = (Team)session.get(TeamImpl.class, team.getPrimaryKeyObj());
+			}
+
+			if (team != null) {
+				session.delete(team);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (team != null) {
+			clearCache(team);
+		}
+
+		return team;
+	}
+
+	@Override
+	public Team updateImpl(com.liferay.portal.model.Team team)
+		throws SystemException {
+		team = toUnwrappedModel(team);
+
+		boolean isNew = team.isNew();
+
+		TeamModelImpl teamModelImpl = (TeamModelImpl)team;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (team.isNew()) {
+				session.save(team);
+
+				team.setNew(false);
+			}
+			else {
+				session.merge(team);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !TeamModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((teamModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(teamModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] { Long.valueOf(teamModelImpl.getGroupId()) };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
+			TeamImpl.class, team.getPrimaryKey(), team);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
+				new Object[] { Long.valueOf(team.getGroupId()), team.getName() },
+				team);
+		}
+		else {
+			if ((teamModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_G_N.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(teamModelImpl.getOriginalGroupId()),
+						
+						teamModelImpl.getOriginalName()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_N, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
+					new Object[] { Long.valueOf(team.getGroupId()), team.getName() },
+					team);
+			}
+		}
+
+		return team;
+	}
+
+	protected Team toUnwrappedModel(Team team) {
+		if (team instanceof TeamImpl) {
+			return team;
+		}
+
+		TeamImpl teamImpl = new TeamImpl();
+
+		teamImpl.setNew(team.isNew());
+		teamImpl.setPrimaryKey(team.getPrimaryKey());
+
+		teamImpl.setTeamId(team.getTeamId());
+		teamImpl.setCompanyId(team.getCompanyId());
+		teamImpl.setUserId(team.getUserId());
+		teamImpl.setUserName(team.getUserName());
+		teamImpl.setCreateDate(team.getCreateDate());
+		teamImpl.setModifiedDate(team.getModifiedDate());
+		teamImpl.setGroupId(team.getGroupId());
+		teamImpl.setName(team.getName());
+		teamImpl.setDescription(team.getDescription());
+
+		return teamImpl;
+	}
+
+	/**
+	 * Returns the team with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the team
+	 * @return the team
+	 * @throws com.liferay.portal.NoSuchModelException if a team with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Team findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the team with the primary key or throws a {@link com.liferay.portal.NoSuchTeamException} if it could not be found.
+	 *
+	 * @param teamId the primary key of the team
+	 * @return the team
+	 * @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Team findByPrimaryKey(long teamId)
+		throws NoSuchTeamException, SystemException {
+		Team team = fetchByPrimaryKey(teamId);
+
+		if (team == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + teamId);
+			}
+
+			throw new NoSuchTeamException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				teamId);
+		}
+
+		return team;
+	}
+
+	/**
+	 * Returns the team with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the team
+	 * @return the team, or <code>null</code> if a team with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Team fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the team with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param teamId the primary key of the team
+	 * @return the team, or <code>null</code> if a team with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Team fetchByPrimaryKey(long teamId) throws SystemException {
+		Team team = (Team)EntityCacheUtil.getResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
+				TeamImpl.class, teamId);
+
+		if (team == _nullTeam) {
+			return null;
+		}
+
+		if (team == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				team = (Team)session.get(TeamImpl.class, Long.valueOf(teamId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (team != null) {
+					cacheResult(team);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
+						TeamImpl.class, teamId, _nullTeam);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return team;
+	}
+
+	/**
 	 * Returns all the teams.
 	 *
 	 * @return the teams
@@ -1495,33 +1700,6 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 	}
 
 	/**
-	 * Removes all the teams where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (Team team : findByGroupId(groupId)) {
-			remove(team);
-		}
-	}
-
-	/**
-	 * Removes the team where groupId = &#63; and name = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @return the team that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Team removeByG_N(long groupId, String name)
-		throws NoSuchTeamException, SystemException {
-		Team team = findByG_N(groupId, name);
-
-		return remove(team);
-	}
-
-	/**
 	 * Removes all the teams from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -1530,177 +1708,6 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 		for (Team team : findAll()) {
 			remove(team);
 		}
-	}
-
-	/**
-	 * Returns the number of teams where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching teams
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_TEAM_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of teams that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching teams that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_TEAM_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				Team.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN,
-				groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of teams where groupId = &#63; and name = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @return the number of matching teams
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_N(long groupId, String name) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, name };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_N,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_TEAM_WHERE);
-
-			query.append(_FINDER_COLUMN_G_N_GROUPID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_G_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_N_NAME_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_N, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -3195,11 +3202,6 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 	private static final String _SQL_GETUSERGROUPS = "SELECT {UserGroup.*} FROM UserGroup INNER JOIN UserGroups_Teams ON (UserGroups_Teams.userGroupId = UserGroup.userGroupId) WHERE (UserGroups_Teams.teamId = ?)";
 	private static final String _SQL_GETUSERGROUPSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM UserGroups_Teams WHERE teamId = ?";
 	private static final String _SQL_CONTAINSUSERGROUP = "SELECT COUNT(*) AS COUNT_VALUE FROM UserGroups_Teams WHERE teamId = ? AND userGroupId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "team.groupId = ?";
-	private static final String _FINDER_COLUMN_G_N_GROUPID_2 = "team.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_N_NAME_1 = "team.name IS NULL";
-	private static final String _FINDER_COLUMN_G_N_NAME_2 = "team.name = ?";
-	private static final String _FINDER_COLUMN_G_N_NAME_3 = "(team.name IS NULL OR team.name = ?)";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "team.teamId";
 	private static final String _FILTER_SQL_SELECT_TEAM_WHERE = "SELECT DISTINCT {team.*} FROM Team team WHERE ";
 	private static final String _FILTER_SQL_SELECT_TEAM_NO_INLINE_DISTINCT_WHERE_1 =

@@ -36,67 +36,6 @@ public interface PortletPersistence extends BasePersistence<Portlet> {
 	 */
 
 	/**
-	* Caches the portlet in the entity cache if it is enabled.
-	*
-	* @param portlet the portlet
-	*/
-	public void cacheResult(com.liferay.portal.model.Portlet portlet);
-
-	/**
-	* Caches the portlets in the entity cache if it is enabled.
-	*
-	* @param portlets the portlets
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.Portlet> portlets);
-
-	/**
-	* Creates a new portlet with the primary key. Does not add the portlet to the database.
-	*
-	* @param id the primary key for the new portlet
-	* @return the new portlet
-	*/
-	public com.liferay.portal.model.Portlet create(long id);
-
-	/**
-	* Removes the portlet with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param id the primary key of the portlet
-	* @return the portlet that was removed
-	* @throws com.liferay.portal.NoSuchPortletException if a portlet with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Portlet remove(long id)
-		throws com.liferay.portal.NoSuchPortletException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.Portlet updateImpl(
-		com.liferay.portal.model.Portlet portlet)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the portlet with the primary key or throws a {@link com.liferay.portal.NoSuchPortletException} if it could not be found.
-	*
-	* @param id the primary key of the portlet
-	* @return the portlet
-	* @throws com.liferay.portal.NoSuchPortletException if a portlet with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Portlet findByPrimaryKey(long id)
-		throws com.liferay.portal.NoSuchPortletException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the portlet with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param id the primary key of the portlet
-	* @return the portlet, or <code>null</code> if a portlet with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Portlet fetchByPrimaryKey(long id)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the portlets where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -216,6 +155,25 @@ public interface PortletPersistence extends BasePersistence<Portlet> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the portlets where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of portlets where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching portlets
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the portlet where companyId = &#63; and portletId = &#63; or throws a {@link com.liferay.portal.NoSuchPortletException} if it could not be found.
 	*
 	* @param companyId the company ID
@@ -252,6 +210,91 @@ public interface PortletPersistence extends BasePersistence<Portlet> {
 	*/
 	public com.liferay.portal.model.Portlet fetchByC_P(long companyId,
 		java.lang.String portletId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the portlet where companyId = &#63; and portletId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param portletId the portlet ID
+	* @return the portlet that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Portlet removeByC_P(long companyId,
+		java.lang.String portletId)
+		throws com.liferay.portal.NoSuchPortletException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of portlets where companyId = &#63; and portletId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param portletId the portlet ID
+	* @return the number of matching portlets
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_P(long companyId, java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the portlet in the entity cache if it is enabled.
+	*
+	* @param portlet the portlet
+	*/
+	public void cacheResult(com.liferay.portal.model.Portlet portlet);
+
+	/**
+	* Caches the portlets in the entity cache if it is enabled.
+	*
+	* @param portlets the portlets
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.Portlet> portlets);
+
+	/**
+	* Creates a new portlet with the primary key. Does not add the portlet to the database.
+	*
+	* @param id the primary key for the new portlet
+	* @return the new portlet
+	*/
+	public com.liferay.portal.model.Portlet create(long id);
+
+	/**
+	* Removes the portlet with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param id the primary key of the portlet
+	* @return the portlet that was removed
+	* @throws com.liferay.portal.NoSuchPortletException if a portlet with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Portlet remove(long id)
+		throws com.liferay.portal.NoSuchPortletException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.Portlet updateImpl(
+		com.liferay.portal.model.Portlet portlet)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the portlet with the primary key or throws a {@link com.liferay.portal.NoSuchPortletException} if it could not be found.
+	*
+	* @param id the primary key of the portlet
+	* @return the portlet
+	* @throws com.liferay.portal.NoSuchPortletException if a portlet with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Portlet findByPrimaryKey(long id)
+		throws com.liferay.portal.NoSuchPortletException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the portlet with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param id the primary key of the portlet
+	* @return the portlet, or <code>null</code> if a portlet with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Portlet fetchByPrimaryKey(long id)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -297,54 +340,11 @@ public interface PortletPersistence extends BasePersistence<Portlet> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the portlets where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the portlet where companyId = &#63; and portletId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param portletId the portlet ID
-	* @return the portlet that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Portlet removeByC_P(long companyId,
-		java.lang.String portletId)
-		throws com.liferay.portal.NoSuchPortletException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the portlets from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of portlets where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching portlets
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of portlets where companyId = &#63; and portletId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param portletId the portlet ID
-	* @return the number of matching portlets
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_P(long companyId, java.lang.String portletId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

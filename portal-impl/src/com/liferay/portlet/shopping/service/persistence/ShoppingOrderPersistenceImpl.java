@@ -79,6 +79,17 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
 			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -99,554 +110,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_NUMBER = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingOrderImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByNumber",
-			new String[] { String.class.getName() },
-			ShoppingOrderModelImpl.NUMBER_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_NUMBER = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByNumber",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_PPTXNID = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingOrderImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByPPTxnId", new String[] { String.class.getName() },
-			ShoppingOrderModelImpl.PPTXNID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_PPTXNID = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByPPTxnId",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_PPPS = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByG_U_PPPS",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_PPPS =
-		new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByG_U_PPPS",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName()
-			},
-			ShoppingOrderModelImpl.GROUPID_COLUMN_BITMASK |
-			ShoppingOrderModelImpl.USERID_COLUMN_BITMASK |
-			ShoppingOrderModelImpl.PPPAYMENTSTATUS_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_U_PPPS = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_U_PPPS",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the shopping order in the entity cache if it is enabled.
-	 *
-	 * @param shoppingOrder the shopping order
-	 */
-	public void cacheResult(ShoppingOrder shoppingOrder) {
-		EntityCacheUtil.putResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderImpl.class, shoppingOrder.getPrimaryKey(),
-			shoppingOrder);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NUMBER,
-			new Object[] { shoppingOrder.getNumber() }, shoppingOrder);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PPTXNID,
-			new Object[] { shoppingOrder.getPpTxnId() }, shoppingOrder);
-
-		shoppingOrder.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the shopping orders in the entity cache if it is enabled.
-	 *
-	 * @param shoppingOrders the shopping orders
-	 */
-	public void cacheResult(List<ShoppingOrder> shoppingOrders) {
-		for (ShoppingOrder shoppingOrder : shoppingOrders) {
-			if (EntityCacheUtil.getResult(
-						ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingOrderImpl.class, shoppingOrder.getPrimaryKey()) == null) {
-				cacheResult(shoppingOrder);
-			}
-			else {
-				shoppingOrder.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all shopping orders.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(ShoppingOrderImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(ShoppingOrderImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the shopping order.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(ShoppingOrder shoppingOrder) {
-		EntityCacheUtil.removeResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderImpl.class, shoppingOrder.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(shoppingOrder);
-	}
-
-	@Override
-	public void clearCache(List<ShoppingOrder> shoppingOrders) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (ShoppingOrder shoppingOrder : shoppingOrders) {
-			EntityCacheUtil.removeResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-				ShoppingOrderImpl.class, shoppingOrder.getPrimaryKey());
-
-			clearUniqueFindersCache(shoppingOrder);
-		}
-	}
-
-	protected void clearUniqueFindersCache(ShoppingOrder shoppingOrder) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NUMBER,
-			new Object[] { shoppingOrder.getNumber() });
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_PPTXNID,
-			new Object[] { shoppingOrder.getPpTxnId() });
-	}
-
-	/**
-	 * Creates a new shopping order with the primary key. Does not add the shopping order to the database.
-	 *
-	 * @param orderId the primary key for the new shopping order
-	 * @return the new shopping order
-	 */
-	public ShoppingOrder create(long orderId) {
-		ShoppingOrder shoppingOrder = new ShoppingOrderImpl();
-
-		shoppingOrder.setNew(true);
-		shoppingOrder.setPrimaryKey(orderId);
-
-		return shoppingOrder;
-	}
-
-	/**
-	 * Removes the shopping order with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param orderId the primary key of the shopping order
-	 * @return the shopping order that was removed
-	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder remove(long orderId)
-		throws NoSuchOrderException, SystemException {
-		return remove(Long.valueOf(orderId));
-	}
-
-	/**
-	 * Removes the shopping order with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the shopping order
-	 * @return the shopping order that was removed
-	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingOrder remove(Serializable primaryKey)
-		throws NoSuchOrderException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			ShoppingOrder shoppingOrder = (ShoppingOrder)session.get(ShoppingOrderImpl.class,
-					primaryKey);
-
-			if (shoppingOrder == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchOrderException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(shoppingOrder);
-		}
-		catch (NoSuchOrderException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected ShoppingOrder removeImpl(ShoppingOrder shoppingOrder)
-		throws SystemException {
-		shoppingOrder = toUnwrappedModel(shoppingOrder);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(shoppingOrder)) {
-				shoppingOrder = (ShoppingOrder)session.get(ShoppingOrderImpl.class,
-						shoppingOrder.getPrimaryKeyObj());
-			}
-
-			if (shoppingOrder != null) {
-				session.delete(shoppingOrder);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (shoppingOrder != null) {
-			clearCache(shoppingOrder);
-		}
-
-		return shoppingOrder;
-	}
-
-	@Override
-	public ShoppingOrder updateImpl(
-		com.liferay.portlet.shopping.model.ShoppingOrder shoppingOrder)
-		throws SystemException {
-		shoppingOrder = toUnwrappedModel(shoppingOrder);
-
-		boolean isNew = shoppingOrder.isNew();
-
-		ShoppingOrderModelImpl shoppingOrderModelImpl = (ShoppingOrderModelImpl)shoppingOrder;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (shoppingOrder.isNew()) {
-				session.save(shoppingOrder);
-
-				shoppingOrder.setNew(false);
-			}
-			else {
-				session.merge(shoppingOrder);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !ShoppingOrderModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((shoppingOrderModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(shoppingOrderModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(shoppingOrderModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((shoppingOrderModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_PPPS.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(shoppingOrderModelImpl.getOriginalGroupId()),
-						Long.valueOf(shoppingOrderModelImpl.getOriginalUserId()),
-						
-						shoppingOrderModelImpl.getOriginalPpPaymentStatus()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_PPPS, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_PPPS,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(shoppingOrderModelImpl.getGroupId()),
-						Long.valueOf(shoppingOrderModelImpl.getUserId()),
-						
-						shoppingOrderModelImpl.getPpPaymentStatus()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_PPPS, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_PPPS,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderImpl.class, shoppingOrder.getPrimaryKey(),
-			shoppingOrder);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NUMBER,
-				new Object[] { shoppingOrder.getNumber() }, shoppingOrder);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PPTXNID,
-				new Object[] { shoppingOrder.getPpTxnId() }, shoppingOrder);
-		}
-		else {
-			if ((shoppingOrderModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_NUMBER.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						shoppingOrderModelImpl.getOriginalNumber()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NUMBER, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NUMBER, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NUMBER,
-					new Object[] { shoppingOrder.getNumber() }, shoppingOrder);
-			}
-
-			if ((shoppingOrderModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_PPTXNID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						shoppingOrderModelImpl.getOriginalPpTxnId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PPTXNID, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_PPTXNID, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PPTXNID,
-					new Object[] { shoppingOrder.getPpTxnId() }, shoppingOrder);
-			}
-		}
-
-		return shoppingOrder;
-	}
-
-	protected ShoppingOrder toUnwrappedModel(ShoppingOrder shoppingOrder) {
-		if (shoppingOrder instanceof ShoppingOrderImpl) {
-			return shoppingOrder;
-		}
-
-		ShoppingOrderImpl shoppingOrderImpl = new ShoppingOrderImpl();
-
-		shoppingOrderImpl.setNew(shoppingOrder.isNew());
-		shoppingOrderImpl.setPrimaryKey(shoppingOrder.getPrimaryKey());
-
-		shoppingOrderImpl.setOrderId(shoppingOrder.getOrderId());
-		shoppingOrderImpl.setGroupId(shoppingOrder.getGroupId());
-		shoppingOrderImpl.setCompanyId(shoppingOrder.getCompanyId());
-		shoppingOrderImpl.setUserId(shoppingOrder.getUserId());
-		shoppingOrderImpl.setUserName(shoppingOrder.getUserName());
-		shoppingOrderImpl.setCreateDate(shoppingOrder.getCreateDate());
-		shoppingOrderImpl.setModifiedDate(shoppingOrder.getModifiedDate());
-		shoppingOrderImpl.setNumber(shoppingOrder.getNumber());
-		shoppingOrderImpl.setTax(shoppingOrder.getTax());
-		shoppingOrderImpl.setShipping(shoppingOrder.getShipping());
-		shoppingOrderImpl.setAltShipping(shoppingOrder.getAltShipping());
-		shoppingOrderImpl.setRequiresShipping(shoppingOrder.isRequiresShipping());
-		shoppingOrderImpl.setInsure(shoppingOrder.isInsure());
-		shoppingOrderImpl.setInsurance(shoppingOrder.getInsurance());
-		shoppingOrderImpl.setCouponCodes(shoppingOrder.getCouponCodes());
-		shoppingOrderImpl.setCouponDiscount(shoppingOrder.getCouponDiscount());
-		shoppingOrderImpl.setBillingFirstName(shoppingOrder.getBillingFirstName());
-		shoppingOrderImpl.setBillingLastName(shoppingOrder.getBillingLastName());
-		shoppingOrderImpl.setBillingEmailAddress(shoppingOrder.getBillingEmailAddress());
-		shoppingOrderImpl.setBillingCompany(shoppingOrder.getBillingCompany());
-		shoppingOrderImpl.setBillingStreet(shoppingOrder.getBillingStreet());
-		shoppingOrderImpl.setBillingCity(shoppingOrder.getBillingCity());
-		shoppingOrderImpl.setBillingState(shoppingOrder.getBillingState());
-		shoppingOrderImpl.setBillingZip(shoppingOrder.getBillingZip());
-		shoppingOrderImpl.setBillingCountry(shoppingOrder.getBillingCountry());
-		shoppingOrderImpl.setBillingPhone(shoppingOrder.getBillingPhone());
-		shoppingOrderImpl.setShipToBilling(shoppingOrder.isShipToBilling());
-		shoppingOrderImpl.setShippingFirstName(shoppingOrder.getShippingFirstName());
-		shoppingOrderImpl.setShippingLastName(shoppingOrder.getShippingLastName());
-		shoppingOrderImpl.setShippingEmailAddress(shoppingOrder.getShippingEmailAddress());
-		shoppingOrderImpl.setShippingCompany(shoppingOrder.getShippingCompany());
-		shoppingOrderImpl.setShippingStreet(shoppingOrder.getShippingStreet());
-		shoppingOrderImpl.setShippingCity(shoppingOrder.getShippingCity());
-		shoppingOrderImpl.setShippingState(shoppingOrder.getShippingState());
-		shoppingOrderImpl.setShippingZip(shoppingOrder.getShippingZip());
-		shoppingOrderImpl.setShippingCountry(shoppingOrder.getShippingCountry());
-		shoppingOrderImpl.setShippingPhone(shoppingOrder.getShippingPhone());
-		shoppingOrderImpl.setCcName(shoppingOrder.getCcName());
-		shoppingOrderImpl.setCcType(shoppingOrder.getCcType());
-		shoppingOrderImpl.setCcNumber(shoppingOrder.getCcNumber());
-		shoppingOrderImpl.setCcExpMonth(shoppingOrder.getCcExpMonth());
-		shoppingOrderImpl.setCcExpYear(shoppingOrder.getCcExpYear());
-		shoppingOrderImpl.setCcVerNumber(shoppingOrder.getCcVerNumber());
-		shoppingOrderImpl.setComments(shoppingOrder.getComments());
-		shoppingOrderImpl.setPpTxnId(shoppingOrder.getPpTxnId());
-		shoppingOrderImpl.setPpPaymentStatus(shoppingOrder.getPpPaymentStatus());
-		shoppingOrderImpl.setPpPaymentGross(shoppingOrder.getPpPaymentGross());
-		shoppingOrderImpl.setPpReceiverEmail(shoppingOrder.getPpReceiverEmail());
-		shoppingOrderImpl.setPpPayerEmail(shoppingOrder.getPpPayerEmail());
-		shoppingOrderImpl.setSendOrderEmail(shoppingOrder.isSendOrderEmail());
-		shoppingOrderImpl.setSendShippingEmail(shoppingOrder.isSendShippingEmail());
-
-		return shoppingOrderImpl;
-	}
-
-	/**
-	 * Returns the shopping order with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the shopping order
-	 * @return the shopping order
-	 * @throws com.liferay.portal.NoSuchModelException if a shopping order with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingOrder findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the shopping order with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
-	 *
-	 * @param orderId the primary key of the shopping order
-	 * @return the shopping order
-	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder findByPrimaryKey(long orderId)
-		throws NoSuchOrderException, SystemException {
-		ShoppingOrder shoppingOrder = fetchByPrimaryKey(orderId);
-
-		if (shoppingOrder == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + orderId);
-			}
-
-			throw new NoSuchOrderException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				orderId);
-		}
-
-		return shoppingOrder;
-	}
-
-	/**
-	 * Returns the shopping order with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the shopping order
-	 * @return the shopping order, or <code>null</code> if a shopping order with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingOrder fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the shopping order with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param orderId the primary key of the shopping order
-	 * @return the shopping order, or <code>null</code> if a shopping order with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder fetchByPrimaryKey(long orderId)
-		throws SystemException {
-		ShoppingOrder shoppingOrder = (ShoppingOrder)EntityCacheUtil.getResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-				ShoppingOrderImpl.class, orderId);
-
-		if (shoppingOrder == _nullShoppingOrder) {
-			return null;
-		}
-
-		if (shoppingOrder == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				shoppingOrder = (ShoppingOrder)session.get(ShoppingOrderImpl.class,
-						Long.valueOf(orderId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (shoppingOrder != null) {
-					cacheResult(shoppingOrder);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingOrderImpl.class, orderId, _nullShoppingOrder);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return shoppingOrder;
-	}
 
 	/**
 	 * Returns all the shopping orders where groupId = &#63;.
@@ -1343,6 +806,130 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	}
 
 	/**
+	 * Removes all the shopping orders where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (ShoppingOrder shoppingOrder : findByGroupId(groupId)) {
+			remove(shoppingOrder);
+		}
+	}
+
+	/**
+	 * Returns the number of shopping orders where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching shopping orders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SHOPPINGORDER_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of shopping orders that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching shopping orders that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_SHOPPINGORDER_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				ShoppingOrder.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "shoppingOrder.groupId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_NUMBER = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingOrderImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByNumber",
+			new String[] { String.class.getName() },
+			ShoppingOrderModelImpl.NUMBER_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_NUMBER = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByNumber",
+			new String[] { String.class.getName() });
+
+	/**
 	 * Returns the shopping order where number = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
 	 *
 	 * @param number the number
@@ -1491,6 +1078,98 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 			}
 		}
 	}
+
+	/**
+	 * Removes the shopping order where number = &#63; from the database.
+	 *
+	 * @param number the number
+	 * @return the shopping order that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder removeByNumber(String number)
+		throws NoSuchOrderException, SystemException {
+		ShoppingOrder shoppingOrder = findByNumber(number);
+
+		return remove(shoppingOrder);
+	}
+
+	/**
+	 * Returns the number of shopping orders where number = &#63;.
+	 *
+	 * @param number the number
+	 * @return the number of matching shopping orders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByNumber(String number) throws SystemException {
+		Object[] finderArgs = new Object[] { number };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_NUMBER,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SHOPPINGORDER_WHERE);
+
+			if (number == null) {
+				query.append(_FINDER_COLUMN_NUMBER_NUMBER_1);
+			}
+			else {
+				if (number.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_NUMBER_NUMBER_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_NUMBER_NUMBER_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (number != null) {
+					qPos.add(number);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NUMBER,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_NUMBER_NUMBER_1 = "shoppingOrder.number IS NULL";
+	private static final String _FINDER_COLUMN_NUMBER_NUMBER_2 = "shoppingOrder.number = ?";
+	private static final String _FINDER_COLUMN_NUMBER_NUMBER_3 = "(shoppingOrder.number IS NULL OR shoppingOrder.number = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_PPTXNID = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingOrderImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByPPTxnId", new String[] { String.class.getName() },
+			ShoppingOrderModelImpl.PPTXNID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_PPTXNID = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByPPTxnId",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns the shopping order where ppTxnId = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
@@ -1642,6 +1321,119 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 			}
 		}
 	}
+
+	/**
+	 * Removes the shopping order where ppTxnId = &#63; from the database.
+	 *
+	 * @param ppTxnId the pp txn ID
+	 * @return the shopping order that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder removeByPPTxnId(String ppTxnId)
+		throws NoSuchOrderException, SystemException {
+		ShoppingOrder shoppingOrder = findByPPTxnId(ppTxnId);
+
+		return remove(shoppingOrder);
+	}
+
+	/**
+	 * Returns the number of shopping orders where ppTxnId = &#63;.
+	 *
+	 * @param ppTxnId the pp txn ID
+	 * @return the number of matching shopping orders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByPPTxnId(String ppTxnId) throws SystemException {
+		Object[] finderArgs = new Object[] { ppTxnId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_PPTXNID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SHOPPINGORDER_WHERE);
+
+			if (ppTxnId == null) {
+				query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_1);
+			}
+			else {
+				if (ppTxnId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (ppTxnId != null) {
+					qPos.add(ppTxnId);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PPTXNID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_PPTXNID_PPTXNID_1 = "shoppingOrder.ppTxnId IS NULL";
+	private static final String _FINDER_COLUMN_PPTXNID_PPTXNID_2 = "shoppingOrder.ppTxnId = ?";
+	private static final String _FINDER_COLUMN_PPTXNID_PPTXNID_3 = "(shoppingOrder.ppTxnId IS NULL OR shoppingOrder.ppTxnId = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_PPPS = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_U_PPPS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_PPPS =
+		new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByG_U_PPPS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName()
+			},
+			ShoppingOrderModelImpl.GROUPID_COLUMN_BITMASK |
+			ShoppingOrderModelImpl.USERID_COLUMN_BITMASK |
+			ShoppingOrderModelImpl.PPPAYMENTSTATUS_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_U_PPPS = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_U_PPPS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName()
+			});
 
 	/**
 	 * Returns all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
@@ -2473,161 +2265,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	}
 
 	/**
-	 * Returns all the shopping orders.
-	 *
-	 * @return the shopping orders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ShoppingOrder> findAll() throws SystemException {
-		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the shopping orders.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of shopping orders
-	 * @param end the upper bound of the range of shopping orders (not inclusive)
-	 * @return the range of shopping orders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ShoppingOrder> findAll(int start, int end)
-		throws SystemException {
-		return findAll(start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the shopping orders.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of shopping orders
-	 * @param end the upper bound of the range of shopping orders (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of shopping orders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ShoppingOrder> findAll(int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<ShoppingOrder> list = (List<ShoppingOrder>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if (list == null) {
-			StringBundler query = null;
-			String sql = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 3));
-
-				query.append(_SQL_SELECT_SHOPPINGORDER);
-
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-
-				sql = query.toString();
-			}
-			else {
-				sql = _SQL_SELECT_SHOPPINGORDER.concat(ShoppingOrderModelImpl.ORDER_BY_JPQL);
-			}
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				if (orderByComparator == null) {
-					list = (List<ShoppingOrder>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-				}
-				else {
-					list = (List<ShoppingOrder>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Removes all the shopping orders where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (ShoppingOrder shoppingOrder : findByGroupId(groupId)) {
-			remove(shoppingOrder);
-		}
-	}
-
-	/**
-	 * Removes the shopping order where number = &#63; from the database.
-	 *
-	 * @param number the number
-	 * @return the shopping order that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder removeByNumber(String number)
-		throws NoSuchOrderException, SystemException {
-		ShoppingOrder shoppingOrder = findByNumber(number);
-
-		return remove(shoppingOrder);
-	}
-
-	/**
-	 * Removes the shopping order where ppTxnId = &#63; from the database.
-	 *
-	 * @param ppTxnId the pp txn ID
-	 * @return the shopping order that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder removeByPPTxnId(String ppTxnId)
-		throws NoSuchOrderException, SystemException {
-		ShoppingOrder shoppingOrder = findByPPTxnId(ppTxnId);
-
-		return remove(shoppingOrder);
-	}
-
-	/**
 	 * Removes all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -2641,248 +2278,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 				ppPaymentStatus)) {
 			remove(shoppingOrder);
 		}
-	}
-
-	/**
-	 * Removes all the shopping orders from the database.
-	 *
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeAll() throws SystemException {
-		for (ShoppingOrder shoppingOrder : findAll()) {
-			remove(shoppingOrder);
-		}
-	}
-
-	/**
-	 * Returns the number of shopping orders where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching shopping orders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SHOPPINGORDER_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of shopping orders that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching shopping orders that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_SHOPPINGORDER_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				ShoppingOrder.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of shopping orders where number = &#63;.
-	 *
-	 * @param number the number
-	 * @return the number of matching shopping orders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByNumber(String number) throws SystemException {
-		Object[] finderArgs = new Object[] { number };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_NUMBER,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SHOPPINGORDER_WHERE);
-
-			if (number == null) {
-				query.append(_FINDER_COLUMN_NUMBER_NUMBER_1);
-			}
-			else {
-				if (number.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_NUMBER_NUMBER_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_NUMBER_NUMBER_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (number != null) {
-					qPos.add(number);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NUMBER,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of shopping orders where ppTxnId = &#63;.
-	 *
-	 * @param ppTxnId the pp txn ID
-	 * @return the number of matching shopping orders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByPPTxnId(String ppTxnId) throws SystemException {
-		Object[] finderArgs = new Object[] { ppTxnId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_PPTXNID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SHOPPINGORDER_WHERE);
-
-			if (ppTxnId == null) {
-				query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_1);
-			}
-			else {
-				if (ppTxnId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_PPTXNID_PPTXNID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (ppTxnId != null) {
-					qPos.add(ppTxnId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PPTXNID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -3032,6 +2427,627 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 		}
 	}
 
+	private static final String _FINDER_COLUMN_G_U_PPPS_GROUPID_2 = "shoppingOrder.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_U_PPPS_USERID_2 = "shoppingOrder.userId = ? AND ";
+	private static final String _FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_1 = "shoppingOrder.ppPaymentStatus IS NULL";
+	private static final String _FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2 = "shoppingOrder.ppPaymentStatus = ?";
+	private static final String _FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3 = "(shoppingOrder.ppPaymentStatus IS NULL OR shoppingOrder.ppPaymentStatus = ?)";
+
+	/**
+	 * Caches the shopping order in the entity cache if it is enabled.
+	 *
+	 * @param shoppingOrder the shopping order
+	 */
+	public void cacheResult(ShoppingOrder shoppingOrder) {
+		EntityCacheUtil.putResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderImpl.class, shoppingOrder.getPrimaryKey(),
+			shoppingOrder);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NUMBER,
+			new Object[] { shoppingOrder.getNumber() }, shoppingOrder);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PPTXNID,
+			new Object[] { shoppingOrder.getPpTxnId() }, shoppingOrder);
+
+		shoppingOrder.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the shopping orders in the entity cache if it is enabled.
+	 *
+	 * @param shoppingOrders the shopping orders
+	 */
+	public void cacheResult(List<ShoppingOrder> shoppingOrders) {
+		for (ShoppingOrder shoppingOrder : shoppingOrders) {
+			if (EntityCacheUtil.getResult(
+						ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingOrderImpl.class, shoppingOrder.getPrimaryKey()) == null) {
+				cacheResult(shoppingOrder);
+			}
+			else {
+				shoppingOrder.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all shopping orders.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(ShoppingOrderImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(ShoppingOrderImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the shopping order.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(ShoppingOrder shoppingOrder) {
+		EntityCacheUtil.removeResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderImpl.class, shoppingOrder.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(shoppingOrder);
+	}
+
+	@Override
+	public void clearCache(List<ShoppingOrder> shoppingOrders) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (ShoppingOrder shoppingOrder : shoppingOrders) {
+			EntityCacheUtil.removeResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+				ShoppingOrderImpl.class, shoppingOrder.getPrimaryKey());
+
+			clearUniqueFindersCache(shoppingOrder);
+		}
+	}
+
+	protected void clearUniqueFindersCache(ShoppingOrder shoppingOrder) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NUMBER,
+			new Object[] { shoppingOrder.getNumber() });
+
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_PPTXNID,
+			new Object[] { shoppingOrder.getPpTxnId() });
+	}
+
+	/**
+	 * Creates a new shopping order with the primary key. Does not add the shopping order to the database.
+	 *
+	 * @param orderId the primary key for the new shopping order
+	 * @return the new shopping order
+	 */
+	public ShoppingOrder create(long orderId) {
+		ShoppingOrder shoppingOrder = new ShoppingOrderImpl();
+
+		shoppingOrder.setNew(true);
+		shoppingOrder.setPrimaryKey(orderId);
+
+		return shoppingOrder;
+	}
+
+	/**
+	 * Removes the shopping order with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param orderId the primary key of the shopping order
+	 * @return the shopping order that was removed
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder remove(long orderId)
+		throws NoSuchOrderException, SystemException {
+		return remove(Long.valueOf(orderId));
+	}
+
+	/**
+	 * Removes the shopping order with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the shopping order
+	 * @return the shopping order that was removed
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingOrder remove(Serializable primaryKey)
+		throws NoSuchOrderException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			ShoppingOrder shoppingOrder = (ShoppingOrder)session.get(ShoppingOrderImpl.class,
+					primaryKey);
+
+			if (shoppingOrder == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchOrderException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(shoppingOrder);
+		}
+		catch (NoSuchOrderException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected ShoppingOrder removeImpl(ShoppingOrder shoppingOrder)
+		throws SystemException {
+		shoppingOrder = toUnwrappedModel(shoppingOrder);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(shoppingOrder)) {
+				shoppingOrder = (ShoppingOrder)session.get(ShoppingOrderImpl.class,
+						shoppingOrder.getPrimaryKeyObj());
+			}
+
+			if (shoppingOrder != null) {
+				session.delete(shoppingOrder);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (shoppingOrder != null) {
+			clearCache(shoppingOrder);
+		}
+
+		return shoppingOrder;
+	}
+
+	@Override
+	public ShoppingOrder updateImpl(
+		com.liferay.portlet.shopping.model.ShoppingOrder shoppingOrder)
+		throws SystemException {
+		shoppingOrder = toUnwrappedModel(shoppingOrder);
+
+		boolean isNew = shoppingOrder.isNew();
+
+		ShoppingOrderModelImpl shoppingOrderModelImpl = (ShoppingOrderModelImpl)shoppingOrder;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (shoppingOrder.isNew()) {
+				session.save(shoppingOrder);
+
+				shoppingOrder.setNew(false);
+			}
+			else {
+				session.merge(shoppingOrder);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !ShoppingOrderModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((shoppingOrderModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(shoppingOrderModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(shoppingOrderModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+
+			if ((shoppingOrderModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_PPPS.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(shoppingOrderModelImpl.getOriginalGroupId()),
+						Long.valueOf(shoppingOrderModelImpl.getOriginalUserId()),
+						
+						shoppingOrderModelImpl.getOriginalPpPaymentStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_PPPS, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_PPPS,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(shoppingOrderModelImpl.getGroupId()),
+						Long.valueOf(shoppingOrderModelImpl.getUserId()),
+						
+						shoppingOrderModelImpl.getPpPaymentStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_PPPS, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_PPPS,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderImpl.class, shoppingOrder.getPrimaryKey(),
+			shoppingOrder);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NUMBER,
+				new Object[] { shoppingOrder.getNumber() }, shoppingOrder);
+
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PPTXNID,
+				new Object[] { shoppingOrder.getPpTxnId() }, shoppingOrder);
+		}
+		else {
+			if ((shoppingOrderModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_NUMBER.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						shoppingOrderModelImpl.getOriginalNumber()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NUMBER, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NUMBER, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NUMBER,
+					new Object[] { shoppingOrder.getNumber() }, shoppingOrder);
+			}
+
+			if ((shoppingOrderModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_PPTXNID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						shoppingOrderModelImpl.getOriginalPpTxnId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PPTXNID, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_PPTXNID, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PPTXNID,
+					new Object[] { shoppingOrder.getPpTxnId() }, shoppingOrder);
+			}
+		}
+
+		return shoppingOrder;
+	}
+
+	protected ShoppingOrder toUnwrappedModel(ShoppingOrder shoppingOrder) {
+		if (shoppingOrder instanceof ShoppingOrderImpl) {
+			return shoppingOrder;
+		}
+
+		ShoppingOrderImpl shoppingOrderImpl = new ShoppingOrderImpl();
+
+		shoppingOrderImpl.setNew(shoppingOrder.isNew());
+		shoppingOrderImpl.setPrimaryKey(shoppingOrder.getPrimaryKey());
+
+		shoppingOrderImpl.setOrderId(shoppingOrder.getOrderId());
+		shoppingOrderImpl.setGroupId(shoppingOrder.getGroupId());
+		shoppingOrderImpl.setCompanyId(shoppingOrder.getCompanyId());
+		shoppingOrderImpl.setUserId(shoppingOrder.getUserId());
+		shoppingOrderImpl.setUserName(shoppingOrder.getUserName());
+		shoppingOrderImpl.setCreateDate(shoppingOrder.getCreateDate());
+		shoppingOrderImpl.setModifiedDate(shoppingOrder.getModifiedDate());
+		shoppingOrderImpl.setNumber(shoppingOrder.getNumber());
+		shoppingOrderImpl.setTax(shoppingOrder.getTax());
+		shoppingOrderImpl.setShipping(shoppingOrder.getShipping());
+		shoppingOrderImpl.setAltShipping(shoppingOrder.getAltShipping());
+		shoppingOrderImpl.setRequiresShipping(shoppingOrder.isRequiresShipping());
+		shoppingOrderImpl.setInsure(shoppingOrder.isInsure());
+		shoppingOrderImpl.setInsurance(shoppingOrder.getInsurance());
+		shoppingOrderImpl.setCouponCodes(shoppingOrder.getCouponCodes());
+		shoppingOrderImpl.setCouponDiscount(shoppingOrder.getCouponDiscount());
+		shoppingOrderImpl.setBillingFirstName(shoppingOrder.getBillingFirstName());
+		shoppingOrderImpl.setBillingLastName(shoppingOrder.getBillingLastName());
+		shoppingOrderImpl.setBillingEmailAddress(shoppingOrder.getBillingEmailAddress());
+		shoppingOrderImpl.setBillingCompany(shoppingOrder.getBillingCompany());
+		shoppingOrderImpl.setBillingStreet(shoppingOrder.getBillingStreet());
+		shoppingOrderImpl.setBillingCity(shoppingOrder.getBillingCity());
+		shoppingOrderImpl.setBillingState(shoppingOrder.getBillingState());
+		shoppingOrderImpl.setBillingZip(shoppingOrder.getBillingZip());
+		shoppingOrderImpl.setBillingCountry(shoppingOrder.getBillingCountry());
+		shoppingOrderImpl.setBillingPhone(shoppingOrder.getBillingPhone());
+		shoppingOrderImpl.setShipToBilling(shoppingOrder.isShipToBilling());
+		shoppingOrderImpl.setShippingFirstName(shoppingOrder.getShippingFirstName());
+		shoppingOrderImpl.setShippingLastName(shoppingOrder.getShippingLastName());
+		shoppingOrderImpl.setShippingEmailAddress(shoppingOrder.getShippingEmailAddress());
+		shoppingOrderImpl.setShippingCompany(shoppingOrder.getShippingCompany());
+		shoppingOrderImpl.setShippingStreet(shoppingOrder.getShippingStreet());
+		shoppingOrderImpl.setShippingCity(shoppingOrder.getShippingCity());
+		shoppingOrderImpl.setShippingState(shoppingOrder.getShippingState());
+		shoppingOrderImpl.setShippingZip(shoppingOrder.getShippingZip());
+		shoppingOrderImpl.setShippingCountry(shoppingOrder.getShippingCountry());
+		shoppingOrderImpl.setShippingPhone(shoppingOrder.getShippingPhone());
+		shoppingOrderImpl.setCcName(shoppingOrder.getCcName());
+		shoppingOrderImpl.setCcType(shoppingOrder.getCcType());
+		shoppingOrderImpl.setCcNumber(shoppingOrder.getCcNumber());
+		shoppingOrderImpl.setCcExpMonth(shoppingOrder.getCcExpMonth());
+		shoppingOrderImpl.setCcExpYear(shoppingOrder.getCcExpYear());
+		shoppingOrderImpl.setCcVerNumber(shoppingOrder.getCcVerNumber());
+		shoppingOrderImpl.setComments(shoppingOrder.getComments());
+		shoppingOrderImpl.setPpTxnId(shoppingOrder.getPpTxnId());
+		shoppingOrderImpl.setPpPaymentStatus(shoppingOrder.getPpPaymentStatus());
+		shoppingOrderImpl.setPpPaymentGross(shoppingOrder.getPpPaymentGross());
+		shoppingOrderImpl.setPpReceiverEmail(shoppingOrder.getPpReceiverEmail());
+		shoppingOrderImpl.setPpPayerEmail(shoppingOrder.getPpPayerEmail());
+		shoppingOrderImpl.setSendOrderEmail(shoppingOrder.isSendOrderEmail());
+		shoppingOrderImpl.setSendShippingEmail(shoppingOrder.isSendShippingEmail());
+
+		return shoppingOrderImpl;
+	}
+
+	/**
+	 * Returns the shopping order with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the shopping order
+	 * @return the shopping order
+	 * @throws com.liferay.portal.NoSuchModelException if a shopping order with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingOrder findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the shopping order with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
+	 *
+	 * @param orderId the primary key of the shopping order
+	 * @return the shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByPrimaryKey(long orderId)
+		throws NoSuchOrderException, SystemException {
+		ShoppingOrder shoppingOrder = fetchByPrimaryKey(orderId);
+
+		if (shoppingOrder == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + orderId);
+			}
+
+			throw new NoSuchOrderException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				orderId);
+		}
+
+		return shoppingOrder;
+	}
+
+	/**
+	 * Returns the shopping order with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the shopping order
+	 * @return the shopping order, or <code>null</code> if a shopping order with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingOrder fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the shopping order with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param orderId the primary key of the shopping order
+	 * @return the shopping order, or <code>null</code> if a shopping order with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByPrimaryKey(long orderId)
+		throws SystemException {
+		ShoppingOrder shoppingOrder = (ShoppingOrder)EntityCacheUtil.getResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+				ShoppingOrderImpl.class, orderId);
+
+		if (shoppingOrder == _nullShoppingOrder) {
+			return null;
+		}
+
+		if (shoppingOrder == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				shoppingOrder = (ShoppingOrder)session.get(ShoppingOrderImpl.class,
+						Long.valueOf(orderId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (shoppingOrder != null) {
+					cacheResult(shoppingOrder);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingOrderImpl.class, orderId, _nullShoppingOrder);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return shoppingOrder;
+	}
+
+	/**
+	 * Returns all the shopping orders.
+	 *
+	 * @return the shopping orders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ShoppingOrder> findAll() throws SystemException {
+		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the shopping orders.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of shopping orders
+	 * @param end the upper bound of the range of shopping orders (not inclusive)
+	 * @return the range of shopping orders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ShoppingOrder> findAll(int start, int end)
+		throws SystemException {
+		return findAll(start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the shopping orders.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of shopping orders
+	 * @param end the upper bound of the range of shopping orders (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of shopping orders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ShoppingOrder> findAll(int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
+
+		List<ShoppingOrder> list = (List<ShoppingOrder>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+			String sql = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(2 +
+						(orderByComparator.getOrderByFields().length * 3));
+
+				query.append(_SQL_SELECT_SHOPPINGORDER);
+
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+
+				sql = query.toString();
+			}
+			else {
+				sql = _SQL_SELECT_SHOPPINGORDER.concat(ShoppingOrderModelImpl.ORDER_BY_JPQL);
+			}
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				if (orderByComparator == null) {
+					list = (List<ShoppingOrder>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+				}
+				else {
+					list = (List<ShoppingOrder>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the shopping orders from the database.
+	 *
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeAll() throws SystemException {
+		for (ShoppingOrder shoppingOrder : findAll()) {
+			remove(shoppingOrder);
+		}
+	}
+
 	/**
 	 * Returns the number of shopping orders.
 	 *
@@ -3129,18 +3145,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	private static final String _SQL_SELECT_SHOPPINGORDER_WHERE = "SELECT shoppingOrder FROM ShoppingOrder shoppingOrder WHERE ";
 	private static final String _SQL_COUNT_SHOPPINGORDER = "SELECT COUNT(shoppingOrder) FROM ShoppingOrder shoppingOrder";
 	private static final String _SQL_COUNT_SHOPPINGORDER_WHERE = "SELECT COUNT(shoppingOrder) FROM ShoppingOrder shoppingOrder WHERE ";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "shoppingOrder.groupId = ?";
-	private static final String _FINDER_COLUMN_NUMBER_NUMBER_1 = "shoppingOrder.number IS NULL";
-	private static final String _FINDER_COLUMN_NUMBER_NUMBER_2 = "shoppingOrder.number = ?";
-	private static final String _FINDER_COLUMN_NUMBER_NUMBER_3 = "(shoppingOrder.number IS NULL OR shoppingOrder.number = ?)";
-	private static final String _FINDER_COLUMN_PPTXNID_PPTXNID_1 = "shoppingOrder.ppTxnId IS NULL";
-	private static final String _FINDER_COLUMN_PPTXNID_PPTXNID_2 = "shoppingOrder.ppTxnId = ?";
-	private static final String _FINDER_COLUMN_PPTXNID_PPTXNID_3 = "(shoppingOrder.ppTxnId IS NULL OR shoppingOrder.ppTxnId = ?)";
-	private static final String _FINDER_COLUMN_G_U_PPPS_GROUPID_2 = "shoppingOrder.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_U_PPPS_USERID_2 = "shoppingOrder.userId = ? AND ";
-	private static final String _FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_1 = "shoppingOrder.ppPaymentStatus IS NULL";
-	private static final String _FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2 = "shoppingOrder.ppPaymentStatus = ?";
-	private static final String _FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3 = "(shoppingOrder.ppPaymentStatus IS NULL OR shoppingOrder.ppPaymentStatus = ?)";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "shoppingOrder.orderId";
 	private static final String _FILTER_SQL_SELECT_SHOPPINGORDER_WHERE = "SELECT DISTINCT {shoppingOrder.*} FROM ShoppingOrder shoppingOrder WHERE ";
 	private static final String _FILTER_SQL_SELECT_SHOPPINGORDER_NO_INLINE_DISTINCT_WHERE_1 =

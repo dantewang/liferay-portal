@@ -38,72 +38,6 @@ public interface SCFrameworkVersionPersistence extends BasePersistence<SCFramewo
 	 */
 
 	/**
-	* Caches the s c framework version in the entity cache if it is enabled.
-	*
-	* @param scFrameworkVersion the s c framework version
-	*/
-	public void cacheResult(
-		com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion scFrameworkVersion);
-
-	/**
-	* Caches the s c framework versions in the entity cache if it is enabled.
-	*
-	* @param scFrameworkVersions the s c framework versions
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion> scFrameworkVersions);
-
-	/**
-	* Creates a new s c framework version with the primary key. Does not add the s c framework version to the database.
-	*
-	* @param frameworkVersionId the primary key for the new s c framework version
-	* @return the new s c framework version
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion create(
-		long frameworkVersionId);
-
-	/**
-	* Removes the s c framework version with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param frameworkVersionId the primary key of the s c framework version
-	* @return the s c framework version that was removed
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion remove(
-		long frameworkVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException;
-
-	public com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion updateImpl(
-		com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion scFrameworkVersion)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the s c framework version with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException} if it could not be found.
-	*
-	* @param frameworkVersionId the primary key of the s c framework version
-	* @return the s c framework version
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion findByPrimaryKey(
-		long frameworkVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException;
-
-	/**
-	* Returns the s c framework version with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param frameworkVersionId the primary key of the s c framework version
-	* @return the s c framework version, or <code>null</code> if a s c framework version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion fetchByPrimaryKey(
-		long frameworkVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the s c framework versions where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -286,6 +220,35 @@ public interface SCFrameworkVersionPersistence extends BasePersistence<SCFramewo
 			com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException;
 
 	/**
+	* Removes all the s c framework versions where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of s c framework versions where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching s c framework versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of s c framework versions that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching s c framework versions that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the s c framework versions where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -403,6 +366,25 @@ public interface SCFrameworkVersionPersistence extends BasePersistence<SCFramewo
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException;
+
+	/**
+	* Removes all the s c framework versions where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of s c framework versions where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching s c framework versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the s c framework versions where groupId = &#63; and active = &#63;.
@@ -599,6 +581,104 @@ public interface SCFrameworkVersionPersistence extends BasePersistence<SCFramewo
 			com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException;
 
 	/**
+	* Removes all the s c framework versions where groupId = &#63; and active = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param active the active
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_A(long groupId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of s c framework versions where groupId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param active the active
+	* @return the number of matching s c framework versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_A(long groupId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of s c framework versions that the user has permission to view where groupId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param active the active
+	* @return the number of matching s c framework versions that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_A(long groupId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the s c framework version in the entity cache if it is enabled.
+	*
+	* @param scFrameworkVersion the s c framework version
+	*/
+	public void cacheResult(
+		com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion scFrameworkVersion);
+
+	/**
+	* Caches the s c framework versions in the entity cache if it is enabled.
+	*
+	* @param scFrameworkVersions the s c framework versions
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion> scFrameworkVersions);
+
+	/**
+	* Creates a new s c framework version with the primary key. Does not add the s c framework version to the database.
+	*
+	* @param frameworkVersionId the primary key for the new s c framework version
+	* @return the new s c framework version
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion create(
+		long frameworkVersionId);
+
+	/**
+	* Removes the s c framework version with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param frameworkVersionId the primary key of the s c framework version
+	* @return the s c framework version that was removed
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion remove(
+		long frameworkVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException;
+
+	public com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion updateImpl(
+		com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion scFrameworkVersion)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the s c framework version with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException} if it could not be found.
+	*
+	* @param frameworkVersionId the primary key of the s c framework version
+	* @return the s c framework version
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion findByPrimaryKey(
+		long frameworkVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException;
+
+	/**
+	* Returns the s c framework version with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param frameworkVersionId the primary key of the s c framework version
+	* @return the s c framework version, or <code>null</code> if a s c framework version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion fetchByPrimaryKey(
+		long frameworkVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the s c framework versions.
 	*
 	* @return the s c framework versions
@@ -642,91 +722,11 @@ public interface SCFrameworkVersionPersistence extends BasePersistence<SCFramewo
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the s c framework versions where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the s c framework versions where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the s c framework versions where groupId = &#63; and active = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param active the active
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_A(long groupId, boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the s c framework versions from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of s c framework versions where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching s c framework versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of s c framework versions that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching s c framework versions that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of s c framework versions where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching s c framework versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of s c framework versions where groupId = &#63; and active = &#63;.
-	*
-	* @param groupId the group ID
-	* @param active the active
-	* @return the number of matching s c framework versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_A(long groupId, boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of s c framework versions that the user has permission to view where groupId = &#63; and active = &#63;.
-	*
-	* @param groupId the group ID
-	* @param active the active
-	* @return the number of matching s c framework versions that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_A(long groupId, boolean active)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

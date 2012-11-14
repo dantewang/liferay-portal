@@ -77,6 +77,17 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
+			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
+			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
 			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
 			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -96,532 +107,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 			PollsQuestionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
-			PollsQuestionImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			PollsQuestionModelImpl.UUID_COLUMN_BITMASK |
-			PollsQuestionModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
-			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
-			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			PollsQuestionModelImpl.UUID_COLUMN_BITMASK |
-			PollsQuestionModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
-			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
-			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByGroupId", new String[] { Long.class.getName() },
-			PollsQuestionModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
-			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
-			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the polls question in the entity cache if it is enabled.
-	 *
-	 * @param pollsQuestion the polls question
-	 */
-	public void cacheResult(PollsQuestion pollsQuestion) {
-		EntityCacheUtil.putResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionImpl.class, pollsQuestion.getPrimaryKey(),
-			pollsQuestion);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				pollsQuestion.getUuid(),
-				Long.valueOf(pollsQuestion.getGroupId())
-			}, pollsQuestion);
-
-		pollsQuestion.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the polls questions in the entity cache if it is enabled.
-	 *
-	 * @param pollsQuestions the polls questions
-	 */
-	public void cacheResult(List<PollsQuestion> pollsQuestions) {
-		for (PollsQuestion pollsQuestion : pollsQuestions) {
-			if (EntityCacheUtil.getResult(
-						PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-						PollsQuestionImpl.class, pollsQuestion.getPrimaryKey()) == null) {
-				cacheResult(pollsQuestion);
-			}
-			else {
-				pollsQuestion.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all polls questions.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(PollsQuestionImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(PollsQuestionImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the polls question.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(PollsQuestion pollsQuestion) {
-		EntityCacheUtil.removeResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionImpl.class, pollsQuestion.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(pollsQuestion);
-	}
-
-	@Override
-	public void clearCache(List<PollsQuestion> pollsQuestions) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (PollsQuestion pollsQuestion : pollsQuestions) {
-			EntityCacheUtil.removeResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-				PollsQuestionImpl.class, pollsQuestion.getPrimaryKey());
-
-			clearUniqueFindersCache(pollsQuestion);
-		}
-	}
-
-	protected void clearUniqueFindersCache(PollsQuestion pollsQuestion) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				pollsQuestion.getUuid(),
-				Long.valueOf(pollsQuestion.getGroupId())
-			});
-	}
-
-	/**
-	 * Creates a new polls question with the primary key. Does not add the polls question to the database.
-	 *
-	 * @param questionId the primary key for the new polls question
-	 * @return the new polls question
-	 */
-	public PollsQuestion create(long questionId) {
-		PollsQuestion pollsQuestion = new PollsQuestionImpl();
-
-		pollsQuestion.setNew(true);
-		pollsQuestion.setPrimaryKey(questionId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		pollsQuestion.setUuid(uuid);
-
-		return pollsQuestion;
-	}
-
-	/**
-	 * Removes the polls question with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param questionId the primary key of the polls question
-	 * @return the polls question that was removed
-	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsQuestion remove(long questionId)
-		throws NoSuchQuestionException, SystemException {
-		return remove(Long.valueOf(questionId));
-	}
-
-	/**
-	 * Removes the polls question with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the polls question
-	 * @return the polls question that was removed
-	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public PollsQuestion remove(Serializable primaryKey)
-		throws NoSuchQuestionException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			PollsQuestion pollsQuestion = (PollsQuestion)session.get(PollsQuestionImpl.class,
-					primaryKey);
-
-			if (pollsQuestion == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchQuestionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(pollsQuestion);
-		}
-		catch (NoSuchQuestionException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected PollsQuestion removeImpl(PollsQuestion pollsQuestion)
-		throws SystemException {
-		pollsQuestion = toUnwrappedModel(pollsQuestion);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(pollsQuestion)) {
-				pollsQuestion = (PollsQuestion)session.get(PollsQuestionImpl.class,
-						pollsQuestion.getPrimaryKeyObj());
-			}
-
-			if (pollsQuestion != null) {
-				session.delete(pollsQuestion);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (pollsQuestion != null) {
-			clearCache(pollsQuestion);
-		}
-
-		return pollsQuestion;
-	}
-
-	@Override
-	public PollsQuestion updateImpl(
-		com.liferay.portlet.polls.model.PollsQuestion pollsQuestion)
-		throws SystemException {
-		pollsQuestion = toUnwrappedModel(pollsQuestion);
-
-		boolean isNew = pollsQuestion.isNew();
-
-		PollsQuestionModelImpl pollsQuestionModelImpl = (PollsQuestionModelImpl)pollsQuestion;
-
-		if (Validator.isNull(pollsQuestion.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			pollsQuestion.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (pollsQuestion.isNew()) {
-				session.save(pollsQuestion);
-
-				pollsQuestion.setNew(false);
-			}
-			else {
-				session.merge(pollsQuestion);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !PollsQuestionModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((pollsQuestionModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						pollsQuestionModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { pollsQuestionModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((pollsQuestionModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						pollsQuestionModelImpl.getOriginalUuid(),
-						Long.valueOf(pollsQuestionModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						pollsQuestionModelImpl.getUuid(),
-						Long.valueOf(pollsQuestionModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((pollsQuestionModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(pollsQuestionModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(pollsQuestionModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-			PollsQuestionImpl.class, pollsQuestion.getPrimaryKey(),
-			pollsQuestion);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-				new Object[] {
-					pollsQuestion.getUuid(),
-					Long.valueOf(pollsQuestion.getGroupId())
-				}, pollsQuestion);
-		}
-		else {
-			if ((pollsQuestionModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						pollsQuestionModelImpl.getOriginalUuid(),
-						Long.valueOf(pollsQuestionModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
-						pollsQuestion.getUuid(),
-						Long.valueOf(pollsQuestion.getGroupId())
-					}, pollsQuestion);
-			}
-		}
-
-		return pollsQuestion;
-	}
-
-	protected PollsQuestion toUnwrappedModel(PollsQuestion pollsQuestion) {
-		if (pollsQuestion instanceof PollsQuestionImpl) {
-			return pollsQuestion;
-		}
-
-		PollsQuestionImpl pollsQuestionImpl = new PollsQuestionImpl();
-
-		pollsQuestionImpl.setNew(pollsQuestion.isNew());
-		pollsQuestionImpl.setPrimaryKey(pollsQuestion.getPrimaryKey());
-
-		pollsQuestionImpl.setUuid(pollsQuestion.getUuid());
-		pollsQuestionImpl.setQuestionId(pollsQuestion.getQuestionId());
-		pollsQuestionImpl.setGroupId(pollsQuestion.getGroupId());
-		pollsQuestionImpl.setCompanyId(pollsQuestion.getCompanyId());
-		pollsQuestionImpl.setUserId(pollsQuestion.getUserId());
-		pollsQuestionImpl.setUserName(pollsQuestion.getUserName());
-		pollsQuestionImpl.setCreateDate(pollsQuestion.getCreateDate());
-		pollsQuestionImpl.setModifiedDate(pollsQuestion.getModifiedDate());
-		pollsQuestionImpl.setTitle(pollsQuestion.getTitle());
-		pollsQuestionImpl.setDescription(pollsQuestion.getDescription());
-		pollsQuestionImpl.setExpirationDate(pollsQuestion.getExpirationDate());
-		pollsQuestionImpl.setLastVoteDate(pollsQuestion.getLastVoteDate());
-
-		return pollsQuestionImpl;
-	}
-
-	/**
-	 * Returns the polls question with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the polls question
-	 * @return the polls question
-	 * @throws com.liferay.portal.NoSuchModelException if a polls question with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public PollsQuestion findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the polls question with the primary key or throws a {@link com.liferay.portlet.polls.NoSuchQuestionException} if it could not be found.
-	 *
-	 * @param questionId the primary key of the polls question
-	 * @return the polls question
-	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsQuestion findByPrimaryKey(long questionId)
-		throws NoSuchQuestionException, SystemException {
-		PollsQuestion pollsQuestion = fetchByPrimaryKey(questionId);
-
-		if (pollsQuestion == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + questionId);
-			}
-
-			throw new NoSuchQuestionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				questionId);
-		}
-
-		return pollsQuestion;
-	}
-
-	/**
-	 * Returns the polls question with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the polls question
-	 * @return the polls question, or <code>null</code> if a polls question with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public PollsQuestion fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the polls question with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param questionId the primary key of the polls question
-	 * @return the polls question, or <code>null</code> if a polls question with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsQuestion fetchByPrimaryKey(long questionId)
-		throws SystemException {
-		PollsQuestion pollsQuestion = (PollsQuestion)EntityCacheUtil.getResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-				PollsQuestionImpl.class, questionId);
-
-		if (pollsQuestion == _nullPollsQuestion) {
-			return null;
-		}
-
-		if (pollsQuestion == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				pollsQuestion = (PollsQuestion)session.get(PollsQuestionImpl.class,
-						Long.valueOf(questionId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (pollsQuestion != null) {
-					cacheResult(pollsQuestion);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-						PollsQuestionImpl.class, questionId, _nullPollsQuestion);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return pollsQuestion;
-	}
 
 	/**
 	 * Returns all the polls questions where uuid = &#63;.
@@ -1027,6 +512,97 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	}
 
 	/**
+	 * Removes all the polls questions where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (PollsQuestion pollsQuestion : findByUuid(uuid)) {
+			remove(pollsQuestion);
+		}
+	}
+
+	/**
+	 * Returns the number of polls questions where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching polls questions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_POLLSQUESTION_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "pollsQuestion.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "pollsQuestion.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(pollsQuestion.uuid IS NULL OR pollsQuestion.uuid = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
+			PollsQuestionImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			PollsQuestionModelImpl.UUID_COLUMN_BITMASK |
+			PollsQuestionModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns the polls question where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.polls.NoSuchQuestionException} if it could not be found.
 	 *
 	 * @param uuid the uuid
@@ -1188,6 +764,119 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 			}
 		}
 	}
+
+	/**
+	 * Removes the polls question where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the polls question that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsQuestion removeByUUID_G(String uuid, long groupId)
+		throws NoSuchQuestionException, SystemException {
+		PollsQuestion pollsQuestion = findByUUID_G(uuid, groupId);
+
+		return remove(pollsQuestion);
+	}
+
+	/**
+	 * Returns the number of polls questions where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching polls questions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUUID_G(String uuid, long groupId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_POLLSQUESTION_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "pollsQuestion.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "pollsQuestion.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(pollsQuestion.uuid IS NULL OR pollsQuestion.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "pollsQuestion.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
+			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
+			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			PollsQuestionModelImpl.UUID_COLUMN_BITMASK |
+			PollsQuestionModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the polls questions where uuid = &#63; and companyId = &#63;.
@@ -1623,6 +1312,116 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the polls questions where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (PollsQuestion pollsQuestion : findByUuid_C(uuid, companyId)) {
+			remove(pollsQuestion);
+		}
+	}
+
+	/**
+	 * Returns the number of polls questions where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching polls questions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_POLLSQUESTION_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "pollsQuestion.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "pollsQuestion.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(pollsQuestion.uuid IS NULL OR pollsQuestion.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "pollsQuestion.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
+			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByGroupId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionModelImpl.FINDER_CACHE_ENABLED,
+			PollsQuestionImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByGroupId", new String[] { Long.class.getName() },
+			PollsQuestionModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the polls questions where groupId = &#63;.
@@ -2320,6 +2119,584 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	}
 
 	/**
+	 * Removes all the polls questions where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (PollsQuestion pollsQuestion : findByGroupId(groupId)) {
+			remove(pollsQuestion);
+		}
+	}
+
+	/**
+	 * Returns the number of polls questions where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching polls questions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_POLLSQUESTION_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of polls questions that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching polls questions that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_POLLSQUESTION_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				PollsQuestion.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "pollsQuestion.groupId = ?";
+
+	/**
+	 * Caches the polls question in the entity cache if it is enabled.
+	 *
+	 * @param pollsQuestion the polls question
+	 */
+	public void cacheResult(PollsQuestion pollsQuestion) {
+		EntityCacheUtil.putResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionImpl.class, pollsQuestion.getPrimaryKey(),
+			pollsQuestion);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				pollsQuestion.getUuid(),
+				Long.valueOf(pollsQuestion.getGroupId())
+			}, pollsQuestion);
+
+		pollsQuestion.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the polls questions in the entity cache if it is enabled.
+	 *
+	 * @param pollsQuestions the polls questions
+	 */
+	public void cacheResult(List<PollsQuestion> pollsQuestions) {
+		for (PollsQuestion pollsQuestion : pollsQuestions) {
+			if (EntityCacheUtil.getResult(
+						PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+						PollsQuestionImpl.class, pollsQuestion.getPrimaryKey()) == null) {
+				cacheResult(pollsQuestion);
+			}
+			else {
+				pollsQuestion.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all polls questions.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(PollsQuestionImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(PollsQuestionImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the polls question.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(PollsQuestion pollsQuestion) {
+		EntityCacheUtil.removeResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionImpl.class, pollsQuestion.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(pollsQuestion);
+	}
+
+	@Override
+	public void clearCache(List<PollsQuestion> pollsQuestions) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (PollsQuestion pollsQuestion : pollsQuestions) {
+			EntityCacheUtil.removeResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+				PollsQuestionImpl.class, pollsQuestion.getPrimaryKey());
+
+			clearUniqueFindersCache(pollsQuestion);
+		}
+	}
+
+	protected void clearUniqueFindersCache(PollsQuestion pollsQuestion) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				pollsQuestion.getUuid(),
+				Long.valueOf(pollsQuestion.getGroupId())
+			});
+	}
+
+	/**
+	 * Creates a new polls question with the primary key. Does not add the polls question to the database.
+	 *
+	 * @param questionId the primary key for the new polls question
+	 * @return the new polls question
+	 */
+	public PollsQuestion create(long questionId) {
+		PollsQuestion pollsQuestion = new PollsQuestionImpl();
+
+		pollsQuestion.setNew(true);
+		pollsQuestion.setPrimaryKey(questionId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		pollsQuestion.setUuid(uuid);
+
+		return pollsQuestion;
+	}
+
+	/**
+	 * Removes the polls question with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param questionId the primary key of the polls question
+	 * @return the polls question that was removed
+	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsQuestion remove(long questionId)
+		throws NoSuchQuestionException, SystemException {
+		return remove(Long.valueOf(questionId));
+	}
+
+	/**
+	 * Removes the polls question with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the polls question
+	 * @return the polls question that was removed
+	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PollsQuestion remove(Serializable primaryKey)
+		throws NoSuchQuestionException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			PollsQuestion pollsQuestion = (PollsQuestion)session.get(PollsQuestionImpl.class,
+					primaryKey);
+
+			if (pollsQuestion == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchQuestionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(pollsQuestion);
+		}
+		catch (NoSuchQuestionException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected PollsQuestion removeImpl(PollsQuestion pollsQuestion)
+		throws SystemException {
+		pollsQuestion = toUnwrappedModel(pollsQuestion);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(pollsQuestion)) {
+				pollsQuestion = (PollsQuestion)session.get(PollsQuestionImpl.class,
+						pollsQuestion.getPrimaryKeyObj());
+			}
+
+			if (pollsQuestion != null) {
+				session.delete(pollsQuestion);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (pollsQuestion != null) {
+			clearCache(pollsQuestion);
+		}
+
+		return pollsQuestion;
+	}
+
+	@Override
+	public PollsQuestion updateImpl(
+		com.liferay.portlet.polls.model.PollsQuestion pollsQuestion)
+		throws SystemException {
+		pollsQuestion = toUnwrappedModel(pollsQuestion);
+
+		boolean isNew = pollsQuestion.isNew();
+
+		PollsQuestionModelImpl pollsQuestionModelImpl = (PollsQuestionModelImpl)pollsQuestion;
+
+		if (Validator.isNull(pollsQuestion.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			pollsQuestion.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (pollsQuestion.isNew()) {
+				session.save(pollsQuestion);
+
+				pollsQuestion.setNew(false);
+			}
+			else {
+				session.merge(pollsQuestion);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !PollsQuestionModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((pollsQuestionModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						pollsQuestionModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { pollsQuestionModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((pollsQuestionModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						pollsQuestionModelImpl.getOriginalUuid(),
+						Long.valueOf(pollsQuestionModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						pollsQuestionModelImpl.getUuid(),
+						Long.valueOf(pollsQuestionModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((pollsQuestionModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(pollsQuestionModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(pollsQuestionModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+			PollsQuestionImpl.class, pollsQuestion.getPrimaryKey(),
+			pollsQuestion);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+				new Object[] {
+					pollsQuestion.getUuid(),
+					Long.valueOf(pollsQuestion.getGroupId())
+				}, pollsQuestion);
+		}
+		else {
+			if ((pollsQuestionModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						pollsQuestionModelImpl.getOriginalUuid(),
+						Long.valueOf(pollsQuestionModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+					new Object[] {
+						pollsQuestion.getUuid(),
+						Long.valueOf(pollsQuestion.getGroupId())
+					}, pollsQuestion);
+			}
+		}
+
+		return pollsQuestion;
+	}
+
+	protected PollsQuestion toUnwrappedModel(PollsQuestion pollsQuestion) {
+		if (pollsQuestion instanceof PollsQuestionImpl) {
+			return pollsQuestion;
+		}
+
+		PollsQuestionImpl pollsQuestionImpl = new PollsQuestionImpl();
+
+		pollsQuestionImpl.setNew(pollsQuestion.isNew());
+		pollsQuestionImpl.setPrimaryKey(pollsQuestion.getPrimaryKey());
+
+		pollsQuestionImpl.setUuid(pollsQuestion.getUuid());
+		pollsQuestionImpl.setQuestionId(pollsQuestion.getQuestionId());
+		pollsQuestionImpl.setGroupId(pollsQuestion.getGroupId());
+		pollsQuestionImpl.setCompanyId(pollsQuestion.getCompanyId());
+		pollsQuestionImpl.setUserId(pollsQuestion.getUserId());
+		pollsQuestionImpl.setUserName(pollsQuestion.getUserName());
+		pollsQuestionImpl.setCreateDate(pollsQuestion.getCreateDate());
+		pollsQuestionImpl.setModifiedDate(pollsQuestion.getModifiedDate());
+		pollsQuestionImpl.setTitle(pollsQuestion.getTitle());
+		pollsQuestionImpl.setDescription(pollsQuestion.getDescription());
+		pollsQuestionImpl.setExpirationDate(pollsQuestion.getExpirationDate());
+		pollsQuestionImpl.setLastVoteDate(pollsQuestion.getLastVoteDate());
+
+		return pollsQuestionImpl;
+	}
+
+	/**
+	 * Returns the polls question with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the polls question
+	 * @return the polls question
+	 * @throws com.liferay.portal.NoSuchModelException if a polls question with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PollsQuestion findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the polls question with the primary key or throws a {@link com.liferay.portlet.polls.NoSuchQuestionException} if it could not be found.
+	 *
+	 * @param questionId the primary key of the polls question
+	 * @return the polls question
+	 * @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsQuestion findByPrimaryKey(long questionId)
+		throws NoSuchQuestionException, SystemException {
+		PollsQuestion pollsQuestion = fetchByPrimaryKey(questionId);
+
+		if (pollsQuestion == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + questionId);
+			}
+
+			throw new NoSuchQuestionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				questionId);
+		}
+
+		return pollsQuestion;
+	}
+
+	/**
+	 * Returns the polls question with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the polls question
+	 * @return the polls question, or <code>null</code> if a polls question with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PollsQuestion fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the polls question with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param questionId the primary key of the polls question
+	 * @return the polls question, or <code>null</code> if a polls question with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsQuestion fetchByPrimaryKey(long questionId)
+		throws SystemException {
+		PollsQuestion pollsQuestion = (PollsQuestion)EntityCacheUtil.getResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+				PollsQuestionImpl.class, questionId);
+
+		if (pollsQuestion == _nullPollsQuestion) {
+			return null;
+		}
+
+		if (pollsQuestion == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				pollsQuestion = (PollsQuestion)session.get(PollsQuestionImpl.class,
+						Long.valueOf(questionId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (pollsQuestion != null) {
+					cacheResult(pollsQuestion);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+						PollsQuestionImpl.class, questionId, _nullPollsQuestion);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return pollsQuestion;
+	}
+
+	/**
 	 * Returns all the polls questions.
 	 *
 	 * @return the polls questions
@@ -2435,59 +2812,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	}
 
 	/**
-	 * Removes all the polls questions where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (PollsQuestion pollsQuestion : findByUuid(uuid)) {
-			remove(pollsQuestion);
-		}
-	}
-
-	/**
-	 * Removes the polls question where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the polls question that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsQuestion removeByUUID_G(String uuid, long groupId)
-		throws NoSuchQuestionException, SystemException {
-		PollsQuestion pollsQuestion = findByUUID_G(uuid, groupId);
-
-		return remove(pollsQuestion);
-	}
-
-	/**
-	 * Removes all the polls questions where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (PollsQuestion pollsQuestion : findByUuid_C(uuid, companyId)) {
-			remove(pollsQuestion);
-		}
-	}
-
-	/**
-	 * Removes all the polls questions where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (PollsQuestion pollsQuestion : findByGroupId(groupId)) {
-			remove(pollsQuestion);
-		}
-	}
-
-	/**
 	 * Removes all the polls questions from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2495,314 +2819,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	public void removeAll() throws SystemException {
 		for (PollsQuestion pollsQuestion : findAll()) {
 			remove(pollsQuestion);
-		}
-	}
-
-	/**
-	 * Returns the number of polls questions where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching polls questions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_POLLSQUESTION_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of polls questions where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching polls questions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUUID_G(String uuid, long groupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_POLLSQUESTION_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of polls questions where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching polls questions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_POLLSQUESTION_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of polls questions where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching polls questions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_POLLSQUESTION_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of polls questions that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching polls questions that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_POLLSQUESTION_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				PollsQuestion.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
 		}
 	}
 
@@ -2887,18 +2903,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	private static final String _SQL_SELECT_POLLSQUESTION_WHERE = "SELECT pollsQuestion FROM PollsQuestion pollsQuestion WHERE ";
 	private static final String _SQL_COUNT_POLLSQUESTION = "SELECT COUNT(pollsQuestion) FROM PollsQuestion pollsQuestion";
 	private static final String _SQL_COUNT_POLLSQUESTION_WHERE = "SELECT COUNT(pollsQuestion) FROM PollsQuestion pollsQuestion WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "pollsQuestion.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "pollsQuestion.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(pollsQuestion.uuid IS NULL OR pollsQuestion.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "pollsQuestion.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "pollsQuestion.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(pollsQuestion.uuid IS NULL OR pollsQuestion.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "pollsQuestion.groupId = ?";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "pollsQuestion.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "pollsQuestion.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(pollsQuestion.uuid IS NULL OR pollsQuestion.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "pollsQuestion.companyId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "pollsQuestion.groupId = ?";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "pollsQuestion.questionId";
 	private static final String _FILTER_SQL_SELECT_POLLSQUESTION_WHERE = "SELECT DISTINCT {pollsQuestion.*} FROM PollsQuestion pollsQuestion WHERE ";
 	private static final String _FILTER_SQL_SELECT_POLLSQUESTION_NO_INLINE_DISTINCT_WHERE_1 =

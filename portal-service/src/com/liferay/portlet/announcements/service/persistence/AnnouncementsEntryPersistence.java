@@ -38,72 +38,6 @@ public interface AnnouncementsEntryPersistence extends BasePersistence<Announcem
 	 */
 
 	/**
-	* Caches the announcements entry in the entity cache if it is enabled.
-	*
-	* @param announcementsEntry the announcements entry
-	*/
-	public void cacheResult(
-		com.liferay.portlet.announcements.model.AnnouncementsEntry announcementsEntry);
-
-	/**
-	* Caches the announcements entries in the entity cache if it is enabled.
-	*
-	* @param announcementsEntries the announcements entries
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.announcements.model.AnnouncementsEntry> announcementsEntries);
-
-	/**
-	* Creates a new announcements entry with the primary key. Does not add the announcements entry to the database.
-	*
-	* @param entryId the primary key for the new announcements entry
-	* @return the new announcements entry
-	*/
-	public com.liferay.portlet.announcements.model.AnnouncementsEntry create(
-		long entryId);
-
-	/**
-	* Removes the announcements entry with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param entryId the primary key of the announcements entry
-	* @return the announcements entry that was removed
-	* @throws com.liferay.portlet.announcements.NoSuchEntryException if a announcements entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.announcements.model.AnnouncementsEntry remove(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.announcements.NoSuchEntryException;
-
-	public com.liferay.portlet.announcements.model.AnnouncementsEntry updateImpl(
-		com.liferay.portlet.announcements.model.AnnouncementsEntry announcementsEntry)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the announcements entry with the primary key or throws a {@link com.liferay.portlet.announcements.NoSuchEntryException} if it could not be found.
-	*
-	* @param entryId the primary key of the announcements entry
-	* @return the announcements entry
-	* @throws com.liferay.portlet.announcements.NoSuchEntryException if a announcements entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.announcements.model.AnnouncementsEntry findByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.announcements.NoSuchEntryException;
-
-	/**
-	* Returns the announcements entry with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param entryId the primary key of the announcements entry
-	* @return the announcements entry, or <code>null</code> if a announcements entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.announcements.model.AnnouncementsEntry fetchByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the announcements entries where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -284,6 +218,35 @@ public interface AnnouncementsEntryPersistence extends BasePersistence<Announcem
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.announcements.NoSuchEntryException;
+
+	/**
+	* Removes all the announcements entries where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of announcements entries where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching announcements entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of announcements entries that the user has permission to view where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching announcements entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the announcements entries where uuid = &#63; and companyId = &#63;.
@@ -480,6 +443,38 @@ public interface AnnouncementsEntryPersistence extends BasePersistence<Announcem
 			com.liferay.portlet.announcements.NoSuchEntryException;
 
 	/**
+	* Removes all the announcements entries where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of announcements entries where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching announcements entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of announcements entries that the user has permission to view where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching announcements entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the announcements entries where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -658,6 +653,35 @@ public interface AnnouncementsEntryPersistence extends BasePersistence<Announcem
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.announcements.NoSuchEntryException;
+
+	/**
+	* Removes all the announcements entries where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of announcements entries where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching announcements entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of announcements entries that the user has permission to view where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching announcements entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the announcements entries where classNameId = &#63; and classPK = &#63;.
@@ -852,6 +876,38 @@ public interface AnnouncementsEntryPersistence extends BasePersistence<Announcem
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.announcements.NoSuchEntryException;
+
+	/**
+	* Removes all the announcements entries where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of announcements entries where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching announcements entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of announcements entries that the user has permission to view where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching announcements entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the announcements entries where classNameId = &#63; and classPK = &#63; and alert = &#63;.
@@ -1060,6 +1116,107 @@ public interface AnnouncementsEntryPersistence extends BasePersistence<Announcem
 			com.liferay.portlet.announcements.NoSuchEntryException;
 
 	/**
+	* Removes all the announcements entries where classNameId = &#63; and classPK = &#63; and alert = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param alert the alert
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_C_A(long classNameId, long classPK, boolean alert)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of announcements entries where classNameId = &#63; and classPK = &#63; and alert = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param alert the alert
+	* @return the number of matching announcements entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_C_A(long classNameId, long classPK, boolean alert)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of announcements entries that the user has permission to view where classNameId = &#63; and classPK = &#63; and alert = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param alert the alert
+	* @return the number of matching announcements entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByC_C_A(long classNameId, long classPK, boolean alert)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the announcements entry in the entity cache if it is enabled.
+	*
+	* @param announcementsEntry the announcements entry
+	*/
+	public void cacheResult(
+		com.liferay.portlet.announcements.model.AnnouncementsEntry announcementsEntry);
+
+	/**
+	* Caches the announcements entries in the entity cache if it is enabled.
+	*
+	* @param announcementsEntries the announcements entries
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.announcements.model.AnnouncementsEntry> announcementsEntries);
+
+	/**
+	* Creates a new announcements entry with the primary key. Does not add the announcements entry to the database.
+	*
+	* @param entryId the primary key for the new announcements entry
+	* @return the new announcements entry
+	*/
+	public com.liferay.portlet.announcements.model.AnnouncementsEntry create(
+		long entryId);
+
+	/**
+	* Removes the announcements entry with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param entryId the primary key of the announcements entry
+	* @return the announcements entry that was removed
+	* @throws com.liferay.portlet.announcements.NoSuchEntryException if a announcements entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.announcements.model.AnnouncementsEntry remove(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.announcements.NoSuchEntryException;
+
+	public com.liferay.portlet.announcements.model.AnnouncementsEntry updateImpl(
+		com.liferay.portlet.announcements.model.AnnouncementsEntry announcementsEntry)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the announcements entry with the primary key or throws a {@link com.liferay.portlet.announcements.NoSuchEntryException} if it could not be found.
+	*
+	* @param entryId the primary key of the announcements entry
+	* @return the announcements entry
+	* @throws com.liferay.portlet.announcements.NoSuchEntryException if a announcements entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.announcements.model.AnnouncementsEntry findByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.announcements.NoSuchEntryException;
+
+	/**
+	* Returns the announcements entry with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param entryId the primary key of the announcements entry
+	* @return the announcements entry, or <code>null</code> if a announcements entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.announcements.model.AnnouncementsEntry fetchByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the announcements entries.
 	*
 	* @return the announcements entries
@@ -1103,168 +1260,11 @@ public interface AnnouncementsEntryPersistence extends BasePersistence<Announcem
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the announcements entries where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the announcements entries where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the announcements entries where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the announcements entries where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the announcements entries where classNameId = &#63; and classPK = &#63; and alert = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param alert the alert
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_C_A(long classNameId, long classPK, boolean alert)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the announcements entries from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of announcements entries where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching announcements entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of announcements entries that the user has permission to view where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching announcements entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of announcements entries where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching announcements entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of announcements entries that the user has permission to view where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching announcements entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of announcements entries where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching announcements entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of announcements entries that the user has permission to view where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching announcements entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of announcements entries where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching announcements entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of announcements entries that the user has permission to view where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching announcements entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of announcements entries where classNameId = &#63; and classPK = &#63; and alert = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param alert the alert
-	* @return the number of matching announcements entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_C_A(long classNameId, long classPK, boolean alert)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of announcements entries that the user has permission to view where classNameId = &#63; and classPK = &#63; and alert = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param alert the alert
-	* @return the number of matching announcements entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByC_C_A(long classNameId, long classPK, boolean alert)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

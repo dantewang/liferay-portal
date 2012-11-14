@@ -79,6 +79,15 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
@@ -97,576 +106,6 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			DDLRecordSetModelImpl.UUID_COLUMN_BITMASK |
-			DDLRecordSetModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			DDLRecordSetModelImpl.UUID_COLUMN_BITMASK |
-			DDLRecordSetModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			DDLRecordSetModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_G_R = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByG_R",
-			new String[] { Long.class.getName(), String.class.getName() },
-			DDLRecordSetModelImpl.GROUPID_COLUMN_BITMASK |
-			DDLRecordSetModelImpl.RECORDSETKEY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_R = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_R",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the d d l record set in the entity cache if it is enabled.
-	 *
-	 * @param ddlRecordSet the d d l record set
-	 */
-	public void cacheResult(DDLRecordSet ddlRecordSet) {
-		EntityCacheUtil.putResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetImpl.class, ddlRecordSet.getPrimaryKey(), ddlRecordSet);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				ddlRecordSet.getUuid(), Long.valueOf(ddlRecordSet.getGroupId())
-			}, ddlRecordSet);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_R,
-			new Object[] {
-				Long.valueOf(ddlRecordSet.getGroupId()),
-				
-			ddlRecordSet.getRecordSetKey()
-			}, ddlRecordSet);
-
-		ddlRecordSet.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the d d l record sets in the entity cache if it is enabled.
-	 *
-	 * @param ddlRecordSets the d d l record sets
-	 */
-	public void cacheResult(List<DDLRecordSet> ddlRecordSets) {
-		for (DDLRecordSet ddlRecordSet : ddlRecordSets) {
-			if (EntityCacheUtil.getResult(
-						DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-						DDLRecordSetImpl.class, ddlRecordSet.getPrimaryKey()) == null) {
-				cacheResult(ddlRecordSet);
-			}
-			else {
-				ddlRecordSet.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all d d l record sets.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(DDLRecordSetImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(DDLRecordSetImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the d d l record set.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(DDLRecordSet ddlRecordSet) {
-		EntityCacheUtil.removeResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetImpl.class, ddlRecordSet.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(ddlRecordSet);
-	}
-
-	@Override
-	public void clearCache(List<DDLRecordSet> ddlRecordSets) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (DDLRecordSet ddlRecordSet : ddlRecordSets) {
-			EntityCacheUtil.removeResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-				DDLRecordSetImpl.class, ddlRecordSet.getPrimaryKey());
-
-			clearUniqueFindersCache(ddlRecordSet);
-		}
-	}
-
-	protected void clearUniqueFindersCache(DDLRecordSet ddlRecordSet) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				ddlRecordSet.getUuid(), Long.valueOf(ddlRecordSet.getGroupId())
-			});
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_R,
-			new Object[] {
-				Long.valueOf(ddlRecordSet.getGroupId()),
-				
-			ddlRecordSet.getRecordSetKey()
-			});
-	}
-
-	/**
-	 * Creates a new d d l record set with the primary key. Does not add the d d l record set to the database.
-	 *
-	 * @param recordSetId the primary key for the new d d l record set
-	 * @return the new d d l record set
-	 */
-	public DDLRecordSet create(long recordSetId) {
-		DDLRecordSet ddlRecordSet = new DDLRecordSetImpl();
-
-		ddlRecordSet.setNew(true);
-		ddlRecordSet.setPrimaryKey(recordSetId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		ddlRecordSet.setUuid(uuid);
-
-		return ddlRecordSet;
-	}
-
-	/**
-	 * Removes the d d l record set with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param recordSetId the primary key of the d d l record set
-	 * @return the d d l record set that was removed
-	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDLRecordSet remove(long recordSetId)
-		throws NoSuchRecordSetException, SystemException {
-		return remove(Long.valueOf(recordSetId));
-	}
-
-	/**
-	 * Removes the d d l record set with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the d d l record set
-	 * @return the d d l record set that was removed
-	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public DDLRecordSet remove(Serializable primaryKey)
-		throws NoSuchRecordSetException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			DDLRecordSet ddlRecordSet = (DDLRecordSet)session.get(DDLRecordSetImpl.class,
-					primaryKey);
-
-			if (ddlRecordSet == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchRecordSetException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(ddlRecordSet);
-		}
-		catch (NoSuchRecordSetException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected DDLRecordSet removeImpl(DDLRecordSet ddlRecordSet)
-		throws SystemException {
-		ddlRecordSet = toUnwrappedModel(ddlRecordSet);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(ddlRecordSet)) {
-				ddlRecordSet = (DDLRecordSet)session.get(DDLRecordSetImpl.class,
-						ddlRecordSet.getPrimaryKeyObj());
-			}
-
-			if (ddlRecordSet != null) {
-				session.delete(ddlRecordSet);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (ddlRecordSet != null) {
-			clearCache(ddlRecordSet);
-		}
-
-		return ddlRecordSet;
-	}
-
-	@Override
-	public DDLRecordSet updateImpl(
-		com.liferay.portlet.dynamicdatalists.model.DDLRecordSet ddlRecordSet)
-		throws SystemException {
-		ddlRecordSet = toUnwrappedModel(ddlRecordSet);
-
-		boolean isNew = ddlRecordSet.isNew();
-
-		DDLRecordSetModelImpl ddlRecordSetModelImpl = (DDLRecordSetModelImpl)ddlRecordSet;
-
-		if (Validator.isNull(ddlRecordSet.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			ddlRecordSet.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (ddlRecordSet.isNew()) {
-				session.save(ddlRecordSet);
-
-				ddlRecordSet.setNew(false);
-			}
-			else {
-				session.merge(ddlRecordSet);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !DDLRecordSetModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((ddlRecordSetModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						ddlRecordSetModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { ddlRecordSetModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((ddlRecordSetModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						ddlRecordSetModelImpl.getOriginalUuid(),
-						Long.valueOf(ddlRecordSetModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						ddlRecordSetModelImpl.getUuid(),
-						Long.valueOf(ddlRecordSetModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((ddlRecordSetModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(ddlRecordSetModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(ddlRecordSetModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordSetImpl.class, ddlRecordSet.getPrimaryKey(), ddlRecordSet);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-				new Object[] {
-					ddlRecordSet.getUuid(),
-					Long.valueOf(ddlRecordSet.getGroupId())
-				}, ddlRecordSet);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_R,
-				new Object[] {
-					Long.valueOf(ddlRecordSet.getGroupId()),
-					
-				ddlRecordSet.getRecordSetKey()
-				}, ddlRecordSet);
-		}
-		else {
-			if ((ddlRecordSetModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						ddlRecordSetModelImpl.getOriginalUuid(),
-						Long.valueOf(ddlRecordSetModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
-						ddlRecordSet.getUuid(),
-						Long.valueOf(ddlRecordSet.getGroupId())
-					}, ddlRecordSet);
-			}
-
-			if ((ddlRecordSetModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_G_R.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(ddlRecordSetModelImpl.getOriginalGroupId()),
-						
-						ddlRecordSetModelImpl.getOriginalRecordSetKey()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_R, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_R,
-					new Object[] {
-						Long.valueOf(ddlRecordSet.getGroupId()),
-						
-					ddlRecordSet.getRecordSetKey()
-					}, ddlRecordSet);
-			}
-		}
-
-		return ddlRecordSet;
-	}
-
-	protected DDLRecordSet toUnwrappedModel(DDLRecordSet ddlRecordSet) {
-		if (ddlRecordSet instanceof DDLRecordSetImpl) {
-			return ddlRecordSet;
-		}
-
-		DDLRecordSetImpl ddlRecordSetImpl = new DDLRecordSetImpl();
-
-		ddlRecordSetImpl.setNew(ddlRecordSet.isNew());
-		ddlRecordSetImpl.setPrimaryKey(ddlRecordSet.getPrimaryKey());
-
-		ddlRecordSetImpl.setUuid(ddlRecordSet.getUuid());
-		ddlRecordSetImpl.setRecordSetId(ddlRecordSet.getRecordSetId());
-		ddlRecordSetImpl.setGroupId(ddlRecordSet.getGroupId());
-		ddlRecordSetImpl.setCompanyId(ddlRecordSet.getCompanyId());
-		ddlRecordSetImpl.setUserId(ddlRecordSet.getUserId());
-		ddlRecordSetImpl.setUserName(ddlRecordSet.getUserName());
-		ddlRecordSetImpl.setCreateDate(ddlRecordSet.getCreateDate());
-		ddlRecordSetImpl.setModifiedDate(ddlRecordSet.getModifiedDate());
-		ddlRecordSetImpl.setDDMStructureId(ddlRecordSet.getDDMStructureId());
-		ddlRecordSetImpl.setRecordSetKey(ddlRecordSet.getRecordSetKey());
-		ddlRecordSetImpl.setName(ddlRecordSet.getName());
-		ddlRecordSetImpl.setDescription(ddlRecordSet.getDescription());
-		ddlRecordSetImpl.setMinDisplayRows(ddlRecordSet.getMinDisplayRows());
-		ddlRecordSetImpl.setScope(ddlRecordSet.getScope());
-
-		return ddlRecordSetImpl;
-	}
-
-	/**
-	 * Returns the d d l record set with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the d d l record set
-	 * @return the d d l record set
-	 * @throws com.liferay.portal.NoSuchModelException if a d d l record set with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public DDLRecordSet findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the d d l record set with the primary key or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException} if it could not be found.
-	 *
-	 * @param recordSetId the primary key of the d d l record set
-	 * @return the d d l record set
-	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDLRecordSet findByPrimaryKey(long recordSetId)
-		throws NoSuchRecordSetException, SystemException {
-		DDLRecordSet ddlRecordSet = fetchByPrimaryKey(recordSetId);
-
-		if (ddlRecordSet == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + recordSetId);
-			}
-
-			throw new NoSuchRecordSetException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				recordSetId);
-		}
-
-		return ddlRecordSet;
-	}
-
-	/**
-	 * Returns the d d l record set with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the d d l record set
-	 * @return the d d l record set, or <code>null</code> if a d d l record set with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public DDLRecordSet fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the d d l record set with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param recordSetId the primary key of the d d l record set
-	 * @return the d d l record set, or <code>null</code> if a d d l record set with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDLRecordSet fetchByPrimaryKey(long recordSetId)
-		throws SystemException {
-		DDLRecordSet ddlRecordSet = (DDLRecordSet)EntityCacheUtil.getResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-				DDLRecordSetImpl.class, recordSetId);
-
-		if (ddlRecordSet == _nullDDLRecordSet) {
-			return null;
-		}
-
-		if (ddlRecordSet == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				ddlRecordSet = (DDLRecordSet)session.get(DDLRecordSetImpl.class,
-						Long.valueOf(recordSetId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (ddlRecordSet != null) {
-					cacheResult(ddlRecordSet);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-						DDLRecordSetImpl.class, recordSetId, _nullDDLRecordSet);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return ddlRecordSet;
-	}
 
 	/**
 	 * Returns all the d d l record sets where uuid = &#63;.
@@ -1063,6 +502,97 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	}
 
 	/**
+	 * Removes all the d d l record sets where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (DDLRecordSet ddlRecordSet : findByUuid(uuid)) {
+			remove(ddlRecordSet);
+		}
+	}
+
+	/**
+	 * Returns the number of d d l record sets where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching d d l record sets
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_DDLRECORDSET_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "ddlRecordSet.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "ddlRecordSet.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(ddlRecordSet.uuid IS NULL OR ddlRecordSet.uuid = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			DDLRecordSetModelImpl.UUID_COLUMN_BITMASK |
+			DDLRecordSetModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns the d d l record set where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException} if it could not be found.
 	 *
 	 * @param uuid the uuid
@@ -1222,6 +752,117 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 			}
 		}
 	}
+
+	/**
+	 * Removes the d d l record set where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the d d l record set that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDLRecordSet removeByUUID_G(String uuid, long groupId)
+		throws NoSuchRecordSetException, SystemException {
+		DDLRecordSet ddlRecordSet = findByUUID_G(uuid, groupId);
+
+		return remove(ddlRecordSet);
+	}
+
+	/**
+	 * Returns the number of d d l record sets where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching d d l record sets
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUUID_G(String uuid, long groupId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_DDLRECORDSET_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "ddlRecordSet.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "ddlRecordSet.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(ddlRecordSet.uuid IS NULL OR ddlRecordSet.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "ddlRecordSet.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			DDLRecordSetModelImpl.UUID_COLUMN_BITMASK |
+			DDLRecordSetModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the d d l record sets where uuid = &#63; and companyId = &#63;.
@@ -1649,6 +1290,115 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the d d l record sets where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (DDLRecordSet ddlRecordSet : findByUuid_C(uuid, companyId)) {
+			remove(ddlRecordSet);
+		}
+	}
+
+	/**
+	 * Returns the number of d d l record sets where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching d d l record sets
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_DDLRECORDSET_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "ddlRecordSet.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "ddlRecordSet.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(ddlRecordSet.uuid IS NULL OR ddlRecordSet.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "ddlRecordSet.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			DDLRecordSetModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the d d l record sets where groupId = &#63;.
@@ -2319,6 +2069,131 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	}
 
 	/**
+	 * Removes all the d d l record sets where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (DDLRecordSet ddlRecordSet : findByGroupId(groupId)) {
+			remove(ddlRecordSet);
+		}
+	}
+
+	/**
+	 * Returns the number of d d l record sets where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching d d l record sets
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_DDLRECORDSET_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of d d l record sets that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching d d l record sets that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_DDLRECORDSET_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				DDLRecordSet.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "ddlRecordSet.groupId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_G_R = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, DDLRecordSetImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByG_R",
+			new String[] { Long.class.getName(), String.class.getName() },
+			DDLRecordSetModelImpl.GROUPID_COLUMN_BITMASK |
+			DDLRecordSetModelImpl.RECORDSETKEY_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_R = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_R",
+			new String[] { Long.class.getName(), String.class.getName() });
+
+	/**
 	 * Returns the d d l record set where groupId = &#63; and recordSetKey = &#63; or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException} if it could not be found.
 	 *
 	 * @param groupId the group ID
@@ -2481,6 +2356,599 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	}
 
 	/**
+	 * Removes the d d l record set where groupId = &#63; and recordSetKey = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param recordSetKey the record set key
+	 * @return the d d l record set that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDLRecordSet removeByG_R(long groupId, String recordSetKey)
+		throws NoSuchRecordSetException, SystemException {
+		DDLRecordSet ddlRecordSet = findByG_R(groupId, recordSetKey);
+
+		return remove(ddlRecordSet);
+	}
+
+	/**
+	 * Returns the number of d d l record sets where groupId = &#63; and recordSetKey = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param recordSetKey the record set key
+	 * @return the number of matching d d l record sets
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_R(long groupId, String recordSetKey)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, recordSetKey };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_R,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_DDLRECORDSET_WHERE);
+
+			query.append(_FINDER_COLUMN_G_R_GROUPID_2);
+
+			if (recordSetKey == null) {
+				query.append(_FINDER_COLUMN_G_R_RECORDSETKEY_1);
+			}
+			else {
+				if (recordSetKey.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_R_RECORDSETKEY_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_R_RECORDSETKEY_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (recordSetKey != null) {
+					qPos.add(recordSetKey);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_R, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_R_GROUPID_2 = "ddlRecordSet.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_R_RECORDSETKEY_1 = "ddlRecordSet.recordSetKey IS NULL";
+	private static final String _FINDER_COLUMN_G_R_RECORDSETKEY_2 = "ddlRecordSet.recordSetKey = ?";
+	private static final String _FINDER_COLUMN_G_R_RECORDSETKEY_3 = "(ddlRecordSet.recordSetKey IS NULL OR ddlRecordSet.recordSetKey = ?)";
+
+	/**
+	 * Caches the d d l record set in the entity cache if it is enabled.
+	 *
+	 * @param ddlRecordSet the d d l record set
+	 */
+	public void cacheResult(DDLRecordSet ddlRecordSet) {
+		EntityCacheUtil.putResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetImpl.class, ddlRecordSet.getPrimaryKey(), ddlRecordSet);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				ddlRecordSet.getUuid(), Long.valueOf(ddlRecordSet.getGroupId())
+			}, ddlRecordSet);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_R,
+			new Object[] {
+				Long.valueOf(ddlRecordSet.getGroupId()),
+				
+			ddlRecordSet.getRecordSetKey()
+			}, ddlRecordSet);
+
+		ddlRecordSet.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the d d l record sets in the entity cache if it is enabled.
+	 *
+	 * @param ddlRecordSets the d d l record sets
+	 */
+	public void cacheResult(List<DDLRecordSet> ddlRecordSets) {
+		for (DDLRecordSet ddlRecordSet : ddlRecordSets) {
+			if (EntityCacheUtil.getResult(
+						DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+						DDLRecordSetImpl.class, ddlRecordSet.getPrimaryKey()) == null) {
+				cacheResult(ddlRecordSet);
+			}
+			else {
+				ddlRecordSet.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all d d l record sets.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(DDLRecordSetImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(DDLRecordSetImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the d d l record set.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(DDLRecordSet ddlRecordSet) {
+		EntityCacheUtil.removeResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetImpl.class, ddlRecordSet.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(ddlRecordSet);
+	}
+
+	@Override
+	public void clearCache(List<DDLRecordSet> ddlRecordSets) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (DDLRecordSet ddlRecordSet : ddlRecordSets) {
+			EntityCacheUtil.removeResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+				DDLRecordSetImpl.class, ddlRecordSet.getPrimaryKey());
+
+			clearUniqueFindersCache(ddlRecordSet);
+		}
+	}
+
+	protected void clearUniqueFindersCache(DDLRecordSet ddlRecordSet) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				ddlRecordSet.getUuid(), Long.valueOf(ddlRecordSet.getGroupId())
+			});
+
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_R,
+			new Object[] {
+				Long.valueOf(ddlRecordSet.getGroupId()),
+				
+			ddlRecordSet.getRecordSetKey()
+			});
+	}
+
+	/**
+	 * Creates a new d d l record set with the primary key. Does not add the d d l record set to the database.
+	 *
+	 * @param recordSetId the primary key for the new d d l record set
+	 * @return the new d d l record set
+	 */
+	public DDLRecordSet create(long recordSetId) {
+		DDLRecordSet ddlRecordSet = new DDLRecordSetImpl();
+
+		ddlRecordSet.setNew(true);
+		ddlRecordSet.setPrimaryKey(recordSetId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		ddlRecordSet.setUuid(uuid);
+
+		return ddlRecordSet;
+	}
+
+	/**
+	 * Removes the d d l record set with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param recordSetId the primary key of the d d l record set
+	 * @return the d d l record set that was removed
+	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDLRecordSet remove(long recordSetId)
+		throws NoSuchRecordSetException, SystemException {
+		return remove(Long.valueOf(recordSetId));
+	}
+
+	/**
+	 * Removes the d d l record set with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the d d l record set
+	 * @return the d d l record set that was removed
+	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DDLRecordSet remove(Serializable primaryKey)
+		throws NoSuchRecordSetException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			DDLRecordSet ddlRecordSet = (DDLRecordSet)session.get(DDLRecordSetImpl.class,
+					primaryKey);
+
+			if (ddlRecordSet == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchRecordSetException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(ddlRecordSet);
+		}
+		catch (NoSuchRecordSetException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected DDLRecordSet removeImpl(DDLRecordSet ddlRecordSet)
+		throws SystemException {
+		ddlRecordSet = toUnwrappedModel(ddlRecordSet);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(ddlRecordSet)) {
+				ddlRecordSet = (DDLRecordSet)session.get(DDLRecordSetImpl.class,
+						ddlRecordSet.getPrimaryKeyObj());
+			}
+
+			if (ddlRecordSet != null) {
+				session.delete(ddlRecordSet);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (ddlRecordSet != null) {
+			clearCache(ddlRecordSet);
+		}
+
+		return ddlRecordSet;
+	}
+
+	@Override
+	public DDLRecordSet updateImpl(
+		com.liferay.portlet.dynamicdatalists.model.DDLRecordSet ddlRecordSet)
+		throws SystemException {
+		ddlRecordSet = toUnwrappedModel(ddlRecordSet);
+
+		boolean isNew = ddlRecordSet.isNew();
+
+		DDLRecordSetModelImpl ddlRecordSetModelImpl = (DDLRecordSetModelImpl)ddlRecordSet;
+
+		if (Validator.isNull(ddlRecordSet.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			ddlRecordSet.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (ddlRecordSet.isNew()) {
+				session.save(ddlRecordSet);
+
+				ddlRecordSet.setNew(false);
+			}
+			else {
+				session.merge(ddlRecordSet);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !DDLRecordSetModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((ddlRecordSetModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						ddlRecordSetModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { ddlRecordSetModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((ddlRecordSetModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						ddlRecordSetModelImpl.getOriginalUuid(),
+						Long.valueOf(ddlRecordSetModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						ddlRecordSetModelImpl.getUuid(),
+						Long.valueOf(ddlRecordSetModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((ddlRecordSetModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(ddlRecordSetModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(ddlRecordSetModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordSetImpl.class, ddlRecordSet.getPrimaryKey(), ddlRecordSet);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+				new Object[] {
+					ddlRecordSet.getUuid(),
+					Long.valueOf(ddlRecordSet.getGroupId())
+				}, ddlRecordSet);
+
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_R,
+				new Object[] {
+					Long.valueOf(ddlRecordSet.getGroupId()),
+					
+				ddlRecordSet.getRecordSetKey()
+				}, ddlRecordSet);
+		}
+		else {
+			if ((ddlRecordSetModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						ddlRecordSetModelImpl.getOriginalUuid(),
+						Long.valueOf(ddlRecordSetModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+					new Object[] {
+						ddlRecordSet.getUuid(),
+						Long.valueOf(ddlRecordSet.getGroupId())
+					}, ddlRecordSet);
+			}
+
+			if ((ddlRecordSetModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_G_R.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(ddlRecordSetModelImpl.getOriginalGroupId()),
+						
+						ddlRecordSetModelImpl.getOriginalRecordSetKey()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_R, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_R,
+					new Object[] {
+						Long.valueOf(ddlRecordSet.getGroupId()),
+						
+					ddlRecordSet.getRecordSetKey()
+					}, ddlRecordSet);
+			}
+		}
+
+		return ddlRecordSet;
+	}
+
+	protected DDLRecordSet toUnwrappedModel(DDLRecordSet ddlRecordSet) {
+		if (ddlRecordSet instanceof DDLRecordSetImpl) {
+			return ddlRecordSet;
+		}
+
+		DDLRecordSetImpl ddlRecordSetImpl = new DDLRecordSetImpl();
+
+		ddlRecordSetImpl.setNew(ddlRecordSet.isNew());
+		ddlRecordSetImpl.setPrimaryKey(ddlRecordSet.getPrimaryKey());
+
+		ddlRecordSetImpl.setUuid(ddlRecordSet.getUuid());
+		ddlRecordSetImpl.setRecordSetId(ddlRecordSet.getRecordSetId());
+		ddlRecordSetImpl.setGroupId(ddlRecordSet.getGroupId());
+		ddlRecordSetImpl.setCompanyId(ddlRecordSet.getCompanyId());
+		ddlRecordSetImpl.setUserId(ddlRecordSet.getUserId());
+		ddlRecordSetImpl.setUserName(ddlRecordSet.getUserName());
+		ddlRecordSetImpl.setCreateDate(ddlRecordSet.getCreateDate());
+		ddlRecordSetImpl.setModifiedDate(ddlRecordSet.getModifiedDate());
+		ddlRecordSetImpl.setDDMStructureId(ddlRecordSet.getDDMStructureId());
+		ddlRecordSetImpl.setRecordSetKey(ddlRecordSet.getRecordSetKey());
+		ddlRecordSetImpl.setName(ddlRecordSet.getName());
+		ddlRecordSetImpl.setDescription(ddlRecordSet.getDescription());
+		ddlRecordSetImpl.setMinDisplayRows(ddlRecordSet.getMinDisplayRows());
+		ddlRecordSetImpl.setScope(ddlRecordSet.getScope());
+
+		return ddlRecordSetImpl;
+	}
+
+	/**
+	 * Returns the d d l record set with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the d d l record set
+	 * @return the d d l record set
+	 * @throws com.liferay.portal.NoSuchModelException if a d d l record set with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DDLRecordSet findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the d d l record set with the primary key or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException} if it could not be found.
+	 *
+	 * @param recordSetId the primary key of the d d l record set
+	 * @return the d d l record set
+	 * @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException if a d d l record set with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDLRecordSet findByPrimaryKey(long recordSetId)
+		throws NoSuchRecordSetException, SystemException {
+		DDLRecordSet ddlRecordSet = fetchByPrimaryKey(recordSetId);
+
+		if (ddlRecordSet == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + recordSetId);
+			}
+
+			throw new NoSuchRecordSetException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				recordSetId);
+		}
+
+		return ddlRecordSet;
+	}
+
+	/**
+	 * Returns the d d l record set with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the d d l record set
+	 * @return the d d l record set, or <code>null</code> if a d d l record set with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DDLRecordSet fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the d d l record set with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param recordSetId the primary key of the d d l record set
+	 * @return the d d l record set, or <code>null</code> if a d d l record set with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDLRecordSet fetchByPrimaryKey(long recordSetId)
+		throws SystemException {
+		DDLRecordSet ddlRecordSet = (DDLRecordSet)EntityCacheUtil.getResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+				DDLRecordSetImpl.class, recordSetId);
+
+		if (ddlRecordSet == _nullDDLRecordSet) {
+			return null;
+		}
+
+		if (ddlRecordSet == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				ddlRecordSet = (DDLRecordSet)session.get(DDLRecordSetImpl.class,
+						Long.valueOf(recordSetId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (ddlRecordSet != null) {
+					cacheResult(ddlRecordSet);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+						DDLRecordSetImpl.class, recordSetId, _nullDDLRecordSet);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return ddlRecordSet;
+	}
+
+	/**
 	 * Returns all the d d l record sets.
 	 *
 	 * @return the d d l record sets
@@ -2596,74 +3064,6 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	}
 
 	/**
-	 * Removes all the d d l record sets where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (DDLRecordSet ddlRecordSet : findByUuid(uuid)) {
-			remove(ddlRecordSet);
-		}
-	}
-
-	/**
-	 * Removes the d d l record set where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the d d l record set that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDLRecordSet removeByUUID_G(String uuid, long groupId)
-		throws NoSuchRecordSetException, SystemException {
-		DDLRecordSet ddlRecordSet = findByUUID_G(uuid, groupId);
-
-		return remove(ddlRecordSet);
-	}
-
-	/**
-	 * Removes all the d d l record sets where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (DDLRecordSet ddlRecordSet : findByUuid_C(uuid, companyId)) {
-			remove(ddlRecordSet);
-		}
-	}
-
-	/**
-	 * Removes all the d d l record sets where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (DDLRecordSet ddlRecordSet : findByGroupId(groupId)) {
-			remove(ddlRecordSet);
-		}
-	}
-
-	/**
-	 * Removes the d d l record set where groupId = &#63; and recordSetKey = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param recordSetKey the record set key
-	 * @return the d d l record set that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDLRecordSet removeByG_R(long groupId, String recordSetKey)
-		throws NoSuchRecordSetException, SystemException {
-		DDLRecordSet ddlRecordSet = findByG_R(groupId, recordSetKey);
-
-		return remove(ddlRecordSet);
-	}
-
-	/**
 	 * Removes all the d d l record sets from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2672,385 +3072,6 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 		for (DDLRecordSet ddlRecordSet : findAll()) {
 			remove(ddlRecordSet);
 		}
-	}
-
-	/**
-	 * Returns the number of d d l record sets where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching d d l record sets
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_DDLRECORDSET_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of d d l record sets where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching d d l record sets
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUUID_G(String uuid, long groupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_DDLRECORDSET_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of d d l record sets where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching d d l record sets
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_DDLRECORDSET_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of d d l record sets where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching d d l record sets
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_DDLRECORDSET_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of d d l record sets that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching d d l record sets that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_DDLRECORDSET_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				DDLRecordSet.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of d d l record sets where groupId = &#63; and recordSetKey = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param recordSetKey the record set key
-	 * @return the number of matching d d l record sets
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_R(long groupId, String recordSetKey)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, recordSetKey };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_R,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_DDLRECORDSET_WHERE);
-
-			query.append(_FINDER_COLUMN_G_R_GROUPID_2);
-
-			if (recordSetKey == null) {
-				query.append(_FINDER_COLUMN_G_R_RECORDSETKEY_1);
-			}
-			else {
-				if (recordSetKey.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_R_RECORDSETKEY_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_R_RECORDSETKEY_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (recordSetKey != null) {
-					qPos.add(recordSetKey);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_R, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -3138,22 +3159,6 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	private static final String _SQL_SELECT_DDLRECORDSET_WHERE = "SELECT ddlRecordSet FROM DDLRecordSet ddlRecordSet WHERE ";
 	private static final String _SQL_COUNT_DDLRECORDSET = "SELECT COUNT(ddlRecordSet) FROM DDLRecordSet ddlRecordSet";
 	private static final String _SQL_COUNT_DDLRECORDSET_WHERE = "SELECT COUNT(ddlRecordSet) FROM DDLRecordSet ddlRecordSet WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "ddlRecordSet.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "ddlRecordSet.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(ddlRecordSet.uuid IS NULL OR ddlRecordSet.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "ddlRecordSet.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "ddlRecordSet.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(ddlRecordSet.uuid IS NULL OR ddlRecordSet.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "ddlRecordSet.groupId = ?";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "ddlRecordSet.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "ddlRecordSet.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(ddlRecordSet.uuid IS NULL OR ddlRecordSet.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "ddlRecordSet.companyId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "ddlRecordSet.groupId = ?";
-	private static final String _FINDER_COLUMN_G_R_GROUPID_2 = "ddlRecordSet.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_R_RECORDSETKEY_1 = "ddlRecordSet.recordSetKey IS NULL";
-	private static final String _FINDER_COLUMN_G_R_RECORDSETKEY_2 = "ddlRecordSet.recordSetKey = ?";
-	private static final String _FINDER_COLUMN_G_R_RECORDSETKEY_3 = "(ddlRecordSet.recordSetKey IS NULL OR ddlRecordSet.recordSetKey = ?)";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "ddlRecordSet.recordSetId";
 	private static final String _FILTER_SQL_SELECT_DDLRECORDSET_WHERE = "SELECT DISTINCT {ddlRecordSet.*} FROM DDLRecordSet ddlRecordSet WHERE ";
 	private static final String _FILTER_SQL_SELECT_DDLRECORDSET_NO_INLINE_DISTINCT_WHERE_1 =

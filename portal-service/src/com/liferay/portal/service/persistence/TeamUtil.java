@@ -108,81 +108,6 @@ public class TeamUtil {
 	}
 
 	/**
-	* Caches the team in the entity cache if it is enabled.
-	*
-	* @param team the team
-	*/
-	public static void cacheResult(com.liferay.portal.model.Team team) {
-		getPersistence().cacheResult(team);
-	}
-
-	/**
-	* Caches the teams in the entity cache if it is enabled.
-	*
-	* @param teams the teams
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.Team> teams) {
-		getPersistence().cacheResult(teams);
-	}
-
-	/**
-	* Creates a new team with the primary key. Does not add the team to the database.
-	*
-	* @param teamId the primary key for the new team
-	* @return the new team
-	*/
-	public static com.liferay.portal.model.Team create(long teamId) {
-		return getPersistence().create(teamId);
-	}
-
-	/**
-	* Removes the team with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param teamId the primary key of the team
-	* @return the team that was removed
-	* @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Team remove(long teamId)
-		throws com.liferay.portal.NoSuchTeamException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(teamId);
-	}
-
-	public static com.liferay.portal.model.Team updateImpl(
-		com.liferay.portal.model.Team team)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(team);
-	}
-
-	/**
-	* Returns the team with the primary key or throws a {@link com.liferay.portal.NoSuchTeamException} if it could not be found.
-	*
-	* @param teamId the primary key of the team
-	* @return the team
-	* @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Team findByPrimaryKey(long teamId)
-		throws com.liferay.portal.NoSuchTeamException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(teamId);
-	}
-
-	/**
-	* Returns the team with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param teamId the primary key of the team
-	* @return the team, or <code>null</code> if a team with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Team fetchByPrimaryKey(long teamId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(teamId);
-	}
-
-	/**
 	* Returns all the teams where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -394,6 +319,41 @@ public class TeamUtil {
 	}
 
 	/**
+	* Removes all the teams where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of teams where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching teams
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of teams that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching teams that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByGroupId(groupId);
+	}
+
+	/**
 	* Returns the team where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchTeamException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -436,6 +396,109 @@ public class TeamUtil {
 		java.lang.String name, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByG_N(groupId, name, retrieveFromCache);
+	}
+
+	/**
+	* Removes the team where groupId = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the team that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Team removeByG_N(long groupId,
+		java.lang.String name)
+		throws com.liferay.portal.NoSuchTeamException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByG_N(groupId, name);
+	}
+
+	/**
+	* Returns the number of teams where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the number of matching teams
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_N(long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_N(groupId, name);
+	}
+
+	/**
+	* Caches the team in the entity cache if it is enabled.
+	*
+	* @param team the team
+	*/
+	public static void cacheResult(com.liferay.portal.model.Team team) {
+		getPersistence().cacheResult(team);
+	}
+
+	/**
+	* Caches the teams in the entity cache if it is enabled.
+	*
+	* @param teams the teams
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.Team> teams) {
+		getPersistence().cacheResult(teams);
+	}
+
+	/**
+	* Creates a new team with the primary key. Does not add the team to the database.
+	*
+	* @param teamId the primary key for the new team
+	* @return the new team
+	*/
+	public static com.liferay.portal.model.Team create(long teamId) {
+		return getPersistence().create(teamId);
+	}
+
+	/**
+	* Removes the team with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param teamId the primary key of the team
+	* @return the team that was removed
+	* @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Team remove(long teamId)
+		throws com.liferay.portal.NoSuchTeamException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(teamId);
+	}
+
+	public static com.liferay.portal.model.Team updateImpl(
+		com.liferay.portal.model.Team team)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(team);
+	}
+
+	/**
+	* Returns the team with the primary key or throws a {@link com.liferay.portal.NoSuchTeamException} if it could not be found.
+	*
+	* @param teamId the primary key of the team
+	* @return the team
+	* @throws com.liferay.portal.NoSuchTeamException if a team with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Team findByPrimaryKey(long teamId)
+		throws com.liferay.portal.NoSuchTeamException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(teamId);
+	}
+
+	/**
+	* Returns the team with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param teamId the primary key of the team
+	* @return the team, or <code>null</code> if a team with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Team fetchByPrimaryKey(long teamId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(teamId);
 	}
 
 	/**
@@ -488,32 +551,6 @@ public class TeamUtil {
 	}
 
 	/**
-	* Removes all the teams where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes the team where groupId = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the team that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Team removeByG_N(long groupId,
-		java.lang.String name)
-		throws com.liferay.portal.NoSuchTeamException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByG_N(groupId, name);
-	}
-
-	/**
 	* Removes all the teams from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -521,43 +558,6 @@ public class TeamUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of teams where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching teams
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of teams that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching teams that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of teams where groupId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the number of matching teams
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_N(long groupId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_N(groupId, name);
 	}
 
 	/**

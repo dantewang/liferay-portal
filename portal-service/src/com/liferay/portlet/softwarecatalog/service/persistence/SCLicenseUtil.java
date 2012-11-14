@@ -111,86 +111,6 @@ public class SCLicenseUtil {
 	}
 
 	/**
-	* Caches the s c license in the entity cache if it is enabled.
-	*
-	* @param scLicense the s c license
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.softwarecatalog.model.SCLicense scLicense) {
-		getPersistence().cacheResult(scLicense);
-	}
-
-	/**
-	* Caches the s c licenses in the entity cache if it is enabled.
-	*
-	* @param scLicenses the s c licenses
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.softwarecatalog.model.SCLicense> scLicenses) {
-		getPersistence().cacheResult(scLicenses);
-	}
-
-	/**
-	* Creates a new s c license with the primary key. Does not add the s c license to the database.
-	*
-	* @param licenseId the primary key for the new s c license
-	* @return the new s c license
-	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCLicense create(
-		long licenseId) {
-		return getPersistence().create(licenseId);
-	}
-
-	/**
-	* Removes the s c license with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param licenseId the primary key of the s c license
-	* @return the s c license that was removed
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCLicense remove(
-		long licenseId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchLicenseException {
-		return getPersistence().remove(licenseId);
-	}
-
-	public static com.liferay.portlet.softwarecatalog.model.SCLicense updateImpl(
-		com.liferay.portlet.softwarecatalog.model.SCLicense scLicense)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(scLicense);
-	}
-
-	/**
-	* Returns the s c license with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchLicenseException} if it could not be found.
-	*
-	* @param licenseId the primary key of the s c license
-	* @return the s c license
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCLicense findByPrimaryKey(
-		long licenseId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchLicenseException {
-		return getPersistence().findByPrimaryKey(licenseId);
-	}
-
-	/**
-	* Returns the s c license with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param licenseId the primary key of the s c license
-	* @return the s c license, or <code>null</code> if a s c license with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.softwarecatalog.model.SCLicense fetchByPrimaryKey(
-		long licenseId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(licenseId);
-	}
-
-	/**
 	* Returns all the s c licenses where active = &#63;.
 	*
 	* @param active the active
@@ -400,6 +320,41 @@ public class SCLicenseUtil {
 		return getPersistence()
 				   .filterFindByActive_PrevAndNext(licenseId, active,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the s c licenses where active = &#63; from the database.
+	*
+	* @param active the active
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByActive(boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByActive(active);
+	}
+
+	/**
+	* Returns the number of s c licenses where active = &#63;.
+	*
+	* @param active the active
+	* @return the number of matching s c licenses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByActive(boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByActive(active);
+	}
+
+	/**
+	* Returns the number of s c licenses that the user has permission to view where active = &#63;.
+	*
+	* @param active the active
+	* @return the number of matching s c licenses that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByActive(boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByActive(active);
 	}
 
 	/**
@@ -632,6 +587,124 @@ public class SCLicenseUtil {
 	}
 
 	/**
+	* Removes all the s c licenses where active = &#63; and recommended = &#63; from the database.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByA_R(boolean active, boolean recommended)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByA_R(active, recommended);
+	}
+
+	/**
+	* Returns the number of s c licenses where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @return the number of matching s c licenses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByA_R(boolean active, boolean recommended)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByA_R(active, recommended);
+	}
+
+	/**
+	* Returns the number of s c licenses that the user has permission to view where active = &#63; and recommended = &#63;.
+	*
+	* @param active the active
+	* @param recommended the recommended
+	* @return the number of matching s c licenses that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByA_R(boolean active, boolean recommended)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByA_R(active, recommended);
+	}
+
+	/**
+	* Caches the s c license in the entity cache if it is enabled.
+	*
+	* @param scLicense the s c license
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.softwarecatalog.model.SCLicense scLicense) {
+		getPersistence().cacheResult(scLicense);
+	}
+
+	/**
+	* Caches the s c licenses in the entity cache if it is enabled.
+	*
+	* @param scLicenses the s c licenses
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.softwarecatalog.model.SCLicense> scLicenses) {
+		getPersistence().cacheResult(scLicenses);
+	}
+
+	/**
+	* Creates a new s c license with the primary key. Does not add the s c license to the database.
+	*
+	* @param licenseId the primary key for the new s c license
+	* @return the new s c license
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCLicense create(
+		long licenseId) {
+		return getPersistence().create(licenseId);
+	}
+
+	/**
+	* Removes the s c license with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param licenseId the primary key of the s c license
+	* @return the s c license that was removed
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCLicense remove(
+		long licenseId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException {
+		return getPersistence().remove(licenseId);
+	}
+
+	public static com.liferay.portlet.softwarecatalog.model.SCLicense updateImpl(
+		com.liferay.portlet.softwarecatalog.model.SCLicense scLicense)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(scLicense);
+	}
+
+	/**
+	* Returns the s c license with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchLicenseException} if it could not be found.
+	*
+	* @param licenseId the primary key of the s c license
+	* @return the s c license
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCLicense findByPrimaryKey(
+		long licenseId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchLicenseException {
+		return getPersistence().findByPrimaryKey(licenseId);
+	}
+
+	/**
+	* Returns the s c license with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param licenseId the primary key of the s c license
+	* @return the s c license, or <code>null</code> if a s c license with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.softwarecatalog.model.SCLicense fetchByPrimaryKey(
+		long licenseId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(licenseId);
+	}
+
+	/**
 	* Returns all the s c licenses.
 	*
 	* @return the s c licenses
@@ -681,29 +754,6 @@ public class SCLicenseUtil {
 	}
 
 	/**
-	* Removes all the s c licenses where active = &#63; from the database.
-	*
-	* @param active the active
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByActive(boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByActive(active);
-	}
-
-	/**
-	* Removes all the s c licenses where active = &#63; and recommended = &#63; from the database.
-	*
-	* @param active the active
-	* @param recommended the recommended
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByA_R(boolean active, boolean recommended)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByA_R(active, recommended);
-	}
-
-	/**
 	* Removes all the s c licenses from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -711,56 +761,6 @@ public class SCLicenseUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of s c licenses where active = &#63;.
-	*
-	* @param active the active
-	* @return the number of matching s c licenses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByActive(boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByActive(active);
-	}
-
-	/**
-	* Returns the number of s c licenses that the user has permission to view where active = &#63;.
-	*
-	* @param active the active
-	* @return the number of matching s c licenses that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByActive(boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByActive(active);
-	}
-
-	/**
-	* Returns the number of s c licenses where active = &#63; and recommended = &#63;.
-	*
-	* @param active the active
-	* @param recommended the recommended
-	* @return the number of matching s c licenses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByA_R(boolean active, boolean recommended)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByA_R(active, recommended);
-	}
-
-	/**
-	* Returns the number of s c licenses that the user has permission to view where active = &#63; and recommended = &#63;.
-	*
-	* @param active the active
-	* @param recommended the recommended
-	* @return the number of matching s c licenses that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByA_R(boolean active, boolean recommended)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByA_R(active, recommended);
 	}
 
 	/**
