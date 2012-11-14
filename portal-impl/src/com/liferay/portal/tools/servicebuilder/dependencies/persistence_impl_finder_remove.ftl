@@ -31,38 +31,40 @@
 		}
 	}
 <#else>
-	/**
-	 * Removes the ${entity.humanName} where ${finder.getHumanConditions(false)} from the database.
-	 *
-	<#list finderColsList as finderCol>
-	 * @param ${finderCol.name} the ${finderCol.humanName}
-	</#list>
-	 * @return the ${entity.humanName} that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ${entity.name} removeBy${finder.name}(
-
-	<#list finderColsList as finderCol>
-		${finderCol.type} ${finderCol.name}
-
-		<#if finderCol_has_next>
-			,
-		</#if>
-	</#list>
-
-	) throws ${noSuchEntity}Exception, SystemException {
-		${entity.name} ${entity.varName} = findBy${finder.name}(
+	<#if finder.isUnique()>
+		/**
+		 * Removes the ${entity.humanName} where ${finder.getHumanConditions(false)} from the database.
+		 *
+		<#list finderColsList as finderCol>
+		 * @param ${finderCol.name} the ${finderCol.humanName}
+		</#list>
+		 * @return the ${entity.humanName} that was removed
+		 * @throws SystemException if a system exception occurred
+		 */
+		public ${entity.name} removeBy${finder.name}(
 
 		<#list finderColsList as finderCol>
-			${finderCol.name}
+			${finderCol.type} ${finderCol.name}
 
 			<#if finderCol_has_next>
 				,
 			</#if>
 		</#list>
 
-		);
+		) throws ${noSuchEntity}Exception, SystemException {
+			${entity.name} ${entity.varName} = findBy${finder.name}(
 
-		return remove(${entity.varName});
-	}
+			<#list finderColsList as finderCol>
+				${finderCol.name}
+
+				<#if finderCol_has_next>
+					,
+				</#if>
+			</#list>
+
+			);
+
+			return remove(${entity.varName});
+		}
+	</#if>
 </#if>
