@@ -38,67 +38,6 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 	 */
 
 	/**
-	* Caches the wiki page in the entity cache if it is enabled.
-	*
-	* @param wikiPage the wiki page
-	*/
-	public void cacheResult(com.liferay.portlet.wiki.model.WikiPage wikiPage);
-
-	/**
-	* Caches the wiki pages in the entity cache if it is enabled.
-	*
-	* @param wikiPages the wiki pages
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.wiki.model.WikiPage> wikiPages);
-
-	/**
-	* Creates a new wiki page with the primary key. Does not add the wiki page to the database.
-	*
-	* @param pageId the primary key for the new wiki page
-	* @return the new wiki page
-	*/
-	public com.liferay.portlet.wiki.model.WikiPage create(long pageId);
-
-	/**
-	* Removes the wiki page with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param pageId the primary key of the wiki page
-	* @return the wiki page that was removed
-	* @throws com.liferay.portlet.wiki.NoSuchPageException if a wiki page with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.wiki.model.WikiPage remove(long pageId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.wiki.NoSuchPageException;
-
-	public com.liferay.portlet.wiki.model.WikiPage updateImpl(
-		com.liferay.portlet.wiki.model.WikiPage wikiPage)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the wiki page with the primary key or throws a {@link com.liferay.portlet.wiki.NoSuchPageException} if it could not be found.
-	*
-	* @param pageId the primary key of the wiki page
-	* @return the wiki page
-	* @throws com.liferay.portlet.wiki.NoSuchPageException if a wiki page with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.wiki.model.WikiPage findByPrimaryKey(long pageId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.wiki.NoSuchPageException;
-
-	/**
-	* Returns the wiki page with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param pageId the primary key of the wiki page
-	* @return the wiki page, or <code>null</code> if a wiki page with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.wiki.model.WikiPage fetchByPrimaryKey(
-		long pageId) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the wiki pages where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -218,6 +157,25 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 			com.liferay.portlet.wiki.NoSuchPageException;
 
 	/**
+	* Removes all the wiki pages where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the wiki page where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.wiki.NoSuchPageException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -254,6 +212,30 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 	*/
 	public com.liferay.portlet.wiki.model.WikiPage fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the wiki page where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the wiki page that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPage removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.wiki.NoSuchPageException;
+
+	/**
+	* Returns the number of wiki pages where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -384,6 +366,27 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 			com.liferay.portlet.wiki.NoSuchPageException;
 
 	/**
+	* Removes all the wiki pages where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the wiki pages where nodeId = &#63;.
 	*
 	* @param nodeId the node ID
@@ -500,6 +503,25 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.wiki.NoSuchPageException;
+
+	/**
+	* Removes all the wiki pages where nodeId = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByNodeId(long nodeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63;.
+	*
+	* @param nodeId the node ID
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByNodeId(long nodeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the wiki pages where format = &#63;.
@@ -619,6 +641,25 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.wiki.NoSuchPageException;
+
+	/**
+	* Removes all the wiki pages where format = &#63; from the database.
+	*
+	* @param format the format
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByFormat(java.lang.String format)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where format = &#63;.
+	*
+	* @param format the format
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByFormat(java.lang.String format)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63;.
@@ -748,6 +789,27 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 			com.liferay.portlet.wiki.NoSuchPageException;
 
 	/**
+	* Removes all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; from the database.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param nodeId the node ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByR_N(long resourcePrimKey, long nodeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where resourcePrimKey = &#63; and nodeId = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param nodeId the node ID
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByR_N(long resourcePrimKey, long nodeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the wiki pages where nodeId = &#63; and title = &#63;.
 	*
 	* @param nodeId the node ID
@@ -873,6 +935,27 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.wiki.NoSuchPageException;
+
+	/**
+	* Removes all the wiki pages where nodeId = &#63; and title = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param title the title
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByN_T(long nodeId, java.lang.String title)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63; and title = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param title the title
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_T(long nodeId, java.lang.String title)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the wiki pages where nodeId = &#63; and head = &#63;.
@@ -1002,6 +1085,27 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 			com.liferay.portlet.wiki.NoSuchPageException;
 
 	/**
+	* Removes all the wiki pages where nodeId = &#63; and head = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param head the head
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByN_H(long nodeId, boolean head)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63; and head = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param head the head
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_H(long nodeId, boolean head)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the wiki pages where nodeId = &#63; and parentTitle = &#63;.
 	*
 	* @param nodeId the node ID
@@ -1127,6 +1231,27 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.wiki.NoSuchPageException;
+
+	/**
+	* Removes all the wiki pages where nodeId = &#63; and parentTitle = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param parentTitle the parent title
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByN_P(long nodeId, java.lang.String parentTitle)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63; and parentTitle = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param parentTitle the parent title
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_P(long nodeId, java.lang.String parentTitle)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the wiki pages where nodeId = &#63; and redirectTitle = &#63;.
@@ -1256,6 +1381,27 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 			com.liferay.portlet.wiki.NoSuchPageException;
 
 	/**
+	* Removes all the wiki pages where nodeId = &#63; and redirectTitle = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param redirectTitle the redirect title
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByN_R(long nodeId, java.lang.String redirectTitle)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63; and redirectTitle = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param redirectTitle the redirect title
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_R(long nodeId, java.lang.String redirectTitle)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the wiki pages where nodeId = &#63; and status = &#63;.
 	*
 	* @param nodeId the node ID
@@ -1383,6 +1529,27 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 			com.liferay.portlet.wiki.NoSuchPageException;
 
 	/**
+	* Removes all the wiki pages where nodeId = &#63; and status = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByN_S(long nodeId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63; and status = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param status the status
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_S(long nodeId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the wiki page where resourcePrimKey = &#63; and nodeId = &#63; and version = &#63; or throws a {@link com.liferay.portlet.wiki.NoSuchPageException} if it could not be found.
 	*
 	* @param resourcePrimKey the resource prim key
@@ -1423,6 +1590,32 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 	public com.liferay.portlet.wiki.model.WikiPage fetchByR_N_V(
 		long resourcePrimKey, long nodeId, double version,
 		boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the wiki page where resourcePrimKey = &#63; and nodeId = &#63; and version = &#63; from the database.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param nodeId the node ID
+	* @param version the version
+	* @return the wiki page that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPage removeByR_N_V(
+		long resourcePrimKey, long nodeId, double version)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.wiki.NoSuchPageException;
+
+	/**
+	* Returns the number of wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and version = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param nodeId the node ID
+	* @param version the version
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByR_N_V(long resourcePrimKey, long nodeId, double version)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -1561,6 +1754,29 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 			com.liferay.portlet.wiki.NoSuchPageException;
 
 	/**
+	* Removes all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63; from the database.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param nodeId the node ID
+	* @param head the head
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByR_N_H(long resourcePrimKey, long nodeId, boolean head)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param nodeId the node ID
+	* @param head the head
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByR_N_H(long resourcePrimKey, long nodeId, boolean head)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
 	*
 	* @param resourcePrimKey the resource prim key
@@ -1694,6 +1910,29 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.wiki.NoSuchPageException;
+
+	/**
+	* Removes all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63; from the database.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param nodeId the node ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByR_N_S(long resourcePrimKey, long nodeId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param nodeId the node ID
+	* @param status the status
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByR_N_S(long resourcePrimKey, long nodeId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the wiki pages where userId = &#63; and nodeId = &#63; and status = &#63;.
@@ -1831,6 +2070,29 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 			com.liferay.portlet.wiki.NoSuchPageException;
 
 	/**
+	* Removes all the wiki pages where userId = &#63; and nodeId = &#63; and status = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param nodeId the node ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByU_N_S(long userId, long nodeId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where userId = &#63; and nodeId = &#63; and status = &#63;.
+	*
+	* @param userId the user ID
+	* @param nodeId the node ID
+	* @param status the status
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByU_N_S(long userId, long nodeId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the wiki page where nodeId = &#63; and title = &#63; and version = &#63; or throws a {@link com.liferay.portlet.wiki.NoSuchPageException} if it could not be found.
 	*
 	* @param nodeId the node ID
@@ -1870,6 +2132,32 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 	*/
 	public com.liferay.portlet.wiki.model.WikiPage fetchByN_T_V(long nodeId,
 		java.lang.String title, double version, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the wiki page where nodeId = &#63; and title = &#63; and version = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param title the title
+	* @param version the version
+	* @return the wiki page that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPage removeByN_T_V(long nodeId,
+		java.lang.String title, double version)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.wiki.NoSuchPageException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63; and title = &#63; and version = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param title the title
+	* @param version the version
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_T_V(long nodeId, java.lang.String title, double version)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -2008,6 +2296,29 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 			com.liferay.portlet.wiki.NoSuchPageException;
 
 	/**
+	* Removes all the wiki pages where nodeId = &#63; and title = &#63; and head = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param title the title
+	* @param head the head
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByN_T_H(long nodeId, java.lang.String title, boolean head)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63; and title = &#63; and head = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param title the title
+	* @param head the head
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_T_H(long nodeId, java.lang.String title, boolean head)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the wiki pages where nodeId = &#63; and title = &#63; and status = &#63;.
 	*
 	* @param nodeId the node ID
@@ -2141,6 +2452,29 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.wiki.NoSuchPageException;
+
+	/**
+	* Removes all the wiki pages where nodeId = &#63; and title = &#63; and status = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param title the title
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByN_T_S(long nodeId, java.lang.String title, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63; and title = &#63; and status = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param title the title
+	* @param status the status
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_T_S(long nodeId, java.lang.String title, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
@@ -2279,6 +2613,31 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 			com.liferay.portlet.wiki.NoSuchPageException;
 
 	/**
+	* Removes all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param head the head
+	* @param parentTitle the parent title
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByN_H_P(long nodeId, boolean head,
+		java.lang.String parentTitle)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param head the head
+	* @param parentTitle the parent title
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_H_P(long nodeId, boolean head,
+		java.lang.String parentTitle)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the wiki pages where nodeId = &#63; and head = &#63; and status = &#63;.
 	*
 	* @param nodeId the node ID
@@ -2412,6 +2771,29 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.wiki.NoSuchPageException;
+
+	/**
+	* Removes all the wiki pages where nodeId = &#63; and head = &#63; and status = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param head the head
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByN_H_S(long nodeId, boolean head, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63; and head = &#63; and status = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param head the head
+	* @param status the status
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_H_S(long nodeId, boolean head, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
@@ -2560,6 +2942,94 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 			com.liferay.portlet.wiki.NoSuchPageException;
 
 	/**
+	* Removes all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param head the head
+	* @param parentTitle the parent title
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByN_H_P_S(long nodeId, boolean head,
+		java.lang.String parentTitle, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param head the head
+	* @param parentTitle the parent title
+	* @param status the status
+	* @return the number of matching wiki pages
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_H_P_S(long nodeId, boolean head,
+		java.lang.String parentTitle, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the wiki page in the entity cache if it is enabled.
+	*
+	* @param wikiPage the wiki page
+	*/
+	public void cacheResult(com.liferay.portlet.wiki.model.WikiPage wikiPage);
+
+	/**
+	* Caches the wiki pages in the entity cache if it is enabled.
+	*
+	* @param wikiPages the wiki pages
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.wiki.model.WikiPage> wikiPages);
+
+	/**
+	* Creates a new wiki page with the primary key. Does not add the wiki page to the database.
+	*
+	* @param pageId the primary key for the new wiki page
+	* @return the new wiki page
+	*/
+	public com.liferay.portlet.wiki.model.WikiPage create(long pageId);
+
+	/**
+	* Removes the wiki page with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param pageId the primary key of the wiki page
+	* @return the wiki page that was removed
+	* @throws com.liferay.portlet.wiki.NoSuchPageException if a wiki page with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPage remove(long pageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.wiki.NoSuchPageException;
+
+	public com.liferay.portlet.wiki.model.WikiPage updateImpl(
+		com.liferay.portlet.wiki.model.WikiPage wikiPage)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the wiki page with the primary key or throws a {@link com.liferay.portlet.wiki.NoSuchPageException} if it could not be found.
+	*
+	* @param pageId the primary key of the wiki page
+	* @return the wiki page
+	* @throws com.liferay.portlet.wiki.NoSuchPageException if a wiki page with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPage findByPrimaryKey(long pageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.wiki.NoSuchPageException;
+
+	/**
+	* Returns the wiki page with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param pageId the primary key of the wiki page
+	* @return the wiki page, or <code>null</code> if a wiki page with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPage fetchByPrimaryKey(
+		long pageId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the wiki pages.
 	*
 	* @return the wiki pages
@@ -2603,481 +3073,11 @@ public interface WikiPagePersistence extends BasePersistence<WikiPage> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the wiki pages where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the wiki page where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the wiki page that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.wiki.model.WikiPage removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.wiki.NoSuchPageException;
-
-	/**
-	* Removes all the wiki pages where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where nodeId = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByNodeId(long nodeId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where format = &#63; from the database.
-	*
-	* @param format the format
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByFormat(java.lang.String format)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; from the database.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @param nodeId the node ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByR_N(long resourcePrimKey, long nodeId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where nodeId = &#63; and title = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param title the title
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByN_T(long nodeId, java.lang.String title)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where nodeId = &#63; and head = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param head the head
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByN_H(long nodeId, boolean head)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where nodeId = &#63; and parentTitle = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param parentTitle the parent title
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByN_P(long nodeId, java.lang.String parentTitle)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where nodeId = &#63; and redirectTitle = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param redirectTitle the redirect title
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByN_R(long nodeId, java.lang.String redirectTitle)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where nodeId = &#63; and status = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByN_S(long nodeId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the wiki page where resourcePrimKey = &#63; and nodeId = &#63; and version = &#63; from the database.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @param nodeId the node ID
-	* @param version the version
-	* @return the wiki page that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.wiki.model.WikiPage removeByR_N_V(
-		long resourcePrimKey, long nodeId, double version)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.wiki.NoSuchPageException;
-
-	/**
-	* Removes all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63; from the database.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @param nodeId the node ID
-	* @param head the head
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByR_N_H(long resourcePrimKey, long nodeId, boolean head)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63; from the database.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @param nodeId the node ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByR_N_S(long resourcePrimKey, long nodeId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where userId = &#63; and nodeId = &#63; and status = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param nodeId the node ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByU_N_S(long userId, long nodeId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the wiki page where nodeId = &#63; and title = &#63; and version = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param title the title
-	* @param version the version
-	* @return the wiki page that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.wiki.model.WikiPage removeByN_T_V(long nodeId,
-		java.lang.String title, double version)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.wiki.NoSuchPageException;
-
-	/**
-	* Removes all the wiki pages where nodeId = &#63; and title = &#63; and head = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param title the title
-	* @param head the head
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByN_T_H(long nodeId, java.lang.String title, boolean head)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where nodeId = &#63; and title = &#63; and status = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param title the title
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByN_T_S(long nodeId, java.lang.String title, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param head the head
-	* @param parentTitle the parent title
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByN_H_P(long nodeId, boolean head,
-		java.lang.String parentTitle)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where nodeId = &#63; and head = &#63; and status = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param head the head
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByN_H_S(long nodeId, boolean head, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param head the head
-	* @param parentTitle the parent title
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByN_H_P_S(long nodeId, boolean head,
-		java.lang.String parentTitle, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the wiki pages from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63;.
-	*
-	* @param nodeId the node ID
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByNodeId(long nodeId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where format = &#63;.
-	*
-	* @param format the format
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByFormat(java.lang.String format)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where resourcePrimKey = &#63; and nodeId = &#63;.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @param nodeId the node ID
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByR_N(long resourcePrimKey, long nodeId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63; and title = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param title the title
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_T(long nodeId, java.lang.String title)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63; and head = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param head the head
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_H(long nodeId, boolean head)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63; and parentTitle = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param parentTitle the parent title
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_P(long nodeId, java.lang.String parentTitle)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63; and redirectTitle = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param redirectTitle the redirect title
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_R(long nodeId, java.lang.String redirectTitle)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63; and status = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param status the status
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_S(long nodeId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and version = &#63;.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @param nodeId the node ID
-	* @param version the version
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByR_N_V(long resourcePrimKey, long nodeId, double version)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @param nodeId the node ID
-	* @param head the head
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByR_N_H(long resourcePrimKey, long nodeId, boolean head)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @param nodeId the node ID
-	* @param status the status
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByR_N_S(long resourcePrimKey, long nodeId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where userId = &#63; and nodeId = &#63; and status = &#63;.
-	*
-	* @param userId the user ID
-	* @param nodeId the node ID
-	* @param status the status
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByU_N_S(long userId, long nodeId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63; and title = &#63; and version = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param title the title
-	* @param version the version
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_T_V(long nodeId, java.lang.String title, double version)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63; and title = &#63; and head = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param title the title
-	* @param head the head
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_T_H(long nodeId, java.lang.String title, boolean head)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63; and title = &#63; and status = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param title the title
-	* @param status the status
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_T_S(long nodeId, java.lang.String title, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param head the head
-	* @param parentTitle the parent title
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_H_P(long nodeId, boolean head,
-		java.lang.String parentTitle)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63; and head = &#63; and status = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param head the head
-	* @param status the status
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_H_S(long nodeId, boolean head, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param head the head
-	* @param parentTitle the parent title
-	* @param status the status
-	* @return the number of matching wiki pages
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_H_P_S(long nodeId, boolean head,
-		java.lang.String parentTitle, int status)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

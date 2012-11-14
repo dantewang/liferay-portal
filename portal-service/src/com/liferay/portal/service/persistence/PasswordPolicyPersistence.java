@@ -36,6 +36,132 @@ public interface PasswordPolicyPersistence extends BasePersistence<PasswordPolic
 	 */
 
 	/**
+	* Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or throws a {@link com.liferay.portal.NoSuchPasswordPolicyException} if it could not be found.
+	*
+	* @param companyId the company ID
+	* @param defaultPolicy the default policy
+	* @return the matching password policy
+	* @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicy findByC_DP(long companyId,
+		boolean defaultPolicy)
+		throws com.liferay.portal.NoSuchPasswordPolicyException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	*
+	* @param companyId the company ID
+	* @param defaultPolicy the default policy
+	* @return the matching password policy, or <code>null</code> if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicy fetchByC_DP(long companyId,
+		boolean defaultPolicy)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	*
+	* @param companyId the company ID
+	* @param defaultPolicy the default policy
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching password policy, or <code>null</code> if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicy fetchByC_DP(long companyId,
+		boolean defaultPolicy, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the password policy where companyId = &#63; and defaultPolicy = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param defaultPolicy the default policy
+	* @return the password policy that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicy removeByC_DP(
+		long companyId, boolean defaultPolicy)
+		throws com.liferay.portal.NoSuchPasswordPolicyException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of password policies where companyId = &#63; and defaultPolicy = &#63;.
+	*
+	* @param companyId the company ID
+	* @param defaultPolicy the default policy
+	* @return the number of matching password policies
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_DP(long companyId, boolean defaultPolicy)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the password policy where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchPasswordPolicyException} if it could not be found.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the matching password policy
+	* @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicy findByC_N(long companyId,
+		java.lang.String name)
+		throws com.liferay.portal.NoSuchPasswordPolicyException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the password policy where companyId = &#63; and name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the matching password policy, or <code>null</code> if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicy fetchByC_N(long companyId,
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the password policy where companyId = &#63; and name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching password policy, or <code>null</code> if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicy fetchByC_N(long companyId,
+		java.lang.String name, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the password policy where companyId = &#63; and name = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the password policy that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.PasswordPolicy removeByC_N(long companyId,
+		java.lang.String name)
+		throws com.liferay.portal.NoSuchPasswordPolicyException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of password policies where companyId = &#63; and name = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the number of matching password policies
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_N(long companyId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Caches the password policy in the entity cache if it is enabled.
 	*
 	* @param passwordPolicy the password policy
@@ -100,84 +226,6 @@ public interface PasswordPolicyPersistence extends BasePersistence<PasswordPolic
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or throws a {@link com.liferay.portal.NoSuchPasswordPolicyException} if it could not be found.
-	*
-	* @param companyId the company ID
-	* @param defaultPolicy the default policy
-	* @return the matching password policy
-	* @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.PasswordPolicy findByC_DP(long companyId,
-		boolean defaultPolicy)
-		throws com.liferay.portal.NoSuchPasswordPolicyException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param companyId the company ID
-	* @param defaultPolicy the default policy
-	* @return the matching password policy, or <code>null</code> if a matching password policy could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.PasswordPolicy fetchByC_DP(long companyId,
-		boolean defaultPolicy)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param companyId the company ID
-	* @param defaultPolicy the default policy
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching password policy, or <code>null</code> if a matching password policy could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.PasswordPolicy fetchByC_DP(long companyId,
-		boolean defaultPolicy, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the password policy where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchPasswordPolicyException} if it could not be found.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @return the matching password policy
-	* @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.PasswordPolicy findByC_N(long companyId,
-		java.lang.String name)
-		throws com.liferay.portal.NoSuchPasswordPolicyException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the password policy where companyId = &#63; and name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @return the matching password policy, or <code>null</code> if a matching password policy could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.PasswordPolicy fetchByC_N(long companyId,
-		java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the password policy where companyId = &#63; and name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching password policy, or <code>null</code> if a matching password policy could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.PasswordPolicy fetchByC_N(long companyId,
-		java.lang.String name, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the password policies.
 	*
 	* @return the password policies
@@ -221,59 +269,11 @@ public interface PasswordPolicyPersistence extends BasePersistence<PasswordPolic
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes the password policy where companyId = &#63; and defaultPolicy = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param defaultPolicy the default policy
-	* @return the password policy that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.PasswordPolicy removeByC_DP(
-		long companyId, boolean defaultPolicy)
-		throws com.liferay.portal.NoSuchPasswordPolicyException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the password policy where companyId = &#63; and name = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @return the password policy that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.PasswordPolicy removeByC_N(long companyId,
-		java.lang.String name)
-		throws com.liferay.portal.NoSuchPasswordPolicyException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the password policies from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of password policies where companyId = &#63; and defaultPolicy = &#63;.
-	*
-	* @param companyId the company ID
-	* @param defaultPolicy the default policy
-	* @return the number of matching password policies
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_DP(long companyId, boolean defaultPolicy)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of password policies where companyId = &#63; and name = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @return the number of matching password policies
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_N(long companyId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

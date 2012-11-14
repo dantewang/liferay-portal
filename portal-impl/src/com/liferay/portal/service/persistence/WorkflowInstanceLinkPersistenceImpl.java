@@ -71,6 +71,17 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED,
+			WorkflowInstanceLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED,
+			WorkflowInstanceLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_C_C = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED,
 			WorkflowInstanceLinkImpl.class,
@@ -102,396 +113,6 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
-			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED,
-			WorkflowInstanceLinkImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
-			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED,
-			WorkflowInstanceLinkImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
-			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the workflow instance link in the entity cache if it is enabled.
-	 *
-	 * @param workflowInstanceLink the workflow instance link
-	 */
-	public void cacheResult(WorkflowInstanceLink workflowInstanceLink) {
-		EntityCacheUtil.putResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
-			WorkflowInstanceLinkImpl.class,
-			workflowInstanceLink.getPrimaryKey(), workflowInstanceLink);
-
-		workflowInstanceLink.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the workflow instance links in the entity cache if it is enabled.
-	 *
-	 * @param workflowInstanceLinks the workflow instance links
-	 */
-	public void cacheResult(List<WorkflowInstanceLink> workflowInstanceLinks) {
-		for (WorkflowInstanceLink workflowInstanceLink : workflowInstanceLinks) {
-			if (EntityCacheUtil.getResult(
-						WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
-						WorkflowInstanceLinkImpl.class,
-						workflowInstanceLink.getPrimaryKey()) == null) {
-				cacheResult(workflowInstanceLink);
-			}
-			else {
-				workflowInstanceLink.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all workflow instance links.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(WorkflowInstanceLinkImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(WorkflowInstanceLinkImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the workflow instance link.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(WorkflowInstanceLink workflowInstanceLink) {
-		EntityCacheUtil.removeResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
-			WorkflowInstanceLinkImpl.class, workflowInstanceLink.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<WorkflowInstanceLink> workflowInstanceLinks) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (WorkflowInstanceLink workflowInstanceLink : workflowInstanceLinks) {
-			EntityCacheUtil.removeResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
-				WorkflowInstanceLinkImpl.class,
-				workflowInstanceLink.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new workflow instance link with the primary key. Does not add the workflow instance link to the database.
-	 *
-	 * @param workflowInstanceLinkId the primary key for the new workflow instance link
-	 * @return the new workflow instance link
-	 */
-	public WorkflowInstanceLink create(long workflowInstanceLinkId) {
-		WorkflowInstanceLink workflowInstanceLink = new WorkflowInstanceLinkImpl();
-
-		workflowInstanceLink.setNew(true);
-		workflowInstanceLink.setPrimaryKey(workflowInstanceLinkId);
-
-		return workflowInstanceLink;
-	}
-
-	/**
-	 * Removes the workflow instance link with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param workflowInstanceLinkId the primary key of the workflow instance link
-	 * @return the workflow instance link that was removed
-	 * @throws com.liferay.portal.NoSuchWorkflowInstanceLinkException if a workflow instance link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WorkflowInstanceLink remove(long workflowInstanceLinkId)
-		throws NoSuchWorkflowInstanceLinkException, SystemException {
-		return remove(Long.valueOf(workflowInstanceLinkId));
-	}
-
-	/**
-	 * Removes the workflow instance link with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the workflow instance link
-	 * @return the workflow instance link that was removed
-	 * @throws com.liferay.portal.NoSuchWorkflowInstanceLinkException if a workflow instance link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public WorkflowInstanceLink remove(Serializable primaryKey)
-		throws NoSuchWorkflowInstanceLinkException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			WorkflowInstanceLink workflowInstanceLink = (WorkflowInstanceLink)session.get(WorkflowInstanceLinkImpl.class,
-					primaryKey);
-
-			if (workflowInstanceLink == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchWorkflowInstanceLinkException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(workflowInstanceLink);
-		}
-		catch (NoSuchWorkflowInstanceLinkException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected WorkflowInstanceLink removeImpl(
-		WorkflowInstanceLink workflowInstanceLink) throws SystemException {
-		workflowInstanceLink = toUnwrappedModel(workflowInstanceLink);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(workflowInstanceLink)) {
-				workflowInstanceLink = (WorkflowInstanceLink)session.get(WorkflowInstanceLinkImpl.class,
-						workflowInstanceLink.getPrimaryKeyObj());
-			}
-
-			if (workflowInstanceLink != null) {
-				session.delete(workflowInstanceLink);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (workflowInstanceLink != null) {
-			clearCache(workflowInstanceLink);
-		}
-
-		return workflowInstanceLink;
-	}
-
-	@Override
-	public WorkflowInstanceLink updateImpl(
-		com.liferay.portal.model.WorkflowInstanceLink workflowInstanceLink)
-		throws SystemException {
-		workflowInstanceLink = toUnwrappedModel(workflowInstanceLink);
-
-		boolean isNew = workflowInstanceLink.isNew();
-
-		WorkflowInstanceLinkModelImpl workflowInstanceLinkModelImpl = (WorkflowInstanceLinkModelImpl)workflowInstanceLink;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (workflowInstanceLink.isNew()) {
-				session.save(workflowInstanceLink);
-
-				workflowInstanceLink.setNew(false);
-			}
-			else {
-				session.merge(workflowInstanceLink);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !WorkflowInstanceLinkModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((workflowInstanceLinkModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(workflowInstanceLinkModelImpl.getOriginalGroupId()),
-						Long.valueOf(workflowInstanceLinkModelImpl.getOriginalCompanyId()),
-						Long.valueOf(workflowInstanceLinkModelImpl.getOriginalClassNameId()),
-						Long.valueOf(workflowInstanceLinkModelImpl.getOriginalClassPK())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(workflowInstanceLinkModelImpl.getGroupId()),
-						Long.valueOf(workflowInstanceLinkModelImpl.getCompanyId()),
-						Long.valueOf(workflowInstanceLinkModelImpl.getClassNameId()),
-						Long.valueOf(workflowInstanceLinkModelImpl.getClassPK())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
-			WorkflowInstanceLinkImpl.class,
-			workflowInstanceLink.getPrimaryKey(), workflowInstanceLink);
-
-		return workflowInstanceLink;
-	}
-
-	protected WorkflowInstanceLink toUnwrappedModel(
-		WorkflowInstanceLink workflowInstanceLink) {
-		if (workflowInstanceLink instanceof WorkflowInstanceLinkImpl) {
-			return workflowInstanceLink;
-		}
-
-		WorkflowInstanceLinkImpl workflowInstanceLinkImpl = new WorkflowInstanceLinkImpl();
-
-		workflowInstanceLinkImpl.setNew(workflowInstanceLink.isNew());
-		workflowInstanceLinkImpl.setPrimaryKey(workflowInstanceLink.getPrimaryKey());
-
-		workflowInstanceLinkImpl.setWorkflowInstanceLinkId(workflowInstanceLink.getWorkflowInstanceLinkId());
-		workflowInstanceLinkImpl.setGroupId(workflowInstanceLink.getGroupId());
-		workflowInstanceLinkImpl.setCompanyId(workflowInstanceLink.getCompanyId());
-		workflowInstanceLinkImpl.setUserId(workflowInstanceLink.getUserId());
-		workflowInstanceLinkImpl.setUserName(workflowInstanceLink.getUserName());
-		workflowInstanceLinkImpl.setCreateDate(workflowInstanceLink.getCreateDate());
-		workflowInstanceLinkImpl.setModifiedDate(workflowInstanceLink.getModifiedDate());
-		workflowInstanceLinkImpl.setClassNameId(workflowInstanceLink.getClassNameId());
-		workflowInstanceLinkImpl.setClassPK(workflowInstanceLink.getClassPK());
-		workflowInstanceLinkImpl.setWorkflowInstanceId(workflowInstanceLink.getWorkflowInstanceId());
-
-		return workflowInstanceLinkImpl;
-	}
-
-	/**
-	 * Returns the workflow instance link with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the workflow instance link
-	 * @return the workflow instance link
-	 * @throws com.liferay.portal.NoSuchModelException if a workflow instance link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public WorkflowInstanceLink findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the workflow instance link with the primary key or throws a {@link com.liferay.portal.NoSuchWorkflowInstanceLinkException} if it could not be found.
-	 *
-	 * @param workflowInstanceLinkId the primary key of the workflow instance link
-	 * @return the workflow instance link
-	 * @throws com.liferay.portal.NoSuchWorkflowInstanceLinkException if a workflow instance link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WorkflowInstanceLink findByPrimaryKey(long workflowInstanceLinkId)
-		throws NoSuchWorkflowInstanceLinkException, SystemException {
-		WorkflowInstanceLink workflowInstanceLink = fetchByPrimaryKey(workflowInstanceLinkId);
-
-		if (workflowInstanceLink == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					workflowInstanceLinkId);
-			}
-
-			throw new NoSuchWorkflowInstanceLinkException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				workflowInstanceLinkId);
-		}
-
-		return workflowInstanceLink;
-	}
-
-	/**
-	 * Returns the workflow instance link with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the workflow instance link
-	 * @return the workflow instance link, or <code>null</code> if a workflow instance link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public WorkflowInstanceLink fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the workflow instance link with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param workflowInstanceLinkId the primary key of the workflow instance link
-	 * @return the workflow instance link, or <code>null</code> if a workflow instance link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WorkflowInstanceLink fetchByPrimaryKey(long workflowInstanceLinkId)
-		throws SystemException {
-		WorkflowInstanceLink workflowInstanceLink = (WorkflowInstanceLink)EntityCacheUtil.getResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
-				WorkflowInstanceLinkImpl.class, workflowInstanceLinkId);
-
-		if (workflowInstanceLink == _nullWorkflowInstanceLink) {
-			return null;
-		}
-
-		if (workflowInstanceLink == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				workflowInstanceLink = (WorkflowInstanceLink)session.get(WorkflowInstanceLinkImpl.class,
-						Long.valueOf(workflowInstanceLinkId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (workflowInstanceLink != null) {
-					cacheResult(workflowInstanceLink);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
-						WorkflowInstanceLinkImpl.class, workflowInstanceLinkId,
-						_nullWorkflowInstanceLink);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return workflowInstanceLink;
-	}
 
 	/**
 	 * Returns all the workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -962,6 +583,478 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 	}
 
 	/**
+	 * Removes all the workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_C_C_C(long groupId, long companyId, long classNameId,
+		long classPK) throws SystemException {
+		for (WorkflowInstanceLink workflowInstanceLink : findByG_C_C_C(
+				groupId, companyId, classNameId, classPK)) {
+			remove(workflowInstanceLink);
+		}
+	}
+
+	/**
+	 * Returns the number of workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the number of matching workflow instance links
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_C_C_C(long groupId, long companyId, long classNameId,
+		long classPK) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				groupId, companyId, classNameId, classPK
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_C_C_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(5);
+
+			query.append(_SQL_COUNT_WORKFLOWINSTANCELINK_WHERE);
+
+			query.append(_FINDER_COLUMN_G_C_C_C_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_C_C_C_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_G_C_C_C_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_G_C_C_C_CLASSPK_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C_C_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_C_C_C_GROUPID_2 = "workflowInstanceLink.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_C_C_C_COMPANYID_2 = "workflowInstanceLink.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_G_C_C_C_CLASSNAMEID_2 = "workflowInstanceLink.classNameId = ? AND ";
+	private static final String _FINDER_COLUMN_G_C_C_C_CLASSPK_2 = "workflowInstanceLink.classPK = ?";
+
+	/**
+	 * Caches the workflow instance link in the entity cache if it is enabled.
+	 *
+	 * @param workflowInstanceLink the workflow instance link
+	 */
+	public void cacheResult(WorkflowInstanceLink workflowInstanceLink) {
+		EntityCacheUtil.putResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowInstanceLinkImpl.class,
+			workflowInstanceLink.getPrimaryKey(), workflowInstanceLink);
+
+		workflowInstanceLink.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the workflow instance links in the entity cache if it is enabled.
+	 *
+	 * @param workflowInstanceLinks the workflow instance links
+	 */
+	public void cacheResult(List<WorkflowInstanceLink> workflowInstanceLinks) {
+		for (WorkflowInstanceLink workflowInstanceLink : workflowInstanceLinks) {
+			if (EntityCacheUtil.getResult(
+						WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+						WorkflowInstanceLinkImpl.class,
+						workflowInstanceLink.getPrimaryKey()) == null) {
+				cacheResult(workflowInstanceLink);
+			}
+			else {
+				workflowInstanceLink.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all workflow instance links.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(WorkflowInstanceLinkImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(WorkflowInstanceLinkImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the workflow instance link.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(WorkflowInstanceLink workflowInstanceLink) {
+		EntityCacheUtil.removeResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowInstanceLinkImpl.class, workflowInstanceLink.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<WorkflowInstanceLink> workflowInstanceLinks) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (WorkflowInstanceLink workflowInstanceLink : workflowInstanceLinks) {
+			EntityCacheUtil.removeResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+				WorkflowInstanceLinkImpl.class,
+				workflowInstanceLink.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new workflow instance link with the primary key. Does not add the workflow instance link to the database.
+	 *
+	 * @param workflowInstanceLinkId the primary key for the new workflow instance link
+	 * @return the new workflow instance link
+	 */
+	public WorkflowInstanceLink create(long workflowInstanceLinkId) {
+		WorkflowInstanceLink workflowInstanceLink = new WorkflowInstanceLinkImpl();
+
+		workflowInstanceLink.setNew(true);
+		workflowInstanceLink.setPrimaryKey(workflowInstanceLinkId);
+
+		return workflowInstanceLink;
+	}
+
+	/**
+	 * Removes the workflow instance link with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param workflowInstanceLinkId the primary key of the workflow instance link
+	 * @return the workflow instance link that was removed
+	 * @throws com.liferay.portal.NoSuchWorkflowInstanceLinkException if a workflow instance link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WorkflowInstanceLink remove(long workflowInstanceLinkId)
+		throws NoSuchWorkflowInstanceLinkException, SystemException {
+		return remove(Long.valueOf(workflowInstanceLinkId));
+	}
+
+	/**
+	 * Removes the workflow instance link with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the workflow instance link
+	 * @return the workflow instance link that was removed
+	 * @throws com.liferay.portal.NoSuchWorkflowInstanceLinkException if a workflow instance link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowInstanceLink remove(Serializable primaryKey)
+		throws NoSuchWorkflowInstanceLinkException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			WorkflowInstanceLink workflowInstanceLink = (WorkflowInstanceLink)session.get(WorkflowInstanceLinkImpl.class,
+					primaryKey);
+
+			if (workflowInstanceLink == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchWorkflowInstanceLinkException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(workflowInstanceLink);
+		}
+		catch (NoSuchWorkflowInstanceLinkException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected WorkflowInstanceLink removeImpl(
+		WorkflowInstanceLink workflowInstanceLink) throws SystemException {
+		workflowInstanceLink = toUnwrappedModel(workflowInstanceLink);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(workflowInstanceLink)) {
+				workflowInstanceLink = (WorkflowInstanceLink)session.get(WorkflowInstanceLinkImpl.class,
+						workflowInstanceLink.getPrimaryKeyObj());
+			}
+
+			if (workflowInstanceLink != null) {
+				session.delete(workflowInstanceLink);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (workflowInstanceLink != null) {
+			clearCache(workflowInstanceLink);
+		}
+
+		return workflowInstanceLink;
+	}
+
+	@Override
+	public WorkflowInstanceLink updateImpl(
+		com.liferay.portal.model.WorkflowInstanceLink workflowInstanceLink)
+		throws SystemException {
+		workflowInstanceLink = toUnwrappedModel(workflowInstanceLink);
+
+		boolean isNew = workflowInstanceLink.isNew();
+
+		WorkflowInstanceLinkModelImpl workflowInstanceLinkModelImpl = (WorkflowInstanceLinkModelImpl)workflowInstanceLink;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (workflowInstanceLink.isNew()) {
+				session.save(workflowInstanceLink);
+
+				workflowInstanceLink.setNew(false);
+			}
+			else {
+				session.merge(workflowInstanceLink);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !WorkflowInstanceLinkModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((workflowInstanceLinkModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(workflowInstanceLinkModelImpl.getOriginalGroupId()),
+						Long.valueOf(workflowInstanceLinkModelImpl.getOriginalCompanyId()),
+						Long.valueOf(workflowInstanceLinkModelImpl.getOriginalClassNameId()),
+						Long.valueOf(workflowInstanceLinkModelImpl.getOriginalClassPK())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(workflowInstanceLinkModelImpl.getGroupId()),
+						Long.valueOf(workflowInstanceLinkModelImpl.getCompanyId()),
+						Long.valueOf(workflowInstanceLinkModelImpl.getClassNameId()),
+						Long.valueOf(workflowInstanceLinkModelImpl.getClassPK())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowInstanceLinkImpl.class,
+			workflowInstanceLink.getPrimaryKey(), workflowInstanceLink);
+
+		return workflowInstanceLink;
+	}
+
+	protected WorkflowInstanceLink toUnwrappedModel(
+		WorkflowInstanceLink workflowInstanceLink) {
+		if (workflowInstanceLink instanceof WorkflowInstanceLinkImpl) {
+			return workflowInstanceLink;
+		}
+
+		WorkflowInstanceLinkImpl workflowInstanceLinkImpl = new WorkflowInstanceLinkImpl();
+
+		workflowInstanceLinkImpl.setNew(workflowInstanceLink.isNew());
+		workflowInstanceLinkImpl.setPrimaryKey(workflowInstanceLink.getPrimaryKey());
+
+		workflowInstanceLinkImpl.setWorkflowInstanceLinkId(workflowInstanceLink.getWorkflowInstanceLinkId());
+		workflowInstanceLinkImpl.setGroupId(workflowInstanceLink.getGroupId());
+		workflowInstanceLinkImpl.setCompanyId(workflowInstanceLink.getCompanyId());
+		workflowInstanceLinkImpl.setUserId(workflowInstanceLink.getUserId());
+		workflowInstanceLinkImpl.setUserName(workflowInstanceLink.getUserName());
+		workflowInstanceLinkImpl.setCreateDate(workflowInstanceLink.getCreateDate());
+		workflowInstanceLinkImpl.setModifiedDate(workflowInstanceLink.getModifiedDate());
+		workflowInstanceLinkImpl.setClassNameId(workflowInstanceLink.getClassNameId());
+		workflowInstanceLinkImpl.setClassPK(workflowInstanceLink.getClassPK());
+		workflowInstanceLinkImpl.setWorkflowInstanceId(workflowInstanceLink.getWorkflowInstanceId());
+
+		return workflowInstanceLinkImpl;
+	}
+
+	/**
+	 * Returns the workflow instance link with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the workflow instance link
+	 * @return the workflow instance link
+	 * @throws com.liferay.portal.NoSuchModelException if a workflow instance link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowInstanceLink findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the workflow instance link with the primary key or throws a {@link com.liferay.portal.NoSuchWorkflowInstanceLinkException} if it could not be found.
+	 *
+	 * @param workflowInstanceLinkId the primary key of the workflow instance link
+	 * @return the workflow instance link
+	 * @throws com.liferay.portal.NoSuchWorkflowInstanceLinkException if a workflow instance link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WorkflowInstanceLink findByPrimaryKey(long workflowInstanceLinkId)
+		throws NoSuchWorkflowInstanceLinkException, SystemException {
+		WorkflowInstanceLink workflowInstanceLink = fetchByPrimaryKey(workflowInstanceLinkId);
+
+		if (workflowInstanceLink == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					workflowInstanceLinkId);
+			}
+
+			throw new NoSuchWorkflowInstanceLinkException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				workflowInstanceLinkId);
+		}
+
+		return workflowInstanceLink;
+	}
+
+	/**
+	 * Returns the workflow instance link with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the workflow instance link
+	 * @return the workflow instance link, or <code>null</code> if a workflow instance link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowInstanceLink fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the workflow instance link with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param workflowInstanceLinkId the primary key of the workflow instance link
+	 * @return the workflow instance link, or <code>null</code> if a workflow instance link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WorkflowInstanceLink fetchByPrimaryKey(long workflowInstanceLinkId)
+		throws SystemException {
+		WorkflowInstanceLink workflowInstanceLink = (WorkflowInstanceLink)EntityCacheUtil.getResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+				WorkflowInstanceLinkImpl.class, workflowInstanceLinkId);
+
+		if (workflowInstanceLink == _nullWorkflowInstanceLink) {
+			return null;
+		}
+
+		if (workflowInstanceLink == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				workflowInstanceLink = (WorkflowInstanceLink)session.get(WorkflowInstanceLinkImpl.class,
+						Long.valueOf(workflowInstanceLinkId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (workflowInstanceLink != null) {
+					cacheResult(workflowInstanceLink);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+						WorkflowInstanceLinkImpl.class, workflowInstanceLinkId,
+						_nullWorkflowInstanceLink);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return workflowInstanceLink;
+	}
+
+	/**
 	 * Returns all the workflow instance links.
 	 *
 	 * @return the workflow instance links
@@ -1077,23 +1170,6 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 	}
 
 	/**
-	 * Removes all the workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_C_C_C(long groupId, long companyId, long classNameId,
-		long classPK) throws SystemException {
-		for (WorkflowInstanceLink workflowInstanceLink : findByG_C_C_C(
-				groupId, companyId, classNameId, classPK)) {
-			remove(workflowInstanceLink);
-		}
-	}
-
-	/**
 	 * Removes all the workflow instance links from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -1102,77 +1178,6 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 		for (WorkflowInstanceLink workflowInstanceLink : findAll()) {
 			remove(workflowInstanceLink);
 		}
-	}
-
-	/**
-	 * Returns the number of workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @return the number of matching workflow instance links
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_C_C_C(long groupId, long companyId, long classNameId,
-		long classPK) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, companyId, classNameId, classPK
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_C_C_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(5);
-
-			query.append(_SQL_COUNT_WORKFLOWINSTANCELINK_WHERE);
-
-			query.append(_FINDER_COLUMN_G_C_C_C_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_C_C_C_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_G_C_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_G_C_C_C_CLASSPK_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(companyId);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C_C_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1370,10 +1375,6 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 	private static final String _SQL_SELECT_WORKFLOWINSTANCELINK_WHERE = "SELECT workflowInstanceLink FROM WorkflowInstanceLink workflowInstanceLink WHERE ";
 	private static final String _SQL_COUNT_WORKFLOWINSTANCELINK = "SELECT COUNT(workflowInstanceLink) FROM WorkflowInstanceLink workflowInstanceLink";
 	private static final String _SQL_COUNT_WORKFLOWINSTANCELINK_WHERE = "SELECT COUNT(workflowInstanceLink) FROM WorkflowInstanceLink workflowInstanceLink WHERE ";
-	private static final String _FINDER_COLUMN_G_C_C_C_GROUPID_2 = "workflowInstanceLink.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_C_C_C_COMPANYID_2 = "workflowInstanceLink.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_G_C_C_C_CLASSNAMEID_2 = "workflowInstanceLink.classNameId = ? AND ";
-	private static final String _FINDER_COLUMN_G_C_C_C_CLASSPK_2 = "workflowInstanceLink.classPK = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "workflowInstanceLink.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No WorkflowInstanceLink exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No WorkflowInstanceLink exists with the key {";

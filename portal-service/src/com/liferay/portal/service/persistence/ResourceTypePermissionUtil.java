@@ -112,86 +112,6 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
-	* Caches the resource type permission in the entity cache if it is enabled.
-	*
-	* @param resourceTypePermission the resource type permission
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.ResourceTypePermission resourceTypePermission) {
-		getPersistence().cacheResult(resourceTypePermission);
-	}
-
-	/**
-	* Caches the resource type permissions in the entity cache if it is enabled.
-	*
-	* @param resourceTypePermissions the resource type permissions
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.ResourceTypePermission> resourceTypePermissions) {
-		getPersistence().cacheResult(resourceTypePermissions);
-	}
-
-	/**
-	* Creates a new resource type permission with the primary key. Does not add the resource type permission to the database.
-	*
-	* @param resourceTypePermissionId the primary key for the new resource type permission
-	* @return the new resource type permission
-	*/
-	public static com.liferay.portal.model.ResourceTypePermission create(
-		long resourceTypePermissionId) {
-		return getPersistence().create(resourceTypePermissionId);
-	}
-
-	/**
-	* Removes the resource type permission with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param resourceTypePermissionId the primary key of the resource type permission
-	* @return the resource type permission that was removed
-	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a resource type permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourceTypePermission remove(
-		long resourceTypePermissionId)
-		throws com.liferay.portal.NoSuchResourceTypePermissionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(resourceTypePermissionId);
-	}
-
-	public static com.liferay.portal.model.ResourceTypePermission updateImpl(
-		com.liferay.portal.model.ResourceTypePermission resourceTypePermission)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(resourceTypePermission);
-	}
-
-	/**
-	* Returns the resource type permission with the primary key or throws a {@link com.liferay.portal.NoSuchResourceTypePermissionException} if it could not be found.
-	*
-	* @param resourceTypePermissionId the primary key of the resource type permission
-	* @return the resource type permission
-	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a resource type permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourceTypePermission findByPrimaryKey(
-		long resourceTypePermissionId)
-		throws com.liferay.portal.NoSuchResourceTypePermissionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(resourceTypePermissionId);
-	}
-
-	/**
-	* Returns the resource type permission with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param resourceTypePermissionId the primary key of the resource type permission
-	* @return the resource type permission, or <code>null</code> if a resource type permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourceTypePermission fetchByPrimaryKey(
-		long resourceTypePermissionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(resourceTypePermissionId);
-	}
-
-	/**
 	* Returns all the resource type permissions where roleId = &#63;.
 	*
 	* @param roleId the role ID
@@ -326,6 +246,29 @@ public class ResourceTypePermissionUtil {
 		return getPersistence()
 				   .findByRoleId_PrevAndNext(resourceTypePermissionId, roleId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the resource type permissions where roleId = &#63; from the database.
+	*
+	* @param roleId the role ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByRoleId(long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByRoleId(roleId);
+	}
+
+	/**
+	* Returns the number of resource type permissions where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the number of matching resource type permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByRoleId(long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByRoleId(roleId);
 	}
 
 	/**
@@ -490,6 +433,33 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
+	* Removes all the resource type permissions where companyId = &#63; and name = &#63; and roleId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param roleId the role ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_N_R(long companyId, java.lang.String name,
+		long roleId) throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_N_R(companyId, name, roleId);
+	}
+
+	/**
+	* Returns the number of resource type permissions where companyId = &#63; and name = &#63; and roleId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param roleId the role ID
+	* @return the number of matching resource type permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_N_R(long companyId, java.lang.String name,
+		long roleId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_N_R(companyId, name, roleId);
+	}
+
+	/**
 	* Returns the resource type permission where companyId = &#63; and groupId = &#63; and name = &#63; and roleId = &#63; or throws a {@link com.liferay.portal.NoSuchResourceTypePermissionException} if it could not be found.
 	*
 	* @param companyId the company ID
@@ -544,6 +514,119 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
+	* Removes the resource type permission where companyId = &#63; and groupId = &#63; and name = &#63; and roleId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param name the name
+	* @param roleId the role ID
+	* @return the resource type permission that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission removeByC_G_N_R(
+		long companyId, long groupId, java.lang.String name, long roleId)
+		throws com.liferay.portal.NoSuchResourceTypePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByC_G_N_R(companyId, groupId, name, roleId);
+	}
+
+	/**
+	* Returns the number of resource type permissions where companyId = &#63; and groupId = &#63; and name = &#63; and roleId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param name the name
+	* @param roleId the role ID
+	* @return the number of matching resource type permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_G_N_R(long companyId, long groupId,
+		java.lang.String name, long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_G_N_R(companyId, groupId, name, roleId);
+	}
+
+	/**
+	* Caches the resource type permission in the entity cache if it is enabled.
+	*
+	* @param resourceTypePermission the resource type permission
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.ResourceTypePermission resourceTypePermission) {
+		getPersistence().cacheResult(resourceTypePermission);
+	}
+
+	/**
+	* Caches the resource type permissions in the entity cache if it is enabled.
+	*
+	* @param resourceTypePermissions the resource type permissions
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.ResourceTypePermission> resourceTypePermissions) {
+		getPersistence().cacheResult(resourceTypePermissions);
+	}
+
+	/**
+	* Creates a new resource type permission with the primary key. Does not add the resource type permission to the database.
+	*
+	* @param resourceTypePermissionId the primary key for the new resource type permission
+	* @return the new resource type permission
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission create(
+		long resourceTypePermissionId) {
+		return getPersistence().create(resourceTypePermissionId);
+	}
+
+	/**
+	* Removes the resource type permission with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param resourceTypePermissionId the primary key of the resource type permission
+	* @return the resource type permission that was removed
+	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a resource type permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission remove(
+		long resourceTypePermissionId)
+		throws com.liferay.portal.NoSuchResourceTypePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(resourceTypePermissionId);
+	}
+
+	public static com.liferay.portal.model.ResourceTypePermission updateImpl(
+		com.liferay.portal.model.ResourceTypePermission resourceTypePermission)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(resourceTypePermission);
+	}
+
+	/**
+	* Returns the resource type permission with the primary key or throws a {@link com.liferay.portal.NoSuchResourceTypePermissionException} if it could not be found.
+	*
+	* @param resourceTypePermissionId the primary key of the resource type permission
+	* @return the resource type permission
+	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a resource type permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission findByPrimaryKey(
+		long resourceTypePermissionId)
+		throws com.liferay.portal.NoSuchResourceTypePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(resourceTypePermissionId);
+	}
+
+	/**
+	* Returns the resource type permission with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param resourceTypePermissionId the primary key of the resource type permission
+	* @return the resource type permission, or <code>null</code> if a resource type permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission fetchByPrimaryKey(
+		long resourceTypePermissionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(resourceTypePermissionId);
+	}
+
+	/**
 	* Returns all the resource type permissions.
 	*
 	* @return the resource type permissions
@@ -593,47 +676,6 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
-	* Removes all the resource type permissions where roleId = &#63; from the database.
-	*
-	* @param roleId the role ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByRoleId(long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByRoleId(roleId);
-	}
-
-	/**
-	* Removes all the resource type permissions where companyId = &#63; and name = &#63; and roleId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param roleId the role ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_N_R(long companyId, java.lang.String name,
-		long roleId) throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_N_R(companyId, name, roleId);
-	}
-
-	/**
-	* Removes the resource type permission where companyId = &#63; and groupId = &#63; and name = &#63; and roleId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param groupId the group ID
-	* @param name the name
-	* @param roleId the role ID
-	* @return the resource type permission that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourceTypePermission removeByC_G_N_R(
-		long companyId, long groupId, java.lang.String name, long roleId)
-		throws com.liferay.portal.NoSuchResourceTypePermissionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByC_G_N_R(companyId, groupId, name, roleId);
-	}
-
-	/**
 	* Removes all the resource type permissions from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -641,48 +683,6 @@ public class ResourceTypePermissionUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of resource type permissions where roleId = &#63;.
-	*
-	* @param roleId the role ID
-	* @return the number of matching resource type permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByRoleId(long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByRoleId(roleId);
-	}
-
-	/**
-	* Returns the number of resource type permissions where companyId = &#63; and name = &#63; and roleId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @param roleId the role ID
-	* @return the number of matching resource type permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_N_R(long companyId, java.lang.String name,
-		long roleId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_N_R(companyId, name, roleId);
-	}
-
-	/**
-	* Returns the number of resource type permissions where companyId = &#63; and groupId = &#63; and name = &#63; and roleId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param groupId the group ID
-	* @param name the name
-	* @param roleId the role ID
-	* @return the number of matching resource type permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_G_N_R(long companyId, long groupId,
-		java.lang.String name, long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_G_N_R(companyId, groupId, name, roleId);
 	}
 
 	/**

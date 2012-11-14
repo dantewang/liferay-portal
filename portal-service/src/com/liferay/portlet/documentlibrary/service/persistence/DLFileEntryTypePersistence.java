@@ -38,72 +38,6 @@ public interface DLFileEntryTypePersistence extends BasePersistence<DLFileEntryT
 	 */
 
 	/**
-	* Caches the document library file entry type in the entity cache if it is enabled.
-	*
-	* @param dlFileEntryType the document library file entry type
-	*/
-	public void cacheResult(
-		com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType);
-
-	/**
-	* Caches the document library file entry types in the entity cache if it is enabled.
-	*
-	* @param dlFileEntryTypes the document library file entry types
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> dlFileEntryTypes);
-
-	/**
-	* Creates a new document library file entry type with the primary key. Does not add the document library file entry type to the database.
-	*
-	* @param fileEntryTypeId the primary key for the new document library file entry type
-	* @return the new document library file entry type
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileEntryType create(
-		long fileEntryTypeId);
-
-	/**
-	* Removes the document library file entry type with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param fileEntryTypeId the primary key of the document library file entry type
-	* @return the document library file entry type that was removed
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException if a document library file entry type with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileEntryType remove(
-		long fileEntryTypeId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException;
-
-	public com.liferay.portlet.documentlibrary.model.DLFileEntryType updateImpl(
-		com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the document library file entry type with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException} if it could not be found.
-	*
-	* @param fileEntryTypeId the primary key of the document library file entry type
-	* @return the document library file entry type
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException if a document library file entry type with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileEntryType findByPrimaryKey(
-		long fileEntryTypeId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException;
-
-	/**
-	* Returns the document library file entry type with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param fileEntryTypeId the primary key of the document library file entry type
-	* @return the document library file entry type, or <code>null</code> if a document library file entry type with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileEntryType fetchByPrimaryKey(
-		long fileEntryTypeId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the document library file entry types where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -223,6 +157,25 @@ public interface DLFileEntryTypePersistence extends BasePersistence<DLFileEntryT
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException;
 
 	/**
+	* Removes all the document library file entry types where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file entry types where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching document library file entry types
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the document library file entry type where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -259,6 +212,30 @@ public interface DLFileEntryTypePersistence extends BasePersistence<DLFileEntryT
 	*/
 	public com.liferay.portlet.documentlibrary.model.DLFileEntryType fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the document library file entry type where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the document library file entry type that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryType removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException;
+
+	/**
+	* Returns the number of document library file entry types where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching document library file entry types
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -387,6 +364,27 @@ public interface DLFileEntryTypePersistence extends BasePersistence<DLFileEntryT
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException;
+
+	/**
+	* Removes all the document library file entry types where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file entry types where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching document library file entry types
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the document library file entry types where groupId = &#63;.
@@ -669,6 +667,55 @@ public interface DLFileEntryTypePersistence extends BasePersistence<DLFileEntryT
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the document library file entry types where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file entry types where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching document library file entry types
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file entry types where groupId = any &#63;.
+	*
+	* @param groupIds the group IDs
+	* @return the number of matching document library file entry types
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long[] groupIds)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file entry types that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching document library file entry types that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file entry types that the user has permission to view where groupId = any &#63;.
+	*
+	* @param groupIds the group IDs
+	* @return the number of matching document library file entry types that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long[] groupIds)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the document library file entry type where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -705,6 +752,96 @@ public interface DLFileEntryTypePersistence extends BasePersistence<DLFileEntryT
 	*/
 	public com.liferay.portlet.documentlibrary.model.DLFileEntryType fetchByG_N(
 		long groupId, java.lang.String name, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the document library file entry type where groupId = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the document library file entry type that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryType removeByG_N(
+		long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException;
+
+	/**
+	* Returns the number of document library file entry types where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the number of matching document library file entry types
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_N(long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the document library file entry type in the entity cache if it is enabled.
+	*
+	* @param dlFileEntryType the document library file entry type
+	*/
+	public void cacheResult(
+		com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType);
+
+	/**
+	* Caches the document library file entry types in the entity cache if it is enabled.
+	*
+	* @param dlFileEntryTypes the document library file entry types
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> dlFileEntryTypes);
+
+	/**
+	* Creates a new document library file entry type with the primary key. Does not add the document library file entry type to the database.
+	*
+	* @param fileEntryTypeId the primary key for the new document library file entry type
+	* @return the new document library file entry type
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryType create(
+		long fileEntryTypeId);
+
+	/**
+	* Removes the document library file entry type with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param fileEntryTypeId the primary key of the document library file entry type
+	* @return the document library file entry type that was removed
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException if a document library file entry type with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryType remove(
+		long fileEntryTypeId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException;
+
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryType updateImpl(
+		com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the document library file entry type with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException} if it could not be found.
+	*
+	* @param fileEntryTypeId the primary key of the document library file entry type
+	* @return the document library file entry type
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException if a document library file entry type with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryType findByPrimaryKey(
+		long fileEntryTypeId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException;
+
+	/**
+	* Returns the document library file entry type with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param fileEntryTypeId the primary key of the document library file entry type
+	* @return the document library file entry type, or <code>null</code> if a document library file entry type with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryType fetchByPrimaryKey(
+		long fileEntryTypeId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -751,148 +888,11 @@ public interface DLFileEntryTypePersistence extends BasePersistence<DLFileEntryT
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the document library file entry types where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the document library file entry type where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the document library file entry type that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileEntryType removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException;
-
-	/**
-	* Removes all the document library file entry types where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the document library file entry types where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the document library file entry type where groupId = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the document library file entry type that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileEntryType removeByG_N(
-		long groupId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileEntryTypeException;
-
-	/**
 	* Removes all the document library file entry types from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file entry types where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching document library file entry types
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file entry types where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching document library file entry types
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file entry types where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching document library file entry types
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file entry types where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching document library file entry types
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file entry types where groupId = any &#63;.
-	*
-	* @param groupIds the group IDs
-	* @return the number of matching document library file entry types
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long[] groupIds)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file entry types that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching document library file entry types that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file entry types that the user has permission to view where groupId = any &#63;.
-	*
-	* @param groupIds the group IDs
-	* @return the number of matching document library file entry types that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long[] groupIds)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file entry types where groupId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the number of matching document library file entry types
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_N(long groupId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

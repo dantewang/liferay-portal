@@ -74,6 +74,17 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED,
+			LayoutSetBranchImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED,
+			LayoutSetBranchImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED,
 			LayoutSetBranchImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -95,513 +106,6 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED,
-			LayoutSetBranchImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByG_P",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED,
-			LayoutSetBranchImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			LayoutSetBranchModelImpl.GROUPID_COLUMN_BITMASK |
-			LayoutSetBranchModelImpl.PRIVATELAYOUT_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_G_P_N = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED,
-			LayoutSetBranchImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByG_P_N",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				String.class.getName()
-			},
-			LayoutSetBranchModelImpl.GROUPID_COLUMN_BITMASK |
-			LayoutSetBranchModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
-			LayoutSetBranchModelImpl.NAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_N = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_N",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				String.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED,
-			LayoutSetBranchImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED,
-			LayoutSetBranchImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the layout set branch in the entity cache if it is enabled.
-	 *
-	 * @param layoutSetBranch the layout set branch
-	 */
-	public void cacheResult(LayoutSetBranch layoutSetBranch) {
-		EntityCacheUtil.putResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutSetBranchImpl.class, layoutSetBranch.getPrimaryKey(),
-			layoutSetBranch);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_N,
-			new Object[] {
-				Long.valueOf(layoutSetBranch.getGroupId()),
-				Boolean.valueOf(layoutSetBranch.getPrivateLayout()),
-				
-			layoutSetBranch.getName()
-			}, layoutSetBranch);
-
-		layoutSetBranch.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the layout set branchs in the entity cache if it is enabled.
-	 *
-	 * @param layoutSetBranchs the layout set branchs
-	 */
-	public void cacheResult(List<LayoutSetBranch> layoutSetBranchs) {
-		for (LayoutSetBranch layoutSetBranch : layoutSetBranchs) {
-			if (EntityCacheUtil.getResult(
-						LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-						LayoutSetBranchImpl.class,
-						layoutSetBranch.getPrimaryKey()) == null) {
-				cacheResult(layoutSetBranch);
-			}
-			else {
-				layoutSetBranch.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all layout set branchs.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(LayoutSetBranchImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(LayoutSetBranchImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the layout set branch.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(LayoutSetBranch layoutSetBranch) {
-		EntityCacheUtil.removeResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutSetBranchImpl.class, layoutSetBranch.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(layoutSetBranch);
-	}
-
-	@Override
-	public void clearCache(List<LayoutSetBranch> layoutSetBranchs) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (LayoutSetBranch layoutSetBranch : layoutSetBranchs) {
-			EntityCacheUtil.removeResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-				LayoutSetBranchImpl.class, layoutSetBranch.getPrimaryKey());
-
-			clearUniqueFindersCache(layoutSetBranch);
-		}
-	}
-
-	protected void clearUniqueFindersCache(LayoutSetBranch layoutSetBranch) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_N,
-			new Object[] {
-				Long.valueOf(layoutSetBranch.getGroupId()),
-				Boolean.valueOf(layoutSetBranch.getPrivateLayout()),
-				
-			layoutSetBranch.getName()
-			});
-	}
-
-	/**
-	 * Creates a new layout set branch with the primary key. Does not add the layout set branch to the database.
-	 *
-	 * @param layoutSetBranchId the primary key for the new layout set branch
-	 * @return the new layout set branch
-	 */
-	public LayoutSetBranch create(long layoutSetBranchId) {
-		LayoutSetBranch layoutSetBranch = new LayoutSetBranchImpl();
-
-		layoutSetBranch.setNew(true);
-		layoutSetBranch.setPrimaryKey(layoutSetBranchId);
-
-		return layoutSetBranch;
-	}
-
-	/**
-	 * Removes the layout set branch with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param layoutSetBranchId the primary key of the layout set branch
-	 * @return the layout set branch that was removed
-	 * @throws com.liferay.portal.NoSuchLayoutSetBranchException if a layout set branch with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutSetBranch remove(long layoutSetBranchId)
-		throws NoSuchLayoutSetBranchException, SystemException {
-		return remove(Long.valueOf(layoutSetBranchId));
-	}
-
-	/**
-	 * Removes the layout set branch with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the layout set branch
-	 * @return the layout set branch that was removed
-	 * @throws com.liferay.portal.NoSuchLayoutSetBranchException if a layout set branch with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public LayoutSetBranch remove(Serializable primaryKey)
-		throws NoSuchLayoutSetBranchException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			LayoutSetBranch layoutSetBranch = (LayoutSetBranch)session.get(LayoutSetBranchImpl.class,
-					primaryKey);
-
-			if (layoutSetBranch == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchLayoutSetBranchException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(layoutSetBranch);
-		}
-		catch (NoSuchLayoutSetBranchException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected LayoutSetBranch removeImpl(LayoutSetBranch layoutSetBranch)
-		throws SystemException {
-		layoutSetBranch = toUnwrappedModel(layoutSetBranch);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(layoutSetBranch)) {
-				layoutSetBranch = (LayoutSetBranch)session.get(LayoutSetBranchImpl.class,
-						layoutSetBranch.getPrimaryKeyObj());
-			}
-
-			if (layoutSetBranch != null) {
-				session.delete(layoutSetBranch);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (layoutSetBranch != null) {
-			clearCache(layoutSetBranch);
-		}
-
-		return layoutSetBranch;
-	}
-
-	@Override
-	public LayoutSetBranch updateImpl(
-		com.liferay.portal.model.LayoutSetBranch layoutSetBranch)
-		throws SystemException {
-		layoutSetBranch = toUnwrappedModel(layoutSetBranch);
-
-		boolean isNew = layoutSetBranch.isNew();
-
-		LayoutSetBranchModelImpl layoutSetBranchModelImpl = (LayoutSetBranchModelImpl)layoutSetBranch;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (layoutSetBranch.isNew()) {
-				session.save(layoutSetBranch);
-
-				layoutSetBranch.setNew(false);
-			}
-			else {
-				session.merge(layoutSetBranch);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !LayoutSetBranchModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((layoutSetBranchModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(layoutSetBranchModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(layoutSetBranchModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((layoutSetBranchModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(layoutSetBranchModelImpl.getOriginalGroupId()),
-						Boolean.valueOf(layoutSetBranchModelImpl.getOriginalPrivateLayout())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(layoutSetBranchModelImpl.getGroupId()),
-						Boolean.valueOf(layoutSetBranchModelImpl.getPrivateLayout())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutSetBranchImpl.class, layoutSetBranch.getPrimaryKey(),
-			layoutSetBranch);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_N,
-				new Object[] {
-					Long.valueOf(layoutSetBranch.getGroupId()),
-					Boolean.valueOf(layoutSetBranch.getPrivateLayout()),
-					
-				layoutSetBranch.getName()
-				}, layoutSetBranch);
-		}
-		else {
-			if ((layoutSetBranchModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_G_P_N.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(layoutSetBranchModelImpl.getOriginalGroupId()),
-						Boolean.valueOf(layoutSetBranchModelImpl.getOriginalPrivateLayout()),
-						
-						layoutSetBranchModelImpl.getOriginalName()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_N, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_N, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_N,
-					new Object[] {
-						Long.valueOf(layoutSetBranch.getGroupId()),
-						Boolean.valueOf(layoutSetBranch.getPrivateLayout()),
-						
-					layoutSetBranch.getName()
-					}, layoutSetBranch);
-			}
-		}
-
-		return layoutSetBranch;
-	}
-
-	protected LayoutSetBranch toUnwrappedModel(LayoutSetBranch layoutSetBranch) {
-		if (layoutSetBranch instanceof LayoutSetBranchImpl) {
-			return layoutSetBranch;
-		}
-
-		LayoutSetBranchImpl layoutSetBranchImpl = new LayoutSetBranchImpl();
-
-		layoutSetBranchImpl.setNew(layoutSetBranch.isNew());
-		layoutSetBranchImpl.setPrimaryKey(layoutSetBranch.getPrimaryKey());
-
-		layoutSetBranchImpl.setLayoutSetBranchId(layoutSetBranch.getLayoutSetBranchId());
-		layoutSetBranchImpl.setGroupId(layoutSetBranch.getGroupId());
-		layoutSetBranchImpl.setCompanyId(layoutSetBranch.getCompanyId());
-		layoutSetBranchImpl.setUserId(layoutSetBranch.getUserId());
-		layoutSetBranchImpl.setUserName(layoutSetBranch.getUserName());
-		layoutSetBranchImpl.setCreateDate(layoutSetBranch.getCreateDate());
-		layoutSetBranchImpl.setModifiedDate(layoutSetBranch.getModifiedDate());
-		layoutSetBranchImpl.setPrivateLayout(layoutSetBranch.isPrivateLayout());
-		layoutSetBranchImpl.setName(layoutSetBranch.getName());
-		layoutSetBranchImpl.setDescription(layoutSetBranch.getDescription());
-		layoutSetBranchImpl.setMaster(layoutSetBranch.isMaster());
-		layoutSetBranchImpl.setLogo(layoutSetBranch.isLogo());
-		layoutSetBranchImpl.setLogoId(layoutSetBranch.getLogoId());
-		layoutSetBranchImpl.setThemeId(layoutSetBranch.getThemeId());
-		layoutSetBranchImpl.setColorSchemeId(layoutSetBranch.getColorSchemeId());
-		layoutSetBranchImpl.setWapThemeId(layoutSetBranch.getWapThemeId());
-		layoutSetBranchImpl.setWapColorSchemeId(layoutSetBranch.getWapColorSchemeId());
-		layoutSetBranchImpl.setCss(layoutSetBranch.getCss());
-		layoutSetBranchImpl.setSettings(layoutSetBranch.getSettings());
-		layoutSetBranchImpl.setLayoutSetPrototypeUuid(layoutSetBranch.getLayoutSetPrototypeUuid());
-		layoutSetBranchImpl.setLayoutSetPrototypeLinkEnabled(layoutSetBranch.isLayoutSetPrototypeLinkEnabled());
-
-		return layoutSetBranchImpl;
-	}
-
-	/**
-	 * Returns the layout set branch with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the layout set branch
-	 * @return the layout set branch
-	 * @throws com.liferay.portal.NoSuchModelException if a layout set branch with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public LayoutSetBranch findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the layout set branch with the primary key or throws a {@link com.liferay.portal.NoSuchLayoutSetBranchException} if it could not be found.
-	 *
-	 * @param layoutSetBranchId the primary key of the layout set branch
-	 * @return the layout set branch
-	 * @throws com.liferay.portal.NoSuchLayoutSetBranchException if a layout set branch with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutSetBranch findByPrimaryKey(long layoutSetBranchId)
-		throws NoSuchLayoutSetBranchException, SystemException {
-		LayoutSetBranch layoutSetBranch = fetchByPrimaryKey(layoutSetBranchId);
-
-		if (layoutSetBranch == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + layoutSetBranchId);
-			}
-
-			throw new NoSuchLayoutSetBranchException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				layoutSetBranchId);
-		}
-
-		return layoutSetBranch;
-	}
-
-	/**
-	 * Returns the layout set branch with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the layout set branch
-	 * @return the layout set branch, or <code>null</code> if a layout set branch with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public LayoutSetBranch fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the layout set branch with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param layoutSetBranchId the primary key of the layout set branch
-	 * @return the layout set branch, or <code>null</code> if a layout set branch with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutSetBranch fetchByPrimaryKey(long layoutSetBranchId)
-		throws SystemException {
-		LayoutSetBranch layoutSetBranch = (LayoutSetBranch)EntityCacheUtil.getResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-				LayoutSetBranchImpl.class, layoutSetBranchId);
-
-		if (layoutSetBranch == _nullLayoutSetBranch) {
-			return null;
-		}
-
-		if (layoutSetBranch == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				layoutSetBranch = (LayoutSetBranch)session.get(LayoutSetBranchImpl.class,
-						Long.valueOf(layoutSetBranchId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (layoutSetBranch != null) {
-					cacheResult(layoutSetBranch);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
-						LayoutSetBranchImpl.class, layoutSetBranchId,
-						_nullLayoutSetBranch);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return layoutSetBranch;
-	}
 
 	/**
 	 * Returns all the layout set branchs where groupId = &#63;.
@@ -1298,6 +802,142 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the layout set branchs where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (LayoutSetBranch layoutSetBranch : findByGroupId(groupId)) {
+			remove(layoutSetBranch);
+		}
+	}
+
+	/**
+	 * Returns the number of layout set branchs where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching layout set branchs
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_LAYOUTSETBRANCH_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of layout set branchs that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching layout set branchs that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_LAYOUTSETBRANCH_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				LayoutSetBranch.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "layoutSetBranch.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED,
+			LayoutSetBranchImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_P",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED,
+			LayoutSetBranchImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			LayoutSetBranchModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutSetBranchModelImpl.PRIVATELAYOUT_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
 	 * Returns all the layout set branchs where groupId = &#63; and privateLayout = &#63;.
@@ -2040,6 +1680,154 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 	}
 
 	/**
+	 * Removes all the layout set branchs where groupId = &#63; and privateLayout = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_P(long groupId, boolean privateLayout)
+		throws SystemException {
+		for (LayoutSetBranch layoutSetBranch : findByG_P(groupId, privateLayout)) {
+			remove(layoutSetBranch);
+		}
+	}
+
+	/**
+	 * Returns the number of layout set branchs where groupId = &#63; and privateLayout = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @return the number of matching layout set branchs
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P(long groupId, boolean privateLayout)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, privateLayout };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_P,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_LAYOUTSETBRANCH_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_PRIVATELAYOUT_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(privateLayout);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of layout set branchs that the user has permission to view where groupId = &#63; and privateLayout = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @return the number of matching layout set branchs that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P(long groupId, boolean privateLayout)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P(groupId, privateLayout);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_LAYOUTSETBRANCH_WHERE);
+
+		query.append(_FINDER_COLUMN_G_P_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_P_PRIVATELAYOUT_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				LayoutSetBranch.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(privateLayout);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_P_GROUPID_2 = "layoutSetBranch.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_PRIVATELAYOUT_2 = "layoutSetBranch.privateLayout = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_G_P_N = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED,
+			LayoutSetBranchImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByG_P_N",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				String.class.getName()
+			},
+			LayoutSetBranchModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutSetBranchModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			LayoutSetBranchModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_N = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_N",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				String.class.getName()
+			});
+
+	/**
 	 * Returns the layout set branch where groupId = &#63; and privateLayout = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutSetBranchException} if it could not be found.
 	 *
 	 * @param groupId the group ID
@@ -2216,6 +2004,562 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 	}
 
 	/**
+	 * Removes the layout set branch where groupId = &#63; and privateLayout = &#63; and name = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param name the name
+	 * @return the layout set branch that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutSetBranch removeByG_P_N(long groupId, boolean privateLayout,
+		String name) throws NoSuchLayoutSetBranchException, SystemException {
+		LayoutSetBranch layoutSetBranch = findByG_P_N(groupId, privateLayout,
+				name);
+
+		return remove(layoutSetBranch);
+	}
+
+	/**
+	 * Returns the number of layout set branchs where groupId = &#63; and privateLayout = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param name the name
+	 * @return the number of matching layout set branchs
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P_N(long groupId, boolean privateLayout, String name)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, privateLayout, name };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_P_N,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_LAYOUTSETBRANCH_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_N_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_N_PRIVATELAYOUT_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_G_P_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_P_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_P_N_NAME_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(privateLayout);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_N,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_P_N_GROUPID_2 = "layoutSetBranch.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_N_PRIVATELAYOUT_2 = "layoutSetBranch.privateLayout = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_N_NAME_1 = "layoutSetBranch.name IS NULL";
+	private static final String _FINDER_COLUMN_G_P_N_NAME_2 = "layoutSetBranch.name = ?";
+	private static final String _FINDER_COLUMN_G_P_N_NAME_3 = "(layoutSetBranch.name IS NULL OR layoutSetBranch.name = ?)";
+
+	/**
+	 * Caches the layout set branch in the entity cache if it is enabled.
+	 *
+	 * @param layoutSetBranch the layout set branch
+	 */
+	public void cacheResult(LayoutSetBranch layoutSetBranch) {
+		EntityCacheUtil.putResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutSetBranchImpl.class, layoutSetBranch.getPrimaryKey(),
+			layoutSetBranch);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_N,
+			new Object[] {
+				Long.valueOf(layoutSetBranch.getGroupId()),
+				Boolean.valueOf(layoutSetBranch.getPrivateLayout()),
+				
+			layoutSetBranch.getName()
+			}, layoutSetBranch);
+
+		layoutSetBranch.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the layout set branchs in the entity cache if it is enabled.
+	 *
+	 * @param layoutSetBranchs the layout set branchs
+	 */
+	public void cacheResult(List<LayoutSetBranch> layoutSetBranchs) {
+		for (LayoutSetBranch layoutSetBranch : layoutSetBranchs) {
+			if (EntityCacheUtil.getResult(
+						LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+						LayoutSetBranchImpl.class,
+						layoutSetBranch.getPrimaryKey()) == null) {
+				cacheResult(layoutSetBranch);
+			}
+			else {
+				layoutSetBranch.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all layout set branchs.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(LayoutSetBranchImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(LayoutSetBranchImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the layout set branch.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(LayoutSetBranch layoutSetBranch) {
+		EntityCacheUtil.removeResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutSetBranchImpl.class, layoutSetBranch.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(layoutSetBranch);
+	}
+
+	@Override
+	public void clearCache(List<LayoutSetBranch> layoutSetBranchs) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (LayoutSetBranch layoutSetBranch : layoutSetBranchs) {
+			EntityCacheUtil.removeResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+				LayoutSetBranchImpl.class, layoutSetBranch.getPrimaryKey());
+
+			clearUniqueFindersCache(layoutSetBranch);
+		}
+	}
+
+	protected void clearUniqueFindersCache(LayoutSetBranch layoutSetBranch) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_N,
+			new Object[] {
+				Long.valueOf(layoutSetBranch.getGroupId()),
+				Boolean.valueOf(layoutSetBranch.getPrivateLayout()),
+				
+			layoutSetBranch.getName()
+			});
+	}
+
+	/**
+	 * Creates a new layout set branch with the primary key. Does not add the layout set branch to the database.
+	 *
+	 * @param layoutSetBranchId the primary key for the new layout set branch
+	 * @return the new layout set branch
+	 */
+	public LayoutSetBranch create(long layoutSetBranchId) {
+		LayoutSetBranch layoutSetBranch = new LayoutSetBranchImpl();
+
+		layoutSetBranch.setNew(true);
+		layoutSetBranch.setPrimaryKey(layoutSetBranchId);
+
+		return layoutSetBranch;
+	}
+
+	/**
+	 * Removes the layout set branch with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param layoutSetBranchId the primary key of the layout set branch
+	 * @return the layout set branch that was removed
+	 * @throws com.liferay.portal.NoSuchLayoutSetBranchException if a layout set branch with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutSetBranch remove(long layoutSetBranchId)
+		throws NoSuchLayoutSetBranchException, SystemException {
+		return remove(Long.valueOf(layoutSetBranchId));
+	}
+
+	/**
+	 * Removes the layout set branch with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the layout set branch
+	 * @return the layout set branch that was removed
+	 * @throws com.liferay.portal.NoSuchLayoutSetBranchException if a layout set branch with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public LayoutSetBranch remove(Serializable primaryKey)
+		throws NoSuchLayoutSetBranchException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			LayoutSetBranch layoutSetBranch = (LayoutSetBranch)session.get(LayoutSetBranchImpl.class,
+					primaryKey);
+
+			if (layoutSetBranch == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchLayoutSetBranchException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(layoutSetBranch);
+		}
+		catch (NoSuchLayoutSetBranchException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected LayoutSetBranch removeImpl(LayoutSetBranch layoutSetBranch)
+		throws SystemException {
+		layoutSetBranch = toUnwrappedModel(layoutSetBranch);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(layoutSetBranch)) {
+				layoutSetBranch = (LayoutSetBranch)session.get(LayoutSetBranchImpl.class,
+						layoutSetBranch.getPrimaryKeyObj());
+			}
+
+			if (layoutSetBranch != null) {
+				session.delete(layoutSetBranch);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (layoutSetBranch != null) {
+			clearCache(layoutSetBranch);
+		}
+
+		return layoutSetBranch;
+	}
+
+	@Override
+	public LayoutSetBranch updateImpl(
+		com.liferay.portal.model.LayoutSetBranch layoutSetBranch)
+		throws SystemException {
+		layoutSetBranch = toUnwrappedModel(layoutSetBranch);
+
+		boolean isNew = layoutSetBranch.isNew();
+
+		LayoutSetBranchModelImpl layoutSetBranchModelImpl = (LayoutSetBranchModelImpl)layoutSetBranch;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (layoutSetBranch.isNew()) {
+				session.save(layoutSetBranch);
+
+				layoutSetBranch.setNew(false);
+			}
+			else {
+				session.merge(layoutSetBranch);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !LayoutSetBranchModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((layoutSetBranchModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(layoutSetBranchModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(layoutSetBranchModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+
+			if ((layoutSetBranchModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(layoutSetBranchModelImpl.getOriginalGroupId()),
+						Boolean.valueOf(layoutSetBranchModelImpl.getOriginalPrivateLayout())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(layoutSetBranchModelImpl.getGroupId()),
+						Boolean.valueOf(layoutSetBranchModelImpl.getPrivateLayout())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutSetBranchImpl.class, layoutSetBranch.getPrimaryKey(),
+			layoutSetBranch);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_N,
+				new Object[] {
+					Long.valueOf(layoutSetBranch.getGroupId()),
+					Boolean.valueOf(layoutSetBranch.getPrivateLayout()),
+					
+				layoutSetBranch.getName()
+				}, layoutSetBranch);
+		}
+		else {
+			if ((layoutSetBranchModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_G_P_N.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(layoutSetBranchModelImpl.getOriginalGroupId()),
+						Boolean.valueOf(layoutSetBranchModelImpl.getOriginalPrivateLayout()),
+						
+						layoutSetBranchModelImpl.getOriginalName()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_N, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_N, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_N,
+					new Object[] {
+						Long.valueOf(layoutSetBranch.getGroupId()),
+						Boolean.valueOf(layoutSetBranch.getPrivateLayout()),
+						
+					layoutSetBranch.getName()
+					}, layoutSetBranch);
+			}
+		}
+
+		return layoutSetBranch;
+	}
+
+	protected LayoutSetBranch toUnwrappedModel(LayoutSetBranch layoutSetBranch) {
+		if (layoutSetBranch instanceof LayoutSetBranchImpl) {
+			return layoutSetBranch;
+		}
+
+		LayoutSetBranchImpl layoutSetBranchImpl = new LayoutSetBranchImpl();
+
+		layoutSetBranchImpl.setNew(layoutSetBranch.isNew());
+		layoutSetBranchImpl.setPrimaryKey(layoutSetBranch.getPrimaryKey());
+
+		layoutSetBranchImpl.setLayoutSetBranchId(layoutSetBranch.getLayoutSetBranchId());
+		layoutSetBranchImpl.setGroupId(layoutSetBranch.getGroupId());
+		layoutSetBranchImpl.setCompanyId(layoutSetBranch.getCompanyId());
+		layoutSetBranchImpl.setUserId(layoutSetBranch.getUserId());
+		layoutSetBranchImpl.setUserName(layoutSetBranch.getUserName());
+		layoutSetBranchImpl.setCreateDate(layoutSetBranch.getCreateDate());
+		layoutSetBranchImpl.setModifiedDate(layoutSetBranch.getModifiedDate());
+		layoutSetBranchImpl.setPrivateLayout(layoutSetBranch.isPrivateLayout());
+		layoutSetBranchImpl.setName(layoutSetBranch.getName());
+		layoutSetBranchImpl.setDescription(layoutSetBranch.getDescription());
+		layoutSetBranchImpl.setMaster(layoutSetBranch.isMaster());
+		layoutSetBranchImpl.setLogo(layoutSetBranch.isLogo());
+		layoutSetBranchImpl.setLogoId(layoutSetBranch.getLogoId());
+		layoutSetBranchImpl.setThemeId(layoutSetBranch.getThemeId());
+		layoutSetBranchImpl.setColorSchemeId(layoutSetBranch.getColorSchemeId());
+		layoutSetBranchImpl.setWapThemeId(layoutSetBranch.getWapThemeId());
+		layoutSetBranchImpl.setWapColorSchemeId(layoutSetBranch.getWapColorSchemeId());
+		layoutSetBranchImpl.setCss(layoutSetBranch.getCss());
+		layoutSetBranchImpl.setSettings(layoutSetBranch.getSettings());
+		layoutSetBranchImpl.setLayoutSetPrototypeUuid(layoutSetBranch.getLayoutSetPrototypeUuid());
+		layoutSetBranchImpl.setLayoutSetPrototypeLinkEnabled(layoutSetBranch.isLayoutSetPrototypeLinkEnabled());
+
+		return layoutSetBranchImpl;
+	}
+
+	/**
+	 * Returns the layout set branch with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the layout set branch
+	 * @return the layout set branch
+	 * @throws com.liferay.portal.NoSuchModelException if a layout set branch with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public LayoutSetBranch findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the layout set branch with the primary key or throws a {@link com.liferay.portal.NoSuchLayoutSetBranchException} if it could not be found.
+	 *
+	 * @param layoutSetBranchId the primary key of the layout set branch
+	 * @return the layout set branch
+	 * @throws com.liferay.portal.NoSuchLayoutSetBranchException if a layout set branch with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutSetBranch findByPrimaryKey(long layoutSetBranchId)
+		throws NoSuchLayoutSetBranchException, SystemException {
+		LayoutSetBranch layoutSetBranch = fetchByPrimaryKey(layoutSetBranchId);
+
+		if (layoutSetBranch == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + layoutSetBranchId);
+			}
+
+			throw new NoSuchLayoutSetBranchException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				layoutSetBranchId);
+		}
+
+		return layoutSetBranch;
+	}
+
+	/**
+	 * Returns the layout set branch with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the layout set branch
+	 * @return the layout set branch, or <code>null</code> if a layout set branch with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public LayoutSetBranch fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the layout set branch with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param layoutSetBranchId the primary key of the layout set branch
+	 * @return the layout set branch, or <code>null</code> if a layout set branch with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutSetBranch fetchByPrimaryKey(long layoutSetBranchId)
+		throws SystemException {
+		LayoutSetBranch layoutSetBranch = (LayoutSetBranch)EntityCacheUtil.getResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+				LayoutSetBranchImpl.class, layoutSetBranchId);
+
+		if (layoutSetBranch == _nullLayoutSetBranch) {
+			return null;
+		}
+
+		if (layoutSetBranch == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				layoutSetBranch = (LayoutSetBranch)session.get(LayoutSetBranchImpl.class,
+						Long.valueOf(layoutSetBranchId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (layoutSetBranch != null) {
+					cacheResult(layoutSetBranch);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
+						LayoutSetBranchImpl.class, layoutSetBranchId,
+						_nullLayoutSetBranch);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return layoutSetBranch;
+	}
+
+	/**
 	 * Returns all the layout set branchs.
 	 *
 	 * @return the layout set branchs
@@ -2331,49 +2675,6 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 	}
 
 	/**
-	 * Removes all the layout set branchs where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (LayoutSetBranch layoutSetBranch : findByGroupId(groupId)) {
-			remove(layoutSetBranch);
-		}
-	}
-
-	/**
-	 * Removes all the layout set branchs where groupId = &#63; and privateLayout = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_P(long groupId, boolean privateLayout)
-		throws SystemException {
-		for (LayoutSetBranch layoutSetBranch : findByG_P(groupId, privateLayout)) {
-			remove(layoutSetBranch);
-		}
-	}
-
-	/**
-	 * Removes the layout set branch where groupId = &#63; and privateLayout = &#63; and name = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param name the name
-	 * @return the layout set branch that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutSetBranch removeByG_P_N(long groupId, boolean privateLayout,
-		String name) throws NoSuchLayoutSetBranchException, SystemException {
-		LayoutSetBranch layoutSetBranch = findByG_P_N(groupId, privateLayout,
-				name);
-
-		return remove(layoutSetBranch);
-	}
-
-	/**
 	 * Removes all the layout set branchs from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2382,296 +2683,6 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 		for (LayoutSetBranch layoutSetBranch : findAll()) {
 			remove(layoutSetBranch);
 		}
-	}
-
-	/**
-	 * Returns the number of layout set branchs where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching layout set branchs
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_LAYOUTSETBRANCH_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of layout set branchs that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching layout set branchs that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_LAYOUTSETBRANCH_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				LayoutSetBranch.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of layout set branchs where groupId = &#63; and privateLayout = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @return the number of matching layout set branchs
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P(long groupId, boolean privateLayout)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, privateLayout };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_P,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_LAYOUTSETBRANCH_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_PRIVATELAYOUT_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(privateLayout);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of layout set branchs that the user has permission to view where groupId = &#63; and privateLayout = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @return the number of matching layout set branchs that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P(long groupId, boolean privateLayout)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P(groupId, privateLayout);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_LAYOUTSETBRANCH_WHERE);
-
-		query.append(_FINDER_COLUMN_G_P_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_P_PRIVATELAYOUT_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				LayoutSetBranch.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(privateLayout);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of layout set branchs where groupId = &#63; and privateLayout = &#63; and name = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param name the name
-	 * @return the number of matching layout set branchs
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P_N(long groupId, boolean privateLayout, String name)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, privateLayout, name };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_P_N,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_LAYOUTSETBRANCH_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_N_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_N_PRIVATELAYOUT_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_G_P_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_P_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_P_N_NAME_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(privateLayout);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_N,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -2869,14 +2880,6 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 	private static final String _SQL_SELECT_LAYOUTSETBRANCH_WHERE = "SELECT layoutSetBranch FROM LayoutSetBranch layoutSetBranch WHERE ";
 	private static final String _SQL_COUNT_LAYOUTSETBRANCH = "SELECT COUNT(layoutSetBranch) FROM LayoutSetBranch layoutSetBranch";
 	private static final String _SQL_COUNT_LAYOUTSETBRANCH_WHERE = "SELECT COUNT(layoutSetBranch) FROM LayoutSetBranch layoutSetBranch WHERE ";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "layoutSetBranch.groupId = ?";
-	private static final String _FINDER_COLUMN_G_P_GROUPID_2 = "layoutSetBranch.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_PRIVATELAYOUT_2 = "layoutSetBranch.privateLayout = ?";
-	private static final String _FINDER_COLUMN_G_P_N_GROUPID_2 = "layoutSetBranch.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_N_PRIVATELAYOUT_2 = "layoutSetBranch.privateLayout = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_N_NAME_1 = "layoutSetBranch.name IS NULL";
-	private static final String _FINDER_COLUMN_G_P_N_NAME_2 = "layoutSetBranch.name = ?";
-	private static final String _FINDER_COLUMN_G_P_N_NAME_3 = "(layoutSetBranch.name IS NULL OR layoutSetBranch.name = ?)";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "layoutSetBranch.layoutSetBranchId";
 	private static final String _FILTER_SQL_SELECT_LAYOUTSETBRANCH_WHERE = "SELECT DISTINCT {layoutSetBranch.*} FROM LayoutSetBranch layoutSetBranch WHERE ";
 	private static final String _FILTER_SQL_SELECT_LAYOUTSETBRANCH_NO_INLINE_DISTINCT_WHERE_1 =

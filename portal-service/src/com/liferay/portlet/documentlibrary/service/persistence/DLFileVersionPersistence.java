@@ -38,72 +38,6 @@ public interface DLFileVersionPersistence extends BasePersistence<DLFileVersion>
 	 */
 
 	/**
-	* Caches the document library file version in the entity cache if it is enabled.
-	*
-	* @param dlFileVersion the document library file version
-	*/
-	public void cacheResult(
-		com.liferay.portlet.documentlibrary.model.DLFileVersion dlFileVersion);
-
-	/**
-	* Caches the document library file versions in the entity cache if it is enabled.
-	*
-	* @param dlFileVersions the document library file versions
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.documentlibrary.model.DLFileVersion> dlFileVersions);
-
-	/**
-	* Creates a new document library file version with the primary key. Does not add the document library file version to the database.
-	*
-	* @param fileVersionId the primary key for the new document library file version
-	* @return the new document library file version
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileVersion create(
-		long fileVersionId);
-
-	/**
-	* Removes the document library file version with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param fileVersionId the primary key of the document library file version
-	* @return the document library file version that was removed
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileVersionException if a document library file version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileVersion remove(
-		long fileVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
-
-	public com.liferay.portlet.documentlibrary.model.DLFileVersion updateImpl(
-		com.liferay.portlet.documentlibrary.model.DLFileVersion dlFileVersion)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the document library file version with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileVersionException} if it could not be found.
-	*
-	* @param fileVersionId the primary key of the document library file version
-	* @return the document library file version
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileVersionException if a document library file version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileVersion findByPrimaryKey(
-		long fileVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
-
-	/**
-	* Returns the document library file version with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param fileVersionId the primary key of the document library file version
-	* @return the document library file version, or <code>null</code> if a document library file version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileVersion fetchByPrimaryKey(
-		long fileVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the document library file versions where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -223,6 +157,25 @@ public interface DLFileVersionPersistence extends BasePersistence<DLFileVersion>
 			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
 
 	/**
+	* Removes all the document library file versions where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file versions where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching document library file versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the document library file version where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileVersionException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -259,6 +212,30 @@ public interface DLFileVersionPersistence extends BasePersistence<DLFileVersion>
 	*/
 	public com.liferay.portlet.documentlibrary.model.DLFileVersion fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the document library file version where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the document library file version that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileVersion removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
+
+	/**
+	* Returns the number of document library file versions where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching document library file versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -389,6 +366,27 @@ public interface DLFileVersionPersistence extends BasePersistence<DLFileVersion>
 			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
 
 	/**
+	* Removes all the document library file versions where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file versions where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching document library file versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the document library file versions where fileEntryId = &#63;.
 	*
 	* @param fileEntryId the file entry ID
@@ -508,6 +506,25 @@ public interface DLFileVersionPersistence extends BasePersistence<DLFileVersion>
 			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
 
 	/**
+	* Removes all the document library file versions where fileEntryId = &#63; from the database.
+	*
+	* @param fileEntryId the file entry ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByFileEntryId(long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file versions where fileEntryId = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @return the number of matching document library file versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByFileEntryId(long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the document library file version where fileEntryId = &#63; and version = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileVersionException} if it could not be found.
 	*
 	* @param fileEntryId the file entry ID
@@ -544,6 +561,30 @@ public interface DLFileVersionPersistence extends BasePersistence<DLFileVersion>
 	*/
 	public com.liferay.portlet.documentlibrary.model.DLFileVersion fetchByF_V(
 		long fileEntryId, java.lang.String version, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the document library file version where fileEntryId = &#63; and version = &#63; from the database.
+	*
+	* @param fileEntryId the file entry ID
+	* @param version the version
+	* @return the document library file version that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileVersion removeByF_V(
+		long fileEntryId, java.lang.String version)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
+
+	/**
+	* Returns the number of document library file versions where fileEntryId = &#63; and version = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @param version the version
+	* @return the number of matching document library file versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByF_V(long fileEntryId, java.lang.String version)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -672,6 +713,27 @@ public interface DLFileVersionPersistence extends BasePersistence<DLFileVersion>
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
+
+	/**
+	* Removes all the document library file versions where fileEntryId = &#63; and status = &#63; from the database.
+	*
+	* @param fileEntryId the file entry ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByF_S(long fileEntryId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file versions where fileEntryId = &#63; and status = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @param status the status
+	* @return the number of matching document library file versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByF_S(long fileEntryId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the document library file versions where groupId = &#63; and folderId = &#63; and status = &#63;.
@@ -807,6 +869,29 @@ public interface DLFileVersionPersistence extends BasePersistence<DLFileVersion>
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
+
+	/**
+	* Removes all the document library file versions where groupId = &#63; and folderId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_F_S(long groupId, long folderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file versions where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @return the number of matching document library file versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_F_S(long groupId, long folderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the document library file versions where groupId = &#63; and folderId = &#63; and title = &#63; and version = &#63;.
@@ -960,6 +1045,99 @@ public interface DLFileVersionPersistence extends BasePersistence<DLFileVersion>
 			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
 
 	/**
+	* Removes all the document library file versions where groupId = &#63; and folderId = &#63; and title = &#63; and version = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param title the title
+	* @param version the version
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_F_T_V(long groupId, long folderId,
+		java.lang.String title, java.lang.String version)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of document library file versions where groupId = &#63; and folderId = &#63; and title = &#63; and version = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param title the title
+	* @param version the version
+	* @return the number of matching document library file versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_F_T_V(long groupId, long folderId,
+		java.lang.String title, java.lang.String version)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the document library file version in the entity cache if it is enabled.
+	*
+	* @param dlFileVersion the document library file version
+	*/
+	public void cacheResult(
+		com.liferay.portlet.documentlibrary.model.DLFileVersion dlFileVersion);
+
+	/**
+	* Caches the document library file versions in the entity cache if it is enabled.
+	*
+	* @param dlFileVersions the document library file versions
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.documentlibrary.model.DLFileVersion> dlFileVersions);
+
+	/**
+	* Creates a new document library file version with the primary key. Does not add the document library file version to the database.
+	*
+	* @param fileVersionId the primary key for the new document library file version
+	* @return the new document library file version
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileVersion create(
+		long fileVersionId);
+
+	/**
+	* Removes the document library file version with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param fileVersionId the primary key of the document library file version
+	* @return the document library file version that was removed
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileVersionException if a document library file version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileVersion remove(
+		long fileVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
+
+	public com.liferay.portlet.documentlibrary.model.DLFileVersion updateImpl(
+		com.liferay.portlet.documentlibrary.model.DLFileVersion dlFileVersion)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the document library file version with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileVersionException} if it could not be found.
+	*
+	* @param fileVersionId the primary key of the document library file version
+	* @return the document library file version
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileVersionException if a document library file version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileVersion findByPrimaryKey(
+		long fileVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
+
+	/**
+	* Returns the document library file version with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param fileVersionId the primary key of the document library file version
+	* @return the document library file version, or <code>null</code> if a document library file version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileVersion fetchByPrimaryKey(
+		long fileVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the document library file versions.
 	*
 	* @return the document library file versions
@@ -1003,189 +1181,11 @@ public interface DLFileVersionPersistence extends BasePersistence<DLFileVersion>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the document library file versions where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the document library file version where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the document library file version that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileVersion removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
-
-	/**
-	* Removes all the document library file versions where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the document library file versions where fileEntryId = &#63; from the database.
-	*
-	* @param fileEntryId the file entry ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByFileEntryId(long fileEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the document library file version where fileEntryId = &#63; and version = &#63; from the database.
-	*
-	* @param fileEntryId the file entry ID
-	* @param version the version
-	* @return the document library file version that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileVersion removeByF_V(
-		long fileEntryId, java.lang.String version)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
-
-	/**
-	* Removes all the document library file versions where fileEntryId = &#63; and status = &#63; from the database.
-	*
-	* @param fileEntryId the file entry ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByF_S(long fileEntryId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the document library file versions where groupId = &#63; and folderId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_F_S(long groupId, long folderId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the document library file versions where groupId = &#63; and folderId = &#63; and title = &#63; and version = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param title the title
-	* @param version the version
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_F_T_V(long groupId, long folderId,
-		java.lang.String title, java.lang.String version)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the document library file versions from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file versions where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching document library file versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file versions where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching document library file versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file versions where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching document library file versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file versions where fileEntryId = &#63;.
-	*
-	* @param fileEntryId the file entry ID
-	* @return the number of matching document library file versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByFileEntryId(long fileEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file versions where fileEntryId = &#63; and version = &#63;.
-	*
-	* @param fileEntryId the file entry ID
-	* @param version the version
-	* @return the number of matching document library file versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByF_V(long fileEntryId, java.lang.String version)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file versions where fileEntryId = &#63; and status = &#63;.
-	*
-	* @param fileEntryId the file entry ID
-	* @param status the status
-	* @return the number of matching document library file versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByF_S(long fileEntryId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file versions where groupId = &#63; and folderId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param status the status
-	* @return the number of matching document library file versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_F_S(long groupId, long folderId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of document library file versions where groupId = &#63; and folderId = &#63; and title = &#63; and version = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param title the title
-	* @param version the version
-	* @return the number of matching document library file versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_F_T_V(long groupId, long folderId,
-		java.lang.String title, java.lang.String version)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

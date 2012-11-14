@@ -73,6 +73,17 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderItemModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingOrderItemImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderItemModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingOrderItemImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ORDERID = new FinderPath(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderItemModelImpl.FINDER_CACHE_ENABLED,
 			ShoppingOrderItemImpl.class,
@@ -94,388 +105,6 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 			ShoppingOrderItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByOrderId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderItemModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingOrderItemImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderItemModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingOrderItemImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the shopping order item in the entity cache if it is enabled.
-	 *
-	 * @param shoppingOrderItem the shopping order item
-	 */
-	public void cacheResult(ShoppingOrderItem shoppingOrderItem) {
-		EntityCacheUtil.putResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderItemImpl.class, shoppingOrderItem.getPrimaryKey(),
-			shoppingOrderItem);
-
-		shoppingOrderItem.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the shopping order items in the entity cache if it is enabled.
-	 *
-	 * @param shoppingOrderItems the shopping order items
-	 */
-	public void cacheResult(List<ShoppingOrderItem> shoppingOrderItems) {
-		for (ShoppingOrderItem shoppingOrderItem : shoppingOrderItems) {
-			if (EntityCacheUtil.getResult(
-						ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingOrderItemImpl.class,
-						shoppingOrderItem.getPrimaryKey()) == null) {
-				cacheResult(shoppingOrderItem);
-			}
-			else {
-				shoppingOrderItem.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all shopping order items.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(ShoppingOrderItemImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(ShoppingOrderItemImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the shopping order item.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(ShoppingOrderItem shoppingOrderItem) {
-		EntityCacheUtil.removeResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderItemImpl.class, shoppingOrderItem.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<ShoppingOrderItem> shoppingOrderItems) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (ShoppingOrderItem shoppingOrderItem : shoppingOrderItems) {
-			EntityCacheUtil.removeResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
-				ShoppingOrderItemImpl.class, shoppingOrderItem.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new shopping order item with the primary key. Does not add the shopping order item to the database.
-	 *
-	 * @param orderItemId the primary key for the new shopping order item
-	 * @return the new shopping order item
-	 */
-	public ShoppingOrderItem create(long orderItemId) {
-		ShoppingOrderItem shoppingOrderItem = new ShoppingOrderItemImpl();
-
-		shoppingOrderItem.setNew(true);
-		shoppingOrderItem.setPrimaryKey(orderItemId);
-
-		return shoppingOrderItem;
-	}
-
-	/**
-	 * Removes the shopping order item with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param orderItemId the primary key of the shopping order item
-	 * @return the shopping order item that was removed
-	 * @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrderItem remove(long orderItemId)
-		throws NoSuchOrderItemException, SystemException {
-		return remove(Long.valueOf(orderItemId));
-	}
-
-	/**
-	 * Removes the shopping order item with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the shopping order item
-	 * @return the shopping order item that was removed
-	 * @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingOrderItem remove(Serializable primaryKey)
-		throws NoSuchOrderItemException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			ShoppingOrderItem shoppingOrderItem = (ShoppingOrderItem)session.get(ShoppingOrderItemImpl.class,
-					primaryKey);
-
-			if (shoppingOrderItem == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchOrderItemException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(shoppingOrderItem);
-		}
-		catch (NoSuchOrderItemException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected ShoppingOrderItem removeImpl(ShoppingOrderItem shoppingOrderItem)
-		throws SystemException {
-		shoppingOrderItem = toUnwrappedModel(shoppingOrderItem);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(shoppingOrderItem)) {
-				shoppingOrderItem = (ShoppingOrderItem)session.get(ShoppingOrderItemImpl.class,
-						shoppingOrderItem.getPrimaryKeyObj());
-			}
-
-			if (shoppingOrderItem != null) {
-				session.delete(shoppingOrderItem);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (shoppingOrderItem != null) {
-			clearCache(shoppingOrderItem);
-		}
-
-		return shoppingOrderItem;
-	}
-
-	@Override
-	public ShoppingOrderItem updateImpl(
-		com.liferay.portlet.shopping.model.ShoppingOrderItem shoppingOrderItem)
-		throws SystemException {
-		shoppingOrderItem = toUnwrappedModel(shoppingOrderItem);
-
-		boolean isNew = shoppingOrderItem.isNew();
-
-		ShoppingOrderItemModelImpl shoppingOrderItemModelImpl = (ShoppingOrderItemModelImpl)shoppingOrderItem;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (shoppingOrderItem.isNew()) {
-				session.save(shoppingOrderItem);
-
-				shoppingOrderItem.setNew(false);
-			}
-			else {
-				session.merge(shoppingOrderItem);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !ShoppingOrderItemModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((shoppingOrderItemModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(shoppingOrderItemModelImpl.getOriginalOrderId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORDERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(shoppingOrderItemModelImpl.getOrderId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORDERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingOrderItemImpl.class, shoppingOrderItem.getPrimaryKey(),
-			shoppingOrderItem);
-
-		return shoppingOrderItem;
-	}
-
-	protected ShoppingOrderItem toUnwrappedModel(
-		ShoppingOrderItem shoppingOrderItem) {
-		if (shoppingOrderItem instanceof ShoppingOrderItemImpl) {
-			return shoppingOrderItem;
-		}
-
-		ShoppingOrderItemImpl shoppingOrderItemImpl = new ShoppingOrderItemImpl();
-
-		shoppingOrderItemImpl.setNew(shoppingOrderItem.isNew());
-		shoppingOrderItemImpl.setPrimaryKey(shoppingOrderItem.getPrimaryKey());
-
-		shoppingOrderItemImpl.setOrderItemId(shoppingOrderItem.getOrderItemId());
-		shoppingOrderItemImpl.setOrderId(shoppingOrderItem.getOrderId());
-		shoppingOrderItemImpl.setItemId(shoppingOrderItem.getItemId());
-		shoppingOrderItemImpl.setSku(shoppingOrderItem.getSku());
-		shoppingOrderItemImpl.setName(shoppingOrderItem.getName());
-		shoppingOrderItemImpl.setDescription(shoppingOrderItem.getDescription());
-		shoppingOrderItemImpl.setProperties(shoppingOrderItem.getProperties());
-		shoppingOrderItemImpl.setPrice(shoppingOrderItem.getPrice());
-		shoppingOrderItemImpl.setQuantity(shoppingOrderItem.getQuantity());
-		shoppingOrderItemImpl.setShippedDate(shoppingOrderItem.getShippedDate());
-
-		return shoppingOrderItemImpl;
-	}
-
-	/**
-	 * Returns the shopping order item with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the shopping order item
-	 * @return the shopping order item
-	 * @throws com.liferay.portal.NoSuchModelException if a shopping order item with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingOrderItem findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the shopping order item with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchOrderItemException} if it could not be found.
-	 *
-	 * @param orderItemId the primary key of the shopping order item
-	 * @return the shopping order item
-	 * @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrderItem findByPrimaryKey(long orderItemId)
-		throws NoSuchOrderItemException, SystemException {
-		ShoppingOrderItem shoppingOrderItem = fetchByPrimaryKey(orderItemId);
-
-		if (shoppingOrderItem == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + orderItemId);
-			}
-
-			throw new NoSuchOrderItemException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				orderItemId);
-		}
-
-		return shoppingOrderItem;
-	}
-
-	/**
-	 * Returns the shopping order item with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the shopping order item
-	 * @return the shopping order item, or <code>null</code> if a shopping order item with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingOrderItem fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the shopping order item with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param orderItemId the primary key of the shopping order item
-	 * @return the shopping order item, or <code>null</code> if a shopping order item with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrderItem fetchByPrimaryKey(long orderItemId)
-		throws SystemException {
-		ShoppingOrderItem shoppingOrderItem = (ShoppingOrderItem)EntityCacheUtil.getResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
-				ShoppingOrderItemImpl.class, orderItemId);
-
-		if (shoppingOrderItem == _nullShoppingOrderItem) {
-			return null;
-		}
-
-		if (shoppingOrderItem == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				shoppingOrderItem = (ShoppingOrderItem)session.get(ShoppingOrderItemImpl.class,
-						Long.valueOf(orderItemId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (shoppingOrderItem != null) {
-					cacheResult(shoppingOrderItem);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingOrderItemImpl.class, orderItemId,
-						_nullShoppingOrderItem);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return shoppingOrderItem;
-	}
 
 	/**
 	 * Returns all the shopping order items where orderId = &#63;.
@@ -860,6 +489,444 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 	}
 
 	/**
+	 * Removes all the shopping order items where orderId = &#63; from the database.
+	 *
+	 * @param orderId the order ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByOrderId(long orderId) throws SystemException {
+		for (ShoppingOrderItem shoppingOrderItem : findByOrderId(orderId)) {
+			remove(shoppingOrderItem);
+		}
+	}
+
+	/**
+	 * Returns the number of shopping order items where orderId = &#63;.
+	 *
+	 * @param orderId the order ID
+	 * @return the number of matching shopping order items
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByOrderId(long orderId) throws SystemException {
+		Object[] finderArgs = new Object[] { orderId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ORDERID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SHOPPINGORDERITEM_WHERE);
+
+			query.append(_FINDER_COLUMN_ORDERID_ORDERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(orderId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ORDERID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_ORDERID_ORDERID_2 = "shoppingOrderItem.orderId = ?";
+
+	/**
+	 * Caches the shopping order item in the entity cache if it is enabled.
+	 *
+	 * @param shoppingOrderItem the shopping order item
+	 */
+	public void cacheResult(ShoppingOrderItem shoppingOrderItem) {
+		EntityCacheUtil.putResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderItemImpl.class, shoppingOrderItem.getPrimaryKey(),
+			shoppingOrderItem);
+
+		shoppingOrderItem.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the shopping order items in the entity cache if it is enabled.
+	 *
+	 * @param shoppingOrderItems the shopping order items
+	 */
+	public void cacheResult(List<ShoppingOrderItem> shoppingOrderItems) {
+		for (ShoppingOrderItem shoppingOrderItem : shoppingOrderItems) {
+			if (EntityCacheUtil.getResult(
+						ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingOrderItemImpl.class,
+						shoppingOrderItem.getPrimaryKey()) == null) {
+				cacheResult(shoppingOrderItem);
+			}
+			else {
+				shoppingOrderItem.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all shopping order items.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(ShoppingOrderItemImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(ShoppingOrderItemImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the shopping order item.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(ShoppingOrderItem shoppingOrderItem) {
+		EntityCacheUtil.removeResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderItemImpl.class, shoppingOrderItem.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<ShoppingOrderItem> shoppingOrderItems) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (ShoppingOrderItem shoppingOrderItem : shoppingOrderItems) {
+			EntityCacheUtil.removeResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
+				ShoppingOrderItemImpl.class, shoppingOrderItem.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new shopping order item with the primary key. Does not add the shopping order item to the database.
+	 *
+	 * @param orderItemId the primary key for the new shopping order item
+	 * @return the new shopping order item
+	 */
+	public ShoppingOrderItem create(long orderItemId) {
+		ShoppingOrderItem shoppingOrderItem = new ShoppingOrderItemImpl();
+
+		shoppingOrderItem.setNew(true);
+		shoppingOrderItem.setPrimaryKey(orderItemId);
+
+		return shoppingOrderItem;
+	}
+
+	/**
+	 * Removes the shopping order item with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param orderItemId the primary key of the shopping order item
+	 * @return the shopping order item that was removed
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrderItem remove(long orderItemId)
+		throws NoSuchOrderItemException, SystemException {
+		return remove(Long.valueOf(orderItemId));
+	}
+
+	/**
+	 * Removes the shopping order item with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the shopping order item
+	 * @return the shopping order item that was removed
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingOrderItem remove(Serializable primaryKey)
+		throws NoSuchOrderItemException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			ShoppingOrderItem shoppingOrderItem = (ShoppingOrderItem)session.get(ShoppingOrderItemImpl.class,
+					primaryKey);
+
+			if (shoppingOrderItem == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchOrderItemException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(shoppingOrderItem);
+		}
+		catch (NoSuchOrderItemException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected ShoppingOrderItem removeImpl(ShoppingOrderItem shoppingOrderItem)
+		throws SystemException {
+		shoppingOrderItem = toUnwrappedModel(shoppingOrderItem);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(shoppingOrderItem)) {
+				shoppingOrderItem = (ShoppingOrderItem)session.get(ShoppingOrderItemImpl.class,
+						shoppingOrderItem.getPrimaryKeyObj());
+			}
+
+			if (shoppingOrderItem != null) {
+				session.delete(shoppingOrderItem);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (shoppingOrderItem != null) {
+			clearCache(shoppingOrderItem);
+		}
+
+		return shoppingOrderItem;
+	}
+
+	@Override
+	public ShoppingOrderItem updateImpl(
+		com.liferay.portlet.shopping.model.ShoppingOrderItem shoppingOrderItem)
+		throws SystemException {
+		shoppingOrderItem = toUnwrappedModel(shoppingOrderItem);
+
+		boolean isNew = shoppingOrderItem.isNew();
+
+		ShoppingOrderItemModelImpl shoppingOrderItemModelImpl = (ShoppingOrderItemModelImpl)shoppingOrderItem;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (shoppingOrderItem.isNew()) {
+				session.save(shoppingOrderItem);
+
+				shoppingOrderItem.setNew(false);
+			}
+			else {
+				session.merge(shoppingOrderItem);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !ShoppingOrderItemModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((shoppingOrderItemModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(shoppingOrderItemModelImpl.getOriginalOrderId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORDERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(shoppingOrderItemModelImpl.getOrderId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORDERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderItemImpl.class, shoppingOrderItem.getPrimaryKey(),
+			shoppingOrderItem);
+
+		return shoppingOrderItem;
+	}
+
+	protected ShoppingOrderItem toUnwrappedModel(
+		ShoppingOrderItem shoppingOrderItem) {
+		if (shoppingOrderItem instanceof ShoppingOrderItemImpl) {
+			return shoppingOrderItem;
+		}
+
+		ShoppingOrderItemImpl shoppingOrderItemImpl = new ShoppingOrderItemImpl();
+
+		shoppingOrderItemImpl.setNew(shoppingOrderItem.isNew());
+		shoppingOrderItemImpl.setPrimaryKey(shoppingOrderItem.getPrimaryKey());
+
+		shoppingOrderItemImpl.setOrderItemId(shoppingOrderItem.getOrderItemId());
+		shoppingOrderItemImpl.setOrderId(shoppingOrderItem.getOrderId());
+		shoppingOrderItemImpl.setItemId(shoppingOrderItem.getItemId());
+		shoppingOrderItemImpl.setSku(shoppingOrderItem.getSku());
+		shoppingOrderItemImpl.setName(shoppingOrderItem.getName());
+		shoppingOrderItemImpl.setDescription(shoppingOrderItem.getDescription());
+		shoppingOrderItemImpl.setProperties(shoppingOrderItem.getProperties());
+		shoppingOrderItemImpl.setPrice(shoppingOrderItem.getPrice());
+		shoppingOrderItemImpl.setQuantity(shoppingOrderItem.getQuantity());
+		shoppingOrderItemImpl.setShippedDate(shoppingOrderItem.getShippedDate());
+
+		return shoppingOrderItemImpl;
+	}
+
+	/**
+	 * Returns the shopping order item with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the shopping order item
+	 * @return the shopping order item
+	 * @throws com.liferay.portal.NoSuchModelException if a shopping order item with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingOrderItem findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the shopping order item with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchOrderItemException} if it could not be found.
+	 *
+	 * @param orderItemId the primary key of the shopping order item
+	 * @return the shopping order item
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrderItem findByPrimaryKey(long orderItemId)
+		throws NoSuchOrderItemException, SystemException {
+		ShoppingOrderItem shoppingOrderItem = fetchByPrimaryKey(orderItemId);
+
+		if (shoppingOrderItem == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + orderItemId);
+			}
+
+			throw new NoSuchOrderItemException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				orderItemId);
+		}
+
+		return shoppingOrderItem;
+	}
+
+	/**
+	 * Returns the shopping order item with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the shopping order item
+	 * @return the shopping order item, or <code>null</code> if a shopping order item with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingOrderItem fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the shopping order item with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param orderItemId the primary key of the shopping order item
+	 * @return the shopping order item, or <code>null</code> if a shopping order item with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrderItem fetchByPrimaryKey(long orderItemId)
+		throws SystemException {
+		ShoppingOrderItem shoppingOrderItem = (ShoppingOrderItem)EntityCacheUtil.getResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
+				ShoppingOrderItemImpl.class, orderItemId);
+
+		if (shoppingOrderItem == _nullShoppingOrderItem) {
+			return null;
+		}
+
+		if (shoppingOrderItem == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				shoppingOrderItem = (ShoppingOrderItem)session.get(ShoppingOrderItemImpl.class,
+						Long.valueOf(orderItemId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (shoppingOrderItem != null) {
+					cacheResult(shoppingOrderItem);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingOrderItemImpl.class, orderItemId,
+						_nullShoppingOrderItem);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return shoppingOrderItem;
+	}
+
+	/**
 	 * Returns all the shopping order items.
 	 *
 	 * @return the shopping order items
@@ -975,18 +1042,6 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 	}
 
 	/**
-	 * Removes all the shopping order items where orderId = &#63; from the database.
-	 *
-	 * @param orderId the order ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByOrderId(long orderId) throws SystemException {
-		for (ShoppingOrderItem shoppingOrderItem : findByOrderId(orderId)) {
-			remove(shoppingOrderItem);
-		}
-	}
-
-	/**
 	 * Removes all the shopping order items from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -995,59 +1050,6 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 		for (ShoppingOrderItem shoppingOrderItem : findAll()) {
 			remove(shoppingOrderItem);
 		}
-	}
-
-	/**
-	 * Returns the number of shopping order items where orderId = &#63;.
-	 *
-	 * @param orderId the order ID
-	 * @return the number of matching shopping order items
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByOrderId(long orderId) throws SystemException {
-		Object[] finderArgs = new Object[] { orderId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ORDERID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SHOPPINGORDERITEM_WHERE);
-
-			query.append(_FINDER_COLUMN_ORDERID_ORDERID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(orderId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ORDERID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1141,7 +1143,6 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 	private static final String _SQL_SELECT_SHOPPINGORDERITEM_WHERE = "SELECT shoppingOrderItem FROM ShoppingOrderItem shoppingOrderItem WHERE ";
 	private static final String _SQL_COUNT_SHOPPINGORDERITEM = "SELECT COUNT(shoppingOrderItem) FROM ShoppingOrderItem shoppingOrderItem";
 	private static final String _SQL_COUNT_SHOPPINGORDERITEM_WHERE = "SELECT COUNT(shoppingOrderItem) FROM ShoppingOrderItem shoppingOrderItem WHERE ";
-	private static final String _FINDER_COLUMN_ORDERID_ORDERID_2 = "shoppingOrderItem.orderId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "shoppingOrderItem.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ShoppingOrderItem exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ShoppingOrderItem exists with the key {";

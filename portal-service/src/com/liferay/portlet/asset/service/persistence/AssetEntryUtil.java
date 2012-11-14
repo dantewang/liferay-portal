@@ -111,86 +111,6 @@ public class AssetEntryUtil {
 	}
 
 	/**
-	* Caches the asset entry in the entity cache if it is enabled.
-	*
-	* @param assetEntry the asset entry
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.asset.model.AssetEntry assetEntry) {
-		getPersistence().cacheResult(assetEntry);
-	}
-
-	/**
-	* Caches the asset entries in the entity cache if it is enabled.
-	*
-	* @param assetEntries the asset entries
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.asset.model.AssetEntry> assetEntries) {
-		getPersistence().cacheResult(assetEntries);
-	}
-
-	/**
-	* Creates a new asset entry with the primary key. Does not add the asset entry to the database.
-	*
-	* @param entryId the primary key for the new asset entry
-	* @return the new asset entry
-	*/
-	public static com.liferay.portlet.asset.model.AssetEntry create(
-		long entryId) {
-		return getPersistence().create(entryId);
-	}
-
-	/**
-	* Removes the asset entry with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param entryId the primary key of the asset entry
-	* @return the asset entry that was removed
-	* @throws com.liferay.portlet.asset.NoSuchEntryException if a asset entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetEntry remove(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchEntryException {
-		return getPersistence().remove(entryId);
-	}
-
-	public static com.liferay.portlet.asset.model.AssetEntry updateImpl(
-		com.liferay.portlet.asset.model.AssetEntry assetEntry)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(assetEntry);
-	}
-
-	/**
-	* Returns the asset entry with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchEntryException} if it could not be found.
-	*
-	* @param entryId the primary key of the asset entry
-	* @return the asset entry
-	* @throws com.liferay.portlet.asset.NoSuchEntryException if a asset entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetEntry findByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchEntryException {
-		return getPersistence().findByPrimaryKey(entryId);
-	}
-
-	/**
-	* Returns the asset entry with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param entryId the primary key of the asset entry
-	* @return the asset entry, or <code>null</code> if a asset entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetEntry fetchByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(entryId);
-	}
-
-	/**
 	* Returns all the asset entries where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -333,6 +253,29 @@ public class AssetEntryUtil {
 	}
 
 	/**
+	* Removes all the asset entries where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of asset entries where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching asset entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
+	}
+
+	/**
 	* Returns all the asset entries where visible = &#63;.
 	*
 	* @param visible the visible
@@ -468,6 +411,29 @@ public class AssetEntryUtil {
 		return getPersistence()
 				   .findByVisible_PrevAndNext(entryId, visible,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the asset entries where visible = &#63; from the database.
+	*
+	* @param visible the visible
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByVisible(boolean visible)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByVisible(visible);
+	}
+
+	/**
+	* Returns the number of asset entries where visible = &#63;.
+	*
+	* @param visible the visible
+	* @return the number of matching asset entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByVisible(boolean visible)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByVisible(visible);
 	}
 
 	/**
@@ -610,6 +576,29 @@ public class AssetEntryUtil {
 		return getPersistence()
 				   .findByPublishDate_PrevAndNext(entryId, publishDate,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the asset entries where publishDate = &#63; from the database.
+	*
+	* @param publishDate the publish date
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByPublishDate(java.util.Date publishDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByPublishDate(publishDate);
+	}
+
+	/**
+	* Returns the number of asset entries where publishDate = &#63;.
+	*
+	* @param publishDate the publish date
+	* @return the number of matching asset entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByPublishDate(java.util.Date publishDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByPublishDate(publishDate);
 	}
 
 	/**
@@ -757,6 +746,29 @@ public class AssetEntryUtil {
 	}
 
 	/**
+	* Removes all the asset entries where expirationDate = &#63; from the database.
+	*
+	* @param expirationDate the expiration date
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByExpirationDate(java.util.Date expirationDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByExpirationDate(expirationDate);
+	}
+
+	/**
+	* Returns the number of asset entries where expirationDate = &#63;.
+	*
+	* @param expirationDate the expiration date
+	* @return the number of matching asset entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByExpirationDate(java.util.Date expirationDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByExpirationDate(expirationDate);
+	}
+
+	/**
 	* Returns all the asset entries where layoutUuid = &#63;.
 	*
 	* @param layoutUuid the layout uuid
@@ -899,6 +911,29 @@ public class AssetEntryUtil {
 	}
 
 	/**
+	* Removes all the asset entries where layoutUuid = &#63; from the database.
+	*
+	* @param layoutUuid the layout uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByLayoutUuid(java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByLayoutUuid(layoutUuid);
+	}
+
+	/**
+	* Returns the number of asset entries where layoutUuid = &#63;.
+	*
+	* @param layoutUuid the layout uuid
+	* @return the number of matching asset entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByLayoutUuid(java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByLayoutUuid(layoutUuid);
+	}
+
+	/**
 	* Returns the asset entry where groupId = &#63; and classUuid = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchEntryException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -945,6 +980,34 @@ public class AssetEntryUtil {
 	}
 
 	/**
+	* Removes the asset entry where groupId = &#63; and classUuid = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param classUuid the class uuid
+	* @return the asset entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetEntry removeByG_CU(
+		long groupId, java.lang.String classUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchEntryException {
+		return getPersistence().removeByG_CU(groupId, classUuid);
+	}
+
+	/**
+	* Returns the number of asset entries where groupId = &#63; and classUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classUuid the class uuid
+	* @return the number of matching asset entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_CU(long groupId, java.lang.String classUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_CU(groupId, classUuid);
+	}
+
+	/**
 	* Returns the asset entry where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchEntryException} if it could not be found.
 	*
 	* @param classNameId the class name ID
@@ -988,6 +1051,114 @@ public class AssetEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_C(classNameId, classPK, retrieveFromCache);
+	}
+
+	/**
+	* Removes the asset entry where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the asset entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetEntry removeByC_C(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchEntryException {
+		return getPersistence().removeByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of asset entries where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching asset entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Caches the asset entry in the entity cache if it is enabled.
+	*
+	* @param assetEntry the asset entry
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.asset.model.AssetEntry assetEntry) {
+		getPersistence().cacheResult(assetEntry);
+	}
+
+	/**
+	* Caches the asset entries in the entity cache if it is enabled.
+	*
+	* @param assetEntries the asset entries
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.asset.model.AssetEntry> assetEntries) {
+		getPersistence().cacheResult(assetEntries);
+	}
+
+	/**
+	* Creates a new asset entry with the primary key. Does not add the asset entry to the database.
+	*
+	* @param entryId the primary key for the new asset entry
+	* @return the new asset entry
+	*/
+	public static com.liferay.portlet.asset.model.AssetEntry create(
+		long entryId) {
+		return getPersistence().create(entryId);
+	}
+
+	/**
+	* Removes the asset entry with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param entryId the primary key of the asset entry
+	* @return the asset entry that was removed
+	* @throws com.liferay.portlet.asset.NoSuchEntryException if a asset entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetEntry remove(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchEntryException {
+		return getPersistence().remove(entryId);
+	}
+
+	public static com.liferay.portlet.asset.model.AssetEntry updateImpl(
+		com.liferay.portlet.asset.model.AssetEntry assetEntry)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(assetEntry);
+	}
+
+	/**
+	* Returns the asset entry with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchEntryException} if it could not be found.
+	*
+	* @param entryId the primary key of the asset entry
+	* @return the asset entry
+	* @throws com.liferay.portlet.asset.NoSuchEntryException if a asset entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetEntry findByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchEntryException {
+		return getPersistence().findByPrimaryKey(entryId);
+	}
+
+	/**
+	* Returns the asset entry with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param entryId the primary key of the asset entry
+	* @return the asset entry, or <code>null</code> if a asset entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetEntry fetchByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(entryId);
 	}
 
 	/**
@@ -1040,91 +1211,6 @@ public class AssetEntryUtil {
 	}
 
 	/**
-	* Removes all the asset entries where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
-	* Removes all the asset entries where visible = &#63; from the database.
-	*
-	* @param visible the visible
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByVisible(boolean visible)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByVisible(visible);
-	}
-
-	/**
-	* Removes all the asset entries where publishDate = &#63; from the database.
-	*
-	* @param publishDate the publish date
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByPublishDate(java.util.Date publishDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByPublishDate(publishDate);
-	}
-
-	/**
-	* Removes all the asset entries where expirationDate = &#63; from the database.
-	*
-	* @param expirationDate the expiration date
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByExpirationDate(java.util.Date expirationDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByExpirationDate(expirationDate);
-	}
-
-	/**
-	* Removes all the asset entries where layoutUuid = &#63; from the database.
-	*
-	* @param layoutUuid the layout uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByLayoutUuid(java.lang.String layoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByLayoutUuid(layoutUuid);
-	}
-
-	/**
-	* Removes the asset entry where groupId = &#63; and classUuid = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param classUuid the class uuid
-	* @return the asset entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetEntry removeByG_CU(
-		long groupId, java.lang.String classUuid)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchEntryException {
-		return getPersistence().removeByG_CU(groupId, classUuid);
-	}
-
-	/**
-	* Removes the asset entry where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the asset entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetEntry removeByC_C(
-		long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchEntryException {
-		return getPersistence().removeByC_C(classNameId, classPK);
-	}
-
-	/**
 	* Removes all the asset entries from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1132,92 +1218,6 @@ public class AssetEntryUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of asset entries where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching asset entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of asset entries where visible = &#63;.
-	*
-	* @param visible the visible
-	* @return the number of matching asset entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByVisible(boolean visible)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByVisible(visible);
-	}
-
-	/**
-	* Returns the number of asset entries where publishDate = &#63;.
-	*
-	* @param publishDate the publish date
-	* @return the number of matching asset entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByPublishDate(java.util.Date publishDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByPublishDate(publishDate);
-	}
-
-	/**
-	* Returns the number of asset entries where expirationDate = &#63;.
-	*
-	* @param expirationDate the expiration date
-	* @return the number of matching asset entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByExpirationDate(java.util.Date expirationDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByExpirationDate(expirationDate);
-	}
-
-	/**
-	* Returns the number of asset entries where layoutUuid = &#63;.
-	*
-	* @param layoutUuid the layout uuid
-	* @return the number of matching asset entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByLayoutUuid(java.lang.String layoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByLayoutUuid(layoutUuid);
-	}
-
-	/**
-	* Returns the number of asset entries where groupId = &#63; and classUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classUuid the class uuid
-	* @return the number of matching asset entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_CU(long groupId, java.lang.String classUuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_CU(groupId, classUuid);
-	}
-
-	/**
-	* Returns the number of asset entries where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching asset entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C(classNameId, classPK);
 	}
 
 	/**

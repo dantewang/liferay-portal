@@ -78,6 +78,15 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
@@ -96,521 +105,6 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			MDRRuleGroupModelImpl.UUID_COLUMN_BITMASK |
-			MDRRuleGroupModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			MDRRuleGroupModelImpl.UUID_COLUMN_BITMASK |
-			MDRRuleGroupModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			MDRRuleGroupModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the m d r rule group in the entity cache if it is enabled.
-	 *
-	 * @param mdrRuleGroup the m d r rule group
-	 */
-	public void cacheResult(MDRRuleGroup mdrRuleGroup) {
-		EntityCacheUtil.putResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupImpl.class, mdrRuleGroup.getPrimaryKey(), mdrRuleGroup);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				mdrRuleGroup.getUuid(), Long.valueOf(mdrRuleGroup.getGroupId())
-			}, mdrRuleGroup);
-
-		mdrRuleGroup.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the m d r rule groups in the entity cache if it is enabled.
-	 *
-	 * @param mdrRuleGroups the m d r rule groups
-	 */
-	public void cacheResult(List<MDRRuleGroup> mdrRuleGroups) {
-		for (MDRRuleGroup mdrRuleGroup : mdrRuleGroups) {
-			if (EntityCacheUtil.getResult(
-						MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-						MDRRuleGroupImpl.class, mdrRuleGroup.getPrimaryKey()) == null) {
-				cacheResult(mdrRuleGroup);
-			}
-			else {
-				mdrRuleGroup.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all m d r rule groups.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(MDRRuleGroupImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(MDRRuleGroupImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the m d r rule group.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(MDRRuleGroup mdrRuleGroup) {
-		EntityCacheUtil.removeResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupImpl.class, mdrRuleGroup.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(mdrRuleGroup);
-	}
-
-	@Override
-	public void clearCache(List<MDRRuleGroup> mdrRuleGroups) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (MDRRuleGroup mdrRuleGroup : mdrRuleGroups) {
-			EntityCacheUtil.removeResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-				MDRRuleGroupImpl.class, mdrRuleGroup.getPrimaryKey());
-
-			clearUniqueFindersCache(mdrRuleGroup);
-		}
-	}
-
-	protected void clearUniqueFindersCache(MDRRuleGroup mdrRuleGroup) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				mdrRuleGroup.getUuid(), Long.valueOf(mdrRuleGroup.getGroupId())
-			});
-	}
-
-	/**
-	 * Creates a new m d r rule group with the primary key. Does not add the m d r rule group to the database.
-	 *
-	 * @param ruleGroupId the primary key for the new m d r rule group
-	 * @return the new m d r rule group
-	 */
-	public MDRRuleGroup create(long ruleGroupId) {
-		MDRRuleGroup mdrRuleGroup = new MDRRuleGroupImpl();
-
-		mdrRuleGroup.setNew(true);
-		mdrRuleGroup.setPrimaryKey(ruleGroupId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		mdrRuleGroup.setUuid(uuid);
-
-		return mdrRuleGroup;
-	}
-
-	/**
-	 * Removes the m d r rule group with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param ruleGroupId the primary key of the m d r rule group
-	 * @return the m d r rule group that was removed
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupException if a m d r rule group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroup remove(long ruleGroupId)
-		throws NoSuchRuleGroupException, SystemException {
-		return remove(Long.valueOf(ruleGroupId));
-	}
-
-	/**
-	 * Removes the m d r rule group with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the m d r rule group
-	 * @return the m d r rule group that was removed
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupException if a m d r rule group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MDRRuleGroup remove(Serializable primaryKey)
-		throws NoSuchRuleGroupException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			MDRRuleGroup mdrRuleGroup = (MDRRuleGroup)session.get(MDRRuleGroupImpl.class,
-					primaryKey);
-
-			if (mdrRuleGroup == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchRuleGroupException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(mdrRuleGroup);
-		}
-		catch (NoSuchRuleGroupException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected MDRRuleGroup removeImpl(MDRRuleGroup mdrRuleGroup)
-		throws SystemException {
-		mdrRuleGroup = toUnwrappedModel(mdrRuleGroup);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(mdrRuleGroup)) {
-				mdrRuleGroup = (MDRRuleGroup)session.get(MDRRuleGroupImpl.class,
-						mdrRuleGroup.getPrimaryKeyObj());
-			}
-
-			if (mdrRuleGroup != null) {
-				session.delete(mdrRuleGroup);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (mdrRuleGroup != null) {
-			clearCache(mdrRuleGroup);
-		}
-
-		return mdrRuleGroup;
-	}
-
-	@Override
-	public MDRRuleGroup updateImpl(
-		com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup mdrRuleGroup)
-		throws SystemException {
-		mdrRuleGroup = toUnwrappedModel(mdrRuleGroup);
-
-		boolean isNew = mdrRuleGroup.isNew();
-
-		MDRRuleGroupModelImpl mdrRuleGroupModelImpl = (MDRRuleGroupModelImpl)mdrRuleGroup;
-
-		if (Validator.isNull(mdrRuleGroup.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			mdrRuleGroup.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (mdrRuleGroup.isNew()) {
-				session.save(mdrRuleGroup);
-
-				mdrRuleGroup.setNew(false);
-			}
-			else {
-				session.merge(mdrRuleGroup);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !MDRRuleGroupModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((mdrRuleGroupModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						mdrRuleGroupModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { mdrRuleGroupModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((mdrRuleGroupModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						mdrRuleGroupModelImpl.getOriginalUuid(),
-						Long.valueOf(mdrRuleGroupModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						mdrRuleGroupModelImpl.getUuid(),
-						Long.valueOf(mdrRuleGroupModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((mdrRuleGroupModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(mdrRuleGroupModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(mdrRuleGroupModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupImpl.class, mdrRuleGroup.getPrimaryKey(), mdrRuleGroup);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-				new Object[] {
-					mdrRuleGroup.getUuid(),
-					Long.valueOf(mdrRuleGroup.getGroupId())
-				}, mdrRuleGroup);
-		}
-		else {
-			if ((mdrRuleGroupModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						mdrRuleGroupModelImpl.getOriginalUuid(),
-						Long.valueOf(mdrRuleGroupModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
-						mdrRuleGroup.getUuid(),
-						Long.valueOf(mdrRuleGroup.getGroupId())
-					}, mdrRuleGroup);
-			}
-		}
-
-		return mdrRuleGroup;
-	}
-
-	protected MDRRuleGroup toUnwrappedModel(MDRRuleGroup mdrRuleGroup) {
-		if (mdrRuleGroup instanceof MDRRuleGroupImpl) {
-			return mdrRuleGroup;
-		}
-
-		MDRRuleGroupImpl mdrRuleGroupImpl = new MDRRuleGroupImpl();
-
-		mdrRuleGroupImpl.setNew(mdrRuleGroup.isNew());
-		mdrRuleGroupImpl.setPrimaryKey(mdrRuleGroup.getPrimaryKey());
-
-		mdrRuleGroupImpl.setUuid(mdrRuleGroup.getUuid());
-		mdrRuleGroupImpl.setRuleGroupId(mdrRuleGroup.getRuleGroupId());
-		mdrRuleGroupImpl.setGroupId(mdrRuleGroup.getGroupId());
-		mdrRuleGroupImpl.setCompanyId(mdrRuleGroup.getCompanyId());
-		mdrRuleGroupImpl.setUserId(mdrRuleGroup.getUserId());
-		mdrRuleGroupImpl.setUserName(mdrRuleGroup.getUserName());
-		mdrRuleGroupImpl.setCreateDate(mdrRuleGroup.getCreateDate());
-		mdrRuleGroupImpl.setModifiedDate(mdrRuleGroup.getModifiedDate());
-		mdrRuleGroupImpl.setName(mdrRuleGroup.getName());
-		mdrRuleGroupImpl.setDescription(mdrRuleGroup.getDescription());
-
-		return mdrRuleGroupImpl;
-	}
-
-	/**
-	 * Returns the m d r rule group with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the m d r rule group
-	 * @return the m d r rule group
-	 * @throws com.liferay.portal.NoSuchModelException if a m d r rule group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MDRRuleGroup findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the m d r rule group with the primary key or throws a {@link com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupException} if it could not be found.
-	 *
-	 * @param ruleGroupId the primary key of the m d r rule group
-	 * @return the m d r rule group
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupException if a m d r rule group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroup findByPrimaryKey(long ruleGroupId)
-		throws NoSuchRuleGroupException, SystemException {
-		MDRRuleGroup mdrRuleGroup = fetchByPrimaryKey(ruleGroupId);
-
-		if (mdrRuleGroup == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + ruleGroupId);
-			}
-
-			throw new NoSuchRuleGroupException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				ruleGroupId);
-		}
-
-		return mdrRuleGroup;
-	}
-
-	/**
-	 * Returns the m d r rule group with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the m d r rule group
-	 * @return the m d r rule group, or <code>null</code> if a m d r rule group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MDRRuleGroup fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the m d r rule group with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param ruleGroupId the primary key of the m d r rule group
-	 * @return the m d r rule group, or <code>null</code> if a m d r rule group with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroup fetchByPrimaryKey(long ruleGroupId)
-		throws SystemException {
-		MDRRuleGroup mdrRuleGroup = (MDRRuleGroup)EntityCacheUtil.getResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-				MDRRuleGroupImpl.class, ruleGroupId);
-
-		if (mdrRuleGroup == _nullMDRRuleGroup) {
-			return null;
-		}
-
-		if (mdrRuleGroup == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				mdrRuleGroup = (MDRRuleGroup)session.get(MDRRuleGroupImpl.class,
-						Long.valueOf(ruleGroupId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (mdrRuleGroup != null) {
-					cacheResult(mdrRuleGroup);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
-						MDRRuleGroupImpl.class, ruleGroupId, _nullMDRRuleGroup);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return mdrRuleGroup;
-	}
 
 	/**
 	 * Returns all the m d r rule groups where uuid = &#63;.
@@ -1007,6 +501,97 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 	}
 
 	/**
+	 * Removes all the m d r rule groups where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (MDRRuleGroup mdrRuleGroup : findByUuid(uuid)) {
+			remove(mdrRuleGroup);
+		}
+	}
+
+	/**
+	 * Returns the number of m d r rule groups where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching m d r rule groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MDRRULEGROUP_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "mdrRuleGroup.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "mdrRuleGroup.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(mdrRuleGroup.uuid IS NULL OR mdrRuleGroup.uuid = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			MDRRuleGroupModelImpl.UUID_COLUMN_BITMASK |
+			MDRRuleGroupModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns the m d r rule group where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupException} if it could not be found.
 	 *
 	 * @param uuid the uuid
@@ -1166,6 +751,117 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 			}
 		}
 	}
+
+	/**
+	 * Removes the m d r rule group where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the m d r rule group that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroup removeByUUID_G(String uuid, long groupId)
+		throws NoSuchRuleGroupException, SystemException {
+		MDRRuleGroup mdrRuleGroup = findByUUID_G(uuid, groupId);
+
+		return remove(mdrRuleGroup);
+	}
+
+	/**
+	 * Returns the number of m d r rule groups where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching m d r rule groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUUID_G(String uuid, long groupId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_MDRRULEGROUP_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "mdrRuleGroup.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "mdrRuleGroup.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(mdrRuleGroup.uuid IS NULL OR mdrRuleGroup.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "mdrRuleGroup.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			MDRRuleGroupModelImpl.UUID_COLUMN_BITMASK |
+			MDRRuleGroupModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the m d r rule groups where uuid = &#63; and companyId = &#63;.
@@ -1593,6 +1289,115 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the m d r rule groups where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (MDRRuleGroup mdrRuleGroup : findByUuid_C(uuid, companyId)) {
+			remove(mdrRuleGroup);
+		}
+	}
+
+	/**
+	 * Returns the number of m d r rule groups where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching m d r rule groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_MDRRULEGROUP_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "mdrRuleGroup.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "mdrRuleGroup.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(mdrRuleGroup.uuid IS NULL OR mdrRuleGroup.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "mdrRuleGroup.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, MDRRuleGroupImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			MDRRuleGroupModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the m d r rule groups where groupId = &#63;.
@@ -2263,6 +2068,578 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 	}
 
 	/**
+	 * Removes all the m d r rule groups where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (MDRRuleGroup mdrRuleGroup : findByGroupId(groupId)) {
+			remove(mdrRuleGroup);
+		}
+	}
+
+	/**
+	 * Returns the number of m d r rule groups where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching m d r rule groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MDRRULEGROUP_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of m d r rule groups that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching m d r rule groups that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_MDRRULEGROUP_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				MDRRuleGroup.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "mdrRuleGroup.groupId = ?";
+
+	/**
+	 * Caches the m d r rule group in the entity cache if it is enabled.
+	 *
+	 * @param mdrRuleGroup the m d r rule group
+	 */
+	public void cacheResult(MDRRuleGroup mdrRuleGroup) {
+		EntityCacheUtil.putResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupImpl.class, mdrRuleGroup.getPrimaryKey(), mdrRuleGroup);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				mdrRuleGroup.getUuid(), Long.valueOf(mdrRuleGroup.getGroupId())
+			}, mdrRuleGroup);
+
+		mdrRuleGroup.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the m d r rule groups in the entity cache if it is enabled.
+	 *
+	 * @param mdrRuleGroups the m d r rule groups
+	 */
+	public void cacheResult(List<MDRRuleGroup> mdrRuleGroups) {
+		for (MDRRuleGroup mdrRuleGroup : mdrRuleGroups) {
+			if (EntityCacheUtil.getResult(
+						MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+						MDRRuleGroupImpl.class, mdrRuleGroup.getPrimaryKey()) == null) {
+				cacheResult(mdrRuleGroup);
+			}
+			else {
+				mdrRuleGroup.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all m d r rule groups.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(MDRRuleGroupImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(MDRRuleGroupImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the m d r rule group.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(MDRRuleGroup mdrRuleGroup) {
+		EntityCacheUtil.removeResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupImpl.class, mdrRuleGroup.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(mdrRuleGroup);
+	}
+
+	@Override
+	public void clearCache(List<MDRRuleGroup> mdrRuleGroups) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (MDRRuleGroup mdrRuleGroup : mdrRuleGroups) {
+			EntityCacheUtil.removeResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+				MDRRuleGroupImpl.class, mdrRuleGroup.getPrimaryKey());
+
+			clearUniqueFindersCache(mdrRuleGroup);
+		}
+	}
+
+	protected void clearUniqueFindersCache(MDRRuleGroup mdrRuleGroup) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				mdrRuleGroup.getUuid(), Long.valueOf(mdrRuleGroup.getGroupId())
+			});
+	}
+
+	/**
+	 * Creates a new m d r rule group with the primary key. Does not add the m d r rule group to the database.
+	 *
+	 * @param ruleGroupId the primary key for the new m d r rule group
+	 * @return the new m d r rule group
+	 */
+	public MDRRuleGroup create(long ruleGroupId) {
+		MDRRuleGroup mdrRuleGroup = new MDRRuleGroupImpl();
+
+		mdrRuleGroup.setNew(true);
+		mdrRuleGroup.setPrimaryKey(ruleGroupId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		mdrRuleGroup.setUuid(uuid);
+
+		return mdrRuleGroup;
+	}
+
+	/**
+	 * Removes the m d r rule group with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param ruleGroupId the primary key of the m d r rule group
+	 * @return the m d r rule group that was removed
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupException if a m d r rule group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroup remove(long ruleGroupId)
+		throws NoSuchRuleGroupException, SystemException {
+		return remove(Long.valueOf(ruleGroupId));
+	}
+
+	/**
+	 * Removes the m d r rule group with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the m d r rule group
+	 * @return the m d r rule group that was removed
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupException if a m d r rule group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MDRRuleGroup remove(Serializable primaryKey)
+		throws NoSuchRuleGroupException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			MDRRuleGroup mdrRuleGroup = (MDRRuleGroup)session.get(MDRRuleGroupImpl.class,
+					primaryKey);
+
+			if (mdrRuleGroup == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchRuleGroupException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(mdrRuleGroup);
+		}
+		catch (NoSuchRuleGroupException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected MDRRuleGroup removeImpl(MDRRuleGroup mdrRuleGroup)
+		throws SystemException {
+		mdrRuleGroup = toUnwrappedModel(mdrRuleGroup);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(mdrRuleGroup)) {
+				mdrRuleGroup = (MDRRuleGroup)session.get(MDRRuleGroupImpl.class,
+						mdrRuleGroup.getPrimaryKeyObj());
+			}
+
+			if (mdrRuleGroup != null) {
+				session.delete(mdrRuleGroup);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (mdrRuleGroup != null) {
+			clearCache(mdrRuleGroup);
+		}
+
+		return mdrRuleGroup;
+	}
+
+	@Override
+	public MDRRuleGroup updateImpl(
+		com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup mdrRuleGroup)
+		throws SystemException {
+		mdrRuleGroup = toUnwrappedModel(mdrRuleGroup);
+
+		boolean isNew = mdrRuleGroup.isNew();
+
+		MDRRuleGroupModelImpl mdrRuleGroupModelImpl = (MDRRuleGroupModelImpl)mdrRuleGroup;
+
+		if (Validator.isNull(mdrRuleGroup.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			mdrRuleGroup.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (mdrRuleGroup.isNew()) {
+				session.save(mdrRuleGroup);
+
+				mdrRuleGroup.setNew(false);
+			}
+			else {
+				session.merge(mdrRuleGroup);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !MDRRuleGroupModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((mdrRuleGroupModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						mdrRuleGroupModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { mdrRuleGroupModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((mdrRuleGroupModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						mdrRuleGroupModelImpl.getOriginalUuid(),
+						Long.valueOf(mdrRuleGroupModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						mdrRuleGroupModelImpl.getUuid(),
+						Long.valueOf(mdrRuleGroupModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((mdrRuleGroupModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(mdrRuleGroupModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(mdrRuleGroupModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+			MDRRuleGroupImpl.class, mdrRuleGroup.getPrimaryKey(), mdrRuleGroup);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+				new Object[] {
+					mdrRuleGroup.getUuid(),
+					Long.valueOf(mdrRuleGroup.getGroupId())
+				}, mdrRuleGroup);
+		}
+		else {
+			if ((mdrRuleGroupModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						mdrRuleGroupModelImpl.getOriginalUuid(),
+						Long.valueOf(mdrRuleGroupModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+					new Object[] {
+						mdrRuleGroup.getUuid(),
+						Long.valueOf(mdrRuleGroup.getGroupId())
+					}, mdrRuleGroup);
+			}
+		}
+
+		return mdrRuleGroup;
+	}
+
+	protected MDRRuleGroup toUnwrappedModel(MDRRuleGroup mdrRuleGroup) {
+		if (mdrRuleGroup instanceof MDRRuleGroupImpl) {
+			return mdrRuleGroup;
+		}
+
+		MDRRuleGroupImpl mdrRuleGroupImpl = new MDRRuleGroupImpl();
+
+		mdrRuleGroupImpl.setNew(mdrRuleGroup.isNew());
+		mdrRuleGroupImpl.setPrimaryKey(mdrRuleGroup.getPrimaryKey());
+
+		mdrRuleGroupImpl.setUuid(mdrRuleGroup.getUuid());
+		mdrRuleGroupImpl.setRuleGroupId(mdrRuleGroup.getRuleGroupId());
+		mdrRuleGroupImpl.setGroupId(mdrRuleGroup.getGroupId());
+		mdrRuleGroupImpl.setCompanyId(mdrRuleGroup.getCompanyId());
+		mdrRuleGroupImpl.setUserId(mdrRuleGroup.getUserId());
+		mdrRuleGroupImpl.setUserName(mdrRuleGroup.getUserName());
+		mdrRuleGroupImpl.setCreateDate(mdrRuleGroup.getCreateDate());
+		mdrRuleGroupImpl.setModifiedDate(mdrRuleGroup.getModifiedDate());
+		mdrRuleGroupImpl.setName(mdrRuleGroup.getName());
+		mdrRuleGroupImpl.setDescription(mdrRuleGroup.getDescription());
+
+		return mdrRuleGroupImpl;
+	}
+
+	/**
+	 * Returns the m d r rule group with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the m d r rule group
+	 * @return the m d r rule group
+	 * @throws com.liferay.portal.NoSuchModelException if a m d r rule group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MDRRuleGroup findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the m d r rule group with the primary key or throws a {@link com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupException} if it could not be found.
+	 *
+	 * @param ruleGroupId the primary key of the m d r rule group
+	 * @return the m d r rule group
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupException if a m d r rule group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroup findByPrimaryKey(long ruleGroupId)
+		throws NoSuchRuleGroupException, SystemException {
+		MDRRuleGroup mdrRuleGroup = fetchByPrimaryKey(ruleGroupId);
+
+		if (mdrRuleGroup == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + ruleGroupId);
+			}
+
+			throw new NoSuchRuleGroupException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				ruleGroupId);
+		}
+
+		return mdrRuleGroup;
+	}
+
+	/**
+	 * Returns the m d r rule group with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the m d r rule group
+	 * @return the m d r rule group, or <code>null</code> if a m d r rule group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MDRRuleGroup fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the m d r rule group with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param ruleGroupId the primary key of the m d r rule group
+	 * @return the m d r rule group, or <code>null</code> if a m d r rule group with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRRuleGroup fetchByPrimaryKey(long ruleGroupId)
+		throws SystemException {
+		MDRRuleGroup mdrRuleGroup = (MDRRuleGroup)EntityCacheUtil.getResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+				MDRRuleGroupImpl.class, ruleGroupId);
+
+		if (mdrRuleGroup == _nullMDRRuleGroup) {
+			return null;
+		}
+
+		if (mdrRuleGroup == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				mdrRuleGroup = (MDRRuleGroup)session.get(MDRRuleGroupImpl.class,
+						Long.valueOf(ruleGroupId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (mdrRuleGroup != null) {
+					cacheResult(mdrRuleGroup);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(MDRRuleGroupModelImpl.ENTITY_CACHE_ENABLED,
+						MDRRuleGroupImpl.class, ruleGroupId, _nullMDRRuleGroup);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return mdrRuleGroup;
+	}
+
+	/**
 	 * Returns all the m d r rule groups.
 	 *
 	 * @return the m d r rule groups
@@ -2378,59 +2755,6 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 	}
 
 	/**
-	 * Removes all the m d r rule groups where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (MDRRuleGroup mdrRuleGroup : findByUuid(uuid)) {
-			remove(mdrRuleGroup);
-		}
-	}
-
-	/**
-	 * Removes the m d r rule group where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the m d r rule group that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRRuleGroup removeByUUID_G(String uuid, long groupId)
-		throws NoSuchRuleGroupException, SystemException {
-		MDRRuleGroup mdrRuleGroup = findByUUID_G(uuid, groupId);
-
-		return remove(mdrRuleGroup);
-	}
-
-	/**
-	 * Removes all the m d r rule groups where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (MDRRuleGroup mdrRuleGroup : findByUuid_C(uuid, companyId)) {
-			remove(mdrRuleGroup);
-		}
-	}
-
-	/**
-	 * Removes all the m d r rule groups where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (MDRRuleGroup mdrRuleGroup : findByGroupId(groupId)) {
-			remove(mdrRuleGroup);
-		}
-	}
-
-	/**
 	 * Removes all the m d r rule groups from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2438,314 +2762,6 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 	public void removeAll() throws SystemException {
 		for (MDRRuleGroup mdrRuleGroup : findAll()) {
 			remove(mdrRuleGroup);
-		}
-	}
-
-	/**
-	 * Returns the number of m d r rule groups where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching m d r rule groups
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MDRRULEGROUP_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of m d r rule groups where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching m d r rule groups
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUUID_G(String uuid, long groupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_MDRRULEGROUP_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of m d r rule groups where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching m d r rule groups
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_MDRRULEGROUP_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of m d r rule groups where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching m d r rule groups
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MDRRULEGROUP_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of m d r rule groups that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching m d r rule groups that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_MDRRULEGROUP_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				MDRRuleGroup.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
 		}
 	}
 
@@ -2834,18 +2850,6 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 	private static final String _SQL_SELECT_MDRRULEGROUP_WHERE = "SELECT mdrRuleGroup FROM MDRRuleGroup mdrRuleGroup WHERE ";
 	private static final String _SQL_COUNT_MDRRULEGROUP = "SELECT COUNT(mdrRuleGroup) FROM MDRRuleGroup mdrRuleGroup";
 	private static final String _SQL_COUNT_MDRRULEGROUP_WHERE = "SELECT COUNT(mdrRuleGroup) FROM MDRRuleGroup mdrRuleGroup WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "mdrRuleGroup.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "mdrRuleGroup.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(mdrRuleGroup.uuid IS NULL OR mdrRuleGroup.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "mdrRuleGroup.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "mdrRuleGroup.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(mdrRuleGroup.uuid IS NULL OR mdrRuleGroup.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "mdrRuleGroup.groupId = ?";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "mdrRuleGroup.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "mdrRuleGroup.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(mdrRuleGroup.uuid IS NULL OR mdrRuleGroup.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "mdrRuleGroup.companyId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "mdrRuleGroup.groupId = ?";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "mdrRuleGroup.ruleGroupId";
 	private static final String _FILTER_SQL_SELECT_MDRRULEGROUP_WHERE = "SELECT DISTINCT {mdrRuleGroup.*} FROM MDRRuleGroup mdrRuleGroup WHERE ";
 	private static final String _FILTER_SQL_SELECT_MDRRULEGROUP_NO_INLINE_DISTINCT_WHERE_1 =

@@ -109,83 +109,6 @@ public class ContactUtil {
 	}
 
 	/**
-	* Caches the contact in the entity cache if it is enabled.
-	*
-	* @param contact the contact
-	*/
-	public static void cacheResult(com.liferay.portal.model.Contact contact) {
-		getPersistence().cacheResult(contact);
-	}
-
-	/**
-	* Caches the contacts in the entity cache if it is enabled.
-	*
-	* @param contacts the contacts
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.Contact> contacts) {
-		getPersistence().cacheResult(contacts);
-	}
-
-	/**
-	* Creates a new contact with the primary key. Does not add the contact to the database.
-	*
-	* @param contactId the primary key for the new contact
-	* @return the new contact
-	*/
-	public static com.liferay.portal.model.Contact create(long contactId) {
-		return getPersistence().create(contactId);
-	}
-
-	/**
-	* Removes the contact with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param contactId the primary key of the contact
-	* @return the contact that was removed
-	* @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Contact remove(long contactId)
-		throws com.liferay.portal.NoSuchContactException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(contactId);
-	}
-
-	public static com.liferay.portal.model.Contact updateImpl(
-		com.liferay.portal.model.Contact contact)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(contact);
-	}
-
-	/**
-	* Returns the contact with the primary key or throws a {@link com.liferay.portal.NoSuchContactException} if it could not be found.
-	*
-	* @param contactId the primary key of the contact
-	* @return the contact
-	* @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Contact findByPrimaryKey(
-		long contactId)
-		throws com.liferay.portal.NoSuchContactException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(contactId);
-	}
-
-	/**
-	* Returns the contact with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param contactId the primary key of the contact
-	* @return the contact, or <code>null</code> if a contact with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Contact fetchByPrimaryKey(
-		long contactId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(contactId);
-	}
-
-	/**
 	* Returns all the contacts where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -328,6 +251,29 @@ public class ContactUtil {
 	}
 
 	/**
+	* Removes all the contacts where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of contacts where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching contacts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
+	}
+
+	/**
 	* Returns all the contacts where accountId = &#63;.
 	*
 	* @param accountId the account ID
@@ -467,6 +413,29 @@ public class ContactUtil {
 		return getPersistence()
 				   .findByAccountId_PrevAndNext(contactId, accountId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the contacts where accountId = &#63; from the database.
+	*
+	* @param accountId the account ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByAccountId(long accountId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByAccountId(accountId);
+	}
+
+	/**
+	* Returns the number of contacts where accountId = &#63;.
+	*
+	* @param accountId the account ID
+	* @return the number of matching contacts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByAccountId(long accountId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByAccountId(accountId);
 	}
 
 	/**
@@ -621,6 +590,108 @@ public class ContactUtil {
 	}
 
 	/**
+	* Removes all the contacts where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of contacts where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching contacts
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Caches the contact in the entity cache if it is enabled.
+	*
+	* @param contact the contact
+	*/
+	public static void cacheResult(com.liferay.portal.model.Contact contact) {
+		getPersistence().cacheResult(contact);
+	}
+
+	/**
+	* Caches the contacts in the entity cache if it is enabled.
+	*
+	* @param contacts the contacts
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.Contact> contacts) {
+		getPersistence().cacheResult(contacts);
+	}
+
+	/**
+	* Creates a new contact with the primary key. Does not add the contact to the database.
+	*
+	* @param contactId the primary key for the new contact
+	* @return the new contact
+	*/
+	public static com.liferay.portal.model.Contact create(long contactId) {
+		return getPersistence().create(contactId);
+	}
+
+	/**
+	* Removes the contact with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param contactId the primary key of the contact
+	* @return the contact that was removed
+	* @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Contact remove(long contactId)
+		throws com.liferay.portal.NoSuchContactException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(contactId);
+	}
+
+	public static com.liferay.portal.model.Contact updateImpl(
+		com.liferay.portal.model.Contact contact)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(contact);
+	}
+
+	/**
+	* Returns the contact with the primary key or throws a {@link com.liferay.portal.NoSuchContactException} if it could not be found.
+	*
+	* @param contactId the primary key of the contact
+	* @return the contact
+	* @throws com.liferay.portal.NoSuchContactException if a contact with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Contact findByPrimaryKey(
+		long contactId)
+		throws com.liferay.portal.NoSuchContactException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(contactId);
+	}
+
+	/**
+	* Returns the contact with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param contactId the primary key of the contact
+	* @return the contact, or <code>null</code> if a contact with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Contact fetchByPrimaryKey(
+		long contactId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(contactId);
+	}
+
+	/**
 	* Returns all the contacts.
 	*
 	* @return the contacts
@@ -670,40 +741,6 @@ public class ContactUtil {
 	}
 
 	/**
-	* Removes all the contacts where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
-	* Removes all the contacts where accountId = &#63; from the database.
-	*
-	* @param accountId the account ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByAccountId(long accountId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByAccountId(accountId);
-	}
-
-	/**
-	* Removes all the contacts where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_C(classNameId, classPK);
-	}
-
-	/**
 	* Removes all the contacts from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -711,43 +748,6 @@ public class ContactUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of contacts where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching contacts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of contacts where accountId = &#63;.
-	*
-	* @param accountId the account ID
-	* @return the number of matching contacts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByAccountId(long accountId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByAccountId(accountId);
-	}
-
-	/**
-	* Returns the number of contacts where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching contacts
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C(classNameId, classPK);
 	}
 
 	/**

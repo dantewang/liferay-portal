@@ -36,67 +36,6 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 	 */
 
 	/**
-	* Caches the layout in the entity cache if it is enabled.
-	*
-	* @param layout the layout
-	*/
-	public void cacheResult(com.liferay.portal.model.Layout layout);
-
-	/**
-	* Caches the layouts in the entity cache if it is enabled.
-	*
-	* @param layouts the layouts
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.Layout> layouts);
-
-	/**
-	* Creates a new layout with the primary key. Does not add the layout to the database.
-	*
-	* @param plid the primary key for the new layout
-	* @return the new layout
-	*/
-	public com.liferay.portal.model.Layout create(long plid);
-
-	/**
-	* Removes the layout with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param plid the primary key of the layout
-	* @return the layout that was removed
-	* @throws com.liferay.portal.NoSuchLayoutException if a layout with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Layout remove(long plid)
-		throws com.liferay.portal.NoSuchLayoutException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.Layout updateImpl(
-		com.liferay.portal.model.Layout layout)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the layout with the primary key or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
-	*
-	* @param plid the primary key of the layout
-	* @return the layout
-	* @throws com.liferay.portal.NoSuchLayoutException if a layout with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Layout findByPrimaryKey(long plid)
-		throws com.liferay.portal.NoSuchLayoutException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the layout with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param plid the primary key of the layout
-	* @return the layout, or <code>null</code> if a layout with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Layout fetchByPrimaryKey(long plid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the layouts where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -216,6 +155,25 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the layouts where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the layout where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -252,6 +210,30 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 	*/
 	public com.liferay.portal.model.Layout fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the layout where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the layout that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Layout removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.NoSuchLayoutException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -380,6 +362,27 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchLayoutException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the layouts where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the layouts where groupId = &#63;.
@@ -560,6 +563,35 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the layouts where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching layouts that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the layouts where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -679,6 +711,25 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the layouts where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the layout where iconImageId = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
 	*
 	* @param iconImageId the icon image ID
@@ -710,6 +761,27 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 	*/
 	public com.liferay.portal.model.Layout fetchByIconImageId(
 		long iconImageId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the layout where iconImageId = &#63; from the database.
+	*
+	* @param iconImageId the icon image ID
+	* @return the layout that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Layout removeByIconImageId(long iconImageId)
+		throws com.liferay.portal.NoSuchLayoutException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where iconImageId = &#63;.
+	*
+	* @param iconImageId the icon image ID
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByIconImageId(long iconImageId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -832,6 +904,26 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the layouts where layoutPrototypeUuid = &#63; from the database.
+	*
+	* @param layoutPrototypeUuid the layout prototype uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByLayoutPrototypeUuid(
+		java.lang.String layoutPrototypeUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where layoutPrototypeUuid = &#63;.
+	*
+	* @param layoutPrototypeUuid the layout prototype uuid
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByLayoutPrototypeUuid(java.lang.String layoutPrototypeUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the layouts where sourcePrototypeLayoutUuid = &#63;.
 	*
 	* @param sourcePrototypeLayoutUuid the source prototype layout uuid
@@ -949,6 +1041,27 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchLayoutException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the layouts where sourcePrototypeLayoutUuid = &#63; from the database.
+	*
+	* @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeBySourcePrototypeLayoutUuid(
+		java.lang.String sourcePrototypeLayoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where sourcePrototypeLayoutUuid = &#63;.
+	*
+	* @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countBySourcePrototypeLayoutUuid(
+		java.lang.String sourcePrototypeLayoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the layouts where groupId = &#63; and privateLayout = &#63;.
@@ -1145,6 +1258,38 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the layouts where groupId = &#63; and privateLayout = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_P(long groupId, boolean privateLayout)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P(long groupId, boolean privateLayout)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts that the user has permission to view where groupId = &#63; and privateLayout = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @return the number of matching layouts that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_P(long groupId, boolean privateLayout)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the layout where groupId = &#63; and privateLayout = &#63; and layoutId = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -1184,6 +1329,32 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 	*/
 	public com.liferay.portal.model.Layout fetchByG_P_L(long groupId,
 		boolean privateLayout, long layoutId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the layout where groupId = &#63; and privateLayout = &#63; and layoutId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param layoutId the layout ID
+	* @return the layout that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Layout removeByG_P_L(long groupId,
+		boolean privateLayout, long layoutId)
+		throws com.liferay.portal.NoSuchLayoutException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63; and layoutId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param layoutId the layout ID
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P_L(long groupId, boolean privateLayout, long layoutId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -1395,6 +1566,44 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the layouts where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param parentLayoutId the parent layout ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_P_P(long groupId, boolean privateLayout,
+		long parentLayoutId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param parentLayoutId the parent layout ID
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P_P(long groupId, boolean privateLayout,
+		long parentLayoutId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts that the user has permission to view where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param parentLayoutId the parent layout ID
+	* @return the number of matching layouts that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_P_P(long groupId, boolean privateLayout,
+		long parentLayoutId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the layout where groupId = &#63; and privateLayout = &#63; and friendlyURL = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -1435,6 +1644,33 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 	public com.liferay.portal.model.Layout fetchByG_P_F(long groupId,
 		boolean privateLayout, java.lang.String friendlyURL,
 		boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the layout where groupId = &#63; and privateLayout = &#63; and friendlyURL = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param friendlyURL the friendly u r l
+	* @return the layout that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Layout removeByG_P_F(long groupId,
+		boolean privateLayout, java.lang.String friendlyURL)
+		throws com.liferay.portal.NoSuchLayoutException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63; and friendlyURL = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param friendlyURL the friendly u r l
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P_F(long groupId, boolean privateLayout,
+		java.lang.String friendlyURL)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -1646,6 +1882,44 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the layouts where groupId = &#63; and privateLayout = &#63; and type = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param type the type
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_P_T(long groupId, boolean privateLayout,
+		java.lang.String type)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63; and type = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param type the type
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P_T(long groupId, boolean privateLayout,
+		java.lang.String type)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts that the user has permission to view where groupId = &#63; and privateLayout = &#63; and type = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param type the type
+	* @return the number of matching layouts that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_P_T(long groupId, boolean privateLayout,
+		java.lang.String type)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the layout where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -1686,6 +1960,94 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 	public com.liferay.portal.model.Layout fetchByG_P_SPLU(long groupId,
 		boolean privateLayout, java.lang.String sourcePrototypeLayoutUuid,
 		boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the layout where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	* @return the layout that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Layout removeByG_P_SPLU(long groupId,
+		boolean privateLayout, java.lang.String sourcePrototypeLayoutUuid)
+		throws com.liferay.portal.NoSuchLayoutException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param privateLayout the private layout
+	* @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	* @return the number of matching layouts
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P_SPLU(long groupId, boolean privateLayout,
+		java.lang.String sourcePrototypeLayoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the layout in the entity cache if it is enabled.
+	*
+	* @param layout the layout
+	*/
+	public void cacheResult(com.liferay.portal.model.Layout layout);
+
+	/**
+	* Caches the layouts in the entity cache if it is enabled.
+	*
+	* @param layouts the layouts
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.Layout> layouts);
+
+	/**
+	* Creates a new layout with the primary key. Does not add the layout to the database.
+	*
+	* @param plid the primary key for the new layout
+	* @return the new layout
+	*/
+	public com.liferay.portal.model.Layout create(long plid);
+
+	/**
+	* Removes the layout with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param plid the primary key of the layout
+	* @return the layout that was removed
+	* @throws com.liferay.portal.NoSuchLayoutException if a layout with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Layout remove(long plid)
+		throws com.liferay.portal.NoSuchLayoutException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.Layout updateImpl(
+		com.liferay.portal.model.Layout layout)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the layout with the primary key or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
+	*
+	* @param plid the primary key of the layout
+	* @return the layout
+	* @throws com.liferay.portal.NoSuchLayoutException if a layout with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Layout findByPrimaryKey(long plid)
+		throws com.liferay.portal.NoSuchLayoutException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the layout with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param plid the primary key of the layout
+	* @return the layout, or <code>null</code> if a layout with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Layout fetchByPrimaryKey(long plid)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -1731,373 +2093,11 @@ public interface LayoutPersistence extends BasePersistence<Layout> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the layouts where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the layout where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the layout that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Layout removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.NoSuchLayoutException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the layouts where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the layouts where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the layouts where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the layout where iconImageId = &#63; from the database.
-	*
-	* @param iconImageId the icon image ID
-	* @return the layout that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Layout removeByIconImageId(long iconImageId)
-		throws com.liferay.portal.NoSuchLayoutException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the layouts where layoutPrototypeUuid = &#63; from the database.
-	*
-	* @param layoutPrototypeUuid the layout prototype uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByLayoutPrototypeUuid(
-		java.lang.String layoutPrototypeUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the layouts where sourcePrototypeLayoutUuid = &#63; from the database.
-	*
-	* @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeBySourcePrototypeLayoutUuid(
-		java.lang.String sourcePrototypeLayoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the layouts where groupId = &#63; and privateLayout = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_P(long groupId, boolean privateLayout)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the layout where groupId = &#63; and privateLayout = &#63; and layoutId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param layoutId the layout ID
-	* @return the layout that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Layout removeByG_P_L(long groupId,
-		boolean privateLayout, long layoutId)
-		throws com.liferay.portal.NoSuchLayoutException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the layouts where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param parentLayoutId the parent layout ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_P_P(long groupId, boolean privateLayout,
-		long parentLayoutId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the layout where groupId = &#63; and privateLayout = &#63; and friendlyURL = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param friendlyURL the friendly u r l
-	* @return the layout that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Layout removeByG_P_F(long groupId,
-		boolean privateLayout, java.lang.String friendlyURL)
-		throws com.liferay.portal.NoSuchLayoutException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the layouts where groupId = &#63; and privateLayout = &#63; and type = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param type the type
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_P_T(long groupId, boolean privateLayout,
-		java.lang.String type)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the layout where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	* @return the layout that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Layout removeByG_P_SPLU(long groupId,
-		boolean privateLayout, java.lang.String sourcePrototypeLayoutUuid)
-		throws com.liferay.portal.NoSuchLayoutException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the layouts from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching layouts that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where iconImageId = &#63;.
-	*
-	* @param iconImageId the icon image ID
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByIconImageId(long iconImageId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where layoutPrototypeUuid = &#63;.
-	*
-	* @param layoutPrototypeUuid the layout prototype uuid
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByLayoutPrototypeUuid(java.lang.String layoutPrototypeUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where sourcePrototypeLayoutUuid = &#63;.
-	*
-	* @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countBySourcePrototypeLayoutUuid(
-		java.lang.String sourcePrototypeLayoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P(long groupId, boolean privateLayout)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts that the user has permission to view where groupId = &#63; and privateLayout = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @return the number of matching layouts that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_P(long groupId, boolean privateLayout)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63; and layoutId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param layoutId the layout ID
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P_L(long groupId, boolean privateLayout, long layoutId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param parentLayoutId the parent layout ID
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P_P(long groupId, boolean privateLayout,
-		long parentLayoutId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts that the user has permission to view where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param parentLayoutId the parent layout ID
-	* @return the number of matching layouts that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_P_P(long groupId, boolean privateLayout,
-		long parentLayoutId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63; and friendlyURL = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param friendlyURL the friendly u r l
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P_F(long groupId, boolean privateLayout,
-		java.lang.String friendlyURL)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63; and type = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param type the type
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P_T(long groupId, boolean privateLayout,
-		java.lang.String type)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts that the user has permission to view where groupId = &#63; and privateLayout = &#63; and type = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param type the type
-	* @return the number of matching layouts that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_P_T(long groupId, boolean privateLayout,
-		java.lang.String type)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of layouts where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param privateLayout the private layout
-	* @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	* @return the number of matching layouts
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P_SPLU(long groupId, boolean privateLayout,
-		java.lang.String sourcePrototypeLayoutUuid)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

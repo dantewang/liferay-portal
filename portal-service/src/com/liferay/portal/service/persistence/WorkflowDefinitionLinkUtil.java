@@ -112,86 +112,6 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
-	* Caches the workflow definition link in the entity cache if it is enabled.
-	*
-	* @param workflowDefinitionLink the workflow definition link
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.WorkflowDefinitionLink workflowDefinitionLink) {
-		getPersistence().cacheResult(workflowDefinitionLink);
-	}
-
-	/**
-	* Caches the workflow definition links in the entity cache if it is enabled.
-	*
-	* @param workflowDefinitionLinks the workflow definition links
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.WorkflowDefinitionLink> workflowDefinitionLinks) {
-		getPersistence().cacheResult(workflowDefinitionLinks);
-	}
-
-	/**
-	* Creates a new workflow definition link with the primary key. Does not add the workflow definition link to the database.
-	*
-	* @param workflowDefinitionLinkId the primary key for the new workflow definition link
-	* @return the new workflow definition link
-	*/
-	public static com.liferay.portal.model.WorkflowDefinitionLink create(
-		long workflowDefinitionLinkId) {
-		return getPersistence().create(workflowDefinitionLinkId);
-	}
-
-	/**
-	* Removes the workflow definition link with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param workflowDefinitionLinkId the primary key of the workflow definition link
-	* @return the workflow definition link that was removed
-	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a workflow definition link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.WorkflowDefinitionLink remove(
-		long workflowDefinitionLinkId)
-		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(workflowDefinitionLinkId);
-	}
-
-	public static com.liferay.portal.model.WorkflowDefinitionLink updateImpl(
-		com.liferay.portal.model.WorkflowDefinitionLink workflowDefinitionLink)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(workflowDefinitionLink);
-	}
-
-	/**
-	* Returns the workflow definition link with the primary key or throws a {@link com.liferay.portal.NoSuchWorkflowDefinitionLinkException} if it could not be found.
-	*
-	* @param workflowDefinitionLinkId the primary key of the workflow definition link
-	* @return the workflow definition link
-	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a workflow definition link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.WorkflowDefinitionLink findByPrimaryKey(
-		long workflowDefinitionLinkId)
-		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(workflowDefinitionLinkId);
-	}
-
-	/**
-	* Returns the workflow definition link with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param workflowDefinitionLinkId the primary key of the workflow definition link
-	* @return the workflow definition link, or <code>null</code> if a workflow definition link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByPrimaryKey(
-		long workflowDefinitionLinkId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(workflowDefinitionLinkId);
-	}
-
-	/**
 	* Returns all the workflow definition links where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -331,6 +251,29 @@ public class WorkflowDefinitionLinkUtil {
 		return getPersistence()
 				   .findByCompanyId_PrevAndNext(workflowDefinitionLinkId,
 			companyId, orderByComparator);
+	}
+
+	/**
+	* Removes all the workflow definition links where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of workflow definition links where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching workflow definition links
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
 	}
 
 	/**
@@ -510,6 +453,39 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
+	* Removes all the workflow definition links where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param workflowDefinitionName the workflow definition name
+	* @param workflowDefinitionVersion the workflow definition version
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_W_W(long companyId,
+		java.lang.String workflowDefinitionName, int workflowDefinitionVersion)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByC_W_W(companyId, workflowDefinitionName,
+			workflowDefinitionVersion);
+	}
+
+	/**
+	* Returns the number of workflow definition links where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
+	*
+	* @param companyId the company ID
+	* @param workflowDefinitionName the workflow definition name
+	* @param workflowDefinitionVersion the workflow definition version
+	* @return the number of matching workflow definition links
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_W_W(long companyId,
+		java.lang.String workflowDefinitionName, int workflowDefinitionVersion)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByC_W_W(companyId, workflowDefinitionName,
+			workflowDefinitionVersion);
+	}
+
+	/**
 	* Returns the workflow definition link where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63; or throws a {@link com.liferay.portal.NoSuchWorkflowDefinitionLinkException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -572,6 +548,126 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
+	* Removes the workflow definition link where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param typePK the type p k
+	* @return the workflow definition link that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink removeByG_C_C_C_T(
+		long groupId, long companyId, long classNameId, long classPK,
+		long typePK)
+		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .removeByG_C_C_C_T(groupId, companyId, classNameId, classPK,
+			typePK);
+	}
+
+	/**
+	* Returns the number of workflow definition links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param typePK the type p k
+	* @return the number of matching workflow definition links
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C_C_C_T(long groupId, long companyId,
+		long classNameId, long classPK, long typePK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByG_C_C_C_T(groupId, companyId, classNameId, classPK,
+			typePK);
+	}
+
+	/**
+	* Caches the workflow definition link in the entity cache if it is enabled.
+	*
+	* @param workflowDefinitionLink the workflow definition link
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.WorkflowDefinitionLink workflowDefinitionLink) {
+		getPersistence().cacheResult(workflowDefinitionLink);
+	}
+
+	/**
+	* Caches the workflow definition links in the entity cache if it is enabled.
+	*
+	* @param workflowDefinitionLinks the workflow definition links
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.WorkflowDefinitionLink> workflowDefinitionLinks) {
+		getPersistence().cacheResult(workflowDefinitionLinks);
+	}
+
+	/**
+	* Creates a new workflow definition link with the primary key. Does not add the workflow definition link to the database.
+	*
+	* @param workflowDefinitionLinkId the primary key for the new workflow definition link
+	* @return the new workflow definition link
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink create(
+		long workflowDefinitionLinkId) {
+		return getPersistence().create(workflowDefinitionLinkId);
+	}
+
+	/**
+	* Removes the workflow definition link with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param workflowDefinitionLinkId the primary key of the workflow definition link
+	* @return the workflow definition link that was removed
+	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a workflow definition link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink remove(
+		long workflowDefinitionLinkId)
+		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(workflowDefinitionLinkId);
+	}
+
+	public static com.liferay.portal.model.WorkflowDefinitionLink updateImpl(
+		com.liferay.portal.model.WorkflowDefinitionLink workflowDefinitionLink)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(workflowDefinitionLink);
+	}
+
+	/**
+	* Returns the workflow definition link with the primary key or throws a {@link com.liferay.portal.NoSuchWorkflowDefinitionLinkException} if it could not be found.
+	*
+	* @param workflowDefinitionLinkId the primary key of the workflow definition link
+	* @return the workflow definition link
+	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a workflow definition link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink findByPrimaryKey(
+		long workflowDefinitionLinkId)
+		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(workflowDefinitionLinkId);
+	}
+
+	/**
+	* Returns the workflow definition link with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param workflowDefinitionLinkId the primary key of the workflow definition link
+	* @return the workflow definition link, or <code>null</code> if a workflow definition link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByPrimaryKey(
+		long workflowDefinitionLinkId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(workflowDefinitionLinkId);
+	}
+
+	/**
 	* Returns all the workflow definition links.
 	*
 	* @return the workflow definition links
@@ -621,54 +717,6 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
-	* Removes all the workflow definition links where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
-	* Removes all the workflow definition links where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param workflowDefinitionName the workflow definition name
-	* @param workflowDefinitionVersion the workflow definition version
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_W_W(long companyId,
-		java.lang.String workflowDefinitionName, int workflowDefinitionVersion)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByC_W_W(companyId, workflowDefinitionName,
-			workflowDefinitionVersion);
-	}
-
-	/**
-	* Removes the workflow definition link where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param typePK the type p k
-	* @return the workflow definition link that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.WorkflowDefinitionLink removeByG_C_C_C_T(
-		long groupId, long companyId, long classNameId, long classPK,
-		long typePK)
-		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .removeByG_C_C_C_T(groupId, companyId, classNameId, classPK,
-			typePK);
-	}
-
-	/**
 	* Removes all the workflow definition links from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -676,54 +724,6 @@ public class WorkflowDefinitionLinkUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of workflow definition links where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching workflow definition links
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of workflow definition links where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
-	*
-	* @param companyId the company ID
-	* @param workflowDefinitionName the workflow definition name
-	* @param workflowDefinitionVersion the workflow definition version
-	* @return the number of matching workflow definition links
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_W_W(long companyId,
-		java.lang.String workflowDefinitionName, int workflowDefinitionVersion)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByC_W_W(companyId, workflowDefinitionName,
-			workflowDefinitionVersion);
-	}
-
-	/**
-	* Returns the number of workflow definition links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.
-	*
-	* @param groupId the group ID
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param typePK the type p k
-	* @return the number of matching workflow definition links
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C_C_C_T(long groupId, long companyId,
-		long classNameId, long classPK, long typePK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByG_C_C_C_T(groupId, companyId, classNameId, classPK,
-			typePK);
 	}
 
 	/**

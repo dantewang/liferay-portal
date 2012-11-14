@@ -36,67 +36,6 @@ public interface AddressPersistence extends BasePersistence<Address> {
 	 */
 
 	/**
-	* Caches the address in the entity cache if it is enabled.
-	*
-	* @param address the address
-	*/
-	public void cacheResult(com.liferay.portal.model.Address address);
-
-	/**
-	* Caches the addresses in the entity cache if it is enabled.
-	*
-	* @param addresses the addresses
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.Address> addresses);
-
-	/**
-	* Creates a new address with the primary key. Does not add the address to the database.
-	*
-	* @param addressId the primary key for the new address
-	* @return the new address
-	*/
-	public com.liferay.portal.model.Address create(long addressId);
-
-	/**
-	* Removes the address with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param addressId the primary key of the address
-	* @return the address that was removed
-	* @throws com.liferay.portal.NoSuchAddressException if a address with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Address remove(long addressId)
-		throws com.liferay.portal.NoSuchAddressException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.Address updateImpl(
-		com.liferay.portal.model.Address address)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the address with the primary key or throws a {@link com.liferay.portal.NoSuchAddressException} if it could not be found.
-	*
-	* @param addressId the primary key of the address
-	* @return the address
-	* @throws com.liferay.portal.NoSuchAddressException if a address with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Address findByPrimaryKey(long addressId)
-		throws com.liferay.portal.NoSuchAddressException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the address with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param addressId the primary key of the address
-	* @return the address, or <code>null</code> if a address with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Address fetchByPrimaryKey(long addressId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the addresses where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -216,6 +155,25 @@ public interface AddressPersistence extends BasePersistence<Address> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the addresses where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of addresses where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching addresses
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the addresses where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -328,6 +286,25 @@ public interface AddressPersistence extends BasePersistence<Address> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchAddressException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the addresses where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of addresses where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching addresses
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the addresses where companyId = &#63; and classNameId = &#63;.
@@ -455,6 +432,27 @@ public interface AddressPersistence extends BasePersistence<Address> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchAddressException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the addresses where companyId = &#63; and classNameId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_C(long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of addresses where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @return the number of matching addresses
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_C(long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -590,6 +588,29 @@ public interface AddressPersistence extends BasePersistence<Address> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchAddressException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_C_C(long companyId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching addresses
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_C_C(long companyId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and mailing = &#63;.
@@ -738,6 +759,33 @@ public interface AddressPersistence extends BasePersistence<Address> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and mailing = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param mailing the mailing
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_C_C_M(long companyId, long classNameId, long classPK,
+		boolean mailing)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and mailing = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param mailing the mailing
+	* @return the number of matching addresses
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_C_C_M(long companyId, long classNameId, long classPK,
+		boolean mailing)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
 	*
 	* @param companyId the company ID
@@ -884,6 +932,94 @@ public interface AddressPersistence extends BasePersistence<Address> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param primary the primary
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_C_C_P(long companyId, long classNameId, long classPK,
+		boolean primary)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param primary the primary
+	* @return the number of matching addresses
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_C_C_P(long companyId, long classNameId, long classPK,
+		boolean primary)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the address in the entity cache if it is enabled.
+	*
+	* @param address the address
+	*/
+	public void cacheResult(com.liferay.portal.model.Address address);
+
+	/**
+	* Caches the addresses in the entity cache if it is enabled.
+	*
+	* @param addresses the addresses
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.Address> addresses);
+
+	/**
+	* Creates a new address with the primary key. Does not add the address to the database.
+	*
+	* @param addressId the primary key for the new address
+	* @return the new address
+	*/
+	public com.liferay.portal.model.Address create(long addressId);
+
+	/**
+	* Removes the address with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param addressId the primary key of the address
+	* @return the address that was removed
+	* @throws com.liferay.portal.NoSuchAddressException if a address with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Address remove(long addressId)
+		throws com.liferay.portal.NoSuchAddressException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.Address updateImpl(
+		com.liferay.portal.model.Address address)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the address with the primary key or throws a {@link com.liferay.portal.NoSuchAddressException} if it could not be found.
+	*
+	* @param addressId the primary key of the address
+	* @return the address
+	* @throws com.liferay.portal.NoSuchAddressException if a address with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Address findByPrimaryKey(long addressId)
+		throws com.liferay.portal.NoSuchAddressException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the address with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param addressId the primary key of the address
+	* @return the address, or <code>null</code> if a address with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Address fetchByPrimaryKey(long addressId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the addresses.
 	*
 	* @return the addresses
@@ -926,147 +1062,11 @@ public interface AddressPersistence extends BasePersistence<Address> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the addresses where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the addresses where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the addresses where companyId = &#63; and classNameId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_C(long companyId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_C_C(long companyId, long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and mailing = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param mailing the mailing
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_C_C_M(long companyId, long classNameId, long classPK,
-		boolean mailing)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param primary the primary
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_C_C_P(long companyId, long classNameId, long classPK,
-		boolean primary)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the addresses from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of addresses where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching addresses
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of addresses where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching addresses
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of addresses where companyId = &#63; and classNameId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @return the number of matching addresses
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_C(long companyId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching addresses
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_C_C(long companyId, long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and mailing = &#63;.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param mailing the mailing
-	* @return the number of matching addresses
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_C_C_M(long companyId, long classNameId, long classPK,
-		boolean mailing)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
-	*
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param primary the primary
-	* @return the number of matching addresses
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_C_C_P(long companyId, long classNameId, long classPK,
-		boolean primary)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

@@ -38,72 +38,6 @@ public interface SCProductVersionPersistence extends BasePersistence<SCProductVe
 	 */
 
 	/**
-	* Caches the s c product version in the entity cache if it is enabled.
-	*
-	* @param scProductVersion the s c product version
-	*/
-	public void cacheResult(
-		com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion);
-
-	/**
-	* Caches the s c product versions in the entity cache if it is enabled.
-	*
-	* @param scProductVersions the s c product versions
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.softwarecatalog.model.SCProductVersion> scProductVersions);
-
-	/**
-	* Creates a new s c product version with the primary key. Does not add the s c product version to the database.
-	*
-	* @param productVersionId the primary key for the new s c product version
-	* @return the new s c product version
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCProductVersion create(
-		long productVersionId);
-
-	/**
-	* Removes the s c product version with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param productVersionId the primary key of the s c product version
-	* @return the s c product version that was removed
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a s c product version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCProductVersion remove(
-		long productVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException;
-
-	public com.liferay.portlet.softwarecatalog.model.SCProductVersion updateImpl(
-		com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the s c product version with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductVersionException} if it could not be found.
-	*
-	* @param productVersionId the primary key of the s c product version
-	* @return the s c product version
-	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a s c product version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCProductVersion findByPrimaryKey(
-		long productVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException;
-
-	/**
-	* Returns the s c product version with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param productVersionId the primary key of the s c product version
-	* @return the s c product version, or <code>null</code> if a s c product version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCProductVersion fetchByPrimaryKey(
-		long productVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the s c product versions where productEntryId = &#63;.
 	*
 	* @param productEntryId the product entry ID
@@ -223,6 +157,25 @@ public interface SCProductVersionPersistence extends BasePersistence<SCProductVe
 			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException;
 
 	/**
+	* Removes all the s c product versions where productEntryId = &#63; from the database.
+	*
+	* @param productEntryId the product entry ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByProductEntryId(long productEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of s c product versions where productEntryId = &#63;.
+	*
+	* @param productEntryId the product entry ID
+	* @return the number of matching s c product versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByProductEntryId(long productEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the s c product version where directDownloadURL = &#63; or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductVersionException} if it could not be found.
 	*
 	* @param directDownloadURL the direct download u r l
@@ -256,6 +209,94 @@ public interface SCProductVersionPersistence extends BasePersistence<SCProductVe
 	*/
 	public com.liferay.portlet.softwarecatalog.model.SCProductVersion fetchByDirectDownloadURL(
 		java.lang.String directDownloadURL, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the s c product version where directDownloadURL = &#63; from the database.
+	*
+	* @param directDownloadURL the direct download u r l
+	* @return the s c product version that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCProductVersion removeByDirectDownloadURL(
+		java.lang.String directDownloadURL)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException;
+
+	/**
+	* Returns the number of s c product versions where directDownloadURL = &#63;.
+	*
+	* @param directDownloadURL the direct download u r l
+	* @return the number of matching s c product versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByDirectDownloadURL(java.lang.String directDownloadURL)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the s c product version in the entity cache if it is enabled.
+	*
+	* @param scProductVersion the s c product version
+	*/
+	public void cacheResult(
+		com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion);
+
+	/**
+	* Caches the s c product versions in the entity cache if it is enabled.
+	*
+	* @param scProductVersions the s c product versions
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.softwarecatalog.model.SCProductVersion> scProductVersions);
+
+	/**
+	* Creates a new s c product version with the primary key. Does not add the s c product version to the database.
+	*
+	* @param productVersionId the primary key for the new s c product version
+	* @return the new s c product version
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCProductVersion create(
+		long productVersionId);
+
+	/**
+	* Removes the s c product version with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param productVersionId the primary key of the s c product version
+	* @return the s c product version that was removed
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a s c product version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCProductVersion remove(
+		long productVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException;
+
+	public com.liferay.portlet.softwarecatalog.model.SCProductVersion updateImpl(
+		com.liferay.portlet.softwarecatalog.model.SCProductVersion scProductVersion)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the s c product version with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductVersionException} if it could not be found.
+	*
+	* @param productVersionId the primary key of the s c product version
+	* @return the s c product version
+	* @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a s c product version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCProductVersion findByPrimaryKey(
+		long productVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException;
+
+	/**
+	* Returns the s c product version with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param productVersionId the primary key of the s c product version
+	* @return the s c product version, or <code>null</code> if a s c product version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.softwarecatalog.model.SCProductVersion fetchByPrimaryKey(
+		long productVersionId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -302,52 +343,11 @@ public interface SCProductVersionPersistence extends BasePersistence<SCProductVe
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the s c product versions where productEntryId = &#63; from the database.
-	*
-	* @param productEntryId the product entry ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByProductEntryId(long productEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the s c product version where directDownloadURL = &#63; from the database.
-	*
-	* @param directDownloadURL the direct download u r l
-	* @return the s c product version that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.softwarecatalog.model.SCProductVersion removeByDirectDownloadURL(
-		java.lang.String directDownloadURL)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.softwarecatalog.NoSuchProductVersionException;
-
-	/**
 	* Removes all the s c product versions from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of s c product versions where productEntryId = &#63;.
-	*
-	* @param productEntryId the product entry ID
-	* @return the number of matching s c product versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByProductEntryId(long productEntryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of s c product versions where directDownloadURL = &#63;.
-	*
-	* @param directDownloadURL the direct download u r l
-	* @return the number of matching s c product versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByDirectDownloadURL(java.lang.String directDownloadURL)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

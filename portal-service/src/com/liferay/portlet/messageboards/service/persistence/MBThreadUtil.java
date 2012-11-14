@@ -110,86 +110,6 @@ public class MBThreadUtil {
 	}
 
 	/**
-	* Caches the message boards thread in the entity cache if it is enabled.
-	*
-	* @param mbThread the message boards thread
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.messageboards.model.MBThread mbThread) {
-		getPersistence().cacheResult(mbThread);
-	}
-
-	/**
-	* Caches the message boards threads in the entity cache if it is enabled.
-	*
-	* @param mbThreads the message boards threads
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.messageboards.model.MBThread> mbThreads) {
-		getPersistence().cacheResult(mbThreads);
-	}
-
-	/**
-	* Creates a new message boards thread with the primary key. Does not add the message boards thread to the database.
-	*
-	* @param threadId the primary key for the new message boards thread
-	* @return the new message boards thread
-	*/
-	public static com.liferay.portlet.messageboards.model.MBThread create(
-		long threadId) {
-		return getPersistence().create(threadId);
-	}
-
-	/**
-	* Removes the message boards thread with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param threadId the primary key of the message boards thread
-	* @return the message boards thread that was removed
-	* @throws com.liferay.portlet.messageboards.NoSuchThreadException if a message boards thread with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBThread remove(
-		long threadId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchThreadException {
-		return getPersistence().remove(threadId);
-	}
-
-	public static com.liferay.portlet.messageboards.model.MBThread updateImpl(
-		com.liferay.portlet.messageboards.model.MBThread mbThread)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(mbThread);
-	}
-
-	/**
-	* Returns the message boards thread with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchThreadException} if it could not be found.
-	*
-	* @param threadId the primary key of the message boards thread
-	* @return the message boards thread
-	* @throws com.liferay.portlet.messageboards.NoSuchThreadException if a message boards thread with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBThread findByPrimaryKey(
-		long threadId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchThreadException {
-		return getPersistence().findByPrimaryKey(threadId);
-	}
-
-	/**
-	* Returns the message boards thread with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param threadId the primary key of the message boards thread
-	* @return the message boards thread, or <code>null</code> if a message boards thread with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBThread fetchByPrimaryKey(
-		long threadId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(threadId);
-	}
-
-	/**
 	* Returns all the message boards threads where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -402,6 +322,41 @@ public class MBThreadUtil {
 	}
 
 	/**
+	* Removes all the message boards threads where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByGroupId(groupId);
+	}
+
+	/**
 	* Returns the message boards thread where rootMessageId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchThreadException} if it could not be found.
 	*
 	* @param rootMessageId the root message ID
@@ -442,6 +397,32 @@ public class MBThreadUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByRootMessageId(rootMessageId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the message boards thread where rootMessageId = &#63; from the database.
+	*
+	* @param rootMessageId the root message ID
+	* @return the message boards thread that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBThread removeByRootMessageId(
+		long rootMessageId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchThreadException {
+		return getPersistence().removeByRootMessageId(rootMessageId);
+	}
+
+	/**
+	* Returns the number of message boards threads where rootMessageId = &#63;.
+	*
+	* @param rootMessageId the root message ID
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByRootMessageId(long rootMessageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByRootMessageId(rootMessageId);
 	}
 
 	/**
@@ -794,6 +775,70 @@ public class MBThreadUtil {
 	}
 
 	/**
+	* Removes all the message boards threads where groupId = &#63; and categoryId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C(long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_C(groupId, categoryId);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C(long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_C(groupId, categoryId);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63; and categoryId = any &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryIds the category IDs
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C(long groupId, long[] categoryIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_C(groupId, categoryIds);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_C(long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_C(groupId, categoryId);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = any &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryIds the category IDs
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_C(long groupId, long[] categoryIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_C(groupId, categoryIds);
+	}
+
+	/**
 	* Returns all the message boards threads where groupId = &#63; and categoryId &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -1022,6 +1067,44 @@ public class MBThreadUtil {
 		return getPersistence()
 				   .filterFindByG_NotC_PrevAndNext(threadId, groupId,
 			categoryId, orderByComparator);
+	}
+
+	/**
+	* Removes all the message boards threads where groupId = &#63; and categoryId &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_NotC(long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_NotC(groupId, categoryId);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63; and categoryId &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_NotC(long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_NotC(groupId, categoryId);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_NotC(long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_NotC(groupId, categoryId);
 	}
 
 	/**
@@ -1254,6 +1337,44 @@ public class MBThreadUtil {
 	}
 
 	/**
+	* Removes all the message boards threads where groupId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_S(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_S(groupId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_S(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_S(groupId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_S(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_S(groupId, status);
+	}
+
+	/**
 	* Returns all the message boards threads where categoryId = &#63; and priority = &#63;.
 	*
 	* @param categoryId the category ID
@@ -1405,6 +1526,31 @@ public class MBThreadUtil {
 	}
 
 	/**
+	* Removes all the message boards threads where categoryId = &#63; and priority = &#63; from the database.
+	*
+	* @param categoryId the category ID
+	* @param priority the priority
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_P(long categoryId, double priority)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_P(categoryId, priority);
+	}
+
+	/**
+	* Returns the number of message boards threads where categoryId = &#63; and priority = &#63;.
+	*
+	* @param categoryId the category ID
+	* @param priority the priority
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_P(long categoryId, double priority)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_P(categoryId, priority);
+	}
+
+	/**
 	* Returns all the message boards threads where lastPostDate = &#63; and priority = &#63;.
 	*
 	* @param lastPostDate the last post date
@@ -1553,6 +1699,31 @@ public class MBThreadUtil {
 		return getPersistence()
 				   .findByL_P_PrevAndNext(threadId, lastPostDate, priority,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the message boards threads where lastPostDate = &#63; and priority = &#63; from the database.
+	*
+	* @param lastPostDate the last post date
+	* @param priority the priority
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByL_P(java.util.Date lastPostDate, double priority)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByL_P(lastPostDate, priority);
+	}
+
+	/**
+	* Returns the number of message boards threads where lastPostDate = &#63; and priority = &#63;.
+	*
+	* @param lastPostDate the last post date
+	* @param priority the priority
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByL_P(java.util.Date lastPostDate, double priority)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByL_P(lastPostDate, priority);
 	}
 
 	/**
@@ -1807,6 +1978,51 @@ public class MBThreadUtil {
 		return getPersistence()
 				   .filterFindByG_C_L_PrevAndNext(threadId, groupId,
 			categoryId, lastPostDate, orderByComparator);
+	}
+
+	/**
+	* Removes all the message boards threads where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param lastPostDate the last post date
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C_L(long groupId, long categoryId,
+		java.util.Date lastPostDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_C_L(groupId, categoryId, lastPostDate);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param lastPostDate the last post date
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C_L(long groupId, long categoryId,
+		java.util.Date lastPostDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_C_L(groupId, categoryId, lastPostDate);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param lastPostDate the last post date
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_C_L(long groupId, long categoryId,
+		java.util.Date lastPostDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_C_L(groupId, categoryId, lastPostDate);
 	}
 
 	/**
@@ -2183,6 +2399,75 @@ public class MBThreadUtil {
 		return getPersistence()
 				   .filterFindByG_C_S(groupId, categoryIds, status, start, end,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the message boards threads where groupId = &#63; and categoryId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C_S(long groupId, long categoryId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_C_S(groupId, categoryId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63; and categoryId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C_S(long groupId, long categoryId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_C_S(groupId, categoryId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63; and categoryId = any &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryIds the category IDs
+	* @param status the status
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C_S(long groupId, long[] categoryIds, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_C_S(groupId, categoryIds, status);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_C_S(long groupId, long categoryId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_C_S(groupId, categoryId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = any &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryIds the category IDs
+	* @param status the status
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_C_S(long groupId, long[] categoryIds,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_C_S(groupId, categoryIds, status);
 	}
 
 	/**
@@ -2564,6 +2849,77 @@ public class MBThreadUtil {
 	}
 
 	/**
+	* Removes all the message boards threads where groupId = &#63; and categoryId = &#63; and status &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C_NotS(long groupId, long categoryId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_C_NotS(groupId, categoryId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63; and categoryId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C_NotS(long groupId, long categoryId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_C_NotS(groupId, categoryId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63; and categoryId = any &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryIds the category IDs
+	* @param status the status
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C_NotS(long groupId, long[] categoryIds,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_C_NotS(groupId, categoryIds, status);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_C_NotS(long groupId, long categoryId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_C_NotS(groupId, categoryId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = any &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryIds the category IDs
+	* @param status the status
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_C_NotS(long groupId, long[] categoryIds,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_C_NotS(groupId, categoryIds, status);
+	}
+
+	/**
 	* Returns all the message boards threads where groupId = &#63; and categoryId &ne; &#63; and status = &#63;.
 	*
 	* @param groupId the group ID
@@ -2809,6 +3165,48 @@ public class MBThreadUtil {
 		return getPersistence()
 				   .filterFindByG_NotC_S_PrevAndNext(threadId, groupId,
 			categoryId, status, orderByComparator);
+	}
+
+	/**
+	* Removes all the message boards threads where groupId = &#63; and categoryId &ne; &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_NotC_S(long groupId, long categoryId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_NotC_S(groupId, categoryId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63; and categoryId &ne; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_NotC_S(long groupId, long categoryId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_NotC_S(groupId, categoryId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId &ne; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_NotC_S(long groupId, long categoryId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_NotC_S(groupId, categoryId, status);
 	}
 
 	/**
@@ -3062,6 +3460,128 @@ public class MBThreadUtil {
 	}
 
 	/**
+	* Removes all the message boards threads where groupId = &#63; and categoryId &ne; &#63; and status &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_NotC_NotS(long groupId, long categoryId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_NotC_NotS(groupId, categoryId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads where groupId = &#63; and categoryId &ne; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @return the number of matching message boards threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_NotC_NotS(long groupId, long categoryId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_NotC_NotS(groupId, categoryId, status);
+	}
+
+	/**
+	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId &ne; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param status the status
+	* @return the number of matching message boards threads that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_NotC_NotS(long groupId, long categoryId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_NotC_NotS(groupId, categoryId, status);
+	}
+
+	/**
+	* Caches the message boards thread in the entity cache if it is enabled.
+	*
+	* @param mbThread the message boards thread
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.messageboards.model.MBThread mbThread) {
+		getPersistence().cacheResult(mbThread);
+	}
+
+	/**
+	* Caches the message boards threads in the entity cache if it is enabled.
+	*
+	* @param mbThreads the message boards threads
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.messageboards.model.MBThread> mbThreads) {
+		getPersistence().cacheResult(mbThreads);
+	}
+
+	/**
+	* Creates a new message boards thread with the primary key. Does not add the message boards thread to the database.
+	*
+	* @param threadId the primary key for the new message boards thread
+	* @return the new message boards thread
+	*/
+	public static com.liferay.portlet.messageboards.model.MBThread create(
+		long threadId) {
+		return getPersistence().create(threadId);
+	}
+
+	/**
+	* Removes the message boards thread with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param threadId the primary key of the message boards thread
+	* @return the message boards thread that was removed
+	* @throws com.liferay.portlet.messageboards.NoSuchThreadException if a message boards thread with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBThread remove(
+		long threadId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchThreadException {
+		return getPersistence().remove(threadId);
+	}
+
+	public static com.liferay.portlet.messageboards.model.MBThread updateImpl(
+		com.liferay.portlet.messageboards.model.MBThread mbThread)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(mbThread);
+	}
+
+	/**
+	* Returns the message boards thread with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchThreadException} if it could not be found.
+	*
+	* @param threadId the primary key of the message boards thread
+	* @return the message boards thread
+	* @throws com.liferay.portlet.messageboards.NoSuchThreadException if a message boards thread with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBThread findByPrimaryKey(
+		long threadId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchThreadException {
+		return getPersistence().findByPrimaryKey(threadId);
+	}
+
+	/**
+	* Returns the message boards thread with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param threadId the primary key of the message boards thread
+	* @return the message boards thread, or <code>null</code> if a message boards thread with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBThread fetchByPrimaryKey(
+		long threadId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(threadId);
+	}
+
+	/**
 	* Returns all the message boards threads.
 	*
 	* @return the message boards threads
@@ -3111,157 +3631,6 @@ public class MBThreadUtil {
 	}
 
 	/**
-	* Removes all the message boards threads where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes the message boards thread where rootMessageId = &#63; from the database.
-	*
-	* @param rootMessageId the root message ID
-	* @return the message boards thread that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBThread removeByRootMessageId(
-		long rootMessageId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchThreadException {
-		return getPersistence().removeByRootMessageId(rootMessageId);
-	}
-
-	/**
-	* Removes all the message boards threads where groupId = &#63; and categoryId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_C(long groupId, long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_C(groupId, categoryId);
-	}
-
-	/**
-	* Removes all the message boards threads where groupId = &#63; and categoryId &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_NotC(long groupId, long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_NotC(groupId, categoryId);
-	}
-
-	/**
-	* Removes all the message boards threads where groupId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_S(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_S(groupId, status);
-	}
-
-	/**
-	* Removes all the message boards threads where categoryId = &#63; and priority = &#63; from the database.
-	*
-	* @param categoryId the category ID
-	* @param priority the priority
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_P(long categoryId, double priority)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_P(categoryId, priority);
-	}
-
-	/**
-	* Removes all the message boards threads where lastPostDate = &#63; and priority = &#63; from the database.
-	*
-	* @param lastPostDate the last post date
-	* @param priority the priority
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByL_P(java.util.Date lastPostDate, double priority)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByL_P(lastPostDate, priority);
-	}
-
-	/**
-	* Removes all the message boards threads where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param lastPostDate the last post date
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_C_L(long groupId, long categoryId,
-		java.util.Date lastPostDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_C_L(groupId, categoryId, lastPostDate);
-	}
-
-	/**
-	* Removes all the message boards threads where groupId = &#63; and categoryId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_C_S(long groupId, long categoryId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_C_S(groupId, categoryId, status);
-	}
-
-	/**
-	* Removes all the message boards threads where groupId = &#63; and categoryId = &#63; and status &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_C_NotS(long groupId, long categoryId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_C_NotS(groupId, categoryId, status);
-	}
-
-	/**
-	* Removes all the message boards threads where groupId = &#63; and categoryId &ne; &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_NotC_S(long groupId, long categoryId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_NotC_S(groupId, categoryId, status);
-	}
-
-	/**
-	* Removes all the message boards threads where groupId = &#63; and categoryId &ne; &#63; and status &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_NotC_NotS(long groupId, long categoryId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_NotC_NotS(groupId, categoryId, status);
-	}
-
-	/**
 	* Removes all the message boards threads from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -3269,375 +3638,6 @@ public class MBThreadUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of message boards threads where rootMessageId = &#63;.
-	*
-	* @param rootMessageId the root message ID
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByRootMessageId(long rootMessageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByRootMessageId(rootMessageId);
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63; and categoryId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C(long groupId, long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_C(groupId, categoryId);
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63; and categoryId = any &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryIds the category IDs
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C(long groupId, long[] categoryIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_C(groupId, categoryIds);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_C(long groupId, long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_C(groupId, categoryId);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = any &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryIds the category IDs
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_C(long groupId, long[] categoryIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_C(groupId, categoryIds);
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63; and categoryId &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_NotC(long groupId, long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_NotC(groupId, categoryId);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_NotC(long groupId, long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_NotC(groupId, categoryId);
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_S(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_S(groupId, status);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_S(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_S(groupId, status);
-	}
-
-	/**
-	* Returns the number of message boards threads where categoryId = &#63; and priority = &#63;.
-	*
-	* @param categoryId the category ID
-	* @param priority the priority
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_P(long categoryId, double priority)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_P(categoryId, priority);
-	}
-
-	/**
-	* Returns the number of message boards threads where lastPostDate = &#63; and priority = &#63;.
-	*
-	* @param lastPostDate the last post date
-	* @param priority the priority
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByL_P(java.util.Date lastPostDate, double priority)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByL_P(lastPostDate, priority);
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param lastPostDate the last post date
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C_L(long groupId, long categoryId,
-		java.util.Date lastPostDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_C_L(groupId, categoryId, lastPostDate);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param lastPostDate the last post date
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_C_L(long groupId, long categoryId,
-		java.util.Date lastPostDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_C_L(groupId, categoryId, lastPostDate);
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63; and categoryId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C_S(long groupId, long categoryId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_C_S(groupId, categoryId, status);
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63; and categoryId = any &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryIds the category IDs
-	* @param status the status
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C_S(long groupId, long[] categoryIds, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_C_S(groupId, categoryIds, status);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_C_S(long groupId, long categoryId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_C_S(groupId, categoryId, status);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = any &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryIds the category IDs
-	* @param status the status
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_C_S(long groupId, long[] categoryIds,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_C_S(groupId, categoryIds, status);
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63; and categoryId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C_NotS(long groupId, long categoryId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_C_NotS(groupId, categoryId, status);
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63; and categoryId = any &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryIds the category IDs
-	* @param status the status
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C_NotS(long groupId, long[] categoryIds,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_C_NotS(groupId, categoryIds, status);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_C_NotS(long groupId, long categoryId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_C_NotS(groupId, categoryId, status);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = any &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryIds the category IDs
-	* @param status the status
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_C_NotS(long groupId, long[] categoryIds,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_C_NotS(groupId, categoryIds, status);
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63; and categoryId &ne; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_NotC_S(long groupId, long categoryId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_NotC_S(groupId, categoryId, status);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId &ne; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_NotC_S(long groupId, long categoryId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_NotC_S(groupId, categoryId, status);
-	}
-
-	/**
-	* Returns the number of message boards threads where groupId = &#63; and categoryId &ne; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @return the number of matching message boards threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_NotC_NotS(long groupId, long categoryId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_NotC_NotS(groupId, categoryId, status);
-	}
-
-	/**
-	* Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId &ne; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param status the status
-	* @return the number of matching message boards threads that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_NotC_NotS(long groupId, long categoryId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_NotC_NotS(groupId, categoryId, status);
 	}
 
 	/**

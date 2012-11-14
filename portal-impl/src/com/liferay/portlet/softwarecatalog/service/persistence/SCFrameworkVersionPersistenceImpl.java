@@ -82,6 +82,17 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
+			SCFrameworkVersionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
+			SCFrameworkVersionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
 			SCFrameworkVersionImpl.class,
@@ -103,485 +114,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
-			SCFrameworkVersionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
-			SCFrameworkVersionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			SCFrameworkVersionModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_A = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
-			SCFrameworkVersionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_A",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
-			SCFrameworkVersionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_A",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			SCFrameworkVersionModelImpl.GROUPID_COLUMN_BITMASK |
-			SCFrameworkVersionModelImpl.ACTIVE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_A = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_A",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
-			SCFrameworkVersionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
-			SCFrameworkVersionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the s c framework version in the entity cache if it is enabled.
-	 *
-	 * @param scFrameworkVersion the s c framework version
-	 */
-	public void cacheResult(SCFrameworkVersion scFrameworkVersion) {
-		EntityCacheUtil.putResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionImpl.class, scFrameworkVersion.getPrimaryKey(),
-			scFrameworkVersion);
-
-		scFrameworkVersion.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the s c framework versions in the entity cache if it is enabled.
-	 *
-	 * @param scFrameworkVersions the s c framework versions
-	 */
-	public void cacheResult(List<SCFrameworkVersion> scFrameworkVersions) {
-		for (SCFrameworkVersion scFrameworkVersion : scFrameworkVersions) {
-			if (EntityCacheUtil.getResult(
-						SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-						SCFrameworkVersionImpl.class,
-						scFrameworkVersion.getPrimaryKey()) == null) {
-				cacheResult(scFrameworkVersion);
-			}
-			else {
-				scFrameworkVersion.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all s c framework versions.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(SCFrameworkVersionImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(SCFrameworkVersionImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the s c framework version.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(SCFrameworkVersion scFrameworkVersion) {
-		EntityCacheUtil.removeResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionImpl.class, scFrameworkVersion.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<SCFrameworkVersion> scFrameworkVersions) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (SCFrameworkVersion scFrameworkVersion : scFrameworkVersions) {
-			EntityCacheUtil.removeResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-				SCFrameworkVersionImpl.class, scFrameworkVersion.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new s c framework version with the primary key. Does not add the s c framework version to the database.
-	 *
-	 * @param frameworkVersionId the primary key for the new s c framework version
-	 * @return the new s c framework version
-	 */
-	public SCFrameworkVersion create(long frameworkVersionId) {
-		SCFrameworkVersion scFrameworkVersion = new SCFrameworkVersionImpl();
-
-		scFrameworkVersion.setNew(true);
-		scFrameworkVersion.setPrimaryKey(frameworkVersionId);
-
-		return scFrameworkVersion;
-	}
-
-	/**
-	 * Removes the s c framework version with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param frameworkVersionId the primary key of the s c framework version
-	 * @return the s c framework version that was removed
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCFrameworkVersion remove(long frameworkVersionId)
-		throws NoSuchFrameworkVersionException, SystemException {
-		return remove(Long.valueOf(frameworkVersionId));
-	}
-
-	/**
-	 * Removes the s c framework version with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the s c framework version
-	 * @return the s c framework version that was removed
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SCFrameworkVersion remove(Serializable primaryKey)
-		throws NoSuchFrameworkVersionException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SCFrameworkVersion scFrameworkVersion = (SCFrameworkVersion)session.get(SCFrameworkVersionImpl.class,
-					primaryKey);
-
-			if (scFrameworkVersion == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchFrameworkVersionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(scFrameworkVersion);
-		}
-		catch (NoSuchFrameworkVersionException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected SCFrameworkVersion removeImpl(
-		SCFrameworkVersion scFrameworkVersion) throws SystemException {
-		scFrameworkVersion = toUnwrappedModel(scFrameworkVersion);
-
-		try {
-			clearSCProductVersions.clear(scFrameworkVersion.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(scFrameworkVersion)) {
-				scFrameworkVersion = (SCFrameworkVersion)session.get(SCFrameworkVersionImpl.class,
-						scFrameworkVersion.getPrimaryKeyObj());
-			}
-
-			if (scFrameworkVersion != null) {
-				session.delete(scFrameworkVersion);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (scFrameworkVersion != null) {
-			clearCache(scFrameworkVersion);
-		}
-
-		return scFrameworkVersion;
-	}
-
-	@Override
-	public SCFrameworkVersion updateImpl(
-		com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion scFrameworkVersion)
-		throws SystemException {
-		scFrameworkVersion = toUnwrappedModel(scFrameworkVersion);
-
-		boolean isNew = scFrameworkVersion.isNew();
-
-		SCFrameworkVersionModelImpl scFrameworkVersionModelImpl = (SCFrameworkVersionModelImpl)scFrameworkVersion;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (scFrameworkVersion.isNew()) {
-				session.save(scFrameworkVersion);
-
-				scFrameworkVersion.setNew(false);
-			}
-			else {
-				session.merge(scFrameworkVersion);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !SCFrameworkVersionModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((scFrameworkVersionModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(scFrameworkVersionModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(scFrameworkVersionModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((scFrameworkVersionModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(scFrameworkVersionModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(scFrameworkVersionModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((scFrameworkVersionModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(scFrameworkVersionModelImpl.getOriginalGroupId()),
-						Boolean.valueOf(scFrameworkVersionModelImpl.getOriginalActive())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_A, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(scFrameworkVersionModelImpl.getGroupId()),
-						Boolean.valueOf(scFrameworkVersionModelImpl.getActive())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_A, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-			SCFrameworkVersionImpl.class, scFrameworkVersion.getPrimaryKey(),
-			scFrameworkVersion);
-
-		return scFrameworkVersion;
-	}
-
-	protected SCFrameworkVersion toUnwrappedModel(
-		SCFrameworkVersion scFrameworkVersion) {
-		if (scFrameworkVersion instanceof SCFrameworkVersionImpl) {
-			return scFrameworkVersion;
-		}
-
-		SCFrameworkVersionImpl scFrameworkVersionImpl = new SCFrameworkVersionImpl();
-
-		scFrameworkVersionImpl.setNew(scFrameworkVersion.isNew());
-		scFrameworkVersionImpl.setPrimaryKey(scFrameworkVersion.getPrimaryKey());
-
-		scFrameworkVersionImpl.setFrameworkVersionId(scFrameworkVersion.getFrameworkVersionId());
-		scFrameworkVersionImpl.setGroupId(scFrameworkVersion.getGroupId());
-		scFrameworkVersionImpl.setCompanyId(scFrameworkVersion.getCompanyId());
-		scFrameworkVersionImpl.setUserId(scFrameworkVersion.getUserId());
-		scFrameworkVersionImpl.setUserName(scFrameworkVersion.getUserName());
-		scFrameworkVersionImpl.setCreateDate(scFrameworkVersion.getCreateDate());
-		scFrameworkVersionImpl.setModifiedDate(scFrameworkVersion.getModifiedDate());
-		scFrameworkVersionImpl.setName(scFrameworkVersion.getName());
-		scFrameworkVersionImpl.setUrl(scFrameworkVersion.getUrl());
-		scFrameworkVersionImpl.setActive(scFrameworkVersion.isActive());
-		scFrameworkVersionImpl.setPriority(scFrameworkVersion.getPriority());
-
-		return scFrameworkVersionImpl;
-	}
-
-	/**
-	 * Returns the s c framework version with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the s c framework version
-	 * @return the s c framework version
-	 * @throws com.liferay.portal.NoSuchModelException if a s c framework version with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SCFrameworkVersion findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the s c framework version with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException} if it could not be found.
-	 *
-	 * @param frameworkVersionId the primary key of the s c framework version
-	 * @return the s c framework version
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCFrameworkVersion findByPrimaryKey(long frameworkVersionId)
-		throws NoSuchFrameworkVersionException, SystemException {
-		SCFrameworkVersion scFrameworkVersion = fetchByPrimaryKey(frameworkVersionId);
-
-		if (scFrameworkVersion == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					frameworkVersionId);
-			}
-
-			throw new NoSuchFrameworkVersionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				frameworkVersionId);
-		}
-
-		return scFrameworkVersion;
-	}
-
-	/**
-	 * Returns the s c framework version with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the s c framework version
-	 * @return the s c framework version, or <code>null</code> if a s c framework version with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SCFrameworkVersion fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the s c framework version with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param frameworkVersionId the primary key of the s c framework version
-	 * @return the s c framework version, or <code>null</code> if a s c framework version with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCFrameworkVersion fetchByPrimaryKey(long frameworkVersionId)
-		throws SystemException {
-		SCFrameworkVersion scFrameworkVersion = (SCFrameworkVersion)EntityCacheUtil.getResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-				SCFrameworkVersionImpl.class, frameworkVersionId);
-
-		if (scFrameworkVersion == _nullSCFrameworkVersion) {
-			return null;
-		}
-
-		if (scFrameworkVersion == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				scFrameworkVersion = (SCFrameworkVersion)session.get(SCFrameworkVersionImpl.class,
-						Long.valueOf(frameworkVersionId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (scFrameworkVersion != null) {
-					cacheResult(scFrameworkVersion);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
-						SCFrameworkVersionImpl.class, frameworkVersionId,
-						_nullSCFrameworkVersion);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return scFrameworkVersion;
-	}
 
 	/**
 	 * Returns all the s c framework versions where groupId = &#63;.
@@ -1282,6 +814,143 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	}
 
 	/**
+	 * Removes all the s c framework versions where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (SCFrameworkVersion scFrameworkVersion : findByGroupId(groupId)) {
+			remove(scFrameworkVersion);
+		}
+	}
+
+	/**
+	 * Returns the number of s c framework versions where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching s c framework versions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SCFRAMEWORKVERSION_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of s c framework versions that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching s c framework versions that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_SCFRAMEWORKVERSION_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				SCFrameworkVersion.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "scFrameworkVersion.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
+			SCFrameworkVersionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
+			SCFrameworkVersionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			SCFrameworkVersionModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the s c framework versions where companyId = &#63;.
 	 *
 	 * @param companyId the company ID
@@ -1664,6 +1333,94 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the s c framework versions where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (SCFrameworkVersion scFrameworkVersion : findByCompanyId(companyId)) {
+			remove(scFrameworkVersion);
+		}
+	}
+
+	/**
+	 * Returns the number of s c framework versions where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching s c framework versions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SCFRAMEWORKVERSION_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "scFrameworkVersion.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_A = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
+			SCFrameworkVersionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_A",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED,
+			SCFrameworkVersionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_A",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			SCFrameworkVersionModelImpl.GROUPID_COLUMN_BITMASK |
+			SCFrameworkVersionModelImpl.ACTIVE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_A = new FinderPath(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_A",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
 	 * Returns all the s c framework versions where groupId = &#63; and active = &#63;.
@@ -2404,6 +2161,561 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	}
 
 	/**
+	 * Removes all the s c framework versions where groupId = &#63; and active = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param active the active
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_A(long groupId, boolean active)
+		throws SystemException {
+		for (SCFrameworkVersion scFrameworkVersion : findByG_A(groupId, active)) {
+			remove(scFrameworkVersion);
+		}
+	}
+
+	/**
+	 * Returns the number of s c framework versions where groupId = &#63; and active = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param active the active
+	 * @return the number of matching s c framework versions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_A(long groupId, boolean active)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, active };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_A,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_SCFRAMEWORKVERSION_WHERE);
+
+			query.append(_FINDER_COLUMN_G_A_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_A_ACTIVE_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(active);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_A, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of s c framework versions that the user has permission to view where groupId = &#63; and active = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param active the active
+	 * @return the number of matching s c framework versions that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_A(long groupId, boolean active)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_A(groupId, active);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_SCFRAMEWORKVERSION_WHERE);
+
+		query.append(_FINDER_COLUMN_G_A_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_A_ACTIVE_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				SCFrameworkVersion.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(active);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_A_GROUPID_2 = "scFrameworkVersion.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_A_ACTIVE_2 = "scFrameworkVersion.active = ?";
+
+	/**
+	 * Caches the s c framework version in the entity cache if it is enabled.
+	 *
+	 * @param scFrameworkVersion the s c framework version
+	 */
+	public void cacheResult(SCFrameworkVersion scFrameworkVersion) {
+		EntityCacheUtil.putResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionImpl.class, scFrameworkVersion.getPrimaryKey(),
+			scFrameworkVersion);
+
+		scFrameworkVersion.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the s c framework versions in the entity cache if it is enabled.
+	 *
+	 * @param scFrameworkVersions the s c framework versions
+	 */
+	public void cacheResult(List<SCFrameworkVersion> scFrameworkVersions) {
+		for (SCFrameworkVersion scFrameworkVersion : scFrameworkVersions) {
+			if (EntityCacheUtil.getResult(
+						SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+						SCFrameworkVersionImpl.class,
+						scFrameworkVersion.getPrimaryKey()) == null) {
+				cacheResult(scFrameworkVersion);
+			}
+			else {
+				scFrameworkVersion.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all s c framework versions.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(SCFrameworkVersionImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(SCFrameworkVersionImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the s c framework version.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(SCFrameworkVersion scFrameworkVersion) {
+		EntityCacheUtil.removeResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionImpl.class, scFrameworkVersion.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<SCFrameworkVersion> scFrameworkVersions) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (SCFrameworkVersion scFrameworkVersion : scFrameworkVersions) {
+			EntityCacheUtil.removeResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+				SCFrameworkVersionImpl.class, scFrameworkVersion.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new s c framework version with the primary key. Does not add the s c framework version to the database.
+	 *
+	 * @param frameworkVersionId the primary key for the new s c framework version
+	 * @return the new s c framework version
+	 */
+	public SCFrameworkVersion create(long frameworkVersionId) {
+		SCFrameworkVersion scFrameworkVersion = new SCFrameworkVersionImpl();
+
+		scFrameworkVersion.setNew(true);
+		scFrameworkVersion.setPrimaryKey(frameworkVersionId);
+
+		return scFrameworkVersion;
+	}
+
+	/**
+	 * Removes the s c framework version with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param frameworkVersionId the primary key of the s c framework version
+	 * @return the s c framework version that was removed
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCFrameworkVersion remove(long frameworkVersionId)
+		throws NoSuchFrameworkVersionException, SystemException {
+		return remove(Long.valueOf(frameworkVersionId));
+	}
+
+	/**
+	 * Removes the s c framework version with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the s c framework version
+	 * @return the s c framework version that was removed
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SCFrameworkVersion remove(Serializable primaryKey)
+		throws NoSuchFrameworkVersionException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SCFrameworkVersion scFrameworkVersion = (SCFrameworkVersion)session.get(SCFrameworkVersionImpl.class,
+					primaryKey);
+
+			if (scFrameworkVersion == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchFrameworkVersionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(scFrameworkVersion);
+		}
+		catch (NoSuchFrameworkVersionException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected SCFrameworkVersion removeImpl(
+		SCFrameworkVersion scFrameworkVersion) throws SystemException {
+		scFrameworkVersion = toUnwrappedModel(scFrameworkVersion);
+
+		try {
+			clearSCProductVersions.clear(scFrameworkVersion.getPrimaryKey());
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			FinderCacheUtil.clearCache(SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(scFrameworkVersion)) {
+				scFrameworkVersion = (SCFrameworkVersion)session.get(SCFrameworkVersionImpl.class,
+						scFrameworkVersion.getPrimaryKeyObj());
+			}
+
+			if (scFrameworkVersion != null) {
+				session.delete(scFrameworkVersion);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (scFrameworkVersion != null) {
+			clearCache(scFrameworkVersion);
+		}
+
+		return scFrameworkVersion;
+	}
+
+	@Override
+	public SCFrameworkVersion updateImpl(
+		com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion scFrameworkVersion)
+		throws SystemException {
+		scFrameworkVersion = toUnwrappedModel(scFrameworkVersion);
+
+		boolean isNew = scFrameworkVersion.isNew();
+
+		SCFrameworkVersionModelImpl scFrameworkVersionModelImpl = (SCFrameworkVersionModelImpl)scFrameworkVersion;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (scFrameworkVersion.isNew()) {
+				session.save(scFrameworkVersion);
+
+				scFrameworkVersion.setNew(false);
+			}
+			else {
+				session.merge(scFrameworkVersion);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !SCFrameworkVersionModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((scFrameworkVersionModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(scFrameworkVersionModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(scFrameworkVersionModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+
+			if ((scFrameworkVersionModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(scFrameworkVersionModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(scFrameworkVersionModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+
+			if ((scFrameworkVersionModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(scFrameworkVersionModelImpl.getOriginalGroupId()),
+						Boolean.valueOf(scFrameworkVersionModelImpl.getOriginalActive())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(scFrameworkVersionModelImpl.getGroupId()),
+						Boolean.valueOf(scFrameworkVersionModelImpl.getActive())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCFrameworkVersionImpl.class, scFrameworkVersion.getPrimaryKey(),
+			scFrameworkVersion);
+
+		return scFrameworkVersion;
+	}
+
+	protected SCFrameworkVersion toUnwrappedModel(
+		SCFrameworkVersion scFrameworkVersion) {
+		if (scFrameworkVersion instanceof SCFrameworkVersionImpl) {
+			return scFrameworkVersion;
+		}
+
+		SCFrameworkVersionImpl scFrameworkVersionImpl = new SCFrameworkVersionImpl();
+
+		scFrameworkVersionImpl.setNew(scFrameworkVersion.isNew());
+		scFrameworkVersionImpl.setPrimaryKey(scFrameworkVersion.getPrimaryKey());
+
+		scFrameworkVersionImpl.setFrameworkVersionId(scFrameworkVersion.getFrameworkVersionId());
+		scFrameworkVersionImpl.setGroupId(scFrameworkVersion.getGroupId());
+		scFrameworkVersionImpl.setCompanyId(scFrameworkVersion.getCompanyId());
+		scFrameworkVersionImpl.setUserId(scFrameworkVersion.getUserId());
+		scFrameworkVersionImpl.setUserName(scFrameworkVersion.getUserName());
+		scFrameworkVersionImpl.setCreateDate(scFrameworkVersion.getCreateDate());
+		scFrameworkVersionImpl.setModifiedDate(scFrameworkVersion.getModifiedDate());
+		scFrameworkVersionImpl.setName(scFrameworkVersion.getName());
+		scFrameworkVersionImpl.setUrl(scFrameworkVersion.getUrl());
+		scFrameworkVersionImpl.setActive(scFrameworkVersion.isActive());
+		scFrameworkVersionImpl.setPriority(scFrameworkVersion.getPriority());
+
+		return scFrameworkVersionImpl;
+	}
+
+	/**
+	 * Returns the s c framework version with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the s c framework version
+	 * @return the s c framework version
+	 * @throws com.liferay.portal.NoSuchModelException if a s c framework version with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SCFrameworkVersion findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the s c framework version with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException} if it could not be found.
+	 *
+	 * @param frameworkVersionId the primary key of the s c framework version
+	 * @return the s c framework version
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchFrameworkVersionException if a s c framework version with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCFrameworkVersion findByPrimaryKey(long frameworkVersionId)
+		throws NoSuchFrameworkVersionException, SystemException {
+		SCFrameworkVersion scFrameworkVersion = fetchByPrimaryKey(frameworkVersionId);
+
+		if (scFrameworkVersion == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					frameworkVersionId);
+			}
+
+			throw new NoSuchFrameworkVersionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				frameworkVersionId);
+		}
+
+		return scFrameworkVersion;
+	}
+
+	/**
+	 * Returns the s c framework version with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the s c framework version
+	 * @return the s c framework version, or <code>null</code> if a s c framework version with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SCFrameworkVersion fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the s c framework version with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param frameworkVersionId the primary key of the s c framework version
+	 * @return the s c framework version, or <code>null</code> if a s c framework version with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCFrameworkVersion fetchByPrimaryKey(long frameworkVersionId)
+		throws SystemException {
+		SCFrameworkVersion scFrameworkVersion = (SCFrameworkVersion)EntityCacheUtil.getResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+				SCFrameworkVersionImpl.class, frameworkVersionId);
+
+		if (scFrameworkVersion == _nullSCFrameworkVersion) {
+			return null;
+		}
+
+		if (scFrameworkVersion == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				scFrameworkVersion = (SCFrameworkVersion)session.get(SCFrameworkVersionImpl.class,
+						Long.valueOf(frameworkVersionId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (scFrameworkVersion != null) {
+					cacheResult(scFrameworkVersion);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+						SCFrameworkVersionImpl.class, frameworkVersionId,
+						_nullSCFrameworkVersion);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return scFrameworkVersion;
+	}
+
+	/**
 	 * Returns all the s c framework versions.
 	 *
 	 * @return the s c framework versions
@@ -2519,44 +2831,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	}
 
 	/**
-	 * Removes all the s c framework versions where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (SCFrameworkVersion scFrameworkVersion : findByGroupId(groupId)) {
-			remove(scFrameworkVersion);
-		}
-	}
-
-	/**
-	 * Removes all the s c framework versions where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (SCFrameworkVersion scFrameworkVersion : findByCompanyId(companyId)) {
-			remove(scFrameworkVersion);
-		}
-	}
-
-	/**
-	 * Removes all the s c framework versions where groupId = &#63; and active = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param active the active
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_A(long groupId, boolean active)
-		throws SystemException {
-		for (SCFrameworkVersion scFrameworkVersion : findByG_A(groupId, active)) {
-			remove(scFrameworkVersion);
-		}
-	}
-
-	/**
 	 * Removes all the s c framework versions from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2564,273 +2838,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	public void removeAll() throws SystemException {
 		for (SCFrameworkVersion scFrameworkVersion : findAll()) {
 			remove(scFrameworkVersion);
-		}
-	}
-
-	/**
-	 * Returns the number of s c framework versions where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching s c framework versions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SCFRAMEWORKVERSION_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of s c framework versions that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching s c framework versions that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_SCFRAMEWORKVERSION_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				SCFrameworkVersion.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of s c framework versions where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching s c framework versions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SCFRAMEWORKVERSION_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of s c framework versions where groupId = &#63; and active = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param active the active
-	 * @return the number of matching s c framework versions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_A(long groupId, boolean active)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, active };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_A,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_SCFRAMEWORKVERSION_WHERE);
-
-			query.append(_FINDER_COLUMN_G_A_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_A_ACTIVE_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(active);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_A, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of s c framework versions that the user has permission to view where groupId = &#63; and active = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param active the active
-	 * @return the number of matching s c framework versions that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_A(long groupId, boolean active)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_A(groupId, active);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_SCFRAMEWORKVERSION_WHERE);
-
-		query.append(_FINDER_COLUMN_G_A_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_A_ACTIVE_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				SCFrameworkVersion.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(active);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
 		}
 	}
 
@@ -3596,10 +3603,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 	private static final String _SQL_GETSCPRODUCTVERSIONS = "SELECT {SCProductVersion.*} FROM SCProductVersion INNER JOIN SCFrameworkVersi_SCProductVers ON (SCFrameworkVersi_SCProductVers.productVersionId = SCProductVersion.productVersionId) WHERE (SCFrameworkVersi_SCProductVers.frameworkVersionId = ?)";
 	private static final String _SQL_GETSCPRODUCTVERSIONSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM SCFrameworkVersi_SCProductVers WHERE frameworkVersionId = ?";
 	private static final String _SQL_CONTAINSSCPRODUCTVERSION = "SELECT COUNT(*) AS COUNT_VALUE FROM SCFrameworkVersi_SCProductVers WHERE frameworkVersionId = ? AND productVersionId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "scFrameworkVersion.groupId = ?";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "scFrameworkVersion.companyId = ?";
-	private static final String _FINDER_COLUMN_G_A_GROUPID_2 = "scFrameworkVersion.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_A_ACTIVE_2 = "scFrameworkVersion.active = ?";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "scFrameworkVersion.frameworkVersionId";
 	private static final String _FILTER_SQL_SELECT_SCFRAMEWORKVERSION_WHERE = "SELECT DISTINCT {scFrameworkVersion.*} FROM SCFrameworkVersion scFrameworkVersion WHERE ";
 	private static final String _FILTER_SQL_SELECT_SCFRAMEWORKVERSION_NO_INLINE_DISTINCT_WHERE_1 =

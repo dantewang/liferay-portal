@@ -36,67 +36,6 @@ public interface RegionPersistence extends BasePersistence<Region> {
 	 */
 
 	/**
-	* Caches the region in the entity cache if it is enabled.
-	*
-	* @param region the region
-	*/
-	public void cacheResult(com.liferay.portal.model.Region region);
-
-	/**
-	* Caches the regions in the entity cache if it is enabled.
-	*
-	* @param regions the regions
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.Region> regions);
-
-	/**
-	* Creates a new region with the primary key. Does not add the region to the database.
-	*
-	* @param regionId the primary key for the new region
-	* @return the new region
-	*/
-	public com.liferay.portal.model.Region create(long regionId);
-
-	/**
-	* Removes the region with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param regionId the primary key of the region
-	* @return the region that was removed
-	* @throws com.liferay.portal.NoSuchRegionException if a region with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Region remove(long regionId)
-		throws com.liferay.portal.NoSuchRegionException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.Region updateImpl(
-		com.liferay.portal.model.Region region)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the region with the primary key or throws a {@link com.liferay.portal.NoSuchRegionException} if it could not be found.
-	*
-	* @param regionId the primary key of the region
-	* @return the region
-	* @throws com.liferay.portal.NoSuchRegionException if a region with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Region findByPrimaryKey(long regionId)
-		throws com.liferay.portal.NoSuchRegionException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the region with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param regionId the primary key of the region
-	* @return the region, or <code>null</code> if a region with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Region fetchByPrimaryKey(long regionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the regions where countryId = &#63;.
 	*
 	* @param countryId the country ID
@@ -216,6 +155,25 @@ public interface RegionPersistence extends BasePersistence<Region> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the regions where countryId = &#63; from the database.
+	*
+	* @param countryId the country ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCountryId(long countryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of regions where countryId = &#63;.
+	*
+	* @param countryId the country ID
+	* @return the number of matching regions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCountryId(long countryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the regions where active = &#63;.
 	*
 	* @param active the active
@@ -331,6 +289,25 @@ public interface RegionPersistence extends BasePersistence<Region> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the regions where active = &#63; from the database.
+	*
+	* @param active the active
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByActive(boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of regions where active = &#63;.
+	*
+	* @param active the active
+	* @return the number of matching regions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByActive(boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the region where countryId = &#63; and regionCode = &#63; or throws a {@link com.liferay.portal.NoSuchRegionException} if it could not be found.
 	*
 	* @param countryId the country ID
@@ -367,6 +344,30 @@ public interface RegionPersistence extends BasePersistence<Region> {
 	*/
 	public com.liferay.portal.model.Region fetchByC_R(long countryId,
 		java.lang.String regionCode, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the region where countryId = &#63; and regionCode = &#63; from the database.
+	*
+	* @param countryId the country ID
+	* @param regionCode the region code
+	* @return the region that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Region removeByC_R(long countryId,
+		java.lang.String regionCode)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of regions where countryId = &#63; and regionCode = &#63;.
+	*
+	* @param countryId the country ID
+	* @param regionCode the region code
+	* @return the number of matching regions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_R(long countryId, java.lang.String regionCode)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -497,6 +498,88 @@ public interface RegionPersistence extends BasePersistence<Region> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the regions where countryId = &#63; and active = &#63; from the database.
+	*
+	* @param countryId the country ID
+	* @param active the active
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_A(long countryId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of regions where countryId = &#63; and active = &#63;.
+	*
+	* @param countryId the country ID
+	* @param active the active
+	* @return the number of matching regions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_A(long countryId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the region in the entity cache if it is enabled.
+	*
+	* @param region the region
+	*/
+	public void cacheResult(com.liferay.portal.model.Region region);
+
+	/**
+	* Caches the regions in the entity cache if it is enabled.
+	*
+	* @param regions the regions
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.Region> regions);
+
+	/**
+	* Creates a new region with the primary key. Does not add the region to the database.
+	*
+	* @param regionId the primary key for the new region
+	* @return the new region
+	*/
+	public com.liferay.portal.model.Region create(long regionId);
+
+	/**
+	* Removes the region with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param regionId the primary key of the region
+	* @return the region that was removed
+	* @throws com.liferay.portal.NoSuchRegionException if a region with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Region remove(long regionId)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.Region updateImpl(
+		com.liferay.portal.model.Region region)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the region with the primary key or throws a {@link com.liferay.portal.NoSuchRegionException} if it could not be found.
+	*
+	* @param regionId the primary key of the region
+	* @return the region
+	* @throws com.liferay.portal.NoSuchRegionException if a region with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Region findByPrimaryKey(long regionId)
+		throws com.liferay.portal.NoSuchRegionException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the region with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param regionId the primary key of the region
+	* @return the region, or <code>null</code> if a region with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Region fetchByPrimaryKey(long regionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the regions.
 	*
 	* @return the regions
@@ -539,94 +622,11 @@ public interface RegionPersistence extends BasePersistence<Region> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the regions where countryId = &#63; from the database.
-	*
-	* @param countryId the country ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCountryId(long countryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the regions where active = &#63; from the database.
-	*
-	* @param active the active
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByActive(boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the region where countryId = &#63; and regionCode = &#63; from the database.
-	*
-	* @param countryId the country ID
-	* @param regionCode the region code
-	* @return the region that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Region removeByC_R(long countryId,
-		java.lang.String regionCode)
-		throws com.liferay.portal.NoSuchRegionException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the regions where countryId = &#63; and active = &#63; from the database.
-	*
-	* @param countryId the country ID
-	* @param active the active
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_A(long countryId, boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the regions from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of regions where countryId = &#63;.
-	*
-	* @param countryId the country ID
-	* @return the number of matching regions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCountryId(long countryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of regions where active = &#63;.
-	*
-	* @param active the active
-	* @return the number of matching regions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByActive(boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of regions where countryId = &#63; and regionCode = &#63;.
-	*
-	* @param countryId the country ID
-	* @param regionCode the region code
-	* @return the number of matching regions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_R(long countryId, java.lang.String regionCode)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of regions where countryId = &#63; and active = &#63;.
-	*
-	* @param countryId the country ID
-	* @param active the active
-	* @return the number of matching regions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_A(long countryId, boolean active)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

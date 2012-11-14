@@ -84,6 +84,15 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
 		new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
@@ -104,546 +113,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_LOCATIONS =
-		new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByLocations",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS =
-		new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByLocations",
-			new String[] { Long.class.getName() },
-			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_LOCATIONS = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByLocations",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_P = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_P",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_P",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK |
-			OrganizationModelImpl.PARENTORGANIZATIONID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_N = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
-			new String[] { Long.class.getName(), String.class.getName() },
-			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK |
-			OrganizationModelImpl.NAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_N",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the organization in the entity cache if it is enabled.
-	 *
-	 * @param organization the organization
-	 */
-	public void cacheResult(Organization organization) {
-		EntityCacheUtil.putResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationImpl.class, organization.getPrimaryKey(), organization);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
-			new Object[] {
-				Long.valueOf(organization.getCompanyId()),
-				
-			organization.getName()
-			}, organization);
-
-		organization.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the organizations in the entity cache if it is enabled.
-	 *
-	 * @param organizations the organizations
-	 */
-	public void cacheResult(List<Organization> organizations) {
-		for (Organization organization : organizations) {
-			if (EntityCacheUtil.getResult(
-						OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-						OrganizationImpl.class, organization.getPrimaryKey()) == null) {
-				cacheResult(organization);
-			}
-			else {
-				organization.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all organizations.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(OrganizationImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(OrganizationImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the organization.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(Organization organization) {
-		EntityCacheUtil.removeResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationImpl.class, organization.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(organization);
-	}
-
-	@Override
-	public void clearCache(List<Organization> organizations) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (Organization organization : organizations) {
-			EntityCacheUtil.removeResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-				OrganizationImpl.class, organization.getPrimaryKey());
-
-			clearUniqueFindersCache(organization);
-		}
-	}
-
-	protected void clearUniqueFindersCache(Organization organization) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
-			new Object[] {
-				Long.valueOf(organization.getCompanyId()),
-				
-			organization.getName()
-			});
-	}
-
-	/**
-	 * Creates a new organization with the primary key. Does not add the organization to the database.
-	 *
-	 * @param organizationId the primary key for the new organization
-	 * @return the new organization
-	 */
-	public Organization create(long organizationId) {
-		Organization organization = new OrganizationImpl();
-
-		organization.setNew(true);
-		organization.setPrimaryKey(organizationId);
-
-		return organization;
-	}
-
-	/**
-	 * Removes the organization with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param organizationId the primary key of the organization
-	 * @return the organization that was removed
-	 * @throws com.liferay.portal.NoSuchOrganizationException if a organization with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Organization remove(long organizationId)
-		throws NoSuchOrganizationException, SystemException {
-		return remove(Long.valueOf(organizationId));
-	}
-
-	/**
-	 * Removes the organization with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the organization
-	 * @return the organization that was removed
-	 * @throws com.liferay.portal.NoSuchOrganizationException if a organization with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Organization remove(Serializable primaryKey)
-		throws NoSuchOrganizationException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Organization organization = (Organization)session.get(OrganizationImpl.class,
-					primaryKey);
-
-			if (organization == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchOrganizationException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(organization);
-		}
-		catch (NoSuchOrganizationException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected Organization removeImpl(Organization organization)
-		throws SystemException {
-		organization = toUnwrappedModel(organization);
-
-		try {
-			clearGroups.clear(organization.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(OrganizationModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
-		}
-
-		try {
-			clearUsers.clear(organization.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(OrganizationModelImpl.MAPPING_TABLE_USERS_ORGS_NAME);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(organization)) {
-				organization = (Organization)session.get(OrganizationImpl.class,
-						organization.getPrimaryKeyObj());
-			}
-
-			if (organization != null) {
-				session.delete(organization);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (organization != null) {
-			clearCache(organization);
-		}
-
-		return organization;
-	}
-
-	@Override
-	public Organization updateImpl(
-		com.liferay.portal.model.Organization organization)
-		throws SystemException {
-		organization = toUnwrappedModel(organization);
-
-		boolean isNew = organization.isNew();
-
-		OrganizationModelImpl organizationModelImpl = (OrganizationModelImpl)organization;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (organization.isNew()) {
-				session.save(organization);
-
-				organization.setNew(false);
-			}
-			else {
-				session.merge(organization);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !OrganizationModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((organizationModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(organizationModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(organizationModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((organizationModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(organizationModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LOCATIONS,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(organizationModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LOCATIONS,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS,
-					args);
-			}
-
-			if ((organizationModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(organizationModelImpl.getOriginalCompanyId()),
-						Long.valueOf(organizationModelImpl.getOriginalParentOrganizationId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(organizationModelImpl.getCompanyId()),
-						Long.valueOf(organizationModelImpl.getParentOrganizationId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationImpl.class, organization.getPrimaryKey(), organization);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
-				new Object[] {
-					Long.valueOf(organization.getCompanyId()),
-					
-				organization.getName()
-				}, organization);
-		}
-		else {
-			if ((organizationModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_C_N.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(organizationModelImpl.getOriginalCompanyId()),
-						
-						organizationModelImpl.getOriginalName()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_N, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
-					new Object[] {
-						Long.valueOf(organization.getCompanyId()),
-						
-					organization.getName()
-					}, organization);
-			}
-		}
-
-		return organization;
-	}
-
-	protected Organization toUnwrappedModel(Organization organization) {
-		if (organization instanceof OrganizationImpl) {
-			return organization;
-		}
-
-		OrganizationImpl organizationImpl = new OrganizationImpl();
-
-		organizationImpl.setNew(organization.isNew());
-		organizationImpl.setPrimaryKey(organization.getPrimaryKey());
-
-		organizationImpl.setOrganizationId(organization.getOrganizationId());
-		organizationImpl.setCompanyId(organization.getCompanyId());
-		organizationImpl.setParentOrganizationId(organization.getParentOrganizationId());
-		organizationImpl.setTreePath(organization.getTreePath());
-		organizationImpl.setName(organization.getName());
-		organizationImpl.setType(organization.getType());
-		organizationImpl.setRecursable(organization.isRecursable());
-		organizationImpl.setRegionId(organization.getRegionId());
-		organizationImpl.setCountryId(organization.getCountryId());
-		organizationImpl.setStatusId(organization.getStatusId());
-		organizationImpl.setComments(organization.getComments());
-
-		return organizationImpl;
-	}
-
-	/**
-	 * Returns the organization with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the organization
-	 * @return the organization
-	 * @throws com.liferay.portal.NoSuchModelException if a organization with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Organization findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the organization with the primary key or throws a {@link com.liferay.portal.NoSuchOrganizationException} if it could not be found.
-	 *
-	 * @param organizationId the primary key of the organization
-	 * @return the organization
-	 * @throws com.liferay.portal.NoSuchOrganizationException if a organization with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Organization findByPrimaryKey(long organizationId)
-		throws NoSuchOrganizationException, SystemException {
-		Organization organization = fetchByPrimaryKey(organizationId);
-
-		if (organization == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + organizationId);
-			}
-
-			throw new NoSuchOrganizationException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				organizationId);
-		}
-
-		return organization;
-	}
-
-	/**
-	 * Returns the organization with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the organization
-	 * @return the organization, or <code>null</code> if a organization with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Organization fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the organization with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param organizationId the primary key of the organization
-	 * @return the organization, or <code>null</code> if a organization with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Organization fetchByPrimaryKey(long organizationId)
-		throws SystemException {
-		Organization organization = (Organization)EntityCacheUtil.getResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-				OrganizationImpl.class, organizationId);
-
-		if (organization == _nullOrganization) {
-			return null;
-		}
-
-		if (organization == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				organization = (Organization)session.get(OrganizationImpl.class,
-						Long.valueOf(organizationId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (organization != null) {
-					cacheResult(organization);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-						OrganizationImpl.class, organizationId,
-						_nullOrganization);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return organization;
-	}
 
 	/**
 	 * Returns all the organizations where companyId = &#63;.
@@ -1342,6 +811,141 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	}
 
 	/**
+	 * Removes all the organizations where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (Organization organization : findByCompanyId(companyId)) {
+			remove(organization);
+		}
+	}
+
+	/**
+	 * Returns the number of organizations where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching organizations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_ORGANIZATION_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of organizations that the user has permission to view where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching organizations that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByCompanyId(long companyId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByCompanyId(companyId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_ORGANIZATION_WHERE);
+
+		query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				Organization.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(companyId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "organization.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_LOCATIONS =
+		new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByLocations",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS =
+		new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByLocations",
+			new String[] { Long.class.getName() },
+			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_LOCATIONS = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByLocations",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the organizations where companyId = &#63;.
 	 *
 	 * @param companyId the company ID
@@ -2036,6 +1640,140 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the organizations where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByLocations(long companyId) throws SystemException {
+		for (Organization organization : findByLocations(companyId)) {
+			remove(organization);
+		}
+	}
+
+	/**
+	 * Returns the number of organizations where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching organizations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByLocations(long companyId) throws SystemException {
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_LOCATIONS,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_ORGANIZATION_WHERE);
+
+			query.append(_FINDER_COLUMN_LOCATIONS_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_LOCATIONS,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of organizations that the user has permission to view where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching organizations that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByLocations(long companyId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByLocations(companyId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_ORGANIZATION_WHERE);
+
+		query.append(_FINDER_COLUMN_LOCATIONS_COMPANYID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				Organization.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(companyId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_LOCATIONS_COMPANYID_2 = "organization.companyId = ? AND organization.parentOrganizationId != 0";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_P = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_P",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK |
+			OrganizationModelImpl.PARENTORGANIZATIONID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_P",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the organizations where companyId = &#63; and parentOrganizationId = &#63;.
@@ -2782,6 +2520,147 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	}
 
 	/**
+	 * Removes all the organizations where companyId = &#63; and parentOrganizationId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param parentOrganizationId the parent organization ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_P(long companyId, long parentOrganizationId)
+		throws SystemException {
+		for (Organization organization : findByC_P(companyId,
+				parentOrganizationId)) {
+			remove(organization);
+		}
+	}
+
+	/**
+	 * Returns the number of organizations where companyId = &#63; and parentOrganizationId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param parentOrganizationId the parent organization ID
+	 * @return the number of matching organizations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_P(long companyId, long parentOrganizationId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { companyId, parentOrganizationId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_P,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_ORGANIZATION_WHERE);
+
+			query.append(_FINDER_COLUMN_C_P_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_P_PARENTORGANIZATIONID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(parentOrganizationId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_P, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of organizations that the user has permission to view where companyId = &#63; and parentOrganizationId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param parentOrganizationId the parent organization ID
+	 * @return the number of matching organizations that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByC_P(long companyId, long parentOrganizationId)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByC_P(companyId, parentOrganizationId);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_ORGANIZATION_WHERE);
+
+		query.append(_FINDER_COLUMN_C_P_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_C_P_PARENTORGANIZATIONID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				Organization.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(companyId);
+
+			qPos.add(parentOrganizationId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_C_P_COMPANYID_2 = "organization.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_P_PARENTORGANIZATIONID_2 = "organization.parentOrganizationId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_C_N = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
+			new String[] { Long.class.getName(), String.class.getName() },
+			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK |
+			OrganizationModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_N",
+			new String[] { Long.class.getName(), String.class.getName() });
+
+	/**
 	 * Returns the organization where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchOrganizationException} if it could not be found.
 	 *
 	 * @param companyId the company ID
@@ -2945,6 +2824,579 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	}
 
 	/**
+	 * Removes the organization where companyId = &#63; and name = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @return the organization that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Organization removeByC_N(long companyId, String name)
+		throws NoSuchOrganizationException, SystemException {
+		Organization organization = findByC_N(companyId, name);
+
+		return remove(organization);
+	}
+
+	/**
+	 * Returns the number of organizations where companyId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @return the number of matching organizations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_N(long companyId, String name)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { companyId, name };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_N,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_ORGANIZATION_WHERE);
+
+			query.append(_FINDER_COLUMN_C_N_COMPANYID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_C_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_C_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_C_N_NAME_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_N, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_N_COMPANYID_2 = "organization.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_N_NAME_1 = "organization.name IS NULL";
+	private static final String _FINDER_COLUMN_C_N_NAME_2 = "organization.name = ?";
+	private static final String _FINDER_COLUMN_C_N_NAME_3 = "(organization.name IS NULL OR organization.name = ?)";
+
+	/**
+	 * Caches the organization in the entity cache if it is enabled.
+	 *
+	 * @param organization the organization
+	 */
+	public void cacheResult(Organization organization) {
+		EntityCacheUtil.putResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationImpl.class, organization.getPrimaryKey(), organization);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
+			new Object[] {
+				Long.valueOf(organization.getCompanyId()),
+				
+			organization.getName()
+			}, organization);
+
+		organization.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the organizations in the entity cache if it is enabled.
+	 *
+	 * @param organizations the organizations
+	 */
+	public void cacheResult(List<Organization> organizations) {
+		for (Organization organization : organizations) {
+			if (EntityCacheUtil.getResult(
+						OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+						OrganizationImpl.class, organization.getPrimaryKey()) == null) {
+				cacheResult(organization);
+			}
+			else {
+				organization.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all organizations.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(OrganizationImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(OrganizationImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the organization.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(Organization organization) {
+		EntityCacheUtil.removeResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationImpl.class, organization.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(organization);
+	}
+
+	@Override
+	public void clearCache(List<Organization> organizations) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (Organization organization : organizations) {
+			EntityCacheUtil.removeResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+				OrganizationImpl.class, organization.getPrimaryKey());
+
+			clearUniqueFindersCache(organization);
+		}
+	}
+
+	protected void clearUniqueFindersCache(Organization organization) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
+			new Object[] {
+				Long.valueOf(organization.getCompanyId()),
+				
+			organization.getName()
+			});
+	}
+
+	/**
+	 * Creates a new organization with the primary key. Does not add the organization to the database.
+	 *
+	 * @param organizationId the primary key for the new organization
+	 * @return the new organization
+	 */
+	public Organization create(long organizationId) {
+		Organization organization = new OrganizationImpl();
+
+		organization.setNew(true);
+		organization.setPrimaryKey(organizationId);
+
+		return organization;
+	}
+
+	/**
+	 * Removes the organization with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param organizationId the primary key of the organization
+	 * @return the organization that was removed
+	 * @throws com.liferay.portal.NoSuchOrganizationException if a organization with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Organization remove(long organizationId)
+		throws NoSuchOrganizationException, SystemException {
+		return remove(Long.valueOf(organizationId));
+	}
+
+	/**
+	 * Removes the organization with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the organization
+	 * @return the organization that was removed
+	 * @throws com.liferay.portal.NoSuchOrganizationException if a organization with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Organization remove(Serializable primaryKey)
+		throws NoSuchOrganizationException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Organization organization = (Organization)session.get(OrganizationImpl.class,
+					primaryKey);
+
+			if (organization == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchOrganizationException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(organization);
+		}
+		catch (NoSuchOrganizationException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected Organization removeImpl(Organization organization)
+		throws SystemException {
+		organization = toUnwrappedModel(organization);
+
+		try {
+			clearGroups.clear(organization.getPrimaryKey());
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			FinderCacheUtil.clearCache(OrganizationModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME);
+		}
+
+		try {
+			clearUsers.clear(organization.getPrimaryKey());
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			FinderCacheUtil.clearCache(OrganizationModelImpl.MAPPING_TABLE_USERS_ORGS_NAME);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(organization)) {
+				organization = (Organization)session.get(OrganizationImpl.class,
+						organization.getPrimaryKeyObj());
+			}
+
+			if (organization != null) {
+				session.delete(organization);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (organization != null) {
+			clearCache(organization);
+		}
+
+		return organization;
+	}
+
+	@Override
+	public Organization updateImpl(
+		com.liferay.portal.model.Organization organization)
+		throws SystemException {
+		organization = toUnwrappedModel(organization);
+
+		boolean isNew = organization.isNew();
+
+		OrganizationModelImpl organizationModelImpl = (OrganizationModelImpl)organization;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (organization.isNew()) {
+				session.save(organization);
+
+				organization.setNew(false);
+			}
+			else {
+				session.merge(organization);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !OrganizationModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((organizationModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(organizationModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(organizationModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+
+			if ((organizationModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(organizationModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LOCATIONS,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(organizationModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LOCATIONS,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS,
+					args);
+			}
+
+			if ((organizationModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(organizationModelImpl.getOriginalCompanyId()),
+						Long.valueOf(organizationModelImpl.getOriginalParentOrganizationId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(organizationModelImpl.getCompanyId()),
+						Long.valueOf(organizationModelImpl.getParentOrganizationId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+			OrganizationImpl.class, organization.getPrimaryKey(), organization);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
+				new Object[] {
+					Long.valueOf(organization.getCompanyId()),
+					
+				organization.getName()
+				}, organization);
+		}
+		else {
+			if ((organizationModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_C_N.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(organizationModelImpl.getOriginalCompanyId()),
+						
+						organizationModelImpl.getOriginalName()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_N, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
+					new Object[] {
+						Long.valueOf(organization.getCompanyId()),
+						
+					organization.getName()
+					}, organization);
+			}
+		}
+
+		return organization;
+	}
+
+	protected Organization toUnwrappedModel(Organization organization) {
+		if (organization instanceof OrganizationImpl) {
+			return organization;
+		}
+
+		OrganizationImpl organizationImpl = new OrganizationImpl();
+
+		organizationImpl.setNew(organization.isNew());
+		organizationImpl.setPrimaryKey(organization.getPrimaryKey());
+
+		organizationImpl.setOrganizationId(organization.getOrganizationId());
+		organizationImpl.setCompanyId(organization.getCompanyId());
+		organizationImpl.setParentOrganizationId(organization.getParentOrganizationId());
+		organizationImpl.setTreePath(organization.getTreePath());
+		organizationImpl.setName(organization.getName());
+		organizationImpl.setType(organization.getType());
+		organizationImpl.setRecursable(organization.isRecursable());
+		organizationImpl.setRegionId(organization.getRegionId());
+		organizationImpl.setCountryId(organization.getCountryId());
+		organizationImpl.setStatusId(organization.getStatusId());
+		organizationImpl.setComments(organization.getComments());
+
+		return organizationImpl;
+	}
+
+	/**
+	 * Returns the organization with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the organization
+	 * @return the organization
+	 * @throws com.liferay.portal.NoSuchModelException if a organization with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Organization findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the organization with the primary key or throws a {@link com.liferay.portal.NoSuchOrganizationException} if it could not be found.
+	 *
+	 * @param organizationId the primary key of the organization
+	 * @return the organization
+	 * @throws com.liferay.portal.NoSuchOrganizationException if a organization with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Organization findByPrimaryKey(long organizationId)
+		throws NoSuchOrganizationException, SystemException {
+		Organization organization = fetchByPrimaryKey(organizationId);
+
+		if (organization == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + organizationId);
+			}
+
+			throw new NoSuchOrganizationException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				organizationId);
+		}
+
+		return organization;
+	}
+
+	/**
+	 * Returns the organization with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the organization
+	 * @return the organization, or <code>null</code> if a organization with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Organization fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the organization with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param organizationId the primary key of the organization
+	 * @return the organization, or <code>null</code> if a organization with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Organization fetchByPrimaryKey(long organizationId)
+		throws SystemException {
+		Organization organization = (Organization)EntityCacheUtil.getResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+				OrganizationImpl.class, organizationId);
+
+		if (organization == _nullOrganization) {
+			return null;
+		}
+
+		if (organization == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				organization = (Organization)session.get(OrganizationImpl.class,
+						Long.valueOf(organizationId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (organization != null) {
+					cacheResult(organization);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+						OrganizationImpl.class, organizationId,
+						_nullOrganization);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return organization;
+	}
+
+	/**
 	 * Returns all the organizations.
 	 *
 	 * @return the organizations
@@ -3060,60 +3512,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	}
 
 	/**
-	 * Removes all the organizations where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (Organization organization : findByCompanyId(companyId)) {
-			remove(organization);
-		}
-	}
-
-	/**
-	 * Removes all the organizations where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByLocations(long companyId) throws SystemException {
-		for (Organization organization : findByLocations(companyId)) {
-			remove(organization);
-		}
-	}
-
-	/**
-	 * Removes all the organizations where companyId = &#63; and parentOrganizationId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param parentOrganizationId the parent organization ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_P(long companyId, long parentOrganizationId)
-		throws SystemException {
-		for (Organization organization : findByC_P(companyId,
-				parentOrganizationId)) {
-			remove(organization);
-		}
-	}
-
-	/**
-	 * Removes the organization where companyId = &#63; and name = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @return the organization that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Organization removeByC_N(long companyId, String name)
-		throws NoSuchOrganizationException, SystemException {
-		Organization organization = findByC_N(companyId, name);
-
-		return remove(organization);
-	}
-
-	/**
 	 * Removes all the organizations from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -3122,392 +3520,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 		for (Organization organization : findAll()) {
 			remove(organization);
 		}
-	}
-
-	/**
-	 * Returns the number of organizations where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching organizations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_ORGANIZATION_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of organizations that the user has permission to view where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching organizations that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByCompanyId(long companyId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByCompanyId(companyId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_ORGANIZATION_WHERE);
-
-		query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				Organization.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(companyId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of organizations where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching organizations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByLocations(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_LOCATIONS,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_ORGANIZATION_WHERE);
-
-			query.append(_FINDER_COLUMN_LOCATIONS_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_LOCATIONS,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of organizations that the user has permission to view where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching organizations that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByLocations(long companyId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByLocations(companyId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_ORGANIZATION_WHERE);
-
-		query.append(_FINDER_COLUMN_LOCATIONS_COMPANYID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				Organization.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(companyId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of organizations where companyId = &#63; and parentOrganizationId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param parentOrganizationId the parent organization ID
-	 * @return the number of matching organizations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_P(long companyId, long parentOrganizationId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, parentOrganizationId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_P,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_ORGANIZATION_WHERE);
-
-			query.append(_FINDER_COLUMN_C_P_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_P_PARENTORGANIZATIONID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(parentOrganizationId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_P, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of organizations that the user has permission to view where companyId = &#63; and parentOrganizationId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param parentOrganizationId the parent organization ID
-	 * @return the number of matching organizations that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByC_P(long companyId, long parentOrganizationId)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByC_P(companyId, parentOrganizationId);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_ORGANIZATION_WHERE);
-
-		query.append(_FINDER_COLUMN_C_P_COMPANYID_2);
-
-		query.append(_FINDER_COLUMN_C_P_PARENTORGANIZATIONID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				Organization.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(companyId);
-
-			qPos.add(parentOrganizationId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of organizations where companyId = &#63; and name = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @return the number of matching organizations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_N(long companyId, String name)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, name };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_N,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_ORGANIZATION_WHERE);
-
-			query.append(_FINDER_COLUMN_C_N_COMPANYID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_C_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_N_NAME_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_N, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -4993,14 +5005,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	private static final String _SQL_GETUSERS = "SELECT {User_.*} FROM User_ INNER JOIN Users_Orgs ON (Users_Orgs.userId = User_.userId) WHERE (Users_Orgs.organizationId = ?)";
 	private static final String _SQL_GETUSERSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM Users_Orgs WHERE organizationId = ?";
 	private static final String _SQL_CONTAINSUSER = "SELECT COUNT(*) AS COUNT_VALUE FROM Users_Orgs WHERE organizationId = ? AND userId = ?";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "organization.companyId = ?";
-	private static final String _FINDER_COLUMN_LOCATIONS_COMPANYID_2 = "organization.companyId = ? AND organization.parentOrganizationId != 0";
-	private static final String _FINDER_COLUMN_C_P_COMPANYID_2 = "organization.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_P_PARENTORGANIZATIONID_2 = "organization.parentOrganizationId = ?";
-	private static final String _FINDER_COLUMN_C_N_COMPANYID_2 = "organization.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_N_NAME_1 = "organization.name IS NULL";
-	private static final String _FINDER_COLUMN_C_N_NAME_2 = "organization.name = ?";
-	private static final String _FINDER_COLUMN_C_N_NAME_3 = "(organization.name IS NULL OR organization.name = ?)";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "organization.organizationId";
 	private static final String _FILTER_SQL_SELECT_ORGANIZATION_WHERE = "SELECT DISTINCT {organization.*} FROM Organization_ organization WHERE ";
 	private static final String _FILTER_SQL_SELECT_ORGANIZATION_NO_INLINE_DISTINCT_WHERE_1 =

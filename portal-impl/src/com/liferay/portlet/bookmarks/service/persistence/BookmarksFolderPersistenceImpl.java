@@ -79,6 +79,17 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_RESOURCEBLOCKID =
 		new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
@@ -101,662 +112,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"countByResourceBlockId", new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByUuid",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
-			new String[] { String.class.getName() },
-			BookmarksFolderModelImpl.UUID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			BookmarksFolderModelImpl.UUID_COLUMN_BITMASK |
-			BookmarksFolderModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			BookmarksFolderModelImpl.UUID_COLUMN_BITMASK |
-			BookmarksFolderModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			BookmarksFolderModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByCompanyId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			BookmarksFolderModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByG_P",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			BookmarksFolderModelImpl.GROUPID_COLUMN_BITMASK |
-			BookmarksFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
-			BookmarksFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the bookmarks folder in the entity cache if it is enabled.
-	 *
-	 * @param bookmarksFolder the bookmarks folder
-	 */
-	public void cacheResult(BookmarksFolder bookmarksFolder) {
-		EntityCacheUtil.putResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderImpl.class, bookmarksFolder.getPrimaryKey(),
-			bookmarksFolder);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				bookmarksFolder.getUuid(),
-				Long.valueOf(bookmarksFolder.getGroupId())
-			}, bookmarksFolder);
-
-		bookmarksFolder.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the bookmarks folders in the entity cache if it is enabled.
-	 *
-	 * @param bookmarksFolders the bookmarks folders
-	 */
-	public void cacheResult(List<BookmarksFolder> bookmarksFolders) {
-		for (BookmarksFolder bookmarksFolder : bookmarksFolders) {
-			if (EntityCacheUtil.getResult(
-						BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-						BookmarksFolderImpl.class,
-						bookmarksFolder.getPrimaryKey()) == null) {
-				cacheResult(bookmarksFolder);
-			}
-			else {
-				bookmarksFolder.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all bookmarks folders.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(BookmarksFolderImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(BookmarksFolderImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the bookmarks folder.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(BookmarksFolder bookmarksFolder) {
-		EntityCacheUtil.removeResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderImpl.class, bookmarksFolder.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(bookmarksFolder);
-	}
-
-	@Override
-	public void clearCache(List<BookmarksFolder> bookmarksFolders) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (BookmarksFolder bookmarksFolder : bookmarksFolders) {
-			EntityCacheUtil.removeResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-				BookmarksFolderImpl.class, bookmarksFolder.getPrimaryKey());
-
-			clearUniqueFindersCache(bookmarksFolder);
-		}
-	}
-
-	protected void clearUniqueFindersCache(BookmarksFolder bookmarksFolder) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				bookmarksFolder.getUuid(),
-				Long.valueOf(bookmarksFolder.getGroupId())
-			});
-	}
-
-	/**
-	 * Creates a new bookmarks folder with the primary key. Does not add the bookmarks folder to the database.
-	 *
-	 * @param folderId the primary key for the new bookmarks folder
-	 * @return the new bookmarks folder
-	 */
-	public BookmarksFolder create(long folderId) {
-		BookmarksFolder bookmarksFolder = new BookmarksFolderImpl();
-
-		bookmarksFolder.setNew(true);
-		bookmarksFolder.setPrimaryKey(folderId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		bookmarksFolder.setUuid(uuid);
-
-		return bookmarksFolder;
-	}
-
-	/**
-	 * Removes the bookmarks folder with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param folderId the primary key of the bookmarks folder
-	 * @return the bookmarks folder that was removed
-	 * @throws com.liferay.portlet.bookmarks.NoSuchFolderException if a bookmarks folder with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public BookmarksFolder remove(long folderId)
-		throws NoSuchFolderException, SystemException {
-		return remove(Long.valueOf(folderId));
-	}
-
-	/**
-	 * Removes the bookmarks folder with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the bookmarks folder
-	 * @return the bookmarks folder that was removed
-	 * @throws com.liferay.portlet.bookmarks.NoSuchFolderException if a bookmarks folder with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public BookmarksFolder remove(Serializable primaryKey)
-		throws NoSuchFolderException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BookmarksFolder bookmarksFolder = (BookmarksFolder)session.get(BookmarksFolderImpl.class,
-					primaryKey);
-
-			if (bookmarksFolder == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchFolderException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(bookmarksFolder);
-		}
-		catch (NoSuchFolderException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected BookmarksFolder removeImpl(BookmarksFolder bookmarksFolder)
-		throws SystemException {
-		bookmarksFolder = toUnwrappedModel(bookmarksFolder);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(bookmarksFolder)) {
-				bookmarksFolder = (BookmarksFolder)session.get(BookmarksFolderImpl.class,
-						bookmarksFolder.getPrimaryKeyObj());
-			}
-
-			if (bookmarksFolder != null) {
-				session.delete(bookmarksFolder);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (bookmarksFolder != null) {
-			clearCache(bookmarksFolder);
-		}
-
-		return bookmarksFolder;
-	}
-
-	@Override
-	public BookmarksFolder updateImpl(
-		com.liferay.portlet.bookmarks.model.BookmarksFolder bookmarksFolder)
-		throws SystemException {
-		bookmarksFolder = toUnwrappedModel(bookmarksFolder);
-
-		boolean isNew = bookmarksFolder.isNew();
-
-		BookmarksFolderModelImpl bookmarksFolderModelImpl = (BookmarksFolderModelImpl)bookmarksFolder;
-
-		if (Validator.isNull(bookmarksFolder.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			bookmarksFolder.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (bookmarksFolder.isNew()) {
-				session.save(bookmarksFolder);
-
-				bookmarksFolder.setNew(false);
-			}
-			else {
-				session.merge(bookmarksFolder);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !BookmarksFolderModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((bookmarksFolderModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEBLOCKID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(bookmarksFolderModelImpl.getOriginalResourceBlockId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEBLOCKID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(bookmarksFolderModelImpl.getResourceBlockId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEBLOCKID,
-					args);
-			}
-
-			if ((bookmarksFolderModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						bookmarksFolderModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { bookmarksFolderModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((bookmarksFolderModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						bookmarksFolderModelImpl.getOriginalUuid(),
-						Long.valueOf(bookmarksFolderModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						bookmarksFolderModelImpl.getUuid(),
-						Long.valueOf(bookmarksFolderModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((bookmarksFolderModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(bookmarksFolderModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(bookmarksFolderModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((bookmarksFolderModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(bookmarksFolderModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(bookmarksFolderModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((bookmarksFolderModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(bookmarksFolderModelImpl.getOriginalGroupId()),
-						Long.valueOf(bookmarksFolderModelImpl.getOriginalParentFolderId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(bookmarksFolderModelImpl.getGroupId()),
-						Long.valueOf(bookmarksFolderModelImpl.getParentFolderId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-			BookmarksFolderImpl.class, bookmarksFolder.getPrimaryKey(),
-			bookmarksFolder);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-				new Object[] {
-					bookmarksFolder.getUuid(),
-					Long.valueOf(bookmarksFolder.getGroupId())
-				}, bookmarksFolder);
-		}
-		else {
-			if ((bookmarksFolderModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						bookmarksFolderModelImpl.getOriginalUuid(),
-						Long.valueOf(bookmarksFolderModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
-						bookmarksFolder.getUuid(),
-						Long.valueOf(bookmarksFolder.getGroupId())
-					}, bookmarksFolder);
-			}
-		}
-
-		return bookmarksFolder;
-	}
-
-	protected BookmarksFolder toUnwrappedModel(BookmarksFolder bookmarksFolder) {
-		if (bookmarksFolder instanceof BookmarksFolderImpl) {
-			return bookmarksFolder;
-		}
-
-		BookmarksFolderImpl bookmarksFolderImpl = new BookmarksFolderImpl();
-
-		bookmarksFolderImpl.setNew(bookmarksFolder.isNew());
-		bookmarksFolderImpl.setPrimaryKey(bookmarksFolder.getPrimaryKey());
-
-		bookmarksFolderImpl.setUuid(bookmarksFolder.getUuid());
-		bookmarksFolderImpl.setFolderId(bookmarksFolder.getFolderId());
-		bookmarksFolderImpl.setGroupId(bookmarksFolder.getGroupId());
-		bookmarksFolderImpl.setCompanyId(bookmarksFolder.getCompanyId());
-		bookmarksFolderImpl.setUserId(bookmarksFolder.getUserId());
-		bookmarksFolderImpl.setUserName(bookmarksFolder.getUserName());
-		bookmarksFolderImpl.setCreateDate(bookmarksFolder.getCreateDate());
-		bookmarksFolderImpl.setModifiedDate(bookmarksFolder.getModifiedDate());
-		bookmarksFolderImpl.setResourceBlockId(bookmarksFolder.getResourceBlockId());
-		bookmarksFolderImpl.setParentFolderId(bookmarksFolder.getParentFolderId());
-		bookmarksFolderImpl.setName(bookmarksFolder.getName());
-		bookmarksFolderImpl.setDescription(bookmarksFolder.getDescription());
-
-		return bookmarksFolderImpl;
-	}
-
-	/**
-	 * Returns the bookmarks folder with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the bookmarks folder
-	 * @return the bookmarks folder
-	 * @throws com.liferay.portal.NoSuchModelException if a bookmarks folder with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public BookmarksFolder findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the bookmarks folder with the primary key or throws a {@link com.liferay.portlet.bookmarks.NoSuchFolderException} if it could not be found.
-	 *
-	 * @param folderId the primary key of the bookmarks folder
-	 * @return the bookmarks folder
-	 * @throws com.liferay.portlet.bookmarks.NoSuchFolderException if a bookmarks folder with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public BookmarksFolder findByPrimaryKey(long folderId)
-		throws NoSuchFolderException, SystemException {
-		BookmarksFolder bookmarksFolder = fetchByPrimaryKey(folderId);
-
-		if (bookmarksFolder == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + folderId);
-			}
-
-			throw new NoSuchFolderException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				folderId);
-		}
-
-		return bookmarksFolder;
-	}
-
-	/**
-	 * Returns the bookmarks folder with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the bookmarks folder
-	 * @return the bookmarks folder, or <code>null</code> if a bookmarks folder with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public BookmarksFolder fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the bookmarks folder with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param folderId the primary key of the bookmarks folder
-	 * @return the bookmarks folder, or <code>null</code> if a bookmarks folder with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public BookmarksFolder fetchByPrimaryKey(long folderId)
-		throws SystemException {
-		BookmarksFolder bookmarksFolder = (BookmarksFolder)EntityCacheUtil.getResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-				BookmarksFolderImpl.class, folderId);
-
-		if (bookmarksFolder == _nullBookmarksFolder) {
-			return null;
-		}
-
-		if (bookmarksFolder == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				bookmarksFolder = (BookmarksFolder)session.get(BookmarksFolderImpl.class,
-						Long.valueOf(folderId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (bookmarksFolder != null) {
-					cacheResult(bookmarksFolder);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
-						BookmarksFolderImpl.class, folderId,
-						_nullBookmarksFolder);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return bookmarksFolder;
-	}
 
 	/**
 	 * Returns all the bookmarks folders where resourceBlockId = &#63;.
@@ -1145,6 +500,97 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the bookmarks folders where resourceBlockId = &#63; from the database.
+	 *
+	 * @param resourceBlockId the resource block ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByResourceBlockId(long resourceBlockId)
+		throws SystemException {
+		for (BookmarksFolder bookmarksFolder : findByResourceBlockId(
+				resourceBlockId)) {
+			remove(bookmarksFolder);
+		}
+	}
+
+	/**
+	 * Returns the number of bookmarks folders where resourceBlockId = &#63;.
+	 *
+	 * @param resourceBlockId the resource block ID
+	 * @return the number of matching bookmarks folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByResourceBlockId(long resourceBlockId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { resourceBlockId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
+
+			query.append(_FINDER_COLUMN_RESOURCEBLOCKID_RESOURCEBLOCKID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourceBlockId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_RESOURCEBLOCKID_RESOURCEBLOCKID_2 =
+		"bookmarksFolder.resourceBlockId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
+			new String[] { String.class.getName() },
+			BookmarksFolderModelImpl.UUID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the bookmarks folders where uuid = &#63;.
@@ -1552,6 +998,98 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	}
 
 	/**
+	 * Removes all the bookmarks folders where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (BookmarksFolder bookmarksFolder : findByUuid(uuid)) {
+			remove(bookmarksFolder);
+		}
+	}
+
+	/**
+	 * Returns the number of bookmarks folders where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching bookmarks folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "bookmarksFolder.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "bookmarksFolder.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(bookmarksFolder.uuid IS NULL OR bookmarksFolder.uuid = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			BookmarksFolderModelImpl.UUID_COLUMN_BITMASK |
+			BookmarksFolderModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns the bookmarks folder where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.bookmarks.NoSuchFolderException} if it could not be found.
 	 *
 	 * @param uuid the uuid
@@ -1713,6 +1251,119 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 			}
 		}
 	}
+
+	/**
+	 * Removes the bookmarks folder where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the bookmarks folder that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public BookmarksFolder removeByUUID_G(String uuid, long groupId)
+		throws NoSuchFolderException, SystemException {
+		BookmarksFolder bookmarksFolder = findByUUID_G(uuid, groupId);
+
+		return remove(bookmarksFolder);
+	}
+
+	/**
+	 * Returns the number of bookmarks folders where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching bookmarks folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUUID_G(String uuid, long groupId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "bookmarksFolder.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "bookmarksFolder.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(bookmarksFolder.uuid IS NULL OR bookmarksFolder.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "bookmarksFolder.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			BookmarksFolderModelImpl.UUID_COLUMN_BITMASK |
+			BookmarksFolderModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the bookmarks folders where uuid = &#63; and companyId = &#63;.
@@ -2148,6 +1799,117 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the bookmarks folders where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (BookmarksFolder bookmarksFolder : findByUuid_C(uuid, companyId)) {
+			remove(bookmarksFolder);
+		}
+	}
+
+	/**
+	 * Returns the number of bookmarks folders where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching bookmarks folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "bookmarksFolder.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "bookmarksFolder.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(bookmarksFolder.uuid IS NULL OR bookmarksFolder.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "bookmarksFolder.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByGroupId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			BookmarksFolderModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the bookmarks folders where groupId = &#63;.
@@ -2787,6 +2549,141 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	}
 
 	/**
+	 * Removes all the bookmarks folders where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (BookmarksFolder bookmarksFolder : findByGroupId(groupId)) {
+			remove(bookmarksFolder);
+		}
+	}
+
+	/**
+	 * Returns the number of bookmarks folders where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching bookmarks folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of bookmarks folders that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching bookmarks folders that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BookmarksFolder.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN,
+				_FILTER_ENTITY_TABLE_FILTER_USERID_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Query q = session.createQuery(sql);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "bookmarksFolder.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByCompanyId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			BookmarksFolderModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the bookmarks folders where companyId = &#63;.
 	 *
 	 * @param companyId the company ID
@@ -3168,6 +3065,94 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the bookmarks folders where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (BookmarksFolder bookmarksFolder : findByCompanyId(companyId)) {
+			remove(bookmarksFolder);
+		}
+	}
+
+	/**
+	 * Returns the number of bookmarks folders where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching bookmarks folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "bookmarksFolder.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED,
+			BookmarksFolderImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			BookmarksFolderModelImpl.GROUPID_COLUMN_BITMASK |
+			BookmarksFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the bookmarks folders where groupId = &#63; and parentFolderId = &#63;.
@@ -3850,6 +3835,662 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	}
 
 	/**
+	 * Removes all the bookmarks folders where groupId = &#63; and parentFolderId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_P(long groupId, long parentFolderId)
+		throws SystemException {
+		for (BookmarksFolder bookmarksFolder : findByG_P(groupId, parentFolderId)) {
+			remove(bookmarksFolder);
+		}
+	}
+
+	/**
+	 * Returns the number of bookmarks folders where groupId = &#63; and parentFolderId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @return the number of matching bookmarks folders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P(long groupId, long parentFolderId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, parentFolderId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_P,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_PARENTFOLDERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentFolderId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of bookmarks folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentFolderId the parent folder ID
+	 * @return the number of matching bookmarks folders that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P(long groupId, long parentFolderId)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P(groupId, parentFolderId);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
+
+		query.append(_FINDER_COLUMN_G_P_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_P_PARENTFOLDERID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BookmarksFolder.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN,
+				_FILTER_ENTITY_TABLE_FILTER_USERID_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Query q = session.createQuery(sql);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(parentFolderId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_P_GROUPID_2 = "bookmarksFolder.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_PARENTFOLDERID_2 = "bookmarksFolder.parentFolderId = ?";
+
+	/**
+	 * Caches the bookmarks folder in the entity cache if it is enabled.
+	 *
+	 * @param bookmarksFolder the bookmarks folder
+	 */
+	public void cacheResult(BookmarksFolder bookmarksFolder) {
+		EntityCacheUtil.putResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderImpl.class, bookmarksFolder.getPrimaryKey(),
+			bookmarksFolder);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				bookmarksFolder.getUuid(),
+				Long.valueOf(bookmarksFolder.getGroupId())
+			}, bookmarksFolder);
+
+		bookmarksFolder.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the bookmarks folders in the entity cache if it is enabled.
+	 *
+	 * @param bookmarksFolders the bookmarks folders
+	 */
+	public void cacheResult(List<BookmarksFolder> bookmarksFolders) {
+		for (BookmarksFolder bookmarksFolder : bookmarksFolders) {
+			if (EntityCacheUtil.getResult(
+						BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+						BookmarksFolderImpl.class,
+						bookmarksFolder.getPrimaryKey()) == null) {
+				cacheResult(bookmarksFolder);
+			}
+			else {
+				bookmarksFolder.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all bookmarks folders.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(BookmarksFolderImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(BookmarksFolderImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the bookmarks folder.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(BookmarksFolder bookmarksFolder) {
+		EntityCacheUtil.removeResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderImpl.class, bookmarksFolder.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(bookmarksFolder);
+	}
+
+	@Override
+	public void clearCache(List<BookmarksFolder> bookmarksFolders) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (BookmarksFolder bookmarksFolder : bookmarksFolders) {
+			EntityCacheUtil.removeResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+				BookmarksFolderImpl.class, bookmarksFolder.getPrimaryKey());
+
+			clearUniqueFindersCache(bookmarksFolder);
+		}
+	}
+
+	protected void clearUniqueFindersCache(BookmarksFolder bookmarksFolder) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				bookmarksFolder.getUuid(),
+				Long.valueOf(bookmarksFolder.getGroupId())
+			});
+	}
+
+	/**
+	 * Creates a new bookmarks folder with the primary key. Does not add the bookmarks folder to the database.
+	 *
+	 * @param folderId the primary key for the new bookmarks folder
+	 * @return the new bookmarks folder
+	 */
+	public BookmarksFolder create(long folderId) {
+		BookmarksFolder bookmarksFolder = new BookmarksFolderImpl();
+
+		bookmarksFolder.setNew(true);
+		bookmarksFolder.setPrimaryKey(folderId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		bookmarksFolder.setUuid(uuid);
+
+		return bookmarksFolder;
+	}
+
+	/**
+	 * Removes the bookmarks folder with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param folderId the primary key of the bookmarks folder
+	 * @return the bookmarks folder that was removed
+	 * @throws com.liferay.portlet.bookmarks.NoSuchFolderException if a bookmarks folder with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public BookmarksFolder remove(long folderId)
+		throws NoSuchFolderException, SystemException {
+		return remove(Long.valueOf(folderId));
+	}
+
+	/**
+	 * Removes the bookmarks folder with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the bookmarks folder
+	 * @return the bookmarks folder that was removed
+	 * @throws com.liferay.portlet.bookmarks.NoSuchFolderException if a bookmarks folder with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public BookmarksFolder remove(Serializable primaryKey)
+		throws NoSuchFolderException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BookmarksFolder bookmarksFolder = (BookmarksFolder)session.get(BookmarksFolderImpl.class,
+					primaryKey);
+
+			if (bookmarksFolder == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchFolderException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(bookmarksFolder);
+		}
+		catch (NoSuchFolderException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected BookmarksFolder removeImpl(BookmarksFolder bookmarksFolder)
+		throws SystemException {
+		bookmarksFolder = toUnwrappedModel(bookmarksFolder);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(bookmarksFolder)) {
+				bookmarksFolder = (BookmarksFolder)session.get(BookmarksFolderImpl.class,
+						bookmarksFolder.getPrimaryKeyObj());
+			}
+
+			if (bookmarksFolder != null) {
+				session.delete(bookmarksFolder);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (bookmarksFolder != null) {
+			clearCache(bookmarksFolder);
+		}
+
+		return bookmarksFolder;
+	}
+
+	@Override
+	public BookmarksFolder updateImpl(
+		com.liferay.portlet.bookmarks.model.BookmarksFolder bookmarksFolder)
+		throws SystemException {
+		bookmarksFolder = toUnwrappedModel(bookmarksFolder);
+
+		boolean isNew = bookmarksFolder.isNew();
+
+		BookmarksFolderModelImpl bookmarksFolderModelImpl = (BookmarksFolderModelImpl)bookmarksFolder;
+
+		if (Validator.isNull(bookmarksFolder.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			bookmarksFolder.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (bookmarksFolder.isNew()) {
+				session.save(bookmarksFolder);
+
+				bookmarksFolder.setNew(false);
+			}
+			else {
+				session.merge(bookmarksFolder);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !BookmarksFolderModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((bookmarksFolderModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEBLOCKID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(bookmarksFolderModelImpl.getOriginalResourceBlockId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEBLOCKID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(bookmarksFolderModelImpl.getResourceBlockId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEBLOCKID,
+					args);
+			}
+
+			if ((bookmarksFolderModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						bookmarksFolderModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { bookmarksFolderModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((bookmarksFolderModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						bookmarksFolderModelImpl.getOriginalUuid(),
+						Long.valueOf(bookmarksFolderModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						bookmarksFolderModelImpl.getUuid(),
+						Long.valueOf(bookmarksFolderModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((bookmarksFolderModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(bookmarksFolderModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(bookmarksFolderModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+
+			if ((bookmarksFolderModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(bookmarksFolderModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(bookmarksFolderModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+
+			if ((bookmarksFolderModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(bookmarksFolderModelImpl.getOriginalGroupId()),
+						Long.valueOf(bookmarksFolderModelImpl.getOriginalParentFolderId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(bookmarksFolderModelImpl.getGroupId()),
+						Long.valueOf(bookmarksFolderModelImpl.getParentFolderId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+			BookmarksFolderImpl.class, bookmarksFolder.getPrimaryKey(),
+			bookmarksFolder);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+				new Object[] {
+					bookmarksFolder.getUuid(),
+					Long.valueOf(bookmarksFolder.getGroupId())
+				}, bookmarksFolder);
+		}
+		else {
+			if ((bookmarksFolderModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						bookmarksFolderModelImpl.getOriginalUuid(),
+						Long.valueOf(bookmarksFolderModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+					new Object[] {
+						bookmarksFolder.getUuid(),
+						Long.valueOf(bookmarksFolder.getGroupId())
+					}, bookmarksFolder);
+			}
+		}
+
+		return bookmarksFolder;
+	}
+
+	protected BookmarksFolder toUnwrappedModel(BookmarksFolder bookmarksFolder) {
+		if (bookmarksFolder instanceof BookmarksFolderImpl) {
+			return bookmarksFolder;
+		}
+
+		BookmarksFolderImpl bookmarksFolderImpl = new BookmarksFolderImpl();
+
+		bookmarksFolderImpl.setNew(bookmarksFolder.isNew());
+		bookmarksFolderImpl.setPrimaryKey(bookmarksFolder.getPrimaryKey());
+
+		bookmarksFolderImpl.setUuid(bookmarksFolder.getUuid());
+		bookmarksFolderImpl.setFolderId(bookmarksFolder.getFolderId());
+		bookmarksFolderImpl.setGroupId(bookmarksFolder.getGroupId());
+		bookmarksFolderImpl.setCompanyId(bookmarksFolder.getCompanyId());
+		bookmarksFolderImpl.setUserId(bookmarksFolder.getUserId());
+		bookmarksFolderImpl.setUserName(bookmarksFolder.getUserName());
+		bookmarksFolderImpl.setCreateDate(bookmarksFolder.getCreateDate());
+		bookmarksFolderImpl.setModifiedDate(bookmarksFolder.getModifiedDate());
+		bookmarksFolderImpl.setResourceBlockId(bookmarksFolder.getResourceBlockId());
+		bookmarksFolderImpl.setParentFolderId(bookmarksFolder.getParentFolderId());
+		bookmarksFolderImpl.setName(bookmarksFolder.getName());
+		bookmarksFolderImpl.setDescription(bookmarksFolder.getDescription());
+
+		return bookmarksFolderImpl;
+	}
+
+	/**
+	 * Returns the bookmarks folder with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the bookmarks folder
+	 * @return the bookmarks folder
+	 * @throws com.liferay.portal.NoSuchModelException if a bookmarks folder with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public BookmarksFolder findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the bookmarks folder with the primary key or throws a {@link com.liferay.portlet.bookmarks.NoSuchFolderException} if it could not be found.
+	 *
+	 * @param folderId the primary key of the bookmarks folder
+	 * @return the bookmarks folder
+	 * @throws com.liferay.portlet.bookmarks.NoSuchFolderException if a bookmarks folder with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public BookmarksFolder findByPrimaryKey(long folderId)
+		throws NoSuchFolderException, SystemException {
+		BookmarksFolder bookmarksFolder = fetchByPrimaryKey(folderId);
+
+		if (bookmarksFolder == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + folderId);
+			}
+
+			throw new NoSuchFolderException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				folderId);
+		}
+
+		return bookmarksFolder;
+	}
+
+	/**
+	 * Returns the bookmarks folder with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the bookmarks folder
+	 * @return the bookmarks folder, or <code>null</code> if a bookmarks folder with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public BookmarksFolder fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the bookmarks folder with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param folderId the primary key of the bookmarks folder
+	 * @return the bookmarks folder, or <code>null</code> if a bookmarks folder with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public BookmarksFolder fetchByPrimaryKey(long folderId)
+		throws SystemException {
+		BookmarksFolder bookmarksFolder = (BookmarksFolder)EntityCacheUtil.getResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+				BookmarksFolderImpl.class, folderId);
+
+		if (bookmarksFolder == _nullBookmarksFolder) {
+			return null;
+		}
+
+		if (bookmarksFolder == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				bookmarksFolder = (BookmarksFolder)session.get(BookmarksFolderImpl.class,
+						Long.valueOf(folderId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (bookmarksFolder != null) {
+					cacheResult(bookmarksFolder);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+						BookmarksFolderImpl.class, folderId,
+						_nullBookmarksFolder);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return bookmarksFolder;
+	}
+
+	/**
 	 * Returns all the bookmarks folders.
 	 *
 	 * @return the bookmarks folders
@@ -3965,99 +4606,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	}
 
 	/**
-	 * Removes all the bookmarks folders where resourceBlockId = &#63; from the database.
-	 *
-	 * @param resourceBlockId the resource block ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByResourceBlockId(long resourceBlockId)
-		throws SystemException {
-		for (BookmarksFolder bookmarksFolder : findByResourceBlockId(
-				resourceBlockId)) {
-			remove(bookmarksFolder);
-		}
-	}
-
-	/**
-	 * Removes all the bookmarks folders where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (BookmarksFolder bookmarksFolder : findByUuid(uuid)) {
-			remove(bookmarksFolder);
-		}
-	}
-
-	/**
-	 * Removes the bookmarks folder where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the bookmarks folder that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public BookmarksFolder removeByUUID_G(String uuid, long groupId)
-		throws NoSuchFolderException, SystemException {
-		BookmarksFolder bookmarksFolder = findByUUID_G(uuid, groupId);
-
-		return remove(bookmarksFolder);
-	}
-
-	/**
-	 * Removes all the bookmarks folders where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (BookmarksFolder bookmarksFolder : findByUuid_C(uuid, companyId)) {
-			remove(bookmarksFolder);
-		}
-	}
-
-	/**
-	 * Removes all the bookmarks folders where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (BookmarksFolder bookmarksFolder : findByGroupId(groupId)) {
-			remove(bookmarksFolder);
-		}
-	}
-
-	/**
-	 * Removes all the bookmarks folders where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (BookmarksFolder bookmarksFolder : findByCompanyId(companyId)) {
-			remove(bookmarksFolder);
-		}
-	}
-
-	/**
-	 * Removes all the bookmarks folders where groupId = &#63; and parentFolderId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param parentFolderId the parent folder ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_P(long groupId, long parentFolderId)
-		throws SystemException {
-		for (BookmarksFolder bookmarksFolder : findByG_P(groupId, parentFolderId)) {
-			remove(bookmarksFolder);
-		}
-	}
-
-	/**
 	 * Removes all the bookmarks folders from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -4065,530 +4613,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	public void removeAll() throws SystemException {
 		for (BookmarksFolder bookmarksFolder : findAll()) {
 			remove(bookmarksFolder);
-		}
-	}
-
-	/**
-	 * Returns the number of bookmarks folders where resourceBlockId = &#63;.
-	 *
-	 * @param resourceBlockId the resource block ID
-	 * @return the number of matching bookmarks folders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByResourceBlockId(long resourceBlockId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { resourceBlockId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
-
-			query.append(_FINDER_COLUMN_RESOURCEBLOCKID_RESOURCEBLOCKID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourceBlockId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of bookmarks folders where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching bookmarks folders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of bookmarks folders where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching bookmarks folders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUUID_G(String uuid, long groupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of bookmarks folders where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching bookmarks folders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of bookmarks folders where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching bookmarks folders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of bookmarks folders that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching bookmarks folders that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BookmarksFolder.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN,
-				_FILTER_ENTITY_TABLE_FILTER_USERID_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Query q = session.createQuery(sql);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of bookmarks folders where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching bookmarks folders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of bookmarks folders where groupId = &#63; and parentFolderId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentFolderId the parent folder ID
-	 * @return the number of matching bookmarks folders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P(long groupId, long parentFolderId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, parentFolderId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_P,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_PARENTFOLDERID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentFolderId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of bookmarks folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentFolderId the parent folder ID
-	 * @return the number of matching bookmarks folders that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P(long groupId, long parentFolderId)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P(groupId, parentFolderId);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_SQL_COUNT_BOOKMARKSFOLDER_WHERE);
-
-		query.append(_FINDER_COLUMN_G_P_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_P_PARENTFOLDERID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BookmarksFolder.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN,
-				_FILTER_ENTITY_TABLE_FILTER_USERID_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Query q = session.createQuery(sql);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(parentFolderId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
 		}
 	}
 
@@ -4677,23 +4701,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	private static final String _SQL_SELECT_BOOKMARKSFOLDER_WHERE = "SELECT bookmarksFolder FROM BookmarksFolder bookmarksFolder WHERE ";
 	private static final String _SQL_COUNT_BOOKMARKSFOLDER = "SELECT COUNT(bookmarksFolder) FROM BookmarksFolder bookmarksFolder";
 	private static final String _SQL_COUNT_BOOKMARKSFOLDER_WHERE = "SELECT COUNT(bookmarksFolder) FROM BookmarksFolder bookmarksFolder WHERE ";
-	private static final String _FINDER_COLUMN_RESOURCEBLOCKID_RESOURCEBLOCKID_2 =
-		"bookmarksFolder.resourceBlockId = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "bookmarksFolder.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "bookmarksFolder.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(bookmarksFolder.uuid IS NULL OR bookmarksFolder.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "bookmarksFolder.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "bookmarksFolder.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(bookmarksFolder.uuid IS NULL OR bookmarksFolder.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "bookmarksFolder.groupId = ?";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "bookmarksFolder.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "bookmarksFolder.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(bookmarksFolder.uuid IS NULL OR bookmarksFolder.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "bookmarksFolder.companyId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "bookmarksFolder.groupId = ?";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "bookmarksFolder.companyId = ?";
-	private static final String _FINDER_COLUMN_G_P_GROUPID_2 = "bookmarksFolder.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_PARENTFOLDERID_2 = "bookmarksFolder.parentFolderId = ?";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "bookmarksFolder.folderId";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_USERID_COLUMN = "bookmarksFolder.userId";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "bookmarksFolder.";

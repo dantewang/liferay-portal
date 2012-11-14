@@ -93,6 +93,15 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
@@ -111,756 +120,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			CalEventModelImpl.UUID_COLUMN_BITMASK |
-			CalEventModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			CalEventModelImpl.UUID_COLUMN_BITMASK |
-			CalEventModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			CalEventModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			CalEventModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_NOTREMINDBY =
-		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByNotRemindBy",
-			new String[] {
-				Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_NOTREMINDBY =
-		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByNotRemindBy",
-			new String[] { Integer.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_T",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_T",
-			new String[] { Long.class.getName(), String.class.getName() },
-			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
-			CalEventModelImpl.TYPE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_T",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_T",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_R",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_R",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
-			CalEventModelImpl.REPEATING_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_R",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_T_R",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_T_R",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				Boolean.class.getName()
-			},
-			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
-			CalEventModelImpl.TYPE_COLUMN_BITMASK |
-			CalEventModelImpl.REPEATING_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_T_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_T_R",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_T_R",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the cal event in the entity cache if it is enabled.
-	 *
-	 * @param calEvent the cal event
-	 */
-	public void cacheResult(CalEvent calEvent) {
-		EntityCacheUtil.putResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventImpl.class, calEvent.getPrimaryKey(), calEvent);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] { calEvent.getUuid(), Long.valueOf(
-					calEvent.getGroupId()) }, calEvent);
-
-		calEvent.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the cal events in the entity cache if it is enabled.
-	 *
-	 * @param calEvents the cal events
-	 */
-	public void cacheResult(List<CalEvent> calEvents) {
-		for (CalEvent calEvent : calEvents) {
-			if (EntityCacheUtil.getResult(
-						CalEventModelImpl.ENTITY_CACHE_ENABLED,
-						CalEventImpl.class, calEvent.getPrimaryKey()) == null) {
-				cacheResult(calEvent);
-			}
-			else {
-				calEvent.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all cal events.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(CalEventImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(CalEventImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the cal event.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(CalEvent calEvent) {
-		EntityCacheUtil.removeResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventImpl.class, calEvent.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(calEvent);
-	}
-
-	@Override
-	public void clearCache(List<CalEvent> calEvents) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (CalEvent calEvent : calEvents) {
-			EntityCacheUtil.removeResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-				CalEventImpl.class, calEvent.getPrimaryKey());
-
-			clearUniqueFindersCache(calEvent);
-		}
-	}
-
-	protected void clearUniqueFindersCache(CalEvent calEvent) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] { calEvent.getUuid(), Long.valueOf(
-					calEvent.getGroupId()) });
-	}
-
-	/**
-	 * Creates a new cal event with the primary key. Does not add the cal event to the database.
-	 *
-	 * @param eventId the primary key for the new cal event
-	 * @return the new cal event
-	 */
-	public CalEvent create(long eventId) {
-		CalEvent calEvent = new CalEventImpl();
-
-		calEvent.setNew(true);
-		calEvent.setPrimaryKey(eventId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		calEvent.setUuid(uuid);
-
-		return calEvent;
-	}
-
-	/**
-	 * Removes the cal event with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param eventId the primary key of the cal event
-	 * @return the cal event that was removed
-	 * @throws com.liferay.portlet.calendar.NoSuchEventException if a cal event with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public CalEvent remove(long eventId)
-		throws NoSuchEventException, SystemException {
-		return remove(Long.valueOf(eventId));
-	}
-
-	/**
-	 * Removes the cal event with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the cal event
-	 * @return the cal event that was removed
-	 * @throws com.liferay.portlet.calendar.NoSuchEventException if a cal event with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public CalEvent remove(Serializable primaryKey)
-		throws NoSuchEventException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			CalEvent calEvent = (CalEvent)session.get(CalEventImpl.class,
-					primaryKey);
-
-			if (calEvent == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchEventException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(calEvent);
-		}
-		catch (NoSuchEventException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected CalEvent removeImpl(CalEvent calEvent) throws SystemException {
-		calEvent = toUnwrappedModel(calEvent);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(calEvent)) {
-				calEvent = (CalEvent)session.get(CalEventImpl.class,
-						calEvent.getPrimaryKeyObj());
-			}
-
-			if (calEvent != null) {
-				session.delete(calEvent);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (calEvent != null) {
-			clearCache(calEvent);
-		}
-
-		return calEvent;
-	}
-
-	@Override
-	public CalEvent updateImpl(
-		com.liferay.portlet.calendar.model.CalEvent calEvent)
-		throws SystemException {
-		calEvent = toUnwrappedModel(calEvent);
-
-		boolean isNew = calEvent.isNew();
-
-		CalEventModelImpl calEventModelImpl = (CalEventModelImpl)calEvent;
-
-		if (Validator.isNull(calEvent.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			calEvent.setUuid(uuid);
-		}
-
-		long userId = GetterUtil.getLong(PrincipalThreadLocal.getName());
-
-		if (userId > 0) {
-			long companyId = calEvent.getCompanyId();
-
-			long groupId = calEvent.getGroupId();
-
-			long eventId = 0;
-
-			if (!isNew) {
-				eventId = calEvent.getPrimaryKey();
-			}
-
-			try {
-				calEvent.setTitle(SanitizerUtil.sanitize(companyId, groupId,
-						userId,
-						com.liferay.portlet.calendar.model.CalEvent.class.getName(),
-						eventId, ContentTypes.TEXT_PLAIN, Sanitizer.MODE_ALL,
-						calEvent.getTitle(), null));
-
-				calEvent.setDescription(SanitizerUtil.sanitize(companyId,
-						groupId, userId,
-						com.liferay.portlet.calendar.model.CalEvent.class.getName(),
-						eventId, ContentTypes.TEXT_HTML, Sanitizer.MODE_ALL,
-						calEvent.getDescription(), null));
-			}
-			catch (SanitizerException se) {
-				throw new SystemException(se);
-			}
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (calEvent.isNew()) {
-				session.save(calEvent);
-
-				calEvent.setNew(false);
-			}
-			else {
-				session.merge(calEvent);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !CalEventModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] { calEventModelImpl.getOriginalUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { calEventModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						calEventModelImpl.getOriginalUuid(),
-						Long.valueOf(calEventModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						calEventModelImpl.getUuid(),
-						Long.valueOf(calEventModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(calEventModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(calEventModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(calEventModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] { Long.valueOf(calEventModelImpl.getGroupId()) };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(calEventModelImpl.getOriginalGroupId()),
-						
-						calEventModelImpl.getOriginalType()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(calEventModelImpl.getGroupId()),
-						
-						calEventModelImpl.getType()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T,
-					args);
-			}
-
-			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(calEventModelImpl.getOriginalGroupId()),
-						Boolean.valueOf(calEventModelImpl.getOriginalRepeating())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(calEventModelImpl.getGroupId()),
-						Boolean.valueOf(calEventModelImpl.getRepeating())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R,
-					args);
-			}
-
-			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(calEventModelImpl.getOriginalGroupId()),
-						
-						calEventModelImpl.getOriginalType(),
-						Boolean.valueOf(calEventModelImpl.getOriginalRepeating())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(calEventModelImpl.getGroupId()),
-						
-						calEventModelImpl.getType(),
-						Boolean.valueOf(calEventModelImpl.getRepeating())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventImpl.class, calEvent.getPrimaryKey(), calEvent);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-				new Object[] {
-					calEvent.getUuid(), Long.valueOf(calEvent.getGroupId())
-				}, calEvent);
-		}
-		else {
-			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						calEventModelImpl.getOriginalUuid(),
-						Long.valueOf(calEventModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
-						calEvent.getUuid(), Long.valueOf(calEvent.getGroupId())
-					}, calEvent);
-			}
-		}
-
-		return calEvent;
-	}
-
-	protected CalEvent toUnwrappedModel(CalEvent calEvent) {
-		if (calEvent instanceof CalEventImpl) {
-			return calEvent;
-		}
-
-		CalEventImpl calEventImpl = new CalEventImpl();
-
-		calEventImpl.setNew(calEvent.isNew());
-		calEventImpl.setPrimaryKey(calEvent.getPrimaryKey());
-
-		calEventImpl.setUuid(calEvent.getUuid());
-		calEventImpl.setEventId(calEvent.getEventId());
-		calEventImpl.setGroupId(calEvent.getGroupId());
-		calEventImpl.setCompanyId(calEvent.getCompanyId());
-		calEventImpl.setUserId(calEvent.getUserId());
-		calEventImpl.setUserName(calEvent.getUserName());
-		calEventImpl.setCreateDate(calEvent.getCreateDate());
-		calEventImpl.setModifiedDate(calEvent.getModifiedDate());
-		calEventImpl.setTitle(calEvent.getTitle());
-		calEventImpl.setDescription(calEvent.getDescription());
-		calEventImpl.setLocation(calEvent.getLocation());
-		calEventImpl.setStartDate(calEvent.getStartDate());
-		calEventImpl.setEndDate(calEvent.getEndDate());
-		calEventImpl.setDurationHour(calEvent.getDurationHour());
-		calEventImpl.setDurationMinute(calEvent.getDurationMinute());
-		calEventImpl.setAllDay(calEvent.isAllDay());
-		calEventImpl.setTimeZoneSensitive(calEvent.isTimeZoneSensitive());
-		calEventImpl.setType(calEvent.getType());
-		calEventImpl.setRepeating(calEvent.isRepeating());
-		calEventImpl.setRecurrence(calEvent.getRecurrence());
-		calEventImpl.setRemindBy(calEvent.getRemindBy());
-		calEventImpl.setFirstReminder(calEvent.getFirstReminder());
-		calEventImpl.setSecondReminder(calEvent.getSecondReminder());
-
-		return calEventImpl;
-	}
-
-	/**
-	 * Returns the cal event with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the cal event
-	 * @return the cal event
-	 * @throws com.liferay.portal.NoSuchModelException if a cal event with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public CalEvent findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the cal event with the primary key or throws a {@link com.liferay.portlet.calendar.NoSuchEventException} if it could not be found.
-	 *
-	 * @param eventId the primary key of the cal event
-	 * @return the cal event
-	 * @throws com.liferay.portlet.calendar.NoSuchEventException if a cal event with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public CalEvent findByPrimaryKey(long eventId)
-		throws NoSuchEventException, SystemException {
-		CalEvent calEvent = fetchByPrimaryKey(eventId);
-
-		if (calEvent == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + eventId);
-			}
-
-			throw new NoSuchEventException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				eventId);
-		}
-
-		return calEvent;
-	}
-
-	/**
-	 * Returns the cal event with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the cal event
-	 * @return the cal event, or <code>null</code> if a cal event with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public CalEvent fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the cal event with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param eventId the primary key of the cal event
-	 * @return the cal event, or <code>null</code> if a cal event with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public CalEvent fetchByPrimaryKey(long eventId) throws SystemException {
-		CalEvent calEvent = (CalEvent)EntityCacheUtil.getResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-				CalEventImpl.class, eventId);
-
-		if (calEvent == _nullCalEvent) {
-			return null;
-		}
-
-		if (calEvent == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				calEvent = (CalEvent)session.get(CalEventImpl.class,
-						Long.valueOf(eventId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (calEvent != null) {
-					cacheResult(calEvent);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-						CalEventImpl.class, eventId, _nullCalEvent);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return calEvent;
-	}
 
 	/**
 	 * Returns all the cal events where uuid = &#63;.
@@ -1265,6 +524,97 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	}
 
 	/**
+	 * Removes all the cal events where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (CalEvent calEvent : findByUuid(uuid)) {
+			remove(calEvent);
+		}
+	}
+
+	/**
+	 * Returns the number of cal events where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_CALEVENT_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "calEvent.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "calEvent.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(calEvent.uuid IS NULL OR calEvent.uuid = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			CalEventModelImpl.UUID_COLUMN_BITMASK |
+			CalEventModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns the cal event where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.calendar.NoSuchEventException} if it could not be found.
 	 *
 	 * @param uuid the uuid
@@ -1426,6 +776,117 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			}
 		}
 	}
+
+	/**
+	 * Removes the cal event where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the cal event that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalEvent removeByUUID_G(String uuid, long groupId)
+		throws NoSuchEventException, SystemException {
+		CalEvent calEvent = findByUUID_G(uuid, groupId);
+
+		return remove(calEvent);
+	}
+
+	/**
+	 * Returns the number of cal events where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUUID_G(String uuid, long groupId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_CALEVENT_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "calEvent.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "calEvent.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(calEvent.uuid IS NULL OR calEvent.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "calEvent.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			CalEventModelImpl.UUID_COLUMN_BITMASK |
+			CalEventModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the cal events where uuid = &#63; and companyId = &#63;.
@@ -1862,6 +1323,116 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	}
 
 	/**
+	 * Removes all the cal events where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (CalEvent calEvent : findByUuid_C(uuid, companyId)) {
+			remove(calEvent);
+		}
+	}
+
+	/**
+	 * Returns the number of cal events where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_CALEVENT_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "calEvent.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "calEvent.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(calEvent.uuid IS NULL OR calEvent.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "calEvent.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			CalEventModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the cal events where companyId = &#63;.
 	 *
 	 * @param companyId the company ID
@@ -2240,6 +1811,92 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the cal events where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (CalEvent calEvent : findByCompanyId(companyId)) {
+			remove(calEvent);
+		}
+	}
+
+	/**
+	 * Returns the number of cal events where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_CALEVENT_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "calEvent.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			CalEventModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the cal events where groupId = &#63;.
@@ -2931,6 +2588,136 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	}
 
 	/**
+	 * Removes all the cal events where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (CalEvent calEvent : findByGroupId(groupId)) {
+			remove(calEvent);
+		}
+	}
+
+	/**
+	 * Returns the number of cal events where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_CALEVENT_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of cal events that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching cal events that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_CALEVENT_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				CalEvent.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "calEvent.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_NOTREMINDBY =
+		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByNotRemindBy",
+			new String[] {
+				Integer.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_NOTREMINDBY =
+		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByNotRemindBy",
+			new String[] { Integer.class.getName() });
+
+	/**
 	 * Returns all the cal events where remindBy &ne; &#63;.
 	 *
 	 * @param remindBy the remind by
@@ -3303,6 +3090,96 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the cal events where remindBy &ne; &#63; from the database.
+	 *
+	 * @param remindBy the remind by
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByNotRemindBy(int remindBy) throws SystemException {
+		for (CalEvent calEvent : findByNotRemindBy(remindBy)) {
+			remove(calEvent);
+		}
+	}
+
+	/**
+	 * Returns the number of cal events where remindBy &ne; &#63;.
+	 *
+	 * @param remindBy the remind by
+	 * @return the number of matching cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByNotRemindBy(int remindBy) throws SystemException {
+		Object[] finderArgs = new Object[] { remindBy };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_NOTREMINDBY,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_CALEVENT_WHERE);
+
+			query.append(_FINDER_COLUMN_NOTREMINDBY_REMINDBY_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(remindBy);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_NOTREMINDBY,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_NOTREMINDBY_REMINDBY_2 = "calEvent.remindBy != ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_T",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_T",
+			new String[] { Long.class.getName(), String.class.getName() },
+			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
+			CalEventModelImpl.TYPE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_T",
+			new String[] { Long.class.getName(), String.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_T",
+			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
 	 * Returns all the cal events where groupId = &#63; and type = &#63;.
@@ -4429,6 +4306,381 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	}
 
 	/**
+	 * Removes all the cal events where groupId = &#63; and type = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param type the type
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_T(long groupId, String type)
+		throws SystemException {
+		for (CalEvent calEvent : findByG_T(groupId, type)) {
+			remove(calEvent);
+		}
+	}
+
+	/**
+	 * Returns the number of cal events where groupId = &#63; and type = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param type the type
+	 * @return the number of matching cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_T(long groupId, String type) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, type };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_T,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_CALEVENT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_T_GROUPID_2);
+
+			if (type == null) {
+				query.append(_FINDER_COLUMN_G_T_TYPE_1);
+			}
+			else {
+				if (type.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_T_TYPE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_T_TYPE_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (type != null) {
+					qPos.add(type);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_T, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of cal events where groupId = &#63; and type = any &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param types the types
+	 * @return the number of matching cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_T(long groupId, String[] types)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, StringUtil.merge(types) };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_CALEVENT_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_T_GROUPID_5);
+
+			conjunctionable = true;
+
+			if ((types == null) || (types.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < types.length; i++) {
+					String type = types[i];
+
+					if (type == null) {
+						query.append(_FINDER_COLUMN_G_T_TYPE_4);
+					}
+					else {
+						if (type.equals(StringPool.BLANK)) {
+							query.append(_FINDER_COLUMN_G_T_TYPE_6);
+						}
+						else {
+							query.append(_FINDER_COLUMN_G_T_TYPE_5);
+						}
+					}
+
+					if ((i + 1) < types.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (types != null) {
+					qPos.add(types);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of cal events that the user has permission to view where groupId = &#63; and type = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param type the type
+	 * @return the number of matching cal events that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_T(long groupId, String type)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_T(groupId, type);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_CALEVENT_WHERE);
+
+		query.append(_FINDER_COLUMN_G_T_GROUPID_2);
+
+		if (type == null) {
+			query.append(_FINDER_COLUMN_G_T_TYPE_1);
+		}
+		else {
+			if (type.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_G_T_TYPE_3);
+			}
+			else {
+				query.append(_FINDER_COLUMN_G_T_TYPE_2);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				CalEvent.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			if (type != null) {
+				qPos.add(type);
+			}
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the number of cal events that the user has permission to view where groupId = &#63; and type = any &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param types the types
+	 * @return the number of matching cal events that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_T(long groupId, String[] types)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_T(groupId, types);
+		}
+
+		StringBundler query = new StringBundler();
+
+		query.append(_FILTER_SQL_COUNT_CALEVENT_WHERE);
+
+		boolean conjunctionable = false;
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_T_GROUPID_5);
+
+		conjunctionable = true;
+
+		if ((types == null) || (types.length > 0)) {
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(StringPool.OPEN_PARENTHESIS);
+
+			for (int i = 0; i < types.length; i++) {
+				String type = types[i];
+
+				if (type == null) {
+					query.append(_FINDER_COLUMN_G_T_TYPE_4);
+				}
+				else {
+					if (type.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_G_T_TYPE_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_G_T_TYPE_5);
+					}
+				}
+
+				if ((i + 1) < types.length) {
+					query.append(WHERE_OR);
+				}
+			}
+
+			query.append(StringPool.CLOSE_PARENTHESIS);
+
+			conjunctionable = true;
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				CalEvent.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			if (types != null) {
+				qPos.add(types);
+			}
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_T_GROUPID_2 = "calEvent.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_T_GROUPID_5 = "(" +
+		_removeConjunction(_FINDER_COLUMN_G_T_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_G_T_TYPE_1 = "calEvent.type IS NULL";
+	private static final String _FINDER_COLUMN_G_T_TYPE_2 = "calEvent.type = ?";
+	private static final String _FINDER_COLUMN_G_T_TYPE_3 = "(calEvent.type IS NULL OR calEvent.type = ?)";
+	private static final String _FINDER_COLUMN_G_T_TYPE_4 = "(" +
+		_removeConjunction(_FINDER_COLUMN_G_T_TYPE_1) + ")";
+	private static final String _FINDER_COLUMN_G_T_TYPE_5 = "(" +
+		_removeConjunction(_FINDER_COLUMN_G_T_TYPE_2) + ")";
+	private static final String _FINDER_COLUMN_G_T_TYPE_6 = "(" +
+		_removeConjunction(_FINDER_COLUMN_G_T_TYPE_3) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_R",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_R",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
+			CalEventModelImpl.REPEATING_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_R",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
+
+	/**
 	 * Returns all the cal events where groupId = &#63; and repeating = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -5162,6 +5414,170 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the cal events where groupId = &#63; and repeating = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param repeating the repeating
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_R(long groupId, boolean repeating)
+		throws SystemException {
+		for (CalEvent calEvent : findByG_R(groupId, repeating)) {
+			remove(calEvent);
+		}
+	}
+
+	/**
+	 * Returns the number of cal events where groupId = &#63; and repeating = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param repeating the repeating
+	 * @return the number of matching cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_R(long groupId, boolean repeating)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, repeating };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_R,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_CALEVENT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_R_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_R_REPEATING_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(repeating);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_R, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of cal events that the user has permission to view where groupId = &#63; and repeating = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param repeating the repeating
+	 * @return the number of matching cal events that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_R(long groupId, boolean repeating)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_R(groupId, repeating);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_CALEVENT_WHERE);
+
+		query.append(_FINDER_COLUMN_G_R_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_R_REPEATING_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				CalEvent.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(repeating);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_R_GROUPID_2 = "calEvent.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_R_REPEATING_2 = "calEvent.repeating = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_T_R",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_T_R",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				Boolean.class.getName()
+			},
+			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
+			CalEventModelImpl.TYPE_COLUMN_BITMASK |
+			CalEventModelImpl.REPEATING_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_T_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_T_R",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				Boolean.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_T_R",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				Boolean.class.getName()
+			});
 
 	/**
 	 * Returns all the cal events where groupId = &#63; and type = &#63; and repeating = &#63;.
@@ -6362,225 +6778,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	}
 
 	/**
-	 * Returns all the cal events.
-	 *
-	 * @return the cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<CalEvent> findAll() throws SystemException {
-		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the cal events.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of cal events
-	 * @param end the upper bound of the range of cal events (not inclusive)
-	 * @return the range of cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<CalEvent> findAll(int start, int end) throws SystemException {
-		return findAll(start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the cal events.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of cal events
-	 * @param end the upper bound of the range of cal events (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<CalEvent> findAll(int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if (list == null) {
-			StringBundler query = null;
-			String sql = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 3));
-
-				query.append(_SQL_SELECT_CALEVENT);
-
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-
-				sql = query.toString();
-			}
-			else {
-				sql = _SQL_SELECT_CALEVENT.concat(CalEventModelImpl.ORDER_BY_JPQL);
-			}
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				if (orderByComparator == null) {
-					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-				}
-				else {
-					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Removes all the cal events where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (CalEvent calEvent : findByUuid(uuid)) {
-			remove(calEvent);
-		}
-	}
-
-	/**
-	 * Removes the cal event where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the cal event that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public CalEvent removeByUUID_G(String uuid, long groupId)
-		throws NoSuchEventException, SystemException {
-		CalEvent calEvent = findByUUID_G(uuid, groupId);
-
-		return remove(calEvent);
-	}
-
-	/**
-	 * Removes all the cal events where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (CalEvent calEvent : findByUuid_C(uuid, companyId)) {
-			remove(calEvent);
-		}
-	}
-
-	/**
-	 * Removes all the cal events where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (CalEvent calEvent : findByCompanyId(companyId)) {
-			remove(calEvent);
-		}
-	}
-
-	/**
-	 * Removes all the cal events where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (CalEvent calEvent : findByGroupId(groupId)) {
-			remove(calEvent);
-		}
-	}
-
-	/**
-	 * Removes all the cal events where remindBy &ne; &#63; from the database.
-	 *
-	 * @param remindBy the remind by
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByNotRemindBy(int remindBy) throws SystemException {
-		for (CalEvent calEvent : findByNotRemindBy(remindBy)) {
-			remove(calEvent);
-		}
-	}
-
-	/**
-	 * Removes all the cal events where groupId = &#63; and type = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param type the type
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_T(long groupId, String type)
-		throws SystemException {
-		for (CalEvent calEvent : findByG_T(groupId, type)) {
-			remove(calEvent);
-		}
-	}
-
-	/**
-	 * Removes all the cal events where groupId = &#63; and repeating = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param repeating the repeating
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_R(long groupId, boolean repeating)
-		throws SystemException {
-		for (CalEvent calEvent : findByG_R(groupId, repeating)) {
-			remove(calEvent);
-		}
-	}
-
-	/**
 	 * Removes all the cal events where groupId = &#63; and type = &#63; and repeating = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -6592,873 +6789,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 		throws SystemException {
 		for (CalEvent calEvent : findByG_T_R(groupId, type, repeating)) {
 			remove(calEvent);
-		}
-	}
-
-	/**
-	 * Removes all the cal events from the database.
-	 *
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeAll() throws SystemException {
-		for (CalEvent calEvent : findAll()) {
-			remove(calEvent);
-		}
-	}
-
-	/**
-	 * Returns the number of cal events where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_CALEVENT_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of cal events where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUUID_G(String uuid, long groupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_CALEVENT_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of cal events where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_CALEVENT_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of cal events where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_CALEVENT_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of cal events where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_CALEVENT_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of cal events that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching cal events that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_CALEVENT_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				CalEvent.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of cal events where remindBy &ne; &#63;.
-	 *
-	 * @param remindBy the remind by
-	 * @return the number of matching cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByNotRemindBy(int remindBy) throws SystemException {
-		Object[] finderArgs = new Object[] { remindBy };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_NOTREMINDBY,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_CALEVENT_WHERE);
-
-			query.append(_FINDER_COLUMN_NOTREMINDBY_REMINDBY_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(remindBy);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_NOTREMINDBY,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of cal events where groupId = &#63; and type = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param type the type
-	 * @return the number of matching cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_T(long groupId, String type) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, type };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_T,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_CALEVENT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_T_GROUPID_2);
-
-			if (type == null) {
-				query.append(_FINDER_COLUMN_G_T_TYPE_1);
-			}
-			else {
-				if (type.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_T_TYPE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_T_TYPE_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (type != null) {
-					qPos.add(type);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_T, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of cal events where groupId = &#63; and type = any &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param types the types
-	 * @return the number of matching cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_T(long groupId, String[] types)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, StringUtil.merge(types) };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_CALEVENT_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_T_GROUPID_5);
-
-			conjunctionable = true;
-
-			if ((types == null) || (types.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < types.length; i++) {
-					String type = types[i];
-
-					if (type == null) {
-						query.append(_FINDER_COLUMN_G_T_TYPE_4);
-					}
-					else {
-						if (type.equals(StringPool.BLANK)) {
-							query.append(_FINDER_COLUMN_G_T_TYPE_6);
-						}
-						else {
-							query.append(_FINDER_COLUMN_G_T_TYPE_5);
-						}
-					}
-
-					if ((i + 1) < types.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (types != null) {
-					qPos.add(types);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of cal events that the user has permission to view where groupId = &#63; and type = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param type the type
-	 * @return the number of matching cal events that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_T(long groupId, String type)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_T(groupId, type);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_CALEVENT_WHERE);
-
-		query.append(_FINDER_COLUMN_G_T_GROUPID_2);
-
-		if (type == null) {
-			query.append(_FINDER_COLUMN_G_T_TYPE_1);
-		}
-		else {
-			if (type.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_T_TYPE_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_T_TYPE_2);
-			}
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				CalEvent.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			if (type != null) {
-				qPos.add(type);
-			}
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of cal events that the user has permission to view where groupId = &#63; and type = any &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param types the types
-	 * @return the number of matching cal events that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_T(long groupId, String[] types)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_T(groupId, types);
-		}
-
-		StringBundler query = new StringBundler();
-
-		query.append(_FILTER_SQL_COUNT_CALEVENT_WHERE);
-
-		boolean conjunctionable = false;
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_T_GROUPID_5);
-
-		conjunctionable = true;
-
-		if ((types == null) || (types.length > 0)) {
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(StringPool.OPEN_PARENTHESIS);
-
-			for (int i = 0; i < types.length; i++) {
-				String type = types[i];
-
-				if (type == null) {
-					query.append(_FINDER_COLUMN_G_T_TYPE_4);
-				}
-				else {
-					if (type.equals(StringPool.BLANK)) {
-						query.append(_FINDER_COLUMN_G_T_TYPE_6);
-					}
-					else {
-						query.append(_FINDER_COLUMN_G_T_TYPE_5);
-					}
-				}
-
-				if ((i + 1) < types.length) {
-					query.append(WHERE_OR);
-				}
-			}
-
-			query.append(StringPool.CLOSE_PARENTHESIS);
-
-			conjunctionable = true;
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				CalEvent.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			if (types != null) {
-				qPos.add(types);
-			}
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of cal events where groupId = &#63; and repeating = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param repeating the repeating
-	 * @return the number of matching cal events
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_R(long groupId, boolean repeating)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, repeating };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_R,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_CALEVENT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_R_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_R_REPEATING_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(repeating);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_R, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of cal events that the user has permission to view where groupId = &#63; and repeating = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param repeating the repeating
-	 * @return the number of matching cal events that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_R(long groupId, boolean repeating)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_R(groupId, repeating);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_CALEVENT_WHERE);
-
-		query.append(_FINDER_COLUMN_G_R_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_R_REPEATING_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				CalEvent.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(repeating);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
 		}
 	}
 
@@ -7826,6 +7156,728 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 		}
 	}
 
+	private static final String _FINDER_COLUMN_G_T_R_GROUPID_2 = "calEvent.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_T_R_GROUPID_5 = "(" +
+		_removeConjunction(_FINDER_COLUMN_G_T_R_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_G_T_R_TYPE_1 = "calEvent.type IS NULL AND ";
+	private static final String _FINDER_COLUMN_G_T_R_TYPE_2 = "calEvent.type = ? AND ";
+	private static final String _FINDER_COLUMN_G_T_R_TYPE_3 = "(calEvent.type IS NULL OR calEvent.type = ?) AND ";
+	private static final String _FINDER_COLUMN_G_T_R_TYPE_4 = "(" +
+		_removeConjunction(_FINDER_COLUMN_G_T_R_TYPE_1) + ")";
+	private static final String _FINDER_COLUMN_G_T_R_TYPE_5 = "(" +
+		_removeConjunction(_FINDER_COLUMN_G_T_R_TYPE_2) + ")";
+	private static final String _FINDER_COLUMN_G_T_R_TYPE_6 = "(" +
+		_removeConjunction(_FINDER_COLUMN_G_T_R_TYPE_3) + ")";
+	private static final String _FINDER_COLUMN_G_T_R_REPEATING_2 = "calEvent.repeating = ?";
+	private static final String _FINDER_COLUMN_G_T_R_REPEATING_5 = "(" +
+		_removeConjunction(_FINDER_COLUMN_G_T_R_REPEATING_2) + ")";
+
+	/**
+	 * Caches the cal event in the entity cache if it is enabled.
+	 *
+	 * @param calEvent the cal event
+	 */
+	public void cacheResult(CalEvent calEvent) {
+		EntityCacheUtil.putResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventImpl.class, calEvent.getPrimaryKey(), calEvent);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] { calEvent.getUuid(), Long.valueOf(
+					calEvent.getGroupId()) }, calEvent);
+
+		calEvent.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the cal events in the entity cache if it is enabled.
+	 *
+	 * @param calEvents the cal events
+	 */
+	public void cacheResult(List<CalEvent> calEvents) {
+		for (CalEvent calEvent : calEvents) {
+			if (EntityCacheUtil.getResult(
+						CalEventModelImpl.ENTITY_CACHE_ENABLED,
+						CalEventImpl.class, calEvent.getPrimaryKey()) == null) {
+				cacheResult(calEvent);
+			}
+			else {
+				calEvent.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all cal events.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(CalEventImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(CalEventImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the cal event.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(CalEvent calEvent) {
+		EntityCacheUtil.removeResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventImpl.class, calEvent.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(calEvent);
+	}
+
+	@Override
+	public void clearCache(List<CalEvent> calEvents) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (CalEvent calEvent : calEvents) {
+			EntityCacheUtil.removeResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+				CalEventImpl.class, calEvent.getPrimaryKey());
+
+			clearUniqueFindersCache(calEvent);
+		}
+	}
+
+	protected void clearUniqueFindersCache(CalEvent calEvent) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] { calEvent.getUuid(), Long.valueOf(
+					calEvent.getGroupId()) });
+	}
+
+	/**
+	 * Creates a new cal event with the primary key. Does not add the cal event to the database.
+	 *
+	 * @param eventId the primary key for the new cal event
+	 * @return the new cal event
+	 */
+	public CalEvent create(long eventId) {
+		CalEvent calEvent = new CalEventImpl();
+
+		calEvent.setNew(true);
+		calEvent.setPrimaryKey(eventId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		calEvent.setUuid(uuid);
+
+		return calEvent;
+	}
+
+	/**
+	 * Removes the cal event with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param eventId the primary key of the cal event
+	 * @return the cal event that was removed
+	 * @throws com.liferay.portlet.calendar.NoSuchEventException if a cal event with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalEvent remove(long eventId)
+		throws NoSuchEventException, SystemException {
+		return remove(Long.valueOf(eventId));
+	}
+
+	/**
+	 * Removes the cal event with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the cal event
+	 * @return the cal event that was removed
+	 * @throws com.liferay.portlet.calendar.NoSuchEventException if a cal event with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public CalEvent remove(Serializable primaryKey)
+		throws NoSuchEventException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			CalEvent calEvent = (CalEvent)session.get(CalEventImpl.class,
+					primaryKey);
+
+			if (calEvent == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchEventException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(calEvent);
+		}
+		catch (NoSuchEventException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected CalEvent removeImpl(CalEvent calEvent) throws SystemException {
+		calEvent = toUnwrappedModel(calEvent);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(calEvent)) {
+				calEvent = (CalEvent)session.get(CalEventImpl.class,
+						calEvent.getPrimaryKeyObj());
+			}
+
+			if (calEvent != null) {
+				session.delete(calEvent);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (calEvent != null) {
+			clearCache(calEvent);
+		}
+
+		return calEvent;
+	}
+
+	@Override
+	public CalEvent updateImpl(
+		com.liferay.portlet.calendar.model.CalEvent calEvent)
+		throws SystemException {
+		calEvent = toUnwrappedModel(calEvent);
+
+		boolean isNew = calEvent.isNew();
+
+		CalEventModelImpl calEventModelImpl = (CalEventModelImpl)calEvent;
+
+		if (Validator.isNull(calEvent.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			calEvent.setUuid(uuid);
+		}
+
+		long userId = GetterUtil.getLong(PrincipalThreadLocal.getName());
+
+		if (userId > 0) {
+			long companyId = calEvent.getCompanyId();
+
+			long groupId = calEvent.getGroupId();
+
+			long eventId = 0;
+
+			if (!isNew) {
+				eventId = calEvent.getPrimaryKey();
+			}
+
+			try {
+				calEvent.setTitle(SanitizerUtil.sanitize(companyId, groupId,
+						userId,
+						com.liferay.portlet.calendar.model.CalEvent.class.getName(),
+						eventId, ContentTypes.TEXT_PLAIN, Sanitizer.MODE_ALL,
+						calEvent.getTitle(), null));
+
+				calEvent.setDescription(SanitizerUtil.sanitize(companyId,
+						groupId, userId,
+						com.liferay.portlet.calendar.model.CalEvent.class.getName(),
+						eventId, ContentTypes.TEXT_HTML, Sanitizer.MODE_ALL,
+						calEvent.getDescription(), null));
+			}
+			catch (SanitizerException se) {
+				throw new SystemException(se);
+			}
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (calEvent.isNew()) {
+				session.save(calEvent);
+
+				calEvent.setNew(false);
+			}
+			else {
+				session.merge(calEvent);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !CalEventModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((calEventModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] { calEventModelImpl.getOriginalUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { calEventModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((calEventModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						calEventModelImpl.getOriginalUuid(),
+						Long.valueOf(calEventModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						calEventModelImpl.getUuid(),
+						Long.valueOf(calEventModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((calEventModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(calEventModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(calEventModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+
+			if ((calEventModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(calEventModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] { Long.valueOf(calEventModelImpl.getGroupId()) };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+
+			if ((calEventModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(calEventModelImpl.getOriginalGroupId()),
+						
+						calEventModelImpl.getOriginalType()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(calEventModelImpl.getGroupId()),
+						
+						calEventModelImpl.getType()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T,
+					args);
+			}
+
+			if ((calEventModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(calEventModelImpl.getOriginalGroupId()),
+						Boolean.valueOf(calEventModelImpl.getOriginalRepeating())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(calEventModelImpl.getGroupId()),
+						Boolean.valueOf(calEventModelImpl.getRepeating())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R,
+					args);
+			}
+
+			if ((calEventModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(calEventModelImpl.getOriginalGroupId()),
+						
+						calEventModelImpl.getOriginalType(),
+						Boolean.valueOf(calEventModelImpl.getOriginalRepeating())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T_R, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(calEventModelImpl.getGroupId()),
+						
+						calEventModelImpl.getType(),
+						Boolean.valueOf(calEventModelImpl.getRepeating())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T_R, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+			CalEventImpl.class, calEvent.getPrimaryKey(), calEvent);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+				new Object[] {
+					calEvent.getUuid(), Long.valueOf(calEvent.getGroupId())
+				}, calEvent);
+		}
+		else {
+			if ((calEventModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						calEventModelImpl.getOriginalUuid(),
+						Long.valueOf(calEventModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+					new Object[] {
+						calEvent.getUuid(), Long.valueOf(calEvent.getGroupId())
+					}, calEvent);
+			}
+		}
+
+		return calEvent;
+	}
+
+	protected CalEvent toUnwrappedModel(CalEvent calEvent) {
+		if (calEvent instanceof CalEventImpl) {
+			return calEvent;
+		}
+
+		CalEventImpl calEventImpl = new CalEventImpl();
+
+		calEventImpl.setNew(calEvent.isNew());
+		calEventImpl.setPrimaryKey(calEvent.getPrimaryKey());
+
+		calEventImpl.setUuid(calEvent.getUuid());
+		calEventImpl.setEventId(calEvent.getEventId());
+		calEventImpl.setGroupId(calEvent.getGroupId());
+		calEventImpl.setCompanyId(calEvent.getCompanyId());
+		calEventImpl.setUserId(calEvent.getUserId());
+		calEventImpl.setUserName(calEvent.getUserName());
+		calEventImpl.setCreateDate(calEvent.getCreateDate());
+		calEventImpl.setModifiedDate(calEvent.getModifiedDate());
+		calEventImpl.setTitle(calEvent.getTitle());
+		calEventImpl.setDescription(calEvent.getDescription());
+		calEventImpl.setLocation(calEvent.getLocation());
+		calEventImpl.setStartDate(calEvent.getStartDate());
+		calEventImpl.setEndDate(calEvent.getEndDate());
+		calEventImpl.setDurationHour(calEvent.getDurationHour());
+		calEventImpl.setDurationMinute(calEvent.getDurationMinute());
+		calEventImpl.setAllDay(calEvent.isAllDay());
+		calEventImpl.setTimeZoneSensitive(calEvent.isTimeZoneSensitive());
+		calEventImpl.setType(calEvent.getType());
+		calEventImpl.setRepeating(calEvent.isRepeating());
+		calEventImpl.setRecurrence(calEvent.getRecurrence());
+		calEventImpl.setRemindBy(calEvent.getRemindBy());
+		calEventImpl.setFirstReminder(calEvent.getFirstReminder());
+		calEventImpl.setSecondReminder(calEvent.getSecondReminder());
+
+		return calEventImpl;
+	}
+
+	/**
+	 * Returns the cal event with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the cal event
+	 * @return the cal event
+	 * @throws com.liferay.portal.NoSuchModelException if a cal event with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public CalEvent findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the cal event with the primary key or throws a {@link com.liferay.portlet.calendar.NoSuchEventException} if it could not be found.
+	 *
+	 * @param eventId the primary key of the cal event
+	 * @return the cal event
+	 * @throws com.liferay.portlet.calendar.NoSuchEventException if a cal event with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalEvent findByPrimaryKey(long eventId)
+		throws NoSuchEventException, SystemException {
+		CalEvent calEvent = fetchByPrimaryKey(eventId);
+
+		if (calEvent == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + eventId);
+			}
+
+			throw new NoSuchEventException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				eventId);
+		}
+
+		return calEvent;
+	}
+
+	/**
+	 * Returns the cal event with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the cal event
+	 * @return the cal event, or <code>null</code> if a cal event with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public CalEvent fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the cal event with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param eventId the primary key of the cal event
+	 * @return the cal event, or <code>null</code> if a cal event with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalEvent fetchByPrimaryKey(long eventId) throws SystemException {
+		CalEvent calEvent = (CalEvent)EntityCacheUtil.getResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+				CalEventImpl.class, eventId);
+
+		if (calEvent == _nullCalEvent) {
+			return null;
+		}
+
+		if (calEvent == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				calEvent = (CalEvent)session.get(CalEventImpl.class,
+						Long.valueOf(eventId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (calEvent != null) {
+					cacheResult(calEvent);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+						CalEventImpl.class, eventId, _nullCalEvent);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return calEvent;
+	}
+
+	/**
+	 * Returns all the cal events.
+	 *
+	 * @return the cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalEvent> findAll() throws SystemException {
+		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the cal events.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of cal events
+	 * @param end the upper bound of the range of cal events (not inclusive)
+	 * @return the range of cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalEvent> findAll(int start, int end) throws SystemException {
+		return findAll(start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the cal events.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of cal events
+	 * @param end the upper bound of the range of cal events (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of cal events
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalEvent> findAll(int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
+
+		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+			String sql = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(2 +
+						(orderByComparator.getOrderByFields().length * 3));
+
+				query.append(_SQL_SELECT_CALEVENT);
+
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+
+				sql = query.toString();
+			}
+			else {
+				sql = _SQL_SELECT_CALEVENT.concat(CalEventModelImpl.ORDER_BY_JPQL);
+			}
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				if (orderByComparator == null) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the cal events from the database.
+	 *
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeAll() throws SystemException {
+		for (CalEvent calEvent : findAll()) {
+			remove(calEvent);
+		}
+	}
+
 	/**
 	 * Returns the number of cal events.
 	 *
@@ -7923,49 +7975,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	private static final String _SQL_SELECT_CALEVENT_WHERE = "SELECT calEvent FROM CalEvent calEvent WHERE ";
 	private static final String _SQL_COUNT_CALEVENT = "SELECT COUNT(calEvent) FROM CalEvent calEvent";
 	private static final String _SQL_COUNT_CALEVENT_WHERE = "SELECT COUNT(calEvent) FROM CalEvent calEvent WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "calEvent.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "calEvent.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(calEvent.uuid IS NULL OR calEvent.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "calEvent.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "calEvent.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(calEvent.uuid IS NULL OR calEvent.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "calEvent.groupId = ?";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "calEvent.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "calEvent.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(calEvent.uuid IS NULL OR calEvent.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "calEvent.companyId = ?";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "calEvent.companyId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "calEvent.groupId = ?";
-	private static final String _FINDER_COLUMN_NOTREMINDBY_REMINDBY_2 = "calEvent.remindBy != ?";
-	private static final String _FINDER_COLUMN_G_T_GROUPID_2 = "calEvent.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_T_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_T_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_G_T_TYPE_1 = "calEvent.type IS NULL";
-	private static final String _FINDER_COLUMN_G_T_TYPE_2 = "calEvent.type = ?";
-	private static final String _FINDER_COLUMN_G_T_TYPE_3 = "(calEvent.type IS NULL OR calEvent.type = ?)";
-	private static final String _FINDER_COLUMN_G_T_TYPE_4 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_T_TYPE_1) + ")";
-	private static final String _FINDER_COLUMN_G_T_TYPE_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_T_TYPE_2) + ")";
-	private static final String _FINDER_COLUMN_G_T_TYPE_6 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_T_TYPE_3) + ")";
-	private static final String _FINDER_COLUMN_G_R_GROUPID_2 = "calEvent.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_R_REPEATING_2 = "calEvent.repeating = ?";
-	private static final String _FINDER_COLUMN_G_T_R_GROUPID_2 = "calEvent.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_T_R_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_T_R_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_G_T_R_TYPE_1 = "calEvent.type IS NULL AND ";
-	private static final String _FINDER_COLUMN_G_T_R_TYPE_2 = "calEvent.type = ? AND ";
-	private static final String _FINDER_COLUMN_G_T_R_TYPE_3 = "(calEvent.type IS NULL OR calEvent.type = ?) AND ";
-	private static final String _FINDER_COLUMN_G_T_R_TYPE_4 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_T_R_TYPE_1) + ")";
-	private static final String _FINDER_COLUMN_G_T_R_TYPE_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_T_R_TYPE_2) + ")";
-	private static final String _FINDER_COLUMN_G_T_R_TYPE_6 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_T_R_TYPE_3) + ")";
-	private static final String _FINDER_COLUMN_G_T_R_REPEATING_2 = "calEvent.repeating = ?";
-	private static final String _FINDER_COLUMN_G_T_R_REPEATING_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_T_R_REPEATING_2) + ")";
 
 	private static String _removeConjunction(String sql) {
 		int pos = sql.indexOf(" AND ");

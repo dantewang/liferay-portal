@@ -111,86 +111,6 @@ public class AssetTagStatsUtil {
 	}
 
 	/**
-	* Caches the asset tag stats in the entity cache if it is enabled.
-	*
-	* @param assetTagStats the asset tag stats
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.asset.model.AssetTagStats assetTagStats) {
-		getPersistence().cacheResult(assetTagStats);
-	}
-
-	/**
-	* Caches the asset tag statses in the entity cache if it is enabled.
-	*
-	* @param assetTagStatses the asset tag statses
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.asset.model.AssetTagStats> assetTagStatses) {
-		getPersistence().cacheResult(assetTagStatses);
-	}
-
-	/**
-	* Creates a new asset tag stats with the primary key. Does not add the asset tag stats to the database.
-	*
-	* @param tagStatsId the primary key for the new asset tag stats
-	* @return the new asset tag stats
-	*/
-	public static com.liferay.portlet.asset.model.AssetTagStats create(
-		long tagStatsId) {
-		return getPersistence().create(tagStatsId);
-	}
-
-	/**
-	* Removes the asset tag stats with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param tagStatsId the primary key of the asset tag stats
-	* @return the asset tag stats that was removed
-	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a asset tag stats with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTagStats remove(
-		long tagStatsId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagStatsException {
-		return getPersistence().remove(tagStatsId);
-	}
-
-	public static com.liferay.portlet.asset.model.AssetTagStats updateImpl(
-		com.liferay.portlet.asset.model.AssetTagStats assetTagStats)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(assetTagStats);
-	}
-
-	/**
-	* Returns the asset tag stats with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchTagStatsException} if it could not be found.
-	*
-	* @param tagStatsId the primary key of the asset tag stats
-	* @return the asset tag stats
-	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a asset tag stats with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTagStats findByPrimaryKey(
-		long tagStatsId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagStatsException {
-		return getPersistence().findByPrimaryKey(tagStatsId);
-	}
-
-	/**
-	* Returns the asset tag stats with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param tagStatsId the primary key of the asset tag stats
-	* @return the asset tag stats, or <code>null</code> if a asset tag stats with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTagStats fetchByPrimaryKey(
-		long tagStatsId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(tagStatsId);
-	}
-
-	/**
 	* Returns all the asset tag statses where tagId = &#63;.
 	*
 	* @param tagId the tag ID
@@ -323,6 +243,29 @@ public class AssetTagStatsUtil {
 			com.liferay.portlet.asset.NoSuchTagStatsException {
 		return getPersistence()
 				   .findByTagId_PrevAndNext(tagStatsId, tagId, orderByComparator);
+	}
+
+	/**
+	* Removes all the asset tag statses where tagId = &#63; from the database.
+	*
+	* @param tagId the tag ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByTagId(long tagId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByTagId(tagId);
+	}
+
+	/**
+	* Returns the number of asset tag statses where tagId = &#63;.
+	*
+	* @param tagId the tag ID
+	* @return the number of matching asset tag statses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByTagId(long tagId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByTagId(tagId);
 	}
 
 	/**
@@ -468,6 +411,29 @@ public class AssetTagStatsUtil {
 	}
 
 	/**
+	* Removes all the asset tag statses where classNameId = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByClassNameId(long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByClassNameId(classNameId);
+	}
+
+	/**
+	* Returns the number of asset tag statses where classNameId = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @return the number of matching asset tag statses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByClassNameId(long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByClassNameId(classNameId);
+	}
+
+	/**
 	* Returns the asset tag stats where tagId = &#63; and classNameId = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchTagStatsException} if it could not be found.
 	*
 	* @param tagId the tag ID
@@ -510,6 +476,114 @@ public class AssetTagStatsUtil {
 		long tagId, long classNameId, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByT_C(tagId, classNameId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the asset tag stats where tagId = &#63; and classNameId = &#63; from the database.
+	*
+	* @param tagId the tag ID
+	* @param classNameId the class name ID
+	* @return the asset tag stats that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats removeByT_C(
+		long tagId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagStatsException {
+		return getPersistence().removeByT_C(tagId, classNameId);
+	}
+
+	/**
+	* Returns the number of asset tag statses where tagId = &#63; and classNameId = &#63;.
+	*
+	* @param tagId the tag ID
+	* @param classNameId the class name ID
+	* @return the number of matching asset tag statses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByT_C(long tagId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByT_C(tagId, classNameId);
+	}
+
+	/**
+	* Caches the asset tag stats in the entity cache if it is enabled.
+	*
+	* @param assetTagStats the asset tag stats
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.asset.model.AssetTagStats assetTagStats) {
+		getPersistence().cacheResult(assetTagStats);
+	}
+
+	/**
+	* Caches the asset tag statses in the entity cache if it is enabled.
+	*
+	* @param assetTagStatses the asset tag statses
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.asset.model.AssetTagStats> assetTagStatses) {
+		getPersistence().cacheResult(assetTagStatses);
+	}
+
+	/**
+	* Creates a new asset tag stats with the primary key. Does not add the asset tag stats to the database.
+	*
+	* @param tagStatsId the primary key for the new asset tag stats
+	* @return the new asset tag stats
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats create(
+		long tagStatsId) {
+		return getPersistence().create(tagStatsId);
+	}
+
+	/**
+	* Removes the asset tag stats with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param tagStatsId the primary key of the asset tag stats
+	* @return the asset tag stats that was removed
+	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a asset tag stats with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats remove(
+		long tagStatsId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagStatsException {
+		return getPersistence().remove(tagStatsId);
+	}
+
+	public static com.liferay.portlet.asset.model.AssetTagStats updateImpl(
+		com.liferay.portlet.asset.model.AssetTagStats assetTagStats)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(assetTagStats);
+	}
+
+	/**
+	* Returns the asset tag stats with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchTagStatsException} if it could not be found.
+	*
+	* @param tagStatsId the primary key of the asset tag stats
+	* @return the asset tag stats
+	* @throws com.liferay.portlet.asset.NoSuchTagStatsException if a asset tag stats with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats findByPrimaryKey(
+		long tagStatsId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagStatsException {
+		return getPersistence().findByPrimaryKey(tagStatsId);
+	}
+
+	/**
+	* Returns the asset tag stats with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param tagStatsId the primary key of the asset tag stats
+	* @return the asset tag stats, or <code>null</code> if a asset tag stats with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagStats fetchByPrimaryKey(
+		long tagStatsId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(tagStatsId);
 	}
 
 	/**
@@ -562,43 +636,6 @@ public class AssetTagStatsUtil {
 	}
 
 	/**
-	* Removes all the asset tag statses where tagId = &#63; from the database.
-	*
-	* @param tagId the tag ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByTagId(long tagId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByTagId(tagId);
-	}
-
-	/**
-	* Removes all the asset tag statses where classNameId = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByClassNameId(long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByClassNameId(classNameId);
-	}
-
-	/**
-	* Removes the asset tag stats where tagId = &#63; and classNameId = &#63; from the database.
-	*
-	* @param tagId the tag ID
-	* @param classNameId the class name ID
-	* @return the asset tag stats that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTagStats removeByT_C(
-		long tagId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagStatsException {
-		return getPersistence().removeByT_C(tagId, classNameId);
-	}
-
-	/**
 	* Removes all the asset tag statses from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -606,43 +643,6 @@ public class AssetTagStatsUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of asset tag statses where tagId = &#63;.
-	*
-	* @param tagId the tag ID
-	* @return the number of matching asset tag statses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByTagId(long tagId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByTagId(tagId);
-	}
-
-	/**
-	* Returns the number of asset tag statses where classNameId = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @return the number of matching asset tag statses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByClassNameId(long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByClassNameId(classNameId);
-	}
-
-	/**
-	* Returns the number of asset tag statses where tagId = &#63; and classNameId = &#63;.
-	*
-	* @param tagId the tag ID
-	* @param classNameId the class name ID
-	* @return the number of matching asset tag statses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByT_C(long tagId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByT_C(tagId, classNameId);
 	}
 
 	/**

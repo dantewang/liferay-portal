@@ -38,69 +38,6 @@ public interface DLSyncPersistence extends BasePersistence<DLSync> {
 	 */
 
 	/**
-	* Caches the d l sync in the entity cache if it is enabled.
-	*
-	* @param dlSync the d l sync
-	*/
-	public void cacheResult(
-		com.liferay.portlet.documentlibrary.model.DLSync dlSync);
-
-	/**
-	* Caches the d l syncs in the entity cache if it is enabled.
-	*
-	* @param dlSyncs the d l syncs
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.documentlibrary.model.DLSync> dlSyncs);
-
-	/**
-	* Creates a new d l sync with the primary key. Does not add the d l sync to the database.
-	*
-	* @param syncId the primary key for the new d l sync
-	* @return the new d l sync
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLSync create(long syncId);
-
-	/**
-	* Removes the d l sync with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param syncId the primary key of the d l sync
-	* @return the d l sync that was removed
-	* @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLSync remove(long syncId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchSyncException;
-
-	public com.liferay.portlet.documentlibrary.model.DLSync updateImpl(
-		com.liferay.portlet.documentlibrary.model.DLSync dlSync)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the d l sync with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchSyncException} if it could not be found.
-	*
-	* @param syncId the primary key of the d l sync
-	* @return the d l sync
-	* @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLSync findByPrimaryKey(
-		long syncId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchSyncException;
-
-	/**
-	* Returns the d l sync with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param syncId the primary key of the d l sync
-	* @return the d l sync, or <code>null</code> if a d l sync with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLSync fetchByPrimaryKey(
-		long syncId) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns the d l sync where fileId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchSyncException} if it could not be found.
 	*
 	* @param fileId the file ID
@@ -133,6 +70,28 @@ public interface DLSyncPersistence extends BasePersistence<DLSync> {
 	*/
 	public com.liferay.portlet.documentlibrary.model.DLSync fetchByFileId(
 		long fileId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the d l sync where fileId = &#63; from the database.
+	*
+	* @param fileId the file ID
+	* @return the d l sync that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLSync removeByFileId(
+		long fileId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchSyncException;
+
+	/**
+	* Returns the number of d l syncs where fileId = &#63;.
+	*
+	* @param fileId the file ID
+	* @return the number of matching d l syncs
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByFileId(long fileId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -274,6 +233,94 @@ public interface DLSyncPersistence extends BasePersistence<DLSync> {
 			com.liferay.portlet.documentlibrary.NoSuchSyncException;
 
 	/**
+	* Removes all the d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @param repositoryId the repository ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_M_R(long companyId, java.util.Date modifiedDate,
+		long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @param repositoryId the repository ID
+	* @return the number of matching d l syncs
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_M_R(long companyId, java.util.Date modifiedDate,
+		long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the d l sync in the entity cache if it is enabled.
+	*
+	* @param dlSync the d l sync
+	*/
+	public void cacheResult(
+		com.liferay.portlet.documentlibrary.model.DLSync dlSync);
+
+	/**
+	* Caches the d l syncs in the entity cache if it is enabled.
+	*
+	* @param dlSyncs the d l syncs
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.documentlibrary.model.DLSync> dlSyncs);
+
+	/**
+	* Creates a new d l sync with the primary key. Does not add the d l sync to the database.
+	*
+	* @param syncId the primary key for the new d l sync
+	* @return the new d l sync
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLSync create(long syncId);
+
+	/**
+	* Removes the d l sync with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param syncId the primary key of the d l sync
+	* @return the d l sync that was removed
+	* @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLSync remove(long syncId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchSyncException;
+
+	public com.liferay.portlet.documentlibrary.model.DLSync updateImpl(
+		com.liferay.portlet.documentlibrary.model.DLSync dlSync)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the d l sync with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchSyncException} if it could not be found.
+	*
+	* @param syncId the primary key of the d l sync
+	* @return the d l sync
+	* @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLSync findByPrimaryKey(
+		long syncId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchSyncException;
+
+	/**
+	* Returns the d l sync with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param syncId the primary key of the d l sync
+	* @return the d l sync, or <code>null</code> if a d l sync with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLSync fetchByPrimaryKey(
+		long syncId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the d l syncs.
 	*
 	* @return the d l syncs
@@ -317,58 +364,11 @@ public interface DLSyncPersistence extends BasePersistence<DLSync> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes the d l sync where fileId = &#63; from the database.
-	*
-	* @param fileId the file ID
-	* @return the d l sync that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLSync removeByFileId(
-		long fileId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchSyncException;
-
-	/**
-	* Removes all the d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param modifiedDate the modified date
-	* @param repositoryId the repository ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_M_R(long companyId, java.util.Date modifiedDate,
-		long repositoryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the d l syncs from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of d l syncs where fileId = &#63;.
-	*
-	* @param fileId the file ID
-	* @return the number of matching d l syncs
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByFileId(long fileId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param modifiedDate the modified date
-	* @param repositoryId the repository ID
-	* @return the number of matching d l syncs
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_M_R(long companyId, java.util.Date modifiedDate,
-		long repositoryId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

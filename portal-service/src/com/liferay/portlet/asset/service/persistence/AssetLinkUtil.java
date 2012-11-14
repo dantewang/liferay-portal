@@ -111,83 +111,6 @@ public class AssetLinkUtil {
 	}
 
 	/**
-	* Caches the asset link in the entity cache if it is enabled.
-	*
-	* @param assetLink the asset link
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.asset.model.AssetLink assetLink) {
-		getPersistence().cacheResult(assetLink);
-	}
-
-	/**
-	* Caches the asset links in the entity cache if it is enabled.
-	*
-	* @param assetLinks the asset links
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.asset.model.AssetLink> assetLinks) {
-		getPersistence().cacheResult(assetLinks);
-	}
-
-	/**
-	* Creates a new asset link with the primary key. Does not add the asset link to the database.
-	*
-	* @param linkId the primary key for the new asset link
-	* @return the new asset link
-	*/
-	public static com.liferay.portlet.asset.model.AssetLink create(long linkId) {
-		return getPersistence().create(linkId);
-	}
-
-	/**
-	* Removes the asset link with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param linkId the primary key of the asset link
-	* @return the asset link that was removed
-	* @throws com.liferay.portlet.asset.NoSuchLinkException if a asset link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetLink remove(long linkId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchLinkException {
-		return getPersistence().remove(linkId);
-	}
-
-	public static com.liferay.portlet.asset.model.AssetLink updateImpl(
-		com.liferay.portlet.asset.model.AssetLink assetLink)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(assetLink);
-	}
-
-	/**
-	* Returns the asset link with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchLinkException} if it could not be found.
-	*
-	* @param linkId the primary key of the asset link
-	* @return the asset link
-	* @throws com.liferay.portlet.asset.NoSuchLinkException if a asset link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetLink findByPrimaryKey(
-		long linkId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchLinkException {
-		return getPersistence().findByPrimaryKey(linkId);
-	}
-
-	/**
-	* Returns the asset link with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param linkId the primary key of the asset link
-	* @return the asset link, or <code>null</code> if a asset link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetLink fetchByPrimaryKey(
-		long linkId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(linkId);
-	}
-
-	/**
 	* Returns all the asset links where entryId1 = &#63;.
 	*
 	* @param entryId1 the entry id1
@@ -324,6 +247,29 @@ public class AssetLinkUtil {
 	}
 
 	/**
+	* Removes all the asset links where entryId1 = &#63; from the database.
+	*
+	* @param entryId1 the entry id1
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByE1(long entryId1)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByE1(entryId1);
+	}
+
+	/**
+	* Returns the number of asset links where entryId1 = &#63;.
+	*
+	* @param entryId1 the entry id1
+	* @return the number of matching asset links
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByE1(long entryId1)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByE1(entryId1);
+	}
+
+	/**
 	* Returns all the asset links where entryId2 = &#63;.
 	*
 	* @param entryId2 the entry id2
@@ -457,6 +403,29 @@ public class AssetLinkUtil {
 			com.liferay.portlet.asset.NoSuchLinkException {
 		return getPersistence()
 				   .findByE2_PrevAndNext(linkId, entryId2, orderByComparator);
+	}
+
+	/**
+	* Removes all the asset links where entryId2 = &#63; from the database.
+	*
+	* @param entryId2 the entry id2
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByE2(long entryId2)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByE2(entryId2);
+	}
+
+	/**
+	* Returns the number of asset links where entryId2 = &#63;.
+	*
+	* @param entryId2 the entry id2
+	* @return the number of matching asset links
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByE2(long entryId2)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByE2(entryId2);
 	}
 
 	/**
@@ -610,6 +579,31 @@ public class AssetLinkUtil {
 	}
 
 	/**
+	* Removes all the asset links where entryId1 = &#63; and entryId2 = &#63; from the database.
+	*
+	* @param entryId1 the entry id1
+	* @param entryId2 the entry id2
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByE_E(long entryId1, long entryId2)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByE_E(entryId1, entryId2);
+	}
+
+	/**
+	* Returns the number of asset links where entryId1 = &#63; and entryId2 = &#63;.
+	*
+	* @param entryId1 the entry id1
+	* @param entryId2 the entry id2
+	* @return the number of matching asset links
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByE_E(long entryId1, long entryId2)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByE_E(entryId1, entryId2);
+	}
+
+	/**
 	* Returns all the asset links where entryId1 = &#63; and type = &#63;.
 	*
 	* @param entryId1 the entry id1
@@ -757,6 +751,31 @@ public class AssetLinkUtil {
 		return getPersistence()
 				   .findByE1_T_PrevAndNext(linkId, entryId1, type,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the asset links where entryId1 = &#63; and type = &#63; from the database.
+	*
+	* @param entryId1 the entry id1
+	* @param type the type
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByE1_T(long entryId1, int type)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByE1_T(entryId1, type);
+	}
+
+	/**
+	* Returns the number of asset links where entryId1 = &#63; and type = &#63;.
+	*
+	* @param entryId1 the entry id1
+	* @param type the type
+	* @return the number of matching asset links
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByE1_T(long entryId1, int type)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByE1_T(entryId1, type);
 	}
 
 	/**
@@ -910,6 +929,31 @@ public class AssetLinkUtil {
 	}
 
 	/**
+	* Removes all the asset links where entryId2 = &#63; and type = &#63; from the database.
+	*
+	* @param entryId2 the entry id2
+	* @param type the type
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByE2_T(long entryId2, int type)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByE2_T(entryId2, type);
+	}
+
+	/**
+	* Returns the number of asset links where entryId2 = &#63; and type = &#63;.
+	*
+	* @param entryId2 the entry id2
+	* @param type the type
+	* @return the number of matching asset links
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByE2_T(long entryId2, int type)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByE2_T(entryId2, type);
+	}
+
+	/**
 	* Returns the asset link where entryId1 = &#63; and entryId2 = &#63; and type = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchLinkException} if it could not be found.
 	*
 	* @param entryId1 the entry id1
@@ -956,6 +1000,113 @@ public class AssetLinkUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByE_E_T(entryId1, entryId2, type, retrieveFromCache);
+	}
+
+	/**
+	* Removes the asset link where entryId1 = &#63; and entryId2 = &#63; and type = &#63; from the database.
+	*
+	* @param entryId1 the entry id1
+	* @param entryId2 the entry id2
+	* @param type the type
+	* @return the asset link that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetLink removeByE_E_T(
+		long entryId1, long entryId2, int type)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchLinkException {
+		return getPersistence().removeByE_E_T(entryId1, entryId2, type);
+	}
+
+	/**
+	* Returns the number of asset links where entryId1 = &#63; and entryId2 = &#63; and type = &#63;.
+	*
+	* @param entryId1 the entry id1
+	* @param entryId2 the entry id2
+	* @param type the type
+	* @return the number of matching asset links
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByE_E_T(long entryId1, long entryId2, int type)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByE_E_T(entryId1, entryId2, type);
+	}
+
+	/**
+	* Caches the asset link in the entity cache if it is enabled.
+	*
+	* @param assetLink the asset link
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.asset.model.AssetLink assetLink) {
+		getPersistence().cacheResult(assetLink);
+	}
+
+	/**
+	* Caches the asset links in the entity cache if it is enabled.
+	*
+	* @param assetLinks the asset links
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.asset.model.AssetLink> assetLinks) {
+		getPersistence().cacheResult(assetLinks);
+	}
+
+	/**
+	* Creates a new asset link with the primary key. Does not add the asset link to the database.
+	*
+	* @param linkId the primary key for the new asset link
+	* @return the new asset link
+	*/
+	public static com.liferay.portlet.asset.model.AssetLink create(long linkId) {
+		return getPersistence().create(linkId);
+	}
+
+	/**
+	* Removes the asset link with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param linkId the primary key of the asset link
+	* @return the asset link that was removed
+	* @throws com.liferay.portlet.asset.NoSuchLinkException if a asset link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetLink remove(long linkId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchLinkException {
+		return getPersistence().remove(linkId);
+	}
+
+	public static com.liferay.portlet.asset.model.AssetLink updateImpl(
+		com.liferay.portlet.asset.model.AssetLink assetLink)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(assetLink);
+	}
+
+	/**
+	* Returns the asset link with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchLinkException} if it could not be found.
+	*
+	* @param linkId the primary key of the asset link
+	* @return the asset link
+	* @throws com.liferay.portlet.asset.NoSuchLinkException if a asset link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetLink findByPrimaryKey(
+		long linkId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchLinkException {
+		return getPersistence().findByPrimaryKey(linkId);
+	}
+
+	/**
+	* Returns the asset link with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param linkId the primary key of the asset link
+	* @return the asset link, or <code>null</code> if a asset link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetLink fetchByPrimaryKey(
+		long linkId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(linkId);
 	}
 
 	/**
@@ -1008,80 +1159,6 @@ public class AssetLinkUtil {
 	}
 
 	/**
-	* Removes all the asset links where entryId1 = &#63; from the database.
-	*
-	* @param entryId1 the entry id1
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByE1(long entryId1)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByE1(entryId1);
-	}
-
-	/**
-	* Removes all the asset links where entryId2 = &#63; from the database.
-	*
-	* @param entryId2 the entry id2
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByE2(long entryId2)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByE2(entryId2);
-	}
-
-	/**
-	* Removes all the asset links where entryId1 = &#63; and entryId2 = &#63; from the database.
-	*
-	* @param entryId1 the entry id1
-	* @param entryId2 the entry id2
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByE_E(long entryId1, long entryId2)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByE_E(entryId1, entryId2);
-	}
-
-	/**
-	* Removes all the asset links where entryId1 = &#63; and type = &#63; from the database.
-	*
-	* @param entryId1 the entry id1
-	* @param type the type
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByE1_T(long entryId1, int type)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByE1_T(entryId1, type);
-	}
-
-	/**
-	* Removes all the asset links where entryId2 = &#63; and type = &#63; from the database.
-	*
-	* @param entryId2 the entry id2
-	* @param type the type
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByE2_T(long entryId2, int type)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByE2_T(entryId2, type);
-	}
-
-	/**
-	* Removes the asset link where entryId1 = &#63; and entryId2 = &#63; and type = &#63; from the database.
-	*
-	* @param entryId1 the entry id1
-	* @param entryId2 the entry id2
-	* @param type the type
-	* @return the asset link that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetLink removeByE_E_T(
-		long entryId1, long entryId2, int type)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchLinkException {
-		return getPersistence().removeByE_E_T(entryId1, entryId2, type);
-	}
-
-	/**
 	* Removes all the asset links from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1089,83 +1166,6 @@ public class AssetLinkUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of asset links where entryId1 = &#63;.
-	*
-	* @param entryId1 the entry id1
-	* @return the number of matching asset links
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByE1(long entryId1)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByE1(entryId1);
-	}
-
-	/**
-	* Returns the number of asset links where entryId2 = &#63;.
-	*
-	* @param entryId2 the entry id2
-	* @return the number of matching asset links
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByE2(long entryId2)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByE2(entryId2);
-	}
-
-	/**
-	* Returns the number of asset links where entryId1 = &#63; and entryId2 = &#63;.
-	*
-	* @param entryId1 the entry id1
-	* @param entryId2 the entry id2
-	* @return the number of matching asset links
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByE_E(long entryId1, long entryId2)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByE_E(entryId1, entryId2);
-	}
-
-	/**
-	* Returns the number of asset links where entryId1 = &#63; and type = &#63;.
-	*
-	* @param entryId1 the entry id1
-	* @param type the type
-	* @return the number of matching asset links
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByE1_T(long entryId1, int type)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByE1_T(entryId1, type);
-	}
-
-	/**
-	* Returns the number of asset links where entryId2 = &#63; and type = &#63;.
-	*
-	* @param entryId2 the entry id2
-	* @param type the type
-	* @return the number of matching asset links
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByE2_T(long entryId2, int type)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByE2_T(entryId2, type);
-	}
-
-	/**
-	* Returns the number of asset links where entryId1 = &#63; and entryId2 = &#63; and type = &#63;.
-	*
-	* @param entryId1 the entry id1
-	* @param entryId2 the entry id2
-	* @param type the type
-	* @return the number of matching asset links
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByE_E_T(long entryId1, long entryId2, int type)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByE_E_T(entryId1, entryId2, type);
 	}
 
 	/**

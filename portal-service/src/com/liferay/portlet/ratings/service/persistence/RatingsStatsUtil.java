@@ -111,6 +111,80 @@ public class RatingsStatsUtil {
 	}
 
 	/**
+	* Returns the ratings stats where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.ratings.NoSuchStatsException} if it could not be found.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the matching ratings stats
+	* @throws com.liferay.portlet.ratings.NoSuchStatsException if a matching ratings stats could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.ratings.model.RatingsStats findByC_C(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.ratings.NoSuchStatsException {
+		return getPersistence().findByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Returns the ratings stats where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the matching ratings stats, or <code>null</code> if a matching ratings stats could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.ratings.model.RatingsStats fetchByC_C(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Returns the ratings stats where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching ratings stats, or <code>null</code> if a matching ratings stats could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.ratings.model.RatingsStats fetchByC_C(
+		long classNameId, long classPK, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_C(classNameId, classPK, retrieveFromCache);
+	}
+
+	/**
+	* Removes the ratings stats where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the ratings stats that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.ratings.model.RatingsStats removeByC_C(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.ratings.NoSuchStatsException {
+		return getPersistence().removeByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of ratings statses where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching ratings statses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C(classNameId, classPK);
+	}
+
+	/**
 	* Caches the ratings stats in the entity cache if it is enabled.
 	*
 	* @param ratingsStats the ratings stats
@@ -191,52 +265,6 @@ public class RatingsStatsUtil {
 	}
 
 	/**
-	* Returns the ratings stats where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.ratings.NoSuchStatsException} if it could not be found.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the matching ratings stats
-	* @throws com.liferay.portlet.ratings.NoSuchStatsException if a matching ratings stats could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.ratings.model.RatingsStats findByC_C(
-		long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.ratings.NoSuchStatsException {
-		return getPersistence().findByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Returns the ratings stats where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the matching ratings stats, or <code>null</code> if a matching ratings stats could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.ratings.model.RatingsStats fetchByC_C(
-		long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Returns the ratings stats where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching ratings stats, or <code>null</code> if a matching ratings stats could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.ratings.model.RatingsStats fetchByC_C(
-		long classNameId, long classPK, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByC_C(classNameId, classPK, retrieveFromCache);
-	}
-
-	/**
 	* Returns all the ratings statses.
 	*
 	* @return the ratings statses
@@ -286,21 +314,6 @@ public class RatingsStatsUtil {
 	}
 
 	/**
-	* Removes the ratings stats where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the ratings stats that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.ratings.model.RatingsStats removeByC_C(
-		long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.ratings.NoSuchStatsException {
-		return getPersistence().removeByC_C(classNameId, classPK);
-	}
-
-	/**
 	* Removes all the ratings statses from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -308,19 +321,6 @@ public class RatingsStatsUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of ratings statses where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching ratings statses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C(classNameId, classPK);
 	}
 
 	/**

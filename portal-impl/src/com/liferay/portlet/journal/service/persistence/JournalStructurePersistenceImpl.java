@@ -81,6 +81,17 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
 			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -101,720 +112,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			JournalStructureModelImpl.UUID_COLUMN_BITMASK |
-			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			JournalStructureModelImpl.UUID_COLUMN_BITMASK |
-			JournalStructureModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_GROUPID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID =
-		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByStructureId",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID =
-		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStructureId",
-			new String[] { String.class.getName() },
-			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStructureId",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_PARENTSTRUCTUREID =
-		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByParentStructureId",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID =
-		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByParentStructureId", new String[] { String.class.getName() },
-			JournalStructureModelImpl.PARENTSTRUCTUREID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByParentStructureId", new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_G_S = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByG_S",
-			new String[] { Long.class.getName(), String.class.getName() },
-			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK |
-			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByG_P",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P",
-			new String[] { Long.class.getName(), String.class.getName() },
-			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK |
-			JournalStructureModelImpl.PARENTSTRUCTUREID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the journal structure in the entity cache if it is enabled.
-	 *
-	 * @param journalStructure the journal structure
-	 */
-	public void cacheResult(JournalStructure journalStructure) {
-		EntityCacheUtil.putResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureImpl.class, journalStructure.getPrimaryKey(),
-			journalStructure);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				journalStructure.getUuid(),
-				Long.valueOf(journalStructure.getGroupId())
-			}, journalStructure);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_S,
-			new Object[] {
-				Long.valueOf(journalStructure.getGroupId()),
-				
-			journalStructure.getStructureId()
-			}, journalStructure);
-
-		journalStructure.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the journal structures in the entity cache if it is enabled.
-	 *
-	 * @param journalStructures the journal structures
-	 */
-	public void cacheResult(List<JournalStructure> journalStructures) {
-		for (JournalStructure journalStructure : journalStructures) {
-			if (EntityCacheUtil.getResult(
-						JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-						JournalStructureImpl.class,
-						journalStructure.getPrimaryKey()) == null) {
-				cacheResult(journalStructure);
-			}
-			else {
-				journalStructure.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all journal structures.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(JournalStructureImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(JournalStructureImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the journal structure.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(JournalStructure journalStructure) {
-		EntityCacheUtil.removeResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureImpl.class, journalStructure.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(journalStructure);
-	}
-
-	@Override
-	public void clearCache(List<JournalStructure> journalStructures) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (JournalStructure journalStructure : journalStructures) {
-			EntityCacheUtil.removeResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-				JournalStructureImpl.class, journalStructure.getPrimaryKey());
-
-			clearUniqueFindersCache(journalStructure);
-		}
-	}
-
-	protected void clearUniqueFindersCache(JournalStructure journalStructure) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				journalStructure.getUuid(),
-				Long.valueOf(journalStructure.getGroupId())
-			});
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_S,
-			new Object[] {
-				Long.valueOf(journalStructure.getGroupId()),
-				
-			journalStructure.getStructureId()
-			});
-	}
-
-	/**
-	 * Creates a new journal structure with the primary key. Does not add the journal structure to the database.
-	 *
-	 * @param id the primary key for the new journal structure
-	 * @return the new journal structure
-	 */
-	public JournalStructure create(long id) {
-		JournalStructure journalStructure = new JournalStructureImpl();
-
-		journalStructure.setNew(true);
-		journalStructure.setPrimaryKey(id);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		journalStructure.setUuid(uuid);
-
-		return journalStructure;
-	}
-
-	/**
-	 * Removes the journal structure with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param id the primary key of the journal structure
-	 * @return the journal structure that was removed
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure remove(long id)
-		throws NoSuchStructureException, SystemException {
-		return remove(Long.valueOf(id));
-	}
-
-	/**
-	 * Removes the journal structure with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the journal structure
-	 * @return the journal structure that was removed
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JournalStructure remove(Serializable primaryKey)
-		throws NoSuchStructureException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			JournalStructure journalStructure = (JournalStructure)session.get(JournalStructureImpl.class,
-					primaryKey);
-
-			if (journalStructure == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchStructureException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(journalStructure);
-		}
-		catch (NoSuchStructureException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected JournalStructure removeImpl(JournalStructure journalStructure)
-		throws SystemException {
-		journalStructure = toUnwrappedModel(journalStructure);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(journalStructure)) {
-				journalStructure = (JournalStructure)session.get(JournalStructureImpl.class,
-						journalStructure.getPrimaryKeyObj());
-			}
-
-			if (journalStructure != null) {
-				session.delete(journalStructure);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (journalStructure != null) {
-			clearCache(journalStructure);
-		}
-
-		return journalStructure;
-	}
-
-	@Override
-	public JournalStructure updateImpl(
-		com.liferay.portlet.journal.model.JournalStructure journalStructure)
-		throws SystemException {
-		journalStructure = toUnwrappedModel(journalStructure);
-
-		boolean isNew = journalStructure.isNew();
-
-		JournalStructureModelImpl journalStructureModelImpl = (JournalStructureModelImpl)journalStructure;
-
-		if (Validator.isNull(journalStructure.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			journalStructure.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (journalStructure.isNew()) {
-				session.save(journalStructure);
-
-				journalStructure.setNew(false);
-			}
-			else {
-				session.merge(journalStructure);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !JournalStructureModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalStructureModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { journalStructureModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalStructureModelImpl.getOriginalUuid(),
-						Long.valueOf(journalStructureModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						journalStructureModelImpl.getUuid(),
-						Long.valueOf(journalStructureModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(journalStructureModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(journalStructureModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalStructureModelImpl.getOriginalStructureId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
-					args);
-
-				args = new Object[] { journalStructureModelImpl.getStructureId() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
-					args);
-			}
-
-			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalStructureModelImpl.getOriginalParentStructureId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID,
-					args);
-
-				args = new Object[] {
-						journalStructureModelImpl.getParentStructureId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID,
-					args);
-			}
-
-			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(journalStructureModelImpl.getOriginalGroupId()),
-						
-						journalStructureModelImpl.getOriginalParentStructureId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(journalStructureModelImpl.getGroupId()),
-						
-						journalStructureModelImpl.getParentStructureId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureImpl.class, journalStructure.getPrimaryKey(),
-			journalStructure);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-				new Object[] {
-					journalStructure.getUuid(),
-					Long.valueOf(journalStructure.getGroupId())
-				}, journalStructure);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_S,
-				new Object[] {
-					Long.valueOf(journalStructure.getGroupId()),
-					
-				journalStructure.getStructureId()
-				}, journalStructure);
-		}
-		else {
-			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalStructureModelImpl.getOriginalUuid(),
-						Long.valueOf(journalStructureModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
-						journalStructure.getUuid(),
-						Long.valueOf(journalStructure.getGroupId())
-					}, journalStructure);
-			}
-
-			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_G_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(journalStructureModelImpl.getOriginalGroupId()),
-						
-						journalStructureModelImpl.getOriginalStructureId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_S, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_S,
-					new Object[] {
-						Long.valueOf(journalStructure.getGroupId()),
-						
-					journalStructure.getStructureId()
-					}, journalStructure);
-			}
-		}
-
-		return journalStructure;
-	}
-
-	protected JournalStructure toUnwrappedModel(
-		JournalStructure journalStructure) {
-		if (journalStructure instanceof JournalStructureImpl) {
-			return journalStructure;
-		}
-
-		JournalStructureImpl journalStructureImpl = new JournalStructureImpl();
-
-		journalStructureImpl.setNew(journalStructure.isNew());
-		journalStructureImpl.setPrimaryKey(journalStructure.getPrimaryKey());
-
-		journalStructureImpl.setUuid(journalStructure.getUuid());
-		journalStructureImpl.setId(journalStructure.getId());
-		journalStructureImpl.setGroupId(journalStructure.getGroupId());
-		journalStructureImpl.setCompanyId(journalStructure.getCompanyId());
-		journalStructureImpl.setUserId(journalStructure.getUserId());
-		journalStructureImpl.setUserName(journalStructure.getUserName());
-		journalStructureImpl.setCreateDate(journalStructure.getCreateDate());
-		journalStructureImpl.setModifiedDate(journalStructure.getModifiedDate());
-		journalStructureImpl.setStructureId(journalStructure.getStructureId());
-		journalStructureImpl.setParentStructureId(journalStructure.getParentStructureId());
-		journalStructureImpl.setName(journalStructure.getName());
-		journalStructureImpl.setDescription(journalStructure.getDescription());
-		journalStructureImpl.setXsd(journalStructure.getXsd());
-
-		return journalStructureImpl;
-	}
-
-	/**
-	 * Returns the journal structure with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the journal structure
-	 * @return the journal structure
-	 * @throws com.liferay.portal.NoSuchModelException if a journal structure with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JournalStructure findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the journal structure with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchStructureException} if it could not be found.
-	 *
-	 * @param id the primary key of the journal structure
-	 * @return the journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByPrimaryKey(long id)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByPrimaryKey(id);
-
-		if (journalStructure == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + id);
-			}
-
-			throw new NoSuchStructureException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				id);
-		}
-
-		return journalStructure;
-	}
-
-	/**
-	 * Returns the journal structure with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the journal structure
-	 * @return the journal structure, or <code>null</code> if a journal structure with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JournalStructure fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the journal structure with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param id the primary key of the journal structure
-	 * @return the journal structure, or <code>null</code> if a journal structure with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByPrimaryKey(long id)
-		throws SystemException {
-		JournalStructure journalStructure = (JournalStructure)EntityCacheUtil.getResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-				JournalStructureImpl.class, id);
-
-		if (journalStructure == _nullJournalStructure) {
-			return null;
-		}
-
-		if (journalStructure == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				journalStructure = (JournalStructure)session.get(JournalStructureImpl.class,
-						Long.valueOf(id));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (journalStructure != null) {
-					cacheResult(journalStructure);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-						JournalStructureImpl.class, id, _nullJournalStructure);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return journalStructure;
-	}
 
 	/**
 	 * Returns all the journal structures where uuid = &#63;.
@@ -1222,6 +519,98 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
+	 * Removes all the journal structures where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (JournalStructure journalStructure : findByUuid(uuid)) {
+			remove(journalStructure);
+		}
+	}
+
+	/**
+	 * Returns the number of journal structures where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "journalStructure.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "journalStructure.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(journalStructure.uuid IS NULL OR journalStructure.uuid = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalStructureModelImpl.UUID_COLUMN_BITMASK |
+			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns the journal structure where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchStructureException} if it could not be found.
 	 *
 	 * @param uuid the uuid
@@ -1383,6 +772,119 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			}
 		}
 	}
+
+	/**
+	 * Removes the journal structure where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the journal structure that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure removeByUUID_G(String uuid, long groupId)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = findByUUID_G(uuid, groupId);
+
+		return remove(journalStructure);
+	}
+
+	/**
+	 * Returns the number of journal structures where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUUID_G(String uuid, long groupId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "journalStructure.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "journalStructure.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(journalStructure.uuid IS NULL OR journalStructure.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "journalStructure.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalStructureModelImpl.UUID_COLUMN_BITMASK |
+			JournalStructureModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the journal structures where uuid = &#63; and companyId = &#63;.
@@ -1818,6 +1320,121 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the journal structures where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (JournalStructure journalStructure : findByUuid_C(uuid, companyId)) {
+			remove(journalStructure);
+		}
+	}
+
+	/**
+	 * Returns the number of journal structures where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "journalStructure.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "journalStructure.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(journalStructure.uuid IS NULL OR journalStructure.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "journalStructure.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByGroupId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_GROUPID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the journal structures where groupId = &#63;.
@@ -2809,6 +2426,290 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
+	 * Removes all the journal structures where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (JournalStructure journalStructure : findByGroupId(groupId)) {
+			remove(journalStructure);
+		}
+	}
+
+	/**
+	 * Returns the number of journal structures where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of journal structures where groupId = any &#63;.
+	 *
+	 * @param groupIds the group IDs
+	 * @return the number of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long[] groupIds) throws SystemException {
+		Object[] finderArgs = new Object[] { StringUtil.merge(groupIds) };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((groupIds == null) || (groupIds.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < groupIds.length; i++) {
+					query.append(_FINDER_COLUMN_GROUPID_GROUPID_5);
+
+					if ((i + 1) < groupIds.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (groupIds != null) {
+					qPos.add(groupIds);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of journal structures that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching journal structures that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				JournalStructure.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the number of journal structures that the user has permission to view where groupId = any &#63;.
+	 *
+	 * @param groupIds the group IDs
+	 * @return the number of matching journal structures that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long[] groupIds) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupIds)) {
+			return countByGroupId(groupIds);
+		}
+
+		StringBundler query = new StringBundler();
+
+		query.append(_FILTER_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
+
+		boolean conjunctionable = false;
+
+		if ((groupIds == null) || (groupIds.length > 0)) {
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(StringPool.OPEN_PARENTHESIS);
+
+			for (int i = 0; i < groupIds.length; i++) {
+				query.append(_FINDER_COLUMN_GROUPID_GROUPID_5);
+
+				if ((i + 1) < groupIds.length) {
+					query.append(WHERE_OR);
+				}
+			}
+
+			query.append(StringPool.CLOSE_PARENTHESIS);
+
+			conjunctionable = true;
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				JournalStructure.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupIds);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			if (groupIds != null) {
+				qPos.add(groupIds);
+			}
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "journalStructure.groupId = ?";
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_5 = "(" +
+		_removeConjunction(_FINDER_COLUMN_GROUPID_GROUPID_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByStructureId",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStructureId",
+			new String[] { String.class.getName() },
+			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStructureId",
+			new String[] { String.class.getName() });
+
+	/**
 	 * Returns all the journal structures where structureId = &#63;.
 	 *
 	 * @param structureId the structure ID
@@ -3216,6 +3117,110 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the journal structures where structureId = &#63; from the database.
+	 *
+	 * @param structureId the structure ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByStructureId(String structureId)
+		throws SystemException {
+		for (JournalStructure journalStructure : findByStructureId(structureId)) {
+			remove(journalStructure);
+		}
+	}
+
+	/**
+	 * Returns the number of journal structures where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the number of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByStructureId(String structureId) throws SystemException {
+		Object[] finderArgs = new Object[] { structureId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
+
+			if (structureId == null) {
+				query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1);
+			}
+			else {
+				if (structureId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (structureId != null) {
+					qPos.add(structureId);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1 = "journalStructure.structureId IS NULL";
+	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2 = "journalStructure.structureId = ?";
+	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3 = "(journalStructure.structureId IS NULL OR journalStructure.structureId = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_PARENTSTRUCTUREID =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByParentStructureId",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByParentStructureId", new String[] { String.class.getName() },
+			JournalStructureModelImpl.PARENTSTRUCTUREID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByParentStructureId", new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the journal structures where parentStructureId = &#63;.
@@ -3635,6 +3640,103 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
+	 * Removes all the journal structures where parentStructureId = &#63; from the database.
+	 *
+	 * @param parentStructureId the parent structure ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByParentStructureId(String parentStructureId)
+		throws SystemException {
+		for (JournalStructure journalStructure : findByParentStructureId(
+				parentStructureId)) {
+			remove(journalStructure);
+		}
+	}
+
+	/**
+	 * Returns the number of journal structures where parentStructureId = &#63;.
+	 *
+	 * @param parentStructureId the parent structure ID
+	 * @return the number of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByParentStructureId(String parentStructureId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { parentStructureId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
+
+			if (parentStructureId == null) {
+				query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_1);
+			}
+			else {
+				if (parentStructureId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (parentStructureId != null) {
+					qPos.add(parentStructureId);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_1 =
+		"journalStructure.parentStructureId IS NULL";
+	private static final String _FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_2 =
+		"journalStructure.parentStructureId = ?";
+	private static final String _FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_3 =
+		"(journalStructure.parentStructureId IS NULL OR journalStructure.parentStructureId = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_G_S = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByG_S",
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
+			new String[] { Long.class.getName(), String.class.getName() });
+
+	/**
 	 * Returns the journal structure where groupId = &#63; and structureId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchStructureException} if it could not be found.
 	 *
 	 * @param groupId the group ID
@@ -3798,6 +3900,118 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			}
 		}
 	}
+
+	/**
+	 * Removes the journal structure where groupId = &#63; and structureId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param structureId the structure ID
+	 * @return the journal structure that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure removeByG_S(long groupId, String structureId)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = findByG_S(groupId, structureId);
+
+		return remove(journalStructure);
+	}
+
+	/**
+	 * Returns the number of journal structures where groupId = &#63; and structureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param structureId the structure ID
+	 * @return the number of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_S(long groupId, String structureId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, structureId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_S,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
+
+			if (structureId == null) {
+				query.append(_FINDER_COLUMN_G_S_STRUCTUREID_1);
+			}
+			else {
+				if (structureId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_S_STRUCTUREID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_S_STRUCTUREID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (structureId != null) {
+					qPos.add(structureId);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_S, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "journalStructure.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_1 = "journalStructure.structureId IS NULL";
+	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_2 = "journalStructure.structureId = ?";
+	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_3 = "(journalStructure.structureId IS NULL OR journalStructure.structureId = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_P",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P",
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalStructureModelImpl.PARENTSTRUCTUREID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
+			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
 	 * Returns all the journal structures where groupId = &#63; and parentStructureId = &#63;.
@@ -4592,216 +4806,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
-	 * Returns all the journal structures.
-	 *
-	 * @return the journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findAll() throws SystemException {
-		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the journal structures.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of journal structures
-	 * @param end the upper bound of the range of journal structures (not inclusive)
-	 * @return the range of journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findAll(int start, int end)
-		throws SystemException {
-		return findAll(start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal structures.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of journal structures
-	 * @param end the upper bound of the range of journal structures (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findAll(int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if (list == null) {
-			StringBundler query = null;
-			String sql = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 3));
-
-				query.append(_SQL_SELECT_JOURNALSTRUCTURE);
-
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-
-				sql = query.toString();
-			}
-			else {
-				sql = _SQL_SELECT_JOURNALSTRUCTURE.concat(JournalStructureModelImpl.ORDER_BY_JPQL);
-			}
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				if (orderByComparator == null) {
-					list = (List<JournalStructure>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-				}
-				else {
-					list = (List<JournalStructure>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Removes all the journal structures where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (JournalStructure journalStructure : findByUuid(uuid)) {
-			remove(journalStructure);
-		}
-	}
-
-	/**
-	 * Removes the journal structure where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the journal structure that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure removeByUUID_G(String uuid, long groupId)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = findByUUID_G(uuid, groupId);
-
-		return remove(journalStructure);
-	}
-
-	/**
-	 * Removes all the journal structures where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (JournalStructure journalStructure : findByUuid_C(uuid, companyId)) {
-			remove(journalStructure);
-		}
-	}
-
-	/**
-	 * Removes all the journal structures where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (JournalStructure journalStructure : findByGroupId(groupId)) {
-			remove(journalStructure);
-		}
-	}
-
-	/**
-	 * Removes all the journal structures where structureId = &#63; from the database.
-	 *
-	 * @param structureId the structure ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByStructureId(String structureId)
-		throws SystemException {
-		for (JournalStructure journalStructure : findByStructureId(structureId)) {
-			remove(journalStructure);
-		}
-	}
-
-	/**
-	 * Removes all the journal structures where parentStructureId = &#63; from the database.
-	 *
-	 * @param parentStructureId the parent structure ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByParentStructureId(String parentStructureId)
-		throws SystemException {
-		for (JournalStructure journalStructure : findByParentStructureId(
-				parentStructureId)) {
-			remove(journalStructure);
-		}
-	}
-
-	/**
-	 * Removes the journal structure where groupId = &#63; and structureId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param structureId the structure ID
-	 * @return the journal structure that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure removeByG_S(long groupId, String structureId)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = findByG_S(groupId, structureId);
-
-		return remove(journalStructure);
-	}
-
-	/**
 	 * Removes all the journal structures where groupId = &#63; and parentStructureId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -4814,672 +4818,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				parentStructureId)) {
 			remove(journalStructure);
 		}
-	}
-
-	/**
-	 * Removes all the journal structures from the database.
-	 *
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeAll() throws SystemException {
-		for (JournalStructure journalStructure : findAll()) {
-			remove(journalStructure);
-		}
-	}
-
-	/**
-	 * Returns the number of journal structures where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal structures where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUUID_G(String uuid, long groupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal structures where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal structures where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal structures where groupId = any &#63;.
-	 *
-	 * @param groupIds the group IDs
-	 * @return the number of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long[] groupIds) throws SystemException {
-		Object[] finderArgs = new Object[] { StringUtil.merge(groupIds) };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((groupIds == null) || (groupIds.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < groupIds.length; i++) {
-					query.append(_FINDER_COLUMN_GROUPID_GROUPID_5);
-
-					if ((i + 1) < groupIds.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (groupIds != null) {
-					qPos.add(groupIds);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal structures that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching journal structures that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				JournalStructure.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of journal structures that the user has permission to view where groupId = any &#63;.
-	 *
-	 * @param groupIds the group IDs
-	 * @return the number of matching journal structures that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long[] groupIds) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupIds)) {
-			return countByGroupId(groupIds);
-		}
-
-		StringBundler query = new StringBundler();
-
-		query.append(_FILTER_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
-
-		boolean conjunctionable = false;
-
-		if ((groupIds == null) || (groupIds.length > 0)) {
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(StringPool.OPEN_PARENTHESIS);
-
-			for (int i = 0; i < groupIds.length; i++) {
-				query.append(_FINDER_COLUMN_GROUPID_GROUPID_5);
-
-				if ((i + 1) < groupIds.length) {
-					query.append(WHERE_OR);
-				}
-			}
-
-			query.append(StringPool.CLOSE_PARENTHESIS);
-
-			conjunctionable = true;
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				JournalStructure.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupIds);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			if (groupIds != null) {
-				qPos.add(groupIds);
-			}
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of journal structures where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @return the number of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByStructureId(String structureId) throws SystemException {
-		Object[] finderArgs = new Object[] { structureId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
-
-			if (structureId == null) {
-				query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1);
-			}
-			else {
-				if (structureId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (structureId != null) {
-					qPos.add(structureId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal structures where parentStructureId = &#63;.
-	 *
-	 * @param parentStructureId the parent structure ID
-	 * @return the number of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByParentStructureId(String parentStructureId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { parentStructureId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
-
-			if (parentStructureId == null) {
-				query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_1);
-			}
-			else {
-				if (parentStructureId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (parentStructureId != null) {
-					qPos.add(parentStructureId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal structures where groupId = &#63; and structureId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param structureId the structure ID
-	 * @return the number of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_S(long groupId, String structureId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, structureId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JOURNALSTRUCTURE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
-
-			if (structureId == null) {
-				query.append(_FINDER_COLUMN_G_S_STRUCTUREID_1);
-			}
-			else {
-				if (structureId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_S_STRUCTUREID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_S_STRUCTUREID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (structureId != null) {
-					qPos.add(structureId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_S, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -5619,6 +4957,707 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 		}
 	}
 
+	private static final String _FINDER_COLUMN_G_P_GROUPID_2 = "journalStructure.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_PARENTSTRUCTUREID_1 = "journalStructure.parentStructureId IS NULL";
+	private static final String _FINDER_COLUMN_G_P_PARENTSTRUCTUREID_2 = "journalStructure.parentStructureId = ?";
+	private static final String _FINDER_COLUMN_G_P_PARENTSTRUCTUREID_3 = "(journalStructure.parentStructureId IS NULL OR journalStructure.parentStructureId = ?)";
+
+	/**
+	 * Caches the journal structure in the entity cache if it is enabled.
+	 *
+	 * @param journalStructure the journal structure
+	 */
+	public void cacheResult(JournalStructure journalStructure) {
+		EntityCacheUtil.putResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureImpl.class, journalStructure.getPrimaryKey(),
+			journalStructure);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				journalStructure.getUuid(),
+				Long.valueOf(journalStructure.getGroupId())
+			}, journalStructure);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_S,
+			new Object[] {
+				Long.valueOf(journalStructure.getGroupId()),
+				
+			journalStructure.getStructureId()
+			}, journalStructure);
+
+		journalStructure.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the journal structures in the entity cache if it is enabled.
+	 *
+	 * @param journalStructures the journal structures
+	 */
+	public void cacheResult(List<JournalStructure> journalStructures) {
+		for (JournalStructure journalStructure : journalStructures) {
+			if (EntityCacheUtil.getResult(
+						JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+						JournalStructureImpl.class,
+						journalStructure.getPrimaryKey()) == null) {
+				cacheResult(journalStructure);
+			}
+			else {
+				journalStructure.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all journal structures.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(JournalStructureImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(JournalStructureImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the journal structure.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(JournalStructure journalStructure) {
+		EntityCacheUtil.removeResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureImpl.class, journalStructure.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(journalStructure);
+	}
+
+	@Override
+	public void clearCache(List<JournalStructure> journalStructures) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (JournalStructure journalStructure : journalStructures) {
+			EntityCacheUtil.removeResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+				JournalStructureImpl.class, journalStructure.getPrimaryKey());
+
+			clearUniqueFindersCache(journalStructure);
+		}
+	}
+
+	protected void clearUniqueFindersCache(JournalStructure journalStructure) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				journalStructure.getUuid(),
+				Long.valueOf(journalStructure.getGroupId())
+			});
+
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_S,
+			new Object[] {
+				Long.valueOf(journalStructure.getGroupId()),
+				
+			journalStructure.getStructureId()
+			});
+	}
+
+	/**
+	 * Creates a new journal structure with the primary key. Does not add the journal structure to the database.
+	 *
+	 * @param id the primary key for the new journal structure
+	 * @return the new journal structure
+	 */
+	public JournalStructure create(long id) {
+		JournalStructure journalStructure = new JournalStructureImpl();
+
+		journalStructure.setNew(true);
+		journalStructure.setPrimaryKey(id);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		journalStructure.setUuid(uuid);
+
+		return journalStructure;
+	}
+
+	/**
+	 * Removes the journal structure with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param id the primary key of the journal structure
+	 * @return the journal structure that was removed
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure remove(long id)
+		throws NoSuchStructureException, SystemException {
+		return remove(Long.valueOf(id));
+	}
+
+	/**
+	 * Removes the journal structure with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the journal structure
+	 * @return the journal structure that was removed
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalStructure remove(Serializable primaryKey)
+		throws NoSuchStructureException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			JournalStructure journalStructure = (JournalStructure)session.get(JournalStructureImpl.class,
+					primaryKey);
+
+			if (journalStructure == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchStructureException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(journalStructure);
+		}
+		catch (NoSuchStructureException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected JournalStructure removeImpl(JournalStructure journalStructure)
+		throws SystemException {
+		journalStructure = toUnwrappedModel(journalStructure);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(journalStructure)) {
+				journalStructure = (JournalStructure)session.get(JournalStructureImpl.class,
+						journalStructure.getPrimaryKeyObj());
+			}
+
+			if (journalStructure != null) {
+				session.delete(journalStructure);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (journalStructure != null) {
+			clearCache(journalStructure);
+		}
+
+		return journalStructure;
+	}
+
+	@Override
+	public JournalStructure updateImpl(
+		com.liferay.portlet.journal.model.JournalStructure journalStructure)
+		throws SystemException {
+		journalStructure = toUnwrappedModel(journalStructure);
+
+		boolean isNew = journalStructure.isNew();
+
+		JournalStructureModelImpl journalStructureModelImpl = (JournalStructureModelImpl)journalStructure;
+
+		if (Validator.isNull(journalStructure.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			journalStructure.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (journalStructure.isNew()) {
+				session.save(journalStructure);
+
+				journalStructure.setNew(false);
+			}
+			else {
+				session.merge(journalStructure);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !JournalStructureModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((journalStructureModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalStructureModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { journalStructureModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((journalStructureModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalStructureModelImpl.getOriginalUuid(),
+						Long.valueOf(journalStructureModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						journalStructureModelImpl.getUuid(),
+						Long.valueOf(journalStructureModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((journalStructureModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(journalStructureModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(journalStructureModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+
+			if ((journalStructureModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalStructureModelImpl.getOriginalStructureId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
+					args);
+
+				args = new Object[] { journalStructureModelImpl.getStructureId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
+					args);
+			}
+
+			if ((journalStructureModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalStructureModelImpl.getOriginalParentStructureId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID,
+					args);
+
+				args = new Object[] {
+						journalStructureModelImpl.getParentStructureId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID,
+					args);
+			}
+
+			if ((journalStructureModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(journalStructureModelImpl.getOriginalGroupId()),
+						
+						journalStructureModelImpl.getOriginalParentStructureId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(journalStructureModelImpl.getGroupId()),
+						
+						journalStructureModelImpl.getParentStructureId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureImpl.class, journalStructure.getPrimaryKey(),
+			journalStructure);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+				new Object[] {
+					journalStructure.getUuid(),
+					Long.valueOf(journalStructure.getGroupId())
+				}, journalStructure);
+
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_S,
+				new Object[] {
+					Long.valueOf(journalStructure.getGroupId()),
+					
+				journalStructure.getStructureId()
+				}, journalStructure);
+		}
+		else {
+			if ((journalStructureModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalStructureModelImpl.getOriginalUuid(),
+						Long.valueOf(journalStructureModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+					new Object[] {
+						journalStructure.getUuid(),
+						Long.valueOf(journalStructure.getGroupId())
+					}, journalStructure);
+			}
+
+			if ((journalStructureModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_G_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(journalStructureModelImpl.getOriginalGroupId()),
+						
+						journalStructureModelImpl.getOriginalStructureId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_S, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_S,
+					new Object[] {
+						Long.valueOf(journalStructure.getGroupId()),
+						
+					journalStructure.getStructureId()
+					}, journalStructure);
+			}
+		}
+
+		return journalStructure;
+	}
+
+	protected JournalStructure toUnwrappedModel(
+		JournalStructure journalStructure) {
+		if (journalStructure instanceof JournalStructureImpl) {
+			return journalStructure;
+		}
+
+		JournalStructureImpl journalStructureImpl = new JournalStructureImpl();
+
+		journalStructureImpl.setNew(journalStructure.isNew());
+		journalStructureImpl.setPrimaryKey(journalStructure.getPrimaryKey());
+
+		journalStructureImpl.setUuid(journalStructure.getUuid());
+		journalStructureImpl.setId(journalStructure.getId());
+		journalStructureImpl.setGroupId(journalStructure.getGroupId());
+		journalStructureImpl.setCompanyId(journalStructure.getCompanyId());
+		journalStructureImpl.setUserId(journalStructure.getUserId());
+		journalStructureImpl.setUserName(journalStructure.getUserName());
+		journalStructureImpl.setCreateDate(journalStructure.getCreateDate());
+		journalStructureImpl.setModifiedDate(journalStructure.getModifiedDate());
+		journalStructureImpl.setStructureId(journalStructure.getStructureId());
+		journalStructureImpl.setParentStructureId(journalStructure.getParentStructureId());
+		journalStructureImpl.setName(journalStructure.getName());
+		journalStructureImpl.setDescription(journalStructure.getDescription());
+		journalStructureImpl.setXsd(journalStructure.getXsd());
+
+		return journalStructureImpl;
+	}
+
+	/**
+	 * Returns the journal structure with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the journal structure
+	 * @return the journal structure
+	 * @throws com.liferay.portal.NoSuchModelException if a journal structure with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalStructure findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the journal structure with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchStructureException} if it could not be found.
+	 *
+	 * @param id the primary key of the journal structure
+	 * @return the journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByPrimaryKey(long id)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByPrimaryKey(id);
+
+		if (journalStructure == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + id);
+			}
+
+			throw new NoSuchStructureException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				id);
+		}
+
+		return journalStructure;
+	}
+
+	/**
+	 * Returns the journal structure with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the journal structure
+	 * @return the journal structure, or <code>null</code> if a journal structure with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalStructure fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the journal structure with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param id the primary key of the journal structure
+	 * @return the journal structure, or <code>null</code> if a journal structure with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByPrimaryKey(long id)
+		throws SystemException {
+		JournalStructure journalStructure = (JournalStructure)EntityCacheUtil.getResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+				JournalStructureImpl.class, id);
+
+		if (journalStructure == _nullJournalStructure) {
+			return null;
+		}
+
+		if (journalStructure == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				journalStructure = (JournalStructure)session.get(JournalStructureImpl.class,
+						Long.valueOf(id));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (journalStructure != null) {
+					cacheResult(journalStructure);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+						JournalStructureImpl.class, id, _nullJournalStructure);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return journalStructure;
+	}
+
+	/**
+	 * Returns all the journal structures.
+	 *
+	 * @return the journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findAll() throws SystemException {
+		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the journal structures.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of journal structures
+	 * @param end the upper bound of the range of journal structures (not inclusive)
+	 * @return the range of journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findAll(int start, int end)
+		throws SystemException {
+		return findAll(start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the journal structures.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of journal structures
+	 * @param end the upper bound of the range of journal structures (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findAll(int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
+
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+			String sql = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(2 +
+						(orderByComparator.getOrderByFields().length * 3));
+
+				query.append(_SQL_SELECT_JOURNALSTRUCTURE);
+
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+
+				sql = query.toString();
+			}
+			else {
+				sql = _SQL_SELECT_JOURNALSTRUCTURE.concat(JournalStructureModelImpl.ORDER_BY_JPQL);
+			}
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				if (orderByComparator == null) {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+				}
+				else {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the journal structures from the database.
+	 *
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeAll() throws SystemException {
+		for (JournalStructure journalStructure : findAll()) {
+			remove(journalStructure);
+		}
+	}
+
 	/**
 	 * Returns the number of journal structures.
 	 *
@@ -5716,37 +5755,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	private static final String _SQL_SELECT_JOURNALSTRUCTURE_WHERE = "SELECT journalStructure FROM JournalStructure journalStructure WHERE ";
 	private static final String _SQL_COUNT_JOURNALSTRUCTURE = "SELECT COUNT(journalStructure) FROM JournalStructure journalStructure";
 	private static final String _SQL_COUNT_JOURNALSTRUCTURE_WHERE = "SELECT COUNT(journalStructure) FROM JournalStructure journalStructure WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "journalStructure.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "journalStructure.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(journalStructure.uuid IS NULL OR journalStructure.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "journalStructure.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "journalStructure.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(journalStructure.uuid IS NULL OR journalStructure.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "journalStructure.groupId = ?";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "journalStructure.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "journalStructure.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(journalStructure.uuid IS NULL OR journalStructure.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "journalStructure.companyId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "journalStructure.groupId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_GROUPID_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1 = "journalStructure.structureId IS NULL";
-	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2 = "journalStructure.structureId = ?";
-	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3 = "(journalStructure.structureId IS NULL OR journalStructure.structureId = ?)";
-	private static final String _FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_1 =
-		"journalStructure.parentStructureId IS NULL";
-	private static final String _FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_2 =
-		"journalStructure.parentStructureId = ?";
-	private static final String _FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_3 =
-		"(journalStructure.parentStructureId IS NULL OR journalStructure.parentStructureId = ?)";
-	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "journalStructure.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_1 = "journalStructure.structureId IS NULL";
-	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_2 = "journalStructure.structureId = ?";
-	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_3 = "(journalStructure.structureId IS NULL OR journalStructure.structureId = ?)";
-	private static final String _FINDER_COLUMN_G_P_GROUPID_2 = "journalStructure.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_PARENTSTRUCTUREID_1 = "journalStructure.parentStructureId IS NULL";
-	private static final String _FINDER_COLUMN_G_P_PARENTSTRUCTUREID_2 = "journalStructure.parentStructureId = ?";
-	private static final String _FINDER_COLUMN_G_P_PARENTSTRUCTUREID_3 = "(journalStructure.parentStructureId IS NULL OR journalStructure.parentStructureId = ?)";
 
 	private static String _removeConjunction(String sql) {
 		int pos = sql.indexOf(" AND ");

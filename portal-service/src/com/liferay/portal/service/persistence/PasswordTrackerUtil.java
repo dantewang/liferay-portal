@@ -110,86 +110,6 @@ public class PasswordTrackerUtil {
 	}
 
 	/**
-	* Caches the password tracker in the entity cache if it is enabled.
-	*
-	* @param passwordTracker the password tracker
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.PasswordTracker passwordTracker) {
-		getPersistence().cacheResult(passwordTracker);
-	}
-
-	/**
-	* Caches the password trackers in the entity cache if it is enabled.
-	*
-	* @param passwordTrackers the password trackers
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.PasswordTracker> passwordTrackers) {
-		getPersistence().cacheResult(passwordTrackers);
-	}
-
-	/**
-	* Creates a new password tracker with the primary key. Does not add the password tracker to the database.
-	*
-	* @param passwordTrackerId the primary key for the new password tracker
-	* @return the new password tracker
-	*/
-	public static com.liferay.portal.model.PasswordTracker create(
-		long passwordTrackerId) {
-		return getPersistence().create(passwordTrackerId);
-	}
-
-	/**
-	* Removes the password tracker with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param passwordTrackerId the primary key of the password tracker
-	* @return the password tracker that was removed
-	* @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PasswordTracker remove(
-		long passwordTrackerId)
-		throws com.liferay.portal.NoSuchPasswordTrackerException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(passwordTrackerId);
-	}
-
-	public static com.liferay.portal.model.PasswordTracker updateImpl(
-		com.liferay.portal.model.PasswordTracker passwordTracker)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(passwordTracker);
-	}
-
-	/**
-	* Returns the password tracker with the primary key or throws a {@link com.liferay.portal.NoSuchPasswordTrackerException} if it could not be found.
-	*
-	* @param passwordTrackerId the primary key of the password tracker
-	* @return the password tracker
-	* @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PasswordTracker findByPrimaryKey(
-		long passwordTrackerId)
-		throws com.liferay.portal.NoSuchPasswordTrackerException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(passwordTrackerId);
-	}
-
-	/**
-	* Returns the password tracker with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param passwordTrackerId the primary key of the password tracker
-	* @return the password tracker, or <code>null</code> if a password tracker with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PasswordTracker fetchByPrimaryKey(
-		long passwordTrackerId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(passwordTrackerId);
-	}
-
-	/**
 	* Returns all the password trackers where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -327,6 +247,109 @@ public class PasswordTrackerUtil {
 	}
 
 	/**
+	* Removes all the password trackers where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUserId(userId);
+	}
+
+	/**
+	* Returns the number of password trackers where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching password trackers
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUserId(userId);
+	}
+
+	/**
+	* Caches the password tracker in the entity cache if it is enabled.
+	*
+	* @param passwordTracker the password tracker
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.PasswordTracker passwordTracker) {
+		getPersistence().cacheResult(passwordTracker);
+	}
+
+	/**
+	* Caches the password trackers in the entity cache if it is enabled.
+	*
+	* @param passwordTrackers the password trackers
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.PasswordTracker> passwordTrackers) {
+		getPersistence().cacheResult(passwordTrackers);
+	}
+
+	/**
+	* Creates a new password tracker with the primary key. Does not add the password tracker to the database.
+	*
+	* @param passwordTrackerId the primary key for the new password tracker
+	* @return the new password tracker
+	*/
+	public static com.liferay.portal.model.PasswordTracker create(
+		long passwordTrackerId) {
+		return getPersistence().create(passwordTrackerId);
+	}
+
+	/**
+	* Removes the password tracker with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param passwordTrackerId the primary key of the password tracker
+	* @return the password tracker that was removed
+	* @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordTracker remove(
+		long passwordTrackerId)
+		throws com.liferay.portal.NoSuchPasswordTrackerException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(passwordTrackerId);
+	}
+
+	public static com.liferay.portal.model.PasswordTracker updateImpl(
+		com.liferay.portal.model.PasswordTracker passwordTracker)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(passwordTracker);
+	}
+
+	/**
+	* Returns the password tracker with the primary key or throws a {@link com.liferay.portal.NoSuchPasswordTrackerException} if it could not be found.
+	*
+	* @param passwordTrackerId the primary key of the password tracker
+	* @return the password tracker
+	* @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordTracker findByPrimaryKey(
+		long passwordTrackerId)
+		throws com.liferay.portal.NoSuchPasswordTrackerException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(passwordTrackerId);
+	}
+
+	/**
+	* Returns the password tracker with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param passwordTrackerId the primary key of the password tracker
+	* @return the password tracker, or <code>null</code> if a password tracker with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordTracker fetchByPrimaryKey(
+		long passwordTrackerId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(passwordTrackerId);
+	}
+
+	/**
 	* Returns all the password trackers.
 	*
 	* @return the password trackers
@@ -376,17 +399,6 @@ public class PasswordTrackerUtil {
 	}
 
 	/**
-	* Removes all the password trackers where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUserId(userId);
-	}
-
-	/**
 	* Removes all the password trackers from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -394,18 +406,6 @@ public class PasswordTrackerUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of password trackers where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching password trackers
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUserId(userId);
 	}
 
 	/**

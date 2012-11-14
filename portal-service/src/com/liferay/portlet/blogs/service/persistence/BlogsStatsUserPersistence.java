@@ -38,72 +38,6 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 	 */
 
 	/**
-	* Caches the blogs stats user in the entity cache if it is enabled.
-	*
-	* @param blogsStatsUser the blogs stats user
-	*/
-	public void cacheResult(
-		com.liferay.portlet.blogs.model.BlogsStatsUser blogsStatsUser);
-
-	/**
-	* Caches the blogs stats users in the entity cache if it is enabled.
-	*
-	* @param blogsStatsUsers the blogs stats users
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.blogs.model.BlogsStatsUser> blogsStatsUsers);
-
-	/**
-	* Creates a new blogs stats user with the primary key. Does not add the blogs stats user to the database.
-	*
-	* @param statsUserId the primary key for the new blogs stats user
-	* @return the new blogs stats user
-	*/
-	public com.liferay.portlet.blogs.model.BlogsStatsUser create(
-		long statsUserId);
-
-	/**
-	* Removes the blogs stats user with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param statsUserId the primary key of the blogs stats user
-	* @return the blogs stats user that was removed
-	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsStatsUser remove(
-		long statsUserId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchStatsUserException;
-
-	public com.liferay.portlet.blogs.model.BlogsStatsUser updateImpl(
-		com.liferay.portlet.blogs.model.BlogsStatsUser blogsStatsUser)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the blogs stats user with the primary key or throws a {@link com.liferay.portlet.blogs.NoSuchStatsUserException} if it could not be found.
-	*
-	* @param statsUserId the primary key of the blogs stats user
-	* @return the blogs stats user
-	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsStatsUser findByPrimaryKey(
-		long statsUserId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchStatsUserException;
-
-	/**
-	* Returns the blogs stats user with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param statsUserId the primary key of the blogs stats user
-	* @return the blogs stats user, or <code>null</code> if a blogs stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByPrimaryKey(
-		long statsUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the blogs stats users where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -221,6 +155,25 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
+	* Removes all the blogs stats users where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs stats users where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching blogs stats users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the blogs stats users where userId = &#63;.
@@ -341,6 +294,25 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Removes all the blogs stats users where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs stats users where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching blogs stats users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the blogs stats user where groupId = &#63; and userId = &#63; or throws a {@link com.liferay.portlet.blogs.NoSuchStatsUserException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -377,6 +349,30 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 	*/
 	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByG_U(
 		long groupId, long userId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the blogs stats user where groupId = &#63; and userId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the blogs stats user that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser removeByG_U(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
+	* Returns the number of blogs stats users where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the number of matching blogs stats users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_U(long groupId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -507,6 +503,27 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Removes all the blogs stats users where groupId = &#63; and entryCount &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param entryCount the entry count
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_NotE(long groupId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs stats users where groupId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param entryCount the entry count
+	* @return the number of matching blogs stats users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_NotE(long groupId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs stats users where companyId = &#63; and entryCount &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -632,6 +649,27 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
+	* Removes all the blogs stats users where companyId = &#63; and entryCount &ne; &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param entryCount the entry count
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_NotE(long companyId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs stats users where companyId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param entryCount the entry count
+	* @return the number of matching blogs stats users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_NotE(long companyId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the blogs stats users where userId = &#63; and lastPostDate = &#63;.
@@ -761,6 +799,93 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Removes all the blogs stats users where userId = &#63; and lastPostDate = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param lastPostDate the last post date
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByU_L(long userId, java.util.Date lastPostDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs stats users where userId = &#63; and lastPostDate = &#63;.
+	*
+	* @param userId the user ID
+	* @param lastPostDate the last post date
+	* @return the number of matching blogs stats users
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByU_L(long userId, java.util.Date lastPostDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the blogs stats user in the entity cache if it is enabled.
+	*
+	* @param blogsStatsUser the blogs stats user
+	*/
+	public void cacheResult(
+		com.liferay.portlet.blogs.model.BlogsStatsUser blogsStatsUser);
+
+	/**
+	* Caches the blogs stats users in the entity cache if it is enabled.
+	*
+	* @param blogsStatsUsers the blogs stats users
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.blogs.model.BlogsStatsUser> blogsStatsUsers);
+
+	/**
+	* Creates a new blogs stats user with the primary key. Does not add the blogs stats user to the database.
+	*
+	* @param statsUserId the primary key for the new blogs stats user
+	* @return the new blogs stats user
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser create(
+		long statsUserId);
+
+	/**
+	* Removes the blogs stats user with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param statsUserId the primary key of the blogs stats user
+	* @return the blogs stats user that was removed
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser remove(
+		long statsUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	public com.liferay.portlet.blogs.model.BlogsStatsUser updateImpl(
+		com.liferay.portlet.blogs.model.BlogsStatsUser blogsStatsUser)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the blogs stats user with the primary key or throws a {@link com.liferay.portlet.blogs.NoSuchStatsUserException} if it could not be found.
+	*
+	* @param statsUserId the primary key of the blogs stats user
+	* @return the blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser findByPrimaryKey(
+		long statsUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
+	* Returns the blogs stats user with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param statsUserId the primary key of the blogs stats user
+	* @return the blogs stats user, or <code>null</code> if a blogs stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByPrimaryKey(
+		long statsUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs stats users.
 	*
 	* @return the blogs stats users
@@ -804,136 +929,11 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the blogs stats users where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs stats users where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the blogs stats user where groupId = &#63; and userId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @return the blogs stats user that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsStatsUser removeByG_U(
-		long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchStatsUserException;
-
-	/**
-	* Removes all the blogs stats users where groupId = &#63; and entryCount &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param entryCount the entry count
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_NotE(long groupId, int entryCount)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs stats users where companyId = &#63; and entryCount &ne; &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param entryCount the entry count
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_NotE(long companyId, int entryCount)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs stats users where userId = &#63; and lastPostDate = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param lastPostDate the last post date
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByU_L(long userId, java.util.Date lastPostDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the blogs stats users from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs stats users where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching blogs stats users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs stats users where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching blogs stats users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs stats users where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @return the number of matching blogs stats users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_U(long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs stats users where groupId = &#63; and entryCount &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param entryCount the entry count
-	* @return the number of matching blogs stats users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_NotE(long groupId, int entryCount)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs stats users where companyId = &#63; and entryCount &ne; &#63;.
-	*
-	* @param companyId the company ID
-	* @param entryCount the entry count
-	* @return the number of matching blogs stats users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_NotE(long companyId, int entryCount)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs stats users where userId = &#63; and lastPostDate = &#63;.
-	*
-	* @param userId the user ID
-	* @param lastPostDate the last post date
-	* @return the number of matching blogs stats users
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByU_L(long userId, java.util.Date lastPostDate)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

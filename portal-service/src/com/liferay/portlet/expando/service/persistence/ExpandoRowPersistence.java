@@ -38,69 +38,6 @@ public interface ExpandoRowPersistence extends BasePersistence<ExpandoRow> {
 	 */
 
 	/**
-	* Caches the expando row in the entity cache if it is enabled.
-	*
-	* @param expandoRow the expando row
-	*/
-	public void cacheResult(
-		com.liferay.portlet.expando.model.ExpandoRow expandoRow);
-
-	/**
-	* Caches the expando rows in the entity cache if it is enabled.
-	*
-	* @param expandoRows the expando rows
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.expando.model.ExpandoRow> expandoRows);
-
-	/**
-	* Creates a new expando row with the primary key. Does not add the expando row to the database.
-	*
-	* @param rowId the primary key for the new expando row
-	* @return the new expando row
-	*/
-	public com.liferay.portlet.expando.model.ExpandoRow create(long rowId);
-
-	/**
-	* Removes the expando row with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param rowId the primary key of the expando row
-	* @return the expando row that was removed
-	* @throws com.liferay.portlet.expando.NoSuchRowException if a expando row with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.expando.model.ExpandoRow remove(long rowId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.expando.NoSuchRowException;
-
-	public com.liferay.portlet.expando.model.ExpandoRow updateImpl(
-		com.liferay.portlet.expando.model.ExpandoRow expandoRow)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the expando row with the primary key or throws a {@link com.liferay.portlet.expando.NoSuchRowException} if it could not be found.
-	*
-	* @param rowId the primary key of the expando row
-	* @return the expando row
-	* @throws com.liferay.portlet.expando.NoSuchRowException if a expando row with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.expando.model.ExpandoRow findByPrimaryKey(
-		long rowId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.expando.NoSuchRowException;
-
-	/**
-	* Returns the expando row with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param rowId the primary key of the expando row
-	* @return the expando row, or <code>null</code> if a expando row with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.expando.model.ExpandoRow fetchByPrimaryKey(
-		long rowId) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the expando rows where tableId = &#63;.
 	*
 	* @param tableId the table ID
@@ -220,6 +157,25 @@ public interface ExpandoRowPersistence extends BasePersistence<ExpandoRow> {
 			com.liferay.portlet.expando.NoSuchRowException;
 
 	/**
+	* Removes all the expando rows where tableId = &#63; from the database.
+	*
+	* @param tableId the table ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByTableId(long tableId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of expando rows where tableId = &#63;.
+	*
+	* @param tableId the table ID
+	* @return the number of matching expando rows
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByTableId(long tableId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the expando row where tableId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.expando.NoSuchRowException} if it could not be found.
 	*
 	* @param tableId the table ID
@@ -257,6 +213,93 @@ public interface ExpandoRowPersistence extends BasePersistence<ExpandoRow> {
 	public com.liferay.portlet.expando.model.ExpandoRow fetchByT_C(
 		long tableId, long classPK, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the expando row where tableId = &#63; and classPK = &#63; from the database.
+	*
+	* @param tableId the table ID
+	* @param classPK the class p k
+	* @return the expando row that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoRow removeByT_C(
+		long tableId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchRowException;
+
+	/**
+	* Returns the number of expando rows where tableId = &#63; and classPK = &#63;.
+	*
+	* @param tableId the table ID
+	* @param classPK the class p k
+	* @return the number of matching expando rows
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByT_C(long tableId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the expando row in the entity cache if it is enabled.
+	*
+	* @param expandoRow the expando row
+	*/
+	public void cacheResult(
+		com.liferay.portlet.expando.model.ExpandoRow expandoRow);
+
+	/**
+	* Caches the expando rows in the entity cache if it is enabled.
+	*
+	* @param expandoRows the expando rows
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.expando.model.ExpandoRow> expandoRows);
+
+	/**
+	* Creates a new expando row with the primary key. Does not add the expando row to the database.
+	*
+	* @param rowId the primary key for the new expando row
+	* @return the new expando row
+	*/
+	public com.liferay.portlet.expando.model.ExpandoRow create(long rowId);
+
+	/**
+	* Removes the expando row with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param rowId the primary key of the expando row
+	* @return the expando row that was removed
+	* @throws com.liferay.portlet.expando.NoSuchRowException if a expando row with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoRow remove(long rowId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchRowException;
+
+	public com.liferay.portlet.expando.model.ExpandoRow updateImpl(
+		com.liferay.portlet.expando.model.ExpandoRow expandoRow)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the expando row with the primary key or throws a {@link com.liferay.portlet.expando.NoSuchRowException} if it could not be found.
+	*
+	* @param rowId the primary key of the expando row
+	* @return the expando row
+	* @throws com.liferay.portlet.expando.NoSuchRowException if a expando row with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoRow findByPrimaryKey(
+		long rowId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchRowException;
+
+	/**
+	* Returns the expando row with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param rowId the primary key of the expando row
+	* @return the expando row, or <code>null</code> if a expando row with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoRow fetchByPrimaryKey(
+		long rowId) throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the expando rows.
@@ -302,54 +345,11 @@ public interface ExpandoRowPersistence extends BasePersistence<ExpandoRow> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the expando rows where tableId = &#63; from the database.
-	*
-	* @param tableId the table ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByTableId(long tableId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the expando row where tableId = &#63; and classPK = &#63; from the database.
-	*
-	* @param tableId the table ID
-	* @param classPK the class p k
-	* @return the expando row that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.expando.model.ExpandoRow removeByT_C(
-		long tableId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.expando.NoSuchRowException;
-
-	/**
 	* Removes all the expando rows from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of expando rows where tableId = &#63;.
-	*
-	* @param tableId the table ID
-	* @return the number of matching expando rows
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByTableId(long tableId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of expando rows where tableId = &#63; and classPK = &#63;.
-	*
-	* @param tableId the table ID
-	* @param classPK the class p k
-	* @return the number of matching expando rows
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByT_C(long tableId, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

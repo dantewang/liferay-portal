@@ -38,72 +38,6 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 	 */
 
 	/**
-	* Caches the shopping category in the entity cache if it is enabled.
-	*
-	* @param shoppingCategory the shopping category
-	*/
-	public void cacheResult(
-		com.liferay.portlet.shopping.model.ShoppingCategory shoppingCategory);
-
-	/**
-	* Caches the shopping categories in the entity cache if it is enabled.
-	*
-	* @param shoppingCategories the shopping categories
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.shopping.model.ShoppingCategory> shoppingCategories);
-
-	/**
-	* Creates a new shopping category with the primary key. Does not add the shopping category to the database.
-	*
-	* @param categoryId the primary key for the new shopping category
-	* @return the new shopping category
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCategory create(
-		long categoryId);
-
-	/**
-	* Removes the shopping category with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param categoryId the primary key of the shopping category
-	* @return the shopping category that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCategory remove(
-		long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchCategoryException;
-
-	public com.liferay.portlet.shopping.model.ShoppingCategory updateImpl(
-		com.liferay.portlet.shopping.model.ShoppingCategory shoppingCategory)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the shopping category with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchCategoryException} if it could not be found.
-	*
-	* @param categoryId the primary key of the shopping category
-	* @return the shopping category
-	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCategory findByPrimaryKey(
-		long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchCategoryException;
-
-	/**
-	* Returns the shopping category with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param categoryId the primary key of the shopping category
-	* @return the shopping category, or <code>null</code> if a shopping category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCategory fetchByPrimaryKey(
-		long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the shopping categories where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -284,6 +218,35 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchCategoryException;
+
+	/**
+	* Removes all the shopping categories where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of shopping categories where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching shopping categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of shopping categories that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching shopping categories that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the shopping categories where groupId = &#63; and parentCategoryId = &#63;.
@@ -480,6 +443,104 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 			com.liferay.portlet.shopping.NoSuchCategoryException;
 
 	/**
+	* Removes all the shopping categories where groupId = &#63; and parentCategoryId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_P(long groupId, long parentCategoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of shopping categories where groupId = &#63; and parentCategoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @return the number of matching shopping categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P(long groupId, long parentCategoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of shopping categories that the user has permission to view where groupId = &#63; and parentCategoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentCategoryId the parent category ID
+	* @return the number of matching shopping categories that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_P(long groupId, long parentCategoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the shopping category in the entity cache if it is enabled.
+	*
+	* @param shoppingCategory the shopping category
+	*/
+	public void cacheResult(
+		com.liferay.portlet.shopping.model.ShoppingCategory shoppingCategory);
+
+	/**
+	* Caches the shopping categories in the entity cache if it is enabled.
+	*
+	* @param shoppingCategories the shopping categories
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.shopping.model.ShoppingCategory> shoppingCategories);
+
+	/**
+	* Creates a new shopping category with the primary key. Does not add the shopping category to the database.
+	*
+	* @param categoryId the primary key for the new shopping category
+	* @return the new shopping category
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCategory create(
+		long categoryId);
+
+	/**
+	* Removes the shopping category with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param categoryId the primary key of the shopping category
+	* @return the shopping category that was removed
+	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCategory remove(
+		long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCategoryException;
+
+	public com.liferay.portlet.shopping.model.ShoppingCategory updateImpl(
+		com.liferay.portlet.shopping.model.ShoppingCategory shoppingCategory)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the shopping category with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchCategoryException} if it could not be found.
+	*
+	* @param categoryId the primary key of the shopping category
+	* @return the shopping category
+	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCategory findByPrimaryKey(
+		long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCategoryException;
+
+	/**
+	* Returns the shopping category with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param categoryId the primary key of the shopping category
+	* @return the shopping category, or <code>null</code> if a shopping category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCategory fetchByPrimaryKey(
+		long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the shopping categories.
 	*
 	* @return the shopping categories
@@ -523,72 +584,11 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the shopping categories where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the shopping categories where groupId = &#63; and parentCategoryId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param parentCategoryId the parent category ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_P(long groupId, long parentCategoryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the shopping categories from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping categories where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching shopping categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping categories that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching shopping categories that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping categories where groupId = &#63; and parentCategoryId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentCategoryId the parent category ID
-	* @return the number of matching shopping categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P(long groupId, long parentCategoryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of shopping categories that the user has permission to view where groupId = &#63; and parentCategoryId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentCategoryId the parent category ID
-	* @return the number of matching shopping categories that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_P(long groupId, long parentCategoryId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

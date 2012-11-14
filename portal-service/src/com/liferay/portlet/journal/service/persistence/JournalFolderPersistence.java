@@ -38,70 +38,6 @@ public interface JournalFolderPersistence extends BasePersistence<JournalFolder>
 	 */
 
 	/**
-	* Caches the journal folder in the entity cache if it is enabled.
-	*
-	* @param journalFolder the journal folder
-	*/
-	public void cacheResult(
-		com.liferay.portlet.journal.model.JournalFolder journalFolder);
-
-	/**
-	* Caches the journal folders in the entity cache if it is enabled.
-	*
-	* @param journalFolders the journal folders
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.journal.model.JournalFolder> journalFolders);
-
-	/**
-	* Creates a new journal folder with the primary key. Does not add the journal folder to the database.
-	*
-	* @param folderId the primary key for the new journal folder
-	* @return the new journal folder
-	*/
-	public com.liferay.portlet.journal.model.JournalFolder create(long folderId);
-
-	/**
-	* Removes the journal folder with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param folderId the primary key of the journal folder
-	* @return the journal folder that was removed
-	* @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalFolder remove(long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchFolderException;
-
-	public com.liferay.portlet.journal.model.JournalFolder updateImpl(
-		com.liferay.portlet.journal.model.JournalFolder journalFolder)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the journal folder with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchFolderException} if it could not be found.
-	*
-	* @param folderId the primary key of the journal folder
-	* @return the journal folder
-	* @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalFolder findByPrimaryKey(
-		long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchFolderException;
-
-	/**
-	* Returns the journal folder with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param folderId the primary key of the journal folder
-	* @return the journal folder, or <code>null</code> if a journal folder with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalFolder fetchByPrimaryKey(
-		long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the journal folders where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -221,6 +157,25 @@ public interface JournalFolderPersistence extends BasePersistence<JournalFolder>
 			com.liferay.portlet.journal.NoSuchFolderException;
 
 	/**
+	* Removes all the journal folders where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal folders where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching journal folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the journal folder where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchFolderException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -257,6 +212,30 @@ public interface JournalFolderPersistence extends BasePersistence<JournalFolder>
 	*/
 	public com.liferay.portlet.journal.model.JournalFolder fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the journal folder where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the journal folder that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalFolder removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchFolderException;
+
+	/**
+	* Returns the number of journal folders where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching journal folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -385,6 +364,27 @@ public interface JournalFolderPersistence extends BasePersistence<JournalFolder>
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchFolderException;
+
+	/**
+	* Removes all the journal folders where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal folders where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching journal folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal folders where groupId = &#63;.
@@ -569,6 +569,35 @@ public interface JournalFolderPersistence extends BasePersistence<JournalFolder>
 			com.liferay.portlet.journal.NoSuchFolderException;
 
 	/**
+	* Removes all the journal folders where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal folders where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching journal folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal folders that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching journal folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal folders where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -686,6 +715,25 @@ public interface JournalFolderPersistence extends BasePersistence<JournalFolder>
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchFolderException;
+
+	/**
+	* Removes all the journal folders where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal folders where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching journal folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal folders where groupId = &#63; and parentFolderId = &#63;.
@@ -882,6 +930,38 @@ public interface JournalFolderPersistence extends BasePersistence<JournalFolder>
 			com.liferay.portlet.journal.NoSuchFolderException;
 
 	/**
+	* Removes all the journal folders where groupId = &#63; and parentFolderId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_P(long groupId, long parentFolderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal folders where groupId = &#63; and parentFolderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @return the number of matching journal folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P(long groupId, long parentFolderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @return the number of matching journal folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_P(long groupId, long parentFolderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the journal folder where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchFolderException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -918,6 +998,30 @@ public interface JournalFolderPersistence extends BasePersistence<JournalFolder>
 	*/
 	public com.liferay.portlet.journal.model.JournalFolder fetchByG_N(
 		long groupId, java.lang.String name, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the journal folder where groupId = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the journal folder that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalFolder removeByG_N(
+		long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchFolderException;
+
+	/**
+	* Returns the number of journal folders where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the number of matching journal folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_N(long groupId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -964,6 +1068,97 @@ public interface JournalFolderPersistence extends BasePersistence<JournalFolder>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the journal folder where groupId = &#63; and parentFolderId = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param name the name
+	* @return the journal folder that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalFolder removeByG_P_N(
+		long groupId, long parentFolderId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchFolderException;
+
+	/**
+	* Returns the number of journal folders where groupId = &#63; and parentFolderId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param name the name
+	* @return the number of matching journal folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_P_N(long groupId, long parentFolderId,
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the journal folder in the entity cache if it is enabled.
+	*
+	* @param journalFolder the journal folder
+	*/
+	public void cacheResult(
+		com.liferay.portlet.journal.model.JournalFolder journalFolder);
+
+	/**
+	* Caches the journal folders in the entity cache if it is enabled.
+	*
+	* @param journalFolders the journal folders
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.journal.model.JournalFolder> journalFolders);
+
+	/**
+	* Creates a new journal folder with the primary key. Does not add the journal folder to the database.
+	*
+	* @param folderId the primary key for the new journal folder
+	* @return the new journal folder
+	*/
+	public com.liferay.portlet.journal.model.JournalFolder create(long folderId);
+
+	/**
+	* Removes the journal folder with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param folderId the primary key of the journal folder
+	* @return the journal folder that was removed
+	* @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalFolder remove(long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchFolderException;
+
+	public com.liferay.portlet.journal.model.JournalFolder updateImpl(
+		com.liferay.portlet.journal.model.JournalFolder journalFolder)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the journal folder with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchFolderException} if it could not be found.
+	*
+	* @param folderId the primary key of the journal folder
+	* @return the journal folder
+	* @throws com.liferay.portlet.journal.NoSuchFolderException if a journal folder with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalFolder findByPrimaryKey(
+		long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchFolderException;
+
+	/**
+	* Returns the journal folder with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param folderId the primary key of the journal folder
+	* @return the journal folder, or <code>null</code> if a journal folder with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalFolder fetchByPrimaryKey(
+		long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal folders.
 	*
 	* @return the journal folders
@@ -1007,206 +1202,11 @@ public interface JournalFolderPersistence extends BasePersistence<JournalFolder>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the journal folders where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the journal folder where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the journal folder that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalFolder removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchFolderException;
-
-	/**
-	* Removes all the journal folders where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal folders where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal folders where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal folders where groupId = &#63; and parentFolderId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_P(long groupId, long parentFolderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the journal folder where groupId = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the journal folder that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalFolder removeByG_N(
-		long groupId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchFolderException;
-
-	/**
-	* Removes the journal folder where groupId = &#63; and parentFolderId = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @param name the name
-	* @return the journal folder that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalFolder removeByG_P_N(
-		long groupId, long parentFolderId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchFolderException;
-
-	/**
 	* Removes all the journal folders from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal folders where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching journal folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal folders where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching journal folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal folders where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching journal folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal folders where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching journal folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal folders that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching journal folders that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal folders where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching journal folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal folders where groupId = &#63; and parentFolderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @return the number of matching journal folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P(long groupId, long parentFolderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @return the number of matching journal folders that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_P(long groupId, long parentFolderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal folders where groupId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the number of matching journal folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_N(long groupId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal folders where groupId = &#63; and parentFolderId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentFolderId the parent folder ID
-	* @param name the name
-	* @return the number of matching journal folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_P_N(long groupId, long parentFolderId,
-		java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

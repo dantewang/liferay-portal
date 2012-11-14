@@ -111,86 +111,6 @@ public class MBCategoryUtil {
 	}
 
 	/**
-	* Caches the message boards category in the entity cache if it is enabled.
-	*
-	* @param mbCategory the message boards category
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.messageboards.model.MBCategory mbCategory) {
-		getPersistence().cacheResult(mbCategory);
-	}
-
-	/**
-	* Caches the message boards categories in the entity cache if it is enabled.
-	*
-	* @param mbCategories the message boards categories
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.messageboards.model.MBCategory> mbCategories) {
-		getPersistence().cacheResult(mbCategories);
-	}
-
-	/**
-	* Creates a new message boards category with the primary key. Does not add the message boards category to the database.
-	*
-	* @param categoryId the primary key for the new message boards category
-	* @return the new message boards category
-	*/
-	public static com.liferay.portlet.messageboards.model.MBCategory create(
-		long categoryId) {
-		return getPersistence().create(categoryId);
-	}
-
-	/**
-	* Removes the message boards category with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param categoryId the primary key of the message boards category
-	* @return the message boards category that was removed
-	* @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBCategory remove(
-		long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchCategoryException {
-		return getPersistence().remove(categoryId);
-	}
-
-	public static com.liferay.portlet.messageboards.model.MBCategory updateImpl(
-		com.liferay.portlet.messageboards.model.MBCategory mbCategory)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(mbCategory);
-	}
-
-	/**
-	* Returns the message boards category with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchCategoryException} if it could not be found.
-	*
-	* @param categoryId the primary key of the message boards category
-	* @return the message boards category
-	* @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBCategory findByPrimaryKey(
-		long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchCategoryException {
-		return getPersistence().findByPrimaryKey(categoryId);
-	}
-
-	/**
-	* Returns the message boards category with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param categoryId the primary key of the message boards category
-	* @return the message boards category, or <code>null</code> if a message boards category with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBCategory fetchByPrimaryKey(
-		long categoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(categoryId);
-	}
-
-	/**
 	* Returns all the message boards categories where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -327,6 +247,29 @@ public class MBCategoryUtil {
 	}
 
 	/**
+	* Removes all the message boards categories where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of message boards categories where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching message boards categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
+	}
+
+	/**
 	* Returns the message boards category where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchCategoryException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -369,6 +312,34 @@ public class MBCategoryUtil {
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUUID_G(uuid, groupId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the message boards category where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the message boards category that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBCategory removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchCategoryException {
+		return getPersistence().removeByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns the number of message boards categories where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching message boards categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUUID_G(java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUUID_G(uuid, groupId);
 	}
 
 	/**
@@ -519,6 +490,31 @@ public class MBCategoryUtil {
 		return getPersistence()
 				   .findByUuid_C_PrevAndNext(categoryId, uuid, companyId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the message boards categories where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns the number of message boards categories where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching message boards categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid_C(uuid, companyId);
 	}
 
 	/**
@@ -734,6 +730,41 @@ public class MBCategoryUtil {
 	}
 
 	/**
+	* Removes all the message boards categories where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of message boards categories where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching message boards categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of message boards categories that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching message boards categories that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByGroupId(groupId);
+	}
+
+	/**
 	* Returns all the message boards categories where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -873,6 +904,29 @@ public class MBCategoryUtil {
 		return getPersistence()
 				   .findByCompanyId_PrevAndNext(categoryId, companyId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the message boards categories where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of message boards categories where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching message boards categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
 	}
 
 	/**
@@ -1229,115 +1283,6 @@ public class MBCategoryUtil {
 	}
 
 	/**
-	* Returns all the message boards categories.
-	*
-	* @return the message boards categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.messageboards.model.MBCategory> findAll()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll();
-	}
-
-	/**
-	* Returns a range of all the message boards categories.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param start the lower bound of the range of message boards categories
-	* @param end the upper bound of the range of message boards categories (not inclusive)
-	* @return the range of message boards categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.messageboards.model.MBCategory> findAll(
-		int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll(start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the message boards categories.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param start the lower bound of the range of message boards categories
-	* @param end the upper bound of the range of message boards categories (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of message boards categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.messageboards.model.MBCategory> findAll(
-		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll(start, end, orderByComparator);
-	}
-
-	/**
-	* Removes all the message boards categories where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes the message boards category where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the message boards category that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBCategory removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchCategoryException {
-		return getPersistence().removeByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Removes all the message boards categories where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Removes all the message boards categories where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes all the message boards categories where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
 	* Removes all the message boards categories where groupId = &#63; and parentCategoryId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -1347,90 +1292,6 @@ public class MBCategoryUtil {
 	public static void removeByG_P(long groupId, long parentCategoryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeByG_P(groupId, parentCategoryId);
-	}
-
-	/**
-	* Removes all the message boards categories from the database.
-	*
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of message boards categories where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching message boards categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of message boards categories where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching message boards categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Returns the number of message boards categories where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching message boards categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Returns the number of message boards categories where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching message boards categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of message boards categories that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching message boards categories that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of message boards categories where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching message boards categories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
 	}
 
 	/**
@@ -1483,6 +1344,145 @@ public class MBCategoryUtil {
 	public static int filterCountByG_P(long groupId, long[] parentCategoryIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().filterCountByG_P(groupId, parentCategoryIds);
+	}
+
+	/**
+	* Caches the message boards category in the entity cache if it is enabled.
+	*
+	* @param mbCategory the message boards category
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.messageboards.model.MBCategory mbCategory) {
+		getPersistence().cacheResult(mbCategory);
+	}
+
+	/**
+	* Caches the message boards categories in the entity cache if it is enabled.
+	*
+	* @param mbCategories the message boards categories
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.messageboards.model.MBCategory> mbCategories) {
+		getPersistence().cacheResult(mbCategories);
+	}
+
+	/**
+	* Creates a new message boards category with the primary key. Does not add the message boards category to the database.
+	*
+	* @param categoryId the primary key for the new message boards category
+	* @return the new message boards category
+	*/
+	public static com.liferay.portlet.messageboards.model.MBCategory create(
+		long categoryId) {
+		return getPersistence().create(categoryId);
+	}
+
+	/**
+	* Removes the message boards category with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param categoryId the primary key of the message boards category
+	* @return the message boards category that was removed
+	* @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBCategory remove(
+		long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchCategoryException {
+		return getPersistence().remove(categoryId);
+	}
+
+	public static com.liferay.portlet.messageboards.model.MBCategory updateImpl(
+		com.liferay.portlet.messageboards.model.MBCategory mbCategory)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(mbCategory);
+	}
+
+	/**
+	* Returns the message boards category with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchCategoryException} if it could not be found.
+	*
+	* @param categoryId the primary key of the message boards category
+	* @return the message boards category
+	* @throws com.liferay.portlet.messageboards.NoSuchCategoryException if a message boards category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBCategory findByPrimaryKey(
+		long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchCategoryException {
+		return getPersistence().findByPrimaryKey(categoryId);
+	}
+
+	/**
+	* Returns the message boards category with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param categoryId the primary key of the message boards category
+	* @return the message boards category, or <code>null</code> if a message boards category with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBCategory fetchByPrimaryKey(
+		long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(categoryId);
+	}
+
+	/**
+	* Returns all the message boards categories.
+	*
+	* @return the message boards categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.messageboards.model.MBCategory> findAll()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll();
+	}
+
+	/**
+	* Returns a range of all the message boards categories.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param start the lower bound of the range of message boards categories
+	* @param end the upper bound of the range of message boards categories (not inclusive)
+	* @return the range of message boards categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.messageboards.model.MBCategory> findAll(
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll(start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the message boards categories.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param start the lower bound of the range of message boards categories
+	* @param end the upper bound of the range of message boards categories (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of message boards categories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.messageboards.model.MBCategory> findAll(
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll(start, end, orderByComparator);
+	}
+
+	/**
+	* Removes all the message boards categories from the database.
+	*
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeAll()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeAll();
 	}
 
 	/**

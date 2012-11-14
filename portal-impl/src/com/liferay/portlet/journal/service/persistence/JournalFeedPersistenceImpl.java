@@ -78,6 +78,15 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
@@ -96,584 +105,6 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			JournalFeedModelImpl.UUID_COLUMN_BITMASK |
-			JournalFeedModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			JournalFeedModelImpl.UUID_COLUMN_BITMASK |
-			JournalFeedModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			JournalFeedModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_G_F = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByG_F",
-			new String[] { Long.class.getName(), String.class.getName() },
-			JournalFeedModelImpl.GROUPID_COLUMN_BITMASK |
-			JournalFeedModelImpl.FEEDID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_F",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the journal feed in the entity cache if it is enabled.
-	 *
-	 * @param journalFeed the journal feed
-	 */
-	public void cacheResult(JournalFeed journalFeed) {
-		EntityCacheUtil.putResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedImpl.class, journalFeed.getPrimaryKey(), journalFeed);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				journalFeed.getUuid(), Long.valueOf(journalFeed.getGroupId())
-			}, journalFeed);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_F,
-			new Object[] {
-				Long.valueOf(journalFeed.getGroupId()),
-				
-			journalFeed.getFeedId()
-			}, journalFeed);
-
-		journalFeed.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the journal feeds in the entity cache if it is enabled.
-	 *
-	 * @param journalFeeds the journal feeds
-	 */
-	public void cacheResult(List<JournalFeed> journalFeeds) {
-		for (JournalFeed journalFeed : journalFeeds) {
-			if (EntityCacheUtil.getResult(
-						JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-						JournalFeedImpl.class, journalFeed.getPrimaryKey()) == null) {
-				cacheResult(journalFeed);
-			}
-			else {
-				journalFeed.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all journal feeds.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(JournalFeedImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(JournalFeedImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the journal feed.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(JournalFeed journalFeed) {
-		EntityCacheUtil.removeResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedImpl.class, journalFeed.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(journalFeed);
-	}
-
-	@Override
-	public void clearCache(List<JournalFeed> journalFeeds) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (JournalFeed journalFeed : journalFeeds) {
-			EntityCacheUtil.removeResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-				JournalFeedImpl.class, journalFeed.getPrimaryKey());
-
-			clearUniqueFindersCache(journalFeed);
-		}
-	}
-
-	protected void clearUniqueFindersCache(JournalFeed journalFeed) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				journalFeed.getUuid(), Long.valueOf(journalFeed.getGroupId())
-			});
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_F,
-			new Object[] {
-				Long.valueOf(journalFeed.getGroupId()),
-				
-			journalFeed.getFeedId()
-			});
-	}
-
-	/**
-	 * Creates a new journal feed with the primary key. Does not add the journal feed to the database.
-	 *
-	 * @param id the primary key for the new journal feed
-	 * @return the new journal feed
-	 */
-	public JournalFeed create(long id) {
-		JournalFeed journalFeed = new JournalFeedImpl();
-
-		journalFeed.setNew(true);
-		journalFeed.setPrimaryKey(id);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		journalFeed.setUuid(uuid);
-
-		return journalFeed;
-	}
-
-	/**
-	 * Removes the journal feed with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param id the primary key of the journal feed
-	 * @return the journal feed that was removed
-	 * @throws com.liferay.portlet.journal.NoSuchFeedException if a journal feed with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalFeed remove(long id)
-		throws NoSuchFeedException, SystemException {
-		return remove(Long.valueOf(id));
-	}
-
-	/**
-	 * Removes the journal feed with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the journal feed
-	 * @return the journal feed that was removed
-	 * @throws com.liferay.portlet.journal.NoSuchFeedException if a journal feed with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JournalFeed remove(Serializable primaryKey)
-		throws NoSuchFeedException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			JournalFeed journalFeed = (JournalFeed)session.get(JournalFeedImpl.class,
-					primaryKey);
-
-			if (journalFeed == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchFeedException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(journalFeed);
-		}
-		catch (NoSuchFeedException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected JournalFeed removeImpl(JournalFeed journalFeed)
-		throws SystemException {
-		journalFeed = toUnwrappedModel(journalFeed);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(journalFeed)) {
-				journalFeed = (JournalFeed)session.get(JournalFeedImpl.class,
-						journalFeed.getPrimaryKeyObj());
-			}
-
-			if (journalFeed != null) {
-				session.delete(journalFeed);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (journalFeed != null) {
-			clearCache(journalFeed);
-		}
-
-		return journalFeed;
-	}
-
-	@Override
-	public JournalFeed updateImpl(
-		com.liferay.portlet.journal.model.JournalFeed journalFeed)
-		throws SystemException {
-		journalFeed = toUnwrappedModel(journalFeed);
-
-		boolean isNew = journalFeed.isNew();
-
-		JournalFeedModelImpl journalFeedModelImpl = (JournalFeedModelImpl)journalFeed;
-
-		if (Validator.isNull(journalFeed.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			journalFeed.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (journalFeed.isNew()) {
-				session.save(journalFeed);
-
-				journalFeed.setNew(false);
-			}
-			else {
-				session.merge(journalFeed);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !JournalFeedModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((journalFeedModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalFeedModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { journalFeedModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((journalFeedModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalFeedModelImpl.getOriginalUuid(),
-						Long.valueOf(journalFeedModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						journalFeedModelImpl.getUuid(),
-						Long.valueOf(journalFeedModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((journalFeedModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(journalFeedModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(journalFeedModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedImpl.class, journalFeed.getPrimaryKey(), journalFeed);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-				new Object[] {
-					journalFeed.getUuid(),
-					Long.valueOf(journalFeed.getGroupId())
-				}, journalFeed);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_F,
-				new Object[] {
-					Long.valueOf(journalFeed.getGroupId()),
-					
-				journalFeed.getFeedId()
-				}, journalFeed);
-		}
-		else {
-			if ((journalFeedModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						journalFeedModelImpl.getOriginalUuid(),
-						Long.valueOf(journalFeedModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
-						journalFeed.getUuid(),
-						Long.valueOf(journalFeed.getGroupId())
-					}, journalFeed);
-			}
-
-			if ((journalFeedModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_G_F.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(journalFeedModelImpl.getOriginalGroupId()),
-						
-						journalFeedModelImpl.getOriginalFeedId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_F, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_F, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_F,
-					new Object[] {
-						Long.valueOf(journalFeed.getGroupId()),
-						
-					journalFeed.getFeedId()
-					}, journalFeed);
-			}
-		}
-
-		return journalFeed;
-	}
-
-	protected JournalFeed toUnwrappedModel(JournalFeed journalFeed) {
-		if (journalFeed instanceof JournalFeedImpl) {
-			return journalFeed;
-		}
-
-		JournalFeedImpl journalFeedImpl = new JournalFeedImpl();
-
-		journalFeedImpl.setNew(journalFeed.isNew());
-		journalFeedImpl.setPrimaryKey(journalFeed.getPrimaryKey());
-
-		journalFeedImpl.setUuid(journalFeed.getUuid());
-		journalFeedImpl.setId(journalFeed.getId());
-		journalFeedImpl.setGroupId(journalFeed.getGroupId());
-		journalFeedImpl.setCompanyId(journalFeed.getCompanyId());
-		journalFeedImpl.setUserId(journalFeed.getUserId());
-		journalFeedImpl.setUserName(journalFeed.getUserName());
-		journalFeedImpl.setCreateDate(journalFeed.getCreateDate());
-		journalFeedImpl.setModifiedDate(journalFeed.getModifiedDate());
-		journalFeedImpl.setFeedId(journalFeed.getFeedId());
-		journalFeedImpl.setName(journalFeed.getName());
-		journalFeedImpl.setDescription(journalFeed.getDescription());
-		journalFeedImpl.setType(journalFeed.getType());
-		journalFeedImpl.setStructureId(journalFeed.getStructureId());
-		journalFeedImpl.setTemplateId(journalFeed.getTemplateId());
-		journalFeedImpl.setRendererTemplateId(journalFeed.getRendererTemplateId());
-		journalFeedImpl.setDelta(journalFeed.getDelta());
-		journalFeedImpl.setOrderByCol(journalFeed.getOrderByCol());
-		journalFeedImpl.setOrderByType(journalFeed.getOrderByType());
-		journalFeedImpl.setTargetLayoutFriendlyUrl(journalFeed.getTargetLayoutFriendlyUrl());
-		journalFeedImpl.setTargetPortletId(journalFeed.getTargetPortletId());
-		journalFeedImpl.setContentField(journalFeed.getContentField());
-		journalFeedImpl.setFeedFormat(journalFeed.getFeedFormat());
-		journalFeedImpl.setFeedVersion(journalFeed.getFeedVersion());
-
-		return journalFeedImpl;
-	}
-
-	/**
-	 * Returns the journal feed with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the journal feed
-	 * @return the journal feed
-	 * @throws com.liferay.portal.NoSuchModelException if a journal feed with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JournalFeed findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the journal feed with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchFeedException} if it could not be found.
-	 *
-	 * @param id the primary key of the journal feed
-	 * @return the journal feed
-	 * @throws com.liferay.portlet.journal.NoSuchFeedException if a journal feed with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalFeed findByPrimaryKey(long id)
-		throws NoSuchFeedException, SystemException {
-		JournalFeed journalFeed = fetchByPrimaryKey(id);
-
-		if (journalFeed == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + id);
-			}
-
-			throw new NoSuchFeedException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				id);
-		}
-
-		return journalFeed;
-	}
-
-	/**
-	 * Returns the journal feed with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the journal feed
-	 * @return the journal feed, or <code>null</code> if a journal feed with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JournalFeed fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the journal feed with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param id the primary key of the journal feed
-	 * @return the journal feed, or <code>null</code> if a journal feed with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalFeed fetchByPrimaryKey(long id) throws SystemException {
-		JournalFeed journalFeed = (JournalFeed)EntityCacheUtil.getResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-				JournalFeedImpl.class, id);
-
-		if (journalFeed == _nullJournalFeed) {
-			return null;
-		}
-
-		if (journalFeed == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				journalFeed = (JournalFeed)session.get(JournalFeedImpl.class,
-						Long.valueOf(id));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (journalFeed != null) {
-					cacheResult(journalFeed);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-						JournalFeedImpl.class, id, _nullJournalFeed);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return journalFeed;
-	}
 
 	/**
 	 * Returns all the journal feeds where uuid = &#63;.
@@ -1078,6 +509,97 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	}
 
 	/**
+	 * Removes all the journal feeds where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (JournalFeed journalFeed : findByUuid(uuid)) {
+			remove(journalFeed);
+		}
+	}
+
+	/**
+	 * Returns the number of journal feeds where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching journal feeds
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JOURNALFEED_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "journalFeed.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "journalFeed.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(journalFeed.uuid IS NULL OR journalFeed.uuid = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalFeedModelImpl.UUID_COLUMN_BITMASK |
+			JournalFeedModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns the journal feed where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchFeedException} if it could not be found.
 	 *
 	 * @param uuid the uuid
@@ -1239,6 +761,117 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 			}
 		}
 	}
+
+	/**
+	 * Removes the journal feed where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the journal feed that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalFeed removeByUUID_G(String uuid, long groupId)
+		throws NoSuchFeedException, SystemException {
+		JournalFeed journalFeed = findByUUID_G(uuid, groupId);
+
+		return remove(journalFeed);
+	}
+
+	/**
+	 * Returns the number of journal feeds where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching journal feeds
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUUID_G(String uuid, long groupId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JOURNALFEED_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "journalFeed.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "journalFeed.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(journalFeed.uuid IS NULL OR journalFeed.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "journalFeed.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalFeedModelImpl.UUID_COLUMN_BITMASK |
+			JournalFeedModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the journal feeds where uuid = &#63; and companyId = &#63;.
@@ -1674,6 +1307,115 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the journal feeds where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (JournalFeed journalFeed : findByUuid_C(uuid, companyId)) {
+			remove(journalFeed);
+		}
+	}
+
+	/**
+	 * Returns the number of journal feeds where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching journal feeds
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JOURNALFEED_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "journalFeed.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "journalFeed.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(journalFeed.uuid IS NULL OR journalFeed.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "journalFeed.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			JournalFeedModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the journal feeds where groupId = &#63;.
@@ -2367,6 +2109,131 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	}
 
 	/**
+	 * Removes all the journal feeds where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (JournalFeed journalFeed : findByGroupId(groupId)) {
+			remove(journalFeed);
+		}
+	}
+
+	/**
+	 * Returns the number of journal feeds where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching journal feeds
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JOURNALFEED_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of journal feeds that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching journal feeds that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_JOURNALFEED_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				JournalFeed.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "journalFeed.groupId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_G_F = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, JournalFeedImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByG_F",
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalFeedModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalFeedModelImpl.FEEDID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_F",
+			new String[] { Long.class.getName(), String.class.getName() });
+
+	/**
 	 * Returns the journal feed where groupId = &#63; and feedId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchFeedException} if it could not be found.
 	 *
 	 * @param groupId the group ID
@@ -2530,6 +2397,607 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	}
 
 	/**
+	 * Removes the journal feed where groupId = &#63; and feedId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param feedId the feed ID
+	 * @return the journal feed that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalFeed removeByG_F(long groupId, String feedId)
+		throws NoSuchFeedException, SystemException {
+		JournalFeed journalFeed = findByG_F(groupId, feedId);
+
+		return remove(journalFeed);
+	}
+
+	/**
+	 * Returns the number of journal feeds where groupId = &#63; and feedId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param feedId the feed ID
+	 * @return the number of matching journal feeds
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_F(long groupId, String feedId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, feedId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_F,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JOURNALFEED_WHERE);
+
+			query.append(_FINDER_COLUMN_G_F_GROUPID_2);
+
+			if (feedId == null) {
+				query.append(_FINDER_COLUMN_G_F_FEEDID_1);
+			}
+			else {
+				if (feedId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_F_FEEDID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_F_FEEDID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (feedId != null) {
+					qPos.add(feedId);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_F, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_F_GROUPID_2 = "journalFeed.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_F_FEEDID_1 = "journalFeed.feedId IS NULL";
+	private static final String _FINDER_COLUMN_G_F_FEEDID_2 = "journalFeed.feedId = ?";
+	private static final String _FINDER_COLUMN_G_F_FEEDID_3 = "(journalFeed.feedId IS NULL OR journalFeed.feedId = ?)";
+
+	/**
+	 * Caches the journal feed in the entity cache if it is enabled.
+	 *
+	 * @param journalFeed the journal feed
+	 */
+	public void cacheResult(JournalFeed journalFeed) {
+		EntityCacheUtil.putResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedImpl.class, journalFeed.getPrimaryKey(), journalFeed);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				journalFeed.getUuid(), Long.valueOf(journalFeed.getGroupId())
+			}, journalFeed);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_F,
+			new Object[] {
+				Long.valueOf(journalFeed.getGroupId()),
+				
+			journalFeed.getFeedId()
+			}, journalFeed);
+
+		journalFeed.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the journal feeds in the entity cache if it is enabled.
+	 *
+	 * @param journalFeeds the journal feeds
+	 */
+	public void cacheResult(List<JournalFeed> journalFeeds) {
+		for (JournalFeed journalFeed : journalFeeds) {
+			if (EntityCacheUtil.getResult(
+						JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+						JournalFeedImpl.class, journalFeed.getPrimaryKey()) == null) {
+				cacheResult(journalFeed);
+			}
+			else {
+				journalFeed.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all journal feeds.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(JournalFeedImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(JournalFeedImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the journal feed.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(JournalFeed journalFeed) {
+		EntityCacheUtil.removeResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedImpl.class, journalFeed.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(journalFeed);
+	}
+
+	@Override
+	public void clearCache(List<JournalFeed> journalFeeds) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (JournalFeed journalFeed : journalFeeds) {
+			EntityCacheUtil.removeResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+				JournalFeedImpl.class, journalFeed.getPrimaryKey());
+
+			clearUniqueFindersCache(journalFeed);
+		}
+	}
+
+	protected void clearUniqueFindersCache(JournalFeed journalFeed) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] {
+				journalFeed.getUuid(), Long.valueOf(journalFeed.getGroupId())
+			});
+
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_F,
+			new Object[] {
+				Long.valueOf(journalFeed.getGroupId()),
+				
+			journalFeed.getFeedId()
+			});
+	}
+
+	/**
+	 * Creates a new journal feed with the primary key. Does not add the journal feed to the database.
+	 *
+	 * @param id the primary key for the new journal feed
+	 * @return the new journal feed
+	 */
+	public JournalFeed create(long id) {
+		JournalFeed journalFeed = new JournalFeedImpl();
+
+		journalFeed.setNew(true);
+		journalFeed.setPrimaryKey(id);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		journalFeed.setUuid(uuid);
+
+		return journalFeed;
+	}
+
+	/**
+	 * Removes the journal feed with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param id the primary key of the journal feed
+	 * @return the journal feed that was removed
+	 * @throws com.liferay.portlet.journal.NoSuchFeedException if a journal feed with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalFeed remove(long id)
+		throws NoSuchFeedException, SystemException {
+		return remove(Long.valueOf(id));
+	}
+
+	/**
+	 * Removes the journal feed with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the journal feed
+	 * @return the journal feed that was removed
+	 * @throws com.liferay.portlet.journal.NoSuchFeedException if a journal feed with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalFeed remove(Serializable primaryKey)
+		throws NoSuchFeedException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			JournalFeed journalFeed = (JournalFeed)session.get(JournalFeedImpl.class,
+					primaryKey);
+
+			if (journalFeed == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchFeedException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(journalFeed);
+		}
+		catch (NoSuchFeedException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected JournalFeed removeImpl(JournalFeed journalFeed)
+		throws SystemException {
+		journalFeed = toUnwrappedModel(journalFeed);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(journalFeed)) {
+				journalFeed = (JournalFeed)session.get(JournalFeedImpl.class,
+						journalFeed.getPrimaryKeyObj());
+			}
+
+			if (journalFeed != null) {
+				session.delete(journalFeed);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (journalFeed != null) {
+			clearCache(journalFeed);
+		}
+
+		return journalFeed;
+	}
+
+	@Override
+	public JournalFeed updateImpl(
+		com.liferay.portlet.journal.model.JournalFeed journalFeed)
+		throws SystemException {
+		journalFeed = toUnwrappedModel(journalFeed);
+
+		boolean isNew = journalFeed.isNew();
+
+		JournalFeedModelImpl journalFeedModelImpl = (JournalFeedModelImpl)journalFeed;
+
+		if (Validator.isNull(journalFeed.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			journalFeed.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (journalFeed.isNew()) {
+				session.save(journalFeed);
+
+				journalFeed.setNew(false);
+			}
+			else {
+				session.merge(journalFeed);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !JournalFeedModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((journalFeedModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalFeedModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { journalFeedModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((journalFeedModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalFeedModelImpl.getOriginalUuid(),
+						Long.valueOf(journalFeedModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						journalFeedModelImpl.getUuid(),
+						Long.valueOf(journalFeedModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((journalFeedModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(journalFeedModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(journalFeedModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+			JournalFeedImpl.class, journalFeed.getPrimaryKey(), journalFeed);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+				new Object[] {
+					journalFeed.getUuid(),
+					Long.valueOf(journalFeed.getGroupId())
+				}, journalFeed);
+
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_F,
+				new Object[] {
+					Long.valueOf(journalFeed.getGroupId()),
+					
+				journalFeed.getFeedId()
+				}, journalFeed);
+		}
+		else {
+			if ((journalFeedModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						journalFeedModelImpl.getOriginalUuid(),
+						Long.valueOf(journalFeedModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+					new Object[] {
+						journalFeed.getUuid(),
+						Long.valueOf(journalFeed.getGroupId())
+					}, journalFeed);
+			}
+
+			if ((journalFeedModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_G_F.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(journalFeedModelImpl.getOriginalGroupId()),
+						
+						journalFeedModelImpl.getOriginalFeedId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_F, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_F, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_F,
+					new Object[] {
+						Long.valueOf(journalFeed.getGroupId()),
+						
+					journalFeed.getFeedId()
+					}, journalFeed);
+			}
+		}
+
+		return journalFeed;
+	}
+
+	protected JournalFeed toUnwrappedModel(JournalFeed journalFeed) {
+		if (journalFeed instanceof JournalFeedImpl) {
+			return journalFeed;
+		}
+
+		JournalFeedImpl journalFeedImpl = new JournalFeedImpl();
+
+		journalFeedImpl.setNew(journalFeed.isNew());
+		journalFeedImpl.setPrimaryKey(journalFeed.getPrimaryKey());
+
+		journalFeedImpl.setUuid(journalFeed.getUuid());
+		journalFeedImpl.setId(journalFeed.getId());
+		journalFeedImpl.setGroupId(journalFeed.getGroupId());
+		journalFeedImpl.setCompanyId(journalFeed.getCompanyId());
+		journalFeedImpl.setUserId(journalFeed.getUserId());
+		journalFeedImpl.setUserName(journalFeed.getUserName());
+		journalFeedImpl.setCreateDate(journalFeed.getCreateDate());
+		journalFeedImpl.setModifiedDate(journalFeed.getModifiedDate());
+		journalFeedImpl.setFeedId(journalFeed.getFeedId());
+		journalFeedImpl.setName(journalFeed.getName());
+		journalFeedImpl.setDescription(journalFeed.getDescription());
+		journalFeedImpl.setType(journalFeed.getType());
+		journalFeedImpl.setStructureId(journalFeed.getStructureId());
+		journalFeedImpl.setTemplateId(journalFeed.getTemplateId());
+		journalFeedImpl.setRendererTemplateId(journalFeed.getRendererTemplateId());
+		journalFeedImpl.setDelta(journalFeed.getDelta());
+		journalFeedImpl.setOrderByCol(journalFeed.getOrderByCol());
+		journalFeedImpl.setOrderByType(journalFeed.getOrderByType());
+		journalFeedImpl.setTargetLayoutFriendlyUrl(journalFeed.getTargetLayoutFriendlyUrl());
+		journalFeedImpl.setTargetPortletId(journalFeed.getTargetPortletId());
+		journalFeedImpl.setContentField(journalFeed.getContentField());
+		journalFeedImpl.setFeedFormat(journalFeed.getFeedFormat());
+		journalFeedImpl.setFeedVersion(journalFeed.getFeedVersion());
+
+		return journalFeedImpl;
+	}
+
+	/**
+	 * Returns the journal feed with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the journal feed
+	 * @return the journal feed
+	 * @throws com.liferay.portal.NoSuchModelException if a journal feed with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalFeed findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the journal feed with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchFeedException} if it could not be found.
+	 *
+	 * @param id the primary key of the journal feed
+	 * @return the journal feed
+	 * @throws com.liferay.portlet.journal.NoSuchFeedException if a journal feed with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalFeed findByPrimaryKey(long id)
+		throws NoSuchFeedException, SystemException {
+		JournalFeed journalFeed = fetchByPrimaryKey(id);
+
+		if (journalFeed == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + id);
+			}
+
+			throw new NoSuchFeedException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				id);
+		}
+
+		return journalFeed;
+	}
+
+	/**
+	 * Returns the journal feed with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the journal feed
+	 * @return the journal feed, or <code>null</code> if a journal feed with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JournalFeed fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the journal feed with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param id the primary key of the journal feed
+	 * @return the journal feed, or <code>null</code> if a journal feed with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalFeed fetchByPrimaryKey(long id) throws SystemException {
+		JournalFeed journalFeed = (JournalFeed)EntityCacheUtil.getResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+				JournalFeedImpl.class, id);
+
+		if (journalFeed == _nullJournalFeed) {
+			return null;
+		}
+
+		if (journalFeed == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				journalFeed = (JournalFeed)session.get(JournalFeedImpl.class,
+						Long.valueOf(id));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (journalFeed != null) {
+					cacheResult(journalFeed);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+						JournalFeedImpl.class, id, _nullJournalFeed);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return journalFeed;
+	}
+
+	/**
 	 * Returns all the journal feeds.
 	 *
 	 * @return the journal feeds
@@ -2645,74 +3113,6 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	}
 
 	/**
-	 * Removes all the journal feeds where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (JournalFeed journalFeed : findByUuid(uuid)) {
-			remove(journalFeed);
-		}
-	}
-
-	/**
-	 * Removes the journal feed where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the journal feed that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalFeed removeByUUID_G(String uuid, long groupId)
-		throws NoSuchFeedException, SystemException {
-		JournalFeed journalFeed = findByUUID_G(uuid, groupId);
-
-		return remove(journalFeed);
-	}
-
-	/**
-	 * Removes all the journal feeds where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (JournalFeed journalFeed : findByUuid_C(uuid, companyId)) {
-			remove(journalFeed);
-		}
-	}
-
-	/**
-	 * Removes all the journal feeds where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (JournalFeed journalFeed : findByGroupId(groupId)) {
-			remove(journalFeed);
-		}
-	}
-
-	/**
-	 * Removes the journal feed where groupId = &#63; and feedId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param feedId the feed ID
-	 * @return the journal feed that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalFeed removeByG_F(long groupId, String feedId)
-		throws NoSuchFeedException, SystemException {
-		JournalFeed journalFeed = findByG_F(groupId, feedId);
-
-		return remove(journalFeed);
-	}
-
-	/**
 	 * Removes all the journal feeds from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2721,385 +3121,6 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 		for (JournalFeed journalFeed : findAll()) {
 			remove(journalFeed);
 		}
-	}
-
-	/**
-	 * Returns the number of journal feeds where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching journal feeds
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JOURNALFEED_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal feeds where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching journal feeds
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUUID_G(String uuid, long groupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JOURNALFEED_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal feeds where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching journal feeds
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JOURNALFEED_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal feeds where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching journal feeds
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JOURNALFEED_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of journal feeds that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching journal feeds that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_JOURNALFEED_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				JournalFeed.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of journal feeds where groupId = &#63; and feedId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param feedId the feed ID
-	 * @return the number of matching journal feeds
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_F(long groupId, String feedId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, feedId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_F,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JOURNALFEED_WHERE);
-
-			query.append(_FINDER_COLUMN_G_F_GROUPID_2);
-
-			if (feedId == null) {
-				query.append(_FINDER_COLUMN_G_F_FEEDID_1);
-			}
-			else {
-				if (feedId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_F_FEEDID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_F_FEEDID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (feedId != null) {
-					qPos.add(feedId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_F, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -3195,22 +3216,6 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	private static final String _SQL_SELECT_JOURNALFEED_WHERE = "SELECT journalFeed FROM JournalFeed journalFeed WHERE ";
 	private static final String _SQL_COUNT_JOURNALFEED = "SELECT COUNT(journalFeed) FROM JournalFeed journalFeed";
 	private static final String _SQL_COUNT_JOURNALFEED_WHERE = "SELECT COUNT(journalFeed) FROM JournalFeed journalFeed WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "journalFeed.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "journalFeed.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(journalFeed.uuid IS NULL OR journalFeed.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "journalFeed.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "journalFeed.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(journalFeed.uuid IS NULL OR journalFeed.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "journalFeed.groupId = ?";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "journalFeed.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "journalFeed.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(journalFeed.uuid IS NULL OR journalFeed.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "journalFeed.companyId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "journalFeed.groupId = ?";
-	private static final String _FINDER_COLUMN_G_F_GROUPID_2 = "journalFeed.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_F_FEEDID_1 = "journalFeed.feedId IS NULL";
-	private static final String _FINDER_COLUMN_G_F_FEEDID_2 = "journalFeed.feedId = ?";
-	private static final String _FINDER_COLUMN_G_F_FEEDID_3 = "(journalFeed.feedId IS NULL OR journalFeed.feedId = ?)";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "journalFeed.id_";
 	private static final String _FILTER_SQL_SELECT_JOURNALFEED_WHERE = "SELECT DISTINCT {journalFeed.*} FROM JournalFeed journalFeed WHERE ";
 	private static final String _FILTER_SQL_SELECT_JOURNALFEED_NO_INLINE_DISTINCT_WHERE_1 =

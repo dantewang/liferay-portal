@@ -77,30 +77,6 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_FETCH_BY_FILEID = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
-			DLSyncModelImpl.FINDER_CACHE_ENABLED, DLSyncImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByFileId",
-			new String[] { Long.class.getName() },
-			DLSyncModelImpl.FILEID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_FILEID = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
-			DLSyncModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByFileId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_M_R = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
-			DLSyncModelImpl.FINDER_CACHE_ENABLED, DLSyncImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_M_R",
-			new String[] {
-				Long.class.getName(), Date.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_M_R = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
-			DLSyncModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_M_R",
-			new String[] {
-				Long.class.getName(), Date.class.getName(), Long.class.getName()
-			});
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
 			DLSyncModelImpl.FINDER_CACHE_ENABLED, DLSyncImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
@@ -110,383 +86,15 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
 			DLSyncModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the d l sync in the entity cache if it is enabled.
-	 *
-	 * @param dlSync the d l sync
-	 */
-	public void cacheResult(DLSync dlSync) {
-		EntityCacheUtil.putResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
-			DLSyncImpl.class, dlSync.getPrimaryKey(), dlSync);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_FILEID,
-			new Object[] { Long.valueOf(dlSync.getFileId()) }, dlSync);
-
-		dlSync.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the d l syncs in the entity cache if it is enabled.
-	 *
-	 * @param dlSyncs the d l syncs
-	 */
-	public void cacheResult(List<DLSync> dlSyncs) {
-		for (DLSync dlSync : dlSyncs) {
-			if (EntityCacheUtil.getResult(
-						DLSyncModelImpl.ENTITY_CACHE_ENABLED, DLSyncImpl.class,
-						dlSync.getPrimaryKey()) == null) {
-				cacheResult(dlSync);
-			}
-			else {
-				dlSync.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all d l syncs.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(DLSyncImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(DLSyncImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the d l sync.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(DLSync dlSync) {
-		EntityCacheUtil.removeResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
-			DLSyncImpl.class, dlSync.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(dlSync);
-	}
-
-	@Override
-	public void clearCache(List<DLSync> dlSyncs) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (DLSync dlSync : dlSyncs) {
-			EntityCacheUtil.removeResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
-				DLSyncImpl.class, dlSync.getPrimaryKey());
-
-			clearUniqueFindersCache(dlSync);
-		}
-	}
-
-	protected void clearUniqueFindersCache(DLSync dlSync) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_FILEID,
-			new Object[] { Long.valueOf(dlSync.getFileId()) });
-	}
-
-	/**
-	 * Creates a new d l sync with the primary key. Does not add the d l sync to the database.
-	 *
-	 * @param syncId the primary key for the new d l sync
-	 * @return the new d l sync
-	 */
-	public DLSync create(long syncId) {
-		DLSync dlSync = new DLSyncImpl();
-
-		dlSync.setNew(true);
-		dlSync.setPrimaryKey(syncId);
-
-		return dlSync;
-	}
-
-	/**
-	 * Removes the d l sync with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param syncId the primary key of the d l sync
-	 * @return the d l sync that was removed
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLSync remove(long syncId)
-		throws NoSuchSyncException, SystemException {
-		return remove(Long.valueOf(syncId));
-	}
-
-	/**
-	 * Removes the d l sync with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the d l sync
-	 * @return the d l sync that was removed
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public DLSync remove(Serializable primaryKey)
-		throws NoSuchSyncException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			DLSync dlSync = (DLSync)session.get(DLSyncImpl.class, primaryKey);
-
-			if (dlSync == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchSyncException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(dlSync);
-		}
-		catch (NoSuchSyncException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected DLSync removeImpl(DLSync dlSync) throws SystemException {
-		dlSync = toUnwrappedModel(dlSync);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(dlSync)) {
-				dlSync = (DLSync)session.get(DLSyncImpl.class,
-						dlSync.getPrimaryKeyObj());
-			}
-
-			if (dlSync != null) {
-				session.delete(dlSync);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (dlSync != null) {
-			clearCache(dlSync);
-		}
-
-		return dlSync;
-	}
-
-	@Override
-	public DLSync updateImpl(
-		com.liferay.portlet.documentlibrary.model.DLSync dlSync)
-		throws SystemException {
-		dlSync = toUnwrappedModel(dlSync);
-
-		boolean isNew = dlSync.isNew();
-
-		DLSyncModelImpl dlSyncModelImpl = (DLSyncModelImpl)dlSync;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (dlSync.isNew()) {
-				session.save(dlSync);
-
-				dlSync.setNew(false);
-			}
-			else {
-				session.merge(dlSync);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !DLSyncModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		EntityCacheUtil.putResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
-			DLSyncImpl.class, dlSync.getPrimaryKey(), dlSync);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_FILEID,
-				new Object[] { Long.valueOf(dlSync.getFileId()) }, dlSync);
-		}
-		else {
-			if ((dlSyncModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_FILEID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(dlSyncModelImpl.getOriginalFileId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FILEID, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_FILEID, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_FILEID,
-					new Object[] { Long.valueOf(dlSync.getFileId()) }, dlSync);
-			}
-		}
-
-		return dlSync;
-	}
-
-	protected DLSync toUnwrappedModel(DLSync dlSync) {
-		if (dlSync instanceof DLSyncImpl) {
-			return dlSync;
-		}
-
-		DLSyncImpl dlSyncImpl = new DLSyncImpl();
-
-		dlSyncImpl.setNew(dlSync.isNew());
-		dlSyncImpl.setPrimaryKey(dlSync.getPrimaryKey());
-
-		dlSyncImpl.setSyncId(dlSync.getSyncId());
-		dlSyncImpl.setCompanyId(dlSync.getCompanyId());
-		dlSyncImpl.setCreateDate(dlSync.getCreateDate());
-		dlSyncImpl.setModifiedDate(dlSync.getModifiedDate());
-		dlSyncImpl.setFileId(dlSync.getFileId());
-		dlSyncImpl.setFileUuid(dlSync.getFileUuid());
-		dlSyncImpl.setRepositoryId(dlSync.getRepositoryId());
-		dlSyncImpl.setParentFolderId(dlSync.getParentFolderId());
-		dlSyncImpl.setName(dlSync.getName());
-		dlSyncImpl.setDescription(dlSync.getDescription());
-		dlSyncImpl.setEvent(dlSync.getEvent());
-		dlSyncImpl.setType(dlSync.getType());
-		dlSyncImpl.setVersion(dlSync.getVersion());
-
-		return dlSyncImpl;
-	}
-
-	/**
-	 * Returns the d l sync with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the d l sync
-	 * @return the d l sync
-	 * @throws com.liferay.portal.NoSuchModelException if a d l sync with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public DLSync findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the d l sync with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchSyncException} if it could not be found.
-	 *
-	 * @param syncId the primary key of the d l sync
-	 * @return the d l sync
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLSync findByPrimaryKey(long syncId)
-		throws NoSuchSyncException, SystemException {
-		DLSync dlSync = fetchByPrimaryKey(syncId);
-
-		if (dlSync == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + syncId);
-			}
-
-			throw new NoSuchSyncException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				syncId);
-		}
-
-		return dlSync;
-	}
-
-	/**
-	 * Returns the d l sync with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the d l sync
-	 * @return the d l sync, or <code>null</code> if a d l sync with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public DLSync fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the d l sync with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param syncId the primary key of the d l sync
-	 * @return the d l sync, or <code>null</code> if a d l sync with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLSync fetchByPrimaryKey(long syncId) throws SystemException {
-		DLSync dlSync = (DLSync)EntityCacheUtil.getResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
-				DLSyncImpl.class, syncId);
-
-		if (dlSync == _nullDLSync) {
-			return null;
-		}
-
-		if (dlSync == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				dlSync = (DLSync)session.get(DLSyncImpl.class,
-						Long.valueOf(syncId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (dlSync != null) {
-					cacheResult(dlSync);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
-						DLSyncImpl.class, syncId, _nullDLSync);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return dlSync;
-	}
+	public static final FinderPath FINDER_PATH_FETCH_BY_FILEID = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+			DLSyncModelImpl.FINDER_CACHE_ENABLED, DLSyncImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByFileId",
+			new String[] { Long.class.getName() },
+			DLSyncModelImpl.FILEID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_FILEID = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+			DLSyncModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByFileId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns the d l sync where fileId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchSyncException} if it could not be found.
@@ -624,6 +232,90 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 			}
 		}
 	}
+
+	/**
+	 * Removes the d l sync where fileId = &#63; from the database.
+	 *
+	 * @param fileId the file ID
+	 * @return the d l sync that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLSync removeByFileId(long fileId)
+		throws NoSuchSyncException, SystemException {
+		DLSync dlSync = findByFileId(fileId);
+
+		return remove(dlSync);
+	}
+
+	/**
+	 * Returns the number of d l syncs where fileId = &#63;.
+	 *
+	 * @param fileId the file ID
+	 * @return the number of matching d l syncs
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByFileId(long fileId) throws SystemException {
+		Object[] finderArgs = new Object[] { fileId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_FILEID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_DLSYNC_WHERE);
+
+			query.append(_FINDER_COLUMN_FILEID_FILEID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(fileId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FILEID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_FILEID_FILEID_2 = "dlSync.fileId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_M_R = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+			DLSyncModelImpl.FINDER_CACHE_ENABLED, DLSyncImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_M_R",
+			new String[] {
+				Long.class.getName(), Date.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_M_R = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+			DLSyncModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_M_R",
+			new String[] {
+				Long.class.getName(), Date.class.getName(), Long.class.getName()
+			});
 
 	/**
 	 * Returns all the d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
@@ -1070,6 +762,474 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	}
 
 	/**
+	 * Removes all the d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param modifiedDate the modified date
+	 * @param repositoryId the repository ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_M_R(long companyId, Date modifiedDate,
+		long repositoryId) throws SystemException {
+		for (DLSync dlSync : findByC_M_R(companyId, modifiedDate, repositoryId)) {
+			remove(dlSync);
+		}
+	}
+
+	/**
+	 * Returns the number of d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param modifiedDate the modified date
+	 * @param repositoryId the repository ID
+	 * @return the number of matching d l syncs
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_M_R(long companyId, Date modifiedDate, long repositoryId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { companyId, modifiedDate, repositoryId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_M_R,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_DLSYNC_WHERE);
+
+			query.append(_FINDER_COLUMN_C_M_R_COMPANYID_2);
+
+			if (modifiedDate == null) {
+				query.append(_FINDER_COLUMN_C_M_R_MODIFIEDDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_C_M_R_MODIFIEDDATE_2);
+			}
+
+			query.append(_FINDER_COLUMN_C_M_R_REPOSITORYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				if (modifiedDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
+				}
+
+				qPos.add(repositoryId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_M_R,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_M_R_COMPANYID_2 = "dlSync.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_M_R_MODIFIEDDATE_1 = "dlSync.modifiedDate >= NULL AND ";
+	private static final String _FINDER_COLUMN_C_M_R_MODIFIEDDATE_2 = "dlSync.modifiedDate >= ? AND ";
+	private static final String _FINDER_COLUMN_C_M_R_REPOSITORYID_2 = "dlSync.repositoryId = ?";
+
+	/**
+	 * Caches the d l sync in the entity cache if it is enabled.
+	 *
+	 * @param dlSync the d l sync
+	 */
+	public void cacheResult(DLSync dlSync) {
+		EntityCacheUtil.putResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+			DLSyncImpl.class, dlSync.getPrimaryKey(), dlSync);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_FILEID,
+			new Object[] { Long.valueOf(dlSync.getFileId()) }, dlSync);
+
+		dlSync.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the d l syncs in the entity cache if it is enabled.
+	 *
+	 * @param dlSyncs the d l syncs
+	 */
+	public void cacheResult(List<DLSync> dlSyncs) {
+		for (DLSync dlSync : dlSyncs) {
+			if (EntityCacheUtil.getResult(
+						DLSyncModelImpl.ENTITY_CACHE_ENABLED, DLSyncImpl.class,
+						dlSync.getPrimaryKey()) == null) {
+				cacheResult(dlSync);
+			}
+			else {
+				dlSync.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all d l syncs.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(DLSyncImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(DLSyncImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the d l sync.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(DLSync dlSync) {
+		EntityCacheUtil.removeResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+			DLSyncImpl.class, dlSync.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(dlSync);
+	}
+
+	@Override
+	public void clearCache(List<DLSync> dlSyncs) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (DLSync dlSync : dlSyncs) {
+			EntityCacheUtil.removeResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+				DLSyncImpl.class, dlSync.getPrimaryKey());
+
+			clearUniqueFindersCache(dlSync);
+		}
+	}
+
+	protected void clearUniqueFindersCache(DLSync dlSync) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_FILEID,
+			new Object[] { Long.valueOf(dlSync.getFileId()) });
+	}
+
+	/**
+	 * Creates a new d l sync with the primary key. Does not add the d l sync to the database.
+	 *
+	 * @param syncId the primary key for the new d l sync
+	 * @return the new d l sync
+	 */
+	public DLSync create(long syncId) {
+		DLSync dlSync = new DLSyncImpl();
+
+		dlSync.setNew(true);
+		dlSync.setPrimaryKey(syncId);
+
+		return dlSync;
+	}
+
+	/**
+	 * Removes the d l sync with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param syncId the primary key of the d l sync
+	 * @return the d l sync that was removed
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLSync remove(long syncId)
+		throws NoSuchSyncException, SystemException {
+		return remove(Long.valueOf(syncId));
+	}
+
+	/**
+	 * Removes the d l sync with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the d l sync
+	 * @return the d l sync that was removed
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLSync remove(Serializable primaryKey)
+		throws NoSuchSyncException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			DLSync dlSync = (DLSync)session.get(DLSyncImpl.class, primaryKey);
+
+			if (dlSync == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchSyncException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(dlSync);
+		}
+		catch (NoSuchSyncException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected DLSync removeImpl(DLSync dlSync) throws SystemException {
+		dlSync = toUnwrappedModel(dlSync);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(dlSync)) {
+				dlSync = (DLSync)session.get(DLSyncImpl.class,
+						dlSync.getPrimaryKeyObj());
+			}
+
+			if (dlSync != null) {
+				session.delete(dlSync);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (dlSync != null) {
+			clearCache(dlSync);
+		}
+
+		return dlSync;
+	}
+
+	@Override
+	public DLSync updateImpl(
+		com.liferay.portlet.documentlibrary.model.DLSync dlSync)
+		throws SystemException {
+		dlSync = toUnwrappedModel(dlSync);
+
+		boolean isNew = dlSync.isNew();
+
+		DLSyncModelImpl dlSyncModelImpl = (DLSyncModelImpl)dlSync;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (dlSync.isNew()) {
+				session.save(dlSync);
+
+				dlSync.setNew(false);
+			}
+			else {
+				session.merge(dlSync);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !DLSyncModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		EntityCacheUtil.putResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+			DLSyncImpl.class, dlSync.getPrimaryKey(), dlSync);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_FILEID,
+				new Object[] { Long.valueOf(dlSync.getFileId()) }, dlSync);
+		}
+		else {
+			if ((dlSyncModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_FILEID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(dlSyncModelImpl.getOriginalFileId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FILEID, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_FILEID, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_FILEID,
+					new Object[] { Long.valueOf(dlSync.getFileId()) }, dlSync);
+			}
+		}
+
+		return dlSync;
+	}
+
+	protected DLSync toUnwrappedModel(DLSync dlSync) {
+		if (dlSync instanceof DLSyncImpl) {
+			return dlSync;
+		}
+
+		DLSyncImpl dlSyncImpl = new DLSyncImpl();
+
+		dlSyncImpl.setNew(dlSync.isNew());
+		dlSyncImpl.setPrimaryKey(dlSync.getPrimaryKey());
+
+		dlSyncImpl.setSyncId(dlSync.getSyncId());
+		dlSyncImpl.setCompanyId(dlSync.getCompanyId());
+		dlSyncImpl.setCreateDate(dlSync.getCreateDate());
+		dlSyncImpl.setModifiedDate(dlSync.getModifiedDate());
+		dlSyncImpl.setFileId(dlSync.getFileId());
+		dlSyncImpl.setFileUuid(dlSync.getFileUuid());
+		dlSyncImpl.setRepositoryId(dlSync.getRepositoryId());
+		dlSyncImpl.setParentFolderId(dlSync.getParentFolderId());
+		dlSyncImpl.setName(dlSync.getName());
+		dlSyncImpl.setDescription(dlSync.getDescription());
+		dlSyncImpl.setEvent(dlSync.getEvent());
+		dlSyncImpl.setType(dlSync.getType());
+		dlSyncImpl.setVersion(dlSync.getVersion());
+
+		return dlSyncImpl;
+	}
+
+	/**
+	 * Returns the d l sync with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the d l sync
+	 * @return the d l sync
+	 * @throws com.liferay.portal.NoSuchModelException if a d l sync with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLSync findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the d l sync with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchSyncException} if it could not be found.
+	 *
+	 * @param syncId the primary key of the d l sync
+	 * @return the d l sync
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLSync findByPrimaryKey(long syncId)
+		throws NoSuchSyncException, SystemException {
+		DLSync dlSync = fetchByPrimaryKey(syncId);
+
+		if (dlSync == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + syncId);
+			}
+
+			throw new NoSuchSyncException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				syncId);
+		}
+
+		return dlSync;
+	}
+
+	/**
+	 * Returns the d l sync with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the d l sync
+	 * @return the d l sync, or <code>null</code> if a d l sync with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DLSync fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the d l sync with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param syncId the primary key of the d l sync
+	 * @return the d l sync, or <code>null</code> if a d l sync with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLSync fetchByPrimaryKey(long syncId) throws SystemException {
+		DLSync dlSync = (DLSync)EntityCacheUtil.getResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+				DLSyncImpl.class, syncId);
+
+		if (dlSync == _nullDLSync) {
+			return null;
+		}
+
+		if (dlSync == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				dlSync = (DLSync)session.get(DLSyncImpl.class,
+						Long.valueOf(syncId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (dlSync != null) {
+					cacheResult(dlSync);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+						DLSyncImpl.class, syncId, _nullDLSync);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return dlSync;
+	}
+
+	/**
 	 * Returns all the d l syncs.
 	 *
 	 * @return the d l syncs
@@ -1184,35 +1344,6 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	}
 
 	/**
-	 * Removes the d l sync where fileId = &#63; from the database.
-	 *
-	 * @param fileId the file ID
-	 * @return the d l sync that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLSync removeByFileId(long fileId)
-		throws NoSuchSyncException, SystemException {
-		DLSync dlSync = findByFileId(fileId);
-
-		return remove(dlSync);
-	}
-
-	/**
-	 * Removes all the d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param modifiedDate the modified date
-	 * @param repositoryId the repository ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_M_R(long companyId, Date modifiedDate,
-		long repositoryId) throws SystemException {
-		for (DLSync dlSync : findByC_M_R(companyId, modifiedDate, repositoryId)) {
-			remove(dlSync);
-		}
-	}
-
-	/**
 	 * Removes all the d l syncs from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -1221,130 +1352,6 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 		for (DLSync dlSync : findAll()) {
 			remove(dlSync);
 		}
-	}
-
-	/**
-	 * Returns the number of d l syncs where fileId = &#63;.
-	 *
-	 * @param fileId the file ID
-	 * @return the number of matching d l syncs
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByFileId(long fileId) throws SystemException {
-		Object[] finderArgs = new Object[] { fileId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_FILEID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_DLSYNC_WHERE);
-
-			query.append(_FINDER_COLUMN_FILEID_FILEID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(fileId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FILEID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param modifiedDate the modified date
-	 * @param repositoryId the repository ID
-	 * @return the number of matching d l syncs
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_M_R(long companyId, Date modifiedDate, long repositoryId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, modifiedDate, repositoryId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_M_R,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_DLSYNC_WHERE);
-
-			query.append(_FINDER_COLUMN_C_M_R_COMPANYID_2);
-
-			if (modifiedDate == null) {
-				query.append(_FINDER_COLUMN_C_M_R_MODIFIEDDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_C_M_R_MODIFIEDDATE_2);
-			}
-
-			query.append(_FINDER_COLUMN_C_M_R_REPOSITORYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (modifiedDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
-				}
-
-				qPos.add(repositoryId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_M_R,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1442,11 +1449,6 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	private static final String _SQL_SELECT_DLSYNC_WHERE = "SELECT dlSync FROM DLSync dlSync WHERE ";
 	private static final String _SQL_COUNT_DLSYNC = "SELECT COUNT(dlSync) FROM DLSync dlSync";
 	private static final String _SQL_COUNT_DLSYNC_WHERE = "SELECT COUNT(dlSync) FROM DLSync dlSync WHERE ";
-	private static final String _FINDER_COLUMN_FILEID_FILEID_2 = "dlSync.fileId = ?";
-	private static final String _FINDER_COLUMN_C_M_R_COMPANYID_2 = "dlSync.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_M_R_MODIFIEDDATE_1 = "dlSync.modifiedDate >= NULL AND ";
-	private static final String _FINDER_COLUMN_C_M_R_MODIFIEDDATE_2 = "dlSync.modifiedDate >= ? AND ";
-	private static final String _FINDER_COLUMN_C_M_R_REPOSITORYID_2 = "dlSync.repositoryId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "dlSync.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No DLSync exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No DLSync exists with the key {";

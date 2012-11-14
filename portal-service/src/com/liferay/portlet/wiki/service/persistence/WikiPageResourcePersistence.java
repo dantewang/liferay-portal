@@ -38,72 +38,6 @@ public interface WikiPageResourcePersistence extends BasePersistence<WikiPageRes
 	 */
 
 	/**
-	* Caches the wiki page resource in the entity cache if it is enabled.
-	*
-	* @param wikiPageResource the wiki page resource
-	*/
-	public void cacheResult(
-		com.liferay.portlet.wiki.model.WikiPageResource wikiPageResource);
-
-	/**
-	* Caches the wiki page resources in the entity cache if it is enabled.
-	*
-	* @param wikiPageResources the wiki page resources
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.wiki.model.WikiPageResource> wikiPageResources);
-
-	/**
-	* Creates a new wiki page resource with the primary key. Does not add the wiki page resource to the database.
-	*
-	* @param resourcePrimKey the primary key for the new wiki page resource
-	* @return the new wiki page resource
-	*/
-	public com.liferay.portlet.wiki.model.WikiPageResource create(
-		long resourcePrimKey);
-
-	/**
-	* Removes the wiki page resource with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param resourcePrimKey the primary key of the wiki page resource
-	* @return the wiki page resource that was removed
-	* @throws com.liferay.portlet.wiki.NoSuchPageResourceException if a wiki page resource with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.wiki.model.WikiPageResource remove(
-		long resourcePrimKey)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.wiki.NoSuchPageResourceException;
-
-	public com.liferay.portlet.wiki.model.WikiPageResource updateImpl(
-		com.liferay.portlet.wiki.model.WikiPageResource wikiPageResource)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the wiki page resource with the primary key or throws a {@link com.liferay.portlet.wiki.NoSuchPageResourceException} if it could not be found.
-	*
-	* @param resourcePrimKey the primary key of the wiki page resource
-	* @return the wiki page resource
-	* @throws com.liferay.portlet.wiki.NoSuchPageResourceException if a wiki page resource with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.wiki.model.WikiPageResource findByPrimaryKey(
-		long resourcePrimKey)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.wiki.NoSuchPageResourceException;
-
-	/**
-	* Returns the wiki page resource with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param resourcePrimKey the primary key of the wiki page resource
-	* @return the wiki page resource, or <code>null</code> if a wiki page resource with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.wiki.model.WikiPageResource fetchByPrimaryKey(
-		long resourcePrimKey)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the wiki page resources where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -223,6 +157,25 @@ public interface WikiPageResourcePersistence extends BasePersistence<WikiPageRes
 			com.liferay.portlet.wiki.NoSuchPageResourceException;
 
 	/**
+	* Removes all the wiki page resources where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of wiki page resources where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching wiki page resources
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the wiki page resource where nodeId = &#63; and title = &#63; or throws a {@link com.liferay.portlet.wiki.NoSuchPageResourceException} if it could not be found.
 	*
 	* @param nodeId the node ID
@@ -259,6 +212,96 @@ public interface WikiPageResourcePersistence extends BasePersistence<WikiPageRes
 	*/
 	public com.liferay.portlet.wiki.model.WikiPageResource fetchByN_T(
 		long nodeId, java.lang.String title, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the wiki page resource where nodeId = &#63; and title = &#63; from the database.
+	*
+	* @param nodeId the node ID
+	* @param title the title
+	* @return the wiki page resource that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPageResource removeByN_T(
+		long nodeId, java.lang.String title)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.wiki.NoSuchPageResourceException;
+
+	/**
+	* Returns the number of wiki page resources where nodeId = &#63; and title = &#63;.
+	*
+	* @param nodeId the node ID
+	* @param title the title
+	* @return the number of matching wiki page resources
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByN_T(long nodeId, java.lang.String title)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the wiki page resource in the entity cache if it is enabled.
+	*
+	* @param wikiPageResource the wiki page resource
+	*/
+	public void cacheResult(
+		com.liferay.portlet.wiki.model.WikiPageResource wikiPageResource);
+
+	/**
+	* Caches the wiki page resources in the entity cache if it is enabled.
+	*
+	* @param wikiPageResources the wiki page resources
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.wiki.model.WikiPageResource> wikiPageResources);
+
+	/**
+	* Creates a new wiki page resource with the primary key. Does not add the wiki page resource to the database.
+	*
+	* @param resourcePrimKey the primary key for the new wiki page resource
+	* @return the new wiki page resource
+	*/
+	public com.liferay.portlet.wiki.model.WikiPageResource create(
+		long resourcePrimKey);
+
+	/**
+	* Removes the wiki page resource with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param resourcePrimKey the primary key of the wiki page resource
+	* @return the wiki page resource that was removed
+	* @throws com.liferay.portlet.wiki.NoSuchPageResourceException if a wiki page resource with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPageResource remove(
+		long resourcePrimKey)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.wiki.NoSuchPageResourceException;
+
+	public com.liferay.portlet.wiki.model.WikiPageResource updateImpl(
+		com.liferay.portlet.wiki.model.WikiPageResource wikiPageResource)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the wiki page resource with the primary key or throws a {@link com.liferay.portlet.wiki.NoSuchPageResourceException} if it could not be found.
+	*
+	* @param resourcePrimKey the primary key of the wiki page resource
+	* @return the wiki page resource
+	* @throws com.liferay.portlet.wiki.NoSuchPageResourceException if a wiki page resource with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPageResource findByPrimaryKey(
+		long resourcePrimKey)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.wiki.NoSuchPageResourceException;
+
+	/**
+	* Returns the wiki page resource with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param resourcePrimKey the primary key of the wiki page resource
+	* @return the wiki page resource, or <code>null</code> if a wiki page resource with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPageResource fetchByPrimaryKey(
+		long resourcePrimKey)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -305,54 +348,11 @@ public interface WikiPageResourcePersistence extends BasePersistence<WikiPageRes
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the wiki page resources where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the wiki page resource where nodeId = &#63; and title = &#63; from the database.
-	*
-	* @param nodeId the node ID
-	* @param title the title
-	* @return the wiki page resource that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.wiki.model.WikiPageResource removeByN_T(
-		long nodeId, java.lang.String title)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.wiki.NoSuchPageResourceException;
-
-	/**
 	* Removes all the wiki page resources from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki page resources where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching wiki page resources
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of wiki page resources where nodeId = &#63; and title = &#63;.
-	*
-	* @param nodeId the node ID
-	* @param title the title
-	* @return the number of matching wiki page resources
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByN_T(long nodeId, java.lang.String title)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

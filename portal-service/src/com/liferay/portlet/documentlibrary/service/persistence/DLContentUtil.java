@@ -111,86 +111,6 @@ public class DLContentUtil {
 	}
 
 	/**
-	* Caches the document library content in the entity cache if it is enabled.
-	*
-	* @param dlContent the document library content
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.documentlibrary.model.DLContent dlContent) {
-		getPersistence().cacheResult(dlContent);
-	}
-
-	/**
-	* Caches the document library contents in the entity cache if it is enabled.
-	*
-	* @param dlContents the document library contents
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> dlContents) {
-		getPersistence().cacheResult(dlContents);
-	}
-
-	/**
-	* Creates a new document library content with the primary key. Does not add the document library content to the database.
-	*
-	* @param contentId the primary key for the new document library content
-	* @return the new document library content
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLContent create(
-		long contentId) {
-		return getPersistence().create(contentId);
-	}
-
-	/**
-	* Removes the document library content with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param contentId the primary key of the document library content
-	* @return the document library content that was removed
-	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a document library content with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLContent remove(
-		long contentId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchContentException {
-		return getPersistence().remove(contentId);
-	}
-
-	public static com.liferay.portlet.documentlibrary.model.DLContent updateImpl(
-		com.liferay.portlet.documentlibrary.model.DLContent dlContent)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(dlContent);
-	}
-
-	/**
-	* Returns the document library content with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchContentException} if it could not be found.
-	*
-	* @param contentId the primary key of the document library content
-	* @return the document library content
-	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a document library content with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLContent findByPrimaryKey(
-		long contentId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchContentException {
-		return getPersistence().findByPrimaryKey(contentId);
-	}
-
-	/**
-	* Returns the document library content with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param contentId the primary key of the document library content
-	* @return the document library content, or <code>null</code> if a document library content with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLContent fetchByPrimaryKey(
-		long contentId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(contentId);
-	}
-
-	/**
 	* Returns all the document library contents where companyId = &#63; and repositoryId = &#63;.
 	*
 	* @param companyId the company ID
@@ -339,6 +259,31 @@ public class DLContentUtil {
 		return getPersistence()
 				   .findByC_R_PrevAndNext(contentId, companyId, repositoryId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the document library contents where companyId = &#63; and repositoryId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_R(long companyId, long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_R(companyId, repositoryId);
+	}
+
+	/**
+	* Returns the number of document library contents where companyId = &#63; and repositoryId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @return the number of matching document library contents
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_R(long companyId, long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_R(companyId, repositoryId);
 	}
 
 	/**
@@ -508,6 +453,35 @@ public class DLContentUtil {
 	}
 
 	/**
+	* Removes all the document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_R_P(long companyId, long repositoryId,
+		java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_R_P(companyId, repositoryId, path);
+	}
+
+	/**
+	* Returns the number of document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @return the number of matching document library contents
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_R_P(long companyId, long repositoryId,
+		java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_R_P(companyId, repositoryId, path);
+	}
+
+	/**
 	* Returns all the document library contents where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
 	*
 	* @param companyId the company ID
@@ -674,6 +648,35 @@ public class DLContentUtil {
 	}
 
 	/**
+	* Removes all the document library contents where companyId = &#63; and repositoryId = &#63; and path LIKE &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_R_LikeP(long companyId, long repositoryId,
+		java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_R_LikeP(companyId, repositoryId, path);
+	}
+
+	/**
+	* Returns the number of document library contents where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @return the number of matching document library contents
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_R_LikeP(long companyId, long repositoryId,
+		java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_R_LikeP(companyId, repositoryId, path);
+	}
+
+	/**
 	* Returns the document library content where companyId = &#63; and repositoryId = &#63; and path = &#63; and version = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchContentException} if it could not be found.
 	*
 	* @param companyId the company ID
@@ -732,6 +735,122 @@ public class DLContentUtil {
 	}
 
 	/**
+	* Removes the document library content where companyId = &#63; and repositoryId = &#63; and path = &#63; and version = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @param version the version
+	* @return the document library content that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLContent removeByC_R_P_V(
+		long companyId, long repositoryId, java.lang.String path,
+		java.lang.String version)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException {
+		return getPersistence()
+				   .removeByC_R_P_V(companyId, repositoryId, path, version);
+	}
+
+	/**
+	* Returns the number of document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63; and version = &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @param version the version
+	* @return the number of matching document library contents
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_R_P_V(long companyId, long repositoryId,
+		java.lang.String path, java.lang.String version)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByC_R_P_V(companyId, repositoryId, path, version);
+	}
+
+	/**
+	* Caches the document library content in the entity cache if it is enabled.
+	*
+	* @param dlContent the document library content
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.documentlibrary.model.DLContent dlContent) {
+		getPersistence().cacheResult(dlContent);
+	}
+
+	/**
+	* Caches the document library contents in the entity cache if it is enabled.
+	*
+	* @param dlContents the document library contents
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> dlContents) {
+		getPersistence().cacheResult(dlContents);
+	}
+
+	/**
+	* Creates a new document library content with the primary key. Does not add the document library content to the database.
+	*
+	* @param contentId the primary key for the new document library content
+	* @return the new document library content
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLContent create(
+		long contentId) {
+		return getPersistence().create(contentId);
+	}
+
+	/**
+	* Removes the document library content with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param contentId the primary key of the document library content
+	* @return the document library content that was removed
+	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a document library content with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLContent remove(
+		long contentId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException {
+		return getPersistence().remove(contentId);
+	}
+
+	public static com.liferay.portlet.documentlibrary.model.DLContent updateImpl(
+		com.liferay.portlet.documentlibrary.model.DLContent dlContent)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(dlContent);
+	}
+
+	/**
+	* Returns the document library content with the primary key or throws a {@link com.liferay.portlet.documentlibrary.NoSuchContentException} if it could not be found.
+	*
+	* @param contentId the primary key of the document library content
+	* @return the document library content
+	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a document library content with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLContent findByPrimaryKey(
+		long contentId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException {
+		return getPersistence().findByPrimaryKey(contentId);
+	}
+
+	/**
+	* Returns the document library content with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param contentId the primary key of the document library content
+	* @return the document library content, or <code>null</code> if a document library content with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLContent fetchByPrimaryKey(
+		long contentId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(contentId);
+	}
+
+	/**
 	* Returns all the document library contents.
 	*
 	* @return the document library contents
@@ -781,65 +900,6 @@ public class DLContentUtil {
 	}
 
 	/**
-	* Removes all the document library contents where companyId = &#63; and repositoryId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param repositoryId the repository ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_R(long companyId, long repositoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_R(companyId, repositoryId);
-	}
-
-	/**
-	* Removes all the document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param repositoryId the repository ID
-	* @param path the path
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_R_P(long companyId, long repositoryId,
-		java.lang.String path)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_R_P(companyId, repositoryId, path);
-	}
-
-	/**
-	* Removes all the document library contents where companyId = &#63; and repositoryId = &#63; and path LIKE &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param repositoryId the repository ID
-	* @param path the path
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_R_LikeP(long companyId, long repositoryId,
-		java.lang.String path)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_R_LikeP(companyId, repositoryId, path);
-	}
-
-	/**
-	* Removes the document library content where companyId = &#63; and repositoryId = &#63; and path = &#63; and version = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param repositoryId the repository ID
-	* @param path the path
-	* @param version the version
-	* @return the document library content that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLContent removeByC_R_P_V(
-		long companyId, long repositoryId, java.lang.String path,
-		java.lang.String version)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchContentException {
-		return getPersistence()
-				   .removeByC_R_P_V(companyId, repositoryId, path, version);
-	}
-
-	/**
 	* Removes all the document library contents from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -847,66 +907,6 @@ public class DLContentUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of document library contents where companyId = &#63; and repositoryId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param repositoryId the repository ID
-	* @return the number of matching document library contents
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_R(long companyId, long repositoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_R(companyId, repositoryId);
-	}
-
-	/**
-	* Returns the number of document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63;.
-	*
-	* @param companyId the company ID
-	* @param repositoryId the repository ID
-	* @param path the path
-	* @return the number of matching document library contents
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_R_P(long companyId, long repositoryId,
-		java.lang.String path)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_R_P(companyId, repositoryId, path);
-	}
-
-	/**
-	* Returns the number of document library contents where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
-	*
-	* @param companyId the company ID
-	* @param repositoryId the repository ID
-	* @param path the path
-	* @return the number of matching document library contents
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_R_LikeP(long companyId, long repositoryId,
-		java.lang.String path)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_R_LikeP(companyId, repositoryId, path);
-	}
-
-	/**
-	* Returns the number of document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63; and version = &#63;.
-	*
-	* @param companyId the company ID
-	* @param repositoryId the repository ID
-	* @param path the path
-	* @param version the version
-	* @return the number of matching document library contents
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_R_P_V(long companyId, long repositoryId,
-		java.lang.String path, java.lang.String version)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByC_R_P_V(companyId, repositoryId, path, version);
 	}
 
 	/**

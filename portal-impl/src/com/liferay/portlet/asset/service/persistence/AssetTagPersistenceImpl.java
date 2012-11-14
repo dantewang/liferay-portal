@@ -83,6 +83,15 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+			AssetTagModelImpl.FINDER_CACHE_ENABLED, AssetTagImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+			AssetTagModelImpl.FINDER_CACHE_ENABLED, AssetTagImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+			AssetTagModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagModelImpl.FINDER_CACHE_ENABLED, AssetTagImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
@@ -102,439 +111,6 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 			AssetTagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_G_N = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagModelImpl.FINDER_CACHE_ENABLED, AssetTagImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
-			new String[] { Long.class.getName(), String.class.getName() },
-			AssetTagModelImpl.GROUPID_COLUMN_BITMASK |
-			AssetTagModelImpl.NAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_N",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagModelImpl.FINDER_CACHE_ENABLED, AssetTagImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagModelImpl.FINDER_CACHE_ENABLED, AssetTagImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the asset tag in the entity cache if it is enabled.
-	 *
-	 * @param assetTag the asset tag
-	 */
-	public void cacheResult(AssetTag assetTag) {
-		EntityCacheUtil.putResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagImpl.class, assetTag.getPrimaryKey(), assetTag);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
-			new Object[] { Long.valueOf(assetTag.getGroupId()), assetTag.getName() },
-			assetTag);
-
-		assetTag.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the asset tags in the entity cache if it is enabled.
-	 *
-	 * @param assetTags the asset tags
-	 */
-	public void cacheResult(List<AssetTag> assetTags) {
-		for (AssetTag assetTag : assetTags) {
-			if (EntityCacheUtil.getResult(
-						AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-						AssetTagImpl.class, assetTag.getPrimaryKey()) == null) {
-				cacheResult(assetTag);
-			}
-			else {
-				assetTag.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all asset tags.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(AssetTagImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(AssetTagImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the asset tag.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(AssetTag assetTag) {
-		EntityCacheUtil.removeResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagImpl.class, assetTag.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(assetTag);
-	}
-
-	@Override
-	public void clearCache(List<AssetTag> assetTags) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (AssetTag assetTag : assetTags) {
-			EntityCacheUtil.removeResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-				AssetTagImpl.class, assetTag.getPrimaryKey());
-
-			clearUniqueFindersCache(assetTag);
-		}
-	}
-
-	protected void clearUniqueFindersCache(AssetTag assetTag) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N,
-			new Object[] { Long.valueOf(assetTag.getGroupId()), assetTag.getName() });
-	}
-
-	/**
-	 * Creates a new asset tag with the primary key. Does not add the asset tag to the database.
-	 *
-	 * @param tagId the primary key for the new asset tag
-	 * @return the new asset tag
-	 */
-	public AssetTag create(long tagId) {
-		AssetTag assetTag = new AssetTagImpl();
-
-		assetTag.setNew(true);
-		assetTag.setPrimaryKey(tagId);
-
-		return assetTag;
-	}
-
-	/**
-	 * Removes the asset tag with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param tagId the primary key of the asset tag
-	 * @return the asset tag that was removed
-	 * @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetTag remove(long tagId)
-		throws NoSuchTagException, SystemException {
-		return remove(Long.valueOf(tagId));
-	}
-
-	/**
-	 * Removes the asset tag with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the asset tag
-	 * @return the asset tag that was removed
-	 * @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public AssetTag remove(Serializable primaryKey)
-		throws NoSuchTagException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			AssetTag assetTag = (AssetTag)session.get(AssetTagImpl.class,
-					primaryKey);
-
-			if (assetTag == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchTagException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(assetTag);
-		}
-		catch (NoSuchTagException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected AssetTag removeImpl(AssetTag assetTag) throws SystemException {
-		assetTag = toUnwrappedModel(assetTag);
-
-		try {
-			clearAssetEntries.clear(assetTag.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(assetTag)) {
-				assetTag = (AssetTag)session.get(AssetTagImpl.class,
-						assetTag.getPrimaryKeyObj());
-			}
-
-			if (assetTag != null) {
-				session.delete(assetTag);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (assetTag != null) {
-			clearCache(assetTag);
-		}
-
-		return assetTag;
-	}
-
-	@Override
-	public AssetTag updateImpl(
-		com.liferay.portlet.asset.model.AssetTag assetTag)
-		throws SystemException {
-		assetTag = toUnwrappedModel(assetTag);
-
-		boolean isNew = assetTag.isNew();
-
-		AssetTagModelImpl assetTagModelImpl = (AssetTagModelImpl)assetTag;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (assetTag.isNew()) {
-				session.save(assetTag);
-
-				assetTag.setNew(false);
-			}
-			else {
-				session.merge(assetTag);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !AssetTagModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((assetTagModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(assetTagModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] { Long.valueOf(assetTagModelImpl.getGroupId()) };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagImpl.class, assetTag.getPrimaryKey(), assetTag);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
-				new Object[] {
-					Long.valueOf(assetTag.getGroupId()),
-					
-				assetTag.getName()
-				}, assetTag);
-		}
-		else {
-			if ((assetTagModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_G_N.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(assetTagModelImpl.getOriginalGroupId()),
-						
-						assetTagModelImpl.getOriginalName()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_N, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
-					new Object[] {
-						Long.valueOf(assetTag.getGroupId()),
-						
-					assetTag.getName()
-					}, assetTag);
-			}
-		}
-
-		return assetTag;
-	}
-
-	protected AssetTag toUnwrappedModel(AssetTag assetTag) {
-		if (assetTag instanceof AssetTagImpl) {
-			return assetTag;
-		}
-
-		AssetTagImpl assetTagImpl = new AssetTagImpl();
-
-		assetTagImpl.setNew(assetTag.isNew());
-		assetTagImpl.setPrimaryKey(assetTag.getPrimaryKey());
-
-		assetTagImpl.setTagId(assetTag.getTagId());
-		assetTagImpl.setGroupId(assetTag.getGroupId());
-		assetTagImpl.setCompanyId(assetTag.getCompanyId());
-		assetTagImpl.setUserId(assetTag.getUserId());
-		assetTagImpl.setUserName(assetTag.getUserName());
-		assetTagImpl.setCreateDate(assetTag.getCreateDate());
-		assetTagImpl.setModifiedDate(assetTag.getModifiedDate());
-		assetTagImpl.setName(assetTag.getName());
-		assetTagImpl.setAssetCount(assetTag.getAssetCount());
-
-		return assetTagImpl;
-	}
-
-	/**
-	 * Returns the asset tag with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the asset tag
-	 * @return the asset tag
-	 * @throws com.liferay.portal.NoSuchModelException if a asset tag with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public AssetTag findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the asset tag with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchTagException} if it could not be found.
-	 *
-	 * @param tagId the primary key of the asset tag
-	 * @return the asset tag
-	 * @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetTag findByPrimaryKey(long tagId)
-		throws NoSuchTagException, SystemException {
-		AssetTag assetTag = fetchByPrimaryKey(tagId);
-
-		if (assetTag == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + tagId);
-			}
-
-			throw new NoSuchTagException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				tagId);
-		}
-
-		return assetTag;
-	}
-
-	/**
-	 * Returns the asset tag with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the asset tag
-	 * @return the asset tag, or <code>null</code> if a asset tag with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public AssetTag fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the asset tag with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param tagId the primary key of the asset tag
-	 * @return the asset tag, or <code>null</code> if a asset tag with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetTag fetchByPrimaryKey(long tagId) throws SystemException {
-		AssetTag assetTag = (AssetTag)EntityCacheUtil.getResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-				AssetTagImpl.class, tagId);
-
-		if (assetTag == _nullAssetTag) {
-			return null;
-		}
-
-		if (assetTag == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				assetTag = (AssetTag)session.get(AssetTagImpl.class,
-						Long.valueOf(tagId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (assetTag != null) {
-					cacheResult(assetTag);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-						AssetTagImpl.class, tagId, _nullAssetTag);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return assetTag;
-	}
 
 	/**
 	 * Returns all the asset tags where groupId = &#63;.
@@ -1226,6 +802,131 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	}
 
 	/**
+	 * Removes all the asset tags where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (AssetTag assetTag : findByGroupId(groupId)) {
+			remove(assetTag);
+		}
+	}
+
+	/**
+	 * Returns the number of asset tags where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching asset tags
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_ASSETTAG_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of asset tags that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching asset tags that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_ASSETTAG_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				AssetTag.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "assetTag.groupId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_G_N = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+			AssetTagModelImpl.FINDER_CACHE_ENABLED, AssetTagImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
+			new String[] { Long.class.getName(), String.class.getName() },
+			AssetTagModelImpl.GROUPID_COLUMN_BITMASK |
+			AssetTagModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+			AssetTagModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_N",
+			new String[] { Long.class.getName(), String.class.getName() });
+
+	/**
 	 * Returns the asset tag where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchTagException} if it could not be found.
 	 *
 	 * @param groupId the group ID
@@ -1389,6 +1090,510 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	}
 
 	/**
+	 * Removes the asset tag where groupId = &#63; and name = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the asset tag that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetTag removeByG_N(long groupId, String name)
+		throws NoSuchTagException, SystemException {
+		AssetTag assetTag = findByG_N(groupId, name);
+
+		return remove(assetTag);
+	}
+
+	/**
+	 * Returns the number of asset tags where groupId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the number of matching asset tags
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_N(long groupId, String name) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, name };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_N,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_ASSETTAG_WHERE);
+
+			query.append(_FINDER_COLUMN_G_N_GROUPID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_G_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_N_NAME_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_N, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_N_GROUPID_2 = "assetTag.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_N_NAME_1 = "assetTag.name IS NULL";
+	private static final String _FINDER_COLUMN_G_N_NAME_2 = "assetTag.name = ?";
+	private static final String _FINDER_COLUMN_G_N_NAME_3 = "(assetTag.name IS NULL OR assetTag.name = ?)";
+
+	/**
+	 * Caches the asset tag in the entity cache if it is enabled.
+	 *
+	 * @param assetTag the asset tag
+	 */
+	public void cacheResult(AssetTag assetTag) {
+		EntityCacheUtil.putResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+			AssetTagImpl.class, assetTag.getPrimaryKey(), assetTag);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
+			new Object[] { Long.valueOf(assetTag.getGroupId()), assetTag.getName() },
+			assetTag);
+
+		assetTag.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the asset tags in the entity cache if it is enabled.
+	 *
+	 * @param assetTags the asset tags
+	 */
+	public void cacheResult(List<AssetTag> assetTags) {
+		for (AssetTag assetTag : assetTags) {
+			if (EntityCacheUtil.getResult(
+						AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+						AssetTagImpl.class, assetTag.getPrimaryKey()) == null) {
+				cacheResult(assetTag);
+			}
+			else {
+				assetTag.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all asset tags.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(AssetTagImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(AssetTagImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the asset tag.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(AssetTag assetTag) {
+		EntityCacheUtil.removeResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+			AssetTagImpl.class, assetTag.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(assetTag);
+	}
+
+	@Override
+	public void clearCache(List<AssetTag> assetTags) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (AssetTag assetTag : assetTags) {
+			EntityCacheUtil.removeResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+				AssetTagImpl.class, assetTag.getPrimaryKey());
+
+			clearUniqueFindersCache(assetTag);
+		}
+	}
+
+	protected void clearUniqueFindersCache(AssetTag assetTag) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N,
+			new Object[] { Long.valueOf(assetTag.getGroupId()), assetTag.getName() });
+	}
+
+	/**
+	 * Creates a new asset tag with the primary key. Does not add the asset tag to the database.
+	 *
+	 * @param tagId the primary key for the new asset tag
+	 * @return the new asset tag
+	 */
+	public AssetTag create(long tagId) {
+		AssetTag assetTag = new AssetTagImpl();
+
+		assetTag.setNew(true);
+		assetTag.setPrimaryKey(tagId);
+
+		return assetTag;
+	}
+
+	/**
+	 * Removes the asset tag with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param tagId the primary key of the asset tag
+	 * @return the asset tag that was removed
+	 * @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetTag remove(long tagId)
+		throws NoSuchTagException, SystemException {
+		return remove(Long.valueOf(tagId));
+	}
+
+	/**
+	 * Removes the asset tag with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the asset tag
+	 * @return the asset tag that was removed
+	 * @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public AssetTag remove(Serializable primaryKey)
+		throws NoSuchTagException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			AssetTag assetTag = (AssetTag)session.get(AssetTagImpl.class,
+					primaryKey);
+
+			if (assetTag == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchTagException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(assetTag);
+		}
+		catch (NoSuchTagException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected AssetTag removeImpl(AssetTag assetTag) throws SystemException {
+		assetTag = toUnwrappedModel(assetTag);
+
+		try {
+			clearAssetEntries.clear(assetTag.getPrimaryKey());
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			FinderCacheUtil.clearCache(AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(assetTag)) {
+				assetTag = (AssetTag)session.get(AssetTagImpl.class,
+						assetTag.getPrimaryKeyObj());
+			}
+
+			if (assetTag != null) {
+				session.delete(assetTag);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (assetTag != null) {
+			clearCache(assetTag);
+		}
+
+		return assetTag;
+	}
+
+	@Override
+	public AssetTag updateImpl(
+		com.liferay.portlet.asset.model.AssetTag assetTag)
+		throws SystemException {
+		assetTag = toUnwrappedModel(assetTag);
+
+		boolean isNew = assetTag.isNew();
+
+		AssetTagModelImpl assetTagModelImpl = (AssetTagModelImpl)assetTag;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (assetTag.isNew()) {
+				session.save(assetTag);
+
+				assetTag.setNew(false);
+			}
+			else {
+				session.merge(assetTag);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !AssetTagModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((assetTagModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(assetTagModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] { Long.valueOf(assetTagModelImpl.getGroupId()) };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+			AssetTagImpl.class, assetTag.getPrimaryKey(), assetTag);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
+				new Object[] {
+					Long.valueOf(assetTag.getGroupId()),
+					
+				assetTag.getName()
+				}, assetTag);
+		}
+		else {
+			if ((assetTagModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_G_N.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(assetTagModelImpl.getOriginalGroupId()),
+						
+						assetTagModelImpl.getOriginalName()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_N, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
+					new Object[] {
+						Long.valueOf(assetTag.getGroupId()),
+						
+					assetTag.getName()
+					}, assetTag);
+			}
+		}
+
+		return assetTag;
+	}
+
+	protected AssetTag toUnwrappedModel(AssetTag assetTag) {
+		if (assetTag instanceof AssetTagImpl) {
+			return assetTag;
+		}
+
+		AssetTagImpl assetTagImpl = new AssetTagImpl();
+
+		assetTagImpl.setNew(assetTag.isNew());
+		assetTagImpl.setPrimaryKey(assetTag.getPrimaryKey());
+
+		assetTagImpl.setTagId(assetTag.getTagId());
+		assetTagImpl.setGroupId(assetTag.getGroupId());
+		assetTagImpl.setCompanyId(assetTag.getCompanyId());
+		assetTagImpl.setUserId(assetTag.getUserId());
+		assetTagImpl.setUserName(assetTag.getUserName());
+		assetTagImpl.setCreateDate(assetTag.getCreateDate());
+		assetTagImpl.setModifiedDate(assetTag.getModifiedDate());
+		assetTagImpl.setName(assetTag.getName());
+		assetTagImpl.setAssetCount(assetTag.getAssetCount());
+
+		return assetTagImpl;
+	}
+
+	/**
+	 * Returns the asset tag with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the asset tag
+	 * @return the asset tag
+	 * @throws com.liferay.portal.NoSuchModelException if a asset tag with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public AssetTag findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the asset tag with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchTagException} if it could not be found.
+	 *
+	 * @param tagId the primary key of the asset tag
+	 * @return the asset tag
+	 * @throws com.liferay.portlet.asset.NoSuchTagException if a asset tag with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetTag findByPrimaryKey(long tagId)
+		throws NoSuchTagException, SystemException {
+		AssetTag assetTag = fetchByPrimaryKey(tagId);
+
+		if (assetTag == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + tagId);
+			}
+
+			throw new NoSuchTagException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				tagId);
+		}
+
+		return assetTag;
+	}
+
+	/**
+	 * Returns the asset tag with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the asset tag
+	 * @return the asset tag, or <code>null</code> if a asset tag with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public AssetTag fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the asset tag with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param tagId the primary key of the asset tag
+	 * @return the asset tag, or <code>null</code> if a asset tag with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetTag fetchByPrimaryKey(long tagId) throws SystemException {
+		AssetTag assetTag = (AssetTag)EntityCacheUtil.getResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+				AssetTagImpl.class, tagId);
+
+		if (assetTag == _nullAssetTag) {
+			return null;
+		}
+
+		if (assetTag == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				assetTag = (AssetTag)session.get(AssetTagImpl.class,
+						Long.valueOf(tagId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (assetTag != null) {
+					cacheResult(assetTag);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+						AssetTagImpl.class, tagId, _nullAssetTag);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return assetTag;
+	}
+
+	/**
 	 * Returns all the asset tags.
 	 *
 	 * @return the asset tags
@@ -1503,33 +1708,6 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	}
 
 	/**
-	 * Removes all the asset tags where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (AssetTag assetTag : findByGroupId(groupId)) {
-			remove(assetTag);
-		}
-	}
-
-	/**
-	 * Removes the asset tag where groupId = &#63; and name = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @return the asset tag that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetTag removeByG_N(long groupId, String name)
-		throws NoSuchTagException, SystemException {
-		AssetTag assetTag = findByG_N(groupId, name);
-
-		return remove(assetTag);
-	}
-
-	/**
 	 * Removes all the asset tags from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -1538,177 +1716,6 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 		for (AssetTag assetTag : findAll()) {
 			remove(assetTag);
 		}
-	}
-
-	/**
-	 * Returns the number of asset tags where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching asset tags
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_ASSETTAG_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of asset tags that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching asset tags that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_ASSETTAG_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				AssetTag.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of asset tags where groupId = &#63; and name = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @return the number of matching asset tags
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_N(long groupId, String name) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, name };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_N,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_ASSETTAG_WHERE);
-
-			query.append(_FINDER_COLUMN_G_N_GROUPID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_G_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_N_NAME_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_N, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -2465,11 +2472,6 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	private static final String _SQL_GETASSETENTRIES = "SELECT {AssetEntry.*} FROM AssetEntry INNER JOIN AssetEntries_AssetTags ON (AssetEntries_AssetTags.entryId = AssetEntry.entryId) WHERE (AssetEntries_AssetTags.tagId = ?)";
 	private static final String _SQL_GETASSETENTRIESSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM AssetEntries_AssetTags WHERE tagId = ?";
 	private static final String _SQL_CONTAINSASSETENTRY = "SELECT COUNT(*) AS COUNT_VALUE FROM AssetEntries_AssetTags WHERE tagId = ? AND entryId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "assetTag.groupId = ?";
-	private static final String _FINDER_COLUMN_G_N_GROUPID_2 = "assetTag.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_N_NAME_1 = "assetTag.name IS NULL";
-	private static final String _FINDER_COLUMN_G_N_NAME_2 = "assetTag.name = ?";
-	private static final String _FINDER_COLUMN_G_N_NAME_3 = "(assetTag.name IS NULL OR assetTag.name = ?)";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "assetTag.tagId";
 	private static final String _FILTER_SQL_SELECT_ASSETTAG_WHERE = "SELECT DISTINCT {assetTag.*} FROM AssetTag assetTag WHERE ";
 	private static final String _FILTER_SQL_SELECT_ASSETTAG_NO_INLINE_DISTINCT_WHERE_1 =

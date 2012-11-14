@@ -71,6 +71,15 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+			OrgLaborModelImpl.FINDER_CACHE_ENABLED, OrgLaborImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+			OrgLaborModelImpl.FINDER_CACHE_ENABLED, OrgLaborImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+			OrgLaborModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ORGANIZATIONID =
 		new FinderPath(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
 			OrgLaborModelImpl.FINDER_CACHE_ENABLED, OrgLaborImpl.class,
@@ -91,388 +100,6 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 			OrgLaborModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByOrganizationId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
-			OrgLaborModelImpl.FINDER_CACHE_ENABLED, OrgLaborImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
-			OrgLaborModelImpl.FINDER_CACHE_ENABLED, OrgLaborImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
-			OrgLaborModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the org labor in the entity cache if it is enabled.
-	 *
-	 * @param orgLabor the org labor
-	 */
-	public void cacheResult(OrgLabor orgLabor) {
-		EntityCacheUtil.putResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
-			OrgLaborImpl.class, orgLabor.getPrimaryKey(), orgLabor);
-
-		orgLabor.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the org labors in the entity cache if it is enabled.
-	 *
-	 * @param orgLabors the org labors
-	 */
-	public void cacheResult(List<OrgLabor> orgLabors) {
-		for (OrgLabor orgLabor : orgLabors) {
-			if (EntityCacheUtil.getResult(
-						OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
-						OrgLaborImpl.class, orgLabor.getPrimaryKey()) == null) {
-				cacheResult(orgLabor);
-			}
-			else {
-				orgLabor.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all org labors.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(OrgLaborImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(OrgLaborImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the org labor.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(OrgLabor orgLabor) {
-		EntityCacheUtil.removeResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
-			OrgLaborImpl.class, orgLabor.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<OrgLabor> orgLabors) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (OrgLabor orgLabor : orgLabors) {
-			EntityCacheUtil.removeResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
-				OrgLaborImpl.class, orgLabor.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new org labor with the primary key. Does not add the org labor to the database.
-	 *
-	 * @param orgLaborId the primary key for the new org labor
-	 * @return the new org labor
-	 */
-	public OrgLabor create(long orgLaborId) {
-		OrgLabor orgLabor = new OrgLaborImpl();
-
-		orgLabor.setNew(true);
-		orgLabor.setPrimaryKey(orgLaborId);
-
-		return orgLabor;
-	}
-
-	/**
-	 * Removes the org labor with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param orgLaborId the primary key of the org labor
-	 * @return the org labor that was removed
-	 * @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public OrgLabor remove(long orgLaborId)
-		throws NoSuchOrgLaborException, SystemException {
-		return remove(Long.valueOf(orgLaborId));
-	}
-
-	/**
-	 * Removes the org labor with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the org labor
-	 * @return the org labor that was removed
-	 * @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public OrgLabor remove(Serializable primaryKey)
-		throws NoSuchOrgLaborException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			OrgLabor orgLabor = (OrgLabor)session.get(OrgLaborImpl.class,
-					primaryKey);
-
-			if (orgLabor == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchOrgLaborException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(orgLabor);
-		}
-		catch (NoSuchOrgLaborException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected OrgLabor removeImpl(OrgLabor orgLabor) throws SystemException {
-		orgLabor = toUnwrappedModel(orgLabor);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(orgLabor)) {
-				orgLabor = (OrgLabor)session.get(OrgLaborImpl.class,
-						orgLabor.getPrimaryKeyObj());
-			}
-
-			if (orgLabor != null) {
-				session.delete(orgLabor);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (orgLabor != null) {
-			clearCache(orgLabor);
-		}
-
-		return orgLabor;
-	}
-
-	@Override
-	public OrgLabor updateImpl(com.liferay.portal.model.OrgLabor orgLabor)
-		throws SystemException {
-		orgLabor = toUnwrappedModel(orgLabor);
-
-		boolean isNew = orgLabor.isNew();
-
-		OrgLaborModelImpl orgLaborModelImpl = (OrgLaborModelImpl)orgLabor;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (orgLabor.isNew()) {
-				session.save(orgLabor);
-
-				orgLabor.setNew(false);
-			}
-			else {
-				session.merge(orgLabor);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !OrgLaborModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((orgLaborModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORGANIZATIONID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(orgLaborModelImpl.getOriginalOrganizationId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORGANIZATIONID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(orgLaborModelImpl.getOrganizationId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORGANIZATIONID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
-			OrgLaborImpl.class, orgLabor.getPrimaryKey(), orgLabor);
-
-		return orgLabor;
-	}
-
-	protected OrgLabor toUnwrappedModel(OrgLabor orgLabor) {
-		if (orgLabor instanceof OrgLaborImpl) {
-			return orgLabor;
-		}
-
-		OrgLaborImpl orgLaborImpl = new OrgLaborImpl();
-
-		orgLaborImpl.setNew(orgLabor.isNew());
-		orgLaborImpl.setPrimaryKey(orgLabor.getPrimaryKey());
-
-		orgLaborImpl.setOrgLaborId(orgLabor.getOrgLaborId());
-		orgLaborImpl.setOrganizationId(orgLabor.getOrganizationId());
-		orgLaborImpl.setTypeId(orgLabor.getTypeId());
-		orgLaborImpl.setSunOpen(orgLabor.getSunOpen());
-		orgLaborImpl.setSunClose(orgLabor.getSunClose());
-		orgLaborImpl.setMonOpen(orgLabor.getMonOpen());
-		orgLaborImpl.setMonClose(orgLabor.getMonClose());
-		orgLaborImpl.setTueOpen(orgLabor.getTueOpen());
-		orgLaborImpl.setTueClose(orgLabor.getTueClose());
-		orgLaborImpl.setWedOpen(orgLabor.getWedOpen());
-		orgLaborImpl.setWedClose(orgLabor.getWedClose());
-		orgLaborImpl.setThuOpen(orgLabor.getThuOpen());
-		orgLaborImpl.setThuClose(orgLabor.getThuClose());
-		orgLaborImpl.setFriOpen(orgLabor.getFriOpen());
-		orgLaborImpl.setFriClose(orgLabor.getFriClose());
-		orgLaborImpl.setSatOpen(orgLabor.getSatOpen());
-		orgLaborImpl.setSatClose(orgLabor.getSatClose());
-
-		return orgLaborImpl;
-	}
-
-	/**
-	 * Returns the org labor with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the org labor
-	 * @return the org labor
-	 * @throws com.liferay.portal.NoSuchModelException if a org labor with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public OrgLabor findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the org labor with the primary key or throws a {@link com.liferay.portal.NoSuchOrgLaborException} if it could not be found.
-	 *
-	 * @param orgLaborId the primary key of the org labor
-	 * @return the org labor
-	 * @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public OrgLabor findByPrimaryKey(long orgLaborId)
-		throws NoSuchOrgLaborException, SystemException {
-		OrgLabor orgLabor = fetchByPrimaryKey(orgLaborId);
-
-		if (orgLabor == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + orgLaborId);
-			}
-
-			throw new NoSuchOrgLaborException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				orgLaborId);
-		}
-
-		return orgLabor;
-	}
-
-	/**
-	 * Returns the org labor with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the org labor
-	 * @return the org labor, or <code>null</code> if a org labor with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public OrgLabor fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the org labor with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param orgLaborId the primary key of the org labor
-	 * @return the org labor, or <code>null</code> if a org labor with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public OrgLabor fetchByPrimaryKey(long orgLaborId)
-		throws SystemException {
-		OrgLabor orgLabor = (OrgLabor)EntityCacheUtil.getResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
-				OrgLaborImpl.class, orgLaborId);
-
-		if (orgLabor == _nullOrgLabor) {
-			return null;
-		}
-
-		if (orgLabor == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				orgLabor = (OrgLabor)session.get(OrgLaborImpl.class,
-						Long.valueOf(orgLaborId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (orgLabor != null) {
-					cacheResult(orgLabor);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
-						OrgLaborImpl.class, orgLaborId, _nullOrgLabor);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return orgLabor;
-	}
 
 	/**
 	 * Returns all the org labors where organizationId = &#63;.
@@ -862,6 +489,448 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 	}
 
 	/**
+	 * Removes all the org labors where organizationId = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByOrganizationId(long organizationId)
+		throws SystemException {
+		for (OrgLabor orgLabor : findByOrganizationId(organizationId)) {
+			remove(orgLabor);
+		}
+	}
+
+	/**
+	 * Returns the number of org labors where organizationId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the number of matching org labors
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByOrganizationId(long organizationId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { organizationId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_ORGLABOR_WHERE);
+
+			query.append(_FINDER_COLUMN_ORGANIZATIONID_ORGANIZATIONID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(organizationId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_ORGANIZATIONID_ORGANIZATIONID_2 = "orgLabor.organizationId = ?";
+
+	/**
+	 * Caches the org labor in the entity cache if it is enabled.
+	 *
+	 * @param orgLabor the org labor
+	 */
+	public void cacheResult(OrgLabor orgLabor) {
+		EntityCacheUtil.putResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+			OrgLaborImpl.class, orgLabor.getPrimaryKey(), orgLabor);
+
+		orgLabor.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the org labors in the entity cache if it is enabled.
+	 *
+	 * @param orgLabors the org labors
+	 */
+	public void cacheResult(List<OrgLabor> orgLabors) {
+		for (OrgLabor orgLabor : orgLabors) {
+			if (EntityCacheUtil.getResult(
+						OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+						OrgLaborImpl.class, orgLabor.getPrimaryKey()) == null) {
+				cacheResult(orgLabor);
+			}
+			else {
+				orgLabor.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all org labors.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(OrgLaborImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(OrgLaborImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the org labor.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(OrgLabor orgLabor) {
+		EntityCacheUtil.removeResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+			OrgLaborImpl.class, orgLabor.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<OrgLabor> orgLabors) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (OrgLabor orgLabor : orgLabors) {
+			EntityCacheUtil.removeResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+				OrgLaborImpl.class, orgLabor.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new org labor with the primary key. Does not add the org labor to the database.
+	 *
+	 * @param orgLaborId the primary key for the new org labor
+	 * @return the new org labor
+	 */
+	public OrgLabor create(long orgLaborId) {
+		OrgLabor orgLabor = new OrgLaborImpl();
+
+		orgLabor.setNew(true);
+		orgLabor.setPrimaryKey(orgLaborId);
+
+		return orgLabor;
+	}
+
+	/**
+	 * Removes the org labor with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param orgLaborId the primary key of the org labor
+	 * @return the org labor that was removed
+	 * @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgLabor remove(long orgLaborId)
+		throws NoSuchOrgLaborException, SystemException {
+		return remove(Long.valueOf(orgLaborId));
+	}
+
+	/**
+	 * Removes the org labor with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the org labor
+	 * @return the org labor that was removed
+	 * @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public OrgLabor remove(Serializable primaryKey)
+		throws NoSuchOrgLaborException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			OrgLabor orgLabor = (OrgLabor)session.get(OrgLaborImpl.class,
+					primaryKey);
+
+			if (orgLabor == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchOrgLaborException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(orgLabor);
+		}
+		catch (NoSuchOrgLaborException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected OrgLabor removeImpl(OrgLabor orgLabor) throws SystemException {
+		orgLabor = toUnwrappedModel(orgLabor);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(orgLabor)) {
+				orgLabor = (OrgLabor)session.get(OrgLaborImpl.class,
+						orgLabor.getPrimaryKeyObj());
+			}
+
+			if (orgLabor != null) {
+				session.delete(orgLabor);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (orgLabor != null) {
+			clearCache(orgLabor);
+		}
+
+		return orgLabor;
+	}
+
+	@Override
+	public OrgLabor updateImpl(com.liferay.portal.model.OrgLabor orgLabor)
+		throws SystemException {
+		orgLabor = toUnwrappedModel(orgLabor);
+
+		boolean isNew = orgLabor.isNew();
+
+		OrgLaborModelImpl orgLaborModelImpl = (OrgLaborModelImpl)orgLabor;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (orgLabor.isNew()) {
+				session.save(orgLabor);
+
+				orgLabor.setNew(false);
+			}
+			else {
+				session.merge(orgLabor);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !OrgLaborModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((orgLaborModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORGANIZATIONID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(orgLaborModelImpl.getOriginalOrganizationId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORGANIZATIONID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(orgLaborModelImpl.getOrganizationId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORGANIZATIONID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+			OrgLaborImpl.class, orgLabor.getPrimaryKey(), orgLabor);
+
+		return orgLabor;
+	}
+
+	protected OrgLabor toUnwrappedModel(OrgLabor orgLabor) {
+		if (orgLabor instanceof OrgLaborImpl) {
+			return orgLabor;
+		}
+
+		OrgLaborImpl orgLaborImpl = new OrgLaborImpl();
+
+		orgLaborImpl.setNew(orgLabor.isNew());
+		orgLaborImpl.setPrimaryKey(orgLabor.getPrimaryKey());
+
+		orgLaborImpl.setOrgLaborId(orgLabor.getOrgLaborId());
+		orgLaborImpl.setOrganizationId(orgLabor.getOrganizationId());
+		orgLaborImpl.setTypeId(orgLabor.getTypeId());
+		orgLaborImpl.setSunOpen(orgLabor.getSunOpen());
+		orgLaborImpl.setSunClose(orgLabor.getSunClose());
+		orgLaborImpl.setMonOpen(orgLabor.getMonOpen());
+		orgLaborImpl.setMonClose(orgLabor.getMonClose());
+		orgLaborImpl.setTueOpen(orgLabor.getTueOpen());
+		orgLaborImpl.setTueClose(orgLabor.getTueClose());
+		orgLaborImpl.setWedOpen(orgLabor.getWedOpen());
+		orgLaborImpl.setWedClose(orgLabor.getWedClose());
+		orgLaborImpl.setThuOpen(orgLabor.getThuOpen());
+		orgLaborImpl.setThuClose(orgLabor.getThuClose());
+		orgLaborImpl.setFriOpen(orgLabor.getFriOpen());
+		orgLaborImpl.setFriClose(orgLabor.getFriClose());
+		orgLaborImpl.setSatOpen(orgLabor.getSatOpen());
+		orgLaborImpl.setSatClose(orgLabor.getSatClose());
+
+		return orgLaborImpl;
+	}
+
+	/**
+	 * Returns the org labor with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the org labor
+	 * @return the org labor
+	 * @throws com.liferay.portal.NoSuchModelException if a org labor with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public OrgLabor findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the org labor with the primary key or throws a {@link com.liferay.portal.NoSuchOrgLaborException} if it could not be found.
+	 *
+	 * @param orgLaborId the primary key of the org labor
+	 * @return the org labor
+	 * @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgLabor findByPrimaryKey(long orgLaborId)
+		throws NoSuchOrgLaborException, SystemException {
+		OrgLabor orgLabor = fetchByPrimaryKey(orgLaborId);
+
+		if (orgLabor == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + orgLaborId);
+			}
+
+			throw new NoSuchOrgLaborException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				orgLaborId);
+		}
+
+		return orgLabor;
+	}
+
+	/**
+	 * Returns the org labor with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the org labor
+	 * @return the org labor, or <code>null</code> if a org labor with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public OrgLabor fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the org labor with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param orgLaborId the primary key of the org labor
+	 * @return the org labor, or <code>null</code> if a org labor with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgLabor fetchByPrimaryKey(long orgLaborId)
+		throws SystemException {
+		OrgLabor orgLabor = (OrgLabor)EntityCacheUtil.getResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+				OrgLaborImpl.class, orgLaborId);
+
+		if (orgLabor == _nullOrgLabor) {
+			return null;
+		}
+
+		if (orgLabor == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				orgLabor = (OrgLabor)session.get(OrgLaborImpl.class,
+						Long.valueOf(orgLaborId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (orgLabor != null) {
+					cacheResult(orgLabor);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+						OrgLaborImpl.class, orgLaborId, _nullOrgLabor);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return orgLabor;
+	}
+
+	/**
 	 * Returns all the org labors.
 	 *
 	 * @return the org labors
@@ -976,19 +1045,6 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 	}
 
 	/**
-	 * Removes all the org labors where organizationId = &#63; from the database.
-	 *
-	 * @param organizationId the organization ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByOrganizationId(long organizationId)
-		throws SystemException {
-		for (OrgLabor orgLabor : findByOrganizationId(organizationId)) {
-			remove(orgLabor);
-		}
-	}
-
-	/**
 	 * Removes all the org labors from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -997,60 +1053,6 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 		for (OrgLabor orgLabor : findAll()) {
 			remove(orgLabor);
 		}
-	}
-
-	/**
-	 * Returns the number of org labors where organizationId = &#63;.
-	 *
-	 * @param organizationId the organization ID
-	 * @return the number of matching org labors
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByOrganizationId(long organizationId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { organizationId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_ORGLABOR_WHERE);
-
-			query.append(_FINDER_COLUMN_ORGANIZATIONID_ORGANIZATIONID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(organizationId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1248,7 +1250,6 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 	private static final String _SQL_SELECT_ORGLABOR_WHERE = "SELECT orgLabor FROM OrgLabor orgLabor WHERE ";
 	private static final String _SQL_COUNT_ORGLABOR = "SELECT COUNT(orgLabor) FROM OrgLabor orgLabor";
 	private static final String _SQL_COUNT_ORGLABOR_WHERE = "SELECT COUNT(orgLabor) FROM OrgLabor orgLabor WHERE ";
-	private static final String _FINDER_COLUMN_ORGANIZATIONID_ORGANIZATIONID_2 = "orgLabor.organizationId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "orgLabor.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No OrgLabor exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No OrgLabor exists with the key {";

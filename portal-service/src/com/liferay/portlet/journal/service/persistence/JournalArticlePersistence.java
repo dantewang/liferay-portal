@@ -38,69 +38,6 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 	 */
 
 	/**
-	* Caches the journal article in the entity cache if it is enabled.
-	*
-	* @param journalArticle the journal article
-	*/
-	public void cacheResult(
-		com.liferay.portlet.journal.model.JournalArticle journalArticle);
-
-	/**
-	* Caches the journal articles in the entity cache if it is enabled.
-	*
-	* @param journalArticles the journal articles
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.journal.model.JournalArticle> journalArticles);
-
-	/**
-	* Creates a new journal article with the primary key. Does not add the journal article to the database.
-	*
-	* @param id the primary key for the new journal article
-	* @return the new journal article
-	*/
-	public com.liferay.portlet.journal.model.JournalArticle create(long id);
-
-	/**
-	* Removes the journal article with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param id the primary key of the journal article
-	* @return the journal article that was removed
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalArticle remove(long id)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException;
-
-	public com.liferay.portlet.journal.model.JournalArticle updateImpl(
-		com.liferay.portlet.journal.model.JournalArticle journalArticle)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the journal article with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchArticleException} if it could not be found.
-	*
-	* @param id the primary key of the journal article
-	* @return the journal article
-	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalArticle findByPrimaryKey(
-		long id)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException;
-
-	/**
-	* Returns the journal article with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param id the primary key of the journal article
-	* @return the journal article, or <code>null</code> if a journal article with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalArticle fetchByPrimaryKey(
-		long id) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the journal articles where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -220,6 +157,25 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the journal article where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchArticleException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -256,6 +212,30 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 	*/
 	public com.liferay.portlet.journal.model.JournalArticle fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the journal article where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the journal article that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalArticle removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Returns the number of journal articles where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -386,6 +366,27 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where resourcePrimKey = &#63;.
 	*
 	* @param resourcePrimKey the resource prim key
@@ -503,6 +504,25 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Removes all the journal articles where resourcePrimKey = &#63; from the database.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByResourcePrimKey(long resourcePrimKey)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where resourcePrimKey = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByResourcePrimKey(long resourcePrimKey)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal articles where groupId = &#63;.
@@ -687,6 +707,35 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -804,6 +853,25 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Removes all the journal articles where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal articles where structureId = &#63;.
@@ -925,6 +993,25 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where structureId = &#63; from the database.
+	*
+	* @param structureId the structure ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByStructureId(java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByStructureId(java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where templateId = &#63;.
 	*
 	* @param templateId the template ID
@@ -1042,6 +1129,25 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Removes all the journal articles where templateId = &#63; from the database.
+	*
+	* @param templateId the template ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByTemplateId(java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where templateId = &#63;.
+	*
+	* @param templateId the template ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByTemplateId(java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal articles where layoutUuid = &#63;.
@@ -1163,6 +1269,25 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where layoutUuid = &#63; from the database.
+	*
+	* @param layoutUuid the layout uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByLayoutUuid(java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where layoutUuid = &#63;.
+	*
+	* @param layoutUuid the layout uuid
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByLayoutUuid(java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
@@ -1280,6 +1405,25 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Removes all the journal articles where smallImageId = &#63; from the database.
+	*
+	* @param smallImageId the small image ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeBySmallImageId(long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countBySmallImageId(long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal articles where resourcePrimKey = &#63; and status = &#63;.
@@ -1407,6 +1551,27 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Removes all the journal articles where resourcePrimKey = &#63; and status = &#63; from the database.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByR_ST(long resourcePrimKey, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where resourcePrimKey = &#63; and status = &#63;.
+	*
+	* @param resourcePrimKey the resource prim key
+	* @param status the status
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByR_ST(long resourcePrimKey, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal articles where groupId = &#63; and userId = &#63;.
@@ -1601,6 +1766,38 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Removes all the journal articles where groupId = &#63; and userId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_U(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_U(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_U(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal articles where groupId = &#63; and folderId = &#63;.
@@ -1901,6 +2098,60 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; and folderId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_F(long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_F(long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and folderId = any &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderIds the folder IDs
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_F(long groupId, long[] folderIds)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and folderId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_F(long groupId, long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and folderId = any &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderIds the folder IDs
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_F(long groupId, long[] folderIds)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where groupId = &#63; and articleId = &#63;.
 	*
 	* @param groupId the group ID
@@ -2093,6 +2344,38 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Removes all the journal articles where groupId = &#63; and articleId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_A(long groupId, java.lang.String articleId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and articleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_A(long groupId, java.lang.String articleId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and articleId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_A(long groupId, java.lang.String articleId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal articles where groupId = &#63; and urlTitle = &#63;.
@@ -2289,6 +2572,38 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; and urlTitle = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_UT(long groupId, java.lang.String urlTitle)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_UT(long groupId, java.lang.String urlTitle)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_UT(long groupId, java.lang.String urlTitle)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where groupId = &#63; and structureId = &#63;.
 	*
 	* @param groupId the group ID
@@ -2481,6 +2796,38 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Removes all the journal articles where groupId = &#63; and structureId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_S(long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_S(long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_S(long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal articles where groupId = &#63; and templateId = &#63;.
@@ -2677,6 +3024,38 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; and templateId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_T(long groupId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_T(long groupId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param templateId the template ID
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_T(long groupId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where groupId = &#63; and layoutUuid = &#63;.
 	*
 	* @param groupId the group ID
@@ -2869,6 +3248,38 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Removes all the journal articles where groupId = &#63; and layoutUuid = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_L(long groupId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_L(long groupId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param layoutUuid the layout uuid
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_L(long groupId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal articles where groupId = &#63; and status = &#63;.
@@ -3065,6 +3476,38 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_ST(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_ST(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_ST(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where companyId = &#63; and version = &#63;.
 	*
 	* @param companyId the company ID
@@ -3192,6 +3635,27 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where companyId = &#63; and version = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_V(long companyId, double version)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where companyId = &#63; and version = &#63;.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_V(long companyId, double version)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where companyId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -3317,6 +3781,27 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Removes all the journal articles where companyId = &#63; and status = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_ST(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_ST(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal articles where groupId = &#63; and folderId = &#63; and status = &#63;.
@@ -3635,6 +4120,65 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; and folderId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_F_ST(long groupId, long folderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_F_ST(long groupId, long folderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and folderId = &#63; and status = any &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param statuses the statuses
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_F_ST(long groupId, long folderId, int[] statuses)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and folderId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param status the status
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_F_ST(long groupId, long folderId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and folderId = &#63; and status = any &#63;.
+	*
+	* @param groupId the group ID
+	* @param folderId the folder ID
+	* @param statuses the statuses
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_F_ST(long groupId, long folderId, int[] statuses)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
 	*
 	* @param groupId the group ID
@@ -3841,6 +4385,41 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_C_C(long groupId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_C_C(long groupId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_C_C(long groupId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the journal article where groupId = &#63; and classNameId = &#63; and structureId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchArticleException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -3881,6 +4460,33 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 	public com.liferay.portlet.journal.model.JournalArticle fetchByG_C_S(
 		long groupId, long classNameId, java.lang.String structureId,
 		boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the journal article where groupId = &#63; and classNameId = &#63; and structureId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param structureId the structure ID
+	* @return the journal article that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalArticle removeByG_C_S(
+		long groupId, long classNameId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and classNameId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param structureId the structure ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_C_S(long groupId, long classNameId,
+		java.lang.String structureId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -4092,6 +4698,44 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; and classNameId = &#63; and templateId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_C_T(long groupId, long classNameId,
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_C_T(long groupId, long classNameId,
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param templateId the template ID
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_C_T(long groupId, long classNameId,
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
 	*
 	* @param groupId the group ID
@@ -4300,6 +4944,44 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_C_L(long groupId, long classNameId,
+		java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_C_L(long groupId, long classNameId,
+		java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param layoutUuid the layout uuid
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_C_L(long groupId, long classNameId,
+		java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where groupId = &#63; and userId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -4506,6 +5188,41 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; and userId = &#63; and classNameId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_U_C(long groupId, long userId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and userId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_U_C(long groupId, long userId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and userId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_U_C(long groupId, long userId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the journal article where groupId = &#63; and articleId = &#63; and version = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchArticleException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -4546,6 +5263,33 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 	public com.liferay.portlet.journal.model.JournalArticle fetchByG_A_V(
 		long groupId, java.lang.String articleId, double version,
 		boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the journal article where groupId = &#63; and articleId = &#63; and version = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param version the version
+	* @return the journal article that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalArticle removeByG_A_V(
+		long groupId, java.lang.String articleId, double version)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and articleId = &#63; and version = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param version the version
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_A_V(long groupId, java.lang.String articleId,
+		double version)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -4869,6 +5613,67 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; and articleId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_A_ST(long groupId, java.lang.String articleId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and articleId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_A_ST(long groupId, java.lang.String articleId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and articleId = &#63; and status = any &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param statuses the statuses
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_A_ST(long groupId, java.lang.String articleId,
+		int[] statuses)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and articleId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param status the status
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_A_ST(long groupId, java.lang.String articleId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and articleId = &#63; and status = any &#63;.
+	*
+	* @param groupId the group ID
+	* @param articleId the article ID
+	* @param statuses the statuses
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_A_ST(long groupId, java.lang.String articleId,
+		int[] statuses)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where groupId = &#63; and urlTitle = &#63; and status = &#63;.
 	*
 	* @param groupId the group ID
@@ -5077,6 +5882,41 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where groupId = &#63; and urlTitle = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_UT_ST(long groupId, java.lang.String urlTitle,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where groupId = &#63; and urlTitle = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_UT_ST(long groupId, java.lang.String urlTitle,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and urlTitle = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @param status the status
+	* @return the number of matching journal articles that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_UT_ST(long groupId, java.lang.String urlTitle,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles where companyId = &#63; and version = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -5212,6 +6052,92 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 			com.liferay.portlet.journal.NoSuchArticleException;
 
 	/**
+	* Removes all the journal articles where companyId = &#63; and version = &#63; and status = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_V_ST(long companyId, double version, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of journal articles where companyId = &#63; and version = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param version the version
+	* @param status the status
+	* @return the number of matching journal articles
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_V_ST(long companyId, double version, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the journal article in the entity cache if it is enabled.
+	*
+	* @param journalArticle the journal article
+	*/
+	public void cacheResult(
+		com.liferay.portlet.journal.model.JournalArticle journalArticle);
+
+	/**
+	* Caches the journal articles in the entity cache if it is enabled.
+	*
+	* @param journalArticles the journal articles
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.journal.model.JournalArticle> journalArticles);
+
+	/**
+	* Creates a new journal article with the primary key. Does not add the journal article to the database.
+	*
+	* @param id the primary key for the new journal article
+	* @return the new journal article
+	*/
+	public com.liferay.portlet.journal.model.JournalArticle create(long id);
+
+	/**
+	* Removes the journal article with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param id the primary key of the journal article
+	* @return the journal article that was removed
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalArticle remove(long id)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException;
+
+	public com.liferay.portlet.journal.model.JournalArticle updateImpl(
+		com.liferay.portlet.journal.model.JournalArticle journalArticle)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the journal article with the primary key or throws a {@link com.liferay.portlet.journal.NoSuchArticleException} if it could not be found.
+	*
+	* @param id the primary key of the journal article
+	* @return the journal article
+	* @throws com.liferay.portlet.journal.NoSuchArticleException if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalArticle findByPrimaryKey(
+		long id)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchArticleException;
+
+	/**
+	* Returns the journal article with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param id the primary key of the journal article
+	* @return the journal article, or <code>null</code> if a journal article with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalArticle fetchByPrimaryKey(
+		long id) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the journal articles.
 	*
 	* @return the journal articles
@@ -5255,937 +6181,11 @@ public interface JournalArticlePersistence extends BasePersistence<JournalArticl
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the journal articles where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the journal article where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the journal article that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalArticle removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException;
-
-	/**
-	* Removes all the journal articles where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where resourcePrimKey = &#63; from the database.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByResourcePrimKey(long resourcePrimKey)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where structureId = &#63; from the database.
-	*
-	* @param structureId the structure ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByStructureId(java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where templateId = &#63; from the database.
-	*
-	* @param templateId the template ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByTemplateId(java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where layoutUuid = &#63; from the database.
-	*
-	* @param layoutUuid the layout uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByLayoutUuid(java.lang.String layoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where smallImageId = &#63; from the database.
-	*
-	* @param smallImageId the small image ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeBySmallImageId(long smallImageId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where resourcePrimKey = &#63; and status = &#63; from the database.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByR_ST(long resourcePrimKey, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and userId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_U(long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and folderId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_F(long groupId, long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and articleId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_A(long groupId, java.lang.String articleId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and urlTitle = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_UT(long groupId, java.lang.String urlTitle)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and structureId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_S(long groupId, java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and templateId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param templateId the template ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_T(long groupId, java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and layoutUuid = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param layoutUuid the layout uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_L(long groupId, java.lang.String layoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_ST(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where companyId = &#63; and version = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param version the version
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_V(long companyId, double version)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where companyId = &#63; and status = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_ST(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and folderId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_F_ST(long groupId, long folderId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_C_C(long groupId, long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the journal article where groupId = &#63; and classNameId = &#63; and structureId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param structureId the structure ID
-	* @return the journal article that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalArticle removeByG_C_S(
-		long groupId, long classNameId, java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and classNameId = &#63; and templateId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param templateId the template ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_C_T(long groupId, long classNameId,
-		java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param layoutUuid the layout uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_C_L(long groupId, long classNameId,
-		java.lang.String layoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and userId = &#63; and classNameId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_U_C(long groupId, long userId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the journal article where groupId = &#63; and articleId = &#63; and version = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param version the version
-	* @return the journal article that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalArticle removeByG_A_V(
-		long groupId, java.lang.String articleId, double version)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchArticleException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and articleId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_A_ST(long groupId, java.lang.String articleId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where groupId = &#63; and urlTitle = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_UT_ST(long groupId, java.lang.String urlTitle,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the journal articles where companyId = &#63; and version = &#63; and status = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param version the version
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_V_ST(long companyId, double version, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the journal articles from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where resourcePrimKey = &#63;.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByResourcePrimKey(long resourcePrimKey)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where structureId = &#63;.
-	*
-	* @param structureId the structure ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByStructureId(java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where templateId = &#63;.
-	*
-	* @param templateId the template ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByTemplateId(java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where layoutUuid = &#63;.
-	*
-	* @param layoutUuid the layout uuid
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByLayoutUuid(java.lang.String layoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where smallImageId = &#63;.
-	*
-	* @param smallImageId the small image ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countBySmallImageId(long smallImageId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where resourcePrimKey = &#63; and status = &#63;.
-	*
-	* @param resourcePrimKey the resource prim key
-	* @param status the status
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByR_ST(long resourcePrimKey, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_U(long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_U(long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_F(long groupId, long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and folderId = any &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderIds the folder IDs
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_F(long groupId, long[] folderIds)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and folderId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_F(long groupId, long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and folderId = any &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderIds the folder IDs
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_F(long groupId, long[] folderIds)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and articleId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_A(long groupId, java.lang.String articleId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and articleId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_A(long groupId, java.lang.String articleId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and urlTitle = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_UT(long groupId, java.lang.String urlTitle)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and urlTitle = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_UT(long groupId, java.lang.String urlTitle)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_S(long groupId, java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_S(long groupId, java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param templateId the template ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_T(long groupId, java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param templateId the template ID
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_T(long groupId, java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param layoutUuid the layout uuid
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_L(long groupId, java.lang.String layoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param layoutUuid the layout uuid
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_L(long groupId, java.lang.String layoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_ST(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_ST(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where companyId = &#63; and version = &#63;.
-	*
-	* @param companyId the company ID
-	* @param version the version
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_V(long companyId, double version)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where companyId = &#63; and status = &#63;.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_ST(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and folderId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param status the status
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_F_ST(long groupId, long folderId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and folderId = &#63; and status = any &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param statuses the statuses
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_F_ST(long groupId, long folderId, int[] statuses)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and folderId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param status the status
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_F_ST(long groupId, long folderId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and folderId = &#63; and status = any &#63;.
-	*
-	* @param groupId the group ID
-	* @param folderId the folder ID
-	* @param statuses the statuses
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_F_ST(long groupId, long folderId, int[] statuses)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_C_C(long groupId, long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_C_C(long groupId, long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and classNameId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param structureId the structure ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_C_S(long groupId, long classNameId,
-		java.lang.String structureId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param templateId the template ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_C_T(long groupId, long classNameId,
-		java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param templateId the template ID
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_C_T(long groupId, long classNameId,
-		java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param layoutUuid the layout uuid
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_C_L(long groupId, long classNameId,
-		java.lang.String layoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param layoutUuid the layout uuid
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_C_L(long groupId, long classNameId,
-		java.lang.String layoutUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and userId = &#63; and classNameId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_U_C(long groupId, long userId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and userId = &#63; and classNameId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_U_C(long groupId, long userId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and articleId = &#63; and version = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param version the version
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_A_V(long groupId, java.lang.String articleId,
-		double version)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and articleId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param status the status
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_A_ST(long groupId, java.lang.String articleId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and articleId = &#63; and status = any &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param statuses the statuses
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_A_ST(long groupId, java.lang.String articleId,
-		int[] statuses)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and articleId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param status the status
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_A_ST(long groupId, java.lang.String articleId,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and articleId = &#63; and status = any &#63;.
-	*
-	* @param groupId the group ID
-	* @param articleId the article ID
-	* @param statuses the statuses
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_A_ST(long groupId, java.lang.String articleId,
-		int[] statuses)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where groupId = &#63; and urlTitle = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param status the status
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_UT_ST(long groupId, java.lang.String urlTitle,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles that the user has permission to view where groupId = &#63; and urlTitle = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @param status the status
-	* @return the number of matching journal articles that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_UT_ST(long groupId, java.lang.String urlTitle,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of journal articles where companyId = &#63; and version = &#63; and status = &#63;.
-	*
-	* @param companyId the company ID
-	* @param version the version
-	* @param status the status
-	* @return the number of matching journal articles
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_V_ST(long companyId, double version, int status)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

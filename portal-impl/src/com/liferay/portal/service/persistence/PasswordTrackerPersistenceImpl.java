@@ -71,6 +71,17 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
+			PasswordTrackerModelImpl.FINDER_CACHE_ENABLED,
+			PasswordTrackerImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
+			PasswordTrackerModelImpl.FINDER_CACHE_ENABLED,
+			PasswordTrackerImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
+			PasswordTrackerModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordTrackerModelImpl.FINDER_CACHE_ENABLED,
 			PasswordTrackerImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -92,381 +103,6 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 			PasswordTrackerModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
-			PasswordTrackerModelImpl.FINDER_CACHE_ENABLED,
-			PasswordTrackerImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
-			PasswordTrackerModelImpl.FINDER_CACHE_ENABLED,
-			PasswordTrackerImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
-			PasswordTrackerModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the password tracker in the entity cache if it is enabled.
-	 *
-	 * @param passwordTracker the password tracker
-	 */
-	public void cacheResult(PasswordTracker passwordTracker) {
-		EntityCacheUtil.putResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
-			PasswordTrackerImpl.class, passwordTracker.getPrimaryKey(),
-			passwordTracker);
-
-		passwordTracker.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the password trackers in the entity cache if it is enabled.
-	 *
-	 * @param passwordTrackers the password trackers
-	 */
-	public void cacheResult(List<PasswordTracker> passwordTrackers) {
-		for (PasswordTracker passwordTracker : passwordTrackers) {
-			if (EntityCacheUtil.getResult(
-						PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
-						PasswordTrackerImpl.class,
-						passwordTracker.getPrimaryKey()) == null) {
-				cacheResult(passwordTracker);
-			}
-			else {
-				passwordTracker.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all password trackers.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(PasswordTrackerImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(PasswordTrackerImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the password tracker.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(PasswordTracker passwordTracker) {
-		EntityCacheUtil.removeResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
-			PasswordTrackerImpl.class, passwordTracker.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<PasswordTracker> passwordTrackers) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (PasswordTracker passwordTracker : passwordTrackers) {
-			EntityCacheUtil.removeResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
-				PasswordTrackerImpl.class, passwordTracker.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new password tracker with the primary key. Does not add the password tracker to the database.
-	 *
-	 * @param passwordTrackerId the primary key for the new password tracker
-	 * @return the new password tracker
-	 */
-	public PasswordTracker create(long passwordTrackerId) {
-		PasswordTracker passwordTracker = new PasswordTrackerImpl();
-
-		passwordTracker.setNew(true);
-		passwordTracker.setPrimaryKey(passwordTrackerId);
-
-		return passwordTracker;
-	}
-
-	/**
-	 * Removes the password tracker with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param passwordTrackerId the primary key of the password tracker
-	 * @return the password tracker that was removed
-	 * @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PasswordTracker remove(long passwordTrackerId)
-		throws NoSuchPasswordTrackerException, SystemException {
-		return remove(Long.valueOf(passwordTrackerId));
-	}
-
-	/**
-	 * Removes the password tracker with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the password tracker
-	 * @return the password tracker that was removed
-	 * @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public PasswordTracker remove(Serializable primaryKey)
-		throws NoSuchPasswordTrackerException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			PasswordTracker passwordTracker = (PasswordTracker)session.get(PasswordTrackerImpl.class,
-					primaryKey);
-
-			if (passwordTracker == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchPasswordTrackerException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(passwordTracker);
-		}
-		catch (NoSuchPasswordTrackerException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected PasswordTracker removeImpl(PasswordTracker passwordTracker)
-		throws SystemException {
-		passwordTracker = toUnwrappedModel(passwordTracker);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(passwordTracker)) {
-				passwordTracker = (PasswordTracker)session.get(PasswordTrackerImpl.class,
-						passwordTracker.getPrimaryKeyObj());
-			}
-
-			if (passwordTracker != null) {
-				session.delete(passwordTracker);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (passwordTracker != null) {
-			clearCache(passwordTracker);
-		}
-
-		return passwordTracker;
-	}
-
-	@Override
-	public PasswordTracker updateImpl(
-		com.liferay.portal.model.PasswordTracker passwordTracker)
-		throws SystemException {
-		passwordTracker = toUnwrappedModel(passwordTracker);
-
-		boolean isNew = passwordTracker.isNew();
-
-		PasswordTrackerModelImpl passwordTrackerModelImpl = (PasswordTrackerModelImpl)passwordTracker;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (passwordTracker.isNew()) {
-				session.save(passwordTracker);
-
-				passwordTracker.setNew(false);
-			}
-			else {
-				session.merge(passwordTracker);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !PasswordTrackerModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((passwordTrackerModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(passwordTrackerModelImpl.getOriginalUserId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(passwordTrackerModelImpl.getUserId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
-			PasswordTrackerImpl.class, passwordTracker.getPrimaryKey(),
-			passwordTracker);
-
-		return passwordTracker;
-	}
-
-	protected PasswordTracker toUnwrappedModel(PasswordTracker passwordTracker) {
-		if (passwordTracker instanceof PasswordTrackerImpl) {
-			return passwordTracker;
-		}
-
-		PasswordTrackerImpl passwordTrackerImpl = new PasswordTrackerImpl();
-
-		passwordTrackerImpl.setNew(passwordTracker.isNew());
-		passwordTrackerImpl.setPrimaryKey(passwordTracker.getPrimaryKey());
-
-		passwordTrackerImpl.setPasswordTrackerId(passwordTracker.getPasswordTrackerId());
-		passwordTrackerImpl.setUserId(passwordTracker.getUserId());
-		passwordTrackerImpl.setCreateDate(passwordTracker.getCreateDate());
-		passwordTrackerImpl.setPassword(passwordTracker.getPassword());
-
-		return passwordTrackerImpl;
-	}
-
-	/**
-	 * Returns the password tracker with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the password tracker
-	 * @return the password tracker
-	 * @throws com.liferay.portal.NoSuchModelException if a password tracker with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public PasswordTracker findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the password tracker with the primary key or throws a {@link com.liferay.portal.NoSuchPasswordTrackerException} if it could not be found.
-	 *
-	 * @param passwordTrackerId the primary key of the password tracker
-	 * @return the password tracker
-	 * @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PasswordTracker findByPrimaryKey(long passwordTrackerId)
-		throws NoSuchPasswordTrackerException, SystemException {
-		PasswordTracker passwordTracker = fetchByPrimaryKey(passwordTrackerId);
-
-		if (passwordTracker == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + passwordTrackerId);
-			}
-
-			throw new NoSuchPasswordTrackerException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				passwordTrackerId);
-		}
-
-		return passwordTracker;
-	}
-
-	/**
-	 * Returns the password tracker with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the password tracker
-	 * @return the password tracker, or <code>null</code> if a password tracker with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public PasswordTracker fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the password tracker with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param passwordTrackerId the primary key of the password tracker
-	 * @return the password tracker, or <code>null</code> if a password tracker with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PasswordTracker fetchByPrimaryKey(long passwordTrackerId)
-		throws SystemException {
-		PasswordTracker passwordTracker = (PasswordTracker)EntityCacheUtil.getResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
-				PasswordTrackerImpl.class, passwordTrackerId);
-
-		if (passwordTracker == _nullPasswordTracker) {
-			return null;
-		}
-
-		if (passwordTracker == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				passwordTracker = (PasswordTracker)session.get(PasswordTrackerImpl.class,
-						Long.valueOf(passwordTrackerId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (passwordTracker != null) {
-					cacheResult(passwordTracker);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
-						PasswordTrackerImpl.class, passwordTrackerId,
-						_nullPasswordTracker);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return passwordTracker;
-	}
 
 	/**
 	 * Returns all the password trackers where userId = &#63;.
@@ -851,6 +487,437 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	}
 
 	/**
+	 * Removes all the password trackers where userId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUserId(long userId) throws SystemException {
+		for (PasswordTracker passwordTracker : findByUserId(userId)) {
+			remove(passwordTracker);
+		}
+	}
+
+	/**
+	 * Returns the number of password trackers where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the number of matching password trackers
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUserId(long userId) throws SystemException {
+		Object[] finderArgs = new Object[] { userId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_PASSWORDTRACKER_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_USERID_USERID_2 = "passwordTracker.userId = ?";
+
+	/**
+	 * Caches the password tracker in the entity cache if it is enabled.
+	 *
+	 * @param passwordTracker the password tracker
+	 */
+	public void cacheResult(PasswordTracker passwordTracker) {
+		EntityCacheUtil.putResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
+			PasswordTrackerImpl.class, passwordTracker.getPrimaryKey(),
+			passwordTracker);
+
+		passwordTracker.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the password trackers in the entity cache if it is enabled.
+	 *
+	 * @param passwordTrackers the password trackers
+	 */
+	public void cacheResult(List<PasswordTracker> passwordTrackers) {
+		for (PasswordTracker passwordTracker : passwordTrackers) {
+			if (EntityCacheUtil.getResult(
+						PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
+						PasswordTrackerImpl.class,
+						passwordTracker.getPrimaryKey()) == null) {
+				cacheResult(passwordTracker);
+			}
+			else {
+				passwordTracker.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all password trackers.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(PasswordTrackerImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(PasswordTrackerImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the password tracker.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(PasswordTracker passwordTracker) {
+		EntityCacheUtil.removeResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
+			PasswordTrackerImpl.class, passwordTracker.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<PasswordTracker> passwordTrackers) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (PasswordTracker passwordTracker : passwordTrackers) {
+			EntityCacheUtil.removeResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
+				PasswordTrackerImpl.class, passwordTracker.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new password tracker with the primary key. Does not add the password tracker to the database.
+	 *
+	 * @param passwordTrackerId the primary key for the new password tracker
+	 * @return the new password tracker
+	 */
+	public PasswordTracker create(long passwordTrackerId) {
+		PasswordTracker passwordTracker = new PasswordTrackerImpl();
+
+		passwordTracker.setNew(true);
+		passwordTracker.setPrimaryKey(passwordTrackerId);
+
+		return passwordTracker;
+	}
+
+	/**
+	 * Removes the password tracker with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param passwordTrackerId the primary key of the password tracker
+	 * @return the password tracker that was removed
+	 * @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PasswordTracker remove(long passwordTrackerId)
+		throws NoSuchPasswordTrackerException, SystemException {
+		return remove(Long.valueOf(passwordTrackerId));
+	}
+
+	/**
+	 * Removes the password tracker with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the password tracker
+	 * @return the password tracker that was removed
+	 * @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PasswordTracker remove(Serializable primaryKey)
+		throws NoSuchPasswordTrackerException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			PasswordTracker passwordTracker = (PasswordTracker)session.get(PasswordTrackerImpl.class,
+					primaryKey);
+
+			if (passwordTracker == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchPasswordTrackerException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(passwordTracker);
+		}
+		catch (NoSuchPasswordTrackerException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected PasswordTracker removeImpl(PasswordTracker passwordTracker)
+		throws SystemException {
+		passwordTracker = toUnwrappedModel(passwordTracker);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(passwordTracker)) {
+				passwordTracker = (PasswordTracker)session.get(PasswordTrackerImpl.class,
+						passwordTracker.getPrimaryKeyObj());
+			}
+
+			if (passwordTracker != null) {
+				session.delete(passwordTracker);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (passwordTracker != null) {
+			clearCache(passwordTracker);
+		}
+
+		return passwordTracker;
+	}
+
+	@Override
+	public PasswordTracker updateImpl(
+		com.liferay.portal.model.PasswordTracker passwordTracker)
+		throws SystemException {
+		passwordTracker = toUnwrappedModel(passwordTracker);
+
+		boolean isNew = passwordTracker.isNew();
+
+		PasswordTrackerModelImpl passwordTrackerModelImpl = (PasswordTrackerModelImpl)passwordTracker;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (passwordTracker.isNew()) {
+				session.save(passwordTracker);
+
+				passwordTracker.setNew(false);
+			}
+			else {
+				session.merge(passwordTracker);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !PasswordTrackerModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((passwordTrackerModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(passwordTrackerModelImpl.getOriginalUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(passwordTrackerModelImpl.getUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
+			PasswordTrackerImpl.class, passwordTracker.getPrimaryKey(),
+			passwordTracker);
+
+		return passwordTracker;
+	}
+
+	protected PasswordTracker toUnwrappedModel(PasswordTracker passwordTracker) {
+		if (passwordTracker instanceof PasswordTrackerImpl) {
+			return passwordTracker;
+		}
+
+		PasswordTrackerImpl passwordTrackerImpl = new PasswordTrackerImpl();
+
+		passwordTrackerImpl.setNew(passwordTracker.isNew());
+		passwordTrackerImpl.setPrimaryKey(passwordTracker.getPrimaryKey());
+
+		passwordTrackerImpl.setPasswordTrackerId(passwordTracker.getPasswordTrackerId());
+		passwordTrackerImpl.setUserId(passwordTracker.getUserId());
+		passwordTrackerImpl.setCreateDate(passwordTracker.getCreateDate());
+		passwordTrackerImpl.setPassword(passwordTracker.getPassword());
+
+		return passwordTrackerImpl;
+	}
+
+	/**
+	 * Returns the password tracker with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the password tracker
+	 * @return the password tracker
+	 * @throws com.liferay.portal.NoSuchModelException if a password tracker with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PasswordTracker findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the password tracker with the primary key or throws a {@link com.liferay.portal.NoSuchPasswordTrackerException} if it could not be found.
+	 *
+	 * @param passwordTrackerId the primary key of the password tracker
+	 * @return the password tracker
+	 * @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PasswordTracker findByPrimaryKey(long passwordTrackerId)
+		throws NoSuchPasswordTrackerException, SystemException {
+		PasswordTracker passwordTracker = fetchByPrimaryKey(passwordTrackerId);
+
+		if (passwordTracker == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + passwordTrackerId);
+			}
+
+			throw new NoSuchPasswordTrackerException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				passwordTrackerId);
+		}
+
+		return passwordTracker;
+	}
+
+	/**
+	 * Returns the password tracker with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the password tracker
+	 * @return the password tracker, or <code>null</code> if a password tracker with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PasswordTracker fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the password tracker with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param passwordTrackerId the primary key of the password tracker
+	 * @return the password tracker, or <code>null</code> if a password tracker with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PasswordTracker fetchByPrimaryKey(long passwordTrackerId)
+		throws SystemException {
+		PasswordTracker passwordTracker = (PasswordTracker)EntityCacheUtil.getResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
+				PasswordTrackerImpl.class, passwordTrackerId);
+
+		if (passwordTracker == _nullPasswordTracker) {
+			return null;
+		}
+
+		if (passwordTracker == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				passwordTracker = (PasswordTracker)session.get(PasswordTrackerImpl.class,
+						Long.valueOf(passwordTrackerId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (passwordTracker != null) {
+					cacheResult(passwordTracker);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
+						PasswordTrackerImpl.class, passwordTrackerId,
+						_nullPasswordTracker);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return passwordTracker;
+	}
+
+	/**
 	 * Returns all the password trackers.
 	 *
 	 * @return the password trackers
@@ -966,18 +1033,6 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	}
 
 	/**
-	 * Removes all the password trackers where userId = &#63; from the database.
-	 *
-	 * @param userId the user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUserId(long userId) throws SystemException {
-		for (PasswordTracker passwordTracker : findByUserId(userId)) {
-			remove(passwordTracker);
-		}
-	}
-
-	/**
 	 * Removes all the password trackers from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -986,59 +1041,6 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 		for (PasswordTracker passwordTracker : findAll()) {
 			remove(passwordTracker);
 		}
-	}
-
-	/**
-	 * Returns the number of password trackers where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @return the number of matching password trackers
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUserId(long userId) throws SystemException {
-		Object[] finderArgs = new Object[] { userId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_PASSWORDTRACKER_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1236,7 +1238,6 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	private static final String _SQL_SELECT_PASSWORDTRACKER_WHERE = "SELECT passwordTracker FROM PasswordTracker passwordTracker WHERE ";
 	private static final String _SQL_COUNT_PASSWORDTRACKER = "SELECT COUNT(passwordTracker) FROM PasswordTracker passwordTracker";
 	private static final String _SQL_COUNT_PASSWORDTRACKER_WHERE = "SELECT COUNT(passwordTracker) FROM PasswordTracker passwordTracker WHERE ";
-	private static final String _FINDER_COLUMN_USERID_USERID_2 = "passwordTracker.userId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "passwordTracker.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No PasswordTracker exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No PasswordTracker exists with the key {";

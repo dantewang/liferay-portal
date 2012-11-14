@@ -88,6 +88,17 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
+			SCProductEntryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
+			SCProductEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
 			SCProductEntryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -109,547 +120,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
-			SCProductEntryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByCompanyId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
-			SCProductEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			SCProductEntryModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
-			SCProductEntryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByG_U",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
-			SCProductEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			SCProductEntryModelImpl.GROUPID_COLUMN_BITMASK |
-			SCProductEntryModelImpl.USERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_RG_RA = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
-			SCProductEntryImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByRG_RA",
-			new String[] { String.class.getName(), String.class.getName() },
-			SCProductEntryModelImpl.REPOGROUPID_COLUMN_BITMASK |
-			SCProductEntryModelImpl.REPOARTIFACTID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_RG_RA = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRG_RA",
-			new String[] { String.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
-			SCProductEntryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
-			SCProductEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the s c product entry in the entity cache if it is enabled.
-	 *
-	 * @param scProductEntry the s c product entry
-	 */
-	public void cacheResult(SCProductEntry scProductEntry) {
-		EntityCacheUtil.putResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryImpl.class, scProductEntry.getPrimaryKey(),
-			scProductEntry);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_RG_RA,
-			new Object[] {
-				scProductEntry.getRepoGroupId(),
-				
-			scProductEntry.getRepoArtifactId()
-			}, scProductEntry);
-
-		scProductEntry.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the s c product entries in the entity cache if it is enabled.
-	 *
-	 * @param scProductEntries the s c product entries
-	 */
-	public void cacheResult(List<SCProductEntry> scProductEntries) {
-		for (SCProductEntry scProductEntry : scProductEntries) {
-			if (EntityCacheUtil.getResult(
-						SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-						SCProductEntryImpl.class, scProductEntry.getPrimaryKey()) == null) {
-				cacheResult(scProductEntry);
-			}
-			else {
-				scProductEntry.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all s c product entries.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(SCProductEntryImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(SCProductEntryImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the s c product entry.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(SCProductEntry scProductEntry) {
-		EntityCacheUtil.removeResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryImpl.class, scProductEntry.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(scProductEntry);
-	}
-
-	@Override
-	public void clearCache(List<SCProductEntry> scProductEntries) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (SCProductEntry scProductEntry : scProductEntries) {
-			EntityCacheUtil.removeResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-				SCProductEntryImpl.class, scProductEntry.getPrimaryKey());
-
-			clearUniqueFindersCache(scProductEntry);
-		}
-	}
-
-	protected void clearUniqueFindersCache(SCProductEntry scProductEntry) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_RG_RA,
-			new Object[] {
-				scProductEntry.getRepoGroupId(),
-				
-			scProductEntry.getRepoArtifactId()
-			});
-	}
-
-	/**
-	 * Creates a new s c product entry with the primary key. Does not add the s c product entry to the database.
-	 *
-	 * @param productEntryId the primary key for the new s c product entry
-	 * @return the new s c product entry
-	 */
-	public SCProductEntry create(long productEntryId) {
-		SCProductEntry scProductEntry = new SCProductEntryImpl();
-
-		scProductEntry.setNew(true);
-		scProductEntry.setPrimaryKey(productEntryId);
-
-		return scProductEntry;
-	}
-
-	/**
-	 * Removes the s c product entry with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param productEntryId the primary key of the s c product entry
-	 * @return the s c product entry that was removed
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a s c product entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry remove(long productEntryId)
-		throws NoSuchProductEntryException, SystemException {
-		return remove(Long.valueOf(productEntryId));
-	}
-
-	/**
-	 * Removes the s c product entry with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the s c product entry
-	 * @return the s c product entry that was removed
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a s c product entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SCProductEntry remove(Serializable primaryKey)
-		throws NoSuchProductEntryException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SCProductEntry scProductEntry = (SCProductEntry)session.get(SCProductEntryImpl.class,
-					primaryKey);
-
-			if (scProductEntry == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchProductEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(scProductEntry);
-		}
-		catch (NoSuchProductEntryException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected SCProductEntry removeImpl(SCProductEntry scProductEntry)
-		throws SystemException {
-		scProductEntry = toUnwrappedModel(scProductEntry);
-
-		try {
-			clearSCLicenses.clear(scProductEntry.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCProductEntryModelImpl.MAPPING_TABLE_SCLICENSES_SCPRODUCTENTRIES_NAME);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(scProductEntry)) {
-				scProductEntry = (SCProductEntry)session.get(SCProductEntryImpl.class,
-						scProductEntry.getPrimaryKeyObj());
-			}
-
-			if (scProductEntry != null) {
-				session.delete(scProductEntry);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (scProductEntry != null) {
-			clearCache(scProductEntry);
-		}
-
-		return scProductEntry;
-	}
-
-	@Override
-	public SCProductEntry updateImpl(
-		com.liferay.portlet.softwarecatalog.model.SCProductEntry scProductEntry)
-		throws SystemException {
-		scProductEntry = toUnwrappedModel(scProductEntry);
-
-		boolean isNew = scProductEntry.isNew();
-
-		SCProductEntryModelImpl scProductEntryModelImpl = (SCProductEntryModelImpl)scProductEntry;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (scProductEntry.isNew()) {
-				session.save(scProductEntry);
-
-				scProductEntry.setNew(false);
-			}
-			else {
-				session.merge(scProductEntry);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !SCProductEntryModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((scProductEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(scProductEntryModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(scProductEntryModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((scProductEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(scProductEntryModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(scProductEntryModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((scProductEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(scProductEntryModelImpl.getOriginalGroupId()),
-						Long.valueOf(scProductEntryModelImpl.getOriginalUserId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(scProductEntryModelImpl.getGroupId()),
-						Long.valueOf(scProductEntryModelImpl.getUserId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-			SCProductEntryImpl.class, scProductEntry.getPrimaryKey(),
-			scProductEntry);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_RG_RA,
-				new Object[] {
-					scProductEntry.getRepoGroupId(),
-					
-				scProductEntry.getRepoArtifactId()
-				}, scProductEntry);
-		}
-		else {
-			if ((scProductEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_RG_RA.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						scProductEntryModelImpl.getOriginalRepoGroupId(),
-						
-						scProductEntryModelImpl.getOriginalRepoArtifactId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RG_RA, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_RG_RA, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_RG_RA,
-					new Object[] {
-						scProductEntry.getRepoGroupId(),
-						
-					scProductEntry.getRepoArtifactId()
-					}, scProductEntry);
-			}
-		}
-
-		return scProductEntry;
-	}
-
-	protected SCProductEntry toUnwrappedModel(SCProductEntry scProductEntry) {
-		if (scProductEntry instanceof SCProductEntryImpl) {
-			return scProductEntry;
-		}
-
-		SCProductEntryImpl scProductEntryImpl = new SCProductEntryImpl();
-
-		scProductEntryImpl.setNew(scProductEntry.isNew());
-		scProductEntryImpl.setPrimaryKey(scProductEntry.getPrimaryKey());
-
-		scProductEntryImpl.setProductEntryId(scProductEntry.getProductEntryId());
-		scProductEntryImpl.setGroupId(scProductEntry.getGroupId());
-		scProductEntryImpl.setCompanyId(scProductEntry.getCompanyId());
-		scProductEntryImpl.setUserId(scProductEntry.getUserId());
-		scProductEntryImpl.setUserName(scProductEntry.getUserName());
-		scProductEntryImpl.setCreateDate(scProductEntry.getCreateDate());
-		scProductEntryImpl.setModifiedDate(scProductEntry.getModifiedDate());
-		scProductEntryImpl.setName(scProductEntry.getName());
-		scProductEntryImpl.setType(scProductEntry.getType());
-		scProductEntryImpl.setTags(scProductEntry.getTags());
-		scProductEntryImpl.setShortDescription(scProductEntry.getShortDescription());
-		scProductEntryImpl.setLongDescription(scProductEntry.getLongDescription());
-		scProductEntryImpl.setPageURL(scProductEntry.getPageURL());
-		scProductEntryImpl.setAuthor(scProductEntry.getAuthor());
-		scProductEntryImpl.setRepoGroupId(scProductEntry.getRepoGroupId());
-		scProductEntryImpl.setRepoArtifactId(scProductEntry.getRepoArtifactId());
-
-		return scProductEntryImpl;
-	}
-
-	/**
-	 * Returns the s c product entry with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the s c product entry
-	 * @return the s c product entry
-	 * @throws com.liferay.portal.NoSuchModelException if a s c product entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SCProductEntry findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the s c product entry with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductEntryException} if it could not be found.
-	 *
-	 * @param productEntryId the primary key of the s c product entry
-	 * @return the s c product entry
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a s c product entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry findByPrimaryKey(long productEntryId)
-		throws NoSuchProductEntryException, SystemException {
-		SCProductEntry scProductEntry = fetchByPrimaryKey(productEntryId);
-
-		if (scProductEntry == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + productEntryId);
-			}
-
-			throw new NoSuchProductEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				productEntryId);
-		}
-
-		return scProductEntry;
-	}
-
-	/**
-	 * Returns the s c product entry with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the s c product entry
-	 * @return the s c product entry, or <code>null</code> if a s c product entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SCProductEntry fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the s c product entry with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param productEntryId the primary key of the s c product entry
-	 * @return the s c product entry, or <code>null</code> if a s c product entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry fetchByPrimaryKey(long productEntryId)
-		throws SystemException {
-		SCProductEntry scProductEntry = (SCProductEntry)EntityCacheUtil.getResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-				SCProductEntryImpl.class, productEntryId);
-
-		if (scProductEntry == _nullSCProductEntry) {
-			return null;
-		}
-
-		if (scProductEntry == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				scProductEntry = (SCProductEntry)session.get(SCProductEntryImpl.class,
-						Long.valueOf(productEntryId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (scProductEntry != null) {
-					cacheResult(scProductEntry);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
-						SCProductEntryImpl.class, productEntryId,
-						_nullSCProductEntry);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return scProductEntry;
-	}
 
 	/**
 	 * Returns all the s c product entries where groupId = &#63;.
@@ -1347,6 +817,143 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	}
 
 	/**
+	 * Removes all the s c product entries where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (SCProductEntry scProductEntry : findByGroupId(groupId)) {
+			remove(scProductEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of s c product entries where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching s c product entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SCPRODUCTENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of s c product entries that the user has permission to view where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching s c product entries that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByGroupId(long groupId) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByGroupId(groupId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_SCPRODUCTENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				SCProductEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "scProductEntry.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
+			SCProductEntryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByCompanyId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
+			SCProductEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			SCProductEntryModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the s c product entries where companyId = &#63;.
 	 *
 	 * @param companyId the company ID
@@ -1728,6 +1335,94 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the s c product entries where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (SCProductEntry scProductEntry : findByCompanyId(companyId)) {
+			remove(scProductEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of s c product entries where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching s c product entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SCPRODUCTENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "scProductEntry.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
+			SCProductEntryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_U",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
+			SCProductEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			SCProductEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			SCProductEntryModelImpl.USERID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_U",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the s c product entries where groupId = &#63; and userId = &#63;.
@@ -2466,6 +2161,145 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	}
 
 	/**
+	 * Removes all the s c product entries where groupId = &#63; and userId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_U(long groupId, long userId)
+		throws SystemException {
+		for (SCProductEntry scProductEntry : findByG_U(groupId, userId)) {
+			remove(scProductEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of s c product entries where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @return the number of matching s c product entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_U(long groupId, long userId) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, userId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_U,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_SCPRODUCTENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_U_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_U_USERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(userId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of s c product entries that the user has permission to view where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @return the number of matching s c product entries that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_U(long groupId, long userId)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_U(groupId, userId);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_SCPRODUCTENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_G_U_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_U_USERID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				SCProductEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(userId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_U_GROUPID_2 = "scProductEntry.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_U_USERID_2 = "scProductEntry.userId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_RG_RA = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
+			SCProductEntryImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByRG_RA",
+			new String[] { String.class.getName(), String.class.getName() },
+			SCProductEntryModelImpl.REPOGROUPID_COLUMN_BITMASK |
+			SCProductEntryModelImpl.REPOARTIFACTID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_RG_RA = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRG_RA",
+			new String[] { String.class.getName(), String.class.getName() });
+
+	/**
 	 * Returns the s c product entry where repoGroupId = &#63; and repoArtifactId = &#63; or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductEntryException} if it could not be found.
 	 *
 	 * @param repoGroupId the repo group ID
@@ -2645,6 +2479,589 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	}
 
 	/**
+	 * Removes the s c product entry where repoGroupId = &#63; and repoArtifactId = &#63; from the database.
+	 *
+	 * @param repoGroupId the repo group ID
+	 * @param repoArtifactId the repo artifact ID
+	 * @return the s c product entry that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry removeByRG_RA(String repoGroupId,
+		String repoArtifactId)
+		throws NoSuchProductEntryException, SystemException {
+		SCProductEntry scProductEntry = findByRG_RA(repoGroupId, repoArtifactId);
+
+		return remove(scProductEntry);
+	}
+
+	/**
+	 * Returns the number of s c product entries where repoGroupId = &#63; and repoArtifactId = &#63;.
+	 *
+	 * @param repoGroupId the repo group ID
+	 * @param repoArtifactId the repo artifact ID
+	 * @return the number of matching s c product entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByRG_RA(String repoGroupId, String repoArtifactId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { repoGroupId, repoArtifactId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_RG_RA,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_SCPRODUCTENTRY_WHERE);
+
+			if (repoGroupId == null) {
+				query.append(_FINDER_COLUMN_RG_RA_REPOGROUPID_1);
+			}
+			else {
+				if (repoGroupId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_RG_RA_REPOGROUPID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_RG_RA_REPOGROUPID_2);
+				}
+			}
+
+			if (repoArtifactId == null) {
+				query.append(_FINDER_COLUMN_RG_RA_REPOARTIFACTID_1);
+			}
+			else {
+				if (repoArtifactId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_RG_RA_REPOARTIFACTID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_RG_RA_REPOARTIFACTID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (repoGroupId != null) {
+					qPos.add(repoGroupId);
+				}
+
+				if (repoArtifactId != null) {
+					qPos.add(repoArtifactId);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RG_RA,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_RG_RA_REPOGROUPID_1 = "scProductEntry.repoGroupId IS NULL AND ";
+	private static final String _FINDER_COLUMN_RG_RA_REPOGROUPID_2 = "lower(scProductEntry.repoGroupId) = lower(CAST_TEXT(?)) AND ";
+	private static final String _FINDER_COLUMN_RG_RA_REPOGROUPID_3 = "(scProductEntry.repoGroupId IS NULL OR lower(scProductEntry.repoGroupId) = lower(CAST_TEXT(?))) AND ";
+	private static final String _FINDER_COLUMN_RG_RA_REPOARTIFACTID_1 = "scProductEntry.repoArtifactId IS NULL";
+	private static final String _FINDER_COLUMN_RG_RA_REPOARTIFACTID_2 = "lower(scProductEntry.repoArtifactId) = lower(CAST_TEXT(?))";
+	private static final String _FINDER_COLUMN_RG_RA_REPOARTIFACTID_3 = "(scProductEntry.repoArtifactId IS NULL OR lower(scProductEntry.repoArtifactId) = lower(CAST_TEXT(?)))";
+
+	/**
+	 * Caches the s c product entry in the entity cache if it is enabled.
+	 *
+	 * @param scProductEntry the s c product entry
+	 */
+	public void cacheResult(SCProductEntry scProductEntry) {
+		EntityCacheUtil.putResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryImpl.class, scProductEntry.getPrimaryKey(),
+			scProductEntry);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_RG_RA,
+			new Object[] {
+				scProductEntry.getRepoGroupId(),
+				
+			scProductEntry.getRepoArtifactId()
+			}, scProductEntry);
+
+		scProductEntry.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the s c product entries in the entity cache if it is enabled.
+	 *
+	 * @param scProductEntries the s c product entries
+	 */
+	public void cacheResult(List<SCProductEntry> scProductEntries) {
+		for (SCProductEntry scProductEntry : scProductEntries) {
+			if (EntityCacheUtil.getResult(
+						SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+						SCProductEntryImpl.class, scProductEntry.getPrimaryKey()) == null) {
+				cacheResult(scProductEntry);
+			}
+			else {
+				scProductEntry.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all s c product entries.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(SCProductEntryImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(SCProductEntryImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the s c product entry.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(SCProductEntry scProductEntry) {
+		EntityCacheUtil.removeResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryImpl.class, scProductEntry.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(scProductEntry);
+	}
+
+	@Override
+	public void clearCache(List<SCProductEntry> scProductEntries) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (SCProductEntry scProductEntry : scProductEntries) {
+			EntityCacheUtil.removeResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+				SCProductEntryImpl.class, scProductEntry.getPrimaryKey());
+
+			clearUniqueFindersCache(scProductEntry);
+		}
+	}
+
+	protected void clearUniqueFindersCache(SCProductEntry scProductEntry) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_RG_RA,
+			new Object[] {
+				scProductEntry.getRepoGroupId(),
+				
+			scProductEntry.getRepoArtifactId()
+			});
+	}
+
+	/**
+	 * Creates a new s c product entry with the primary key. Does not add the s c product entry to the database.
+	 *
+	 * @param productEntryId the primary key for the new s c product entry
+	 * @return the new s c product entry
+	 */
+	public SCProductEntry create(long productEntryId) {
+		SCProductEntry scProductEntry = new SCProductEntryImpl();
+
+		scProductEntry.setNew(true);
+		scProductEntry.setPrimaryKey(productEntryId);
+
+		return scProductEntry;
+	}
+
+	/**
+	 * Removes the s c product entry with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param productEntryId the primary key of the s c product entry
+	 * @return the s c product entry that was removed
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a s c product entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry remove(long productEntryId)
+		throws NoSuchProductEntryException, SystemException {
+		return remove(Long.valueOf(productEntryId));
+	}
+
+	/**
+	 * Removes the s c product entry with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the s c product entry
+	 * @return the s c product entry that was removed
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a s c product entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SCProductEntry remove(Serializable primaryKey)
+		throws NoSuchProductEntryException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SCProductEntry scProductEntry = (SCProductEntry)session.get(SCProductEntryImpl.class,
+					primaryKey);
+
+			if (scProductEntry == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchProductEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(scProductEntry);
+		}
+		catch (NoSuchProductEntryException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected SCProductEntry removeImpl(SCProductEntry scProductEntry)
+		throws SystemException {
+		scProductEntry = toUnwrappedModel(scProductEntry);
+
+		try {
+			clearSCLicenses.clear(scProductEntry.getPrimaryKey());
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			FinderCacheUtil.clearCache(SCProductEntryModelImpl.MAPPING_TABLE_SCLICENSES_SCPRODUCTENTRIES_NAME);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(scProductEntry)) {
+				scProductEntry = (SCProductEntry)session.get(SCProductEntryImpl.class,
+						scProductEntry.getPrimaryKeyObj());
+			}
+
+			if (scProductEntry != null) {
+				session.delete(scProductEntry);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (scProductEntry != null) {
+			clearCache(scProductEntry);
+		}
+
+		return scProductEntry;
+	}
+
+	@Override
+	public SCProductEntry updateImpl(
+		com.liferay.portlet.softwarecatalog.model.SCProductEntry scProductEntry)
+		throws SystemException {
+		scProductEntry = toUnwrappedModel(scProductEntry);
+
+		boolean isNew = scProductEntry.isNew();
+
+		SCProductEntryModelImpl scProductEntryModelImpl = (SCProductEntryModelImpl)scProductEntry;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (scProductEntry.isNew()) {
+				session.save(scProductEntry);
+
+				scProductEntry.setNew(false);
+			}
+			else {
+				session.merge(scProductEntry);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !SCProductEntryModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((scProductEntryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(scProductEntryModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(scProductEntryModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+
+			if ((scProductEntryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(scProductEntryModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(scProductEntryModelImpl.getCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+
+			if ((scProductEntryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(scProductEntryModelImpl.getOriginalGroupId()),
+						Long.valueOf(scProductEntryModelImpl.getOriginalUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(scProductEntryModelImpl.getGroupId()),
+						Long.valueOf(scProductEntryModelImpl.getUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryImpl.class, scProductEntry.getPrimaryKey(),
+			scProductEntry);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_RG_RA,
+				new Object[] {
+					scProductEntry.getRepoGroupId(),
+					
+				scProductEntry.getRepoArtifactId()
+				}, scProductEntry);
+		}
+		else {
+			if ((scProductEntryModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_RG_RA.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						scProductEntryModelImpl.getOriginalRepoGroupId(),
+						
+						scProductEntryModelImpl.getOriginalRepoArtifactId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RG_RA, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_RG_RA, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_RG_RA,
+					new Object[] {
+						scProductEntry.getRepoGroupId(),
+						
+					scProductEntry.getRepoArtifactId()
+					}, scProductEntry);
+			}
+		}
+
+		return scProductEntry;
+	}
+
+	protected SCProductEntry toUnwrappedModel(SCProductEntry scProductEntry) {
+		if (scProductEntry instanceof SCProductEntryImpl) {
+			return scProductEntry;
+		}
+
+		SCProductEntryImpl scProductEntryImpl = new SCProductEntryImpl();
+
+		scProductEntryImpl.setNew(scProductEntry.isNew());
+		scProductEntryImpl.setPrimaryKey(scProductEntry.getPrimaryKey());
+
+		scProductEntryImpl.setProductEntryId(scProductEntry.getProductEntryId());
+		scProductEntryImpl.setGroupId(scProductEntry.getGroupId());
+		scProductEntryImpl.setCompanyId(scProductEntry.getCompanyId());
+		scProductEntryImpl.setUserId(scProductEntry.getUserId());
+		scProductEntryImpl.setUserName(scProductEntry.getUserName());
+		scProductEntryImpl.setCreateDate(scProductEntry.getCreateDate());
+		scProductEntryImpl.setModifiedDate(scProductEntry.getModifiedDate());
+		scProductEntryImpl.setName(scProductEntry.getName());
+		scProductEntryImpl.setType(scProductEntry.getType());
+		scProductEntryImpl.setTags(scProductEntry.getTags());
+		scProductEntryImpl.setShortDescription(scProductEntry.getShortDescription());
+		scProductEntryImpl.setLongDescription(scProductEntry.getLongDescription());
+		scProductEntryImpl.setPageURL(scProductEntry.getPageURL());
+		scProductEntryImpl.setAuthor(scProductEntry.getAuthor());
+		scProductEntryImpl.setRepoGroupId(scProductEntry.getRepoGroupId());
+		scProductEntryImpl.setRepoArtifactId(scProductEntry.getRepoArtifactId());
+
+		return scProductEntryImpl;
+	}
+
+	/**
+	 * Returns the s c product entry with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the s c product entry
+	 * @return the s c product entry
+	 * @throws com.liferay.portal.NoSuchModelException if a s c product entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SCProductEntry findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the s c product entry with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductEntryException} if it could not be found.
+	 *
+	 * @param productEntryId the primary key of the s c product entry
+	 * @return the s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a s c product entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByPrimaryKey(long productEntryId)
+		throws NoSuchProductEntryException, SystemException {
+		SCProductEntry scProductEntry = fetchByPrimaryKey(productEntryId);
+
+		if (scProductEntry == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + productEntryId);
+			}
+
+			throw new NoSuchProductEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				productEntryId);
+		}
+
+		return scProductEntry;
+	}
+
+	/**
+	 * Returns the s c product entry with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the s c product entry
+	 * @return the s c product entry, or <code>null</code> if a s c product entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SCProductEntry fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the s c product entry with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param productEntryId the primary key of the s c product entry
+	 * @return the s c product entry, or <code>null</code> if a s c product entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByPrimaryKey(long productEntryId)
+		throws SystemException {
+		SCProductEntry scProductEntry = (SCProductEntry)EntityCacheUtil.getResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+				SCProductEntryImpl.class, productEntryId);
+
+		if (scProductEntry == _nullSCProductEntry) {
+			return null;
+		}
+
+		if (scProductEntry == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				scProductEntry = (SCProductEntry)session.get(SCProductEntryImpl.class,
+						Long.valueOf(productEntryId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (scProductEntry != null) {
+					cacheResult(scProductEntry);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+						SCProductEntryImpl.class, productEntryId,
+						_nullSCProductEntry);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return scProductEntry;
+	}
+
+	/**
 	 * Returns all the s c product entries.
 	 *
 	 * @return the s c product entries
@@ -2760,60 +3177,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	}
 
 	/**
-	 * Removes all the s c product entries where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (SCProductEntry scProductEntry : findByGroupId(groupId)) {
-			remove(scProductEntry);
-		}
-	}
-
-	/**
-	 * Removes all the s c product entries where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (SCProductEntry scProductEntry : findByCompanyId(companyId)) {
-			remove(scProductEntry);
-		}
-	}
-
-	/**
-	 * Removes all the s c product entries where groupId = &#63; and userId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_U(long groupId, long userId)
-		throws SystemException {
-		for (SCProductEntry scProductEntry : findByG_U(groupId, userId)) {
-			remove(scProductEntry);
-		}
-	}
-
-	/**
-	 * Removes the s c product entry where repoGroupId = &#63; and repoArtifactId = &#63; from the database.
-	 *
-	 * @param repoGroupId the repo group ID
-	 * @param repoArtifactId the repo artifact ID
-	 * @return the s c product entry that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry removeByRG_RA(String repoGroupId,
-		String repoArtifactId)
-		throws NoSuchProductEntryException, SystemException {
-		SCProductEntry scProductEntry = findByRG_RA(repoGroupId, repoArtifactId);
-
-		return remove(scProductEntry);
-	}
-
-	/**
 	 * Removes all the s c product entries from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2822,355 +3185,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 		for (SCProductEntry scProductEntry : findAll()) {
 			remove(scProductEntry);
 		}
-	}
-
-	/**
-	 * Returns the number of s c product entries where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching s c product entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SCPRODUCTENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of s c product entries that the user has permission to view where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching s c product entries that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByGroupId(long groupId) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByGroupId(groupId);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_SCPRODUCTENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				SCProductEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of s c product entries where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching s c product entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SCPRODUCTENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of s c product entries where groupId = &#63; and userId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @return the number of matching s c product entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_U(long groupId, long userId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, userId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_U,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_SCPRODUCTENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_G_U_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_U_USERID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(userId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of s c product entries that the user has permission to view where groupId = &#63; and userId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @return the number of matching s c product entries that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_U(long groupId, long userId)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_U(groupId, userId);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_SCPRODUCTENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_G_U_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_U_USERID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				SCProductEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(userId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of s c product entries where repoGroupId = &#63; and repoArtifactId = &#63;.
-	 *
-	 * @param repoGroupId the repo group ID
-	 * @param repoArtifactId the repo artifact ID
-	 * @return the number of matching s c product entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByRG_RA(String repoGroupId, String repoArtifactId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { repoGroupId, repoArtifactId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_RG_RA,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_SCPRODUCTENTRY_WHERE);
-
-			if (repoGroupId == null) {
-				query.append(_FINDER_COLUMN_RG_RA_REPOGROUPID_1);
-			}
-			else {
-				if (repoGroupId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_RG_RA_REPOGROUPID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_RG_RA_REPOGROUPID_2);
-				}
-			}
-
-			if (repoArtifactId == null) {
-				query.append(_FINDER_COLUMN_RG_RA_REPOARTIFACTID_1);
-			}
-			else {
-				if (repoArtifactId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_RG_RA_REPOARTIFACTID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_RG_RA_REPOARTIFACTID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (repoGroupId != null) {
-					qPos.add(repoGroupId);
-				}
-
-				if (repoArtifactId != null) {
-					qPos.add(repoArtifactId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RG_RA,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -3934,16 +3948,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	private static final String _SQL_GETSCLICENSES = "SELECT {SCLicense.*} FROM SCLicense INNER JOIN SCLicenses_SCProductEntries ON (SCLicenses_SCProductEntries.licenseId = SCLicense.licenseId) WHERE (SCLicenses_SCProductEntries.productEntryId = ?)";
 	private static final String _SQL_GETSCLICENSESSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM SCLicenses_SCProductEntries WHERE productEntryId = ?";
 	private static final String _SQL_CONTAINSSCLICENSE = "SELECT COUNT(*) AS COUNT_VALUE FROM SCLicenses_SCProductEntries WHERE productEntryId = ? AND licenseId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "scProductEntry.groupId = ?";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "scProductEntry.companyId = ?";
-	private static final String _FINDER_COLUMN_G_U_GROUPID_2 = "scProductEntry.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_U_USERID_2 = "scProductEntry.userId = ?";
-	private static final String _FINDER_COLUMN_RG_RA_REPOGROUPID_1 = "scProductEntry.repoGroupId IS NULL AND ";
-	private static final String _FINDER_COLUMN_RG_RA_REPOGROUPID_2 = "lower(scProductEntry.repoGroupId) = lower(CAST_TEXT(?)) AND ";
-	private static final String _FINDER_COLUMN_RG_RA_REPOGROUPID_3 = "(scProductEntry.repoGroupId IS NULL OR lower(scProductEntry.repoGroupId) = lower(CAST_TEXT(?))) AND ";
-	private static final String _FINDER_COLUMN_RG_RA_REPOARTIFACTID_1 = "scProductEntry.repoArtifactId IS NULL";
-	private static final String _FINDER_COLUMN_RG_RA_REPOARTIFACTID_2 = "lower(scProductEntry.repoArtifactId) = lower(CAST_TEXT(?))";
-	private static final String _FINDER_COLUMN_RG_RA_REPOARTIFACTID_3 = "(scProductEntry.repoArtifactId IS NULL OR lower(scProductEntry.repoArtifactId) = lower(CAST_TEXT(?)))";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "scProductEntry.productEntryId";
 	private static final String _FILTER_SQL_SELECT_SCPRODUCTENTRY_WHERE = "SELECT DISTINCT {scProductEntry.*} FROM SCProductEntry scProductEntry WHERE ";
 	private static final String _FILTER_SQL_SELECT_SCPRODUCTENTRY_NO_INLINE_DISTINCT_WHERE_1 =

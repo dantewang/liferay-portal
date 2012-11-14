@@ -36,67 +36,6 @@ public interface OrgLaborPersistence extends BasePersistence<OrgLabor> {
 	 */
 
 	/**
-	* Caches the org labor in the entity cache if it is enabled.
-	*
-	* @param orgLabor the org labor
-	*/
-	public void cacheResult(com.liferay.portal.model.OrgLabor orgLabor);
-
-	/**
-	* Caches the org labors in the entity cache if it is enabled.
-	*
-	* @param orgLabors the org labors
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.model.OrgLabor> orgLabors);
-
-	/**
-	* Creates a new org labor with the primary key. Does not add the org labor to the database.
-	*
-	* @param orgLaborId the primary key for the new org labor
-	* @return the new org labor
-	*/
-	public com.liferay.portal.model.OrgLabor create(long orgLaborId);
-
-	/**
-	* Removes the org labor with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param orgLaborId the primary key of the org labor
-	* @return the org labor that was removed
-	* @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.OrgLabor remove(long orgLaborId)
-		throws com.liferay.portal.NoSuchOrgLaborException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.portal.model.OrgLabor updateImpl(
-		com.liferay.portal.model.OrgLabor orgLabor)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the org labor with the primary key or throws a {@link com.liferay.portal.NoSuchOrgLaborException} if it could not be found.
-	*
-	* @param orgLaborId the primary key of the org labor
-	* @return the org labor
-	* @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.OrgLabor findByPrimaryKey(long orgLaborId)
-		throws com.liferay.portal.NoSuchOrgLaborException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the org labor with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param orgLaborId the primary key of the org labor
-	* @return the org labor, or <code>null</code> if a org labor with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.OrgLabor fetchByPrimaryKey(long orgLaborId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the org labors where organizationId = &#63;.
 	*
 	* @param organizationId the organization ID
@@ -216,6 +155,86 @@ public interface OrgLaborPersistence extends BasePersistence<OrgLabor> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the org labors where organizationId = &#63; from the database.
+	*
+	* @param organizationId the organization ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByOrganizationId(long organizationId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of org labors where organizationId = &#63;.
+	*
+	* @param organizationId the organization ID
+	* @return the number of matching org labors
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByOrganizationId(long organizationId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the org labor in the entity cache if it is enabled.
+	*
+	* @param orgLabor the org labor
+	*/
+	public void cacheResult(com.liferay.portal.model.OrgLabor orgLabor);
+
+	/**
+	* Caches the org labors in the entity cache if it is enabled.
+	*
+	* @param orgLabors the org labors
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.model.OrgLabor> orgLabors);
+
+	/**
+	* Creates a new org labor with the primary key. Does not add the org labor to the database.
+	*
+	* @param orgLaborId the primary key for the new org labor
+	* @return the new org labor
+	*/
+	public com.liferay.portal.model.OrgLabor create(long orgLaborId);
+
+	/**
+	* Removes the org labor with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param orgLaborId the primary key of the org labor
+	* @return the org labor that was removed
+	* @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.OrgLabor remove(long orgLaborId)
+		throws com.liferay.portal.NoSuchOrgLaborException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.model.OrgLabor updateImpl(
+		com.liferay.portal.model.OrgLabor orgLabor)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the org labor with the primary key or throws a {@link com.liferay.portal.NoSuchOrgLaborException} if it could not be found.
+	*
+	* @param orgLaborId the primary key of the org labor
+	* @return the org labor
+	* @throws com.liferay.portal.NoSuchOrgLaborException if a org labor with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.OrgLabor findByPrimaryKey(long orgLaborId)
+		throws com.liferay.portal.NoSuchOrgLaborException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the org labor with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param orgLaborId the primary key of the org labor
+	* @return the org labor, or <code>null</code> if a org labor with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.OrgLabor fetchByPrimaryKey(long orgLaborId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the org labors.
 	*
 	* @return the org labors
@@ -259,30 +278,11 @@ public interface OrgLaborPersistence extends BasePersistence<OrgLabor> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the org labors where organizationId = &#63; from the database.
-	*
-	* @param organizationId the organization ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByOrganizationId(long organizationId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the org labors from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of org labors where organizationId = &#63;.
-	*
-	* @param organizationId the organization ID
-	* @return the number of matching org labors
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByOrganizationId(long organizationId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

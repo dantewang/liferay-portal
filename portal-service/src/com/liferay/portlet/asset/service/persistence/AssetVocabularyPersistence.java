@@ -38,72 +38,6 @@ public interface AssetVocabularyPersistence extends BasePersistence<AssetVocabul
 	 */
 
 	/**
-	* Caches the asset vocabulary in the entity cache if it is enabled.
-	*
-	* @param assetVocabulary the asset vocabulary
-	*/
-	public void cacheResult(
-		com.liferay.portlet.asset.model.AssetVocabulary assetVocabulary);
-
-	/**
-	* Caches the asset vocabularies in the entity cache if it is enabled.
-	*
-	* @param assetVocabularies the asset vocabularies
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.asset.model.AssetVocabulary> assetVocabularies);
-
-	/**
-	* Creates a new asset vocabulary with the primary key. Does not add the asset vocabulary to the database.
-	*
-	* @param vocabularyId the primary key for the new asset vocabulary
-	* @return the new asset vocabulary
-	*/
-	public com.liferay.portlet.asset.model.AssetVocabulary create(
-		long vocabularyId);
-
-	/**
-	* Removes the asset vocabulary with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param vocabularyId the primary key of the asset vocabulary
-	* @return the asset vocabulary that was removed
-	* @throws com.liferay.portlet.asset.NoSuchVocabularyException if a asset vocabulary with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.asset.model.AssetVocabulary remove(
-		long vocabularyId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchVocabularyException;
-
-	public com.liferay.portlet.asset.model.AssetVocabulary updateImpl(
-		com.liferay.portlet.asset.model.AssetVocabulary assetVocabulary)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the asset vocabulary with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchVocabularyException} if it could not be found.
-	*
-	* @param vocabularyId the primary key of the asset vocabulary
-	* @return the asset vocabulary
-	* @throws com.liferay.portlet.asset.NoSuchVocabularyException if a asset vocabulary with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.asset.model.AssetVocabulary findByPrimaryKey(
-		long vocabularyId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchVocabularyException;
-
-	/**
-	* Returns the asset vocabulary with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param vocabularyId the primary key of the asset vocabulary
-	* @return the asset vocabulary, or <code>null</code> if a asset vocabulary with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.asset.model.AssetVocabulary fetchByPrimaryKey(
-		long vocabularyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the asset vocabularies where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -223,6 +157,25 @@ public interface AssetVocabularyPersistence extends BasePersistence<AssetVocabul
 			com.liferay.portlet.asset.NoSuchVocabularyException;
 
 	/**
+	* Removes all the asset vocabularies where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of asset vocabularies where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching asset vocabularies
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the asset vocabulary where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchVocabularyException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -259,6 +212,30 @@ public interface AssetVocabularyPersistence extends BasePersistence<AssetVocabul
 	*/
 	public com.liferay.portlet.asset.model.AssetVocabulary fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the asset vocabulary where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the asset vocabulary that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.asset.model.AssetVocabulary removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchVocabularyException;
+
+	/**
+	* Returns the number of asset vocabularies where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching asset vocabularies
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -387,6 +364,27 @@ public interface AssetVocabularyPersistence extends BasePersistence<AssetVocabul
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.asset.NoSuchVocabularyException;
+
+	/**
+	* Removes all the asset vocabularies where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of asset vocabularies where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching asset vocabularies
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the asset vocabularies where groupId = &#63;.
@@ -571,6 +569,35 @@ public interface AssetVocabularyPersistence extends BasePersistence<AssetVocabul
 			com.liferay.portlet.asset.NoSuchVocabularyException;
 
 	/**
+	* Removes all the asset vocabularies where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of asset vocabularies where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching asset vocabularies
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of asset vocabularies that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching asset vocabularies that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the asset vocabularies where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -690,6 +717,25 @@ public interface AssetVocabularyPersistence extends BasePersistence<AssetVocabul
 			com.liferay.portlet.asset.NoSuchVocabularyException;
 
 	/**
+	* Removes all the asset vocabularies where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of asset vocabularies where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching asset vocabularies
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the asset vocabulary where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchVocabularyException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -726,6 +772,96 @@ public interface AssetVocabularyPersistence extends BasePersistence<AssetVocabul
 	*/
 	public com.liferay.portlet.asset.model.AssetVocabulary fetchByG_N(
 		long groupId, java.lang.String name, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the asset vocabulary where groupId = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the asset vocabulary that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.asset.model.AssetVocabulary removeByG_N(
+		long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchVocabularyException;
+
+	/**
+	* Returns the number of asset vocabularies where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the number of matching asset vocabularies
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_N(long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the asset vocabulary in the entity cache if it is enabled.
+	*
+	* @param assetVocabulary the asset vocabulary
+	*/
+	public void cacheResult(
+		com.liferay.portlet.asset.model.AssetVocabulary assetVocabulary);
+
+	/**
+	* Caches the asset vocabularies in the entity cache if it is enabled.
+	*
+	* @param assetVocabularies the asset vocabularies
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.asset.model.AssetVocabulary> assetVocabularies);
+
+	/**
+	* Creates a new asset vocabulary with the primary key. Does not add the asset vocabulary to the database.
+	*
+	* @param vocabularyId the primary key for the new asset vocabulary
+	* @return the new asset vocabulary
+	*/
+	public com.liferay.portlet.asset.model.AssetVocabulary create(
+		long vocabularyId);
+
+	/**
+	* Removes the asset vocabulary with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param vocabularyId the primary key of the asset vocabulary
+	* @return the asset vocabulary that was removed
+	* @throws com.liferay.portlet.asset.NoSuchVocabularyException if a asset vocabulary with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.asset.model.AssetVocabulary remove(
+		long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchVocabularyException;
+
+	public com.liferay.portlet.asset.model.AssetVocabulary updateImpl(
+		com.liferay.portlet.asset.model.AssetVocabulary assetVocabulary)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the asset vocabulary with the primary key or throws a {@link com.liferay.portlet.asset.NoSuchVocabularyException} if it could not be found.
+	*
+	* @param vocabularyId the primary key of the asset vocabulary
+	* @return the asset vocabulary
+	* @throws com.liferay.portlet.asset.NoSuchVocabularyException if a asset vocabulary with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.asset.model.AssetVocabulary findByPrimaryKey(
+		long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchVocabularyException;
+
+	/**
+	* Returns the asset vocabulary with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param vocabularyId the primary key of the asset vocabulary
+	* @return the asset vocabulary, or <code>null</code> if a asset vocabulary with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.asset.model.AssetVocabulary fetchByPrimaryKey(
+		long vocabularyId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -772,147 +908,11 @@ public interface AssetVocabularyPersistence extends BasePersistence<AssetVocabul
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the asset vocabularies where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the asset vocabulary where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the asset vocabulary that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.asset.model.AssetVocabulary removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchVocabularyException;
-
-	/**
-	* Removes all the asset vocabularies where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the asset vocabularies where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the asset vocabularies where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the asset vocabulary where groupId = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the asset vocabulary that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.asset.model.AssetVocabulary removeByG_N(
-		long groupId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchVocabularyException;
-
-	/**
 	* Removes all the asset vocabularies from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of asset vocabularies where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching asset vocabularies
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of asset vocabularies where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching asset vocabularies
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of asset vocabularies where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching asset vocabularies
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of asset vocabularies where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching asset vocabularies
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of asset vocabularies that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching asset vocabularies that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of asset vocabularies where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching asset vocabularies
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of asset vocabularies where groupId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the number of matching asset vocabularies
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_N(long groupId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

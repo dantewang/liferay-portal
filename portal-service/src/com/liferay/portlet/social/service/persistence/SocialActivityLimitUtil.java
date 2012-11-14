@@ -112,86 +112,6 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
-	* Caches the social activity limit in the entity cache if it is enabled.
-	*
-	* @param socialActivityLimit the social activity limit
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.social.model.SocialActivityLimit socialActivityLimit) {
-		getPersistence().cacheResult(socialActivityLimit);
-	}
-
-	/**
-	* Caches the social activity limits in the entity cache if it is enabled.
-	*
-	* @param socialActivityLimits the social activity limits
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.social.model.SocialActivityLimit> socialActivityLimits) {
-		getPersistence().cacheResult(socialActivityLimits);
-	}
-
-	/**
-	* Creates a new social activity limit with the primary key. Does not add the social activity limit to the database.
-	*
-	* @param activityLimitId the primary key for the new social activity limit
-	* @return the new social activity limit
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityLimit create(
-		long activityLimitId) {
-		return getPersistence().create(activityLimitId);
-	}
-
-	/**
-	* Removes the social activity limit with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param activityLimitId the primary key of the social activity limit
-	* @return the social activity limit that was removed
-	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a social activity limit with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityLimit remove(
-		long activityLimitId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityLimitException {
-		return getPersistence().remove(activityLimitId);
-	}
-
-	public static com.liferay.portlet.social.model.SocialActivityLimit updateImpl(
-		com.liferay.portlet.social.model.SocialActivityLimit socialActivityLimit)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(socialActivityLimit);
-	}
-
-	/**
-	* Returns the social activity limit with the primary key or throws a {@link com.liferay.portlet.social.NoSuchActivityLimitException} if it could not be found.
-	*
-	* @param activityLimitId the primary key of the social activity limit
-	* @return the social activity limit
-	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a social activity limit with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityLimit findByPrimaryKey(
-		long activityLimitId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityLimitException {
-		return getPersistence().findByPrimaryKey(activityLimitId);
-	}
-
-	/**
-	* Returns the social activity limit with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param activityLimitId the primary key of the social activity limit
-	* @return the social activity limit, or <code>null</code> if a social activity limit with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityLimit fetchByPrimaryKey(
-		long activityLimitId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(activityLimitId);
-	}
-
-	/**
 	* Returns all the social activity limits where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -326,6 +246,29 @@ public class SocialActivityLimitUtil {
 		return getPersistence()
 				   .findByUserId_PrevAndNext(activityLimitId, userId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the social activity limits where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUserId(userId);
+	}
+
+	/**
+	* Returns the number of social activity limits where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching social activity limits
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUserId(userId);
 	}
 
 	/**
@@ -480,6 +423,31 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
+	* Removes all the social activity limits where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of social activity limits where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching social activity limits
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C(classNameId, classPK);
+	}
+
+	/**
 	* Returns the social activity limit where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and activityType = &#63; and activityCounterName = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivityLimitException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -547,6 +515,129 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
+	* Removes the social activity limit where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and activityType = &#63; and activityCounterName = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param activityType the activity type
+	* @param activityCounterName the activity counter name
+	* @return the social activity limit that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit removeByG_U_C_C_A_A(
+		long groupId, long userId, long classNameId, long classPK,
+		int activityType, java.lang.String activityCounterName)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityLimitException {
+		return getPersistence()
+				   .removeByG_U_C_C_A_A(groupId, userId, classNameId, classPK,
+			activityType, activityCounterName);
+	}
+
+	/**
+	* Returns the number of social activity limits where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and activityType = &#63; and activityCounterName = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param activityType the activity type
+	* @param activityCounterName the activity counter name
+	* @return the number of matching social activity limits
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U_C_C_A_A(long groupId, long userId,
+		long classNameId, long classPK, int activityType,
+		java.lang.String activityCounterName)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByG_U_C_C_A_A(groupId, userId, classNameId, classPK,
+			activityType, activityCounterName);
+	}
+
+	/**
+	* Caches the social activity limit in the entity cache if it is enabled.
+	*
+	* @param socialActivityLimit the social activity limit
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.social.model.SocialActivityLimit socialActivityLimit) {
+		getPersistence().cacheResult(socialActivityLimit);
+	}
+
+	/**
+	* Caches the social activity limits in the entity cache if it is enabled.
+	*
+	* @param socialActivityLimits the social activity limits
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.social.model.SocialActivityLimit> socialActivityLimits) {
+		getPersistence().cacheResult(socialActivityLimits);
+	}
+
+	/**
+	* Creates a new social activity limit with the primary key. Does not add the social activity limit to the database.
+	*
+	* @param activityLimitId the primary key for the new social activity limit
+	* @return the new social activity limit
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit create(
+		long activityLimitId) {
+		return getPersistence().create(activityLimitId);
+	}
+
+	/**
+	* Removes the social activity limit with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param activityLimitId the primary key of the social activity limit
+	* @return the social activity limit that was removed
+	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a social activity limit with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit remove(
+		long activityLimitId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityLimitException {
+		return getPersistence().remove(activityLimitId);
+	}
+
+	public static com.liferay.portlet.social.model.SocialActivityLimit updateImpl(
+		com.liferay.portlet.social.model.SocialActivityLimit socialActivityLimit)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(socialActivityLimit);
+	}
+
+	/**
+	* Returns the social activity limit with the primary key or throws a {@link com.liferay.portlet.social.NoSuchActivityLimitException} if it could not be found.
+	*
+	* @param activityLimitId the primary key of the social activity limit
+	* @return the social activity limit
+	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a social activity limit with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit findByPrimaryKey(
+		long activityLimitId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityLimitException {
+		return getPersistence().findByPrimaryKey(activityLimitId);
+	}
+
+	/**
+	* Returns the social activity limit with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param activityLimitId the primary key of the social activity limit
+	* @return the social activity limit, or <code>null</code> if a social activity limit with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit fetchByPrimaryKey(
+		long activityLimitId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(activityLimitId);
+	}
+
+	/**
 	* Returns all the social activity limits.
 	*
 	* @return the social activity limits
@@ -596,51 +687,6 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
-	* Removes all the social activity limits where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUserId(userId);
-	}
-
-	/**
-	* Removes all the social activity limits where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Removes the social activity limit where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and activityType = &#63; and activityCounterName = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param activityType the activity type
-	* @param activityCounterName the activity counter name
-	* @return the social activity limit that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityLimit removeByG_U_C_C_A_A(
-		long groupId, long userId, long classNameId, long classPK,
-		int activityType, java.lang.String activityCounterName)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityLimitException {
-		return getPersistence()
-				   .removeByG_U_C_C_A_A(groupId, userId, classNameId, classPK,
-			activityType, activityCounterName);
-	}
-
-	/**
 	* Removes all the social activity limits from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -648,52 +694,6 @@ public class SocialActivityLimitUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of social activity limits where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching social activity limits
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUserId(userId);
-	}
-
-	/**
-	* Returns the number of social activity limits where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching social activity limits
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Returns the number of social activity limits where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and activityType = &#63; and activityCounterName = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param activityType the activity type
-	* @param activityCounterName the activity counter name
-	* @return the number of matching social activity limits
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U_C_C_A_A(long groupId, long userId,
-		long classNameId, long classPK, int activityType,
-		java.lang.String activityCounterName)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByG_U_C_C_A_A(groupId, userId, classNameId, classPK,
-			activityType, activityCounterName);
 	}
 
 	/**

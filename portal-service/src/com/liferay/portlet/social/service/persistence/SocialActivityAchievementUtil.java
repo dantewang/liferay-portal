@@ -114,86 +114,6 @@ public class SocialActivityAchievementUtil {
 	}
 
 	/**
-	* Caches the social activity achievement in the entity cache if it is enabled.
-	*
-	* @param socialActivityAchievement the social activity achievement
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.social.model.SocialActivityAchievement socialActivityAchievement) {
-		getPersistence().cacheResult(socialActivityAchievement);
-	}
-
-	/**
-	* Caches the social activity achievements in the entity cache if it is enabled.
-	*
-	* @param socialActivityAchievements the social activity achievements
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.social.model.SocialActivityAchievement> socialActivityAchievements) {
-		getPersistence().cacheResult(socialActivityAchievements);
-	}
-
-	/**
-	* Creates a new social activity achievement with the primary key. Does not add the social activity achievement to the database.
-	*
-	* @param activityAchievementId the primary key for the new social activity achievement
-	* @return the new social activity achievement
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityAchievement create(
-		long activityAchievementId) {
-		return getPersistence().create(activityAchievementId);
-	}
-
-	/**
-	* Removes the social activity achievement with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param activityAchievementId the primary key of the social activity achievement
-	* @return the social activity achievement that was removed
-	* @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a social activity achievement with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityAchievement remove(
-		long activityAchievementId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityAchievementException {
-		return getPersistence().remove(activityAchievementId);
-	}
-
-	public static com.liferay.portlet.social.model.SocialActivityAchievement updateImpl(
-		com.liferay.portlet.social.model.SocialActivityAchievement socialActivityAchievement)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(socialActivityAchievement);
-	}
-
-	/**
-	* Returns the social activity achievement with the primary key or throws a {@link com.liferay.portlet.social.NoSuchActivityAchievementException} if it could not be found.
-	*
-	* @param activityAchievementId the primary key of the social activity achievement
-	* @return the social activity achievement
-	* @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a social activity achievement with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityAchievement findByPrimaryKey(
-		long activityAchievementId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityAchievementException {
-		return getPersistence().findByPrimaryKey(activityAchievementId);
-	}
-
-	/**
-	* Returns the social activity achievement with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param activityAchievementId the primary key of the social activity achievement
-	* @return the social activity achievement, or <code>null</code> if a social activity achievement with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityAchievement fetchByPrimaryKey(
-		long activityAchievementId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(activityAchievementId);
-	}
-
-	/**
 	* Returns all the social activity achievements where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -329,6 +249,29 @@ public class SocialActivityAchievementUtil {
 		return getPersistence()
 				   .findByGroupId_PrevAndNext(activityAchievementId, groupId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the social activity achievements where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of social activity achievements where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching social activity achievements
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
 	}
 
 	/**
@@ -482,6 +425,31 @@ public class SocialActivityAchievementUtil {
 	}
 
 	/**
+	* Removes all the social activity achievements where groupId = &#63; and userId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_U(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_U(groupId, userId);
+	}
+
+	/**
+	* Returns the number of social activity achievements where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the number of matching social activity achievements
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_U(groupId, userId);
+	}
+
+	/**
 	* Returns all the social activity achievements where groupId = &#63; and name = &#63;.
 	*
 	* @param groupId the group ID
@@ -626,6 +594,31 @@ public class SocialActivityAchievementUtil {
 		return getPersistence()
 				   .findByG_N_PrevAndNext(activityAchievementId, groupId, name,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the social activity achievements where groupId = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_N(long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_N(groupId, name);
+	}
+
+	/**
+	* Returns the number of social activity achievements where groupId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @return the number of matching social activity achievements
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_N(long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_N(groupId, name);
 	}
 
 	/**
@@ -780,6 +773,31 @@ public class SocialActivityAchievementUtil {
 	}
 
 	/**
+	* Removes all the social activity achievements where groupId = &#63; and firstInGroup = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param firstInGroup the first in group
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_F(long groupId, boolean firstInGroup)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_F(groupId, firstInGroup);
+	}
+
+	/**
+	* Returns the number of social activity achievements where groupId = &#63; and firstInGroup = &#63;.
+	*
+	* @param groupId the group ID
+	* @param firstInGroup the first in group
+	* @return the number of matching social activity achievements
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_F(long groupId, boolean firstInGroup)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_F(groupId, firstInGroup);
+	}
+
+	/**
 	* Returns the social activity achievement where groupId = &#63; and userId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivityAchievementException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -827,6 +845,37 @@ public class SocialActivityAchievementUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_U_N(groupId, userId, name, retrieveFromCache);
+	}
+
+	/**
+	* Removes the social activity achievement where groupId = &#63; and userId = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param name the name
+	* @return the social activity achievement that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityAchievement removeByG_U_N(
+		long groupId, long userId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityAchievementException {
+		return getPersistence().removeByG_U_N(groupId, userId, name);
+	}
+
+	/**
+	* Returns the number of social activity achievements where groupId = &#63; and userId = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param name the name
+	* @return the number of matching social activity achievements
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U_N(long groupId, long userId,
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_U_N(groupId, userId, name);
 	}
 
 	/**
@@ -995,6 +1044,115 @@ public class SocialActivityAchievementUtil {
 	}
 
 	/**
+	* Removes all the social activity achievements where groupId = &#63; and userId = &#63; and firstInGroup = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param firstInGroup the first in group
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_U_F(long groupId, long userId,
+		boolean firstInGroup)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_U_F(groupId, userId, firstInGroup);
+	}
+
+	/**
+	* Returns the number of social activity achievements where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param firstInGroup the first in group
+	* @return the number of matching social activity achievements
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_U_F(long groupId, long userId,
+		boolean firstInGroup)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_U_F(groupId, userId, firstInGroup);
+	}
+
+	/**
+	* Caches the social activity achievement in the entity cache if it is enabled.
+	*
+	* @param socialActivityAchievement the social activity achievement
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.social.model.SocialActivityAchievement socialActivityAchievement) {
+		getPersistence().cacheResult(socialActivityAchievement);
+	}
+
+	/**
+	* Caches the social activity achievements in the entity cache if it is enabled.
+	*
+	* @param socialActivityAchievements the social activity achievements
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.social.model.SocialActivityAchievement> socialActivityAchievements) {
+		getPersistence().cacheResult(socialActivityAchievements);
+	}
+
+	/**
+	* Creates a new social activity achievement with the primary key. Does not add the social activity achievement to the database.
+	*
+	* @param activityAchievementId the primary key for the new social activity achievement
+	* @return the new social activity achievement
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityAchievement create(
+		long activityAchievementId) {
+		return getPersistence().create(activityAchievementId);
+	}
+
+	/**
+	* Removes the social activity achievement with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param activityAchievementId the primary key of the social activity achievement
+	* @return the social activity achievement that was removed
+	* @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a social activity achievement with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityAchievement remove(
+		long activityAchievementId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityAchievementException {
+		return getPersistence().remove(activityAchievementId);
+	}
+
+	public static com.liferay.portlet.social.model.SocialActivityAchievement updateImpl(
+		com.liferay.portlet.social.model.SocialActivityAchievement socialActivityAchievement)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(socialActivityAchievement);
+	}
+
+	/**
+	* Returns the social activity achievement with the primary key or throws a {@link com.liferay.portlet.social.NoSuchActivityAchievementException} if it could not be found.
+	*
+	* @param activityAchievementId the primary key of the social activity achievement
+	* @return the social activity achievement
+	* @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a social activity achievement with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityAchievement findByPrimaryKey(
+		long activityAchievementId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityAchievementException {
+		return getPersistence().findByPrimaryKey(activityAchievementId);
+	}
+
+	/**
+	* Returns the social activity achievement with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param activityAchievementId the primary key of the social activity achievement
+	* @return the social activity achievement, or <code>null</code> if a social activity achievement with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityAchievement fetchByPrimaryKey(
+		long activityAchievementId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(activityAchievementId);
+	}
+
+	/**
 	* Returns all the social activity achievements.
 	*
 	* @return the social activity achievements
@@ -1044,83 +1202,6 @@ public class SocialActivityAchievementUtil {
 	}
 
 	/**
-	* Removes all the social activity achievements where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes all the social activity achievements where groupId = &#63; and userId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_U(long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_U(groupId, userId);
-	}
-
-	/**
-	* Removes all the social activity achievements where groupId = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_N(long groupId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_N(groupId, name);
-	}
-
-	/**
-	* Removes all the social activity achievements where groupId = &#63; and firstInGroup = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param firstInGroup the first in group
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_F(long groupId, boolean firstInGroup)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_F(groupId, firstInGroup);
-	}
-
-	/**
-	* Removes the social activity achievement where groupId = &#63; and userId = &#63; and name = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param name the name
-	* @return the social activity achievement that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityAchievement removeByG_U_N(
-		long groupId, long userId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityAchievementException {
-		return getPersistence().removeByG_U_N(groupId, userId, name);
-	}
-
-	/**
-	* Removes all the social activity achievements where groupId = &#63; and userId = &#63; and firstInGroup = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param firstInGroup the first in group
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_U_F(long groupId, long userId,
-		boolean firstInGroup)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_U_F(groupId, userId, firstInGroup);
-	}
-
-	/**
 	* Removes all the social activity achievements from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1128,87 +1209,6 @@ public class SocialActivityAchievementUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of social activity achievements where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching social activity achievements
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of social activity achievements where groupId = &#63; and userId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @return the number of matching social activity achievements
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U(long groupId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_U(groupId, userId);
-	}
-
-	/**
-	* Returns the number of social activity achievements where groupId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @return the number of matching social activity achievements
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_N(long groupId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_N(groupId, name);
-	}
-
-	/**
-	* Returns the number of social activity achievements where groupId = &#63; and firstInGroup = &#63;.
-	*
-	* @param groupId the group ID
-	* @param firstInGroup the first in group
-	* @return the number of matching social activity achievements
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_F(long groupId, boolean firstInGroup)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_F(groupId, firstInGroup);
-	}
-
-	/**
-	* Returns the number of social activity achievements where groupId = &#63; and userId = &#63; and name = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param name the name
-	* @return the number of matching social activity achievements
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U_N(long groupId, long userId,
-		java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_U_N(groupId, userId, name);
-	}
-
-	/**
-	* Returns the number of social activity achievements where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param firstInGroup the first in group
-	* @return the number of matching social activity achievements
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_U_F(long groupId, long userId,
-		boolean firstInGroup)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_U_F(groupId, userId, firstInGroup);
 	}
 
 	/**

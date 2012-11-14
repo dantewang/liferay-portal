@@ -111,86 +111,6 @@ public class ExpandoValueUtil {
 	}
 
 	/**
-	* Caches the expando value in the entity cache if it is enabled.
-	*
-	* @param expandoValue the expando value
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.expando.model.ExpandoValue expandoValue) {
-		getPersistence().cacheResult(expandoValue);
-	}
-
-	/**
-	* Caches the expando values in the entity cache if it is enabled.
-	*
-	* @param expandoValues the expando values
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.expando.model.ExpandoValue> expandoValues) {
-		getPersistence().cacheResult(expandoValues);
-	}
-
-	/**
-	* Creates a new expando value with the primary key. Does not add the expando value to the database.
-	*
-	* @param valueId the primary key for the new expando value
-	* @return the new expando value
-	*/
-	public static com.liferay.portlet.expando.model.ExpandoValue create(
-		long valueId) {
-		return getPersistence().create(valueId);
-	}
-
-	/**
-	* Removes the expando value with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param valueId the primary key of the expando value
-	* @return the expando value that was removed
-	* @throws com.liferay.portlet.expando.NoSuchValueException if a expando value with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.expando.model.ExpandoValue remove(
-		long valueId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.expando.NoSuchValueException {
-		return getPersistence().remove(valueId);
-	}
-
-	public static com.liferay.portlet.expando.model.ExpandoValue updateImpl(
-		com.liferay.portlet.expando.model.ExpandoValue expandoValue)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(expandoValue);
-	}
-
-	/**
-	* Returns the expando value with the primary key or throws a {@link com.liferay.portlet.expando.NoSuchValueException} if it could not be found.
-	*
-	* @param valueId the primary key of the expando value
-	* @return the expando value
-	* @throws com.liferay.portlet.expando.NoSuchValueException if a expando value with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.expando.model.ExpandoValue findByPrimaryKey(
-		long valueId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.expando.NoSuchValueException {
-		return getPersistence().findByPrimaryKey(valueId);
-	}
-
-	/**
-	* Returns the expando value with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param valueId the primary key of the expando value
-	* @return the expando value, or <code>null</code> if a expando value with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.expando.model.ExpandoValue fetchByPrimaryKey(
-		long valueId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(valueId);
-	}
-
-	/**
 	* Returns all the expando values where tableId = &#63;.
 	*
 	* @param tableId the table ID
@@ -326,6 +246,29 @@ public class ExpandoValueUtil {
 		return getPersistence()
 				   .findByTableId_PrevAndNext(valueId, tableId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the expando values where tableId = &#63; from the database.
+	*
+	* @param tableId the table ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByTableId(long tableId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByTableId(tableId);
+	}
+
+	/**
+	* Returns the number of expando values where tableId = &#63;.
+	*
+	* @param tableId the table ID
+	* @return the number of matching expando values
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByTableId(long tableId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByTableId(tableId);
 	}
 
 	/**
@@ -468,6 +411,29 @@ public class ExpandoValueUtil {
 	}
 
 	/**
+	* Removes all the expando values where columnId = &#63; from the database.
+	*
+	* @param columnId the column ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByColumnId(long columnId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByColumnId(columnId);
+	}
+
+	/**
+	* Returns the number of expando values where columnId = &#63;.
+	*
+	* @param columnId the column ID
+	* @return the number of matching expando values
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByColumnId(long columnId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByColumnId(columnId);
+	}
+
+	/**
 	* Returns all the expando values where rowId = &#63;.
 	*
 	* @param rowId the row ID
@@ -600,6 +566,29 @@ public class ExpandoValueUtil {
 			com.liferay.portlet.expando.NoSuchValueException {
 		return getPersistence()
 				   .findByRowId_PrevAndNext(valueId, rowId, orderByComparator);
+	}
+
+	/**
+	* Removes all the expando values where rowId = &#63; from the database.
+	*
+	* @param rowId the row ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByRowId(long rowId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByRowId(rowId);
+	}
+
+	/**
+	* Returns the number of expando values where rowId = &#63;.
+	*
+	* @param rowId the row ID
+	* @return the number of matching expando values
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByRowId(long rowId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByRowId(rowId);
 	}
 
 	/**
@@ -753,6 +742,31 @@ public class ExpandoValueUtil {
 	}
 
 	/**
+	* Removes all the expando values where tableId = &#63; and columnId = &#63; from the database.
+	*
+	* @param tableId the table ID
+	* @param columnId the column ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByT_C(long tableId, long columnId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByT_C(tableId, columnId);
+	}
+
+	/**
+	* Returns the number of expando values where tableId = &#63; and columnId = &#63;.
+	*
+	* @param tableId the table ID
+	* @param columnId the column ID
+	* @return the number of matching expando values
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByT_C(long tableId, long columnId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByT_C(tableId, columnId);
+	}
+
+	/**
 	* Returns all the expando values where tableId = &#63; and classPK = &#63;.
 	*
 	* @param tableId the table ID
@@ -900,6 +914,31 @@ public class ExpandoValueUtil {
 		return getPersistence()
 				   .findByT_CPK_PrevAndNext(valueId, tableId, classPK,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the expando values where tableId = &#63; and classPK = &#63; from the database.
+	*
+	* @param tableId the table ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByT_CPK(long tableId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByT_CPK(tableId, classPK);
+	}
+
+	/**
+	* Returns the number of expando values where tableId = &#63; and classPK = &#63;.
+	*
+	* @param tableId the table ID
+	* @param classPK the class p k
+	* @return the number of matching expando values
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByT_CPK(long tableId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByT_CPK(tableId, classPK);
 	}
 
 	/**
@@ -1052,6 +1091,31 @@ public class ExpandoValueUtil {
 	}
 
 	/**
+	* Removes all the expando values where tableId = &#63; and rowId = &#63; from the database.
+	*
+	* @param tableId the table ID
+	* @param rowId the row ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByT_R(long tableId, long rowId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByT_R(tableId, rowId);
+	}
+
+	/**
+	* Returns the number of expando values where tableId = &#63; and rowId = &#63;.
+	*
+	* @param tableId the table ID
+	* @param rowId the row ID
+	* @return the number of matching expando values
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByT_R(long tableId, long rowId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByT_R(tableId, rowId);
+	}
+
+	/**
 	* Returns the expando value where columnId = &#63; and rowId = &#63; or throws a {@link com.liferay.portlet.expando.NoSuchValueException} if it could not be found.
 	*
 	* @param columnId the column ID
@@ -1094,6 +1158,34 @@ public class ExpandoValueUtil {
 		long columnId, long rowId, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByC_R(columnId, rowId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the expando value where columnId = &#63; and rowId = &#63; from the database.
+	*
+	* @param columnId the column ID
+	* @param rowId the row ID
+	* @return the expando value that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.expando.model.ExpandoValue removeByC_R(
+		long columnId, long rowId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchValueException {
+		return getPersistence().removeByC_R(columnId, rowId);
+	}
+
+	/**
+	* Returns the number of expando values where columnId = &#63; and rowId = &#63;.
+	*
+	* @param columnId the column ID
+	* @param rowId the row ID
+	* @return the number of matching expando values
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_R(long columnId, long rowId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_R(columnId, rowId);
 	}
 
 	/**
@@ -1248,6 +1340,31 @@ public class ExpandoValueUtil {
 	}
 
 	/**
+	* Removes all the expando values where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of expando values where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching expando values
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C(classNameId, classPK);
+	}
+
+	/**
 	* Returns the expando value where tableId = &#63; and columnId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.expando.NoSuchValueException} if it could not be found.
 	*
 	* @param tableId the table ID
@@ -1294,6 +1411,36 @@ public class ExpandoValueUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByT_C_C(tableId, columnId, classPK, retrieveFromCache);
+	}
+
+	/**
+	* Removes the expando value where tableId = &#63; and columnId = &#63; and classPK = &#63; from the database.
+	*
+	* @param tableId the table ID
+	* @param columnId the column ID
+	* @param classPK the class p k
+	* @return the expando value that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.expando.model.ExpandoValue removeByT_C_C(
+		long tableId, long columnId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchValueException {
+		return getPersistence().removeByT_C_C(tableId, columnId, classPK);
+	}
+
+	/**
+	* Returns the number of expando values where tableId = &#63; and columnId = &#63; and classPK = &#63;.
+	*
+	* @param tableId the table ID
+	* @param columnId the column ID
+	* @param classPK the class p k
+	* @return the number of matching expando values
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByT_C_C(long tableId, long columnId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByT_C_C(tableId, columnId, classPK);
 	}
 
 	/**
@@ -1457,6 +1604,115 @@ public class ExpandoValueUtil {
 	}
 
 	/**
+	* Removes all the expando values where tableId = &#63; and columnId = &#63; and data = &#63; from the database.
+	*
+	* @param tableId the table ID
+	* @param columnId the column ID
+	* @param data the data
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByT_C_D(long tableId, long columnId,
+		java.lang.String data)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByT_C_D(tableId, columnId, data);
+	}
+
+	/**
+	* Returns the number of expando values where tableId = &#63; and columnId = &#63; and data = &#63;.
+	*
+	* @param tableId the table ID
+	* @param columnId the column ID
+	* @param data the data
+	* @return the number of matching expando values
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByT_C_D(long tableId, long columnId,
+		java.lang.String data)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByT_C_D(tableId, columnId, data);
+	}
+
+	/**
+	* Caches the expando value in the entity cache if it is enabled.
+	*
+	* @param expandoValue the expando value
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.expando.model.ExpandoValue expandoValue) {
+		getPersistence().cacheResult(expandoValue);
+	}
+
+	/**
+	* Caches the expando values in the entity cache if it is enabled.
+	*
+	* @param expandoValues the expando values
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.expando.model.ExpandoValue> expandoValues) {
+		getPersistence().cacheResult(expandoValues);
+	}
+
+	/**
+	* Creates a new expando value with the primary key. Does not add the expando value to the database.
+	*
+	* @param valueId the primary key for the new expando value
+	* @return the new expando value
+	*/
+	public static com.liferay.portlet.expando.model.ExpandoValue create(
+		long valueId) {
+		return getPersistence().create(valueId);
+	}
+
+	/**
+	* Removes the expando value with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param valueId the primary key of the expando value
+	* @return the expando value that was removed
+	* @throws com.liferay.portlet.expando.NoSuchValueException if a expando value with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.expando.model.ExpandoValue remove(
+		long valueId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchValueException {
+		return getPersistence().remove(valueId);
+	}
+
+	public static com.liferay.portlet.expando.model.ExpandoValue updateImpl(
+		com.liferay.portlet.expando.model.ExpandoValue expandoValue)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(expandoValue);
+	}
+
+	/**
+	* Returns the expando value with the primary key or throws a {@link com.liferay.portlet.expando.NoSuchValueException} if it could not be found.
+	*
+	* @param valueId the primary key of the expando value
+	* @return the expando value
+	* @throws com.liferay.portlet.expando.NoSuchValueException if a expando value with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.expando.model.ExpandoValue findByPrimaryKey(
+		long valueId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchValueException {
+		return getPersistence().findByPrimaryKey(valueId);
+	}
+
+	/**
+	* Returns the expando value with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param valueId the primary key of the expando value
+	* @return the expando value, or <code>null</code> if a expando value with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.expando.model.ExpandoValue fetchByPrimaryKey(
+		long valueId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(valueId);
+	}
+
+	/**
 	* Returns all the expando values.
 	*
 	* @return the expando values
@@ -1506,132 +1762,6 @@ public class ExpandoValueUtil {
 	}
 
 	/**
-	* Removes all the expando values where tableId = &#63; from the database.
-	*
-	* @param tableId the table ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByTableId(long tableId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByTableId(tableId);
-	}
-
-	/**
-	* Removes all the expando values where columnId = &#63; from the database.
-	*
-	* @param columnId the column ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByColumnId(long columnId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByColumnId(columnId);
-	}
-
-	/**
-	* Removes all the expando values where rowId = &#63; from the database.
-	*
-	* @param rowId the row ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByRowId(long rowId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByRowId(rowId);
-	}
-
-	/**
-	* Removes all the expando values where tableId = &#63; and columnId = &#63; from the database.
-	*
-	* @param tableId the table ID
-	* @param columnId the column ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByT_C(long tableId, long columnId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByT_C(tableId, columnId);
-	}
-
-	/**
-	* Removes all the expando values where tableId = &#63; and classPK = &#63; from the database.
-	*
-	* @param tableId the table ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByT_CPK(long tableId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByT_CPK(tableId, classPK);
-	}
-
-	/**
-	* Removes all the expando values where tableId = &#63; and rowId = &#63; from the database.
-	*
-	* @param tableId the table ID
-	* @param rowId the row ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByT_R(long tableId, long rowId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByT_R(tableId, rowId);
-	}
-
-	/**
-	* Removes the expando value where columnId = &#63; and rowId = &#63; from the database.
-	*
-	* @param columnId the column ID
-	* @param rowId the row ID
-	* @return the expando value that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.expando.model.ExpandoValue removeByC_R(
-		long columnId, long rowId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.expando.NoSuchValueException {
-		return getPersistence().removeByC_R(columnId, rowId);
-	}
-
-	/**
-	* Removes all the expando values where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Removes the expando value where tableId = &#63; and columnId = &#63; and classPK = &#63; from the database.
-	*
-	* @param tableId the table ID
-	* @param columnId the column ID
-	* @param classPK the class p k
-	* @return the expando value that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.expando.model.ExpandoValue removeByT_C_C(
-		long tableId, long columnId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.expando.NoSuchValueException {
-		return getPersistence().removeByT_C_C(tableId, columnId, classPK);
-	}
-
-	/**
-	* Removes all the expando values where tableId = &#63; and columnId = &#63; and data = &#63; from the database.
-	*
-	* @param tableId the table ID
-	* @param columnId the column ID
-	* @param data the data
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByT_C_D(long tableId, long columnId,
-		java.lang.String data)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByT_C_D(tableId, columnId, data);
-	}
-
-	/**
 	* Removes all the expando values from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1639,136 +1769,6 @@ public class ExpandoValueUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of expando values where tableId = &#63;.
-	*
-	* @param tableId the table ID
-	* @return the number of matching expando values
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByTableId(long tableId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByTableId(tableId);
-	}
-
-	/**
-	* Returns the number of expando values where columnId = &#63;.
-	*
-	* @param columnId the column ID
-	* @return the number of matching expando values
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByColumnId(long columnId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByColumnId(columnId);
-	}
-
-	/**
-	* Returns the number of expando values where rowId = &#63;.
-	*
-	* @param rowId the row ID
-	* @return the number of matching expando values
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByRowId(long rowId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByRowId(rowId);
-	}
-
-	/**
-	* Returns the number of expando values where tableId = &#63; and columnId = &#63;.
-	*
-	* @param tableId the table ID
-	* @param columnId the column ID
-	* @return the number of matching expando values
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByT_C(long tableId, long columnId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByT_C(tableId, columnId);
-	}
-
-	/**
-	* Returns the number of expando values where tableId = &#63; and classPK = &#63;.
-	*
-	* @param tableId the table ID
-	* @param classPK the class p k
-	* @return the number of matching expando values
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByT_CPK(long tableId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByT_CPK(tableId, classPK);
-	}
-
-	/**
-	* Returns the number of expando values where tableId = &#63; and rowId = &#63;.
-	*
-	* @param tableId the table ID
-	* @param rowId the row ID
-	* @return the number of matching expando values
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByT_R(long tableId, long rowId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByT_R(tableId, rowId);
-	}
-
-	/**
-	* Returns the number of expando values where columnId = &#63; and rowId = &#63;.
-	*
-	* @param columnId the column ID
-	* @param rowId the row ID
-	* @return the number of matching expando values
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_R(long columnId, long rowId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_R(columnId, rowId);
-	}
-
-	/**
-	* Returns the number of expando values where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching expando values
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Returns the number of expando values where tableId = &#63; and columnId = &#63; and classPK = &#63;.
-	*
-	* @param tableId the table ID
-	* @param columnId the column ID
-	* @param classPK the class p k
-	* @return the number of matching expando values
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByT_C_C(long tableId, long columnId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByT_C_C(tableId, columnId, classPK);
-	}
-
-	/**
-	* Returns the number of expando values where tableId = &#63; and columnId = &#63; and data = &#63;.
-	*
-	* @param tableId the table ID
-	* @param columnId the column ID
-	* @param data the data
-	* @return the number of matching expando values
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByT_C_D(long tableId, long columnId,
-		java.lang.String data)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByT_C_D(tableId, columnId, data);
 	}
 
 	/**

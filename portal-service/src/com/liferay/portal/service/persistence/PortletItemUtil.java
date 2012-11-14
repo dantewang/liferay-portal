@@ -110,86 +110,6 @@ public class PortletItemUtil {
 	}
 
 	/**
-	* Caches the portlet item in the entity cache if it is enabled.
-	*
-	* @param portletItem the portlet item
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.PortletItem portletItem) {
-		getPersistence().cacheResult(portletItem);
-	}
-
-	/**
-	* Caches the portlet items in the entity cache if it is enabled.
-	*
-	* @param portletItems the portlet items
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.PortletItem> portletItems) {
-		getPersistence().cacheResult(portletItems);
-	}
-
-	/**
-	* Creates a new portlet item with the primary key. Does not add the portlet item to the database.
-	*
-	* @param portletItemId the primary key for the new portlet item
-	* @return the new portlet item
-	*/
-	public static com.liferay.portal.model.PortletItem create(
-		long portletItemId) {
-		return getPersistence().create(portletItemId);
-	}
-
-	/**
-	* Removes the portlet item with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param portletItemId the primary key of the portlet item
-	* @return the portlet item that was removed
-	* @throws com.liferay.portal.NoSuchPortletItemException if a portlet item with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PortletItem remove(
-		long portletItemId)
-		throws com.liferay.portal.NoSuchPortletItemException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(portletItemId);
-	}
-
-	public static com.liferay.portal.model.PortletItem updateImpl(
-		com.liferay.portal.model.PortletItem portletItem)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(portletItem);
-	}
-
-	/**
-	* Returns the portlet item with the primary key or throws a {@link com.liferay.portal.NoSuchPortletItemException} if it could not be found.
-	*
-	* @param portletItemId the primary key of the portlet item
-	* @return the portlet item
-	* @throws com.liferay.portal.NoSuchPortletItemException if a portlet item with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PortletItem findByPrimaryKey(
-		long portletItemId)
-		throws com.liferay.portal.NoSuchPortletItemException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(portletItemId);
-	}
-
-	/**
-	* Returns the portlet item with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param portletItemId the primary key of the portlet item
-	* @return the portlet item, or <code>null</code> if a portlet item with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PortletItem fetchByPrimaryKey(
-		long portletItemId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(portletItemId);
-	}
-
-	/**
 	* Returns all the portlet items where groupId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -338,6 +258,31 @@ public class PortletItemUtil {
 		return getPersistence()
 				   .findByG_C_PrevAndNext(portletItemId, groupId, classNameId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the portlet items where groupId = &#63; and classNameId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C(long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_C(groupId, classNameId);
+	}
+
+	/**
+	* Returns the number of portlet items where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @return the number of matching portlet items
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C(long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_C(groupId, classNameId);
 	}
 
 	/**
@@ -507,6 +452,35 @@ public class PortletItemUtil {
 	}
 
 	/**
+	* Removes all the portlet items where groupId = &#63; and portletId = &#63; and classNameId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_P_C(long groupId, java.lang.String portletId,
+		long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_P_C(groupId, portletId, classNameId);
+	}
+
+	/**
+	* Returns the number of portlet items where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @return the number of matching portlet items
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_P_C(long groupId, java.lang.String portletId,
+		long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_P_C(groupId, portletId, classNameId);
+	}
+
+	/**
 	* Returns the portlet item where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; or throws a {@link com.liferay.portal.NoSuchPortletItemException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -565,6 +539,122 @@ public class PortletItemUtil {
 	}
 
 	/**
+	* Removes the portlet item where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @return the portlet item that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem removeByG_N_P_C(
+		long groupId, java.lang.String name, java.lang.String portletId,
+		long classNameId)
+		throws com.liferay.portal.NoSuchPortletItemException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .removeByG_N_P_C(groupId, name, portletId, classNameId);
+	}
+
+	/**
+	* Returns the number of portlet items where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @return the number of matching portlet items
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_N_P_C(long groupId, java.lang.String name,
+		java.lang.String portletId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByG_N_P_C(groupId, name, portletId, classNameId);
+	}
+
+	/**
+	* Caches the portlet item in the entity cache if it is enabled.
+	*
+	* @param portletItem the portlet item
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.PortletItem portletItem) {
+		getPersistence().cacheResult(portletItem);
+	}
+
+	/**
+	* Caches the portlet items in the entity cache if it is enabled.
+	*
+	* @param portletItems the portlet items
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.PortletItem> portletItems) {
+		getPersistence().cacheResult(portletItems);
+	}
+
+	/**
+	* Creates a new portlet item with the primary key. Does not add the portlet item to the database.
+	*
+	* @param portletItemId the primary key for the new portlet item
+	* @return the new portlet item
+	*/
+	public static com.liferay.portal.model.PortletItem create(
+		long portletItemId) {
+		return getPersistence().create(portletItemId);
+	}
+
+	/**
+	* Removes the portlet item with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param portletItemId the primary key of the portlet item
+	* @return the portlet item that was removed
+	* @throws com.liferay.portal.NoSuchPortletItemException if a portlet item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem remove(
+		long portletItemId)
+		throws com.liferay.portal.NoSuchPortletItemException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(portletItemId);
+	}
+
+	public static com.liferay.portal.model.PortletItem updateImpl(
+		com.liferay.portal.model.PortletItem portletItem)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(portletItem);
+	}
+
+	/**
+	* Returns the portlet item with the primary key or throws a {@link com.liferay.portal.NoSuchPortletItemException} if it could not be found.
+	*
+	* @param portletItemId the primary key of the portlet item
+	* @return the portlet item
+	* @throws com.liferay.portal.NoSuchPortletItemException if a portlet item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem findByPrimaryKey(
+		long portletItemId)
+		throws com.liferay.portal.NoSuchPortletItemException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(portletItemId);
+	}
+
+	/**
+	* Returns the portlet item with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param portletItemId the primary key of the portlet item
+	* @return the portlet item, or <code>null</code> if a portlet item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem fetchByPrimaryKey(
+		long portletItemId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(portletItemId);
+	}
+
+	/**
 	* Returns all the portlet items.
 	*
 	* @return the portlet items
@@ -614,51 +704,6 @@ public class PortletItemUtil {
 	}
 
 	/**
-	* Removes all the portlet items where groupId = &#63; and classNameId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_C(long groupId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_C(groupId, classNameId);
-	}
-
-	/**
-	* Removes all the portlet items where groupId = &#63; and portletId = &#63; and classNameId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param portletId the portlet ID
-	* @param classNameId the class name ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_P_C(long groupId, java.lang.String portletId,
-		long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_P_C(groupId, portletId, classNameId);
-	}
-
-	/**
-	* Removes the portlet item where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @param portletId the portlet ID
-	* @param classNameId the class name ID
-	* @return the portlet item that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PortletItem removeByG_N_P_C(
-		long groupId, java.lang.String name, java.lang.String portletId,
-		long classNameId)
-		throws com.liferay.portal.NoSuchPortletItemException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .removeByG_N_P_C(groupId, name, portletId, classNameId);
-	}
-
-	/**
 	* Removes all the portlet items from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -666,51 +711,6 @@ public class PortletItemUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of portlet items where groupId = &#63; and classNameId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @return the number of matching portlet items
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C(long groupId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_C(groupId, classNameId);
-	}
-
-	/**
-	* Returns the number of portlet items where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param portletId the portlet ID
-	* @param classNameId the class name ID
-	* @return the number of matching portlet items
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_P_C(long groupId, java.lang.String portletId,
-		long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_P_C(groupId, portletId, classNameId);
-	}
-
-	/**
-	* Returns the number of portlet items where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param name the name
-	* @param portletId the portlet ID
-	* @param classNameId the class name ID
-	* @return the number of matching portlet items
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_N_P_C(long groupId, java.lang.String name,
-		java.lang.String portletId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByG_N_P_C(groupId, name, portletId, classNameId);
 	}
 
 	/**

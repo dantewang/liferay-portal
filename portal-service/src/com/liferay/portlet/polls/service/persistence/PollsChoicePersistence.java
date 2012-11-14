@@ -38,70 +38,6 @@ public interface PollsChoicePersistence extends BasePersistence<PollsChoice> {
 	 */
 
 	/**
-	* Caches the polls choice in the entity cache if it is enabled.
-	*
-	* @param pollsChoice the polls choice
-	*/
-	public void cacheResult(
-		com.liferay.portlet.polls.model.PollsChoice pollsChoice);
-
-	/**
-	* Caches the polls choices in the entity cache if it is enabled.
-	*
-	* @param pollsChoices the polls choices
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.polls.model.PollsChoice> pollsChoices);
-
-	/**
-	* Creates a new polls choice with the primary key. Does not add the polls choice to the database.
-	*
-	* @param choiceId the primary key for the new polls choice
-	* @return the new polls choice
-	*/
-	public com.liferay.portlet.polls.model.PollsChoice create(long choiceId);
-
-	/**
-	* Removes the polls choice with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param choiceId the primary key of the polls choice
-	* @return the polls choice that was removed
-	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a polls choice with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.polls.model.PollsChoice remove(long choiceId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.polls.NoSuchChoiceException;
-
-	public com.liferay.portlet.polls.model.PollsChoice updateImpl(
-		com.liferay.portlet.polls.model.PollsChoice pollsChoice)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the polls choice with the primary key or throws a {@link com.liferay.portlet.polls.NoSuchChoiceException} if it could not be found.
-	*
-	* @param choiceId the primary key of the polls choice
-	* @return the polls choice
-	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a polls choice with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.polls.model.PollsChoice findByPrimaryKey(
-		long choiceId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.polls.NoSuchChoiceException;
-
-	/**
-	* Returns the polls choice with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param choiceId the primary key of the polls choice
-	* @return the polls choice, or <code>null</code> if a polls choice with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.polls.model.PollsChoice fetchByPrimaryKey(
-		long choiceId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the polls choices where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -219,6 +155,25 @@ public interface PollsChoicePersistence extends BasePersistence<PollsChoice> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.polls.NoSuchChoiceException;
+
+	/**
+	* Removes all the polls choices where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of polls choices where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching polls choices
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the polls choices where questionId = &#63;.
@@ -340,6 +295,25 @@ public interface PollsChoicePersistence extends BasePersistence<PollsChoice> {
 			com.liferay.portlet.polls.NoSuchChoiceException;
 
 	/**
+	* Removes all the polls choices where questionId = &#63; from the database.
+	*
+	* @param questionId the question ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByQuestionId(long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of polls choices where questionId = &#63;.
+	*
+	* @param questionId the question ID
+	* @return the number of matching polls choices
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByQuestionId(long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the polls choice where questionId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.polls.NoSuchChoiceException} if it could not be found.
 	*
 	* @param questionId the question ID
@@ -376,6 +350,94 @@ public interface PollsChoicePersistence extends BasePersistence<PollsChoice> {
 	*/
 	public com.liferay.portlet.polls.model.PollsChoice fetchByQ_N(
 		long questionId, java.lang.String name, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the polls choice where questionId = &#63; and name = &#63; from the database.
+	*
+	* @param questionId the question ID
+	* @param name the name
+	* @return the polls choice that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsChoice removeByQ_N(
+		long questionId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchChoiceException;
+
+	/**
+	* Returns the number of polls choices where questionId = &#63; and name = &#63;.
+	*
+	* @param questionId the question ID
+	* @param name the name
+	* @return the number of matching polls choices
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByQ_N(long questionId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the polls choice in the entity cache if it is enabled.
+	*
+	* @param pollsChoice the polls choice
+	*/
+	public void cacheResult(
+		com.liferay.portlet.polls.model.PollsChoice pollsChoice);
+
+	/**
+	* Caches the polls choices in the entity cache if it is enabled.
+	*
+	* @param pollsChoices the polls choices
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.polls.model.PollsChoice> pollsChoices);
+
+	/**
+	* Creates a new polls choice with the primary key. Does not add the polls choice to the database.
+	*
+	* @param choiceId the primary key for the new polls choice
+	* @return the new polls choice
+	*/
+	public com.liferay.portlet.polls.model.PollsChoice create(long choiceId);
+
+	/**
+	* Removes the polls choice with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param choiceId the primary key of the polls choice
+	* @return the polls choice that was removed
+	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a polls choice with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsChoice remove(long choiceId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchChoiceException;
+
+	public com.liferay.portlet.polls.model.PollsChoice updateImpl(
+		com.liferay.portlet.polls.model.PollsChoice pollsChoice)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the polls choice with the primary key or throws a {@link com.liferay.portlet.polls.NoSuchChoiceException} if it could not be found.
+	*
+	* @param choiceId the primary key of the polls choice
+	* @return the polls choice
+	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a polls choice with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsChoice findByPrimaryKey(
+		long choiceId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchChoiceException;
+
+	/**
+	* Returns the polls choice with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param choiceId the primary key of the polls choice
+	* @return the polls choice, or <code>null</code> if a polls choice with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsChoice fetchByPrimaryKey(
+		long choiceId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -422,73 +484,11 @@ public interface PollsChoicePersistence extends BasePersistence<PollsChoice> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the polls choices where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the polls choices where questionId = &#63; from the database.
-	*
-	* @param questionId the question ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByQuestionId(long questionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the polls choice where questionId = &#63; and name = &#63; from the database.
-	*
-	* @param questionId the question ID
-	* @param name the name
-	* @return the polls choice that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.polls.model.PollsChoice removeByQ_N(
-		long questionId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.polls.NoSuchChoiceException;
-
-	/**
 	* Removes all the polls choices from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of polls choices where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching polls choices
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of polls choices where questionId = &#63;.
-	*
-	* @param questionId the question ID
-	* @return the number of matching polls choices
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByQuestionId(long questionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of polls choices where questionId = &#63; and name = &#63;.
-	*
-	* @param questionId the question ID
-	* @param name the name
-	* @return the number of matching polls choices
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByQ_N(long questionId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

@@ -71,6 +71,15 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
 		new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
@@ -91,555 +100,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
-		new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
-			new String[] { Long.class.getName() },
-			PhoneModelImpl.USERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
-			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_C",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_C",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			},
-			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
-			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			PhoneModelImpl.CLASSPK_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C_P = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_C_P",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P =
-		new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_C_P",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			},
-			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
-			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			PhoneModelImpl.CLASSPK_COLUMN_BITMASK |
-			PhoneModelImpl.PRIMARY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C_P = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C_P",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the phone in the entity cache if it is enabled.
-	 *
-	 * @param phone the phone
-	 */
-	public void cacheResult(Phone phone) {
-		EntityCacheUtil.putResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneImpl.class, phone.getPrimaryKey(), phone);
-
-		phone.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the phones in the entity cache if it is enabled.
-	 *
-	 * @param phones the phones
-	 */
-	public void cacheResult(List<Phone> phones) {
-		for (Phone phone : phones) {
-			if (EntityCacheUtil.getResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-						PhoneImpl.class, phone.getPrimaryKey()) == null) {
-				cacheResult(phone);
-			}
-			else {
-				phone.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all phones.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(PhoneImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(PhoneImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the phone.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(Phone phone) {
-		EntityCacheUtil.removeResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneImpl.class, phone.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<Phone> phones) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (Phone phone : phones) {
-			EntityCacheUtil.removeResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-				PhoneImpl.class, phone.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new phone with the primary key. Does not add the phone to the database.
-	 *
-	 * @param phoneId the primary key for the new phone
-	 * @return the new phone
-	 */
-	public Phone create(long phoneId) {
-		Phone phone = new PhoneImpl();
-
-		phone.setNew(true);
-		phone.setPrimaryKey(phoneId);
-
-		return phone;
-	}
-
-	/**
-	 * Removes the phone with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param phoneId the primary key of the phone
-	 * @return the phone that was removed
-	 * @throws com.liferay.portal.NoSuchPhoneException if a phone with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone remove(long phoneId)
-		throws NoSuchPhoneException, SystemException {
-		return remove(Long.valueOf(phoneId));
-	}
-
-	/**
-	 * Removes the phone with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the phone
-	 * @return the phone that was removed
-	 * @throws com.liferay.portal.NoSuchPhoneException if a phone with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Phone remove(Serializable primaryKey)
-		throws NoSuchPhoneException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Phone phone = (Phone)session.get(PhoneImpl.class, primaryKey);
-
-			if (phone == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchPhoneException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(phone);
-		}
-		catch (NoSuchPhoneException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected Phone removeImpl(Phone phone) throws SystemException {
-		phone = toUnwrappedModel(phone);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(phone)) {
-				phone = (Phone)session.get(PhoneImpl.class,
-						phone.getPrimaryKeyObj());
-			}
-
-			if (phone != null) {
-				session.delete(phone);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (phone != null) {
-			clearCache(phone);
-		}
-
-		return phone;
-	}
-
-	@Override
-	public Phone updateImpl(com.liferay.portal.model.Phone phone)
-		throws SystemException {
-		phone = toUnwrappedModel(phone);
-
-		boolean isNew = phone.isNew();
-
-		PhoneModelImpl phoneModelImpl = (PhoneModelImpl)phone;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (phone.isNew()) {
-				session.save(phone);
-
-				phone.setNew(false);
-			}
-			else {
-				session.merge(phone);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !PhoneModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((phoneModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(phoneModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] { Long.valueOf(phoneModelImpl.getCompanyId()) };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((phoneModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(phoneModelImpl.getOriginalUserId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
-					args);
-
-				args = new Object[] { Long.valueOf(phoneModelImpl.getUserId()) };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
-					args);
-			}
-
-			if ((phoneModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(phoneModelImpl.getOriginalCompanyId()),
-						Long.valueOf(phoneModelImpl.getOriginalClassNameId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(phoneModelImpl.getCompanyId()),
-						Long.valueOf(phoneModelImpl.getClassNameId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
-					args);
-			}
-
-			if ((phoneModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(phoneModelImpl.getOriginalCompanyId()),
-						Long.valueOf(phoneModelImpl.getOriginalClassNameId()),
-						Long.valueOf(phoneModelImpl.getOriginalClassPK())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(phoneModelImpl.getCompanyId()),
-						Long.valueOf(phoneModelImpl.getClassNameId()),
-						Long.valueOf(phoneModelImpl.getClassPK())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C,
-					args);
-			}
-
-			if ((phoneModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(phoneModelImpl.getOriginalCompanyId()),
-						Long.valueOf(phoneModelImpl.getOriginalClassNameId()),
-						Long.valueOf(phoneModelImpl.getOriginalClassPK()),
-						Boolean.valueOf(phoneModelImpl.getOriginalPrimary())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(phoneModelImpl.getCompanyId()),
-						Long.valueOf(phoneModelImpl.getClassNameId()),
-						Long.valueOf(phoneModelImpl.getClassPK()),
-						Boolean.valueOf(phoneModelImpl.getPrimary())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-			PhoneImpl.class, phone.getPrimaryKey(), phone);
-
-		return phone;
-	}
-
-	protected Phone toUnwrappedModel(Phone phone) {
-		if (phone instanceof PhoneImpl) {
-			return phone;
-		}
-
-		PhoneImpl phoneImpl = new PhoneImpl();
-
-		phoneImpl.setNew(phone.isNew());
-		phoneImpl.setPrimaryKey(phone.getPrimaryKey());
-
-		phoneImpl.setPhoneId(phone.getPhoneId());
-		phoneImpl.setCompanyId(phone.getCompanyId());
-		phoneImpl.setUserId(phone.getUserId());
-		phoneImpl.setUserName(phone.getUserName());
-		phoneImpl.setCreateDate(phone.getCreateDate());
-		phoneImpl.setModifiedDate(phone.getModifiedDate());
-		phoneImpl.setClassNameId(phone.getClassNameId());
-		phoneImpl.setClassPK(phone.getClassPK());
-		phoneImpl.setNumber(phone.getNumber());
-		phoneImpl.setExtension(phone.getExtension());
-		phoneImpl.setTypeId(phone.getTypeId());
-		phoneImpl.setPrimary(phone.isPrimary());
-
-		return phoneImpl;
-	}
-
-	/**
-	 * Returns the phone with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the phone
-	 * @return the phone
-	 * @throws com.liferay.portal.NoSuchModelException if a phone with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Phone findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the phone with the primary key or throws a {@link com.liferay.portal.NoSuchPhoneException} if it could not be found.
-	 *
-	 * @param phoneId the primary key of the phone
-	 * @return the phone
-	 * @throws com.liferay.portal.NoSuchPhoneException if a phone with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone findByPrimaryKey(long phoneId)
-		throws NoSuchPhoneException, SystemException {
-		Phone phone = fetchByPrimaryKey(phoneId);
-
-		if (phone == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + phoneId);
-			}
-
-			throw new NoSuchPhoneException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				phoneId);
-		}
-
-		return phone;
-	}
-
-	/**
-	 * Returns the phone with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the phone
-	 * @return the phone, or <code>null</code> if a phone with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Phone fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the phone with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param phoneId the primary key of the phone
-	 * @return the phone, or <code>null</code> if a phone with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Phone fetchByPrimaryKey(long phoneId) throws SystemException {
-		Phone phone = (Phone)EntityCacheUtil.getResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-				PhoneImpl.class, phoneId);
-
-		if (phone == _nullPhone) {
-			return null;
-		}
-
-		if (phone == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				phone = (Phone)session.get(PhoneImpl.class,
-						Long.valueOf(phoneId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (phone != null) {
-					cacheResult(phone);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-						PhoneImpl.class, phoneId, _nullPhone);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return phone;
-	}
 
 	/**
 	 * Returns all the phones where companyId = &#63;.
@@ -1020,6 +480,92 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	}
 
 	/**
+	 * Removes all the phones where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (Phone phone : findByCompanyId(companyId)) {
+			remove(phone);
+		}
+	}
+
+	/**
+	 * Returns the number of phones where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching phones
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_PHONE_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "phone.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
+		new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
+			new String[] { Long.class.getName() },
+			PhoneModelImpl.USERID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the phones where userId = &#63;.
 	 *
 	 * @param userId the user ID
@@ -1394,6 +940,92 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the phones where userId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUserId(long userId) throws SystemException {
+		for (Phone phone : findByUserId(userId)) {
+			remove(phone);
+		}
+	}
+
+	/**
+	 * Returns the number of phones where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the number of matching phones
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUserId(long userId) throws SystemException {
+		Object[] finderArgs = new Object[] { userId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_PHONE_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_USERID_USERID_2 = "phone.userId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
+			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the phones where companyId = &#63; and classNameId = &#63;.
@@ -1801,6 +1433,106 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the phones where companyId = &#63; and classNameId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_C(long companyId, long classNameId)
+		throws SystemException {
+		for (Phone phone : findByC_C(companyId, classNameId)) {
+			remove(phone);
+		}
+	}
+
+	/**
+	 * Returns the number of phones where companyId = &#63; and classNameId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @return the number of matching phones
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_C(long companyId, long classNameId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { companyId, classNameId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_PHONE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_C_COMPANYID_2 = "phone.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "phone.classNameId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName()
+			},
+			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
+			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			PhoneModelImpl.CLASSPK_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName()
+			});
 
 	/**
 	 * Returns all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -2236,6 +1968,118 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_C_C(long companyId, long classNameId, long classPK)
+		throws SystemException {
+		for (Phone phone : findByC_C_C(companyId, classNameId, classPK)) {
+			remove(phone);
+		}
+	}
+
+	/**
+	 * Returns the number of phones where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the number of matching phones
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_C_C(long companyId, long classNameId, long classPK)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { companyId, classNameId, classPK };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_C,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_PHONE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_C_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_CLASSPK_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_C,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_C_C_COMPANYID_2 = "phone.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_C_CLASSNAMEID_2 = "phone.classNameId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_C_CLASSPK_2 = "phone.classPK = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C_P = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_C_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P =
+		new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, PhoneImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_C_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
+			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			PhoneModelImpl.CLASSPK_COLUMN_BITMASK |
+			PhoneModelImpl.PRIMARY_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C_P = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
 
 	/**
 	 * Returns all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
@@ -2699,6 +2543,548 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	}
 
 	/**
+	 * Removes all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_C_C_P(long companyId, long classNameId, long classPK,
+		boolean primary) throws SystemException {
+		for (Phone phone : findByC_C_C_P(companyId, classNameId, classPK,
+				primary)) {
+			remove(phone);
+		}
+	}
+
+	/**
+	 * Returns the number of phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param primary the primary
+	 * @return the number of matching phones
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_C_C_P(long companyId, long classNameId, long classPK,
+		boolean primary) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				companyId, classNameId, classPK, primary
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_C_P,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(5);
+
+			query.append(_SQL_COUNT_PHONE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_CLASSPK_2);
+
+			query.append(_FINDER_COLUMN_C_C_C_P_PRIMARY_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				qPos.add(primary);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_C_P,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_C_C_P_COMPANYID_2 = "phone.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_C_P_CLASSNAMEID_2 = "phone.classNameId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_C_P_CLASSPK_2 = "phone.classPK = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_C_P_PRIMARY_2 = "phone.primary = ?";
+
+	/**
+	 * Caches the phone in the entity cache if it is enabled.
+	 *
+	 * @param phone the phone
+	 */
+	public void cacheResult(Phone phone) {
+		EntityCacheUtil.putResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneImpl.class, phone.getPrimaryKey(), phone);
+
+		phone.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the phones in the entity cache if it is enabled.
+	 *
+	 * @param phones the phones
+	 */
+	public void cacheResult(List<Phone> phones) {
+		for (Phone phone : phones) {
+			if (EntityCacheUtil.getResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+						PhoneImpl.class, phone.getPrimaryKey()) == null) {
+				cacheResult(phone);
+			}
+			else {
+				phone.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all phones.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(PhoneImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(PhoneImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the phone.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(Phone phone) {
+		EntityCacheUtil.removeResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneImpl.class, phone.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<Phone> phones) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (Phone phone : phones) {
+			EntityCacheUtil.removeResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+				PhoneImpl.class, phone.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new phone with the primary key. Does not add the phone to the database.
+	 *
+	 * @param phoneId the primary key for the new phone
+	 * @return the new phone
+	 */
+	public Phone create(long phoneId) {
+		Phone phone = new PhoneImpl();
+
+		phone.setNew(true);
+		phone.setPrimaryKey(phoneId);
+
+		return phone;
+	}
+
+	/**
+	 * Removes the phone with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param phoneId the primary key of the phone
+	 * @return the phone that was removed
+	 * @throws com.liferay.portal.NoSuchPhoneException if a phone with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone remove(long phoneId)
+		throws NoSuchPhoneException, SystemException {
+		return remove(Long.valueOf(phoneId));
+	}
+
+	/**
+	 * Removes the phone with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the phone
+	 * @return the phone that was removed
+	 * @throws com.liferay.portal.NoSuchPhoneException if a phone with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Phone remove(Serializable primaryKey)
+		throws NoSuchPhoneException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Phone phone = (Phone)session.get(PhoneImpl.class, primaryKey);
+
+			if (phone == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchPhoneException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(phone);
+		}
+		catch (NoSuchPhoneException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected Phone removeImpl(Phone phone) throws SystemException {
+		phone = toUnwrappedModel(phone);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(phone)) {
+				phone = (Phone)session.get(PhoneImpl.class,
+						phone.getPrimaryKeyObj());
+			}
+
+			if (phone != null) {
+				session.delete(phone);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (phone != null) {
+			clearCache(phone);
+		}
+
+		return phone;
+	}
+
+	@Override
+	public Phone updateImpl(com.liferay.portal.model.Phone phone)
+		throws SystemException {
+		phone = toUnwrappedModel(phone);
+
+		boolean isNew = phone.isNew();
+
+		PhoneModelImpl phoneModelImpl = (PhoneModelImpl)phone;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (phone.isNew()) {
+				session.save(phone);
+
+				phone.setNew(false);
+			}
+			else {
+				session.merge(phone);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !PhoneModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((phoneModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(phoneModelImpl.getOriginalCompanyId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] { Long.valueOf(phoneModelImpl.getCompanyId()) };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+
+			if ((phoneModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(phoneModelImpl.getOriginalUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
+
+				args = new Object[] { Long.valueOf(phoneModelImpl.getUserId()) };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
+			}
+
+			if ((phoneModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(phoneModelImpl.getOriginalCompanyId()),
+						Long.valueOf(phoneModelImpl.getOriginalClassNameId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(phoneModelImpl.getCompanyId()),
+						Long.valueOf(phoneModelImpl.getClassNameId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
+			}
+
+			if ((phoneModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(phoneModelImpl.getOriginalCompanyId()),
+						Long.valueOf(phoneModelImpl.getOriginalClassNameId()),
+						Long.valueOf(phoneModelImpl.getOriginalClassPK())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(phoneModelImpl.getCompanyId()),
+						Long.valueOf(phoneModelImpl.getClassNameId()),
+						Long.valueOf(phoneModelImpl.getClassPK())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C,
+					args);
+			}
+
+			if ((phoneModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(phoneModelImpl.getOriginalCompanyId()),
+						Long.valueOf(phoneModelImpl.getOriginalClassNameId()),
+						Long.valueOf(phoneModelImpl.getOriginalClassPK()),
+						Boolean.valueOf(phoneModelImpl.getOriginalPrimary())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(phoneModelImpl.getCompanyId()),
+						Long.valueOf(phoneModelImpl.getClassNameId()),
+						Long.valueOf(phoneModelImpl.getClassPK()),
+						Boolean.valueOf(phoneModelImpl.getPrimary())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+			PhoneImpl.class, phone.getPrimaryKey(), phone);
+
+		return phone;
+	}
+
+	protected Phone toUnwrappedModel(Phone phone) {
+		if (phone instanceof PhoneImpl) {
+			return phone;
+		}
+
+		PhoneImpl phoneImpl = new PhoneImpl();
+
+		phoneImpl.setNew(phone.isNew());
+		phoneImpl.setPrimaryKey(phone.getPrimaryKey());
+
+		phoneImpl.setPhoneId(phone.getPhoneId());
+		phoneImpl.setCompanyId(phone.getCompanyId());
+		phoneImpl.setUserId(phone.getUserId());
+		phoneImpl.setUserName(phone.getUserName());
+		phoneImpl.setCreateDate(phone.getCreateDate());
+		phoneImpl.setModifiedDate(phone.getModifiedDate());
+		phoneImpl.setClassNameId(phone.getClassNameId());
+		phoneImpl.setClassPK(phone.getClassPK());
+		phoneImpl.setNumber(phone.getNumber());
+		phoneImpl.setExtension(phone.getExtension());
+		phoneImpl.setTypeId(phone.getTypeId());
+		phoneImpl.setPrimary(phone.isPrimary());
+
+		return phoneImpl;
+	}
+
+	/**
+	 * Returns the phone with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the phone
+	 * @return the phone
+	 * @throws com.liferay.portal.NoSuchModelException if a phone with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Phone findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the phone with the primary key or throws a {@link com.liferay.portal.NoSuchPhoneException} if it could not be found.
+	 *
+	 * @param phoneId the primary key of the phone
+	 * @return the phone
+	 * @throws com.liferay.portal.NoSuchPhoneException if a phone with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone findByPrimaryKey(long phoneId)
+		throws NoSuchPhoneException, SystemException {
+		Phone phone = fetchByPrimaryKey(phoneId);
+
+		if (phone == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + phoneId);
+			}
+
+			throw new NoSuchPhoneException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				phoneId);
+		}
+
+		return phone;
+	}
+
+	/**
+	 * Returns the phone with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the phone
+	 * @return the phone, or <code>null</code> if a phone with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Phone fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the phone with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param phoneId the primary key of the phone
+	 * @return the phone, or <code>null</code> if a phone with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Phone fetchByPrimaryKey(long phoneId) throws SystemException {
+		Phone phone = (Phone)EntityCacheUtil.getResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+				PhoneImpl.class, phoneId);
+
+		if (phone == _nullPhone) {
+			return null;
+		}
+
+		if (phone == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				phone = (Phone)session.get(PhoneImpl.class,
+						Long.valueOf(phoneId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (phone != null) {
+					cacheResult(phone);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+						PhoneImpl.class, phoneId, _nullPhone);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return phone;
+	}
+
+	/**
 	 * Returns all the phones.
 	 *
 	 * @return the phones
@@ -2813,76 +3199,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	}
 
 	/**
-	 * Removes all the phones where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (Phone phone : findByCompanyId(companyId)) {
-			remove(phone);
-		}
-	}
-
-	/**
-	 * Removes all the phones where userId = &#63; from the database.
-	 *
-	 * @param userId the user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUserId(long userId) throws SystemException {
-		for (Phone phone : findByUserId(userId)) {
-			remove(phone);
-		}
-	}
-
-	/**
-	 * Removes all the phones where companyId = &#63; and classNameId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_C(long companyId, long classNameId)
-		throws SystemException {
-		for (Phone phone : findByC_C(companyId, classNameId)) {
-			remove(phone);
-		}
-	}
-
-	/**
-	 * Removes all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_C_C(long companyId, long classNameId, long classPK)
-		throws SystemException {
-		for (Phone phone : findByC_C_C(companyId, classNameId, classPK)) {
-			remove(phone);
-		}
-	}
-
-	/**
-	 * Removes all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param primary the primary
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_C_C_P(long companyId, long classNameId, long classPK,
-		boolean primary) throws SystemException {
-		for (Phone phone : findByC_C_C_P(companyId, classNameId, classPK,
-				primary)) {
-			remove(phone);
-		}
-	}
-
-	/**
 	 * Removes all the phones from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2891,306 +3207,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 		for (Phone phone : findAll()) {
 			remove(phone);
 		}
-	}
-
-	/**
-	 * Returns the number of phones where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching phones
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_PHONE_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of phones where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @return the number of matching phones
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUserId(long userId) throws SystemException {
-		Object[] finderArgs = new Object[] { userId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_PHONE_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of phones where companyId = &#63; and classNameId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @return the number of matching phones
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_C(long companyId, long classNameId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, classNameId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_PHONE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(classNameId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of phones where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @return the number of matching phones
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_C_C(long companyId, long classNameId, long classPK)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, classNameId, classPK };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_PHONE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_C_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_CLASSPK_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param primary the primary
-	 * @return the number of matching phones
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_C_C_P(long companyId, long classNameId, long classPK,
-		boolean primary) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				companyId, classNameId, classPK, primary
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_C_P,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(5);
-
-			query.append(_SQL_COUNT_PHONE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_CLASSPK_2);
-
-			query.append(_FINDER_COLUMN_C_C_C_P_PRIMARY_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				qPos.add(primary);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_C_P,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -3388,17 +3404,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	private static final String _SQL_SELECT_PHONE_WHERE = "SELECT phone FROM Phone phone WHERE ";
 	private static final String _SQL_COUNT_PHONE = "SELECT COUNT(phone) FROM Phone phone";
 	private static final String _SQL_COUNT_PHONE_WHERE = "SELECT COUNT(phone) FROM Phone phone WHERE ";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "phone.companyId = ?";
-	private static final String _FINDER_COLUMN_USERID_USERID_2 = "phone.userId = ?";
-	private static final String _FINDER_COLUMN_C_C_COMPANYID_2 = "phone.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "phone.classNameId = ?";
-	private static final String _FINDER_COLUMN_C_C_C_COMPANYID_2 = "phone.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_C_CLASSNAMEID_2 = "phone.classNameId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_C_CLASSPK_2 = "phone.classPK = ?";
-	private static final String _FINDER_COLUMN_C_C_C_P_COMPANYID_2 = "phone.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_C_P_CLASSNAMEID_2 = "phone.classNameId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_C_P_CLASSPK_2 = "phone.classPK = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_C_P_PRIMARY_2 = "phone.primary = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "phone.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Phone exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Phone exists with the key {";

@@ -82,6 +82,15 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByActive",
@@ -101,427 +110,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByActive",
 			new String[] { Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByA_R",
-			new String[] {
-				Boolean.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByA_R",
-			new String[] { Boolean.class.getName(), Boolean.class.getName() },
-			SCLicenseModelImpl.ACTIVE_COLUMN_BITMASK |
-			SCLicenseModelImpl.RECOMMENDED_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByA_R",
-			new String[] { Boolean.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the s c license in the entity cache if it is enabled.
-	 *
-	 * @param scLicense the s c license
-	 */
-	public void cacheResult(SCLicense scLicense) {
-		EntityCacheUtil.putResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-			SCLicenseImpl.class, scLicense.getPrimaryKey(), scLicense);
-
-		scLicense.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the s c licenses in the entity cache if it is enabled.
-	 *
-	 * @param scLicenses the s c licenses
-	 */
-	public void cacheResult(List<SCLicense> scLicenses) {
-		for (SCLicense scLicense : scLicenses) {
-			if (EntityCacheUtil.getResult(
-						SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-						SCLicenseImpl.class, scLicense.getPrimaryKey()) == null) {
-				cacheResult(scLicense);
-			}
-			else {
-				scLicense.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all s c licenses.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(SCLicenseImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(SCLicenseImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the s c license.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(SCLicense scLicense) {
-		EntityCacheUtil.removeResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-			SCLicenseImpl.class, scLicense.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<SCLicense> scLicenses) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (SCLicense scLicense : scLicenses) {
-			EntityCacheUtil.removeResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-				SCLicenseImpl.class, scLicense.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new s c license with the primary key. Does not add the s c license to the database.
-	 *
-	 * @param licenseId the primary key for the new s c license
-	 * @return the new s c license
-	 */
-	public SCLicense create(long licenseId) {
-		SCLicense scLicense = new SCLicenseImpl();
-
-		scLicense.setNew(true);
-		scLicense.setPrimaryKey(licenseId);
-
-		return scLicense;
-	}
-
-	/**
-	 * Removes the s c license with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param licenseId the primary key of the s c license
-	 * @return the s c license that was removed
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCLicense remove(long licenseId)
-		throws NoSuchLicenseException, SystemException {
-		return remove(Long.valueOf(licenseId));
-	}
-
-	/**
-	 * Removes the s c license with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the s c license
-	 * @return the s c license that was removed
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SCLicense remove(Serializable primaryKey)
-		throws NoSuchLicenseException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SCLicense scLicense = (SCLicense)session.get(SCLicenseImpl.class,
-					primaryKey);
-
-			if (scLicense == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchLicenseException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(scLicense);
-		}
-		catch (NoSuchLicenseException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected SCLicense removeImpl(SCLicense scLicense)
-		throws SystemException {
-		scLicense = toUnwrappedModel(scLicense);
-
-		try {
-			clearSCProductEntries.clear(scLicense.getPrimaryKey());
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCLicenseModelImpl.MAPPING_TABLE_SCLICENSES_SCPRODUCTENTRIES_NAME);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (!session.contains(scLicense)) {
-				scLicense = (SCLicense)session.get(SCLicenseImpl.class,
-						scLicense.getPrimaryKeyObj());
-			}
-
-			if (scLicense != null) {
-				session.delete(scLicense);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (scLicense != null) {
-			clearCache(scLicense);
-		}
-
-		return scLicense;
-	}
-
-	@Override
-	public SCLicense updateImpl(
-		com.liferay.portlet.softwarecatalog.model.SCLicense scLicense)
-		throws SystemException {
-		scLicense = toUnwrappedModel(scLicense);
-
-		boolean isNew = scLicense.isNew();
-
-		SCLicenseModelImpl scLicenseModelImpl = (SCLicenseModelImpl)scLicense;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (scLicense.isNew()) {
-				session.save(scLicense);
-
-				scLicense.setNew(false);
-			}
-			else {
-				session.merge(scLicense);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !SCLicenseModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((scLicenseModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Boolean.valueOf(scLicenseModelImpl.getOriginalActive())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVE, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE,
-					args);
-
-				args = new Object[] {
-						Boolean.valueOf(scLicenseModelImpl.getActive())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVE, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE,
-					args);
-			}
-
-			if ((scLicenseModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Boolean.valueOf(scLicenseModelImpl.getOriginalActive()),
-						Boolean.valueOf(scLicenseModelImpl.getOriginalRecommended())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R,
-					args);
-
-				args = new Object[] {
-						Boolean.valueOf(scLicenseModelImpl.getActive()),
-						Boolean.valueOf(scLicenseModelImpl.getRecommended())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-			SCLicenseImpl.class, scLicense.getPrimaryKey(), scLicense);
-
-		return scLicense;
-	}
-
-	protected SCLicense toUnwrappedModel(SCLicense scLicense) {
-		if (scLicense instanceof SCLicenseImpl) {
-			return scLicense;
-		}
-
-		SCLicenseImpl scLicenseImpl = new SCLicenseImpl();
-
-		scLicenseImpl.setNew(scLicense.isNew());
-		scLicenseImpl.setPrimaryKey(scLicense.getPrimaryKey());
-
-		scLicenseImpl.setLicenseId(scLicense.getLicenseId());
-		scLicenseImpl.setName(scLicense.getName());
-		scLicenseImpl.setUrl(scLicense.getUrl());
-		scLicenseImpl.setOpenSource(scLicense.isOpenSource());
-		scLicenseImpl.setActive(scLicense.isActive());
-		scLicenseImpl.setRecommended(scLicense.isRecommended());
-
-		return scLicenseImpl;
-	}
-
-	/**
-	 * Returns the s c license with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the s c license
-	 * @return the s c license
-	 * @throws com.liferay.portal.NoSuchModelException if a s c license with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SCLicense findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the s c license with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchLicenseException} if it could not be found.
-	 *
-	 * @param licenseId the primary key of the s c license
-	 * @return the s c license
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCLicense findByPrimaryKey(long licenseId)
-		throws NoSuchLicenseException, SystemException {
-		SCLicense scLicense = fetchByPrimaryKey(licenseId);
-
-		if (scLicense == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + licenseId);
-			}
-
-			throw new NoSuchLicenseException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				licenseId);
-		}
-
-		return scLicense;
-	}
-
-	/**
-	 * Returns the s c license with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the s c license
-	 * @return the s c license, or <code>null</code> if a s c license with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SCLicense fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the s c license with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param licenseId the primary key of the s c license
-	 * @return the s c license, or <code>null</code> if a s c license with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCLicense fetchByPrimaryKey(long licenseId)
-		throws SystemException {
-		SCLicense scLicense = (SCLicense)EntityCacheUtil.getResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-				SCLicenseImpl.class, licenseId);
-
-		if (scLicense == _nullSCLicense) {
-			return null;
-		}
-
-		if (scLicense == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				scLicense = (SCLicense)session.get(SCLicenseImpl.class,
-						Long.valueOf(licenseId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (scLicense != null) {
-					cacheResult(scLicense);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-						SCLicenseImpl.class, licenseId, _nullSCLicense);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return scLicense;
-	}
 
 	/**
 	 * Returns all the s c licenses where active = &#63;.
@@ -1210,6 +798,139 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the s c licenses where active = &#63; from the database.
+	 *
+	 * @param active the active
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByActive(boolean active) throws SystemException {
+		for (SCLicense scLicense : findByActive(active)) {
+			remove(scLicense);
+		}
+	}
+
+	/**
+	 * Returns the number of s c licenses where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the number of matching s c licenses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByActive(boolean active) throws SystemException {
+		Object[] finderArgs = new Object[] { active };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ACTIVE,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SCLICENSE_WHERE);
+
+			query.append(_FINDER_COLUMN_ACTIVE_ACTIVE_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(active);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ACTIVE,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of s c licenses that the user has permission to view where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the number of matching s c licenses that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByActive(boolean active) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByActive(active);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_SCLICENSE_WHERE);
+
+		query.append(_FINDER_COLUMN_ACTIVE_ACTIVE_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				SCLicense.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(active);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_ACTIVE_ACTIVE_2 = "scLicense.active = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByA_R",
+			new String[] {
+				Boolean.class.getName(), Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByA_R",
+			new String[] { Boolean.class.getName(), Boolean.class.getName() },
+			SCLicenseModelImpl.ACTIVE_COLUMN_BITMASK |
+			SCLicenseModelImpl.RECOMMENDED_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByA_R",
+			new String[] { Boolean.class.getName(), Boolean.class.getName() });
 
 	/**
 	 * Returns all the s c licenses where active = &#63; and recommended = &#63;.
@@ -1946,6 +1667,528 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	}
 
 	/**
+	 * Removes all the s c licenses where active = &#63; and recommended = &#63; from the database.
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByA_R(boolean active, boolean recommended)
+		throws SystemException {
+		for (SCLicense scLicense : findByA_R(active, recommended)) {
+			remove(scLicense);
+		}
+	}
+
+	/**
+	 * Returns the number of s c licenses where active = &#63; and recommended = &#63;.
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @return the number of matching s c licenses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByA_R(boolean active, boolean recommended)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { active, recommended };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_A_R,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_SCLICENSE_WHERE);
+
+			query.append(_FINDER_COLUMN_A_R_ACTIVE_2);
+
+			query.append(_FINDER_COLUMN_A_R_RECOMMENDED_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(active);
+
+				qPos.add(recommended);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A_R, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of s c licenses that the user has permission to view where active = &#63; and recommended = &#63;.
+	 *
+	 * @param active the active
+	 * @param recommended the recommended
+	 * @return the number of matching s c licenses that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByA_R(boolean active, boolean recommended)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByA_R(active, recommended);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_SCLICENSE_WHERE);
+
+		query.append(_FINDER_COLUMN_A_R_ACTIVE_2);
+
+		query.append(_FINDER_COLUMN_A_R_RECOMMENDED_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				SCLicense.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(active);
+
+			qPos.add(recommended);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_A_R_ACTIVE_2 = "scLicense.active = ? AND ";
+	private static final String _FINDER_COLUMN_A_R_RECOMMENDED_2 = "scLicense.recommended = ?";
+
+	/**
+	 * Caches the s c license in the entity cache if it is enabled.
+	 *
+	 * @param scLicense the s c license
+	 */
+	public void cacheResult(SCLicense scLicense) {
+		EntityCacheUtil.putResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+			SCLicenseImpl.class, scLicense.getPrimaryKey(), scLicense);
+
+		scLicense.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the s c licenses in the entity cache if it is enabled.
+	 *
+	 * @param scLicenses the s c licenses
+	 */
+	public void cacheResult(List<SCLicense> scLicenses) {
+		for (SCLicense scLicense : scLicenses) {
+			if (EntityCacheUtil.getResult(
+						SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+						SCLicenseImpl.class, scLicense.getPrimaryKey()) == null) {
+				cacheResult(scLicense);
+			}
+			else {
+				scLicense.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all s c licenses.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(SCLicenseImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(SCLicenseImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the s c license.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(SCLicense scLicense) {
+		EntityCacheUtil.removeResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+			SCLicenseImpl.class, scLicense.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<SCLicense> scLicenses) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (SCLicense scLicense : scLicenses) {
+			EntityCacheUtil.removeResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+				SCLicenseImpl.class, scLicense.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new s c license with the primary key. Does not add the s c license to the database.
+	 *
+	 * @param licenseId the primary key for the new s c license
+	 * @return the new s c license
+	 */
+	public SCLicense create(long licenseId) {
+		SCLicense scLicense = new SCLicenseImpl();
+
+		scLicense.setNew(true);
+		scLicense.setPrimaryKey(licenseId);
+
+		return scLicense;
+	}
+
+	/**
+	 * Removes the s c license with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param licenseId the primary key of the s c license
+	 * @return the s c license that was removed
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense remove(long licenseId)
+		throws NoSuchLicenseException, SystemException {
+		return remove(Long.valueOf(licenseId));
+	}
+
+	/**
+	 * Removes the s c license with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the s c license
+	 * @return the s c license that was removed
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SCLicense remove(Serializable primaryKey)
+		throws NoSuchLicenseException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SCLicense scLicense = (SCLicense)session.get(SCLicenseImpl.class,
+					primaryKey);
+
+			if (scLicense == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchLicenseException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(scLicense);
+		}
+		catch (NoSuchLicenseException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected SCLicense removeImpl(SCLicense scLicense)
+		throws SystemException {
+		scLicense = toUnwrappedModel(scLicense);
+
+		try {
+			clearSCProductEntries.clear(scLicense.getPrimaryKey());
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			FinderCacheUtil.clearCache(SCLicenseModelImpl.MAPPING_TABLE_SCLICENSES_SCPRODUCTENTRIES_NAME);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(scLicense)) {
+				scLicense = (SCLicense)session.get(SCLicenseImpl.class,
+						scLicense.getPrimaryKeyObj());
+			}
+
+			if (scLicense != null) {
+				session.delete(scLicense);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (scLicense != null) {
+			clearCache(scLicense);
+		}
+
+		return scLicense;
+	}
+
+	@Override
+	public SCLicense updateImpl(
+		com.liferay.portlet.softwarecatalog.model.SCLicense scLicense)
+		throws SystemException {
+		scLicense = toUnwrappedModel(scLicense);
+
+		boolean isNew = scLicense.isNew();
+
+		SCLicenseModelImpl scLicenseModelImpl = (SCLicenseModelImpl)scLicense;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (scLicense.isNew()) {
+				session.save(scLicense);
+
+				scLicense.setNew(false);
+			}
+			else {
+				session.merge(scLicense);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !SCLicenseModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((scLicenseModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Boolean.valueOf(scLicenseModelImpl.getOriginalActive())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVE, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE,
+					args);
+
+				args = new Object[] {
+						Boolean.valueOf(scLicenseModelImpl.getActive())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVE, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE,
+					args);
+			}
+
+			if ((scLicenseModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Boolean.valueOf(scLicenseModelImpl.getOriginalActive()),
+						Boolean.valueOf(scLicenseModelImpl.getOriginalRecommended())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_R, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R,
+					args);
+
+				args = new Object[] {
+						Boolean.valueOf(scLicenseModelImpl.getActive()),
+						Boolean.valueOf(scLicenseModelImpl.getRecommended())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_R, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+			SCLicenseImpl.class, scLicense.getPrimaryKey(), scLicense);
+
+		return scLicense;
+	}
+
+	protected SCLicense toUnwrappedModel(SCLicense scLicense) {
+		if (scLicense instanceof SCLicenseImpl) {
+			return scLicense;
+		}
+
+		SCLicenseImpl scLicenseImpl = new SCLicenseImpl();
+
+		scLicenseImpl.setNew(scLicense.isNew());
+		scLicenseImpl.setPrimaryKey(scLicense.getPrimaryKey());
+
+		scLicenseImpl.setLicenseId(scLicense.getLicenseId());
+		scLicenseImpl.setName(scLicense.getName());
+		scLicenseImpl.setUrl(scLicense.getUrl());
+		scLicenseImpl.setOpenSource(scLicense.isOpenSource());
+		scLicenseImpl.setActive(scLicense.isActive());
+		scLicenseImpl.setRecommended(scLicense.isRecommended());
+
+		return scLicenseImpl;
+	}
+
+	/**
+	 * Returns the s c license with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the s c license
+	 * @return the s c license
+	 * @throws com.liferay.portal.NoSuchModelException if a s c license with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SCLicense findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the s c license with the primary key or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchLicenseException} if it could not be found.
+	 *
+	 * @param licenseId the primary key of the s c license
+	 * @return the s c license
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchLicenseException if a s c license with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense findByPrimaryKey(long licenseId)
+		throws NoSuchLicenseException, SystemException {
+		SCLicense scLicense = fetchByPrimaryKey(licenseId);
+
+		if (scLicense == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + licenseId);
+			}
+
+			throw new NoSuchLicenseException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				licenseId);
+		}
+
+		return scLicense;
+	}
+
+	/**
+	 * Returns the s c license with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the s c license
+	 * @return the s c license, or <code>null</code> if a s c license with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SCLicense fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the s c license with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param licenseId the primary key of the s c license
+	 * @return the s c license, or <code>null</code> if a s c license with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCLicense fetchByPrimaryKey(long licenseId)
+		throws SystemException {
+		SCLicense scLicense = (SCLicense)EntityCacheUtil.getResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+				SCLicenseImpl.class, licenseId);
+
+		if (scLicense == _nullSCLicense) {
+			return null;
+		}
+
+		if (scLicense == null) {
+			Session session = null;
+
+			boolean hasException = false;
+
+			try {
+				session = openSession();
+
+				scLicense = (SCLicense)session.get(SCLicenseImpl.class,
+						Long.valueOf(licenseId));
+			}
+			catch (Exception e) {
+				hasException = true;
+
+				throw processException(e);
+			}
+			finally {
+				if (scLicense != null) {
+					cacheResult(scLicense);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+						SCLicenseImpl.class, licenseId, _nullSCLicense);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return scLicense;
+	}
+
+	/**
 	 * Returns all the s c licenses.
 	 *
 	 * @return the s c licenses
@@ -2061,32 +2304,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	}
 
 	/**
-	 * Removes all the s c licenses where active = &#63; from the database.
-	 *
-	 * @param active the active
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByActive(boolean active) throws SystemException {
-		for (SCLicense scLicense : findByActive(active)) {
-			remove(scLicense);
-		}
-	}
-
-	/**
-	 * Removes all the s c licenses where active = &#63; and recommended = &#63; from the database.
-	 *
-	 * @param active the active
-	 * @param recommended the recommended
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByA_R(boolean active, boolean recommended)
-		throws SystemException {
-		for (SCLicense scLicense : findByA_R(active, recommended)) {
-			remove(scLicense);
-		}
-	}
-
-	/**
 	 * Removes all the s c licenses from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -2094,218 +2311,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	public void removeAll() throws SystemException {
 		for (SCLicense scLicense : findAll()) {
 			remove(scLicense);
-		}
-	}
-
-	/**
-	 * Returns the number of s c licenses where active = &#63;.
-	 *
-	 * @param active the active
-	 * @return the number of matching s c licenses
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByActive(boolean active) throws SystemException {
-		Object[] finderArgs = new Object[] { active };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ACTIVE,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SCLICENSE_WHERE);
-
-			query.append(_FINDER_COLUMN_ACTIVE_ACTIVE_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(active);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ACTIVE,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of s c licenses that the user has permission to view where active = &#63;.
-	 *
-	 * @param active the active
-	 * @return the number of matching s c licenses that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByActive(boolean active) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByActive(active);
-		}
-
-		StringBundler query = new StringBundler(2);
-
-		query.append(_FILTER_SQL_COUNT_SCLICENSE_WHERE);
-
-		query.append(_FINDER_COLUMN_ACTIVE_ACTIVE_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				SCLicense.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(active);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of s c licenses where active = &#63; and recommended = &#63;.
-	 *
-	 * @param active the active
-	 * @param recommended the recommended
-	 * @return the number of matching s c licenses
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByA_R(boolean active, boolean recommended)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { active, recommended };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_A_R,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_SCLICENSE_WHERE);
-
-			query.append(_FINDER_COLUMN_A_R_ACTIVE_2);
-
-			query.append(_FINDER_COLUMN_A_R_RECOMMENDED_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(active);
-
-				qPos.add(recommended);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A_R, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of s c licenses that the user has permission to view where active = &#63; and recommended = &#63;.
-	 *
-	 * @param active the active
-	 * @param recommended the recommended
-	 * @return the number of matching s c licenses that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByA_R(boolean active, boolean recommended)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled()) {
-			return countByA_R(active, recommended);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_SCLICENSE_WHERE);
-
-		query.append(_FINDER_COLUMN_A_R_ACTIVE_2);
-
-		query.append(_FINDER_COLUMN_A_R_RECOMMENDED_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				SCLicense.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(active);
-
-			qPos.add(recommended);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
 		}
 	}
 
@@ -3062,9 +3067,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	private static final String _SQL_GETSCPRODUCTENTRIES = "SELECT {SCProductEntry.*} FROM SCProductEntry INNER JOIN SCLicenses_SCProductEntries ON (SCLicenses_SCProductEntries.productEntryId = SCProductEntry.productEntryId) WHERE (SCLicenses_SCProductEntries.licenseId = ?)";
 	private static final String _SQL_GETSCPRODUCTENTRIESSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM SCLicenses_SCProductEntries WHERE licenseId = ?";
 	private static final String _SQL_CONTAINSSCPRODUCTENTRY = "SELECT COUNT(*) AS COUNT_VALUE FROM SCLicenses_SCProductEntries WHERE licenseId = ? AND productEntryId = ?";
-	private static final String _FINDER_COLUMN_ACTIVE_ACTIVE_2 = "scLicense.active = ?";
-	private static final String _FINDER_COLUMN_A_R_ACTIVE_2 = "scLicense.active = ? AND ";
-	private static final String _FINDER_COLUMN_A_R_RECOMMENDED_2 = "scLicense.recommended = ?";
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "scLicense.licenseId";
 	private static final String _FILTER_SQL_SELECT_SCLICENSE_WHERE = "SELECT DISTINCT {scLicense.*} FROM SCLicense scLicense WHERE ";
 	private static final String _FILTER_SQL_SELECT_SCLICENSE_NO_INLINE_DISTINCT_WHERE_1 =

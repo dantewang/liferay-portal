@@ -72,15 +72,6 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_FETCH_BY_SERVLETCONTEXTNAME = new FinderPath(ReleaseModelImpl.ENTITY_CACHE_ENABLED,
-			ReleaseModelImpl.FINDER_CACHE_ENABLED, ReleaseImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByServletContextName",
-			new String[] { String.class.getName() },
-			ReleaseModelImpl.SERVLETCONTEXTNAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_SERVLETCONTEXTNAME = new FinderPath(ReleaseModelImpl.ENTITY_CACHE_ENABLED,
-			ReleaseModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByServletContextName", new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ReleaseModelImpl.ENTITY_CACHE_ENABLED,
 			ReleaseModelImpl.FINDER_CACHE_ENABLED, ReleaseImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
@@ -90,6 +81,253 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ReleaseModelImpl.ENTITY_CACHE_ENABLED,
 			ReleaseModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_FETCH_BY_SERVLETCONTEXTNAME = new FinderPath(ReleaseModelImpl.ENTITY_CACHE_ENABLED,
+			ReleaseModelImpl.FINDER_CACHE_ENABLED, ReleaseImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByServletContextName",
+			new String[] { String.class.getName() },
+			ReleaseModelImpl.SERVLETCONTEXTNAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_SERVLETCONTEXTNAME = new FinderPath(ReleaseModelImpl.ENTITY_CACHE_ENABLED,
+			ReleaseModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByServletContextName", new String[] { String.class.getName() });
+
+	/**
+	 * Returns the release where servletContextName = &#63; or throws a {@link com.liferay.portal.NoSuchReleaseException} if it could not be found.
+	 *
+	 * @param servletContextName the servlet context name
+	 * @return the matching release
+	 * @throws com.liferay.portal.NoSuchReleaseException if a matching release could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Release findByServletContextName(String servletContextName)
+		throws NoSuchReleaseException, SystemException {
+		Release release = fetchByServletContextName(servletContextName);
+
+		if (release == null) {
+			StringBundler msg = new StringBundler(4);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("servletContextName=");
+			msg.append(servletContextName);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new NoSuchReleaseException(msg.toString());
+		}
+
+		return release;
+	}
+
+	/**
+	 * Returns the release where servletContextName = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param servletContextName the servlet context name
+	 * @return the matching release, or <code>null</code> if a matching release could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Release fetchByServletContextName(String servletContextName)
+		throws SystemException {
+		return fetchByServletContextName(servletContextName, true);
+	}
+
+	/**
+	 * Returns the release where servletContextName = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param servletContextName the servlet context name
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching release, or <code>null</code> if a matching release could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Release fetchByServletContextName(String servletContextName,
+		boolean retrieveFromCache) throws SystemException {
+		Object[] finderArgs = new Object[] { servletContextName };
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_SERVLETCONTEXTNAME,
+					finderArgs, this);
+		}
+
+		if (result instanceof Release) {
+			Release release = (Release)result;
+
+			if (!Validator.equals(servletContextName,
+						release.getServletContextName())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_SELECT_RELEASE_WHERE);
+
+			if (servletContextName == null) {
+				query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_1);
+			}
+			else {
+				if (servletContextName.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (servletContextName != null) {
+					qPos.add(servletContextName);
+				}
+
+				List<Release> list = q.list();
+
+				result = list;
+
+				Release release = null;
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SERVLETCONTEXTNAME,
+						finderArgs, list);
+				}
+				else {
+					release = list.get(0);
+
+					cacheResult(release);
+
+					if ((release.getServletContextName() == null) ||
+							!release.getServletContextName()
+										.equals(servletContextName)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SERVLETCONTEXTNAME,
+							finderArgs, release);
+					}
+				}
+
+				return release;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_SERVLETCONTEXTNAME,
+						finderArgs);
+				}
+
+				closeSession(session);
+			}
+		}
+		else {
+			if (result instanceof List<?>) {
+				return null;
+			}
+			else {
+				return (Release)result;
+			}
+		}
+	}
+
+	/**
+	 * Removes the release where servletContextName = &#63; from the database.
+	 *
+	 * @param servletContextName the servlet context name
+	 * @return the release that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Release removeByServletContextName(String servletContextName)
+		throws NoSuchReleaseException, SystemException {
+		Release release = findByServletContextName(servletContextName);
+
+		return remove(release);
+	}
+
+	/**
+	 * Returns the number of releases where servletContextName = &#63;.
+	 *
+	 * @param servletContextName the servlet context name
+	 * @return the number of matching releases
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByServletContextName(String servletContextName)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { servletContextName };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_SERVLETCONTEXTNAME,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_RELEASE_WHERE);
+
+			if (servletContextName == null) {
+				query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_1);
+			}
+			else {
+				if (servletContextName.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (servletContextName != null) {
+					qPos.add(servletContextName);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_SERVLETCONTEXTNAME,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_1 =
+		"release.servletContextName IS NULL";
+	private static final String _FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_2 =
+		"lower(release.servletContextName) = lower(CAST_TEXT(?))";
+	private static final String _FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_3 =
+		"(release.servletContextName IS NULL OR lower(release.servletContextName) = lower(CAST_TEXT(?)))";
 
 	/**
 	 * Caches the release in the entity cache if it is enabled.
@@ -466,157 +704,6 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 	}
 
 	/**
-	 * Returns the release where servletContextName = &#63; or throws a {@link com.liferay.portal.NoSuchReleaseException} if it could not be found.
-	 *
-	 * @param servletContextName the servlet context name
-	 * @return the matching release
-	 * @throws com.liferay.portal.NoSuchReleaseException if a matching release could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Release findByServletContextName(String servletContextName)
-		throws NoSuchReleaseException, SystemException {
-		Release release = fetchByServletContextName(servletContextName);
-
-		if (release == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("servletContextName=");
-			msg.append(servletContextName);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchReleaseException(msg.toString());
-		}
-
-		return release;
-	}
-
-	/**
-	 * Returns the release where servletContextName = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param servletContextName the servlet context name
-	 * @return the matching release, or <code>null</code> if a matching release could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Release fetchByServletContextName(String servletContextName)
-		throws SystemException {
-		return fetchByServletContextName(servletContextName, true);
-	}
-
-	/**
-	 * Returns the release where servletContextName = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param servletContextName the servlet context name
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching release, or <code>null</code> if a matching release could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Release fetchByServletContextName(String servletContextName,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { servletContextName };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_SERVLETCONTEXTNAME,
-					finderArgs, this);
-		}
-
-		if (result instanceof Release) {
-			Release release = (Release)result;
-
-			if (!Validator.equals(servletContextName,
-						release.getServletContextName())) {
-				result = null;
-			}
-		}
-
-		if (result == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_SELECT_RELEASE_WHERE);
-
-			if (servletContextName == null) {
-				query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_1);
-			}
-			else {
-				if (servletContextName.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (servletContextName != null) {
-					qPos.add(servletContextName);
-				}
-
-				List<Release> list = q.list();
-
-				result = list;
-
-				Release release = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SERVLETCONTEXTNAME,
-						finderArgs, list);
-				}
-				else {
-					release = list.get(0);
-
-					cacheResult(release);
-
-					if ((release.getServletContextName() == null) ||
-							!release.getServletContextName()
-										.equals(servletContextName)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_SERVLETCONTEXTNAME,
-							finderArgs, release);
-					}
-				}
-
-				return release;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_SERVLETCONTEXTNAME,
-						finderArgs);
-				}
-
-				closeSession(session);
-			}
-		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Release)result;
-			}
-		}
-	}
-
-	/**
 	 * Returns all the releases.
 	 *
 	 * @return the releases
@@ -731,20 +818,6 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 	}
 
 	/**
-	 * Removes the release where servletContextName = &#63; from the database.
-	 *
-	 * @param servletContextName the servlet context name
-	 * @return the release that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Release removeByServletContextName(String servletContextName)
-		throws NoSuchReleaseException, SystemException {
-		Release release = findByServletContextName(servletContextName);
-
-		return remove(release);
-	}
-
-	/**
 	 * Removes all the releases from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -753,72 +826,6 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 		for (Release release : findAll()) {
 			remove(release);
 		}
-	}
-
-	/**
-	 * Returns the number of releases where servletContextName = &#63;.
-	 *
-	 * @param servletContextName the servlet context name
-	 * @return the number of matching releases
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByServletContextName(String servletContextName)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { servletContextName };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_SERVLETCONTEXTNAME,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_RELEASE_WHERE);
-
-			if (servletContextName == null) {
-				query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_1);
-			}
-			else {
-				if (servletContextName.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (servletContextName != null) {
-					qPos.add(servletContextName);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_SERVLETCONTEXTNAME,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1016,12 +1023,6 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 	private static final String _SQL_SELECT_RELEASE_WHERE = "SELECT release FROM Release release WHERE ";
 	private static final String _SQL_COUNT_RELEASE = "SELECT COUNT(release) FROM Release release";
 	private static final String _SQL_COUNT_RELEASE_WHERE = "SELECT COUNT(release) FROM Release release WHERE ";
-	private static final String _FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_1 =
-		"release.servletContextName IS NULL";
-	private static final String _FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_2 =
-		"lower(release.servletContextName) = lower(CAST_TEXT(?))";
-	private static final String _FINDER_COLUMN_SERVLETCONTEXTNAME_SERVLETCONTEXTNAME_3 =
-		"(release.servletContextName IS NULL OR lower(release.servletContextName) = lower(CAST_TEXT(?)))";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "release.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Release exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Release exists with the key {";

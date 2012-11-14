@@ -111,86 +111,6 @@ public class SocialRequestUtil {
 	}
 
 	/**
-	* Caches the social request in the entity cache if it is enabled.
-	*
-	* @param socialRequest the social request
-	*/
-	public static void cacheResult(
-		com.liferay.portlet.social.model.SocialRequest socialRequest) {
-		getPersistence().cacheResult(socialRequest);
-	}
-
-	/**
-	* Caches the social requests in the entity cache if it is enabled.
-	*
-	* @param socialRequests the social requests
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portlet.social.model.SocialRequest> socialRequests) {
-		getPersistence().cacheResult(socialRequests);
-	}
-
-	/**
-	* Creates a new social request with the primary key. Does not add the social request to the database.
-	*
-	* @param requestId the primary key for the new social request
-	* @return the new social request
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest create(
-		long requestId) {
-		return getPersistence().create(requestId);
-	}
-
-	/**
-	* Removes the social request with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param requestId the primary key of the social request
-	* @return the social request that was removed
-	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest remove(
-		long requestId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence().remove(requestId);
-	}
-
-	public static com.liferay.portlet.social.model.SocialRequest updateImpl(
-		com.liferay.portlet.social.model.SocialRequest socialRequest)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(socialRequest);
-	}
-
-	/**
-	* Returns the social request with the primary key or throws a {@link com.liferay.portlet.social.NoSuchRequestException} if it could not be found.
-	*
-	* @param requestId the primary key of the social request
-	* @return the social request
-	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest findByPrimaryKey(
-		long requestId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence().findByPrimaryKey(requestId);
-	}
-
-	/**
-	* Returns the social request with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param requestId the primary key of the social request
-	* @return the social request, or <code>null</code> if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest fetchByPrimaryKey(
-		long requestId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(requestId);
-	}
-
-	/**
 	* Returns all the social requests where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -327,6 +247,29 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Removes all the social requests where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of social requests where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching social requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
+	}
+
+	/**
 	* Returns the social request where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.social.NoSuchRequestException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -369,6 +312,34 @@ public class SocialRequestUtil {
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUUID_G(uuid, groupId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the social request where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the social request that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().removeByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns the number of social requests where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching social requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUUID_G(java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUUID_G(uuid, groupId);
 	}
 
 	/**
@@ -522,6 +493,31 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Removes all the social requests where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns the number of social requests where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching social requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid_C(uuid, companyId);
+	}
+
+	/**
 	* Returns all the social requests where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -664,6 +660,29 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Removes all the social requests where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of social requests where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching social requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
+	}
+
+	/**
 	* Returns all the social requests where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -798,6 +817,29 @@ public class SocialRequestUtil {
 		return getPersistence()
 				   .findByUserId_PrevAndNext(requestId, userId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the social requests where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUserId(userId);
+	}
+
+	/**
+	* Returns the number of social requests where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching social requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUserId(userId);
 	}
 
 	/**
@@ -942,6 +984,29 @@ public class SocialRequestUtil {
 		return getPersistence()
 				   .findByReceiverUserId_PrevAndNext(requestId, receiverUserId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the social requests where receiverUserId = &#63; from the database.
+	*
+	* @param receiverUserId the receiver user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByReceiverUserId(long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByReceiverUserId(receiverUserId);
+	}
+
+	/**
+	* Returns the number of social requests where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the number of matching social requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByReceiverUserId(long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByReceiverUserId(receiverUserId);
 	}
 
 	/**
@@ -1091,6 +1156,31 @@ public class SocialRequestUtil {
 		return getPersistence()
 				   .findByU_S_PrevAndNext(requestId, userId, status,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the social requests where userId = &#63; and status = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByU_S(long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByU_S(userId, status);
+	}
+
+	/**
+	* Returns the number of social requests where userId = &#63; and status = &#63;.
+	*
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching social requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByU_S(long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByU_S(userId, status);
 	}
 
 	/**
@@ -1245,6 +1335,31 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Removes all the social requests where receiverUserId = &#63; and status = &#63; from the database.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByR_S(long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByR_S(receiverUserId, status);
+	}
+
+	/**
+	* Returns the number of social requests where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the number of matching social requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByR_S(long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByR_S(receiverUserId, status);
+	}
+
+	/**
 	* Returns the social request where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; or throws a {@link com.liferay.portlet.social.NoSuchRequestException} if it could not be found.
 	*
 	* @param userId the user ID
@@ -1305,6 +1420,46 @@ public class SocialRequestUtil {
 		return getPersistence()
 				   .fetchByU_C_C_T_R(userId, classNameId, classPK, type,
 			receiverUserId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the social request where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @return the social request that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest removeByU_C_C_T_R(
+		long userId, long classNameId, long classPK, int type,
+		long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .removeByU_C_C_T_R(userId, classNameId, classPK, type,
+			receiverUserId);
+	}
+
+	/**
+	* Returns the number of social requests where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @return the number of matching social requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByU_C_C_T_R(long userId, long classNameId,
+		long classPK, int type, long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByU_C_C_T_R(userId, classNameId, classPK, type,
+			receiverUserId);
 	}
 
 	/**
@@ -1490,6 +1645,41 @@ public class SocialRequestUtil {
 		return getPersistence()
 				   .findByU_C_C_T_S_PrevAndNext(requestId, userId, classNameId,
 			classPK, type, status, orderByComparator);
+	}
+
+	/**
+	* Removes all the social requests where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByU_C_C_T_S(long userId, long classNameId,
+		long classPK, int type, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByU_C_C_T_S(userId, classNameId, classPK, type, status);
+	}
+
+	/**
+	* Returns the number of social requests where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param status the status
+	* @return the number of matching social requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByU_C_C_T_S(long userId, long classNameId,
+		long classPK, int type, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByU_C_C_T_S(userId, classNameId, classPK, type, status);
 	}
 
 	/**
@@ -1683,6 +1873,123 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Removes all the social requests where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_C_T_R_S(long classNameId, long classPK,
+		int type, long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByC_C_T_R_S(classNameId, classPK, type, receiverUserId,
+			status);
+	}
+
+	/**
+	* Returns the number of social requests where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the number of matching social requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C_T_R_S(long classNameId, long classPK,
+		int type, long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByC_C_T_R_S(classNameId, classPK, type,
+			receiverUserId, status);
+	}
+
+	/**
+	* Caches the social request in the entity cache if it is enabled.
+	*
+	* @param socialRequest the social request
+	*/
+	public static void cacheResult(
+		com.liferay.portlet.social.model.SocialRequest socialRequest) {
+		getPersistence().cacheResult(socialRequest);
+	}
+
+	/**
+	* Caches the social requests in the entity cache if it is enabled.
+	*
+	* @param socialRequests the social requests
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portlet.social.model.SocialRequest> socialRequests) {
+		getPersistence().cacheResult(socialRequests);
+	}
+
+	/**
+	* Creates a new social request with the primary key. Does not add the social request to the database.
+	*
+	* @param requestId the primary key for the new social request
+	* @return the new social request
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest create(
+		long requestId) {
+		return getPersistence().create(requestId);
+	}
+
+	/**
+	* Removes the social request with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param requestId the primary key of the social request
+	* @return the social request that was removed
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest remove(
+		long requestId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().remove(requestId);
+	}
+
+	public static com.liferay.portlet.social.model.SocialRequest updateImpl(
+		com.liferay.portlet.social.model.SocialRequest socialRequest)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(socialRequest);
+	}
+
+	/**
+	* Returns the social request with the primary key or throws a {@link com.liferay.portlet.social.NoSuchRequestException} if it could not be found.
+	*
+	* @param requestId the primary key of the social request
+	* @return the social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByPrimaryKey(
+		long requestId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByPrimaryKey(requestId);
+	}
+
+	/**
+	* Returns the social request with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param requestId the primary key of the social request
+	* @return the social request, or <code>null</code> if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByPrimaryKey(
+		long requestId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(requestId);
+	}
+
+	/**
 	* Returns all the social requests.
 	*
 	* @return the social requests
@@ -1732,157 +2039,6 @@ public class SocialRequestUtil {
 	}
 
 	/**
-	* Removes all the social requests where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes the social request where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the social request that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence().removeByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Removes all the social requests where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Removes all the social requests where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
-	* Removes all the social requests where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUserId(userId);
-	}
-
-	/**
-	* Removes all the social requests where receiverUserId = &#63; from the database.
-	*
-	* @param receiverUserId the receiver user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByReceiverUserId(long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByReceiverUserId(receiverUserId);
-	}
-
-	/**
-	* Removes all the social requests where userId = &#63; and status = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByU_S(long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByU_S(userId, status);
-	}
-
-	/**
-	* Removes all the social requests where receiverUserId = &#63; and status = &#63; from the database.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByR_S(long receiverUserId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByR_S(receiverUserId, status);
-	}
-
-	/**
-	* Removes the social request where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param receiverUserId the receiver user ID
-	* @return the social request that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest removeByU_C_C_T_R(
-		long userId, long classNameId, long classPK, int type,
-		long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence()
-				   .removeByU_C_C_T_R(userId, classNameId, classPK, type,
-			receiverUserId);
-	}
-
-	/**
-	* Removes all the social requests where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByU_C_C_T_S(long userId, long classNameId,
-		long classPK, int type, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByU_C_C_T_S(userId, classNameId, classPK, type, status);
-	}
-
-	/**
-	* Removes all the social requests where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_C_T_R_S(long classNameId, long classPK,
-		int type, long receiverUserId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByC_C_T_R_S(classNameId, classPK, type, receiverUserId,
-			status);
-	}
-
-	/**
 	* Removes all the social requests from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1890,162 +2046,6 @@ public class SocialRequestUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of social requests where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching social requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of social requests where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching social requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Returns the number of social requests where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching social requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Returns the number of social requests where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching social requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of social requests where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching social requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUserId(userId);
-	}
-
-	/**
-	* Returns the number of social requests where receiverUserId = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @return the number of matching social requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByReceiverUserId(long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByReceiverUserId(receiverUserId);
-	}
-
-	/**
-	* Returns the number of social requests where userId = &#63; and status = &#63;.
-	*
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching social requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByU_S(long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByU_S(userId, status);
-	}
-
-	/**
-	* Returns the number of social requests where receiverUserId = &#63; and status = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @return the number of matching social requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByR_S(long receiverUserId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByR_S(receiverUserId, status);
-	}
-
-	/**
-	* Returns the number of social requests where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
-	*
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param receiverUserId the receiver user ID
-	* @return the number of matching social requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByU_C_C_T_R(long userId, long classNameId,
-		long classPK, int type, long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByU_C_C_T_R(userId, classNameId, classPK, type,
-			receiverUserId);
-	}
-
-	/**
-	* Returns the number of social requests where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
-	*
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param status the status
-	* @return the number of matching social requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByU_C_C_T_S(long userId, long classNameId,
-		long classPK, int type, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByU_C_C_T_S(userId, classNameId, classPK, type, status);
-	}
-
-	/**
-	* Returns the number of social requests where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @return the number of matching social requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C_T_R_S(long classNameId, long classPK,
-		int type, long receiverUserId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByC_C_T_R_S(classNameId, classPK, type,
-			receiverUserId, status);
 	}
 
 	/**

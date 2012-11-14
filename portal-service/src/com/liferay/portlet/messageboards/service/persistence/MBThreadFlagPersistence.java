@@ -38,72 +38,6 @@ public interface MBThreadFlagPersistence extends BasePersistence<MBThreadFlag> {
 	 */
 
 	/**
-	* Caches the message boards thread flag in the entity cache if it is enabled.
-	*
-	* @param mbThreadFlag the message boards thread flag
-	*/
-	public void cacheResult(
-		com.liferay.portlet.messageboards.model.MBThreadFlag mbThreadFlag);
-
-	/**
-	* Caches the message boards thread flags in the entity cache if it is enabled.
-	*
-	* @param mbThreadFlags the message boards thread flags
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.messageboards.model.MBThreadFlag> mbThreadFlags);
-
-	/**
-	* Creates a new message boards thread flag with the primary key. Does not add the message boards thread flag to the database.
-	*
-	* @param threadFlagId the primary key for the new message boards thread flag
-	* @return the new message boards thread flag
-	*/
-	public com.liferay.portlet.messageboards.model.MBThreadFlag create(
-		long threadFlagId);
-
-	/**
-	* Removes the message boards thread flag with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param threadFlagId the primary key of the message boards thread flag
-	* @return the message boards thread flag that was removed
-	* @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a message boards thread flag with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBThreadFlag remove(
-		long threadFlagId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchThreadFlagException;
-
-	public com.liferay.portlet.messageboards.model.MBThreadFlag updateImpl(
-		com.liferay.portlet.messageboards.model.MBThreadFlag mbThreadFlag)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the message boards thread flag with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchThreadFlagException} if it could not be found.
-	*
-	* @param threadFlagId the primary key of the message boards thread flag
-	* @return the message boards thread flag
-	* @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a message boards thread flag with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBThreadFlag findByPrimaryKey(
-		long threadFlagId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchThreadFlagException;
-
-	/**
-	* Returns the message boards thread flag with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param threadFlagId the primary key of the message boards thread flag
-	* @return the message boards thread flag, or <code>null</code> if a message boards thread flag with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBThreadFlag fetchByPrimaryKey(
-		long threadFlagId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the message boards thread flags where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -220,6 +154,25 @@ public interface MBThreadFlagPersistence extends BasePersistence<MBThreadFlag> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.messageboards.NoSuchThreadFlagException;
+
+	/**
+	* Removes all the message boards thread flags where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of message boards thread flags where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching message boards thread flags
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the message boards thread flags where threadId = &#63;.
@@ -341,6 +294,25 @@ public interface MBThreadFlagPersistence extends BasePersistence<MBThreadFlag> {
 			com.liferay.portlet.messageboards.NoSuchThreadFlagException;
 
 	/**
+	* Removes all the message boards thread flags where threadId = &#63; from the database.
+	*
+	* @param threadId the thread ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByThreadId(long threadId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of message boards thread flags where threadId = &#63;.
+	*
+	* @param threadId the thread ID
+	* @return the number of matching message boards thread flags
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByThreadId(long threadId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the message boards thread flag where userId = &#63; and threadId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchThreadFlagException} if it could not be found.
 	*
 	* @param userId the user ID
@@ -377,6 +349,96 @@ public interface MBThreadFlagPersistence extends BasePersistence<MBThreadFlag> {
 	*/
 	public com.liferay.portlet.messageboards.model.MBThreadFlag fetchByU_T(
 		long userId, long threadId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the message boards thread flag where userId = &#63; and threadId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param threadId the thread ID
+	* @return the message boards thread flag that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBThreadFlag removeByU_T(
+		long userId, long threadId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchThreadFlagException;
+
+	/**
+	* Returns the number of message boards thread flags where userId = &#63; and threadId = &#63;.
+	*
+	* @param userId the user ID
+	* @param threadId the thread ID
+	* @return the number of matching message boards thread flags
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByU_T(long userId, long threadId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the message boards thread flag in the entity cache if it is enabled.
+	*
+	* @param mbThreadFlag the message boards thread flag
+	*/
+	public void cacheResult(
+		com.liferay.portlet.messageboards.model.MBThreadFlag mbThreadFlag);
+
+	/**
+	* Caches the message boards thread flags in the entity cache if it is enabled.
+	*
+	* @param mbThreadFlags the message boards thread flags
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.messageboards.model.MBThreadFlag> mbThreadFlags);
+
+	/**
+	* Creates a new message boards thread flag with the primary key. Does not add the message boards thread flag to the database.
+	*
+	* @param threadFlagId the primary key for the new message boards thread flag
+	* @return the new message boards thread flag
+	*/
+	public com.liferay.portlet.messageboards.model.MBThreadFlag create(
+		long threadFlagId);
+
+	/**
+	* Removes the message boards thread flag with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param threadFlagId the primary key of the message boards thread flag
+	* @return the message boards thread flag that was removed
+	* @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a message boards thread flag with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBThreadFlag remove(
+		long threadFlagId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchThreadFlagException;
+
+	public com.liferay.portlet.messageboards.model.MBThreadFlag updateImpl(
+		com.liferay.portlet.messageboards.model.MBThreadFlag mbThreadFlag)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the message boards thread flag with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchThreadFlagException} if it could not be found.
+	*
+	* @param threadFlagId the primary key of the message boards thread flag
+	* @return the message boards thread flag
+	* @throws com.liferay.portlet.messageboards.NoSuchThreadFlagException if a message boards thread flag with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBThreadFlag findByPrimaryKey(
+		long threadFlagId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchThreadFlagException;
+
+	/**
+	* Returns the message boards thread flag with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param threadFlagId the primary key of the message boards thread flag
+	* @return the message boards thread flag, or <code>null</code> if a message boards thread flag with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.messageboards.model.MBThreadFlag fetchByPrimaryKey(
+		long threadFlagId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -423,73 +485,11 @@ public interface MBThreadFlagPersistence extends BasePersistence<MBThreadFlag> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the message boards thread flags where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the message boards thread flags where threadId = &#63; from the database.
-	*
-	* @param threadId the thread ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByThreadId(long threadId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the message boards thread flag where userId = &#63; and threadId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param threadId the thread ID
-	* @return the message boards thread flag that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.messageboards.model.MBThreadFlag removeByU_T(
-		long userId, long threadId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchThreadFlagException;
-
-	/**
 	* Removes all the message boards thread flags from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards thread flags where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching message boards thread flags
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards thread flags where threadId = &#63;.
-	*
-	* @param threadId the thread ID
-	* @return the number of matching message boards thread flags
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByThreadId(long threadId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of message boards thread flags where userId = &#63; and threadId = &#63;.
-	*
-	* @param userId the user ID
-	* @param threadId the thread ID
-	* @return the number of matching message boards thread flags
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByU_T(long userId, long threadId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

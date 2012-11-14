@@ -113,86 +113,6 @@ public class ResourceBlockPermissionUtil {
 	}
 
 	/**
-	* Caches the resource block permission in the entity cache if it is enabled.
-	*
-	* @param resourceBlockPermission the resource block permission
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.ResourceBlockPermission resourceBlockPermission) {
-		getPersistence().cacheResult(resourceBlockPermission);
-	}
-
-	/**
-	* Caches the resource block permissions in the entity cache if it is enabled.
-	*
-	* @param resourceBlockPermissions the resource block permissions
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.ResourceBlockPermission> resourceBlockPermissions) {
-		getPersistence().cacheResult(resourceBlockPermissions);
-	}
-
-	/**
-	* Creates a new resource block permission with the primary key. Does not add the resource block permission to the database.
-	*
-	* @param resourceBlockPermissionId the primary key for the new resource block permission
-	* @return the new resource block permission
-	*/
-	public static com.liferay.portal.model.ResourceBlockPermission create(
-		long resourceBlockPermissionId) {
-		return getPersistence().create(resourceBlockPermissionId);
-	}
-
-	/**
-	* Removes the resource block permission with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param resourceBlockPermissionId the primary key of the resource block permission
-	* @return the resource block permission that was removed
-	* @throws com.liferay.portal.NoSuchResourceBlockPermissionException if a resource block permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourceBlockPermission remove(
-		long resourceBlockPermissionId)
-		throws com.liferay.portal.NoSuchResourceBlockPermissionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(resourceBlockPermissionId);
-	}
-
-	public static com.liferay.portal.model.ResourceBlockPermission updateImpl(
-		com.liferay.portal.model.ResourceBlockPermission resourceBlockPermission)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(resourceBlockPermission);
-	}
-
-	/**
-	* Returns the resource block permission with the primary key or throws a {@link com.liferay.portal.NoSuchResourceBlockPermissionException} if it could not be found.
-	*
-	* @param resourceBlockPermissionId the primary key of the resource block permission
-	* @return the resource block permission
-	* @throws com.liferay.portal.NoSuchResourceBlockPermissionException if a resource block permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourceBlockPermission findByPrimaryKey(
-		long resourceBlockPermissionId)
-		throws com.liferay.portal.NoSuchResourceBlockPermissionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(resourceBlockPermissionId);
-	}
-
-	/**
-	* Returns the resource block permission with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param resourceBlockPermissionId the primary key of the resource block permission
-	* @return the resource block permission, or <code>null</code> if a resource block permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourceBlockPermission fetchByPrimaryKey(
-		long resourceBlockPermissionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(resourceBlockPermissionId);
-	}
-
-	/**
 	* Returns all the resource block permissions where resourceBlockId = &#63;.
 	*
 	* @param resourceBlockId the resource block ID
@@ -341,6 +261,29 @@ public class ResourceBlockPermissionUtil {
 	}
 
 	/**
+	* Removes all the resource block permissions where resourceBlockId = &#63; from the database.
+	*
+	* @param resourceBlockId the resource block ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByResourceBlockId(long resourceBlockId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByResourceBlockId(resourceBlockId);
+	}
+
+	/**
+	* Returns the number of resource block permissions where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @return the number of matching resource block permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByResourceBlockId(long resourceBlockId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByResourceBlockId(resourceBlockId);
+	}
+
+	/**
 	* Returns the resource block permission where resourceBlockId = &#63; and roleId = &#63; or throws a {@link com.liferay.portal.NoSuchResourceBlockPermissionException} if it could not be found.
 	*
 	* @param resourceBlockId the resource block ID
@@ -384,6 +327,114 @@ public class ResourceBlockPermissionUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByR_R(resourceBlockId, roleId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the resource block permission where resourceBlockId = &#63; and roleId = &#63; from the database.
+	*
+	* @param resourceBlockId the resource block ID
+	* @param roleId the role ID
+	* @return the resource block permission that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceBlockPermission removeByR_R(
+		long resourceBlockId, long roleId)
+		throws com.liferay.portal.NoSuchResourceBlockPermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByR_R(resourceBlockId, roleId);
+	}
+
+	/**
+	* Returns the number of resource block permissions where resourceBlockId = &#63; and roleId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @param roleId the role ID
+	* @return the number of matching resource block permissions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByR_R(long resourceBlockId, long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByR_R(resourceBlockId, roleId);
+	}
+
+	/**
+	* Caches the resource block permission in the entity cache if it is enabled.
+	*
+	* @param resourceBlockPermission the resource block permission
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.ResourceBlockPermission resourceBlockPermission) {
+		getPersistence().cacheResult(resourceBlockPermission);
+	}
+
+	/**
+	* Caches the resource block permissions in the entity cache if it is enabled.
+	*
+	* @param resourceBlockPermissions the resource block permissions
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.ResourceBlockPermission> resourceBlockPermissions) {
+		getPersistence().cacheResult(resourceBlockPermissions);
+	}
+
+	/**
+	* Creates a new resource block permission with the primary key. Does not add the resource block permission to the database.
+	*
+	* @param resourceBlockPermissionId the primary key for the new resource block permission
+	* @return the new resource block permission
+	*/
+	public static com.liferay.portal.model.ResourceBlockPermission create(
+		long resourceBlockPermissionId) {
+		return getPersistence().create(resourceBlockPermissionId);
+	}
+
+	/**
+	* Removes the resource block permission with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param resourceBlockPermissionId the primary key of the resource block permission
+	* @return the resource block permission that was removed
+	* @throws com.liferay.portal.NoSuchResourceBlockPermissionException if a resource block permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceBlockPermission remove(
+		long resourceBlockPermissionId)
+		throws com.liferay.portal.NoSuchResourceBlockPermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(resourceBlockPermissionId);
+	}
+
+	public static com.liferay.portal.model.ResourceBlockPermission updateImpl(
+		com.liferay.portal.model.ResourceBlockPermission resourceBlockPermission)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(resourceBlockPermission);
+	}
+
+	/**
+	* Returns the resource block permission with the primary key or throws a {@link com.liferay.portal.NoSuchResourceBlockPermissionException} if it could not be found.
+	*
+	* @param resourceBlockPermissionId the primary key of the resource block permission
+	* @return the resource block permission
+	* @throws com.liferay.portal.NoSuchResourceBlockPermissionException if a resource block permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceBlockPermission findByPrimaryKey(
+		long resourceBlockPermissionId)
+		throws com.liferay.portal.NoSuchResourceBlockPermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(resourceBlockPermissionId);
+	}
+
+	/**
+	* Returns the resource block permission with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param resourceBlockPermissionId the primary key of the resource block permission
+	* @return the resource block permission, or <code>null</code> if a resource block permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceBlockPermission fetchByPrimaryKey(
+		long resourceBlockPermissionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(resourceBlockPermissionId);
 	}
 
 	/**
@@ -436,32 +487,6 @@ public class ResourceBlockPermissionUtil {
 	}
 
 	/**
-	* Removes all the resource block permissions where resourceBlockId = &#63; from the database.
-	*
-	* @param resourceBlockId the resource block ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByResourceBlockId(long resourceBlockId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByResourceBlockId(resourceBlockId);
-	}
-
-	/**
-	* Removes the resource block permission where resourceBlockId = &#63; and roleId = &#63; from the database.
-	*
-	* @param resourceBlockId the resource block ID
-	* @param roleId the role ID
-	* @return the resource block permission that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourceBlockPermission removeByR_R(
-		long resourceBlockId, long roleId)
-		throws com.liferay.portal.NoSuchResourceBlockPermissionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByR_R(resourceBlockId, roleId);
-	}
-
-	/**
 	* Removes all the resource block permissions from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -469,31 +494,6 @@ public class ResourceBlockPermissionUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of resource block permissions where resourceBlockId = &#63;.
-	*
-	* @param resourceBlockId the resource block ID
-	* @return the number of matching resource block permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByResourceBlockId(long resourceBlockId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByResourceBlockId(resourceBlockId);
-	}
-
-	/**
-	* Returns the number of resource block permissions where resourceBlockId = &#63; and roleId = &#63;.
-	*
-	* @param resourceBlockId the resource block ID
-	* @param roleId the role ID
-	* @return the number of matching resource block permissions
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByR_R(long resourceBlockId, long roleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByR_R(resourceBlockId, roleId);
 	}
 
 	/**

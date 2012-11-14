@@ -38,70 +38,6 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 	 */
 
 	/**
-	* Caches the blogs entry in the entity cache if it is enabled.
-	*
-	* @param blogsEntry the blogs entry
-	*/
-	public void cacheResult(
-		com.liferay.portlet.blogs.model.BlogsEntry blogsEntry);
-
-	/**
-	* Caches the blogs entries in the entity cache if it is enabled.
-	*
-	* @param blogsEntries the blogs entries
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> blogsEntries);
-
-	/**
-	* Creates a new blogs entry with the primary key. Does not add the blogs entry to the database.
-	*
-	* @param entryId the primary key for the new blogs entry
-	* @return the new blogs entry
-	*/
-	public com.liferay.portlet.blogs.model.BlogsEntry create(long entryId);
-
-	/**
-	* Removes the blogs entry with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param entryId the primary key of the blogs entry
-	* @return the blogs entry that was removed
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsEntry remove(long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException;
-
-	public com.liferay.portlet.blogs.model.BlogsEntry updateImpl(
-		com.liferay.portlet.blogs.model.BlogsEntry blogsEntry)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the blogs entry with the primary key or throws a {@link com.liferay.portlet.blogs.NoSuchEntryException} if it could not be found.
-	*
-	* @param entryId the primary key of the blogs entry
-	* @return the blogs entry
-	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsEntry findByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException;
-
-	/**
-	* Returns the blogs entry with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param entryId the primary key of the blogs entry
-	* @return the blogs entry, or <code>null</code> if a blogs entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsEntry fetchByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the blogs entries where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -221,6 +157,25 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the blogs entry where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.blogs.NoSuchEntryException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -257,6 +212,30 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 	*/
 	public com.liferay.portlet.blogs.model.BlogsEntry fetchByUUID_G(
 		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the blogs entry where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the blogs entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsEntry removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Returns the number of blogs entries where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUUID_G(java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -385,6 +364,27 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Removes all the blogs entries where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the blogs entries where groupId = &#63;.
@@ -569,6 +569,35 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -686,6 +715,25 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Removes all the blogs entries where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the blogs entries where companyId = &#63; and userId = &#63;.
@@ -815,6 +863,27 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where companyId = &#63; and userId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_U(long companyId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and userId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_U(long companyId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63;.
 	*
 	* @param companyId the company ID
@@ -940,6 +1009,27 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_LtD(long companyId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_LtD(long companyId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the blogs entries where companyId = &#63; and status &ne; &#63;.
@@ -1069,6 +1159,27 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where companyId = &#63; and status &ne; &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_NotS(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_NotS(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries where companyId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -1196,6 +1307,27 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where companyId = &#63; and status = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_S(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_S(long companyId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the blogs entry where groupId = &#63; and urlTitle = &#63; or throws a {@link com.liferay.portlet.blogs.NoSuchEntryException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -1232,6 +1364,30 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 	*/
 	public com.liferay.portlet.blogs.model.BlogsEntry fetchByG_UT(
 		long groupId, java.lang.String urlTitle, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the blogs entry where groupId = &#63; and urlTitle = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @return the blogs entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsEntry removeByG_UT(
+		long groupId, java.lang.String urlTitle)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and urlTitle = &#63;.
+	*
+	* @param groupId the group ID
+	* @param urlTitle the url title
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_UT(long groupId, java.lang.String urlTitle)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -1429,6 +1585,38 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_LtD(long groupId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_LtD(long groupId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_LtD(long groupId, java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and status &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -1621,6 +1809,38 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and status &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_NotS(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_NotS(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_NotS(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the blogs entries where groupId = &#63; and status = &#63;.
@@ -1817,6 +2037,38 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where groupId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_S(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_S(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_S(long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries where displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param displayDate the display date
@@ -1942,6 +2194,27 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Removes all the blogs entries where displayDate &lt; &#63; and status = &#63; from the database.
+	*
+	* @param displayDate the display date
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByLtD_S(java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByLtD_S(java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
@@ -2079,6 +2352,29 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_U_NotS(long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_U_NotS(long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -2212,6 +2508,29 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Removes all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_U_S(long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_U_S(long companyId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
@@ -2350,6 +2669,29 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_LtD_NotS(long companyId, java.util.Date displayDate,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_LtD_NotS(long companyId, java.util.Date displayDate,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -2484,6 +2826,29 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_LtD_S(long companyId, java.util.Date displayDate,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_LtD_S(long companyId, java.util.Date displayDate,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
@@ -2694,6 +3059,44 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_U_LtD(long groupId, long userId,
+		java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_U_LtD(long groupId, long userId,
+		java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_U_LtD(long groupId, long userId,
+		java.util.Date displayDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -2900,6 +3303,41 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_U_NotS(long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_U_NotS(long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_U_NotS(long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and userId = &#63; and status = &#63;.
 	*
 	* @param groupId the group ID
@@ -3104,6 +3542,41 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_U_S(long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_U_S(long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_U_S(long groupId, long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
@@ -3314,6 +3787,42 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_LtD_NotS(long groupId, java.util.Date displayDate,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_LtD_NotS(long groupId, java.util.Date displayDate,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_LtD_NotS(long groupId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param groupId the group ID
@@ -3520,6 +4029,41 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_LtD_S(long groupId, java.util.Date displayDate,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_LtD_S(long groupId, java.util.Date displayDate,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_LtD_S(long groupId, java.util.Date displayDate,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
@@ -3746,6 +4290,47 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_U_LtD_NotS(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_U_LtD_NotS(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_U_LtD_NotS(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	*
 	* @param groupId the group ID
@@ -3970,6 +4555,111 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 			com.liferay.portlet.blogs.NoSuchEntryException;
 
 	/**
+	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByG_U_LtD_S(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_U_LtD_S(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param displayDate the display date
+	* @param status the status
+	* @return the number of matching blogs entries that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByG_U_LtD_S(long groupId, long userId,
+		java.util.Date displayDate, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the blogs entry in the entity cache if it is enabled.
+	*
+	* @param blogsEntry the blogs entry
+	*/
+	public void cacheResult(
+		com.liferay.portlet.blogs.model.BlogsEntry blogsEntry);
+
+	/**
+	* Caches the blogs entries in the entity cache if it is enabled.
+	*
+	* @param blogsEntries the blogs entries
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> blogsEntries);
+
+	/**
+	* Creates a new blogs entry with the primary key. Does not add the blogs entry to the database.
+	*
+	* @param entryId the primary key for the new blogs entry
+	* @return the new blogs entry
+	*/
+	public com.liferay.portlet.blogs.model.BlogsEntry create(long entryId);
+
+	/**
+	* Removes the blogs entry with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param entryId the primary key of the blogs entry
+	* @return the blogs entry that was removed
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsEntry remove(long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	public com.liferay.portlet.blogs.model.BlogsEntry updateImpl(
+		com.liferay.portlet.blogs.model.BlogsEntry blogsEntry)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the blogs entry with the primary key or throws a {@link com.liferay.portlet.blogs.NoSuchEntryException} if it could not be found.
+	*
+	* @param entryId the primary key of the blogs entry
+	* @return the blogs entry
+	* @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsEntry findByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchEntryException;
+
+	/**
+	* Returns the blogs entry with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param entryId the primary key of the blogs entry
+	* @return the blogs entry, or <code>null</code> if a blogs entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsEntry fetchByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the blogs entries.
 	*
 	* @return the blogs entries
@@ -4013,701 +4703,11 @@ public interface BlogsEntryPersistence extends BasePersistence<BlogsEntry> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the blogs entries where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the blogs entry where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the blogs entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsEntry removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException;
-
-	/**
-	* Removes all the blogs entries where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and userId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_U(long companyId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_LtD(long companyId, java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and status &ne; &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_NotS(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and status = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_S(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the blogs entry where groupId = &#63; and urlTitle = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @return the blogs entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsEntry removeByG_UT(
-		long groupId, java.lang.String urlTitle)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchEntryException;
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_LtD(long groupId, java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and status &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_NotS(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_S(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where displayDate &lt; &#63; and status = &#63; from the database.
-	*
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByLtD_S(java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_U_NotS(long companyId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_U_S(long companyId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_LtD_NotS(long companyId, java.util.Date displayDate,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_LtD_S(long companyId, java.util.Date displayDate,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_U_LtD(long groupId, long userId,
-		java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_U_NotS(long groupId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_U_S(long groupId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_LtD_NotS(long groupId, java.util.Date displayDate,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_LtD_S(long groupId, java.util.Date displayDate,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_U_LtD_NotS(long groupId, long userId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByG_U_LtD_S(long groupId, long userId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the blogs entries from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and userId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_U(long companyId, long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_LtD(long companyId, java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and status &ne; &#63;.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_NotS(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and status = &#63;.
-	*
-	* @param companyId the company ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_S(long companyId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and urlTitle = &#63;.
-	*
-	* @param groupId the group ID
-	* @param urlTitle the url title
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_UT(long groupId, java.lang.String urlTitle)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_LtD(long groupId, java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_LtD(long groupId, java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_NotS(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_NotS(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_S(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_S(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByLtD_S(java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_U_NotS(long companyId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
-	*
-	* @param companyId the company ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_U_S(long companyId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_LtD_NotS(long companyId, java.util.Date displayDate,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param companyId the company ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_LtD_S(long companyId, java.util.Date displayDate,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_U_LtD(long groupId, long userId,
-		java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_U_LtD(long groupId, long userId,
-		java.util.Date displayDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_U_NotS(long groupId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_U_NotS(long groupId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_U_S(long groupId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_U_S(long groupId, long userId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_LtD_NotS(long groupId, java.util.Date displayDate,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_LtD_NotS(long groupId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_LtD_S(long groupId, java.util.Date displayDate,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_LtD_S(long groupId, java.util.Date displayDate,
-		int status) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_U_LtD_NotS(long groupId, long userId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_U_LtD_NotS(long groupId, long userId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_U_LtD_S(long groupId, long userId,
-		java.util.Date displayDate, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param displayDate the display date
-	* @param status the status
-	* @return the number of matching blogs entries that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByG_U_LtD_S(long groupId, long userId,
-		java.util.Date displayDate, int status)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

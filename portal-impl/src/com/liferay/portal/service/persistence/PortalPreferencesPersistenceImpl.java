@@ -71,17 +71,6 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_FETCH_BY_O_O = new FinderPath(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			PortalPreferencesImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByO_O",
-			new String[] { Long.class.getName(), Integer.class.getName() },
-			PortalPreferencesModelImpl.OWNERID_COLUMN_BITMASK |
-			PortalPreferencesModelImpl.OWNERTYPE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_O_O = new FinderPath(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByO_O",
-			new String[] { Long.class.getName(), Integer.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED,
 			PortalPreferencesImpl.class,
@@ -93,6 +82,242 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_FETCH_BY_O_O = new FinderPath(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
+			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED,
+			PortalPreferencesImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByO_O",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			PortalPreferencesModelImpl.OWNERID_COLUMN_BITMASK |
+			PortalPreferencesModelImpl.OWNERTYPE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_O_O = new FinderPath(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
+			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByO_O",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+
+	/**
+	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or throws a {@link com.liferay.portal.NoSuchPreferencesException} if it could not be found.
+	 *
+	 * @param ownerId the owner ID
+	 * @param ownerType the owner type
+	 * @return the matching portal preferences
+	 * @throws com.liferay.portal.NoSuchPreferencesException if a matching portal preferences could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortalPreferences findByO_O(long ownerId, int ownerType)
+		throws NoSuchPreferencesException, SystemException {
+		PortalPreferences portalPreferences = fetchByO_O(ownerId, ownerType);
+
+		if (portalPreferences == null) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("ownerId=");
+			msg.append(ownerId);
+
+			msg.append(", ownerType=");
+			msg.append(ownerType);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new NoSuchPreferencesException(msg.toString());
+		}
+
+		return portalPreferences;
+	}
+
+	/**
+	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param ownerId the owner ID
+	 * @param ownerType the owner type
+	 * @return the matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortalPreferences fetchByO_O(long ownerId, int ownerType)
+		throws SystemException {
+		return fetchByO_O(ownerId, ownerType, true);
+	}
+
+	/**
+	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param ownerId the owner ID
+	 * @param ownerType the owner type
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortalPreferences fetchByO_O(long ownerId, int ownerType,
+		boolean retrieveFromCache) throws SystemException {
+		Object[] finderArgs = new Object[] { ownerId, ownerType };
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_O_O,
+					finderArgs, this);
+		}
+
+		if (result instanceof PortalPreferences) {
+			PortalPreferences portalPreferences = (PortalPreferences)result;
+
+			if ((ownerId != portalPreferences.getOwnerId()) ||
+					(ownerType != portalPreferences.getOwnerType())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_SELECT_PORTALPREFERENCES_WHERE);
+
+			query.append(_FINDER_COLUMN_O_O_OWNERID_2);
+
+			query.append(_FINDER_COLUMN_O_O_OWNERTYPE_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(ownerId);
+
+				qPos.add(ownerType);
+
+				List<PortalPreferences> list = q.list();
+
+				result = list;
+
+				PortalPreferences portalPreferences = null;
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_O_O,
+						finderArgs, list);
+				}
+				else {
+					portalPreferences = list.get(0);
+
+					cacheResult(portalPreferences);
+
+					if ((portalPreferences.getOwnerId() != ownerId) ||
+							(portalPreferences.getOwnerType() != ownerType)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_O_O,
+							finderArgs, portalPreferences);
+					}
+				}
+
+				return portalPreferences;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_O_O,
+						finderArgs);
+				}
+
+				closeSession(session);
+			}
+		}
+		else {
+			if (result instanceof List<?>) {
+				return null;
+			}
+			else {
+				return (PortalPreferences)result;
+			}
+		}
+	}
+
+	/**
+	 * Removes the portal preferences where ownerId = &#63; and ownerType = &#63; from the database.
+	 *
+	 * @param ownerId the owner ID
+	 * @param ownerType the owner type
+	 * @return the portal preferences that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortalPreferences removeByO_O(long ownerId, int ownerType)
+		throws NoSuchPreferencesException, SystemException {
+		PortalPreferences portalPreferences = findByO_O(ownerId, ownerType);
+
+		return remove(portalPreferences);
+	}
+
+	/**
+	 * Returns the number of portal preferenceses where ownerId = &#63; and ownerType = &#63;.
+	 *
+	 * @param ownerId the owner ID
+	 * @param ownerType the owner type
+	 * @return the number of matching portal preferenceses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByO_O(long ownerId, int ownerType)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { ownerId, ownerType };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_O_O,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_PORTALPREFERENCES_WHERE);
+
+			query.append(_FINDER_COLUMN_O_O_OWNERID_2);
+
+			query.append(_FINDER_COLUMN_O_O_OWNERTYPE_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(ownerId);
+
+				qPos.add(ownerType);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_O_O, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_O_O_OWNERID_2 = "portalPreferences.ownerId = ? AND ";
+	private static final String _FINDER_COLUMN_O_O_OWNERTYPE_2 = "portalPreferences.ownerType = ?";
 
 	/**
 	 * Caches the portal preferences in the entity cache if it is enabled.
@@ -485,154 +710,6 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 	}
 
 	/**
-	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or throws a {@link com.liferay.portal.NoSuchPreferencesException} if it could not be found.
-	 *
-	 * @param ownerId the owner ID
-	 * @param ownerType the owner type
-	 * @return the matching portal preferences
-	 * @throws com.liferay.portal.NoSuchPreferencesException if a matching portal preferences could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortalPreferences findByO_O(long ownerId, int ownerType)
-		throws NoSuchPreferencesException, SystemException {
-		PortalPreferences portalPreferences = fetchByO_O(ownerId, ownerType);
-
-		if (portalPreferences == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("ownerId=");
-			msg.append(ownerId);
-
-			msg.append(", ownerType=");
-			msg.append(ownerType);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchPreferencesException(msg.toString());
-		}
-
-		return portalPreferences;
-	}
-
-	/**
-	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param ownerId the owner ID
-	 * @param ownerType the owner type
-	 * @return the matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortalPreferences fetchByO_O(long ownerId, int ownerType)
-		throws SystemException {
-		return fetchByO_O(ownerId, ownerType, true);
-	}
-
-	/**
-	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param ownerId the owner ID
-	 * @param ownerType the owner type
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortalPreferences fetchByO_O(long ownerId, int ownerType,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { ownerId, ownerType };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_O_O,
-					finderArgs, this);
-		}
-
-		if (result instanceof PortalPreferences) {
-			PortalPreferences portalPreferences = (PortalPreferences)result;
-
-			if ((ownerId != portalPreferences.getOwnerId()) ||
-					(ownerType != portalPreferences.getOwnerType())) {
-				result = null;
-			}
-		}
-
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_SELECT_PORTALPREFERENCES_WHERE);
-
-			query.append(_FINDER_COLUMN_O_O_OWNERID_2);
-
-			query.append(_FINDER_COLUMN_O_O_OWNERTYPE_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(ownerId);
-
-				qPos.add(ownerType);
-
-				List<PortalPreferences> list = q.list();
-
-				result = list;
-
-				PortalPreferences portalPreferences = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_O_O,
-						finderArgs, list);
-				}
-				else {
-					portalPreferences = list.get(0);
-
-					cacheResult(portalPreferences);
-
-					if ((portalPreferences.getOwnerId() != ownerId) ||
-							(portalPreferences.getOwnerType() != ownerType)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_O_O,
-							finderArgs, portalPreferences);
-					}
-				}
-
-				return portalPreferences;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_O_O,
-						finderArgs);
-				}
-
-				closeSession(session);
-			}
-		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (PortalPreferences)result;
-			}
-		}
-	}
-
-	/**
 	 * Returns all the portal preferenceses.
 	 *
 	 * @return the portal preferenceses
@@ -748,21 +825,6 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 	}
 
 	/**
-	 * Removes the portal preferences where ownerId = &#63; and ownerType = &#63; from the database.
-	 *
-	 * @param ownerId the owner ID
-	 * @param ownerType the owner type
-	 * @return the portal preferences that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortalPreferences removeByO_O(long ownerId, int ownerType)
-		throws NoSuchPreferencesException, SystemException {
-		PortalPreferences portalPreferences = findByO_O(ownerId, ownerType);
-
-		return remove(portalPreferences);
-	}
-
-	/**
 	 * Removes all the portal preferenceses from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -771,65 +833,6 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 		for (PortalPreferences portalPreferences : findAll()) {
 			remove(portalPreferences);
 		}
-	}
-
-	/**
-	 * Returns the number of portal preferenceses where ownerId = &#63; and ownerType = &#63;.
-	 *
-	 * @param ownerId the owner ID
-	 * @param ownerType the owner type
-	 * @return the number of matching portal preferenceses
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByO_O(long ownerId, int ownerType)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { ownerId, ownerType };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_O_O,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_PORTALPREFERENCES_WHERE);
-
-			query.append(_FINDER_COLUMN_O_O_OWNERID_2);
-
-			query.append(_FINDER_COLUMN_O_O_OWNERTYPE_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(ownerId);
-
-				qPos.add(ownerType);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_O_O, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1027,8 +1030,6 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 	private static final String _SQL_SELECT_PORTALPREFERENCES_WHERE = "SELECT portalPreferences FROM PortalPreferences portalPreferences WHERE ";
 	private static final String _SQL_COUNT_PORTALPREFERENCES = "SELECT COUNT(portalPreferences) FROM PortalPreferences portalPreferences";
 	private static final String _SQL_COUNT_PORTALPREFERENCES_WHERE = "SELECT COUNT(portalPreferences) FROM PortalPreferences portalPreferences WHERE ";
-	private static final String _FINDER_COLUMN_O_O_OWNERID_2 = "portalPreferences.ownerId = ? AND ";
-	private static final String _FINDER_COLUMN_O_O_OWNERTYPE_2 = "portalPreferences.ownerType = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "portalPreferences.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No PortalPreferences exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No PortalPreferences exists with the key {";

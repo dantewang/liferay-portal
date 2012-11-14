@@ -38,72 +38,6 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 	 */
 
 	/**
-	* Caches the d d l record version in the entity cache if it is enabled.
-	*
-	* @param ddlRecordVersion the d d l record version
-	*/
-	public void cacheResult(
-		com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion ddlRecordVersion);
-
-	/**
-	* Caches the d d l record versions in the entity cache if it is enabled.
-	*
-	* @param ddlRecordVersions the d d l record versions
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion> ddlRecordVersions);
-
-	/**
-	* Creates a new d d l record version with the primary key. Does not add the d d l record version to the database.
-	*
-	* @param recordVersionId the primary key for the new d d l record version
-	* @return the new d d l record version
-	*/
-	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion create(
-		long recordVersionId);
-
-	/**
-	* Removes the d d l record version with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param recordVersionId the primary key of the d d l record version
-	* @return the d d l record version that was removed
-	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a d d l record version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion remove(
-		long recordVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
-
-	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion updateImpl(
-		com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion ddlRecordVersion)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the d d l record version with the primary key or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException} if it could not be found.
-	*
-	* @param recordVersionId the primary key of the d d l record version
-	* @return the d d l record version
-	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a d d l record version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion findByPrimaryKey(
-		long recordVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
-
-	/**
-	* Returns the d d l record version with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param recordVersionId the primary key of the d d l record version
-	* @return the d d l record version, or <code>null</code> if a d d l record version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion fetchByPrimaryKey(
-		long recordVersionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the d d l record versions where recordId = &#63;.
 	*
 	* @param recordId the record ID
@@ -223,6 +157,25 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
 
 	/**
+	* Removes all the d d l record versions where recordId = &#63; from the database.
+	*
+	* @param recordId the record ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByRecordId(long recordId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of d d l record versions where recordId = &#63;.
+	*
+	* @param recordId the record ID
+	* @return the number of matching d d l record versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByRecordId(long recordId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the d d l record version where recordId = &#63; and version = &#63; or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException} if it could not be found.
 	*
 	* @param recordId the record ID
@@ -259,6 +212,30 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 	*/
 	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion fetchByR_V(
 		long recordId, java.lang.String version, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the d d l record version where recordId = &#63; and version = &#63; from the database.
+	*
+	* @param recordId the record ID
+	* @param version the version
+	* @return the d d l record version that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion removeByR_V(
+		long recordId, java.lang.String version)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
+
+	/**
+	* Returns the number of d d l record versions where recordId = &#63; and version = &#63;.
+	*
+	* @param recordId the record ID
+	* @param version the version
+	* @return the number of matching d d l record versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByR_V(long recordId, java.lang.String version)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -389,6 +366,93 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
 
 	/**
+	* Removes all the d d l record versions where recordId = &#63; and status = &#63; from the database.
+	*
+	* @param recordId the record ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByR_S(long recordId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of d d l record versions where recordId = &#63; and status = &#63;.
+	*
+	* @param recordId the record ID
+	* @param status the status
+	* @return the number of matching d d l record versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByR_S(long recordId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the d d l record version in the entity cache if it is enabled.
+	*
+	* @param ddlRecordVersion the d d l record version
+	*/
+	public void cacheResult(
+		com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion ddlRecordVersion);
+
+	/**
+	* Caches the d d l record versions in the entity cache if it is enabled.
+	*
+	* @param ddlRecordVersions the d d l record versions
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion> ddlRecordVersions);
+
+	/**
+	* Creates a new d d l record version with the primary key. Does not add the d d l record version to the database.
+	*
+	* @param recordVersionId the primary key for the new d d l record version
+	* @return the new d d l record version
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion create(
+		long recordVersionId);
+
+	/**
+	* Removes the d d l record version with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param recordVersionId the primary key of the d d l record version
+	* @return the d d l record version that was removed
+	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a d d l record version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion remove(
+		long recordVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
+
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion updateImpl(
+		com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion ddlRecordVersion)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the d d l record version with the primary key or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException} if it could not be found.
+	*
+	* @param recordVersionId the primary key of the d d l record version
+	* @return the d d l record version
+	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a d d l record version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion findByPrimaryKey(
+		long recordVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
+
+	/**
+	* Returns the d d l record version with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param recordVersionId the primary key of the d d l record version
+	* @return the d d l record version, or <code>null</code> if a d d l record version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion fetchByPrimaryKey(
+		long recordVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the d d l record versions.
 	*
 	* @return the d d l record versions
@@ -432,75 +496,11 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the d d l record versions where recordId = &#63; from the database.
-	*
-	* @param recordId the record ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByRecordId(long recordId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the d d l record version where recordId = &#63; and version = &#63; from the database.
-	*
-	* @param recordId the record ID
-	* @param version the version
-	* @return the d d l record version that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion removeByR_V(
-		long recordId, java.lang.String version)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
-
-	/**
-	* Removes all the d d l record versions where recordId = &#63; and status = &#63; from the database.
-	*
-	* @param recordId the record ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByR_S(long recordId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the d d l record versions from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of d d l record versions where recordId = &#63;.
-	*
-	* @param recordId the record ID
-	* @return the number of matching d d l record versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByRecordId(long recordId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of d d l record versions where recordId = &#63; and version = &#63;.
-	*
-	* @param recordId the record ID
-	* @param version the version
-	* @return the number of matching d d l record versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByR_V(long recordId, java.lang.String version)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of d d l record versions where recordId = &#63; and status = &#63;.
-	*
-	* @param recordId the record ID
-	* @param status the status
-	* @return the number of matching d d l record versions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByR_S(long recordId, int status)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

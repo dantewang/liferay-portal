@@ -111,86 +111,6 @@ public class PortletPreferencesUtil {
 	}
 
 	/**
-	* Caches the portlet preferences in the entity cache if it is enabled.
-	*
-	* @param portletPreferences the portlet preferences
-	*/
-	public static void cacheResult(
-		com.liferay.portal.model.PortletPreferences portletPreferences) {
-		getPersistence().cacheResult(portletPreferences);
-	}
-
-	/**
-	* Caches the portlet preferenceses in the entity cache if it is enabled.
-	*
-	* @param portletPreferenceses the portlet preferenceses
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.model.PortletPreferences> portletPreferenceses) {
-		getPersistence().cacheResult(portletPreferenceses);
-	}
-
-	/**
-	* Creates a new portlet preferences with the primary key. Does not add the portlet preferences to the database.
-	*
-	* @param portletPreferencesId the primary key for the new portlet preferences
-	* @return the new portlet preferences
-	*/
-	public static com.liferay.portal.model.PortletPreferences create(
-		long portletPreferencesId) {
-		return getPersistence().create(portletPreferencesId);
-	}
-
-	/**
-	* Removes the portlet preferences with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param portletPreferencesId the primary key of the portlet preferences
-	* @return the portlet preferences that was removed
-	* @throws com.liferay.portal.NoSuchPortletPreferencesException if a portlet preferences with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PortletPreferences remove(
-		long portletPreferencesId)
-		throws com.liferay.portal.NoSuchPortletPreferencesException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(portletPreferencesId);
-	}
-
-	public static com.liferay.portal.model.PortletPreferences updateImpl(
-		com.liferay.portal.model.PortletPreferences portletPreferences)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(portletPreferences);
-	}
-
-	/**
-	* Returns the portlet preferences with the primary key or throws a {@link com.liferay.portal.NoSuchPortletPreferencesException} if it could not be found.
-	*
-	* @param portletPreferencesId the primary key of the portlet preferences
-	* @return the portlet preferences
-	* @throws com.liferay.portal.NoSuchPortletPreferencesException if a portlet preferences with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PortletPreferences findByPrimaryKey(
-		long portletPreferencesId)
-		throws com.liferay.portal.NoSuchPortletPreferencesException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(portletPreferencesId);
-	}
-
-	/**
-	* Returns the portlet preferences with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param portletPreferencesId the primary key of the portlet preferences
-	* @return the portlet preferences, or <code>null</code> if a portlet preferences with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PortletPreferences fetchByPrimaryKey(
-		long portletPreferencesId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(portletPreferencesId);
-	}
-
-	/**
 	* Returns all the portlet preferenceses where plid = &#63;.
 	*
 	* @param plid the plid
@@ -324,6 +244,29 @@ public class PortletPreferencesUtil {
 		return getPersistence()
 				   .findByPlid_PrevAndNext(portletPreferencesId, plid,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the portlet preferenceses where plid = &#63; from the database.
+	*
+	* @param plid the plid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByPlid(long plid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByPlid(plid);
+	}
+
+	/**
+	* Returns the number of portlet preferenceses where plid = &#63;.
+	*
+	* @param plid the plid
+	* @return the number of matching portlet preferenceses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByPlid(long plid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByPlid(plid);
 	}
 
 	/**
@@ -466,6 +409,29 @@ public class PortletPreferencesUtil {
 		return getPersistence()
 				   .findByPortletId_PrevAndNext(portletPreferencesId,
 			portletId, orderByComparator);
+	}
+
+	/**
+	* Removes all the portlet preferenceses where portletId = &#63; from the database.
+	*
+	* @param portletId the portlet ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByPortletId(java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByPortletId(portletId);
+	}
+
+	/**
+	* Returns the number of portlet preferenceses where portletId = &#63;.
+	*
+	* @param portletId the portlet ID
+	* @return the number of matching portlet preferenceses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByPortletId(java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByPortletId(portletId);
 	}
 
 	/**
@@ -616,6 +582,31 @@ public class PortletPreferencesUtil {
 		return getPersistence()
 				   .findByP_P_PrevAndNext(portletPreferencesId, plid,
 			portletId, orderByComparator);
+	}
+
+	/**
+	* Removes all the portlet preferenceses where plid = &#63; and portletId = &#63; from the database.
+	*
+	* @param plid the plid
+	* @param portletId the portlet ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByP_P(long plid, java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByP_P(plid, portletId);
+	}
+
+	/**
+	* Returns the number of portlet preferenceses where plid = &#63; and portletId = &#63;.
+	*
+	* @param plid the plid
+	* @param portletId the portlet ID
+	* @return the number of matching portlet preferenceses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByP_P(long plid, java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByP_P(plid, portletId);
 	}
 
 	/**
@@ -778,6 +769,33 @@ public class PortletPreferencesUtil {
 		return getPersistence()
 				   .findByO_O_P_PrevAndNext(portletPreferencesId, ownerId,
 			ownerType, plid, orderByComparator);
+	}
+
+	/**
+	* Removes all the portlet preferenceses where ownerId = &#63; and ownerType = &#63; and plid = &#63; from the database.
+	*
+	* @param ownerId the owner ID
+	* @param ownerType the owner type
+	* @param plid the plid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByO_O_P(long ownerId, int ownerType, long plid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByO_O_P(ownerId, ownerType, plid);
+	}
+
+	/**
+	* Returns the number of portlet preferenceses where ownerId = &#63; and ownerType = &#63; and plid = &#63;.
+	*
+	* @param ownerId the owner ID
+	* @param ownerType the owner type
+	* @param plid the plid
+	* @return the number of matching portlet preferenceses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByO_O_P(long ownerId, int ownerType, long plid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByO_O_P(ownerId, ownerType, plid);
 	}
 
 	/**
@@ -947,6 +965,35 @@ public class PortletPreferencesUtil {
 	}
 
 	/**
+	* Removes all the portlet preferenceses where ownerType = &#63; and plid = &#63; and portletId = &#63; from the database.
+	*
+	* @param ownerType the owner type
+	* @param plid the plid
+	* @param portletId the portlet ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByO_P_P(int ownerType, long plid,
+		java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByO_P_P(ownerType, plid, portletId);
+	}
+
+	/**
+	* Returns the number of portlet preferenceses where ownerType = &#63; and plid = &#63; and portletId = &#63;.
+	*
+	* @param ownerType the owner type
+	* @param plid the plid
+	* @param portletId the portlet ID
+	* @return the number of matching portlet preferenceses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByO_P_P(int ownerType, long plid,
+		java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByO_P_P(ownerType, plid, portletId);
+	}
+
+	/**
 	* Returns the portlet preferences where ownerId = &#63; and ownerType = &#63; and plid = &#63; and portletId = &#63; or throws a {@link com.liferay.portal.NoSuchPortletPreferencesException} if it could not be found.
 	*
 	* @param ownerId the owner ID
@@ -1003,6 +1050,121 @@ public class PortletPreferencesUtil {
 	}
 
 	/**
+	* Removes the portlet preferences where ownerId = &#63; and ownerType = &#63; and plid = &#63; and portletId = &#63; from the database.
+	*
+	* @param ownerId the owner ID
+	* @param ownerType the owner type
+	* @param plid the plid
+	* @param portletId the portlet ID
+	* @return the portlet preferences that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletPreferences removeByO_O_P_P(
+		long ownerId, int ownerType, long plid, java.lang.String portletId)
+		throws com.liferay.portal.NoSuchPortletPreferencesException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .removeByO_O_P_P(ownerId, ownerType, plid, portletId);
+	}
+
+	/**
+	* Returns the number of portlet preferenceses where ownerId = &#63; and ownerType = &#63; and plid = &#63; and portletId = &#63;.
+	*
+	* @param ownerId the owner ID
+	* @param ownerType the owner type
+	* @param plid the plid
+	* @param portletId the portlet ID
+	* @return the number of matching portlet preferenceses
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByO_O_P_P(long ownerId, int ownerType, long plid,
+		java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByO_O_P_P(ownerId, ownerType, plid, portletId);
+	}
+
+	/**
+	* Caches the portlet preferences in the entity cache if it is enabled.
+	*
+	* @param portletPreferences the portlet preferences
+	*/
+	public static void cacheResult(
+		com.liferay.portal.model.PortletPreferences portletPreferences) {
+		getPersistence().cacheResult(portletPreferences);
+	}
+
+	/**
+	* Caches the portlet preferenceses in the entity cache if it is enabled.
+	*
+	* @param portletPreferenceses the portlet preferenceses
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.model.PortletPreferences> portletPreferenceses) {
+		getPersistence().cacheResult(portletPreferenceses);
+	}
+
+	/**
+	* Creates a new portlet preferences with the primary key. Does not add the portlet preferences to the database.
+	*
+	* @param portletPreferencesId the primary key for the new portlet preferences
+	* @return the new portlet preferences
+	*/
+	public static com.liferay.portal.model.PortletPreferences create(
+		long portletPreferencesId) {
+		return getPersistence().create(portletPreferencesId);
+	}
+
+	/**
+	* Removes the portlet preferences with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param portletPreferencesId the primary key of the portlet preferences
+	* @return the portlet preferences that was removed
+	* @throws com.liferay.portal.NoSuchPortletPreferencesException if a portlet preferences with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletPreferences remove(
+		long portletPreferencesId)
+		throws com.liferay.portal.NoSuchPortletPreferencesException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(portletPreferencesId);
+	}
+
+	public static com.liferay.portal.model.PortletPreferences updateImpl(
+		com.liferay.portal.model.PortletPreferences portletPreferences)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(portletPreferences);
+	}
+
+	/**
+	* Returns the portlet preferences with the primary key or throws a {@link com.liferay.portal.NoSuchPortletPreferencesException} if it could not be found.
+	*
+	* @param portletPreferencesId the primary key of the portlet preferences
+	* @return the portlet preferences
+	* @throws com.liferay.portal.NoSuchPortletPreferencesException if a portlet preferences with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletPreferences findByPrimaryKey(
+		long portletPreferencesId)
+		throws com.liferay.portal.NoSuchPortletPreferencesException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(portletPreferencesId);
+	}
+
+	/**
+	* Returns the portlet preferences with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param portletPreferencesId the primary key of the portlet preferences
+	* @return the portlet preferences, or <code>null</code> if a portlet preferences with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletPreferences fetchByPrimaryKey(
+		long portletPreferencesId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(portletPreferencesId);
+	}
+
+	/**
 	* Returns all the portlet preferenceses.
 	*
 	* @return the portlet preferenceses
@@ -1052,85 +1214,6 @@ public class PortletPreferencesUtil {
 	}
 
 	/**
-	* Removes all the portlet preferenceses where plid = &#63; from the database.
-	*
-	* @param plid the plid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByPlid(long plid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByPlid(plid);
-	}
-
-	/**
-	* Removes all the portlet preferenceses where portletId = &#63; from the database.
-	*
-	* @param portletId the portlet ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByPortletId(java.lang.String portletId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByPortletId(portletId);
-	}
-
-	/**
-	* Removes all the portlet preferenceses where plid = &#63; and portletId = &#63; from the database.
-	*
-	* @param plid the plid
-	* @param portletId the portlet ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByP_P(long plid, java.lang.String portletId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByP_P(plid, portletId);
-	}
-
-	/**
-	* Removes all the portlet preferenceses where ownerId = &#63; and ownerType = &#63; and plid = &#63; from the database.
-	*
-	* @param ownerId the owner ID
-	* @param ownerType the owner type
-	* @param plid the plid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByO_O_P(long ownerId, int ownerType, long plid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByO_O_P(ownerId, ownerType, plid);
-	}
-
-	/**
-	* Removes all the portlet preferenceses where ownerType = &#63; and plid = &#63; and portletId = &#63; from the database.
-	*
-	* @param ownerType the owner type
-	* @param plid the plid
-	* @param portletId the portlet ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByO_P_P(int ownerType, long plid,
-		java.lang.String portletId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByO_P_P(ownerType, plid, portletId);
-	}
-
-	/**
-	* Removes the portlet preferences where ownerId = &#63; and ownerType = &#63; and plid = &#63; and portletId = &#63; from the database.
-	*
-	* @param ownerId the owner ID
-	* @param ownerType the owner type
-	* @param plid the plid
-	* @param portletId the portlet ID
-	* @return the portlet preferences that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PortletPreferences removeByO_O_P_P(
-		long ownerId, int ownerType, long plid, java.lang.String portletId)
-		throws com.liferay.portal.NoSuchPortletPreferencesException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .removeByO_O_P_P(ownerId, ownerType, plid, portletId);
-	}
-
-	/**
 	* Removes all the portlet preferenceses from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1138,89 +1221,6 @@ public class PortletPreferencesUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of portlet preferenceses where plid = &#63;.
-	*
-	* @param plid the plid
-	* @return the number of matching portlet preferenceses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByPlid(long plid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByPlid(plid);
-	}
-
-	/**
-	* Returns the number of portlet preferenceses where portletId = &#63;.
-	*
-	* @param portletId the portlet ID
-	* @return the number of matching portlet preferenceses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByPortletId(java.lang.String portletId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByPortletId(portletId);
-	}
-
-	/**
-	* Returns the number of portlet preferenceses where plid = &#63; and portletId = &#63;.
-	*
-	* @param plid the plid
-	* @param portletId the portlet ID
-	* @return the number of matching portlet preferenceses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByP_P(long plid, java.lang.String portletId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByP_P(plid, portletId);
-	}
-
-	/**
-	* Returns the number of portlet preferenceses where ownerId = &#63; and ownerType = &#63; and plid = &#63;.
-	*
-	* @param ownerId the owner ID
-	* @param ownerType the owner type
-	* @param plid the plid
-	* @return the number of matching portlet preferenceses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByO_O_P(long ownerId, int ownerType, long plid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByO_O_P(ownerId, ownerType, plid);
-	}
-
-	/**
-	* Returns the number of portlet preferenceses where ownerType = &#63; and plid = &#63; and portletId = &#63;.
-	*
-	* @param ownerType the owner type
-	* @param plid the plid
-	* @param portletId the portlet ID
-	* @return the number of matching portlet preferenceses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByO_P_P(int ownerType, long plid,
-		java.lang.String portletId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByO_P_P(ownerType, plid, portletId);
-	}
-
-	/**
-	* Returns the number of portlet preferenceses where ownerId = &#63; and ownerType = &#63; and plid = &#63; and portletId = &#63;.
-	*
-	* @param ownerId the owner ID
-	* @param ownerType the owner type
-	* @param plid the plid
-	* @param portletId the portlet ID
-	* @return the number of matching portlet preferenceses
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByO_O_P_P(long ownerId, int ownerType, long plid,
-		java.lang.String portletId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByO_O_P_P(ownerId, ownerType, plid, portletId);
 	}
 
 	/**

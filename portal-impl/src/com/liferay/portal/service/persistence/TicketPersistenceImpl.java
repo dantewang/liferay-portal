@@ -72,15 +72,6 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_FETCH_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
-			TicketModelImpl.FINDER_CACHE_ENABLED, TicketImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByKey",
-			new String[] { String.class.getName() },
-			TicketModelImpl.KEY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
-			TicketModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByKey",
-			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketModelImpl.FINDER_CACHE_ENABLED, TicketImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
@@ -90,6 +81,248 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_FETCH_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
+			TicketModelImpl.FINDER_CACHE_ENABLED, TicketImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByKey",
+			new String[] { String.class.getName() },
+			TicketModelImpl.KEY_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
+			TicketModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByKey",
+			new String[] { String.class.getName() });
+
+	/**
+	 * Returns the ticket where key = &#63; or throws a {@link com.liferay.portal.NoSuchTicketException} if it could not be found.
+	 *
+	 * @param key the key
+	 * @return the matching ticket
+	 * @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Ticket findByKey(String key)
+		throws NoSuchTicketException, SystemException {
+		Ticket ticket = fetchByKey(key);
+
+		if (ticket == null) {
+			StringBundler msg = new StringBundler(4);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("key=");
+			msg.append(key);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new NoSuchTicketException(msg.toString());
+		}
+
+		return ticket;
+	}
+
+	/**
+	 * Returns the ticket where key = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param key the key
+	 * @return the matching ticket, or <code>null</code> if a matching ticket could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Ticket fetchByKey(String key) throws SystemException {
+		return fetchByKey(key, true);
+	}
+
+	/**
+	 * Returns the ticket where key = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param key the key
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching ticket, or <code>null</code> if a matching ticket could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Ticket fetchByKey(String key, boolean retrieveFromCache)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { key };
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_KEY,
+					finderArgs, this);
+		}
+
+		if (result instanceof Ticket) {
+			Ticket ticket = (Ticket)result;
+
+			if (!Validator.equals(key, ticket.getKey())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_SELECT_TICKET_WHERE);
+
+			if (key == null) {
+				query.append(_FINDER_COLUMN_KEY_KEY_1);
+			}
+			else {
+				if (key.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_KEY_KEY_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_KEY_KEY_2);
+				}
+			}
+
+			query.append(TicketModelImpl.ORDER_BY_JPQL);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (key != null) {
+					qPos.add(key);
+				}
+
+				List<Ticket> list = q.list();
+
+				result = list;
+
+				Ticket ticket = null;
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
+						finderArgs, list);
+				}
+				else {
+					ticket = list.get(0);
+
+					cacheResult(ticket);
+
+					if ((ticket.getKey() == null) ||
+							!ticket.getKey().equals(key)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
+							finderArgs, ticket);
+					}
+				}
+
+				return ticket;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KEY,
+						finderArgs);
+				}
+
+				closeSession(session);
+			}
+		}
+		else {
+			if (result instanceof List<?>) {
+				return null;
+			}
+			else {
+				return (Ticket)result;
+			}
+		}
+	}
+
+	/**
+	 * Removes the ticket where key = &#63; from the database.
+	 *
+	 * @param key the key
+	 * @return the ticket that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Ticket removeByKey(String key)
+		throws NoSuchTicketException, SystemException {
+		Ticket ticket = findByKey(key);
+
+		return remove(ticket);
+	}
+
+	/**
+	 * Returns the number of tickets where key = &#63;.
+	 *
+	 * @param key the key
+	 * @return the number of matching tickets
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByKey(String key) throws SystemException {
+		Object[] finderArgs = new Object[] { key };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_KEY,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_TICKET_WHERE);
+
+			if (key == null) {
+				query.append(_FINDER_COLUMN_KEY_KEY_1);
+			}
+			else {
+				if (key.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_KEY_KEY_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_KEY_KEY_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (key != null) {
+					qPos.add(key);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KEY, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_KEY_KEY_1 = "ticket.key IS NULL";
+	private static final String _FINDER_COLUMN_KEY_KEY_2 = "ticket.key = ?";
+	private static final String _FINDER_COLUMN_KEY_KEY_3 = "(ticket.key IS NULL OR ticket.key = ?)";
 
 	/**
 	 * Caches the ticket in the entity cache if it is enabled.
@@ -462,156 +695,6 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 	}
 
 	/**
-	 * Returns the ticket where key = &#63; or throws a {@link com.liferay.portal.NoSuchTicketException} if it could not be found.
-	 *
-	 * @param key the key
-	 * @return the matching ticket
-	 * @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Ticket findByKey(String key)
-		throws NoSuchTicketException, SystemException {
-		Ticket ticket = fetchByKey(key);
-
-		if (ticket == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("key=");
-			msg.append(key);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchTicketException(msg.toString());
-		}
-
-		return ticket;
-	}
-
-	/**
-	 * Returns the ticket where key = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param key the key
-	 * @return the matching ticket, or <code>null</code> if a matching ticket could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Ticket fetchByKey(String key) throws SystemException {
-		return fetchByKey(key, true);
-	}
-
-	/**
-	 * Returns the ticket where key = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param key the key
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching ticket, or <code>null</code> if a matching ticket could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Ticket fetchByKey(String key, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { key };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_KEY,
-					finderArgs, this);
-		}
-
-		if (result instanceof Ticket) {
-			Ticket ticket = (Ticket)result;
-
-			if (!Validator.equals(key, ticket.getKey())) {
-				result = null;
-			}
-		}
-
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_SELECT_TICKET_WHERE);
-
-			if (key == null) {
-				query.append(_FINDER_COLUMN_KEY_KEY_1);
-			}
-			else {
-				if (key.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_KEY_KEY_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_KEY_KEY_2);
-				}
-			}
-
-			query.append(TicketModelImpl.ORDER_BY_JPQL);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (key != null) {
-					qPos.add(key);
-				}
-
-				List<Ticket> list = q.list();
-
-				result = list;
-
-				Ticket ticket = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
-						finderArgs, list);
-				}
-				else {
-					ticket = list.get(0);
-
-					cacheResult(ticket);
-
-					if ((ticket.getKey() == null) ||
-							!ticket.getKey().equals(key)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
-							finderArgs, ticket);
-					}
-				}
-
-				return ticket;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KEY,
-						finderArgs);
-				}
-
-				closeSession(session);
-			}
-		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Ticket)result;
-			}
-		}
-	}
-
-	/**
 	 * Returns all the tickets.
 	 *
 	 * @return the tickets
@@ -726,20 +809,6 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 	}
 
 	/**
-	 * Removes the ticket where key = &#63; from the database.
-	 *
-	 * @param key the key
-	 * @return the ticket that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Ticket removeByKey(String key)
-		throws NoSuchTicketException, SystemException {
-		Ticket ticket = findByKey(key);
-
-		return remove(ticket);
-	}
-
-	/**
 	 * Removes all the tickets from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -748,71 +817,6 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 		for (Ticket ticket : findAll()) {
 			remove(ticket);
 		}
-	}
-
-	/**
-	 * Returns the number of tickets where key = &#63;.
-	 *
-	 * @param key the key
-	 * @return the number of matching tickets
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByKey(String key) throws SystemException {
-		Object[] finderArgs = new Object[] { key };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_KEY,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_TICKET_WHERE);
-
-			if (key == null) {
-				query.append(_FINDER_COLUMN_KEY_KEY_1);
-			}
-			else {
-				if (key.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_KEY_KEY_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_KEY_KEY_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (key != null) {
-					qPos.add(key);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KEY, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1010,9 +1014,6 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 	private static final String _SQL_SELECT_TICKET_WHERE = "SELECT ticket FROM Ticket ticket WHERE ";
 	private static final String _SQL_COUNT_TICKET = "SELECT COUNT(ticket) FROM Ticket ticket";
 	private static final String _SQL_COUNT_TICKET_WHERE = "SELECT COUNT(ticket) FROM Ticket ticket WHERE ";
-	private static final String _FINDER_COLUMN_KEY_KEY_1 = "ticket.key IS NULL";
-	private static final String _FINDER_COLUMN_KEY_KEY_2 = "ticket.key = ?";
-	private static final String _FINDER_COLUMN_KEY_KEY_3 = "(ticket.key IS NULL OR ticket.key = ?)";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "ticket.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Ticket exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Ticket exists with the key {";
