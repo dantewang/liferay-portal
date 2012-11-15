@@ -337,7 +337,7 @@
 					query = new StringBundler(${finderColsList?size + 2} + (orderByComparator.getOrderByFields().length * 3));
 				}
 				else {
-					query = new StringBundler(<#if entity.getOrder()??>${finderColsList?size + 2}<#else>${finderColsList?size + 1}</#if>);
+					query = new StringBundler(${finderColsList?size + 2});
 				}
 
 				if (getDB().isSupportsInlineDistinct()) {
@@ -361,17 +361,14 @@
 						appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE, orderByComparator);
 					}
 				}
-
-				<#if entity.getOrder()??>
-					else {
-						if (getDB().isSupportsInlineDistinct()) {
-							query.append(${entity.name}ModelImpl.ORDER_BY_JPQL);
-						}
-						else {
-							query.append(${entity.name}ModelImpl.ORDER_BY_SQL);
-						}
+				else {
+					if (getDB().isSupportsInlineDistinct()) {
+						query.append(${entity.name}ModelImpl.ORDER_BY_JPQL);
 					}
-				</#if>
+					else {
+						query.append(${entity.name}ModelImpl.ORDER_BY_SQL);
+					}
+				}
 
 				String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(), ${entity.name}.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN<#if finder.hasColumn("groupId")>, groupId</#if>);
 
@@ -603,17 +600,14 @@
 						}
 					}
 				}
-
-				<#if entity.getOrder()??>
-					else {
-						if (getDB().isSupportsInlineDistinct()) {
-							query.append(${entity.name}ModelImpl.ORDER_BY_JPQL);
-						}
-						else {
-							query.append(${entity.name}ModelImpl.ORDER_BY_SQL);
-						}
+				else {
+					if (getDB().isSupportsInlineDistinct()) {
+						query.append(${entity.name}ModelImpl.ORDER_BY_JPQL);
 					}
-				</#if>
+					else {
+						query.append(${entity.name}ModelImpl.ORDER_BY_SQL);
+					}
+				}
 
 				String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(), ${entity.name}.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN<#if finder.hasColumn("groupId")>, groupId</#if>);
 
@@ -846,17 +840,14 @@
 							appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE, orderByComparator);
 						}
 					}
-
-					<#if entity.getOrder()??>
-						else {
-							if (getDB().isSupportsInlineDistinct()) {
-								query.append(${entity.name}ModelImpl.ORDER_BY_JPQL);
-							}
-							else {
-								query.append(${entity.name}ModelImpl.ORDER_BY_SQL);
-							}
+					else {
+						if (getDB().isSupportsInlineDistinct()) {
+							query.append(${entity.name}ModelImpl.ORDER_BY_JPQL);
 						}
-					</#if>
+						else {
+							query.append(${entity.name}ModelImpl.ORDER_BY_SQL);
+						}
+					}
 
 					String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(), ${entity.name}.class.getName(), _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN
 
@@ -1050,7 +1041,7 @@
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(<#if entity.getOrder()??>${finderColsList?size + 2}<#else>${finderColsList?size + 1}</#if>);
+			StringBundler query = new StringBundler(${finderColsList?size + 2});
 
 			query.append(_SQL_SELECT_${entity.alias?upper_case}_WHERE);
 

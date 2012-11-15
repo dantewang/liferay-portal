@@ -922,11 +922,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				sql = query.toString();
 			}
 			else {
-				<#if entity.getOrder()??>
-					sql = _SQL_SELECT_${entity.alias?upper_case}.concat(${entity.name}ModelImpl.ORDER_BY_JPQL);
-				<#else>
-					sql = _SQL_SELECT_${entity.alias?upper_case};
-				</#if>
+				sql = _SQL_SELECT_${entity.alias?upper_case}.concat(${entity.name}ModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
