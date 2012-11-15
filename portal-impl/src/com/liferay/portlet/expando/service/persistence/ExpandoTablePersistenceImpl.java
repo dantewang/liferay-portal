@@ -251,6 +251,9 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 				}
 			}
 		}
+		else {
+			query.append(ExpandoTableModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -340,7 +343,7 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_EXPANDOTABLE_WHERE);
@@ -352,6 +355,9 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ExpandoTableModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -760,7 +766,7 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(4);
+			StringBundler query = new StringBundler(5);
 
 			query.append(_SQL_SELECT_EXPANDOTABLE_WHERE);
 
@@ -1436,7 +1442,7 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_EXPANDOTABLE;
+				sql = _SQL_SELECT_EXPANDOTABLE.concat(ExpandoTableModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

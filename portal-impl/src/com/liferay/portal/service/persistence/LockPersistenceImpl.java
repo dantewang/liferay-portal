@@ -253,6 +253,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				}
 			}
 		}
+		else {
+			query.append(LockModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -335,7 +338,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_LOCK_WHERE);
@@ -355,6 +358,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LockModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -801,6 +807,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				}
 			}
 		}
+		else {
+			query.append(LockModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -891,7 +900,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_LOCK_WHERE);
@@ -913,6 +922,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LockModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1373,6 +1385,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				}
 			}
 		}
+		else {
+			query.append(LockModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1448,7 +1463,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_LOCK_WHERE);
@@ -1463,6 +1478,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LockModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1811,7 +1829,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_LOCK_WHERE);
@@ -1843,6 +1861,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LockModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2279,7 +2300,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(4);
+			StringBundler query = new StringBundler(5);
 
 			query.append(_SQL_SELECT_LOCK_WHERE);
 
@@ -3021,7 +3042,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_LOCK;
+				sql = _SQL_SELECT_LOCK.concat(LockModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

@@ -272,7 +272,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			query.append(CalEventModelImpl.ORDER_BY_JPQL);
 		}
@@ -379,7 +378,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
@@ -1109,7 +1107,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			query.append(CalEventModelImpl.ORDER_BY_JPQL);
 		}
@@ -1226,7 +1223,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
@@ -1693,7 +1689,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			query.append(CalEventModelImpl.ORDER_BY_JPQL);
 		}
@@ -1788,7 +1783,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
@@ -2208,7 +2202,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			query.append(CalEventModelImpl.ORDER_BY_JPQL);
 		}
@@ -2326,7 +2319,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
@@ -2505,7 +2497,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
@@ -2614,7 +2605,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
@@ -3079,7 +3069,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			query.append(CalEventModelImpl.ORDER_BY_JPQL);
 		}
@@ -3167,7 +3156,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
@@ -3609,7 +3597,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			query.append(CalEventModelImpl.ORDER_BY_JPQL);
 		}
@@ -3746,7 +3733,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
@@ -3943,7 +3929,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
@@ -4115,7 +4100,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
@@ -4240,7 +4224,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
@@ -4584,7 +4567,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
@@ -5153,7 +5135,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			query.append(CalEventModelImpl.ORDER_BY_JPQL);
 		}
@@ -5279,7 +5260,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
@@ -5464,7 +5444,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
@@ -5583,7 +5562,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
@@ -6122,7 +6100,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			query.append(CalEventModelImpl.ORDER_BY_JPQL);
 		}
@@ -6268,7 +6245,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
@@ -6470,7 +6446,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
@@ -6656,7 +6631,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
@@ -6788,7 +6762,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
@@ -7168,7 +7141,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}

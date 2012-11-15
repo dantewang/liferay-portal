@@ -79,6 +79,8 @@ public class LayoutSetPrototypeModelImpl extends BaseModelImpl<LayoutSetPrototyp
 		};
 	public static final String TABLE_SQL_CREATE = "create table LayoutSetPrototype (uuid_ VARCHAR(75) null,layoutSetPrototypeId LONG not null primary key,companyId LONG,createDate DATE null,modifiedDate DATE null,name STRING null,description STRING null,settings_ STRING null,active_ BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table LayoutSetPrototype";
+	public static final String ORDER_BY_JPQL = " ORDER BY layoutSetPrototype.layoutSetPrototypeId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY LayoutSetPrototype.layoutSetPrototypeId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

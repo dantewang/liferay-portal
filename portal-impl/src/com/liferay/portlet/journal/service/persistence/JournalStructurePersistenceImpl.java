@@ -265,7 +265,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				}
 			}
 		}
-
 		else {
 			query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 		}
@@ -372,7 +371,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
@@ -1111,7 +1109,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				}
 			}
 		}
-
 		else {
 			query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 		}
@@ -1229,7 +1226,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
@@ -1700,7 +1696,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				}
 			}
 		}
-
 		else {
 			query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 		}
@@ -1818,7 +1813,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
@@ -1998,7 +1992,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
@@ -2143,7 +2136,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
@@ -2249,7 +2241,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
@@ -2554,7 +2545,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
@@ -3035,7 +3025,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				}
 			}
 		}
-
 		else {
 			query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 		}
@@ -3144,7 +3133,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
@@ -3601,7 +3589,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				}
 			}
 		}
-
 		else {
 			query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 		}
@@ -3714,7 +3701,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
@@ -4463,7 +4449,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				}
 			}
 		}
-
 		else {
 			query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 		}
@@ -4602,7 +4587,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
@@ -4802,7 +4786,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
@@ -4935,7 +4918,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}

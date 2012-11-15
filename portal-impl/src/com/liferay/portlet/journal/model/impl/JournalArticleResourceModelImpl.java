@@ -64,6 +64,8 @@ public class JournalArticleResourceModelImpl extends BaseModelImpl<JournalArticl
 		};
 	public static final String TABLE_SQL_CREATE = "create table JournalArticleResource (uuid_ VARCHAR(75) null,resourcePrimKey LONG not null primary key,groupId LONG,articleId VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table JournalArticleResource";
+	public static final String ORDER_BY_JPQL = " ORDER BY journalArticleResource.resourcePrimKey ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY JournalArticleResource.resourcePrimKey ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

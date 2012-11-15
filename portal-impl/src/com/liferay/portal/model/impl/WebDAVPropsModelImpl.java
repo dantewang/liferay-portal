@@ -69,6 +69,8 @@ public class WebDAVPropsModelImpl extends BaseModelImpl<WebDAVProps>
 		};
 	public static final String TABLE_SQL_CREATE = "create table WebDAVProps (webDavPropsId LONG not null primary key,companyId LONG,createDate DATE null,modifiedDate DATE null,classNameId LONG,classPK LONG,props TEXT null)";
 	public static final String TABLE_SQL_DROP = "drop table WebDAVProps";
+	public static final String ORDER_BY_JPQL = " ORDER BY webDAVProps.webDavPropsId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY WebDAVProps.webDavPropsId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

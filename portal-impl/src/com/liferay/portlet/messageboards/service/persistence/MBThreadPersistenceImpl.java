@@ -257,7 +257,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 		}
@@ -375,7 +374,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -555,7 +553,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -664,7 +661,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -1056,7 +1052,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -1492,7 +1487,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 		}
@@ -1618,7 +1612,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -1803,7 +1796,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -1961,7 +1953,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -2076,7 +2067,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -2411,7 +2401,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -2923,7 +2912,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 		}
@@ -3050,7 +3038,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -3235,7 +3222,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -3348,7 +3334,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -3857,7 +3842,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 		}
@@ -3982,7 +3966,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -4167,7 +4150,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -4286,7 +4268,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -4790,7 +4771,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 		}
@@ -4896,7 +4876,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -5356,7 +5335,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 		}
@@ -5469,7 +5447,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -5949,7 +5926,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 		}
@@ -6091,7 +6067,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -6289,7 +6264,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -6423,7 +6397,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -6999,7 +6972,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 		}
@@ -7133,7 +7105,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -7324,7 +7295,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -7496,7 +7466,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -7618,7 +7587,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -7985,7 +7953,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -8545,7 +8512,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 		}
@@ -8680,7 +8646,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -8871,7 +8836,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -9045,7 +9009,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -9160,7 +9123,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -9527,7 +9489,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -10087,7 +10048,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 		}
@@ -10222,7 +10182,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -10413,7 +10372,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -10532,7 +10490,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
@@ -11077,7 +11034,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 		}
@@ -11213,7 +11169,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -11404,7 +11359,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
@@ -11523,7 +11477,6 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}

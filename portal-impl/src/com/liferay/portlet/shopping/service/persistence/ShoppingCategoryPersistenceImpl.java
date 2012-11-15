@@ -250,7 +250,6 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 				}
 			}
 		}
-
 		else {
 			query.append(ShoppingCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -368,7 +367,6 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(ShoppingCategoryModelImpl.ORDER_BY_JPQL);
@@ -549,7 +547,6 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(ShoppingCategoryModelImpl.ORDER_BY_JPQL);
@@ -658,7 +655,6 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ShoppingCategoryModelImpl.ORDER_BY_JPQL);
 			}
@@ -1138,7 +1134,6 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 				}
 			}
 		}
-
 		else {
 			query.append(ShoppingCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -1265,7 +1260,6 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(ShoppingCategoryModelImpl.ORDER_BY_JPQL);
@@ -1451,7 +1445,6 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(ShoppingCategoryModelImpl.ORDER_BY_JPQL);
@@ -1571,7 +1564,6 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ShoppingCategoryModelImpl.ORDER_BY_JPQL);
 			}

@@ -279,7 +279,6 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 				}
 			}
 		}
-
 		else {
 			query.append(WorkflowInstanceLinkModelImpl.ORDER_BY_JPQL);
 		}
@@ -397,7 +396,6 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WorkflowInstanceLinkModelImpl.ORDER_BY_JPQL);
 			}

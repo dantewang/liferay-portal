@@ -70,6 +70,8 @@ public class PluginSettingModelImpl extends BaseModelImpl<PluginSetting>
 		};
 	public static final String TABLE_SQL_CREATE = "create table PluginSetting (pluginSettingId LONG not null primary key,companyId LONG,pluginId VARCHAR(75) null,pluginType VARCHAR(75) null,roles STRING null,active_ BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table PluginSetting";
+	public static final String ORDER_BY_JPQL = " ORDER BY pluginSetting.pluginSettingId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY PluginSetting.pluginSettingId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

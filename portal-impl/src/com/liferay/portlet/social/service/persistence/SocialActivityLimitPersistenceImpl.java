@@ -250,6 +250,9 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityLimitModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -330,7 +333,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYLIMIT_WHERE);
@@ -340,6 +343,9 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityLimitModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -769,6 +775,9 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityLimitModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -858,7 +867,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYLIMIT_WHERE);
@@ -870,6 +879,9 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityLimitModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1325,7 +1337,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(7);
+			StringBundler query = new StringBundler(8);
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYLIMIT_WHERE);
 
@@ -2096,7 +2108,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SOCIALACTIVITYLIMIT;
+				sql = _SQL_SELECT_SOCIALACTIVITYLIMIT.concat(SocialActivityLimitModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

@@ -65,6 +65,8 @@ public class ResourceTypePermissionModelImpl extends BaseModelImpl<ResourceTypeP
 		};
 	public static final String TABLE_SQL_CREATE = "create table ResourceTypePermission (resourceTypePermissionId LONG not null primary key,companyId LONG,groupId LONG,name VARCHAR(75) null,roleId LONG,actionIds LONG)";
 	public static final String TABLE_SQL_DROP = "drop table ResourceTypePermission";
+	public static final String ORDER_BY_JPQL = " ORDER BY resourceTypePermission.resourceTypePermissionId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY ResourceTypePermission.resourceTypePermissionId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

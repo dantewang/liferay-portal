@@ -244,7 +244,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				}
 			}
 		}
-
 		else {
 			query.append(AddressModelImpl.ORDER_BY_JPQL);
 		}
@@ -339,7 +338,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}
@@ -757,7 +755,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				}
 			}
 		}
-
 		else {
 			query.append(AddressModelImpl.ORDER_BY_JPQL);
 		}
@@ -852,7 +849,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}
@@ -1276,7 +1272,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				}
 			}
 		}
-
 		else {
 			query.append(AddressModelImpl.ORDER_BY_JPQL);
 		}
@@ -1381,7 +1376,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}
@@ -1845,7 +1839,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				}
 			}
 		}
-
 		else {
 			query.append(AddressModelImpl.ORDER_BY_JPQL);
 		}
@@ -1957,7 +1950,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}
@@ -2459,7 +2451,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				}
 			}
 		}
-
 		else {
 			query.append(AddressModelImpl.ORDER_BY_JPQL);
 		}
@@ -2577,7 +2568,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}
@@ -3109,7 +3099,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				}
 			}
 		}
-
 		else {
 			query.append(AddressModelImpl.ORDER_BY_JPQL);
 		}
@@ -3227,7 +3216,6 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}

@@ -176,7 +176,6 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ShoppingItemModelImpl.ORDER_BY_JPQL);
 			}
@@ -526,7 +525,6 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ShoppingItemModelImpl.ORDER_BY_JPQL);
 			}
@@ -877,7 +875,6 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ShoppingItemModelImpl.ORDER_BY_JPQL);
 			}
@@ -1308,7 +1305,6 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				}
 			}
 		}
-
 		else {
 			query.append(ShoppingItemModelImpl.ORDER_BY_JPQL);
 		}
@@ -1434,7 +1430,6 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(ShoppingItemModelImpl.ORDER_BY_JPQL);
@@ -1620,7 +1615,6 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(ShoppingItemModelImpl.ORDER_BY_JPQL);
@@ -1740,7 +1734,6 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ShoppingItemModelImpl.ORDER_BY_JPQL);
 			}

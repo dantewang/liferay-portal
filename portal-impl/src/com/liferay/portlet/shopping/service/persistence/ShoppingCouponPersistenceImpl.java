@@ -249,7 +249,6 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 				}
 			}
 		}
-
 		else {
 			query.append(ShoppingCouponModelImpl.ORDER_BY_JPQL);
 		}
@@ -344,7 +343,6 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ShoppingCouponModelImpl.ORDER_BY_JPQL);
 			}

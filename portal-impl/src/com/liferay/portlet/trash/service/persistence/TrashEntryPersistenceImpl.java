@@ -252,7 +252,6 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 				}
 			}
 		}
-
 		else {
 			query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
 		}
@@ -347,7 +346,6 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
 			}
@@ -770,7 +768,6 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 				}
 			}
 		}
-
 		else {
 			query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
 		}
@@ -865,7 +862,6 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
 			}
@@ -1294,7 +1290,6 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 				}
 			}
 		}
-
 		else {
 			query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
 		}
@@ -1400,7 +1395,6 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
 			}

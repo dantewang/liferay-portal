@@ -254,7 +254,6 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 				}
 			}
 		}
-
 		else {
 			query.append(SCProductScreenshotModelImpl.ORDER_BY_JPQL);
 		}
@@ -354,7 +353,6 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SCProductScreenshotModelImpl.ORDER_BY_JPQL);
 			}
@@ -704,7 +702,6 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SCProductScreenshotModelImpl.ORDER_BY_JPQL);
 			}
@@ -1051,7 +1048,6 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SCProductScreenshotModelImpl.ORDER_BY_JPQL);
 			}
@@ -1405,7 +1401,6 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SCProductScreenshotModelImpl.ORDER_BY_JPQL);
 			}

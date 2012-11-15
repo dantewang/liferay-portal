@@ -58,6 +58,8 @@ public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 		};
 	public static final String TABLE_SQL_CREATE = "create table OrgGroupRole (organizationId LONG not null,groupId LONG not null,roleId LONG not null,primary key (organizationId, groupId, roleId))";
 	public static final String TABLE_SQL_DROP = "drop table OrgGroupRole";
+	public static final String ORDER_BY_JPQL = " ORDER BY orgGroupRole.id.organizationId ASC, orgGroupRole.id.groupId ASC, orgGroupRole.id.roleId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY OrgGroupRole.organizationId ASC, OrgGroupRole.groupId ASC, OrgGroupRole.roleId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

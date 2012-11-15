@@ -243,7 +243,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				}
 			}
 		}
-
 		else {
 			query.append(PhoneModelImpl.ORDER_BY_JPQL);
 		}
@@ -338,7 +337,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(PhoneModelImpl.ORDER_BY_JPQL);
 			}
@@ -756,7 +754,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				}
 			}
 		}
-
 		else {
 			query.append(PhoneModelImpl.ORDER_BY_JPQL);
 		}
@@ -851,7 +848,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(PhoneModelImpl.ORDER_BY_JPQL);
 			}
@@ -1275,7 +1271,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				}
 			}
 		}
-
 		else {
 			query.append(PhoneModelImpl.ORDER_BY_JPQL);
 		}
@@ -1380,7 +1375,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(PhoneModelImpl.ORDER_BY_JPQL);
 			}
@@ -1842,7 +1836,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				}
 			}
 		}
-
 		else {
 			query.append(PhoneModelImpl.ORDER_BY_JPQL);
 		}
@@ -1954,7 +1947,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(PhoneModelImpl.ORDER_BY_JPQL);
 			}
@@ -2456,7 +2448,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				}
 			}
 		}
-
 		else {
 			query.append(PhoneModelImpl.ORDER_BY_JPQL);
 		}
@@ -2574,7 +2565,6 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(PhoneModelImpl.ORDER_BY_JPQL);
 			}

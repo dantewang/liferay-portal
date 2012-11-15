@@ -185,7 +185,7 @@ public class WebDAVPropsPersistenceImpl extends BasePersistenceImpl<WebDAVProps>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_WEBDAVPROPS_WHERE);
 
@@ -792,7 +792,7 @@ public class WebDAVPropsPersistenceImpl extends BasePersistenceImpl<WebDAVProps>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_WEBDAVPROPS;
+				sql = _SQL_SELECT_WEBDAVPROPS.concat(WebDAVPropsModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

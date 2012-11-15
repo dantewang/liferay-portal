@@ -252,6 +252,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				}
 			}
 		}
+		else {
+			query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -332,7 +335,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEPERMISSION_WHERE);
@@ -342,6 +345,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -642,6 +648,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -991,6 +1000,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				}
 			}
 		}
+		else {
+			query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1071,7 +1083,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEPERMISSION_WHERE);
@@ -1081,6 +1093,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1514,6 +1529,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				}
 			}
 		}
+		else {
+			query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1599,7 +1617,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEPERMISSION_WHERE);
@@ -1621,6 +1639,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2115,6 +2136,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				}
 			}
 		}
+		else {
+			query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2210,7 +2234,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEPERMISSION_WHERE);
@@ -2234,6 +2258,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2753,6 +2780,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				}
 			}
 		}
+		else {
+			query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2849,7 +2879,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEPERMISSION_WHERE);
@@ -2873,6 +2903,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -3411,6 +3444,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				}
 			}
 		}
+		else {
+			query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -3513,7 +3549,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(5);
+				query = new StringBundler(6);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEPERMISSION_WHERE);
@@ -3549,6 +3585,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -4128,6 +4167,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				}
 			}
 		}
+		else {
+			query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -4230,7 +4272,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(5);
+				query = new StringBundler(6);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEPERMISSION_WHERE);
@@ -4266,6 +4308,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -4869,6 +4914,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				}
 			}
 		}
+		else {
+			query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -4975,7 +5023,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(6);
+				query = new StringBundler(7);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEPERMISSION_WHERE);
@@ -5013,6 +5061,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -5470,6 +5521,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -6041,6 +6095,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				}
 			}
 		}
+		else {
+			query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -6149,7 +6206,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(6);
+				query = new StringBundler(7);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEPERMISSION_WHERE);
@@ -6187,6 +6244,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -6830,6 +6890,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				}
 			}
 		}
+		else {
+			query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -6943,7 +7006,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(7);
+				query = new StringBundler(8);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEPERMISSION_WHERE);
@@ -6983,6 +7046,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -7474,6 +7540,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -7951,7 +8020,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(8);
+				query = new StringBundler(9);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEPERMISSION_WHERE);
@@ -7993,6 +8062,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -9123,7 +9195,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_RESOURCEPERMISSION;
+				sql = _SQL_SELECT_RESOURCEPERMISSION.concat(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

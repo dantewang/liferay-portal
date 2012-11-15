@@ -276,7 +276,6 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				}
 			}
 		}
-
 		else {
 			query.append(GroupModelImpl.ORDER_BY_JPQL);
 		}
@@ -371,7 +370,6 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(GroupModelImpl.ORDER_BY_JPQL);
 			}
@@ -711,7 +709,6 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(GroupModelImpl.ORDER_BY_JPQL);
 			}
@@ -1138,7 +1135,6 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				}
 			}
 		}
-
 		else {
 			query.append(GroupModelImpl.ORDER_BY_JPQL);
 		}
@@ -1243,7 +1239,6 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(GroupModelImpl.ORDER_BY_JPQL);
 			}
@@ -2251,7 +2246,6 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				}
 			}
 		}
-
 		else {
 			query.append(GroupModelImpl.ORDER_BY_JPQL);
 		}
@@ -2356,7 +2350,6 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(GroupModelImpl.ORDER_BY_JPQL);
 			}
@@ -2807,7 +2800,6 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				}
 			}
 		}
-
 		else {
 			query.append(GroupModelImpl.ORDER_BY_JPQL);
 		}
@@ -2911,7 +2903,6 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(GroupModelImpl.ORDER_BY_JPQL);
 			}
@@ -3650,7 +3641,6 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				}
 			}
 		}
-
 		else {
 			query.append(GroupModelImpl.ORDER_BY_JPQL);
 		}
@@ -3762,7 +3752,6 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(GroupModelImpl.ORDER_BY_JPQL);
 			}

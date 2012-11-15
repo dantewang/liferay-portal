@@ -162,7 +162,7 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_PASSWORDPOLICY_WHERE);
@@ -174,6 +174,9 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PasswordPolicyModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -567,7 +570,7 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_PASSWORDPOLICY_WHERE);
 
@@ -1234,7 +1237,7 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_PASSWORDPOLICY;
+				sql = _SQL_SELECT_PASSWORDPOLICY.concat(PasswordPolicyModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

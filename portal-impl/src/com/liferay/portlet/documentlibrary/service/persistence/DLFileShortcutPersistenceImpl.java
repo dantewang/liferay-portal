@@ -264,6 +264,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -346,7 +349,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
@@ -366,6 +369,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -748,7 +754,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
 
@@ -1101,6 +1107,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1192,7 +1201,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
@@ -1214,6 +1223,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1681,6 +1693,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1766,7 +1781,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
@@ -1776,6 +1791,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2207,6 +2225,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2301,7 +2322,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(3);
+			query = new StringBundler(4);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -2327,6 +2348,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -2506,6 +2535,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				DLFileShortcut.class.getName(),
@@ -2604,7 +2641,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
@@ -2616,6 +2653,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -3138,6 +3178,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -3238,7 +3281,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(4);
+			query = new StringBundler(5);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -3266,6 +3309,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -3451,6 +3502,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				DLFileShortcut.class.getName(),
@@ -3553,7 +3612,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
@@ -3567,6 +3626,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -4128,6 +4190,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -4235,7 +4300,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(5);
+			query = new StringBundler(6);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -4265,6 +4330,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -4456,6 +4529,14 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				DLFileShortcut.class.getName(),
@@ -4562,7 +4643,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(5);
+				query = new StringBundler(6);
 			}
 
 			query.append(_SQL_SELECT_DLFILESHORTCUT_WHERE);
@@ -4578,6 +4659,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileShortcutModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -5590,7 +5674,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_DLFILESHORTCUT;
+				sql = _SQL_SELECT_DLFILESHORTCUT.concat(DLFileShortcutModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

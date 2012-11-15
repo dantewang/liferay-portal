@@ -263,6 +263,9 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 				}
 			}
 		}
+		else {
+			query.append(ResourceBlockModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -354,7 +357,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEBLOCK_WHERE);
@@ -376,6 +379,9 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourceBlockModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -870,6 +876,9 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 				}
 			}
 		}
+		else {
+			query.append(ResourceBlockModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -965,7 +974,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_RESOURCEBLOCK_WHERE);
@@ -989,6 +998,9 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourceBlockModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1457,7 +1469,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(5);
+			StringBundler query = new StringBundler(6);
 
 			query.append(_SQL_SELECT_RESOURCEBLOCK_WHERE);
 
@@ -2219,7 +2231,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_RESOURCEBLOCK;
+				sql = _SQL_SELECT_RESOURCEBLOCK.concat(ResourceBlockModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

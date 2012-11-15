@@ -259,7 +259,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 		}
@@ -366,7 +365,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 			}
@@ -1096,7 +1094,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 		}
@@ -1213,7 +1210,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 			}
@@ -1677,7 +1673,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 		}
@@ -1795,7 +1790,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
@@ -1974,7 +1968,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
@@ -2083,7 +2076,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 			}
@@ -2553,7 +2545,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 		}
@@ -2648,7 +2639,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 			}
@@ -3351,7 +3341,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 		}
@@ -3476,7 +3465,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
@@ -3661,7 +3649,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
@@ -3780,7 +3767,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 			}
@@ -4284,7 +4270,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 		}
@@ -4389,7 +4374,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiNodeModelImpl.ORDER_BY_JPQL);
 			}

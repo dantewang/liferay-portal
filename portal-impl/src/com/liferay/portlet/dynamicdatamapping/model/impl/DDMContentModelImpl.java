@@ -80,6 +80,8 @@ public class DDMContentModelImpl extends BaseModelImpl<DDMContent>
 		};
 	public static final String TABLE_SQL_CREATE = "create table DDMContent (uuid_ VARCHAR(75) null,contentId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name STRING null,description STRING null,xml TEXT null)";
 	public static final String TABLE_SQL_DROP = "drop table DDMContent";
+	public static final String ORDER_BY_JPQL = " ORDER BY ddmContent.contentId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY DDMContent.contentId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

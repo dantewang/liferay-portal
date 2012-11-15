@@ -251,7 +251,6 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 				}
 			}
 		}
-
 		else {
 			query.append(ListTypeModelImpl.ORDER_BY_JPQL);
 		}
@@ -358,7 +357,6 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ListTypeModelImpl.ORDER_BY_JPQL);
 			}

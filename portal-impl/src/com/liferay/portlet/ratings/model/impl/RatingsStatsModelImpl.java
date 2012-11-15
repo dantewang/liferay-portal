@@ -68,6 +68,8 @@ public class RatingsStatsModelImpl extends BaseModelImpl<RatingsStats>
 		};
 	public static final String TABLE_SQL_CREATE = "create table RatingsStats (statsId LONG not null primary key,classNameId LONG,classPK LONG,totalEntries INTEGER,totalScore DOUBLE,averageScore DOUBLE)";
 	public static final String TABLE_SQL_DROP = "drop table RatingsStats";
+	public static final String ORDER_BY_JPQL = " ORDER BY ratingsStats.statsId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY RatingsStats.statsId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

@@ -244,7 +244,6 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 				}
 			}
 		}
-
 		else {
 			query.append(RegionModelImpl.ORDER_BY_JPQL);
 		}
@@ -339,7 +338,6 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(RegionModelImpl.ORDER_BY_JPQL);
 			}
@@ -757,7 +755,6 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 				}
 			}
 		}
-
 		else {
 			query.append(RegionModelImpl.ORDER_BY_JPQL);
 		}
@@ -852,7 +849,6 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(RegionModelImpl.ORDER_BY_JPQL);
 			}
@@ -1553,7 +1549,6 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 				}
 			}
 		}
-
 		else {
 			query.append(RegionModelImpl.ORDER_BY_JPQL);
 		}
@@ -1658,7 +1653,6 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(RegionModelImpl.ORDER_BY_JPQL);
 			}

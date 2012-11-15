@@ -67,6 +67,8 @@ public class JournalContentSearchModelImpl extends BaseModelImpl<JournalContentS
 		};
 	public static final String TABLE_SQL_CREATE = "create table JournalContentSearch (contentSearchId LONG not null primary key,groupId LONG,companyId LONG,privateLayout BOOLEAN,layoutId LONG,portletId VARCHAR(200) null,articleId VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table JournalContentSearch";
+	public static final String ORDER_BY_JPQL = " ORDER BY journalContentSearch.contentSearchId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY JournalContentSearch.contentSearchId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

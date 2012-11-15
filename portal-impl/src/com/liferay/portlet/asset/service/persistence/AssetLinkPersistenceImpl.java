@@ -242,7 +242,6 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				}
 			}
 		}
-
 		else {
 			query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 		}
@@ -337,7 +336,6 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 			}
@@ -754,7 +752,6 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				}
 			}
 		}
-
 		else {
 			query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 		}
@@ -849,7 +846,6 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 			}
@@ -1274,7 +1270,6 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				}
 			}
 		}
-
 		else {
 			query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 		}
@@ -1379,7 +1374,6 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 			}
@@ -1834,7 +1828,6 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				}
 			}
 		}
-
 		else {
 			query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 		}
@@ -1939,7 +1932,6 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 			}
@@ -2391,7 +2383,6 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				}
 			}
 		}
-
 		else {
 			query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 		}
@@ -2496,7 +2487,6 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 			}

@@ -259,6 +259,9 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 				}
 			}
 		}
+		else {
+			query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -348,7 +351,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(2);
+			query = new StringBundler(3);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -382,6 +385,14 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -568,6 +579,14 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				LayoutPrototype.class.getName(),
@@ -659,7 +678,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
@@ -679,6 +698,9 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1194,6 +1216,9 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 				}
 			}
 		}
+		else {
+			query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1290,7 +1315,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(3);
+			query = new StringBundler(4);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -1326,6 +1351,14 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -1518,6 +1551,14 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				LayoutPrototype.class.getName(),
@@ -1618,7 +1659,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
@@ -1640,6 +1681,9 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2173,6 +2217,9 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 				}
 			}
 		}
+		else {
+			query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2262,7 +2309,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(2);
+			query = new StringBundler(3);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -2286,6 +2333,14 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -2461,6 +2516,14 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				LayoutPrototype.class.getName(),
@@ -2550,7 +2613,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
@@ -2560,6 +2623,9 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -3037,6 +3103,9 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 				}
 			}
 		}
+		else {
+			query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -3131,7 +3200,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(3);
+			query = new StringBundler(4);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -3157,6 +3226,14 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -3337,6 +3414,14 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				LayoutPrototype.class.getName(),
@@ -3435,7 +3520,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
@@ -3447,6 +3532,9 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -4298,7 +4386,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_LAYOUTPROTOTYPE;
+				sql = _SQL_SELECT_LAYOUTPROTOTYPE.concat(LayoutPrototypeModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

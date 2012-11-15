@@ -251,7 +251,6 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 				}
 			}
 		}
-
 		else {
 			query.append(DLContentModelImpl.ORDER_BY_JPQL);
 		}
@@ -357,7 +356,6 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLContentModelImpl.ORDER_BY_JPQL);
 			}
@@ -835,7 +833,6 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 				}
 			}
 		}
-
 		else {
 			query.append(DLContentModelImpl.ORDER_BY_JPQL);
 		}
@@ -959,7 +956,6 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLContentModelImpl.ORDER_BY_JPQL);
 			}
@@ -1471,7 +1467,6 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 				}
 			}
 		}
-
 		else {
 			query.append(DLContentModelImpl.ORDER_BY_JPQL);
 		}
@@ -1588,7 +1583,6 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLContentModelImpl.ORDER_BY_JPQL);
 			}

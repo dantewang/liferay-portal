@@ -253,7 +253,6 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 				}
 			}
 		}
-
 		else {
 			query.append(AssetTagModelImpl.ORDER_BY_JPQL);
 		}
@@ -371,7 +370,6 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(AssetTagModelImpl.ORDER_BY_JPQL);
@@ -550,7 +548,6 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(AssetTagModelImpl.ORDER_BY_JPQL);
@@ -659,7 +656,6 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetTagModelImpl.ORDER_BY_JPQL);
 			}
@@ -1064,7 +1060,6 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetTagModelImpl.ORDER_BY_JPQL);
 			}

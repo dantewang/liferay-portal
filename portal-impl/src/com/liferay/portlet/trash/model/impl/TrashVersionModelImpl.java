@@ -67,6 +67,8 @@ public class TrashVersionModelImpl extends BaseModelImpl<TrashVersion>
 		};
 	public static final String TABLE_SQL_CREATE = "create table TrashVersion (versionId LONG not null primary key,entryId LONG,classNameId LONG,classPK LONG,status INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table TrashVersion";
+	public static final String ORDER_BY_JPQL = " ORDER BY trashVersion.versionId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY TrashVersion.versionId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

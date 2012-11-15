@@ -259,6 +259,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 				}
 			}
 		}
+		else {
+			query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -341,7 +344,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
@@ -361,6 +364,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -815,6 +821,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 				}
 			}
 		}
+		else {
+			query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -906,7 +915,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
@@ -928,6 +937,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1394,6 +1406,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 				}
 			}
 		}
+		else {
+			query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1474,7 +1489,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
@@ -1484,6 +1499,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1907,6 +1925,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 				}
 			}
 		}
+		else {
+			query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1987,7 +2008,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
@@ -1997,6 +2018,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2420,6 +2444,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 				}
 			}
 		}
+		else {
+			query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2500,7 +2527,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
@@ -2510,6 +2537,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2931,6 +2961,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 				}
 			}
 		}
+		else {
+			query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -3011,7 +3044,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
@@ -3021,6 +3054,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -3446,6 +3482,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 				}
 			}
 		}
+		else {
+			query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -3534,7 +3573,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
@@ -3546,6 +3585,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -3998,6 +4040,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 				}
 			}
 		}
+		else {
+			query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -4087,7 +4132,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
@@ -4099,6 +4144,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -4553,6 +4601,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 				}
 			}
 		}
+		else {
+			query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -4641,7 +4692,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
@@ -4653,6 +4704,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -5105,6 +5159,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 				}
 			}
 		}
+		else {
+			query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -5193,7 +5250,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
@@ -5205,6 +5262,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialRelationModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -5615,7 +5675,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(4);
+			StringBundler query = new StringBundler(5);
 
 			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
 
@@ -6454,7 +6514,7 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SOCIALRELATION;
+				sql = _SQL_SELECT_SOCIALRELATION.concat(SocialRelationModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

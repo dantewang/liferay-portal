@@ -245,7 +245,6 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 				}
 			}
 		}
-
 		else {
 			query.append(MBStatsUserModelImpl.ORDER_BY_JPQL);
 		}
@@ -340,7 +339,6 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBStatsUserModelImpl.ORDER_BY_JPQL);
 			}
@@ -762,7 +760,6 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 				}
 			}
 		}
-
 		else {
 			query.append(MBStatsUserModelImpl.ORDER_BY_JPQL);
 		}
@@ -857,7 +854,6 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBStatsUserModelImpl.ORDER_BY_JPQL);
 			}
@@ -1539,7 +1535,6 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 				}
 			}
 		}
-
 		else {
 			query.append(MBStatsUserModelImpl.ORDER_BY_JPQL);
 		}
@@ -1644,7 +1639,6 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBStatsUserModelImpl.ORDER_BY_JPQL);
 			}

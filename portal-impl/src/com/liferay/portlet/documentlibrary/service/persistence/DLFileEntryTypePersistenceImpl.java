@@ -272,6 +272,9 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 				}
 			}
 		}
+		else {
+			query.append(DLFileEntryTypeModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -354,7 +357,7 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DLFILEENTRYTYPE_WHERE);
@@ -374,6 +377,9 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileEntryTypeModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -757,7 +763,7 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_DLFILEENTRYTYPE_WHERE);
 
@@ -1110,6 +1116,9 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 				}
 			}
 		}
+		else {
+			query.append(DLFileEntryTypeModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1201,7 +1210,7 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_DLFILEENTRYTYPE_WHERE);
@@ -1223,6 +1232,9 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileEntryTypeModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1691,6 +1703,9 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 				}
 			}
 		}
+		else {
+			query.append(DLFileEntryTypeModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1779,7 +1794,7 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(2);
+			query = new StringBundler(3);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -1803,6 +1818,14 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileEntryTypeModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileEntryTypeModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -1977,6 +2000,14 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileEntryTypeModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileEntryTypeModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				DLFileEntryType.class.getName(),
@@ -2113,6 +2144,14 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 					orderByComparator);
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DLFileEntryTypeModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DLFileEntryTypeModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				DLFileEntryType.class.getName(),
@@ -2199,7 +2238,7 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DLFILEENTRYTYPE_WHERE);
@@ -2209,6 +2248,9 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileEntryTypeModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2510,6 +2552,9 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileEntryTypeModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2919,7 +2964,7 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_DLFILEENTRYTYPE_WHERE);
 
@@ -3689,7 +3734,7 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_DLFILEENTRYTYPE;
+				sql = _SQL_SELECT_DLFILEENTRYTYPE.concat(DLFileEntryTypeModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

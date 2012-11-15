@@ -75,6 +75,8 @@ public class MBBanModelImpl extends BaseModelImpl<MBBan> implements MBBanModel {
 		};
 	public static final String TABLE_SQL_CREATE = "create table MBBan (banId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,banUserId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table MBBan";
+	public static final String ORDER_BY_JPQL = " ORDER BY mbBan.banId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY MBBan.banId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

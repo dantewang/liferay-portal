@@ -257,6 +257,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -339,7 +342,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
@@ -359,6 +362,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -735,7 +741,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
 
@@ -1086,6 +1092,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1177,7 +1186,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
@@ -1199,6 +1208,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1661,6 +1673,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1749,7 +1764,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(2);
+			query = new StringBundler(3);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -1773,6 +1788,14 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -1946,6 +1969,14 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				DDMTemplate.class.getName(),
@@ -2035,7 +2066,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
@@ -2045,6 +2076,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2512,6 +2546,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2592,7 +2629,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
@@ -2602,6 +2639,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -3029,6 +3069,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -3111,7 +3154,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
@@ -3131,6 +3174,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -3574,6 +3620,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -3656,7 +3705,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
@@ -3676,6 +3725,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -4119,6 +4171,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -4213,7 +4268,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(3);
+			query = new StringBundler(4);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -4239,6 +4294,14 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -4417,6 +4480,14 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				DDMTemplate.class.getName(),
@@ -4515,7 +4586,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
@@ -4527,6 +4598,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -4970,7 +5044,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
 
@@ -5320,6 +5394,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -5420,7 +5497,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			query = new StringBundler(4);
+			query = new StringBundler(5);
 		}
 
 		if (getDB().isSupportsInlineDistinct()) {
@@ -5448,6 +5525,14 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			else {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
 					orderByComparator);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_SQL);
 			}
 		}
 
@@ -5632,6 +5717,14 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_SQL);
+			}
+		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
 				DDMTemplate.class.getName(),
@@ -5734,7 +5827,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
@@ -5748,6 +5841,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -6308,6 +6404,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -6403,7 +6502,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
@@ -6427,6 +6526,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -6961,6 +7063,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				}
 			}
 		}
+		else {
+			query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -7062,7 +7167,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(5);
+				query = new StringBundler(6);
 			}
 
 			query.append(_SQL_SELECT_DDMTEMPLATE_WHERE);
@@ -7098,6 +7203,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMTemplateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -8199,7 +8307,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_DDMTEMPLATE;
+				sql = _SQL_SELECT_DDMTEMPLATE.concat(DDMTemplateModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

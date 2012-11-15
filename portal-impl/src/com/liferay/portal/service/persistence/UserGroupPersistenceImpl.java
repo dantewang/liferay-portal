@@ -256,7 +256,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				}
 			}
 		}
-
 		else {
 			query.append(UserGroupModelImpl.ORDER_BY_JPQL);
 		}
@@ -374,7 +373,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(UserGroupModelImpl.ORDER_BY_JPQL);
@@ -553,7 +551,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(UserGroupModelImpl.ORDER_BY_JPQL);
@@ -661,7 +658,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(UserGroupModelImpl.ORDER_BY_JPQL);
 			}
@@ -1137,7 +1133,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				}
 			}
 		}
-
 		else {
 			query.append(UserGroupModelImpl.ORDER_BY_JPQL);
 		}
@@ -1264,7 +1259,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(UserGroupModelImpl.ORDER_BY_JPQL);
@@ -1449,7 +1443,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(UserGroupModelImpl.ORDER_BY_JPQL);
@@ -1568,7 +1561,6 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(UserGroupModelImpl.ORDER_BY_JPQL);
 			}

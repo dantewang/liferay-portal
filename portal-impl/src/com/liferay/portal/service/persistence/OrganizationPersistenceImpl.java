@@ -257,7 +257,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 				}
 			}
 		}
-
 		else {
 			query.append(OrganizationModelImpl.ORDER_BY_JPQL);
 		}
@@ -375,7 +374,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(OrganizationModelImpl.ORDER_BY_JPQL);
@@ -556,7 +554,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(OrganizationModelImpl.ORDER_BY_JPQL);
@@ -665,7 +662,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(OrganizationModelImpl.ORDER_BY_JPQL);
 			}
@@ -1139,7 +1135,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 				}
 			}
 		}
-
 		else {
 			query.append(OrganizationModelImpl.ORDER_BY_JPQL);
 		}
@@ -1257,7 +1252,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(OrganizationModelImpl.ORDER_BY_JPQL);
@@ -1438,7 +1432,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(OrganizationModelImpl.ORDER_BY_JPQL);
@@ -1547,7 +1540,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(OrganizationModelImpl.ORDER_BY_JPQL);
 			}
@@ -2027,7 +2019,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 				}
 			}
 		}
-
 		else {
 			query.append(OrganizationModelImpl.ORDER_BY_JPQL);
 		}
@@ -2155,7 +2146,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(OrganizationModelImpl.ORDER_BY_JPQL);
@@ -2342,7 +2332,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(OrganizationModelImpl.ORDER_BY_JPQL);
@@ -2462,7 +2451,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(OrganizationModelImpl.ORDER_BY_JPQL);
 			}

@@ -79,6 +79,8 @@ public class DDLRecordVersionModelImpl extends BaseModelImpl<DDLRecordVersion>
 		};
 	public static final String TABLE_SQL_CREATE = "create table DDLRecordVersion (recordVersionId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,DDMStorageId LONG,recordSetId LONG,recordId LONG,version VARCHAR(75) null,displayIndex INTEGER,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table DDLRecordVersion";
+	public static final String ORDER_BY_JPQL = " ORDER BY ddlRecordVersion.recordVersionId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY DDLRecordVersion.recordVersionId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

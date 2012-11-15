@@ -261,7 +261,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				}
 			}
 		}
-
 		else {
 			query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -368,7 +367,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}
@@ -1098,7 +1096,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				}
 			}
 		}
-
 		else {
 			query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -1216,7 +1213,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}
@@ -1681,7 +1677,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				}
 			}
 		}
-
 		else {
 			query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -1799,7 +1794,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
@@ -1979,7 +1973,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
@@ -2088,7 +2081,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}
@@ -2559,7 +2551,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				}
 			}
 		}
-
 		else {
 			query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -2654,7 +2645,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}
@@ -3088,7 +3078,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				}
 			}
 		}
-
 		else {
 			query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 		}
@@ -3215,7 +3204,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
@@ -3400,7 +3388,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
@@ -3559,7 +3546,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
@@ -3675,7 +3661,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}
@@ -4012,7 +3997,6 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}

@@ -258,7 +258,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 				}
 			}
 		}
-
 		else {
 			query.append(SCFrameworkVersionModelImpl.ORDER_BY_JPQL);
 		}
@@ -377,7 +376,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCFrameworkVersionModelImpl.ORDER_BY_JPQL);
@@ -559,7 +557,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCFrameworkVersionModelImpl.ORDER_BY_JPQL);
@@ -668,7 +665,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SCFrameworkVersionModelImpl.ORDER_BY_JPQL);
 			}
@@ -1145,7 +1141,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 				}
 			}
 		}
-
 		else {
 			query.append(SCFrameworkVersionModelImpl.ORDER_BY_JPQL);
 		}
@@ -1240,7 +1235,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SCFrameworkVersionModelImpl.ORDER_BY_JPQL);
 			}
@@ -1672,7 +1666,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 				}
 			}
 		}
-
 		else {
 			query.append(SCFrameworkVersionModelImpl.ORDER_BY_JPQL);
 		}
@@ -1798,7 +1791,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCFrameworkVersionModelImpl.ORDER_BY_JPQL);
@@ -1985,7 +1977,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCFrameworkVersionModelImpl.ORDER_BY_JPQL);
@@ -2105,7 +2096,6 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SCFrameworkVersionModelImpl.ORDER_BY_JPQL);
 			}

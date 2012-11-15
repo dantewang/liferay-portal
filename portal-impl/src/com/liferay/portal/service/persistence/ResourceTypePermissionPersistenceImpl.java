@@ -248,6 +248,9 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 				}
 			}
 		}
+		else {
+			query.append(ResourceTypePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -328,7 +331,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_RESOURCETYPEPERMISSION_WHERE);
@@ -338,6 +341,9 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourceTypePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -792,6 +798,9 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 				}
 			}
 		}
+		else {
+			query.append(ResourceTypePermissionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -887,7 +896,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_RESOURCETYPEPERMISSION_WHERE);
@@ -911,6 +920,9 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ResourceTypePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1379,7 +1391,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(5);
+			StringBundler query = new StringBundler(6);
 
 			query.append(_SQL_SELECT_RESOURCETYPEPERMISSION_WHERE);
 
@@ -2111,7 +2123,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_RESOURCETYPEPERMISSION;
+				sql = _SQL_SELECT_RESOURCETYPEPERMISSION.concat(ResourceTypePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

@@ -187,7 +187,7 @@ public class RatingsStatsPersistenceImpl extends BasePersistenceImpl<RatingsStat
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_RATINGSSTATS_WHERE);
 
@@ -793,7 +793,7 @@ public class RatingsStatsPersistenceImpl extends BasePersistenceImpl<RatingsStat
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_RATINGSSTATS;
+				sql = _SQL_SELECT_RATINGSSTATS.concat(RatingsStatsModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

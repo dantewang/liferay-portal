@@ -247,7 +247,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 				}
 			}
 		}
-
 		else {
 			query.append(MembershipRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -342,7 +341,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MembershipRequestModelImpl.ORDER_BY_JPQL);
 			}
@@ -769,7 +767,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 				}
 			}
 		}
-
 		else {
 			query.append(MembershipRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -864,7 +861,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MembershipRequestModelImpl.ORDER_BY_JPQL);
 			}
@@ -1296,7 +1292,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 				}
 			}
 		}
-
 		else {
 			query.append(MembershipRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -1402,7 +1397,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MembershipRequestModelImpl.ORDER_BY_JPQL);
 			}
@@ -1872,7 +1866,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 				}
 			}
 		}
-
 		else {
 			query.append(MembershipRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -1984,7 +1977,6 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(MembershipRequestModelImpl.ORDER_BY_JPQL);
 			}

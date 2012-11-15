@@ -66,6 +66,8 @@ public class DDMStructureLinkModelImpl extends BaseModelImpl<DDMStructureLink>
 		};
 	public static final String TABLE_SQL_CREATE = "create table DDMStructureLink (structureLinkId LONG not null primary key,classNameId LONG,classPK LONG,structureId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table DDMStructureLink";
+	public static final String ORDER_BY_JPQL = " ORDER BY ddmStructureLink.structureLinkId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY DDMStructureLink.structureLinkId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

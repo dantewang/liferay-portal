@@ -181,7 +181,7 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_SELECT_RELEASE_WHERE);
 
@@ -793,7 +793,7 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_RELEASE;
+				sql = _SQL_SELECT_RELEASE.concat(ReleaseModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

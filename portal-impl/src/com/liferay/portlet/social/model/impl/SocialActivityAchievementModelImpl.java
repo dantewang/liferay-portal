@@ -69,6 +69,8 @@ public class SocialActivityAchievementModelImpl extends BaseModelImpl<SocialActi
 		};
 	public static final String TABLE_SQL_CREATE = "create table SocialActivityAchievement (activityAchievementId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate LONG,name VARCHAR(75) null,firstInGroup BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table SocialActivityAchievement";
+	public static final String ORDER_BY_JPQL = " ORDER BY socialActivityAchievement.activityAchievementId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY SocialActivityAchievement.activityAchievementId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

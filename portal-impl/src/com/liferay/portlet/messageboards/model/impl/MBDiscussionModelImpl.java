@@ -66,6 +66,8 @@ public class MBDiscussionModelImpl extends BaseModelImpl<MBDiscussion>
 		};
 	public static final String TABLE_SQL_CREATE = "create table MBDiscussion (discussionId LONG not null primary key,classNameId LONG,classPK LONG,threadId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table MBDiscussion";
+	public static final String ORDER_BY_JPQL = " ORDER BY mbDiscussion.discussionId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY MBDiscussion.discussionId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

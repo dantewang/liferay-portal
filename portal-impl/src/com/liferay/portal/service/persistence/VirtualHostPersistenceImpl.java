@@ -178,7 +178,7 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_SELECT_VIRTUALHOST_WHERE);
 
@@ -442,7 +442,7 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_VIRTUALHOST_WHERE);
 
@@ -1069,7 +1069,7 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_VIRTUALHOST;
+				sql = _SQL_SELECT_VIRTUALHOST.concat(VirtualHostModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

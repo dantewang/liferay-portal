@@ -259,6 +259,9 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 				}
 			}
 		}
+		else {
+			query.append(JournalArticleResourceModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -341,7 +344,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_JOURNALARTICLERESOURCE_WHERE);
@@ -361,6 +364,9 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(JournalArticleResourceModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -746,7 +752,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_JOURNALARTICLERESOURCE_WHERE);
 
@@ -1083,6 +1089,9 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 				}
 			}
 		}
+		else {
+			query.append(JournalArticleResourceModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1163,7 +1172,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_JOURNALARTICLERESOURCE_WHERE);
@@ -1173,6 +1182,9 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(JournalArticleResourceModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1542,7 +1554,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_JOURNALARTICLERESOURCE_WHERE);
 
@@ -2274,7 +2286,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_JOURNALARTICLERESOURCE;
+				sql = _SQL_SELECT_JOURNALARTICLERESOURCE.concat(JournalArticleResourceModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

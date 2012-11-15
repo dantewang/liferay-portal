@@ -176,7 +176,7 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_SELECT_CLASSNAME_WHERE);
 
@@ -778,7 +778,7 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_CLASSNAME;
+				sql = _SQL_SELECT_CLASSNAME.concat(ClassNameModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

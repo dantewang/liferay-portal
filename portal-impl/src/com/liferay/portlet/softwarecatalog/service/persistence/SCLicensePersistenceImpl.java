@@ -253,7 +253,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				}
 			}
 		}
-
 		else {
 			query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
 		}
@@ -371,7 +370,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
@@ -549,7 +547,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
@@ -657,7 +654,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
 			}
@@ -1131,7 +1127,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				}
 			}
 		}
-
 		else {
 			query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
 		}
@@ -1257,7 +1252,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
@@ -1441,7 +1435,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
@@ -1560,7 +1553,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
 			}

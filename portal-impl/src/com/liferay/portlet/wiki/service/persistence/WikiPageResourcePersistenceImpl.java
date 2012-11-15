@@ -259,6 +259,9 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 				}
 			}
 		}
+		else {
+			query.append(WikiPageResourceModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -341,7 +344,7 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_WIKIPAGERESOURCE_WHERE);
@@ -361,6 +364,9 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(WikiPageResourceModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -742,7 +748,7 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_WIKIPAGERESOURCE_WHERE);
 
@@ -1411,7 +1417,7 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_WIKIPAGERESOURCE;
+				sql = _SQL_SELECT_WIKIPAGERESOURCE.concat(WikiPageResourceModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

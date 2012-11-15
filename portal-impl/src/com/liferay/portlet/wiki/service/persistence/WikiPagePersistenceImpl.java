@@ -272,7 +272,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -379,7 +378,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -1109,7 +1107,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -1226,7 +1223,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -1690,7 +1686,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -1785,7 +1780,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -2213,7 +2207,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -2320,7 +2313,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -2762,7 +2754,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -2868,7 +2859,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -3333,7 +3323,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -3450,7 +3439,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -3917,7 +3905,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -4022,7 +4009,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -4483,7 +4469,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -4600,7 +4585,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -5081,7 +5065,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -5200,7 +5183,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -5671,7 +5653,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -5776,7 +5757,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -6521,7 +6501,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -6633,7 +6612,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -7127,7 +7105,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -7239,7 +7216,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -7732,7 +7708,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -7844,7 +7819,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -8653,7 +8627,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -8777,7 +8750,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -9294,7 +9266,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -9418,7 +9389,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -9935,7 +9905,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -10059,7 +10028,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -10568,7 +10536,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -10680,7 +10647,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}
@@ -11190,7 +11156,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -11320,7 +11285,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 			}

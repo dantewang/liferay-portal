@@ -247,6 +247,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 				}
 			}
 		}
+		else {
+			query.append(PortletPreferencesModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -327,7 +330,7 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_PORTLETPREFERENCES_WHERE);
@@ -337,6 +340,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PortletPreferencesModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -772,6 +778,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 				}
 			}
 		}
+		else {
+			query.append(PortletPreferencesModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -856,7 +865,7 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_PORTLETPREFERENCES_WHERE);
@@ -876,6 +885,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PortletPreferencesModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1332,6 +1344,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 				}
 			}
 		}
+		else {
+			query.append(PortletPreferencesModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1424,7 +1439,7 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_PORTLETPREFERENCES_WHERE);
@@ -1446,6 +1461,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PortletPreferencesModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1930,6 +1948,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 				}
 			}
 		}
+		else {
+			query.append(PortletPreferencesModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2023,7 +2044,7 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_PORTLETPREFERENCES_WHERE);
@@ -2037,6 +2058,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PortletPreferencesModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2540,6 +2564,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 				}
 			}
 		}
+		else {
+			query.append(PortletPreferencesModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2636,7 +2663,7 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_PORTLETPREFERENCES_WHERE);
@@ -2660,6 +2687,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PortletPreferencesModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -3128,7 +3158,7 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(5);
+			StringBundler query = new StringBundler(6);
 
 			query.append(_SQL_SELECT_PORTLETPREFERENCES_WHERE);
 
@@ -3920,7 +3950,7 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_PORTLETPREFERENCES;
+				sql = _SQL_SELECT_PORTLETPREFERENCES.concat(PortletPreferencesModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

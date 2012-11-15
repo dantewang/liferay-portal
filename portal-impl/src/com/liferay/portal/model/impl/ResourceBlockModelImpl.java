@@ -70,6 +70,8 @@ public class ResourceBlockModelImpl extends BaseModelImpl<ResourceBlock>
 		};
 	public static final String TABLE_SQL_CREATE = "create table ResourceBlock (resourceBlockId LONG not null primary key,companyId LONG,groupId LONG,name VARCHAR(75) null,permissionsHash VARCHAR(75) null,referenceCount LONG)";
 	public static final String TABLE_SQL_DROP = "drop table ResourceBlock";
+	public static final String ORDER_BY_JPQL = " ORDER BY resourceBlock.resourceBlockId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY ResourceBlock.resourceBlockId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

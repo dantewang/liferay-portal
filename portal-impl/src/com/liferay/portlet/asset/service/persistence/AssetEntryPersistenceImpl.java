@@ -270,6 +270,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				}
 			}
 		}
+		else {
+			query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -350,7 +353,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
@@ -360,6 +363,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -781,6 +787,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				}
 			}
 		}
+		else {
+			query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -861,7 +870,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
@@ -871,6 +880,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1296,6 +1308,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				}
 			}
 		}
+		else {
+			query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1378,7 +1393,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
@@ -1393,6 +1408,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1831,6 +1849,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				}
 			}
 		}
+		else {
+			query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1919,7 +1940,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
@@ -1934,6 +1955,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2379,6 +2403,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				}
 			}
 		}
+		else {
+			query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2461,7 +2488,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
@@ -2481,6 +2508,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2833,7 +2863,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
@@ -2855,6 +2885,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -3260,7 +3293,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
 
@@ -4004,7 +4037,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_ASSETENTRY;
+				sql = _SQL_SELECT_ASSETENTRY.concat(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

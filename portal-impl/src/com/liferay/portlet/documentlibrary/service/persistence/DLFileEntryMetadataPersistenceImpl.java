@@ -261,6 +261,9 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 				}
 			}
 		}
+		else {
+			query.append(DLFileEntryMetadataModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -343,7 +346,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DLFILEENTRYMETADATA_WHERE);
@@ -363,6 +366,9 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileEntryMetadataModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -808,6 +814,9 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 				}
 			}
 		}
+		else {
+			query.append(DLFileEntryMetadataModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -893,7 +902,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DLFILEENTRYMETADATA_WHERE);
@@ -903,6 +912,9 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileEntryMetadataModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1334,6 +1346,9 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 				}
 			}
 		}
+		else {
+			query.append(DLFileEntryMetadataModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1415,7 +1430,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DLFILEENTRYMETADATA_WHERE);
@@ -1425,6 +1440,9 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileEntryMetadataModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1852,6 +1870,9 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 				}
 			}
 		}
+		else {
+			query.append(DLFileEntryMetadataModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1937,7 +1958,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DLFILEENTRYMETADATA_WHERE);
@@ -1947,6 +1968,9 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DLFileEntryMetadataModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2318,7 +2342,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_DLFILEENTRYMETADATA_WHERE);
 
@@ -3027,7 +3051,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_DLFILEENTRYMETADATA;
+				sql = _SQL_SELECT_DLFILEENTRYMETADATA.concat(DLFileEntryMetadataModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

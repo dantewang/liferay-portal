@@ -244,7 +244,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				}
 			}
 		}
-
 		else {
 			query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 		}
@@ -339,7 +338,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 			}
@@ -763,7 +761,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				}
 			}
 		}
-
 		else {
 			query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 		}
@@ -858,7 +855,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 			}
@@ -1286,7 +1282,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				}
 			}
 		}
-
 		else {
 			query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 		}
@@ -1392,7 +1387,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 			}
@@ -1858,7 +1852,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				}
 			}
 		}
-
 		else {
 			query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 		}
@@ -1970,7 +1963,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 			}
@@ -2476,7 +2468,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				}
 			}
 		}
-
 		else {
 			query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 		}
@@ -2594,7 +2585,6 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 			}

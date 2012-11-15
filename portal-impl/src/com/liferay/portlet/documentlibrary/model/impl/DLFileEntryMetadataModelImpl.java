@@ -67,6 +67,8 @@ public class DLFileEntryMetadataModelImpl extends BaseModelImpl<DLFileEntryMetad
 		};
 	public static final String TABLE_SQL_CREATE = "create table DLFileEntryMetadata (uuid_ VARCHAR(75) null,fileEntryMetadataId LONG not null primary key,DDMStorageId LONG,DDMStructureId LONG,fileEntryTypeId LONG,fileEntryId LONG,fileVersionId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table DLFileEntryMetadata";
+	public static final String ORDER_BY_JPQL = " ORDER BY dlFileEntryMetadata.fileEntryMetadataId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY DLFileEntryMetadata.fileEntryMetadataId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

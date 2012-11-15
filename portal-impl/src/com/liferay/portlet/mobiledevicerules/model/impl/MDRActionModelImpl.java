@@ -88,6 +88,8 @@ public class MDRActionModelImpl extends BaseModelImpl<MDRAction>
 		};
 	public static final String TABLE_SQL_CREATE = "create table MDRAction (uuid_ VARCHAR(75) null,actionId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,classNameId LONG,classPK LONG,ruleGroupInstanceId LONG,name STRING null,description STRING null,type_ VARCHAR(255) null,typeSettings TEXT null)";
 	public static final String TABLE_SQL_DROP = "drop table MDRAction";
+	public static final String ORDER_BY_JPQL = " ORDER BY mdrAction.actionId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY MDRAction.actionId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

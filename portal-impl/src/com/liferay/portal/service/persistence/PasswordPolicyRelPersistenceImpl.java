@@ -251,6 +251,9 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 				}
 			}
 		}
+		else {
+			query.append(PasswordPolicyRelModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -336,7 +339,7 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_PASSWORDPOLICYREL_WHERE);
@@ -346,6 +349,9 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PasswordPolicyRelModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -689,7 +695,7 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_PASSWORDPOLICYREL_WHERE);
@@ -701,6 +707,9 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PasswordPolicyRelModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1071,7 +1080,7 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_PASSWORDPOLICYREL_WHERE);
@@ -1085,6 +1094,9 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PasswordPolicyRelModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1842,7 +1854,7 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_PASSWORDPOLICYREL;
+				sql = _SQL_SELECT_PASSWORDPOLICYREL.concat(PasswordPolicyRelModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

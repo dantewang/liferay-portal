@@ -246,6 +246,9 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 				}
 			}
 		}
+		else {
+			query.append(LayoutBranchModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -331,7 +334,7 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_LAYOUTBRANCH_WHERE);
@@ -341,6 +344,9 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LayoutBranchModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -771,6 +777,9 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 				}
 			}
 		}
+		else {
+			query.append(LayoutBranchModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -860,7 +869,7 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_LAYOUTBRANCH_WHERE);
@@ -872,6 +881,9 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LayoutBranchModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1280,7 +1292,7 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(4);
+			StringBundler query = new StringBundler(5);
 
 			query.append(_SQL_SELECT_LAYOUTBRANCH_WHERE);
 
@@ -1551,7 +1563,7 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_LAYOUTBRANCH_WHERE);
@@ -1565,6 +1577,9 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LayoutBranchModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2394,7 +2409,7 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_LAYOUTBRANCH;
+				sql = _SQL_SELECT_LAYOUTBRANCH.concat(LayoutBranchModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

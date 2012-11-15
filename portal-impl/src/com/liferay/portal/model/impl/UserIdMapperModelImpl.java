@@ -66,6 +66,8 @@ public class UserIdMapperModelImpl extends BaseModelImpl<UserIdMapper>
 		};
 	public static final String TABLE_SQL_CREATE = "create table UserIdMapper (userIdMapperId LONG not null primary key,userId LONG,type_ VARCHAR(75) null,description VARCHAR(75) null,externalUserId VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table UserIdMapper";
+	public static final String ORDER_BY_JPQL = " ORDER BY userIdMapper.userIdMapperId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY UserIdMapper.userIdMapperId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

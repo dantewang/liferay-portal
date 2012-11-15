@@ -244,6 +244,9 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 				}
 			}
 		}
+		else {
+			query.append(ShoppingCartModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -324,7 +327,7 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_SHOPPINGCART_WHERE);
@@ -334,6 +337,9 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ShoppingCartModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -754,6 +760,9 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 				}
 			}
 		}
+		else {
+			query.append(ShoppingCartModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -834,7 +843,7 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_SHOPPINGCART_WHERE);
@@ -844,6 +853,9 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ShoppingCartModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1206,7 +1218,7 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_SHOPPINGCART_WHERE);
 
@@ -1856,7 +1868,7 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SHOPPINGCART;
+				sql = _SQL_SELECT_SHOPPINGCART.concat(ShoppingCartModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

@@ -246,6 +246,9 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 				}
 			}
 		}
+		else {
+			query.append(SubscriptionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -326,7 +329,7 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_SUBSCRIPTION_WHERE);
@@ -336,6 +339,9 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SubscriptionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -761,6 +767,9 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 				}
 			}
 		}
+		else {
+			query.append(SubscriptionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -850,7 +859,7 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_SUBSCRIPTION_WHERE);
@@ -862,6 +871,9 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SubscriptionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1325,6 +1337,9 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 				}
 			}
 		}
+		else {
+			query.append(SubscriptionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1418,7 +1433,7 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_SUBSCRIPTION_WHERE);
@@ -1432,6 +1447,9 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SubscriptionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1880,7 +1898,7 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(5);
+			StringBundler query = new StringBundler(6);
 
 			query.append(_SQL_SELECT_SUBSCRIPTION_WHERE);
 
@@ -2593,7 +2611,7 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SUBSCRIPTION;
+				sql = _SQL_SELECT_SUBSCRIPTION.concat(SubscriptionModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

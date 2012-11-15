@@ -236,7 +236,6 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 				}
 			}
 		}
-
 		else {
 			query.append(ImageModelImpl.ORDER_BY_JPQL);
 		}
@@ -324,7 +323,6 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ImageModelImpl.ORDER_BY_JPQL);
 			}

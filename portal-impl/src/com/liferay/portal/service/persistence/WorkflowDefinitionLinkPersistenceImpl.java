@@ -250,7 +250,6 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 				}
 			}
 		}
-
 		else {
 			query.append(WorkflowDefinitionLinkModelImpl.ORDER_BY_JPQL);
 		}
@@ -346,7 +345,6 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WorkflowDefinitionLinkModelImpl.ORDER_BY_JPQL);
 			}
@@ -810,7 +808,6 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 				}
 			}
 		}
-
 		else {
 			query.append(WorkflowDefinitionLinkModelImpl.ORDER_BY_JPQL);
 		}
@@ -938,7 +935,6 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WorkflowDefinitionLinkModelImpl.ORDER_BY_JPQL);
 			}
@@ -1403,7 +1399,6 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(WorkflowDefinitionLinkModelImpl.ORDER_BY_JPQL);
 			}

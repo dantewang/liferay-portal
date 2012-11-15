@@ -243,6 +243,9 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 				}
 			}
 		}
+		else {
+			query.append(LayoutSetModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -323,7 +326,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_LAYOUTSET_WHERE);
@@ -333,6 +336,9 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LayoutSetModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -769,6 +775,9 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 				}
 			}
 		}
+		else {
+			query.append(LayoutSetModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -857,7 +866,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_LAYOUTSET_WHERE);
@@ -877,6 +886,9 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(LayoutSetModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1267,7 +1279,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_LAYOUTSET_WHERE);
 
@@ -1925,7 +1937,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_LAYOUTSET;
+				sql = _SQL_SELECT_LAYOUTSET.concat(LayoutSetModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

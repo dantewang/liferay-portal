@@ -252,7 +252,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			query.append(RoleModelImpl.ORDER_BY_JPQL);
 		}
@@ -370,7 +369,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -548,7 +546,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -656,7 +653,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
 			}
@@ -1129,7 +1125,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			query.append(RoleModelImpl.ORDER_BY_JPQL);
 		}
@@ -1257,7 +1252,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -1446,7 +1440,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -1566,7 +1559,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
 			}
@@ -2065,7 +2057,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			query.append(RoleModelImpl.ORDER_BY_JPQL);
 		}
@@ -2195,7 +2186,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -2384,7 +2374,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -2504,7 +2493,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
 			}
@@ -3289,7 +3277,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			query.append(RoleModelImpl.ORDER_BY_JPQL);
 		}
@@ -3426,7 +3413,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -3622,7 +3608,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
@@ -3752,7 +3737,6 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(RoleModelImpl.ORDER_BY_JPQL);
 			}

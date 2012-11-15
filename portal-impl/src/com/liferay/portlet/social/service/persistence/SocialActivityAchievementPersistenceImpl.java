@@ -253,6 +253,9 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -334,7 +337,7 @@ public class SocialActivityAchievementPersistenceImpl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
@@ -344,6 +347,9 @@ public class SocialActivityAchievementPersistenceImpl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -775,6 +781,9 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -864,7 +873,7 @@ public class SocialActivityAchievementPersistenceImpl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
@@ -876,6 +885,9 @@ public class SocialActivityAchievementPersistenceImpl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1342,6 +1354,9 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1434,7 +1449,7 @@ public class SocialActivityAchievementPersistenceImpl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
@@ -1456,6 +1471,9 @@ public class SocialActivityAchievementPersistenceImpl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1929,6 +1947,9 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2018,7 +2039,7 @@ public class SocialActivityAchievementPersistenceImpl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
@@ -2030,6 +2051,9 @@ public class SocialActivityAchievementPersistenceImpl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2448,7 +2472,7 @@ public class SocialActivityAchievementPersistenceImpl
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(4);
+			StringBundler query = new StringBundler(5);
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
 
@@ -2822,6 +2846,9 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2915,7 +2942,7 @@ public class SocialActivityAchievementPersistenceImpl
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
@@ -2929,6 +2956,9 @@ public class SocialActivityAchievementPersistenceImpl
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -3836,7 +3866,7 @@ public class SocialActivityAchievementPersistenceImpl
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SOCIALACTIVITYACHIEVEMENT;
+				sql = _SQL_SELECT_SOCIALACTIVITYACHIEVEMENT.concat(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

@@ -259,6 +259,9 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 				}
 			}
 		}
+		else {
+			query.append(DDMStorageLinkModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -341,7 +344,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DDMSTORAGELINK_WHERE);
@@ -361,6 +364,9 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMStorageLinkModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -733,7 +739,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_SELECT_DDMSTORAGELINK_WHERE);
 
@@ -1031,6 +1037,9 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 				}
 			}
 		}
+		else {
+			query.append(DDMStorageLinkModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1111,7 +1120,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DDMSTORAGELINK_WHERE);
@@ -1121,6 +1130,9 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDMStorageLinkModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1883,7 +1895,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_DDMSTORAGELINK;
+				sql = _SQL_SELECT_DDMSTORAGELINK.concat(DDMStorageLinkModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

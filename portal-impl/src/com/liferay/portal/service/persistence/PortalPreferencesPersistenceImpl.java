@@ -161,7 +161,7 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_PORTALPREFERENCES_WHERE);
@@ -173,6 +173,9 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PortalPreferencesModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -875,7 +878,7 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_PORTALPREFERENCES;
+				sql = _SQL_SELECT_PORTALPREFERENCES.concat(PortalPreferencesModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

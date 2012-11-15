@@ -250,6 +250,9 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 				}
 			}
 		}
+		else {
+			query.append(DDLRecordVersionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -330,7 +333,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DDLRECORDVERSION_WHERE);
@@ -340,6 +343,9 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDLRecordVersionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -706,7 +712,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_DDLRECORDVERSION_WHERE);
 
@@ -1048,6 +1054,9 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 				}
 			}
 		}
+		else {
+			query.append(DDLRecordVersionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1137,7 +1146,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_DDLRECORDVERSION_WHERE);
@@ -1149,6 +1158,9 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(DDLRecordVersionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1954,7 +1966,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_DDLRECORDVERSION;
+				sql = _SQL_SELECT_DDLRECORDVERSION.concat(DDLRecordVersionModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

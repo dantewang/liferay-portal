@@ -75,6 +75,8 @@ public class SocialActivityCounterModelImpl extends BaseModelImpl<SocialActivity
 		};
 	public static final String TABLE_SQL_CREATE = "create table SocialActivityCounter (activityCounterId LONG not null primary key,groupId LONG,companyId LONG,classNameId LONG,classPK LONG,name VARCHAR(75) null,ownerType INTEGER,currentValue INTEGER,totalValue INTEGER,graceValue INTEGER,startPeriod INTEGER,endPeriod INTEGER,active_ BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table SocialActivityCounter";
+	public static final String ORDER_BY_JPQL = " ORDER BY socialActivityCounter.activityCounterId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY SocialActivityCounter.activityCounterId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

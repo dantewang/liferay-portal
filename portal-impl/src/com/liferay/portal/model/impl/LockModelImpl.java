@@ -72,6 +72,8 @@ public class LockModelImpl extends BaseModelImpl<Lock> implements LockModel {
 		};
 	public static final String TABLE_SQL_CREATE = "create table Lock_ (uuid_ VARCHAR(75) null,lockId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,className VARCHAR(75) null,key_ VARCHAR(200) null,owner VARCHAR(255) null,inheritable BOOLEAN,expirationDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table Lock_";
+	public static final String ORDER_BY_JPQL = " ORDER BY lock.lockId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Lock_.lockId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

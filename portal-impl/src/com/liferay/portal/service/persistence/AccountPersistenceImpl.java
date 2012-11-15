@@ -497,7 +497,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_ACCOUNT;
+				sql = _SQL_SELECT_ACCOUNT.concat(AccountModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

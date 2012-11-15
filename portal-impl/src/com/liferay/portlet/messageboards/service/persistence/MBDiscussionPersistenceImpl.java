@@ -246,6 +246,9 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 				}
 			}
 		}
+		else {
+			query.append(MBDiscussionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -326,7 +329,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_MBDISCUSSION_WHERE);
@@ -336,6 +339,9 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(MBDiscussionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -692,7 +698,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_SELECT_MBDISCUSSION_WHERE);
 
@@ -929,7 +935,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_MBDISCUSSION_WHERE);
 
@@ -1582,7 +1588,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_MBDISCUSSION;
+				sql = _SQL_SELECT_MBDISCUSSION.concat(MBDiscussionModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

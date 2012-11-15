@@ -260,7 +260,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 				}
 			}
 		}
-
 		else {
 			query.append(PollsQuestionModelImpl.ORDER_BY_JPQL);
 		}
@@ -367,7 +366,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(PollsQuestionModelImpl.ORDER_BY_JPQL);
 			}
@@ -1103,7 +1101,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 				}
 			}
 		}
-
 		else {
 			query.append(PollsQuestionModelImpl.ORDER_BY_JPQL);
 		}
@@ -1221,7 +1218,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(PollsQuestionModelImpl.ORDER_BY_JPQL);
 			}
@@ -1687,7 +1683,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 				}
 			}
 		}
-
 		else {
 			query.append(PollsQuestionModelImpl.ORDER_BY_JPQL);
 		}
@@ -1805,7 +1800,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(PollsQuestionModelImpl.ORDER_BY_JPQL);
@@ -1986,7 +1980,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(PollsQuestionModelImpl.ORDER_BY_JPQL);
@@ -2095,7 +2088,6 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(PollsQuestionModelImpl.ORDER_BY_JPQL);
 			}

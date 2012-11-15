@@ -484,7 +484,7 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_COUNTER;
+				sql = _SQL_SELECT_COUNTER.concat(CounterModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

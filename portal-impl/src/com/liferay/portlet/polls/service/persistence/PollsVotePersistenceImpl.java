@@ -246,6 +246,9 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 				}
 			}
 		}
+		else {
+			query.append(PollsVoteModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -326,7 +329,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_POLLSVOTE_WHERE);
@@ -336,6 +339,9 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PollsVoteModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -758,6 +764,9 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 				}
 			}
 		}
+		else {
+			query.append(PollsVoteModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -838,7 +847,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_POLLSVOTE_WHERE);
@@ -848,6 +857,9 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(PollsVoteModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1209,7 +1221,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_POLLSVOTE_WHERE);
 
@@ -1859,7 +1871,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_POLLSVOTE;
+				sql = _SQL_SELECT_POLLSVOTE.concat(PollsVoteModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

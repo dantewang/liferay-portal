@@ -171,7 +171,6 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(TicketModelImpl.ORDER_BY_JPQL);
 			}

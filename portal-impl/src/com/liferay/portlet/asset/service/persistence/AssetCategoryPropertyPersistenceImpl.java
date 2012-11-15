@@ -252,7 +252,6 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryPropertyModelImpl.ORDER_BY_JPQL);
 		}
@@ -348,7 +347,6 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetCategoryPropertyModelImpl.ORDER_BY_JPQL);
 			}
@@ -777,7 +775,6 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryPropertyModelImpl.ORDER_BY_JPQL);
 		}
@@ -873,7 +870,6 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetCategoryPropertyModelImpl.ORDER_BY_JPQL);
 			}
@@ -1316,7 +1312,6 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 				}
 			}
 		}
-
 		else {
 			query.append(AssetCategoryPropertyModelImpl.ORDER_BY_JPQL);
 		}
@@ -1434,7 +1429,6 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetCategoryPropertyModelImpl.ORDER_BY_JPQL);
 			}

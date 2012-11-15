@@ -248,7 +248,6 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 				}
 			}
 		}
-
 		else {
 			query.append(AnnouncementsFlagModelImpl.ORDER_BY_JPQL);
 		}
@@ -343,7 +342,6 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AnnouncementsFlagModelImpl.ORDER_BY_JPQL);
 			}

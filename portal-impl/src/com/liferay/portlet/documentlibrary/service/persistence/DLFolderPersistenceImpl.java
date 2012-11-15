@@ -270,7 +270,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -377,7 +376,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -1107,7 +1105,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -1224,7 +1221,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -1688,7 +1684,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -1806,7 +1801,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -1986,7 +1980,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -2095,7 +2088,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -2565,7 +2557,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -2660,7 +2651,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -3005,7 +2995,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -3436,7 +3425,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -3563,7 +3551,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -3748,7 +3735,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -3868,7 +3854,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -4387,7 +4372,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -4505,7 +4489,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -4991,7 +4974,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -5126,7 +5108,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -5318,7 +5299,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -5444,7 +5424,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -6304,7 +6283,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -6439,7 +6417,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -6630,7 +6607,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -6756,7 +6732,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -7319,7 +7294,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -7462,7 +7436,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -7661,7 +7634,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -7795,7 +7767,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -8395,7 +8366,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -8538,7 +8508,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -8737,7 +8706,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
@@ -8871,7 +8839,6 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFolderModelImpl.ORDER_BY_JPQL);
 			}

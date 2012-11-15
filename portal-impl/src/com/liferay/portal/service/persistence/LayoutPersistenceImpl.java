@@ -260,7 +260,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 		}
@@ -367,7 +366,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
@@ -1095,7 +1093,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 		}
@@ -1212,7 +1209,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
@@ -1672,7 +1668,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 		}
@@ -1790,7 +1785,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
@@ -1969,7 +1963,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
@@ -2078,7 +2071,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
@@ -2545,7 +2537,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 		}
@@ -2640,7 +2631,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
@@ -2980,7 +2970,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
@@ -3416,7 +3405,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 		}
@@ -3529,7 +3517,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
@@ -3991,7 +3978,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 		}
@@ -4104,7 +4090,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
@@ -4563,7 +4548,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 		}
@@ -4690,7 +4674,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
@@ -4875,7 +4858,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
@@ -4995,7 +4977,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
@@ -5799,7 +5780,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 		}
@@ -5934,7 +5914,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
@@ -6126,7 +6105,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
@@ -6252,7 +6230,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
@@ -7124,7 +7101,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 		}
@@ -7270,7 +7246,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
@@ -7472,7 +7447,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
@@ -7610,7 +7584,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
@@ -8124,7 +8097,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}

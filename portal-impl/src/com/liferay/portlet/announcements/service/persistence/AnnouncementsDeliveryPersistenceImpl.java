@@ -249,6 +249,9 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 				}
 			}
 		}
+		else {
+			query.append(AnnouncementsDeliveryModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -329,7 +332,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_ANNOUNCEMENTSDELIVERY_WHERE);
@@ -339,6 +342,9 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(AnnouncementsDeliveryModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -706,7 +712,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_ANNOUNCEMENTSDELIVERY_WHERE);
 
@@ -1373,7 +1379,7 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_ANNOUNCEMENTSDELIVERY;
+				sql = _SQL_SELECT_ANNOUNCEMENTSDELIVERY.concat(AnnouncementsDeliveryModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

@@ -253,7 +253,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 				}
 			}
 		}
-
 		else {
 			query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
 		}
@@ -371,7 +370,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
@@ -551,7 +549,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
@@ -660,7 +657,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
 			}
@@ -1318,7 +1314,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
 			}
@@ -1792,7 +1787,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 				}
 			}
 		}
-
 		else {
 			query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
 		}
@@ -1939,7 +1933,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
@@ -2144,7 +2137,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
@@ -2283,7 +2275,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
 			}

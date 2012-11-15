@@ -67,6 +67,8 @@ public class DDMStorageLinkModelImpl extends BaseModelImpl<DDMStorageLink>
 		};
 	public static final String TABLE_SQL_CREATE = "create table DDMStorageLink (uuid_ VARCHAR(75) null,storageLinkId LONG not null primary key,classNameId LONG,classPK LONG,structureId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table DDMStorageLink";
+	public static final String ORDER_BY_JPQL = " ORDER BY ddmStorageLink.storageLinkId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY DDMStorageLink.storageLinkId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

@@ -261,7 +261,6 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				}
 			}
 		}
-
 		else {
 			query.append(SCProductVersionModelImpl.ORDER_BY_JPQL);
 		}
@@ -361,7 +360,6 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SCProductVersionModelImpl.ORDER_BY_JPQL);
 			}
@@ -725,7 +723,6 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SCProductVersionModelImpl.ORDER_BY_JPQL);
 			}

@@ -248,7 +248,6 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 				}
 			}
 		}
-
 		else {
 			query.append(ShoppingItemPriceModelImpl.ORDER_BY_JPQL);
 		}
@@ -343,7 +342,6 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ShoppingItemPriceModelImpl.ORDER_BY_JPQL);
 			}

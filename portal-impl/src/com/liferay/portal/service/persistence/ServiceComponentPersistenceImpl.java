@@ -261,7 +261,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 				}
 			}
 		}
-
 		else {
 			query.append(ServiceComponentModelImpl.ORDER_BY_JPQL);
 		}
@@ -374,7 +373,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ServiceComponentModelImpl.ORDER_BY_JPQL);
 			}

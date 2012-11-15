@@ -244,6 +244,9 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 				}
 			}
 		}
+		else {
+			query.append(ContactModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -324,7 +327,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_CONTACT_WHERE);
@@ -334,6 +337,9 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ContactModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -753,6 +759,9 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 				}
 			}
 		}
+		else {
+			query.append(ContactModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -833,7 +842,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_CONTACT_WHERE);
@@ -843,6 +852,9 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ContactModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1266,6 +1278,9 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 				}
 			}
 		}
+		else {
+			query.append(ContactModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1354,7 +1369,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_CONTACT_WHERE);
@@ -1366,6 +1381,9 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(ContactModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2152,7 +2170,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_CONTACT;
+				sql = _SQL_SELECT_CONTACT.concat(ContactModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

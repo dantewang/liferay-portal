@@ -256,7 +256,6 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 				}
 			}
 		}
-
 		else {
 			query.append(ResourceActionModelImpl.ORDER_BY_JPQL);
 		}
@@ -363,7 +362,6 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ResourceActionModelImpl.ORDER_BY_JPQL);
 			}

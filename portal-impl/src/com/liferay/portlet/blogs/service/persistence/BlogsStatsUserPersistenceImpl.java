@@ -252,7 +252,6 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 				}
 			}
 		}
-
 		else {
 			query.append(BlogsStatsUserModelImpl.ORDER_BY_JPQL);
 		}
@@ -347,7 +346,6 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(BlogsStatsUserModelImpl.ORDER_BY_JPQL);
 			}
@@ -773,7 +771,6 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 				}
 			}
 		}
-
 		else {
 			query.append(BlogsStatsUserModelImpl.ORDER_BY_JPQL);
 		}
@@ -868,7 +865,6 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(BlogsStatsUserModelImpl.ORDER_BY_JPQL);
 			}
@@ -1543,7 +1539,6 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 				}
 			}
 		}
-
 		else {
 			query.append(BlogsStatsUserModelImpl.ORDER_BY_JPQL);
 		}
@@ -1642,7 +1637,6 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(BlogsStatsUserModelImpl.ORDER_BY_JPQL);
 			}
@@ -2092,7 +2086,6 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 				}
 			}
 		}
-
 		else {
 			query.append(BlogsStatsUserModelImpl.ORDER_BY_JPQL);
 		}
@@ -2191,7 +2184,6 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(BlogsStatsUserModelImpl.ORDER_BY_JPQL);
 			}
@@ -2653,7 +2645,6 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 				}
 			}
 		}
-
 		else {
 			query.append(BlogsStatsUserModelImpl.ORDER_BY_JPQL);
 		}
@@ -2767,7 +2758,6 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(BlogsStatsUserModelImpl.ORDER_BY_JPQL);
 			}

@@ -180,7 +180,7 @@ public class BrowserTrackerPersistenceImpl extends BasePersistenceImpl<BrowserTr
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_SELECT_BROWSERTRACKER_WHERE);
 
@@ -763,7 +763,7 @@ public class BrowserTrackerPersistenceImpl extends BasePersistenceImpl<BrowserTr
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_BROWSERTRACKER;
+				sql = _SQL_SELECT_BROWSERTRACKER.concat(BrowserTrackerModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

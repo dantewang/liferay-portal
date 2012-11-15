@@ -491,7 +491,7 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_CLUSTERGROUP;
+				sql = _SQL_SELECT_CLUSTERGROUP.concat(ClusterGroupModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

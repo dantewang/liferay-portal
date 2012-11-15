@@ -259,6 +259,9 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityCounterModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -348,7 +351,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYCOUNTER_WHERE);
@@ -360,6 +363,9 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityCounterModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -843,6 +849,9 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityCounterModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -940,7 +949,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(5);
+				query = new StringBundler(6);
 			}
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYCOUNTER_WHERE);
@@ -956,6 +965,9 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityCounterModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1467,7 +1479,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(7);
+			StringBundler query = new StringBundler(8);
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYCOUNTER_WHERE);
 
@@ -1858,7 +1870,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(7);
+			StringBundler query = new StringBundler(8);
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYCOUNTER_WHERE);
 
@@ -2696,7 +2708,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SOCIALACTIVITYCOUNTER;
+				sql = _SQL_SELECT_SOCIALACTIVITYCOUNTER.concat(SocialActivityCounterModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

@@ -65,6 +65,8 @@ public class PasswordPolicyRelModelImpl extends BaseModelImpl<PasswordPolicyRel>
 		};
 	public static final String TABLE_SQL_CREATE = "create table PasswordPolicyRel (passwordPolicyRelId LONG not null primary key,passwordPolicyId LONG,classNameId LONG,classPK LONG)";
 	public static final String TABLE_SQL_DROP = "drop table PasswordPolicyRel";
+	public static final String ORDER_BY_JPQL = " ORDER BY passwordPolicyRel.passwordPolicyRelId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY PasswordPolicyRel.passwordPolicyRelId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

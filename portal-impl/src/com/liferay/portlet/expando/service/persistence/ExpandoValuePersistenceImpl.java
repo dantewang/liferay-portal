@@ -245,7 +245,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				}
 			}
 		}
-
 		else {
 			query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 		}
@@ -340,7 +339,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 			}
@@ -764,7 +762,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				}
 			}
 		}
-
 		else {
 			query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 		}
@@ -859,7 +856,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 			}
@@ -1281,7 +1277,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				}
 			}
 		}
-
 		else {
 			query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 		}
@@ -1376,7 +1371,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 			}
@@ -1802,7 +1796,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				}
 			}
 		}
-
 		else {
 			query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 		}
@@ -1907,7 +1900,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 			}
@@ -2362,7 +2354,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				}
 			}
 		}
-
 		else {
 			query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 		}
@@ -2468,7 +2459,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 			}
@@ -2923,7 +2913,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				}
 			}
 		}
-
 		else {
 			query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 		}
@@ -3028,7 +3017,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 			}
@@ -3730,7 +3718,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				}
 			}
 		}
-
 		else {
 			query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 		}
@@ -3836,7 +3823,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 			}
@@ -4591,7 +4577,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				}
 			}
 		}
-
 		else {
 			query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 		}
@@ -4715,7 +4700,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(ExpandoValueModelImpl.ORDER_BY_JPQL);
 			}

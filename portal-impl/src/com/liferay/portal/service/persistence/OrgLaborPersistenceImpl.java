@@ -244,7 +244,6 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 				}
 			}
 		}
-
 		else {
 			query.append(OrgLaborModelImpl.ORDER_BY_JPQL);
 		}
@@ -343,7 +342,6 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(OrgLaborModelImpl.ORDER_BY_JPQL);
 			}

@@ -256,7 +256,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				}
 			}
 		}
-
 		else {
 			query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -356,7 +355,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -794,7 +792,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				}
 			}
 		}
-
 		else {
 			query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -901,7 +898,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -1640,7 +1636,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				}
 			}
 		}
-
 		else {
 			query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -1758,7 +1753,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -2225,7 +2219,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				}
 			}
 		}
-
 		else {
 			query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -2328,7 +2321,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 			appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 				orderByComparator);
 		}
-
 		else {
 			query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -2477,7 +2469,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				}
 			}
 		}
-
 		else {
 			query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -2575,7 +2566,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -3049,7 +3039,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				}
 			}
 		}
-
 		else {
 			query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -3144,7 +3133,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 			}
@@ -3576,7 +3564,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				}
 			}
 		}
-
 		else {
 			query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -3688,7 +3675,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 			appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 				orderByComparator);
 		}
-
 		else {
 			query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -3842,7 +3828,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				}
 			}
 		}
-
 		else {
 			query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 		}
@@ -3951,7 +3936,6 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(BookmarksFolderModelImpl.ORDER_BY_JPQL);
 			}

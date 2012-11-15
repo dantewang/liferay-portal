@@ -250,7 +250,6 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				}
 			}
 		}
-
 		else {
 			query.append(TeamModelImpl.ORDER_BY_JPQL);
 		}
@@ -368,7 +367,6 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(TeamModelImpl.ORDER_BY_JPQL);
@@ -546,7 +544,6 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(TeamModelImpl.ORDER_BY_JPQL);
@@ -655,7 +652,6 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(TeamModelImpl.ORDER_BY_JPQL);
 			}

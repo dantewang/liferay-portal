@@ -254,7 +254,6 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 				}
 			}
 		}
-
 		else {
 			query.append(PollsChoiceModelImpl.ORDER_BY_JPQL);
 		}
@@ -361,7 +360,6 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(PollsChoiceModelImpl.ORDER_BY_JPQL);
 			}
@@ -798,7 +796,6 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 				}
 			}
 		}
-
 		else {
 			query.append(PollsChoiceModelImpl.ORDER_BY_JPQL);
 		}
@@ -893,7 +890,6 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(PollsChoiceModelImpl.ORDER_BY_JPQL);
 			}

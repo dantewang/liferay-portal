@@ -258,7 +258,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				}
 			}
 		}
-
 		else {
 			query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 		}
@@ -365,7 +364,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 			}
@@ -1101,7 +1099,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				}
 			}
 		}
-
 		else {
 			query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 		}
@@ -1219,7 +1216,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 			}
@@ -1687,7 +1683,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				}
 			}
 		}
-
 		else {
 			query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 		}
@@ -1782,7 +1777,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 			}
@@ -2493,7 +2487,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				}
 			}
 		}
-
 		else {
 			query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 		}
@@ -2599,7 +2592,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 			}
@@ -3070,7 +3062,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				}
 			}
 		}
-
 		else {
 			query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 		}
@@ -3182,7 +3173,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 			}
@@ -3706,7 +3696,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				}
 			}
 		}
-
 		else {
 			query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 		}
@@ -3848,7 +3837,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLFileVersionModelImpl.ORDER_BY_JPQL);
 			}

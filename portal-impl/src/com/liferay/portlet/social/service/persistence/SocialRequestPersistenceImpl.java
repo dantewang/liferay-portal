@@ -258,7 +258,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -365,7 +364,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 			}
@@ -1101,7 +1099,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -1219,7 +1216,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 			}
@@ -1687,7 +1683,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -1782,7 +1777,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 			}
@@ -2207,7 +2201,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -2302,7 +2295,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 			}
@@ -2728,7 +2720,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -2828,7 +2819,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 			}
@@ -3262,7 +3252,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -3367,7 +3356,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 			}
@@ -3822,7 +3810,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -3928,7 +3915,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 			}
@@ -4756,7 +4742,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -4880,7 +4865,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 			}
@@ -5453,7 +5437,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -5579,7 +5562,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 			}

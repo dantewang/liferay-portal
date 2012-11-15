@@ -246,7 +246,6 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 				}
 			}
 		}
-
 		else {
 			query.append(PasswordTrackerModelImpl.ORDER_BY_JPQL);
 		}
@@ -341,7 +340,6 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(PasswordTrackerModelImpl.ORDER_BY_JPQL);
 			}

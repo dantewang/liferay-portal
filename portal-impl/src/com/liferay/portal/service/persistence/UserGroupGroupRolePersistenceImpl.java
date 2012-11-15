@@ -249,6 +249,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 				}
 			}
 		}
+		else {
+			query.append(UserGroupGroupRoleModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -330,7 +333,7 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_USERGROUPGROUPROLE_WHERE);
@@ -340,6 +343,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(UserGroupGroupRoleModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -764,6 +770,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 				}
 			}
 		}
+		else {
+			query.append(UserGroupGroupRoleModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -844,7 +853,7 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_USERGROUPGROUPROLE_WHERE);
@@ -854,6 +863,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(UserGroupGroupRoleModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1278,6 +1290,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 				}
 			}
 		}
+		else {
+			query.append(UserGroupGroupRoleModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1358,7 +1373,7 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_USERGROUPGROUPROLE_WHERE);
@@ -1368,6 +1383,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(UserGroupGroupRoleModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1798,6 +1816,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 				}
 			}
 		}
+		else {
+			query.append(UserGroupGroupRoleModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1887,7 +1908,7 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_USERGROUPGROUPROLE_WHERE);
@@ -1899,6 +1920,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(UserGroupGroupRoleModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -2354,6 +2378,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 				}
 			}
 		}
+		else {
+			query.append(UserGroupGroupRoleModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2443,7 +2470,7 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_USERGROUPGROUPROLE_WHERE);
@@ -2455,6 +2482,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(UserGroupGroupRoleModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -3261,7 +3291,7 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_USERGROUPGROUPROLE;
+				sql = _SQL_SELECT_USERGROUPGROUPROLE.concat(UserGroupGroupRoleModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;

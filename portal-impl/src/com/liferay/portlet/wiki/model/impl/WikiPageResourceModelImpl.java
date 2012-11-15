@@ -64,6 +64,8 @@ public class WikiPageResourceModelImpl extends BaseModelImpl<WikiPageResource>
 		};
 	public static final String TABLE_SQL_CREATE = "create table WikiPageResource (uuid_ VARCHAR(75) null,resourcePrimKey LONG not null primary key,nodeId LONG,title VARCHAR(255) null)";
 	public static final String TABLE_SQL_DROP = "drop table WikiPageResource";
+	public static final String ORDER_BY_JPQL = " ORDER BY wikiPageResource.resourcePrimKey ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY WikiPageResource.resourcePrimKey ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

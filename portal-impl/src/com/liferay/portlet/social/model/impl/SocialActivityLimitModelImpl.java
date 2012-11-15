@@ -72,6 +72,8 @@ public class SocialActivityLimitModelImpl extends BaseModelImpl<SocialActivityLi
 		};
 	public static final String TABLE_SQL_CREATE = "create table SocialActivityLimit (activityLimitId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,classNameId LONG,classPK LONG,activityType INTEGER,activityCounterName VARCHAR(75) null,value VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table SocialActivityLimit";
+	public static final String ORDER_BY_JPQL = " ORDER BY socialActivityLimit.activityLimitId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY SocialActivityLimit.activityLimitId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

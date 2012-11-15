@@ -251,7 +251,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				}
 			}
 		}
-
 		else {
 			query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 		}
@@ -346,7 +345,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 			}
@@ -774,7 +772,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				}
 			}
 		}
-
 		else {
 			query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 		}
@@ -869,7 +866,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 			}
@@ -1295,7 +1291,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				}
 			}
 		}
-
 		else {
 			query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 		}
@@ -1390,7 +1385,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 			}
@@ -1740,7 +1734,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 			}
@@ -2171,7 +2164,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				}
 			}
 		}
-
 		else {
 			query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 		}
@@ -2266,7 +2258,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 			}
@@ -2694,7 +2685,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				}
 			}
 		}
-
 		else {
 			query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 		}
@@ -2794,7 +2784,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 			}
@@ -3228,7 +3217,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				}
 			}
 		}
-
 		else {
 			query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 		}
@@ -3334,7 +3322,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 			}
@@ -3806,7 +3793,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				}
 			}
 		}
-
 		else {
 			query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 		}
@@ -3918,7 +3904,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 			}
@@ -4447,7 +4432,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				}
 			}
 		}
-
 		else {
 			query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 		}
@@ -4580,7 +4564,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 			}

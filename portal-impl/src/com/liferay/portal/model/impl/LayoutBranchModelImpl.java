@@ -76,6 +76,8 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 		};
 	public static final String TABLE_SQL_CREATE = "create table LayoutBranch (LayoutBranchId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,layoutSetBranchId LONG,plid LONG,name VARCHAR(75) null,description STRING null,master BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table LayoutBranch";
+	public static final String ORDER_BY_JPQL = " ORDER BY layoutBranch.LayoutBranchId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY LayoutBranch.LayoutBranchId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

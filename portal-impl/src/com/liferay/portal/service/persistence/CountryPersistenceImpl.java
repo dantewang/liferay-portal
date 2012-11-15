@@ -1003,7 +1003,6 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				}
 			}
 		}
-
 		else {
 			query.append(CountryModelImpl.ORDER_BY_JPQL);
 		}
@@ -1098,7 +1097,6 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(CountryModelImpl.ORDER_BY_JPQL);
 			}

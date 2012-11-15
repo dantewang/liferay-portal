@@ -490,7 +490,6 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 				}
 			}
 		}
-
 		else {
 			query.append(DLSyncModelImpl.ORDER_BY_JPQL);
 		}
@@ -602,7 +601,6 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(DLSyncModelImpl.ORDER_BY_JPQL);
 			}

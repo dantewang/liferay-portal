@@ -62,6 +62,8 @@ public class ExpandoRowModelImpl extends BaseModelImpl<ExpandoRow>
 		};
 	public static final String TABLE_SQL_CREATE = "create table ExpandoRow (rowId_ LONG not null primary key,companyId LONG,modifiedDate DATE null,tableId LONG,classPK LONG)";
 	public static final String TABLE_SQL_DROP = "drop table ExpandoRow";
+	public static final String ORDER_BY_JPQL = " ORDER BY expandoRow.rowId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY ExpandoRow.rowId_ ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

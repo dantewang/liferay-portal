@@ -262,7 +262,6 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 				}
 			}
 		}
-
 		else {
 			query.append(AssetVocabularyModelImpl.ORDER_BY_JPQL);
 		}
@@ -369,7 +368,6 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetVocabularyModelImpl.ORDER_BY_JPQL);
 			}
@@ -1108,7 +1106,6 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 				}
 			}
 		}
-
 		else {
 			query.append(AssetVocabularyModelImpl.ORDER_BY_JPQL);
 		}
@@ -1226,7 +1223,6 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetVocabularyModelImpl.ORDER_BY_JPQL);
 			}
@@ -1693,7 +1689,6 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 				}
 			}
 		}
-
 		else {
 			query.append(AssetVocabularyModelImpl.ORDER_BY_JPQL);
 		}
@@ -1811,7 +1806,6 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(AssetVocabularyModelImpl.ORDER_BY_JPQL);
@@ -1992,7 +1986,6 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(AssetVocabularyModelImpl.ORDER_BY_JPQL);
@@ -2101,7 +2094,6 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetVocabularyModelImpl.ORDER_BY_JPQL);
 			}
@@ -2577,7 +2569,6 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 				}
 			}
 		}
-
 		else {
 			query.append(AssetVocabularyModelImpl.ORDER_BY_JPQL);
 		}
@@ -2672,7 +2663,6 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
 			else {
 				query.append(AssetVocabularyModelImpl.ORDER_BY_JPQL);
 			}

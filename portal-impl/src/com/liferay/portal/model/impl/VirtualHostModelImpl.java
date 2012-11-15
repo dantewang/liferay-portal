@@ -63,6 +63,8 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 		};
 	public static final String TABLE_SQL_CREATE = "create table VirtualHost (virtualHostId LONG not null primary key,companyId LONG,layoutSetId LONG,hostname VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table VirtualHost";
+	public static final String ORDER_BY_JPQL = " ORDER BY virtualHost.virtualHostId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY VirtualHost.virtualHostId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

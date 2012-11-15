@@ -66,6 +66,8 @@ public class MBThreadFlagModelImpl extends BaseModelImpl<MBThreadFlag>
 		};
 	public static final String TABLE_SQL_CREATE = "create table MBThreadFlag (threadFlagId LONG not null primary key,userId LONG,modifiedDate DATE null,threadId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table MBThreadFlag";
+	public static final String ORDER_BY_JPQL = " ORDER BY mbThreadFlag.threadFlagId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY MBThreadFlag.threadFlagId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";

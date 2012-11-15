@@ -249,6 +249,9 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 				}
 			}
 		}
+		else {
+			query.append(UserTrackerPathModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -334,7 +337,7 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_USERTRACKERPATH_WHERE);
@@ -344,6 +347,9 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else {
+				query.append(UserTrackerPathModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1046,7 +1052,7 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_USERTRACKERPATH;
+				sql = _SQL_SELECT_USERTRACKERPATH.concat(UserTrackerPathModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
