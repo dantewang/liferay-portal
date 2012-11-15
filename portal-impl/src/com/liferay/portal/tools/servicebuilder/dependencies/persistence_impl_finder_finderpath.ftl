@@ -32,52 +32,51 @@
 		);
 </#if>
 
-<#if finder.isCollection()>
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case} = new FinderPath(
+
+public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case} = new FinderPath(
+	${entity.name}ModelImpl.ENTITY_CACHE_ENABLED,
+	${entity.name}ModelImpl.FINDER_CACHE_ENABLED,
+	${entity.name}Impl.class,
+	FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+	"findBy${finder.name}",
+	new String[] {
+		<#list finderColsList as finderCol>
+			${serviceBuilder.getPrimitiveObj("${finderCol.type}")}.class.getName(),
+		</#list>
+
+		"java.lang.Integer", "java.lang.Integer", "com.liferay.portal.kernel.util.OrderByComparator"
+	});
+
+<#if !finder.hasCustomComparator()>
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case} = new FinderPath(
 		${entity.name}ModelImpl.ENTITY_CACHE_ENABLED,
 		${entity.name}ModelImpl.FINDER_CACHE_ENABLED,
 		${entity.name}Impl.class,
-		FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+		FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 		"findBy${finder.name}",
 		new String[] {
 			<#list finderColsList as finderCol>
-				${serviceBuilder.getPrimitiveObj("${finderCol.type}")}.class.getName(),
+				${serviceBuilder.getPrimitiveObj("${finderCol.type}")}.class.getName()
+
+				<#if finderCol_has_next>
+					,
+				</#if>
 			</#list>
+		}
 
-			"java.lang.Integer", "java.lang.Integer", "com.liferay.portal.kernel.util.OrderByComparator"
-		});
+		<#if columnBitmaskEnabled>
+			,
 
-	<#if !finder.hasCustomComparator()>
-		public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case} = new FinderPath(
-			${entity.name}ModelImpl.ENTITY_CACHE_ENABLED,
-			${entity.name}ModelImpl.FINDER_CACHE_ENABLED,
-			${entity.name}Impl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findBy${finder.name}",
-			new String[] {
-				<#list finderColsList as finderCol>
-					${serviceBuilder.getPrimitiveObj("${finderCol.type}")}.class.getName()
+			<#list finderColsList as finderCol>
+				${entity.name}ModelImpl.${finderCol.name?upper_case}_COLUMN_BITMASK
 
-					<#if finderCol_has_next>
-						,
-					</#if>
-				</#list>
-			}
+				<#if finderCol_has_next>
+					|
+				</#if>
+			</#list>
+		</#if>
 
-			<#if columnBitmaskEnabled>
-				,
-
-				<#list finderColsList as finderCol>
-					${entity.name}ModelImpl.${finderCol.name?upper_case}_COLUMN_BITMASK
-
-					<#if finderCol_has_next>
-						|
-					</#if>
-				</#list>
-			</#if>
-
-			);
-	</#if>
+		);
 </#if>
 
 <#if !finder.hasCustomComparator()>

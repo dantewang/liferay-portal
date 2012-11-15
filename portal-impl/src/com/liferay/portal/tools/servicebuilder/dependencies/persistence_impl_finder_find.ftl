@@ -1251,6 +1251,36 @@
 	}
 
 	/**
+	 * Returns the first ${entity.humanName} in the default ordered set defined by {@link ${entity.name}ModelImpl#ORDER_BY_JPQL} where ${finder.getHumanConditions(false)}.
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @return the first matching ${entity.humanName}
+	 * @throws ${packagePath}.${noSuchEntity}Exception if a matching ${entity.humanName} could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name} findBy${finder.name}_First(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name}
+
+		<#if finderCol_has_next>
+			,
+		</#if>
+	</#list>
+
+	) throws ${noSuchEntity}Exception, SystemException {
+		return findBy${finder.name}_First(
+
+		<#list finderColsList as finderCol>
+			${finderCol.name},
+		</#list>
+
+		null);
+	}
+
+	/**
 	 * Returns the first ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
 	 *
 	<#list finderColsList as finderCol>
@@ -1297,6 +1327,35 @@
 	}
 
 	/**
+	 * Returns the first ${entity.humanName} in the default ordered set defined by {@link ${entity.name}ModelImpl#ORDER_BY_JPQL} where ${finder.getHumanConditions(false)}.
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @return the first matching ${entity.humanName}, or <code>null</code> if a matching ${entity.humanName} could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name} fetchBy${finder.name}_First(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name}
+
+		<#if finderCol_has_next>
+			,
+		</#if>
+	</#list>
+
+	) throws SystemException {
+		return fetchBy${finder.name}_First(
+
+		<#list finderColsList as finderCol>
+			${finderCol.name},
+		</#list>
+
+		null);
+	}
+
+	/**
 	 * Returns the first ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
 	 *
 	<#list finderColsList as finderCol>
@@ -1326,6 +1385,36 @@
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns the last ${entity.humanName} in the default ordered set defined by {@link ${entity.name}ModelImpl#ORDER_BY_JPQL} where ${finder.getHumanConditions(false)}.
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @return the last matching ${entity.humanName}
+	 * @throws ${packagePath}.${noSuchEntity}Exception if a matching ${entity.humanName} could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name} findBy${finder.name}_Last(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name}
+
+		<#if finderCol_has_next>
+			,
+		</#if>
+	</#list>
+
+	) throws ${noSuchEntity}Exception, SystemException {
+		return findBy${finder.name}_Last(
+
+		<#list finderColsList as finderCol>
+			${finderCol.name},
+		</#list>
+
+		null);
 	}
 
 	/**
@@ -1372,6 +1461,35 @@
 		</#list>
 
 		throw new ${noSuchEntity}Exception(msg.toString());
+	}
+
+	/**
+	 * Returns the last ${entity.humanName} in the default ordered set defined by {@link ${entity.name}ModelImpl#ORDER_BY_JPQL} where ${finder.getHumanConditions(false)}.
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @return the last matching ${entity.humanName}, or <code>null</code> if a matching ${entity.humanName} could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name} fetchBy${finder.name}_Last(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name}
+
+		<#if finderCol_has_next>
+			,
+		</#if>
+	</#list>
+
+	) throws SystemException {
+		return fetchBy${finder.name}_Last(
+
+		<#list finderColsList as finderCol>
+			${finderCol.name},
+		</#list>
+
+		null);
 	}
 
 	/**
