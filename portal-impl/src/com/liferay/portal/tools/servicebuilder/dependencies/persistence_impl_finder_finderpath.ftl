@@ -32,25 +32,27 @@
 		);
 </#if>
 
-public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case} = new FinderPath(
-	${entity.name}ModelImpl.ENTITY_CACHE_ENABLED,
-	${entity.name}ModelImpl.FINDER_CACHE_ENABLED,
-	${entity.name}Impl.class,
-	FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-	"findBy${finder.name}",
-	new String[] {
-		<#list finderColsList as finderCol>
-			${serviceBuilder.getPrimitiveObj("${finderCol.type}")}.class.getName(),
-		</#list>
+<#if !(!finder.isCollection() && finder.isUnique())>
+	public static final FinderPath FINDER_PATH_FIND_BY_${finder.name?upper_case} = new FinderPath(
+		${entity.name}ModelImpl.ENTITY_CACHE_ENABLED,
+		${entity.name}ModelImpl.FINDER_CACHE_ENABLED,
+		${entity.name}Impl.class,
+		FINDER_CLASS_NAME_LIST,
+		"findBy${finder.name}",
+		new String[] {
+			<#list finderColsList as finderCol>
+				${serviceBuilder.getPrimitiveObj("${finderCol.type}")}.class.getName(),
+			</#list>
 
-		Integer.class.getName(), Integer.class.getName(), OrderByComparator.class.getName()
-	});
+			Integer.class.getName(), Integer.class.getName(), OrderByComparator.class.getName()
+		});
+</#if>
 
 public static final FinderPath FINDER_PATH_COUNT_BY_${finder.name?upper_case} = new FinderPath(
 	${entity.name}ModelImpl.ENTITY_CACHE_ENABLED,
 	${entity.name}ModelImpl.FINDER_CACHE_ENABLED,
 	Long.class,
-	FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+	FINDER_CLASS_NAME_COUNT,
 	"countBy${finder.name}",
 	new String[] {
 		<#list finderColsList as finderCol>
