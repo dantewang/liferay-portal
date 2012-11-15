@@ -87,19 +87,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * Never modify or reference this class directly. Always use {@link DLFolderUtil} to access the document library folder persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = DLFolderImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List1";
-	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
+		".List";
+	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
+		".Count";
+	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_FIND_BY_UUID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
+			FINDER_CLASS_NAME_LIST, "findByUuid",
 			new String[] {
 				String.class.getName(),
 				
@@ -108,7 +108,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			FINDER_CLASS_NAME_COUNT, "countByUuid",
 			new String[] { String.class.getName() });
 
 	/**
@@ -315,7 +315,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		OrderByComparator orderByComparator) throws SystemException {
 		Object[] finderArgs = new Object[] { uuid, start, end, orderByComparator };
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -384,13 +384,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID,
 						finderArgs, list);
 				}
 
@@ -637,18 +637,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			new String[] { String.class.getName(), Long.class.getName() },
 			DLFolderModelImpl.UUID_COLUMN_BITMASK |
 			DLFolderModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_G = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
-			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUUID_G",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
 			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
@@ -902,9 +893,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "dlFolder.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(dlFolder.uuid IS NULL OR dlFolder.uuid = ?) AND ";
 	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "dlFolder.groupId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_UUID_C = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
+			FINDER_CLASS_NAME_LIST, "findByUuid_C",
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
@@ -913,7 +904,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
@@ -1134,7 +1125,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				start, end, orderByComparator
 			};
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID_C,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1208,13 +1199,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID_C,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID_C,
 						finderArgs, list);
 				}
 
@@ -1483,9 +1474,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "dlFolder.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(dlFolder.uuid IS NULL OR dlFolder.uuid = ?) AND ";
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "dlFolder.companyId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_GROUPID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
+			FINDER_CLASS_NAME_LIST, "findByGroupId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -1494,7 +1485,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			FINDER_CLASS_NAME_COUNT, "countByGroupId",
 			new String[] { Long.class.getName() });
 
 	/**
@@ -2003,7 +1994,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				start, end, orderByComparator
 			};
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_GROUPID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2060,13 +2051,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_GROUPID,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_GROUPID,
 						finderArgs, list);
 				}
 
@@ -2342,10 +2333,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	}
 
 	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "dlFolder.groupId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_COMPANYID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
+			FINDER_CLASS_NAME_LIST, "findByCompanyId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -2354,7 +2344,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
 			new String[] { Long.class.getName() });
 
 	/**
@@ -2555,7 +2545,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				start, end, orderByComparator
 			};
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_COMPANYID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2612,13 +2602,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_COMPANYID,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_COMPANYID,
 						finderArgs, list);
 				}
 
@@ -2847,10 +2837,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	}
 
 	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "dlFolder.companyId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_REPOSITORYID =
-		new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_REPOSITORYID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByRepositoryId",
+			FINDER_CLASS_NAME_LIST, "findByRepositoryId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -2859,7 +2848,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_REPOSITORYID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRepositoryId",
+			FINDER_CLASS_NAME_COUNT, "countByRepositoryId",
 			new String[] { Long.class.getName() });
 
 	/**
@@ -2884,7 +2873,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				start, end, orderByComparator
 			};
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_REPOSITORYID,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_REPOSITORYID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2941,13 +2930,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_REPOSITORYID,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_REPOSITORYID,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_REPOSITORYID,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_REPOSITORYID,
 						finderArgs, list);
 				}
 
@@ -3180,9 +3169,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	}
 
 	private static final String _FINDER_COLUMN_REPOSITORYID_REPOSITORYID_2 = "dlFolder.repositoryId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_G_P = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P",
+			FINDER_CLASS_NAME_LIST, "findByG_P",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
@@ -3191,7 +3180,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
+			FINDER_CLASS_NAME_COUNT, "countByG_P",
 			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
@@ -3725,7 +3714,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				start, end, orderByComparator
 			};
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -3787,13 +3776,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P,
 						finderArgs, list);
 				}
 
@@ -4102,9 +4091,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 	private static final String _FINDER_COLUMN_G_P_GROUPID_2 = "dlFolder.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_P_PARENTFOLDERID_2 = "dlFolder.parentFolderId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_N = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_P_N = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_N",
+			FINDER_CLASS_NAME_LIST, "findByP_N",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
@@ -4113,7 +4102,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_N = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_N",
+			FINDER_CLASS_NAME_COUNT, "countByP_N",
 			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
@@ -4335,7 +4324,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				start, end, orderByComparator
 			};
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_N,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_P_N,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -4409,13 +4398,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_N,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_P_N,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_N,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_P_N,
 						finderArgs, list);
 				}
 
@@ -4684,9 +4673,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	private static final String _FINDER_COLUMN_P_N_NAME_1 = "dlFolder.name IS NULL";
 	private static final String _FINDER_COLUMN_P_N_NAME_2 = "dlFolder.name = ?";
 	private static final String _FINDER_COLUMN_P_N_NAME_3 = "(dlFolder.name IS NULL OR dlFolder.name = ?)";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_G_M_P = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_M_P",
+			FINDER_CLASS_NAME_LIST, "findByG_M_P",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName(),
@@ -4696,7 +4685,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_M_P = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_M_P",
+			FINDER_CLASS_NAME_COUNT, "countByG_M_P",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName()
@@ -5258,7 +5247,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				start, end, orderByComparator
 			};
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_M_P,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -5325,13 +5314,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_M_P,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_M_P,
 						finderArgs, list);
 				}
 
@@ -5678,19 +5667,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			DLFolderModelImpl.GROUPID_COLUMN_BITMASK |
 			DLFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK |
 			DLFolderModelImpl.NAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_N = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
-			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_N",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_N = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_N",
+			FINDER_CLASS_NAME_COUNT, "countByG_P_N",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
@@ -5966,9 +5945,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	private static final String _FINDER_COLUMN_G_P_N_NAME_1 = "dlFolder.name IS NULL";
 	private static final String _FINDER_COLUMN_G_P_N_NAME_2 = "dlFolder.name = ?";
 	private static final String _FINDER_COLUMN_G_P_N_NAME_3 = "(dlFolder.name IS NULL OR dlFolder.name = ?)";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_G_P_S = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_S",
+			FINDER_CLASS_NAME_LIST, "findByG_P_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(),
@@ -5978,7 +5957,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_S = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_S",
+			FINDER_CLASS_NAME_COUNT, "countByG_P_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
@@ -6537,7 +6516,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				start, end, orderByComparator
 			};
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P_S,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -6604,13 +6583,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_S,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_S,
 						finderArgs, list);
 				}
 
@@ -6947,9 +6926,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	private static final String _FINDER_COLUMN_G_P_S_GROUPID_2 = "dlFolder.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_P_S_PARENTFOLDERID_2 = "dlFolder.parentFolderId = ? AND ";
 	private static final String _FINDER_COLUMN_G_P_S_STATUS_2 = "dlFolder.status = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P_H = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_G_M_P_H = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_M_P_H",
+			FINDER_CLASS_NAME_LIST, "findByG_M_P_H",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName(), Boolean.class.getName(),
@@ -6959,7 +6938,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_M_P_H = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_M_P_H",
+			FINDER_CLASS_NAME_COUNT, "countByG_M_P_H",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName(), Boolean.class.getName()
@@ -7546,7 +7525,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				start, end, orderByComparator
 			};
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P_H,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_M_P_H,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -7618,13 +7597,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P_H,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_M_P_H,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P_H,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_M_P_H,
 						finderArgs, list);
 				}
 
@@ -7996,9 +7975,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	private static final String _FINDER_COLUMN_G_M_P_H_MOUNTPOINT_2 = "dlFolder.mountPoint = ? AND ";
 	private static final String _FINDER_COLUMN_G_M_P_H_PARENTFOLDERID_2 = "dlFolder.parentFolderId = ? AND ";
 	private static final String _FINDER_COLUMN_G_M_P_H_HIDDEN_2 = "dlFolder.hidden = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P_S = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_G_M_P_S = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, DLFolderImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_M_P_S",
+			FINDER_CLASS_NAME_LIST, "findByG_M_P_S",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName(), Integer.class.getName(),
@@ -8008,7 +7987,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_M_P_S = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_M_P_S",
+			FINDER_CLASS_NAME_COUNT, "countByG_M_P_S",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName(), Integer.class.getName()
@@ -8595,7 +8574,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				start, end, orderByComparator
 			};
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P_S,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_M_P_S,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -8667,13 +8646,13 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P_S,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_M_P_S,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M_P_S,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_M_P_S,
 						finderArgs, list);
 				}
 
@@ -9104,8 +9083,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		EntityCacheUtil.clearCache(DLFolderImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 	}
 
 	/**
@@ -9120,16 +9099,16 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		EntityCacheUtil.removeResult(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderImpl.class, dlFolder.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 
 		clearUniqueFindersCache(dlFolder);
 	}
 
 	@Override
 	public void clearCache(List<DLFolder> dlFolders) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 
 		for (DLFolder dlFolder : dlFolders) {
 			EntityCacheUtil.removeResult(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
@@ -9305,10 +9284,10 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
 		if (isNew || !DLFolderModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 		}
 
 		else {
@@ -9724,7 +9703,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		OrderByComparator orderByComparator) throws SystemException {
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -9769,14 +9748,14 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
-						finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
+						list);
 				}
 
 				closeSession(session);
@@ -9871,8 +9850,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME,
 			"getDLFileEntryTypes",
 			new String[] {
-				Long.class.getName(), "java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
 			});
 
 	static {
@@ -9914,7 +9893,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 												  .concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETDLFILEENTRYTYPES;
+					sql = _SQL_GETDLFILEENTRYTYPES.concat(com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl.ORDER_BY_SQL);
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -10357,7 +10336,7 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	public void destroy() {
 		EntityCacheUtil.removeCache(DLFolderImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
 	}
 
 	@BeanReference(type = DLContentPersistence.class)

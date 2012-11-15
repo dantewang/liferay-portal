@@ -68,19 +68,19 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 	 * Never modify or reference this class directly. Always use {@link TicketUtil} to access the ticket persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = TicketImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List1";
-	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
+	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
+		".List";
+	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
+		".Count";
+	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketModelImpl.FINDER_CACHE_ENABLED, TicketImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_FIND_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketModelImpl.FINDER_CACHE_ENABLED, TicketImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByKey",
+			FINDER_CLASS_NAME_LIST, "findByKey",
 			new String[] {
 				String.class.getName(),
 				
@@ -89,7 +89,7 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByKey",
+			FINDER_CLASS_NAME_COUNT, "countByKey",
 			new String[] { String.class.getName() });
 
 	/**
@@ -110,7 +110,7 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 		OrderByComparator orderByComparator) throws SystemException {
 		Object[] finderArgs = new Object[] { key, start, end, orderByComparator };
 
-		List<Ticket> list = (List<Ticket>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_KEY,
+		List<Ticket> list = (List<Ticket>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_KEY,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -178,13 +178,13 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_KEY,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_KEY,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_KEY,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_KEY,
 						finderArgs, list);
 				}
 
@@ -470,8 +470,8 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 		EntityCacheUtil.clearCache(TicketImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 	}
 
 	/**
@@ -486,14 +486,14 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 		EntityCacheUtil.removeResult(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketImpl.class, ticket.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 	}
 
 	@Override
 	public void clearCache(List<Ticket> tickets) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 
 		for (Ticket ticket : tickets) {
 			EntityCacheUtil.removeResult(TicketModelImpl.ENTITY_CACHE_ENABLED,
@@ -629,10 +629,10 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
 		if (isNew || !TicketModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 		}
 
 		EntityCacheUtil.putResult(TicketModelImpl.ENTITY_CACHE_ENABLED,
@@ -805,7 +805,7 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 		OrderByComparator orderByComparator) throws SystemException {
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		List<Ticket> list = (List<Ticket>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+		List<Ticket> list = (List<Ticket>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -850,14 +850,14 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
-						finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
+						list);
 				}
 
 				closeSession(session);
@@ -944,7 +944,7 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 	public void destroy() {
 		EntityCacheUtil.removeCache(TicketImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

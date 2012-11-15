@@ -78,19 +78,19 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	 * Never modify or reference this class directly. Always use {@link SCLicenseUtil} to access the s c license persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = SCLicenseImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List1";
-	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
+		".List";
+	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
+		".Count";
+	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_FIND_BY_ACTIVE = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByActive",
+			FINDER_CLASS_NAME_LIST, "findByActive",
 			new String[] {
 				Boolean.class.getName(),
 				
@@ -99,7 +99,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_ACTIVE = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByActive",
+			FINDER_CLASS_NAME_COUNT, "countByActive",
 			new String[] { Boolean.class.getName() });
 
 	/**
@@ -602,7 +602,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 		OrderByComparator orderByComparator) throws SystemException {
 		Object[] finderArgs = new Object[] { active, start, end, orderByComparator };
 
-		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE,
+		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_ACTIVE,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -659,13 +659,13 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_ACTIVE,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_ACTIVE,
 						finderArgs, list);
 				}
 
@@ -941,9 +941,9 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	}
 
 	private static final String _FINDER_COLUMN_ACTIVE_ACTIVE_2 = "scLicense.active = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, SCLicenseImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByA_R",
+			FINDER_CLASS_NAME_LIST, "findByA_R",
 			new String[] {
 				Boolean.class.getName(), Boolean.class.getName(),
 				
@@ -952,7 +952,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByA_R",
+			FINDER_CLASS_NAME_COUNT, "countByA_R",
 			new String[] { Boolean.class.getName(), Boolean.class.getName() });
 
 	/**
@@ -1483,7 +1483,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				start, end, orderByComparator
 			};
 
-		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_A_R,
+		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_A_R,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1545,13 +1545,13 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_A_R,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_A_R,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_A_R,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_A_R,
 						finderArgs, list);
 				}
 
@@ -1906,8 +1906,8 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 		EntityCacheUtil.clearCache(SCLicenseImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 	}
 
 	/**
@@ -1922,14 +1922,14 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 		EntityCacheUtil.removeResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseImpl.class, scLicense.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 	}
 
 	@Override
 	public void clearCache(List<SCLicense> scLicenses) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 
 		for (SCLicense scLicense : scLicenses) {
 			EntityCacheUtil.removeResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
@@ -2080,10 +2080,10 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
 		if (isNew || !SCLicenseModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 		}
 
 		else {
@@ -2289,7 +2289,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 		OrderByComparator orderByComparator) throws SystemException {
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -2334,14 +2334,14 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
-						finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
+						list);
 				}
 
 				closeSession(session);
@@ -2436,8 +2436,8 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			SCLicenseModelImpl.MAPPING_TABLE_SCLICENSES_SCPRODUCTENTRIES_NAME,
 			"getSCProductEntries",
 			new String[] {
-				Long.class.getName(), "java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
 			});
 
 	static {
@@ -2921,7 +2921,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	public void destroy() {
 		EntityCacheUtil.removeCache(SCLicenseImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
 	}
 
 	@BeanReference(type = SCFrameworkVersionPersistence.class)

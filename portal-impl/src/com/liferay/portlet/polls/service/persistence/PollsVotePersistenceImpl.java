@@ -69,20 +69,19 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 	 * Never modify or reference this class directly. Always use {@link PollsVoteUtil} to access the polls vote persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = PollsVoteImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List1";
-	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
+	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
+		".List";
+	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
+		".Count";
+	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
 			PollsVoteModelImpl.FINDER_CACHE_ENABLED, PollsVoteImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
 			PollsVoteModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_QUESTIONID =
-		new FinderPath(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_FIND_BY_QUESTIONID = new FinderPath(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
 			PollsVoteModelImpl.FINDER_CACHE_ENABLED, PollsVoteImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByQuestionId",
+			FINDER_CLASS_NAME_LIST, "findByQuestionId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -91,7 +90,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_QUESTIONID = new FinderPath(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
 			PollsVoteModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByQuestionId",
+			FINDER_CLASS_NAME_COUNT, "countByQuestionId",
 			new String[] { Long.class.getName() });
 
 	/**
@@ -292,7 +291,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 				start, end, orderByComparator
 			};
 
-		List<PollsVote> list = (List<PollsVote>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_QUESTIONID,
+		List<PollsVote> list = (List<PollsVote>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_QUESTIONID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -349,13 +348,13 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_QUESTIONID,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_QUESTIONID,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_QUESTIONID,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_QUESTIONID,
 						finderArgs, list);
 				}
 
@@ -587,9 +586,9 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 	}
 
 	private static final String _FINDER_COLUMN_QUESTIONID_QUESTIONID_2 = "pollsVote.questionId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_CHOICEID = new FinderPath(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_BY_CHOICEID = new FinderPath(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
 			PollsVoteModelImpl.FINDER_CACHE_ENABLED, PollsVoteImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByChoiceId",
+			FINDER_CLASS_NAME_LIST, "findByChoiceId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -598,7 +597,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_CHOICEID = new FinderPath(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
 			PollsVoteModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByChoiceId",
+			FINDER_CLASS_NAME_COUNT, "countByChoiceId",
 			new String[] { Long.class.getName() });
 
 	/**
@@ -799,7 +798,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 				start, end, orderByComparator
 			};
 
-		List<PollsVote> list = (List<PollsVote>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_CHOICEID,
+		List<PollsVote> list = (List<PollsVote>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_CHOICEID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -856,13 +855,13 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_CHOICEID,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_CHOICEID,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_CHOICEID,
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_CHOICEID,
 						finderArgs, list);
 				}
 
@@ -1097,18 +1096,9 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			new String[] { Long.class.getName(), Long.class.getName() },
 			PollsVoteModelImpl.QUESTIONID_COLUMN_BITMASK |
 			PollsVoteModelImpl.USERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_Q_U = new FinderPath(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
-			PollsVoteModelImpl.FINDER_CACHE_ENABLED, PollsVoteImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByQ_U",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_Q_U = new FinderPath(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
 			PollsVoteModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByQ_U",
+			FINDER_CLASS_NAME_COUNT, "countByQ_U",
 			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
@@ -1388,8 +1378,8 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		EntityCacheUtil.clearCache(PollsVoteImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 	}
 
 	/**
@@ -1404,16 +1394,16 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		EntityCacheUtil.removeResult(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
 			PollsVoteImpl.class, pollsVote.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 
 		clearUniqueFindersCache(pollsVote);
 	}
 
 	@Override
 	public void clearCache(List<PollsVote> pollsVotes) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 
 		for (PollsVote pollsVote : pollsVotes) {
 			EntityCacheUtil.removeResult(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
@@ -1564,10 +1554,10 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
 		if (isNew || !PollsVoteModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
 		}
 
 		else {
@@ -1802,7 +1792,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		OrderByComparator orderByComparator) throws SystemException {
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		List<PollsVote> list = (List<PollsVote>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+		List<PollsVote> list = (List<PollsVote>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -1847,14 +1837,14 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
 						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
-						finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
+						list);
 				}
 
 				closeSession(session);
@@ -1941,7 +1931,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 	public void destroy() {
 		EntityCacheUtil.removeCache(PollsVoteImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
 	}
 
 	@BeanReference(type = PollsChoicePersistence.class)
