@@ -141,209 +141,6 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	}
 
 	/**
-	 * Returns an ordered range of all the trash entries where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of trash entries
-	 * @param end the upper bound of the range of trash entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching trash entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<TrashEntry> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (TrashEntry trashEntry : list) {
-				if ((groupId != trashEntry.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_TRASHENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<TrashEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first trash entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching trash entry
-	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		TrashEntry trashEntry = fetchByGroupId_First(groupId, orderByComparator);
-
-		if (trashEntry != null) {
-			return trashEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first trash entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<TrashEntry> list = findByGroupId(groupId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last trash entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching trash entry
-	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		TrashEntry trashEntry = fetchByGroupId_Last(groupId, orderByComparator);
-
-		if (trashEntry != null) {
-			return trashEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last trash entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<TrashEntry> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the trash entries before and after the current trash entry in the ordered set where groupId = &#63;.
 	 *
 	 * @param entryId the primary key of the current trash entry
@@ -490,13 +287,267 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	}
 
 	/**
+	 * Returns an ordered range of all the trash entries where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of trash entries
+	 * @param end the upper bound of the range of trash entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching trash entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<TrashEntry> findByGroupId(long groupId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (TrashEntry trashEntry : list) {
+				if ((groupId != trashEntry.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_TRASHENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<TrashEntry>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByGroupId_First(long groupId)
+		throws NoSuchEntryException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first trash entry in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		TrashEntry trashEntry = fetchByGroupId_First(groupId, orderByComparator);
+
+		if (trashEntry != null) {
+			return trashEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first trash entry in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<TrashEntry> list = findByGroupId(groupId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByGroupId_Last(long groupId)
+		throws NoSuchEntryException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last trash entry in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		TrashEntry trashEntry = fetchByGroupId_Last(groupId, orderByComparator);
+
+		if (trashEntry != null) {
+			return trashEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last trash entry in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<TrashEntry> list = findByGroupId(groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the trash entries where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (TrashEntry trashEntry : findByGroupId(groupId)) {
+		for (TrashEntry trashEntry : findByGroupId(groupId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(trashEntry);
 		}
 	}
@@ -605,212 +656,6 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public List<TrashEntry> findByCompanyId(long companyId, int start, int end)
 		throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the trash entries where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of trash entries
-	 * @param end the upper bound of the range of trash entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching trash entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<TrashEntry> findByCompanyId(long companyId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (TrashEntry trashEntry : list) {
-				if ((companyId != trashEntry.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_TRASHENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<TrashEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first trash entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching trash entry
-	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		TrashEntry trashEntry = fetchByCompanyId_First(companyId,
-				orderByComparator);
-
-		if (trashEntry != null) {
-			return trashEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first trash entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<TrashEntry> list = findByCompanyId(companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last trash entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching trash entry
-	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		TrashEntry trashEntry = fetchByCompanyId_Last(companyId,
-				orderByComparator);
-
-		if (trashEntry != null) {
-			return trashEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last trash entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<TrashEntry> list = findByCompanyId(companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -960,13 +805,270 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	}
 
 	/**
+	 * Returns an ordered range of all the trash entries where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of trash entries
+	 * @param end the upper bound of the range of trash entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching trash entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<TrashEntry> findByCompanyId(long companyId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (TrashEntry trashEntry : list) {
+				if ((companyId != trashEntry.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_TRASHENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				list = (List<TrashEntry>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByCompanyId_First(long companyId)
+		throws NoSuchEntryException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first trash entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		TrashEntry trashEntry = fetchByCompanyId_First(companyId,
+				orderByComparator);
+
+		if (trashEntry != null) {
+			return trashEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first trash entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<TrashEntry> list = findByCompanyId(companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByCompanyId_Last(long companyId)
+		throws NoSuchEntryException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last trash entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		TrashEntry trashEntry = fetchByCompanyId_Last(companyId,
+				orderByComparator);
+
+		if (trashEntry != null) {
+			return trashEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByCompanyId_Last(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last trash entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<TrashEntry> list = findByCompanyId(companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the trash entries where companyId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCompanyId(long companyId) throws SystemException {
-		for (TrashEntry trashEntry : findByCompanyId(companyId)) {
+		for (TrashEntry trashEntry : findByCompanyId(companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(trashEntry);
 		}
 	}
@@ -1070,233 +1172,6 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public List<TrashEntry> findByG_LtCD(long groupId, Date createDate,
 		int start, int end) throws SystemException {
 		return findByG_LtCD(groupId, createDate, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the trash entries where groupId = &#63; and createDate &lt; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param createDate the create date
-	 * @param start the lower bound of the range of trash entries
-	 * @param end the upper bound of the range of trash entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching trash entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<TrashEntry> findByG_LtCD(long groupId, Date createDate,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_LTCD;
-		finderArgs = new Object[] {
-				groupId, createDate,
-				
-				start, end, orderByComparator
-			};
-
-		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (TrashEntry trashEntry : list) {
-				if ((groupId != trashEntry.getGroupId()) ||
-						!Validator.equals(createDate, trashEntry.getCreateDate())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_TRASHENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_G_LTCD_GROUPID_2);
-
-			if (createDate == null) {
-				query.append(_FINDER_COLUMN_G_LTCD_CREATEDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_LTCD_CREATEDATE_2);
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (createDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(createDate));
-				}
-
-				list = (List<TrashEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param createDate the create date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching trash entry
-	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry findByG_LtCD_First(long groupId, Date createDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		TrashEntry trashEntry = fetchByG_LtCD_First(groupId, createDate,
-				orderByComparator);
-
-		if (trashEntry != null) {
-			return trashEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", createDate=");
-		msg.append(createDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param createDate the create date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry fetchByG_LtCD_First(long groupId, Date createDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<TrashEntry> list = findByG_LtCD(groupId, createDate, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param createDate the create date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching trash entry
-	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry findByG_LtCD_Last(long groupId, Date createDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		TrashEntry trashEntry = fetchByG_LtCD_Last(groupId, createDate,
-				orderByComparator);
-
-		if (trashEntry != null) {
-			return trashEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", createDate=");
-		msg.append(createDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param createDate the create date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashEntry fetchByG_LtCD_Last(long groupId, Date createDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_LtCD(groupId, createDate);
-
-		List<TrashEntry> list = findByG_LtCD(groupId, createDate, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1458,6 +1333,287 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	}
 
 	/**
+	 * Returns an ordered range of all the trash entries where groupId = &#63; and createDate &lt; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param createDate the create date
+	 * @param start the lower bound of the range of trash entries
+	 * @param end the upper bound of the range of trash entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching trash entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<TrashEntry> findByG_LtCD(long groupId, Date createDate,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_LTCD;
+		finderArgs = new Object[] {
+				groupId, createDate,
+				
+				start, end, orderByComparator
+			};
+
+		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (TrashEntry trashEntry : list) {
+				if ((groupId != trashEntry.getGroupId()) ||
+						!Validator.equals(createDate, trashEntry.getCreateDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_TRASHENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_LTCD_GROUPID_2);
+
+			if (createDate == null) {
+				query.append(_FINDER_COLUMN_G_LTCD_CREATEDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_G_LTCD_CREATEDATE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (createDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(createDate));
+				}
+
+				list = (List<TrashEntry>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and createDate &lt; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param createDate the create date
+	 * @return the first matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByG_LtCD_First(long groupId, Date createDate)
+		throws NoSuchEntryException, SystemException {
+		return findByG_LtCD_First(groupId, createDate, null);
+	}
+
+	/**
+	 * Returns the first trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByG_LtCD_First(long groupId, Date createDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		TrashEntry trashEntry = fetchByG_LtCD_First(groupId, createDate,
+				orderByComparator);
+
+		if (trashEntry != null) {
+			return trashEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", createDate=");
+		msg.append(createDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and createDate &lt; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param createDate the create date
+	 * @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByG_LtCD_First(long groupId, Date createDate)
+		throws SystemException {
+		return fetchByG_LtCD_First(groupId, createDate, null);
+	}
+
+	/**
+	 * Returns the first trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByG_LtCD_First(long groupId, Date createDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<TrashEntry> list = findByG_LtCD(groupId, createDate, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and createDate &lt; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param createDate the create date
+	 * @return the last matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByG_LtCD_Last(long groupId, Date createDate)
+		throws NoSuchEntryException, SystemException {
+		return findByG_LtCD_Last(groupId, createDate, null);
+	}
+
+	/**
+	 * Returns the last trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching trash entry
+	 * @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry findByG_LtCD_Last(long groupId, Date createDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		TrashEntry trashEntry = fetchByG_LtCD_Last(groupId, createDate,
+				orderByComparator);
+
+		if (trashEntry != null) {
+			return trashEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", createDate=");
+		msg.append(createDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and createDate &lt; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param createDate the create date
+	 * @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByG_LtCD_Last(long groupId, Date createDate)
+		throws SystemException {
+		return fetchByG_LtCD_Last(groupId, createDate, null);
+	}
+
+	/**
+	 * Returns the last trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashEntry fetchByG_LtCD_Last(long groupId, Date createDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_LtCD(groupId, createDate);
+
+		List<TrashEntry> list = findByG_LtCD(groupId, createDate, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the trash entries where groupId = &#63; and createDate &lt; &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -1466,7 +1622,8 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	 */
 	public void removeByG_LtCD(long groupId, Date createDate)
 		throws SystemException {
-		for (TrashEntry trashEntry : findByG_LtCD(groupId, createDate)) {
+		for (TrashEntry trashEntry : findByG_LtCD(groupId, createDate,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(trashEntry);
 		}
 	}
@@ -1543,6 +1700,21 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public static final FinderPath FINDER_PATH_FETCH_BY_C_C = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, TrashEntryImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			TrashEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			TrashEntryModelImpl.CLASSPK_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
+			TrashEntryModelImpl.FINDER_CACHE_ENABLED, TrashEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
+			TrashEntryModelImpl.FINDER_CACHE_ENABLED, TrashEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			TrashEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
 			TrashEntryModelImpl.CLASSPK_COLUMN_BITMASK);
@@ -1637,8 +1809,6 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
 
 			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
-
-			query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 

@@ -139,208 +139,6 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	}
 
 	/**
-	 * Returns an ordered range of all the social activity settings where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of social activity settings
-	 * @param end the upper bound of the range of social activity settings (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activity settings
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivitySetting> findByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivitySetting socialActivitySetting : list) {
-				if ((groupId != socialActivitySetting.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITYSETTING_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<SocialActivitySetting>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity setting in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity setting
-	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivitySettingException, SystemException {
-		SocialActivitySetting socialActivitySetting = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (socialActivitySetting != null) {
-			return socialActivitySetting;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivitySettingException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity setting in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialActivitySetting> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity setting in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity setting
-	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivitySettingException, SystemException {
-		SocialActivitySetting socialActivitySetting = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (socialActivitySetting != null) {
-			return socialActivitySetting;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivitySettingException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity setting in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<SocialActivitySetting> list = findByGroupId(groupId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the social activity settings before and after the current social activity setting in the ordered set where groupId = &#63;.
 	 *
 	 * @param activitySettingId the primary key of the current social activity setting
@@ -484,6 +282,258 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	}
 
 	/**
+	 * Returns an ordered range of all the social activity settings where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of social activity settings
+	 * @param end the upper bound of the range of social activity settings (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activity settings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivitySetting> findByGroupId(long groupId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivitySetting socialActivitySetting : list) {
+				if ((groupId != socialActivitySetting.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITYSETTING_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<SocialActivitySetting>)QueryUtil.list(q,
+						getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByGroupId_First(long groupId)
+		throws NoSuchActivitySettingException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first social activity setting in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivitySettingException, SystemException {
+		SocialActivitySetting socialActivitySetting = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (socialActivitySetting != null) {
+			return socialActivitySetting;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivitySettingException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first social activity setting in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialActivitySetting> list = findByGroupId(groupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByGroupId_Last(long groupId)
+		throws NoSuchActivitySettingException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last social activity setting in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivitySettingException, SystemException {
+		SocialActivitySetting socialActivitySetting = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (socialActivitySetting != null) {
+			return socialActivitySetting;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivitySettingException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last social activity setting in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<SocialActivitySetting> list = findByGroupId(groupId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activity settings where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -491,7 +541,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (SocialActivitySetting socialActivitySetting : findByGroupId(
-				groupId)) {
+				groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivitySetting);
 		}
 	}
@@ -603,231 +653,6 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	public List<SocialActivitySetting> findByG_C(long groupId,
 		long classNameId, int start, int end) throws SystemException {
 		return findByG_C(groupId, classNameId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activity settings where groupId = &#63; and classNameId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param start the lower bound of the range of social activity settings
-	 * @param end the upper bound of the range of social activity settings (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activity settings
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivitySetting> findByG_C(long groupId,
-		long classNameId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C;
-			finderArgs = new Object[] { groupId, classNameId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C;
-			finderArgs = new Object[] {
-					groupId, classNameId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivitySetting socialActivitySetting : list) {
-				if ((groupId != socialActivitySetting.getGroupId()) ||
-						(classNameId != socialActivitySetting.getClassNameId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITYSETTING_WHERE);
-
-			query.append(_FINDER_COLUMN_G_C_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_C_CLASSNAMEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(classNameId);
-
-				list = (List<SocialActivitySetting>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity setting
-	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting findByG_C_First(long groupId,
-		long classNameId, OrderByComparator orderByComparator)
-		throws NoSuchActivitySettingException, SystemException {
-		SocialActivitySetting socialActivitySetting = fetchByG_C_First(groupId,
-				classNameId, orderByComparator);
-
-		if (socialActivitySetting != null) {
-			return socialActivitySetting;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivitySettingException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting fetchByG_C_First(long groupId,
-		long classNameId, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<SocialActivitySetting> list = findByG_C(groupId, classNameId, 0,
-				1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity setting
-	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting findByG_C_Last(long groupId, long classNameId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivitySettingException, SystemException {
-		SocialActivitySetting socialActivitySetting = fetchByG_C_Last(groupId,
-				classNameId, orderByComparator);
-
-		if (socialActivitySetting != null) {
-			return socialActivitySetting;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivitySettingException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting fetchByG_C_Last(long groupId,
-		long classNameId, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_C(groupId, classNameId);
-
-		List<SocialActivitySetting> list = findByG_C(groupId, classNameId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -979,6 +804,285 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	}
 
 	/**
+	 * Returns an ordered range of all the social activity settings where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param start the lower bound of the range of social activity settings
+	 * @param end the upper bound of the range of social activity settings (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activity settings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivitySetting> findByG_C(long groupId,
+		long classNameId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C;
+			finderArgs = new Object[] { groupId, classNameId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C;
+			finderArgs = new Object[] {
+					groupId, classNameId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivitySetting socialActivitySetting : list) {
+				if ((groupId != socialActivitySetting.getGroupId()) ||
+						(classNameId != socialActivitySetting.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITYSETTING_WHERE);
+
+			query.append(_FINDER_COLUMN_G_C_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_C_CLASSNAMEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(classNameId);
+
+				list = (List<SocialActivitySetting>)QueryUtil.list(q,
+						getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @return the first matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_C_First(long groupId, long classNameId)
+		throws NoSuchActivitySettingException, SystemException {
+		return findByG_C_First(groupId, classNameId, null);
+	}
+
+	/**
+	 * Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_C_First(long groupId,
+		long classNameId, OrderByComparator orderByComparator)
+		throws NoSuchActivitySettingException, SystemException {
+		SocialActivitySetting socialActivitySetting = fetchByG_C_First(groupId,
+				classNameId, orderByComparator);
+
+		if (socialActivitySetting != null) {
+			return socialActivitySetting;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivitySettingException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_First(long groupId, long classNameId)
+		throws SystemException {
+		return fetchByG_C_First(groupId, classNameId, null);
+	}
+
+	/**
+	 * Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_First(long groupId,
+		long classNameId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<SocialActivitySetting> list = findByG_C(groupId, classNameId, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @return the last matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_C_Last(long groupId, long classNameId)
+		throws NoSuchActivitySettingException, SystemException {
+		return findByG_C_Last(groupId, classNameId, null);
+	}
+
+	/**
+	 * Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_C_Last(long groupId, long classNameId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivitySettingException, SystemException {
+		SocialActivitySetting socialActivitySetting = fetchByG_C_Last(groupId,
+				classNameId, orderByComparator);
+
+		if (socialActivitySetting != null) {
+			return socialActivitySetting;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivitySettingException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_Last(long groupId, long classNameId)
+		throws SystemException {
+		return fetchByG_C_Last(groupId, classNameId, null);
+	}
+
+	/**
+	 * Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_Last(long groupId,
+		long classNameId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_C(groupId, classNameId);
+
+		List<SocialActivitySetting> list = findByG_C(groupId, classNameId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activity settings where groupId = &#63; and classNameId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -988,7 +1092,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	public void removeByG_C(long groupId, long classNameId)
 		throws SystemException {
 		for (SocialActivitySetting socialActivitySetting : findByG_C(groupId,
-				classNameId)) {
+				classNameId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivitySetting);
 		}
 	}
@@ -1107,231 +1211,6 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	public List<SocialActivitySetting> findByG_A(long groupId,
 		int activityType, int start, int end) throws SystemException {
 		return findByG_A(groupId, activityType, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activity settings where groupId = &#63; and activityType = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param activityType the activity type
-	 * @param start the lower bound of the range of social activity settings
-	 * @param end the upper bound of the range of social activity settings (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activity settings
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivitySetting> findByG_A(long groupId,
-		int activityType, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A;
-			finderArgs = new Object[] { groupId, activityType };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_A;
-			finderArgs = new Object[] {
-					groupId, activityType,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivitySetting socialActivitySetting : list) {
-				if ((groupId != socialActivitySetting.getGroupId()) ||
-						(activityType != socialActivitySetting.getActivityType())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITYSETTING_WHERE);
-
-			query.append(_FINDER_COLUMN_G_A_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_A_ACTIVITYTYPE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(activityType);
-
-				list = (List<SocialActivitySetting>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param activityType the activity type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity setting
-	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting findByG_A_First(long groupId,
-		int activityType, OrderByComparator orderByComparator)
-		throws NoSuchActivitySettingException, SystemException {
-		SocialActivitySetting socialActivitySetting = fetchByG_A_First(groupId,
-				activityType, orderByComparator);
-
-		if (socialActivitySetting != null) {
-			return socialActivitySetting;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", activityType=");
-		msg.append(activityType);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivitySettingException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param activityType the activity type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting fetchByG_A_First(long groupId,
-		int activityType, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<SocialActivitySetting> list = findByG_A(groupId, activityType, 0,
-				1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param activityType the activity type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity setting
-	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting findByG_A_Last(long groupId, int activityType,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivitySettingException, SystemException {
-		SocialActivitySetting socialActivitySetting = fetchByG_A_Last(groupId,
-				activityType, orderByComparator);
-
-		if (socialActivitySetting != null) {
-			return socialActivitySetting;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", activityType=");
-		msg.append(activityType);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivitySettingException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param activityType the activity type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting fetchByG_A_Last(long groupId,
-		int activityType, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_A(groupId, activityType);
-
-		List<SocialActivitySetting> list = findByG_A(groupId, activityType,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1483,6 +1362,285 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	}
 
 	/**
+	 * Returns an ordered range of all the social activity settings where groupId = &#63; and activityType = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param activityType the activity type
+	 * @param start the lower bound of the range of social activity settings
+	 * @param end the upper bound of the range of social activity settings (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activity settings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivitySetting> findByG_A(long groupId,
+		int activityType, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A;
+			finderArgs = new Object[] { groupId, activityType };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_A;
+			finderArgs = new Object[] {
+					groupId, activityType,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivitySetting socialActivitySetting : list) {
+				if ((groupId != socialActivitySetting.getGroupId()) ||
+						(activityType != socialActivitySetting.getActivityType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITYSETTING_WHERE);
+
+			query.append(_FINDER_COLUMN_G_A_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_A_ACTIVITYTYPE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(activityType);
+
+				list = (List<SocialActivitySetting>)QueryUtil.list(q,
+						getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param activityType the activity type
+	 * @return the first matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_A_First(long groupId, int activityType)
+		throws NoSuchActivitySettingException, SystemException {
+		return findByG_A_First(groupId, activityType, null);
+	}
+
+	/**
+	 * Returns the first social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param activityType the activity type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_A_First(long groupId,
+		int activityType, OrderByComparator orderByComparator)
+		throws NoSuchActivitySettingException, SystemException {
+		SocialActivitySetting socialActivitySetting = fetchByG_A_First(groupId,
+				activityType, orderByComparator);
+
+		if (socialActivitySetting != null) {
+			return socialActivitySetting;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", activityType=");
+		msg.append(activityType);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivitySettingException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param activityType the activity type
+	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_A_First(long groupId, int activityType)
+		throws SystemException {
+		return fetchByG_A_First(groupId, activityType, null);
+	}
+
+	/**
+	 * Returns the first social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param activityType the activity type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_A_First(long groupId,
+		int activityType, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<SocialActivitySetting> list = findByG_A(groupId, activityType, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param activityType the activity type
+	 * @return the last matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_A_Last(long groupId, int activityType)
+		throws NoSuchActivitySettingException, SystemException {
+		return findByG_A_Last(groupId, activityType, null);
+	}
+
+	/**
+	 * Returns the last social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param activityType the activity type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_A_Last(long groupId, int activityType,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivitySettingException, SystemException {
+		SocialActivitySetting socialActivitySetting = fetchByG_A_Last(groupId,
+				activityType, orderByComparator);
+
+		if (socialActivitySetting != null) {
+			return socialActivitySetting;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", activityType=");
+		msg.append(activityType);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivitySettingException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param activityType the activity type
+	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_A_Last(long groupId, int activityType)
+		throws SystemException {
+		return fetchByG_A_Last(groupId, activityType, null);
+	}
+
+	/**
+	 * Returns the last social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param activityType the activity type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_A_Last(long groupId,
+		int activityType, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_A(groupId, activityType);
+
+		List<SocialActivitySetting> list = findByG_A(groupId, activityType,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activity settings where groupId = &#63; and activityType = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -1492,7 +1650,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	public void removeByG_A(long groupId, int activityType)
 		throws SystemException {
 		for (SocialActivitySetting socialActivitySetting : findByG_A(groupId,
-				activityType)) {
+				activityType, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivitySetting);
 		}
 	}
@@ -1622,247 +1780,6 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 		long classNameId, int activityType, int start, int end)
 		throws SystemException {
 		return findByG_C_A(groupId, classNameId, activityType, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activity settings where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param activityType the activity type
-	 * @param start the lower bound of the range of social activity settings
-	 * @param end the upper bound of the range of social activity settings (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activity settings
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivitySetting> findByG_C_A(long groupId,
-		long classNameId, int activityType, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_A;
-			finderArgs = new Object[] { groupId, classNameId, activityType };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_A;
-			finderArgs = new Object[] {
-					groupId, classNameId, activityType,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivitySetting socialActivitySetting : list) {
-				if ((groupId != socialActivitySetting.getGroupId()) ||
-						(classNameId != socialActivitySetting.getClassNameId()) ||
-						(activityType != socialActivitySetting.getActivityType())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITYSETTING_WHERE);
-
-			query.append(_FINDER_COLUMN_G_C_A_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_C_A_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_G_C_A_ACTIVITYTYPE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(classNameId);
-
-				qPos.add(activityType);
-
-				list = (List<SocialActivitySetting>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param activityType the activity type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity setting
-	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting findByG_C_A_First(long groupId,
-		long classNameId, int activityType, OrderByComparator orderByComparator)
-		throws NoSuchActivitySettingException, SystemException {
-		SocialActivitySetting socialActivitySetting = fetchByG_C_A_First(groupId,
-				classNameId, activityType, orderByComparator);
-
-		if (socialActivitySetting != null) {
-			return socialActivitySetting;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", activityType=");
-		msg.append(activityType);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivitySettingException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param activityType the activity type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting fetchByG_C_A_First(long groupId,
-		long classNameId, int activityType, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<SocialActivitySetting> list = findByG_C_A(groupId, classNameId,
-				activityType, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param activityType the activity type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity setting
-	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting findByG_C_A_Last(long groupId,
-		long classNameId, int activityType, OrderByComparator orderByComparator)
-		throws NoSuchActivitySettingException, SystemException {
-		SocialActivitySetting socialActivitySetting = fetchByG_C_A_Last(groupId,
-				classNameId, activityType, orderByComparator);
-
-		if (socialActivitySetting != null) {
-			return socialActivitySetting;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", activityType=");
-		msg.append(activityType);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivitySettingException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param activityType the activity type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting fetchByG_C_A_Last(long groupId,
-		long classNameId, int activityType, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_C_A(groupId, classNameId, activityType);
-
-		List<SocialActivitySetting> list = findByG_C_A(groupId, classNameId,
-				activityType, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2020,6 +1937,307 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	}
 
 	/**
+	 * Returns an ordered range of all the social activity settings where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param start the lower bound of the range of social activity settings
+	 * @param end the upper bound of the range of social activity settings (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activity settings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivitySetting> findByG_C_A(long groupId,
+		long classNameId, int activityType, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_A;
+			finderArgs = new Object[] { groupId, classNameId, activityType };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_A;
+			finderArgs = new Object[] {
+					groupId, classNameId, activityType,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivitySetting socialActivitySetting : list) {
+				if ((groupId != socialActivitySetting.getGroupId()) ||
+						(classNameId != socialActivitySetting.getClassNameId()) ||
+						(activityType != socialActivitySetting.getActivityType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITYSETTING_WHERE);
+
+			query.append(_FINDER_COLUMN_G_C_A_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_C_A_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_G_C_A_ACTIVITYTYPE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(classNameId);
+
+				qPos.add(activityType);
+
+				list = (List<SocialActivitySetting>)QueryUtil.list(q,
+						getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @return the first matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_C_A_First(long groupId,
+		long classNameId, int activityType)
+		throws NoSuchActivitySettingException, SystemException {
+		return findByG_C_A_First(groupId, classNameId, activityType, null);
+	}
+
+	/**
+	 * Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_C_A_First(long groupId,
+		long classNameId, int activityType, OrderByComparator orderByComparator)
+		throws NoSuchActivitySettingException, SystemException {
+		SocialActivitySetting socialActivitySetting = fetchByG_C_A_First(groupId,
+				classNameId, activityType, orderByComparator);
+
+		if (socialActivitySetting != null) {
+			return socialActivitySetting;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", activityType=");
+		msg.append(activityType);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivitySettingException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_A_First(long groupId,
+		long classNameId, int activityType) throws SystemException {
+		return fetchByG_C_A_First(groupId, classNameId, activityType, null);
+	}
+
+	/**
+	 * Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_A_First(long groupId,
+		long classNameId, int activityType, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<SocialActivitySetting> list = findByG_C_A(groupId, classNameId,
+				activityType, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @return the last matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_C_A_Last(long groupId,
+		long classNameId, int activityType)
+		throws NoSuchActivitySettingException, SystemException {
+		return findByG_C_A_Last(groupId, classNameId, activityType, null);
+	}
+
+	/**
+	 * Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_C_A_Last(long groupId,
+		long classNameId, int activityType, OrderByComparator orderByComparator)
+		throws NoSuchActivitySettingException, SystemException {
+		SocialActivitySetting socialActivitySetting = fetchByG_C_A_Last(groupId,
+				classNameId, activityType, orderByComparator);
+
+		if (socialActivitySetting != null) {
+			return socialActivitySetting;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", activityType=");
+		msg.append(activityType);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivitySettingException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_A_Last(long groupId,
+		long classNameId, int activityType) throws SystemException {
+		return fetchByG_C_A_Last(groupId, classNameId, activityType, null);
+	}
+
+	/**
+	 * Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_A_Last(long groupId,
+		long classNameId, int activityType, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_C_A(groupId, classNameId, activityType);
+
+		List<SocialActivitySetting> list = findByG_C_A(groupId, classNameId,
+				activityType, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activity settings where groupId = &#63; and classNameId = &#63; and activityType = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -2030,7 +2248,8 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	public void removeByG_C_A(long groupId, long classNameId, int activityType)
 		throws SystemException {
 		for (SocialActivitySetting socialActivitySetting : findByG_C_A(
-				groupId, classNameId, activityType)) {
+				groupId, classNameId, activityType, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(socialActivitySetting);
 		}
 	}
@@ -2102,10 +2321,22 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	private static final String _FINDER_COLUMN_G_C_A_GROUPID_2 = "socialActivitySetting.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_C_A_CLASSNAMEID_2 = "socialActivitySetting.classNameId = ? AND ";
 	private static final String _FINDER_COLUMN_G_C_A_ACTIVITYTYPE_2 = "socialActivitySetting.activityType = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_G_C_A_N = new FinderPath(SocialActivitySettingModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_A_N = new FinderPath(SocialActivitySettingModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivitySettingModelImpl.FINDER_CACHE_ENABLED,
-			SocialActivitySettingImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByG_C_A_N",
+			SocialActivitySettingImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_C_A_N",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_A_N =
+		new FinderPath(SocialActivitySettingModelImpl.ENTITY_CACHE_ENABLED,
+			SocialActivitySettingModelImpl.FINDER_CACHE_ENABLED,
+			SocialActivitySettingImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_C_A_N",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(), String.class.getName()
@@ -2123,104 +2354,68 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 			});
 
 	/**
-	 * Returns the social activity setting where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivitySettingException} if it could not be found.
+	 * Returns an ordered range of all the social activity settings where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param groupId the group ID
 	 * @param classNameId the class name ID
 	 * @param activityType the activity type
 	 * @param name the name
-	 * @return the matching social activity setting
-	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @param start the lower bound of the range of social activity settings
+	 * @param end the upper bound of the range of social activity settings (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activity settings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SocialActivitySetting findByG_C_A_N(long groupId, long classNameId,
-		int activityType, String name)
-		throws NoSuchActivitySettingException, SystemException {
-		SocialActivitySetting socialActivitySetting = fetchByG_C_A_N(groupId,
-				classNameId, activityType, name);
+	protected List<SocialActivitySetting> findByG_C_A_N(long groupId,
+		long classNameId, int activityType, String name, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (socialActivitySetting == null) {
-			StringBundler msg = new StringBundler(10);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("groupId=");
-			msg.append(groupId);
-
-			msg.append(", classNameId=");
-			msg.append(classNameId);
-
-			msg.append(", activityType=");
-			msg.append(activityType);
-
-			msg.append(", name=");
-			msg.append(name);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchActivitySettingException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_A_N;
+			finderArgs = new Object[] { groupId, classNameId, activityType, name };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_A_N;
+			finderArgs = new Object[] {
+					groupId, classNameId, activityType, name,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		return socialActivitySetting;
-	}
+		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the social activity setting where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param activityType the activity type
-	 * @param name the name
-	 * @return the matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting fetchByG_C_A_N(long groupId, long classNameId,
-		int activityType, String name) throws SystemException {
-		return fetchByG_C_A_N(groupId, classNameId, activityType, name, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivitySetting socialActivitySetting : list) {
+				if ((groupId != socialActivitySetting.getGroupId()) ||
+						(classNameId != socialActivitySetting.getClassNameId()) ||
+						(activityType != socialActivitySetting.getActivityType()) ||
+						!Validator.equals(name, socialActivitySetting.getName())) {
+					list = null;
 
-	/**
-	 * Returns the social activity setting where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param activityType the activity type
-	 * @param name the name
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivitySetting fetchByG_C_A_N(long groupId, long classNameId,
-		int activityType, String name, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, classNameId, activityType, name
-			};
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_C_A_N,
-					finderArgs, this);
-		}
-
-		if (result instanceof SocialActivitySetting) {
-			SocialActivitySetting socialActivitySetting = (SocialActivitySetting)result;
-
-			if ((groupId != socialActivitySetting.getGroupId()) ||
-					(classNameId != socialActivitySetting.getClassNameId()) ||
-					(activityType != socialActivitySetting.getActivityType()) ||
-					!Validator.equals(name, socialActivitySetting.getName())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(5);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(6 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYSETTING_WHERE);
 
@@ -2240,6 +2435,11 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 				else {
 					query.append(_FINDER_COLUMN_G_C_A_N_NAME_2);
 				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
 			}
 
 			String sql = query.toString();
@@ -2263,72 +2463,252 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 					qPos.add(name);
 				}
 
-				List<SocialActivitySetting> list = q.list();
-
-				result = list;
-
-				SocialActivitySetting socialActivitySetting = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_C_A_N,
-						finderArgs, list);
-				}
-				else {
-					socialActivitySetting = list.get(0);
-
-					cacheResult(socialActivitySetting);
-
-					if ((socialActivitySetting.getGroupId() != groupId) ||
-							(socialActivitySetting.getClassNameId() != classNameId) ||
-							(socialActivitySetting.getActivityType() != activityType) ||
-							(socialActivitySetting.getName() == null) ||
-							!socialActivitySetting.getName().equals(name)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_C_A_N,
-							finderArgs, socialActivitySetting);
-					}
-				}
-
-				return socialActivitySetting;
+				list = (List<SocialActivitySetting>)QueryUtil.list(q,
+						getDialect(), start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_C_A_N,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (SocialActivitySetting)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the social activity setting where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63; from the database.
+	 * Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param classNameId the class name ID
 	 * @param activityType the activity type
 	 * @param name the name
-	 * @return the social activity setting that was removed
+	 * @return the first matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SocialActivitySetting removeByG_C_A_N(long groupId,
+	public SocialActivitySetting findByG_C_A_N_First(long groupId,
 		long classNameId, int activityType, String name)
 		throws NoSuchActivitySettingException, SystemException {
-		SocialActivitySetting socialActivitySetting = findByG_C_A_N(groupId,
-				classNameId, activityType, name);
+		return findByG_C_A_N_First(groupId, classNameId, activityType, name,
+			null);
+	}
 
-		return remove(socialActivitySetting);
+	/**
+	 * Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_C_A_N_First(long groupId,
+		long classNameId, int activityType, String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivitySettingException, SystemException {
+		SocialActivitySetting socialActivitySetting = fetchByG_C_A_N_First(groupId,
+				classNameId, activityType, name, orderByComparator);
+
+		if (socialActivitySetting != null) {
+			return socialActivitySetting;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", activityType=");
+		msg.append(activityType);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivitySettingException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param name the name
+	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_A_N_First(long groupId,
+		long classNameId, int activityType, String name)
+		throws SystemException {
+		return fetchByG_C_A_N_First(groupId, classNameId, activityType, name,
+			null);
+	}
+
+	/**
+	 * Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_A_N_First(long groupId,
+		long classNameId, int activityType, String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialActivitySetting> list = findByG_C_A_N(groupId, classNameId,
+				activityType, name, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param name the name
+	 * @return the last matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_C_A_N_Last(long groupId,
+		long classNameId, int activityType, String name)
+		throws NoSuchActivitySettingException, SystemException {
+		return findByG_C_A_N_Last(groupId, classNameId, activityType, name, null);
+	}
+
+	/**
+	 * Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity setting
+	 * @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting findByG_C_A_N_Last(long groupId,
+		long classNameId, int activityType, String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivitySettingException, SystemException {
+		SocialActivitySetting socialActivitySetting = fetchByG_C_A_N_Last(groupId,
+				classNameId, activityType, name, orderByComparator);
+
+		if (socialActivitySetting != null) {
+			return socialActivitySetting;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", activityType=");
+		msg.append(activityType);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivitySettingException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param name the name
+	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_A_N_Last(long groupId,
+		long classNameId, int activityType, String name)
+		throws SystemException {
+		return fetchByG_C_A_N_Last(groupId, classNameId, activityType, name,
+			null);
+	}
+
+	/**
+	 * Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivitySetting fetchByG_C_A_N_Last(long groupId,
+		long classNameId, int activityType, String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_C_A_N(groupId, classNameId, activityType, name);
+
+		List<SocialActivitySetting> list = findByG_C_A_N(groupId, classNameId,
+				activityType, name, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the social activity settings where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param activityType the activity type
+	 * @param name the name
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_C_A_N(long groupId, long classNameId,
+		int activityType, String name) throws SystemException {
+		for (SocialActivitySetting socialActivitySetting : findByG_C_A_N(
+				groupId, classNameId, activityType, name, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(socialActivitySetting);
+		}
 	}
 
 	/**
@@ -2431,15 +2811,6 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 			SocialActivitySettingImpl.class,
 			socialActivitySetting.getPrimaryKey(), socialActivitySetting);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_C_A_N,
-			new Object[] {
-				Long.valueOf(socialActivitySetting.getGroupId()),
-				Long.valueOf(socialActivitySetting.getClassNameId()),
-				Integer.valueOf(socialActivitySetting.getActivityType()),
-				
-			socialActivitySetting.getName()
-			}, socialActivitySetting);
-
 		socialActivitySetting.resetOriginalValues();
 	}
 
@@ -2497,8 +2868,6 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(socialActivitySetting);
 	}
 
 	@Override
@@ -2510,21 +2879,7 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 			EntityCacheUtil.removeResult(SocialActivitySettingModelImpl.ENTITY_CACHE_ENABLED,
 				SocialActivitySettingImpl.class,
 				socialActivitySetting.getPrimaryKey());
-
-			clearUniqueFindersCache(socialActivitySetting);
 		}
-	}
-
-	protected void clearUniqueFindersCache(
-		SocialActivitySetting socialActivitySetting) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_C_A_N,
-			new Object[] {
-				Long.valueOf(socialActivitySetting.getGroupId()),
-				Long.valueOf(socialActivitySetting.getClassNameId()),
-				Integer.valueOf(socialActivitySetting.getActivityType()),
-				
-			socialActivitySetting.getName()
-			});
 	}
 
 	/**
@@ -2755,42 +3110,6 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 		EntityCacheUtil.putResult(SocialActivitySettingModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivitySettingImpl.class,
 			socialActivitySetting.getPrimaryKey(), socialActivitySetting);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_C_A_N,
-				new Object[] {
-					Long.valueOf(socialActivitySetting.getGroupId()),
-					Long.valueOf(socialActivitySetting.getClassNameId()),
-					Integer.valueOf(socialActivitySetting.getActivityType()),
-					
-				socialActivitySetting.getName()
-				}, socialActivitySetting);
-		}
-		else {
-			if ((socialActivitySettingModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_G_C_A_N.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(socialActivitySettingModelImpl.getOriginalGroupId()),
-						Long.valueOf(socialActivitySettingModelImpl.getOriginalClassNameId()),
-						Integer.valueOf(socialActivitySettingModelImpl.getOriginalActivityType()),
-						
-						socialActivitySettingModelImpl.getOriginalName()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_A_N, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_C_A_N, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_C_A_N,
-					new Object[] {
-						Long.valueOf(socialActivitySetting.getGroupId()),
-						Long.valueOf(socialActivitySetting.getClassNameId()),
-						Integer.valueOf(socialActivitySetting.getActivityType()),
-						
-					socialActivitySetting.getName()
-					}, socialActivitySetting);
-			}
-		}
 
 		return socialActivitySetting;
 	}

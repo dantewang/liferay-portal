@@ -138,219 +138,6 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	}
 
 	/**
-	 * Returns an ordered range of all the layout prototypes where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of layout prototypes
-	 * @param end the upper bound of the range of layout prototypes (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layout prototypes
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<LayoutPrototype> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<LayoutPrototype> list = (List<LayoutPrototype>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (LayoutPrototype layoutPrototype : list) {
-				if (!Validator.equals(uuid, layoutPrototype.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<LayoutPrototype>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout prototype in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout prototype
-	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutPrototypeException, SystemException {
-		LayoutPrototype layoutPrototype = fetchByUuid_First(uuid,
-				orderByComparator);
-
-		if (layoutPrototype != null) {
-			return layoutPrototype;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutPrototypeException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout prototype in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<LayoutPrototype> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout prototype in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout prototype
-	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutPrototypeException, SystemException {
-		LayoutPrototype layoutPrototype = fetchByUuid_Last(uuid,
-				orderByComparator);
-
-		if (layoutPrototype != null) {
-			return layoutPrototype;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutPrototypeException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout prototype in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<LayoutPrototype> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the layout prototypes before and after the current layout prototype in the ordered set where uuid = &#63;.
 	 *
 	 * @param layoutPrototypeId the primary key of the current layout prototype
@@ -823,13 +610,277 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	}
 
 	/**
+	 * Returns an ordered range of all the layout prototypes where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of layout prototypes
+	 * @param end the upper bound of the range of layout prototypes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layout prototypes
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<LayoutPrototype> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<LayoutPrototype> list = (List<LayoutPrototype>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutPrototype layoutPrototype : list) {
+				if (!Validator.equals(uuid, layoutPrototype.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<LayoutPrototype>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByUuid_First(String uuid)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first layout prototype in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		LayoutPrototype layoutPrototype = fetchByUuid_First(uuid,
+				orderByComparator);
+
+		if (layoutPrototype != null) {
+			return layoutPrototype;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutPrototypeException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByUuid_First(String uuid)
+		throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first layout prototype in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<LayoutPrototype> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByUuid_Last(String uuid)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last layout prototype in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		LayoutPrototype layoutPrototype = fetchByUuid_Last(uuid,
+				orderByComparator);
+
+		if (layoutPrototype != null) {
+			return layoutPrototype;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutPrototypeException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByUuid_Last(String uuid)
+		throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last layout prototype in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<LayoutPrototype> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layout prototypes where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (LayoutPrototype layoutPrototype : findByUuid(uuid)) {
+		for (LayoutPrototype layoutPrototype : findByUuid(uuid,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(layoutPrototype);
 		}
 	}
@@ -1016,241 +1067,6 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	public List<LayoutPrototype> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the layout prototypes where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of layout prototypes
-	 * @param end the upper bound of the range of layout prototypes (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layout prototypes
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<LayoutPrototype> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<LayoutPrototype> list = (List<LayoutPrototype>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (LayoutPrototype layoutPrototype : list) {
-				if (!Validator.equals(uuid, layoutPrototype.getUuid()) ||
-						(companyId != layoutPrototype.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<LayoutPrototype>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout prototype in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout prototype
-	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutPrototypeException, SystemException {
-		LayoutPrototype layoutPrototype = fetchByUuid_C_First(uuid, companyId,
-				orderByComparator);
-
-		if (layoutPrototype != null) {
-			return layoutPrototype;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutPrototypeException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout prototype in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<LayoutPrototype> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout prototype in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout prototype
-	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutPrototypeException, SystemException {
-		LayoutPrototype layoutPrototype = fetchByUuid_C_Last(uuid, companyId,
-				orderByComparator);
-
-		if (layoutPrototype != null) {
-			return layoutPrototype;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutPrototypeException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout prototype in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<LayoutPrototype> list = findByUuid_C(uuid, companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1746,6 +1562,295 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	}
 
 	/**
+	 * Returns an ordered range of all the layout prototypes where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of layout prototypes
+	 * @param end the upper bound of the range of layout prototypes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layout prototypes
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<LayoutPrototype> findByUuid_C(String uuid, long companyId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<LayoutPrototype> list = (List<LayoutPrototype>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutPrototype layoutPrototype : list) {
+				if (!Validator.equals(uuid, layoutPrototype.getUuid()) ||
+						(companyId != layoutPrototype.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<LayoutPrototype>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first layout prototype in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		LayoutPrototype layoutPrototype = fetchByUuid_C_First(uuid, companyId,
+				orderByComparator);
+
+		if (layoutPrototype != null) {
+			return layoutPrototype;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutPrototypeException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first layout prototype in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<LayoutPrototype> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last layout prototype in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		LayoutPrototype layoutPrototype = fetchByUuid_C_Last(uuid, companyId,
+				orderByComparator);
+
+		if (layoutPrototype != null) {
+			return layoutPrototype;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutPrototypeException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last layout prototype in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<LayoutPrototype> list = findByUuid_C(uuid, companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layout prototypes where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1754,7 +1859,8 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (LayoutPrototype layoutPrototype : findByUuid_C(uuid, companyId)) {
+		for (LayoutPrototype layoutPrototype : findByUuid_C(uuid, companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(layoutPrototype);
 		}
 	}
@@ -1952,208 +2058,6 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	public List<LayoutPrototype> findByCompanyId(long companyId, int start,
 		int end) throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the layout prototypes where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of layout prototypes
-	 * @param end the upper bound of the range of layout prototypes (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layout prototypes
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<LayoutPrototype> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<LayoutPrototype> list = (List<LayoutPrototype>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (LayoutPrototype layoutPrototype : list) {
-				if ((companyId != layoutPrototype.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<LayoutPrototype>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout prototype in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout prototype
-	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutPrototypeException, SystemException {
-		LayoutPrototype layoutPrototype = fetchByCompanyId_First(companyId,
-				orderByComparator);
-
-		if (layoutPrototype != null) {
-			return layoutPrototype;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutPrototypeException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout prototype in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<LayoutPrototype> list = findByCompanyId(companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout prototype in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout prototype
-	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutPrototypeException, SystemException {
-		LayoutPrototype layoutPrototype = fetchByCompanyId_Last(companyId,
-				orderByComparator);
-
-		if (layoutPrototype != null) {
-			return layoutPrototype;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutPrototypeException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout prototype in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<LayoutPrototype> list = findByCompanyId(companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2597,13 +2501,266 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	}
 
 	/**
+	 * Returns an ordered range of all the layout prototypes where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of layout prototypes
+	 * @param end the upper bound of the range of layout prototypes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layout prototypes
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<LayoutPrototype> findByCompanyId(long companyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<LayoutPrototype> list = (List<LayoutPrototype>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutPrototype layoutPrototype : list) {
+				if ((companyId != layoutPrototype.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				list = (List<LayoutPrototype>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByCompanyId_First(long companyId)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first layout prototype in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		LayoutPrototype layoutPrototype = fetchByCompanyId_First(companyId,
+				orderByComparator);
+
+		if (layoutPrototype != null) {
+			return layoutPrototype;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutPrototypeException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first layout prototype in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<LayoutPrototype> list = findByCompanyId(companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByCompanyId_Last(long companyId)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last layout prototype in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		LayoutPrototype layoutPrototype = fetchByCompanyId_Last(companyId,
+				orderByComparator);
+
+		if (layoutPrototype != null) {
+			return layoutPrototype;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutPrototypeException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByCompanyId_Last(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last layout prototype in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<LayoutPrototype> list = findByCompanyId(companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layout prototypes where companyId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCompanyId(long companyId) throws SystemException {
-		for (LayoutPrototype layoutPrototype : findByCompanyId(companyId)) {
+		for (LayoutPrototype layoutPrototype : findByCompanyId(companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(layoutPrototype);
 		}
 	}
@@ -2763,229 +2920,6 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	public List<LayoutPrototype> findByC_A(long companyId, boolean active,
 		int start, int end) throws SystemException {
 		return findByC_A(companyId, active, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the layout prototypes where companyId = &#63; and active = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param active the active
-	 * @param start the lower bound of the range of layout prototypes
-	 * @param end the upper bound of the range of layout prototypes (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layout prototypes
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<LayoutPrototype> findByC_A(long companyId, boolean active,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A;
-			finderArgs = new Object[] { companyId, active };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_A;
-			finderArgs = new Object[] {
-					companyId, active,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<LayoutPrototype> list = (List<LayoutPrototype>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (LayoutPrototype layoutPrototype : list) {
-				if ((companyId != layoutPrototype.getCompanyId()) ||
-						(active != layoutPrototype.getActive())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_A_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_A_ACTIVE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(active);
-
-				list = (List<LayoutPrototype>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout prototype in the ordered set where companyId = &#63; and active = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout prototype
-	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype findByC_A_First(long companyId, boolean active,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutPrototypeException, SystemException {
-		LayoutPrototype layoutPrototype = fetchByC_A_First(companyId, active,
-				orderByComparator);
-
-		if (layoutPrototype != null) {
-			return layoutPrototype;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutPrototypeException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout prototype in the ordered set where companyId = &#63; and active = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype fetchByC_A_First(long companyId, boolean active,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<LayoutPrototype> list = findByC_A(companyId, active, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout prototype in the ordered set where companyId = &#63; and active = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout prototype
-	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype findByC_A_Last(long companyId, boolean active,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutPrototypeException, SystemException {
-		LayoutPrototype layoutPrototype = fetchByC_A_Last(companyId, active,
-				orderByComparator);
-
-		if (layoutPrototype != null) {
-			return layoutPrototype;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutPrototypeException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout prototype in the ordered set where companyId = &#63; and active = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public LayoutPrototype fetchByC_A_Last(long companyId, boolean active,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_A(companyId, active);
-
-		List<LayoutPrototype> list = findByC_A(companyId, active, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3445,6 +3379,283 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	}
 
 	/**
+	 * Returns an ordered range of all the layout prototypes where companyId = &#63; and active = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @param start the lower bound of the range of layout prototypes
+	 * @param end the upper bound of the range of layout prototypes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layout prototypes
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<LayoutPrototype> findByC_A(long companyId, boolean active,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A;
+			finderArgs = new Object[] { companyId, active };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_A;
+			finderArgs = new Object[] {
+					companyId, active,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<LayoutPrototype> list = (List<LayoutPrototype>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutPrototype layoutPrototype : list) {
+				if ((companyId != layoutPrototype.getCompanyId()) ||
+						(active != layoutPrototype.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_LAYOUTPROTOTYPE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_A_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_A_ACTIVE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(active);
+
+				list = (List<LayoutPrototype>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where companyId = &#63; and active = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @return the first matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByC_A_First(long companyId, boolean active)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		return findByC_A_First(companyId, active, null);
+	}
+
+	/**
+	 * Returns the first layout prototype in the ordered set where companyId = &#63; and active = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByC_A_First(long companyId, boolean active,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		LayoutPrototype layoutPrototype = fetchByC_A_First(companyId, active,
+				orderByComparator);
+
+		if (layoutPrototype != null) {
+			return layoutPrototype;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutPrototypeException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where companyId = &#63; and active = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByC_A_First(long companyId, boolean active)
+		throws SystemException {
+		return fetchByC_A_First(companyId, active, null);
+	}
+
+	/**
+	 * Returns the first layout prototype in the ordered set where companyId = &#63; and active = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByC_A_First(long companyId, boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<LayoutPrototype> list = findByC_A(companyId, active, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where companyId = &#63; and active = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @return the last matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByC_A_Last(long companyId, boolean active)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		return findByC_A_Last(companyId, active, null);
+	}
+
+	/**
+	 * Returns the last layout prototype in the ordered set where companyId = &#63; and active = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout prototype
+	 * @throws com.liferay.portal.NoSuchLayoutPrototypeException if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype findByC_A_Last(long companyId, boolean active,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutPrototypeException, SystemException {
+		LayoutPrototype layoutPrototype = fetchByC_A_Last(companyId, active,
+				orderByComparator);
+
+		if (layoutPrototype != null) {
+			return layoutPrototype;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutPrototypeException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout prototype in the default ordered set defined by {@link LayoutPrototypeModelImpl#ORDER_BY_JPQL} where companyId = &#63; and active = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByC_A_Last(long companyId, boolean active)
+		throws SystemException {
+		return fetchByC_A_Last(companyId, active, null);
+	}
+
+	/**
+	 * Returns the last layout prototype in the ordered set where companyId = &#63; and active = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout prototype, or <code>null</code> if a matching layout prototype could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public LayoutPrototype fetchByC_A_Last(long companyId, boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_A(companyId, active);
+
+		List<LayoutPrototype> list = findByC_A(companyId, active, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layout prototypes where companyId = &#63; and active = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -3453,7 +3664,8 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	public void removeByC_A(long companyId, boolean active)
 		throws SystemException {
-		for (LayoutPrototype layoutPrototype : findByC_A(companyId, active)) {
+		for (LayoutPrototype layoutPrototype : findByC_A(companyId, active,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(layoutPrototype);
 		}
 	}

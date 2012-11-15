@@ -144,6 +144,26 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
+	* Returns the workflow definition links before and after the current workflow definition link in the ordered set where companyId = &#63;.
+	*
+	* @param workflowDefinitionLinkId the primary key of the current workflow definition link
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next workflow definition link
+	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a workflow definition link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink[] findByCompanyId_PrevAndNext(
+		long workflowDefinitionLinkId, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByCompanyId_PrevAndNext(workflowDefinitionLinkId,
+			companyId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the workflow definition links where companyId = &#63;.
 	*
 	* <p>
@@ -166,6 +186,21 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
+	* Returns the first workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching workflow definition link
+	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink findByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first workflow definition link in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -184,6 +219,19 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
+	* Returns the first workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching workflow definition link, or <code>null</code> if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first workflow definition link in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -197,6 +245,21 @@ public class WorkflowDefinitionLinkUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_First(companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching workflow definition link
+	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink findByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByCompanyId_Last(companyId);
 	}
 
 	/**
@@ -218,6 +281,19 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
+	* Returns the last workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching workflow definition link, or <code>null</code> if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_Last(companyId);
+	}
+
+	/**
 	* Returns the last workflow definition link in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -231,26 +307,6 @@ public class WorkflowDefinitionLinkUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_Last(companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the workflow definition links before and after the current workflow definition link in the ordered set where companyId = &#63;.
-	*
-	* @param workflowDefinitionLinkId the primary key of the current workflow definition link
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next workflow definition link
-	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a workflow definition link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.WorkflowDefinitionLink[] findByCompanyId_PrevAndNext(
-		long workflowDefinitionLinkId, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByCompanyId_PrevAndNext(workflowDefinitionLinkId,
-			companyId, orderByComparator);
 	}
 
 	/**
@@ -319,6 +375,30 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
+	* Returns the workflow definition links before and after the current workflow definition link in the ordered set where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
+	*
+	* @param workflowDefinitionLinkId the primary key of the current workflow definition link
+	* @param companyId the company ID
+	* @param workflowDefinitionName the workflow definition name
+	* @param workflowDefinitionVersion the workflow definition version
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next workflow definition link
+	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a workflow definition link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink[] findByC_W_W_PrevAndNext(
+		long workflowDefinitionLinkId, long companyId,
+		java.lang.String workflowDefinitionName, int workflowDefinitionVersion,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_W_W_PrevAndNext(workflowDefinitionLinkId,
+			companyId, workflowDefinitionName, workflowDefinitionVersion,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the workflow definition links where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
 	*
 	* <p>
@@ -345,6 +425,26 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
+	* Returns the first workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
+	*
+	* @param companyId the company ID
+	* @param workflowDefinitionName the workflow definition name
+	* @param workflowDefinitionVersion the workflow definition version
+	* @return the first matching workflow definition link
+	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink findByC_W_W_First(
+		long companyId, java.lang.String workflowDefinitionName,
+		int workflowDefinitionVersion)
+		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_W_W_First(companyId, workflowDefinitionName,
+			workflowDefinitionVersion);
+	}
+
+	/**
 	* Returns the first workflow definition link in the ordered set where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
 	*
 	* @param companyId the company ID
@@ -367,6 +467,24 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
+	* Returns the first workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
+	*
+	* @param companyId the company ID
+	* @param workflowDefinitionName the workflow definition name
+	* @param workflowDefinitionVersion the workflow definition version
+	* @return the first matching workflow definition link, or <code>null</code> if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByC_W_W_First(
+		long companyId, java.lang.String workflowDefinitionName,
+		int workflowDefinitionVersion)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_W_W_First(companyId, workflowDefinitionName,
+			workflowDefinitionVersion);
+	}
+
+	/**
 	* Returns the first workflow definition link in the ordered set where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
 	*
 	* @param companyId the company ID
@@ -384,6 +502,26 @@ public class WorkflowDefinitionLinkUtil {
 		return getPersistence()
 				   .fetchByC_W_W_First(companyId, workflowDefinitionName,
 			workflowDefinitionVersion, orderByComparator);
+	}
+
+	/**
+	* Returns the last workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
+	*
+	* @param companyId the company ID
+	* @param workflowDefinitionName the workflow definition name
+	* @param workflowDefinitionVersion the workflow definition version
+	* @return the last matching workflow definition link
+	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink findByC_W_W_Last(
+		long companyId, java.lang.String workflowDefinitionName,
+		int workflowDefinitionVersion)
+		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_W_W_Last(companyId, workflowDefinitionName,
+			workflowDefinitionVersion);
 	}
 
 	/**
@@ -409,6 +547,24 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
+	* Returns the last workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
+	*
+	* @param companyId the company ID
+	* @param workflowDefinitionName the workflow definition name
+	* @param workflowDefinitionVersion the workflow definition version
+	* @return the last matching workflow definition link, or <code>null</code> if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByC_W_W_Last(
+		long companyId, java.lang.String workflowDefinitionName,
+		int workflowDefinitionVersion)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_W_W_Last(companyId, workflowDefinitionName,
+			workflowDefinitionVersion);
+	}
+
+	/**
 	* Returns the last workflow definition link in the ordered set where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
 	*
 	* @param companyId the company ID
@@ -426,30 +582,6 @@ public class WorkflowDefinitionLinkUtil {
 		return getPersistence()
 				   .fetchByC_W_W_Last(companyId, workflowDefinitionName,
 			workflowDefinitionVersion, orderByComparator);
-	}
-
-	/**
-	* Returns the workflow definition links before and after the current workflow definition link in the ordered set where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
-	*
-	* @param workflowDefinitionLinkId the primary key of the current workflow definition link
-	* @param companyId the company ID
-	* @param workflowDefinitionName the workflow definition name
-	* @param workflowDefinitionVersion the workflow definition version
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next workflow definition link
-	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a workflow definition link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.WorkflowDefinitionLink[] findByC_W_W_PrevAndNext(
-		long workflowDefinitionLinkId, long companyId,
-		java.lang.String workflowDefinitionName, int workflowDefinitionVersion,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByC_W_W_PrevAndNext(workflowDefinitionLinkId,
-			companyId, workflowDefinitionName, workflowDefinitionVersion,
-			orderByComparator);
 	}
 
 	/**
@@ -486,86 +618,194 @@ public class WorkflowDefinitionLinkUtil {
 	}
 
 	/**
-	* Returns the workflow definition link where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63; or throws a {@link com.liferay.portal.NoSuchWorkflowDefinitionLinkException} if it could not be found.
+	* Returns the first workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.
 	*
 	* @param groupId the group ID
 	* @param companyId the company ID
 	* @param classNameId the class name ID
 	* @param classPK the class p k
 	* @param typePK the type p k
-	* @return the matching workflow definition link
+	* @return the first matching workflow definition link
 	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a matching workflow definition link could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.WorkflowDefinitionLink findByG_C_C_C_T(
+	public static com.liferay.portal.model.WorkflowDefinitionLink findByG_C_C_C_T_First(
 		long groupId, long companyId, long classNameId, long classPK,
 		long typePK)
 		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .findByG_C_C_C_T(groupId, companyId, classNameId, classPK,
-			typePK);
+				   .findByG_C_C_C_T_First(groupId, companyId, classNameId,
+			classPK, typePK);
 	}
 
 	/**
-	* Returns the workflow definition link where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first workflow definition link in the ordered set where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.
 	*
 	* @param groupId the group ID
 	* @param companyId the company ID
 	* @param classNameId the class name ID
 	* @param classPK the class p k
 	* @param typePK the type p k
-	* @return the matching workflow definition link, or <code>null</code> if a matching workflow definition link could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching workflow definition link
+	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a matching workflow definition link could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByG_C_C_C_T(
+	public static com.liferay.portal.model.WorkflowDefinitionLink findByG_C_C_C_T_First(
+		long groupId, long companyId, long classNameId, long classPK,
+		long typePK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_C_C_T_First(groupId, companyId, classNameId,
+			classPK, typePK, orderByComparator);
+	}
+
+	/**
+	* Returns the first workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param typePK the type p k
+	* @return the first matching workflow definition link, or <code>null</code> if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByG_C_C_C_T_First(
 		long groupId, long companyId, long classNameId, long classPK,
 		long typePK) throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchByG_C_C_C_T(groupId, companyId, classNameId, classPK,
-			typePK);
+				   .fetchByG_C_C_C_T_First(groupId, companyId, classNameId,
+			classPK, typePK);
 	}
 
 	/**
-	* Returns the workflow definition link where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first workflow definition link in the ordered set where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.
 	*
 	* @param groupId the group ID
 	* @param companyId the company ID
 	* @param classNameId the class name ID
 	* @param classPK the class p k
 	* @param typePK the type p k
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching workflow definition link, or <code>null</code> if a matching workflow definition link could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching workflow definition link, or <code>null</code> if a matching workflow definition link could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByG_C_C_C_T(
+	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByG_C_C_C_T_First(
 		long groupId, long companyId, long classNameId, long classPK,
-		long typePK, boolean retrieveFromCache)
+		long typePK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchByG_C_C_C_T(groupId, companyId, classNameId, classPK,
-			typePK, retrieveFromCache);
+				   .fetchByG_C_C_C_T_First(groupId, companyId, classNameId,
+			classPK, typePK, orderByComparator);
 	}
 
 	/**
-	* Removes the workflow definition link where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63; from the database.
+	* Returns the last workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.
 	*
 	* @param groupId the group ID
 	* @param companyId the company ID
 	* @param classNameId the class name ID
 	* @param classPK the class p k
 	* @param typePK the type p k
-	* @return the workflow definition link that was removed
+	* @return the last matching workflow definition link
+	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a matching workflow definition link could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.WorkflowDefinitionLink removeByG_C_C_C_T(
+	public static com.liferay.portal.model.WorkflowDefinitionLink findByG_C_C_C_T_Last(
 		long groupId, long companyId, long classNameId, long classPK,
 		long typePK)
 		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .removeByG_C_C_C_T(groupId, companyId, classNameId, classPK,
-			typePK);
+				   .findByG_C_C_C_T_Last(groupId, companyId, classNameId,
+			classPK, typePK);
+	}
+
+	/**
+	* Returns the last workflow definition link in the ordered set where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param typePK the type p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching workflow definition link
+	* @throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink findByG_C_C_C_T_Last(
+		long groupId, long companyId, long classNameId, long classPK,
+		long typePK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchWorkflowDefinitionLinkException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_C_C_T_Last(groupId, companyId, classNameId,
+			classPK, typePK, orderByComparator);
+	}
+
+	/**
+	* Returns the last workflow definition link in the default ordered set defined by {@link WorkflowDefinitionLinkModelImpl#ORDER_BY_JPQL} where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param typePK the type p k
+	* @return the last matching workflow definition link, or <code>null</code> if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByG_C_C_C_T_Last(
+		long groupId, long companyId, long classNameId, long classPK,
+		long typePK) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_C_C_T_Last(groupId, companyId, classNameId,
+			classPK, typePK);
+	}
+
+	/**
+	* Returns the last workflow definition link in the ordered set where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.
+	*
+	* @param groupId the group ID
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param typePK the type p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching workflow definition link, or <code>null</code> if a matching workflow definition link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.WorkflowDefinitionLink fetchByG_C_C_C_T_Last(
+		long groupId, long companyId, long classNameId, long classPK,
+		long typePK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_C_C_T_Last(groupId, companyId, classNameId,
+			classPK, typePK, orderByComparator);
+	}
+
+	/**
+	* Removes all the workflow definition links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param typePK the type p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C_C_C_T(long groupId, long companyId,
+		long classNameId, long classPK, long typePK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByG_C_C_C_T(groupId, companyId, classNameId, classPK, typePK);
 	}
 
 	/**

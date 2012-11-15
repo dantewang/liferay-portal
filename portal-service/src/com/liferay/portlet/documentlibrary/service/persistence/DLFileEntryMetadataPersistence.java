@@ -66,6 +66,22 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the document library file entry metadatas before and after the current document library file entry metadata in the ordered set where uuid = &#63;.
+	*
+	* @param fileEntryMetadataId the primary key of the current document library file entry metadata
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata[] findByUuid_PrevAndNext(
+		long fileEntryMetadataId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
+
+	/**
 	* Returns an ordered range of all the document library file entry metadatas where uuid = &#63;.
 	*
 	* <p>
@@ -85,6 +101,19 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
+
+	/**
 	* Returns the first document library file entry metadata in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -100,6 +129,17 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
+	* Returns the first document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching document library file entry metadata, or <code>null</code> if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first document library file entry metadata in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -111,6 +151,19 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
 	* Returns the last document library file entry metadata in the ordered set where uuid = &#63;.
@@ -128,6 +181,17 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
+	* Returns the last document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching document library file entry metadata, or <code>null</code> if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last document library file entry metadata in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -139,22 +203,6 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the document library file entry metadatas before and after the current document library file entry metadata in the ordered set where uuid = &#63;.
-	*
-	* @param fileEntryMetadataId the primary key of the current document library file entry metadata
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library file entry metadata
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata[] findByUuid_PrevAndNext(
-		long fileEntryMetadataId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
 	* Removes all the document library file entry metadatas where uuid = &#63; from the database.
@@ -204,6 +252,22 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the document library file entry metadatas before and after the current document library file entry metadata in the ordered set where fileEntryTypeId = &#63;.
+	*
+	* @param fileEntryMetadataId the primary key of the current document library file entry metadata
+	* @param fileEntryTypeId the file entry type ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata[] findByFileEntryTypeId_PrevAndNext(
+		long fileEntryMetadataId, long fileEntryTypeId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
+
+	/**
 	* Returns an ordered range of all the document library file entry metadatas where fileEntryTypeId = &#63;.
 	*
 	* <p>
@@ -223,6 +287,19 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileEntryTypeId = &#63;.
+	*
+	* @param fileEntryTypeId the file entry type ID
+	* @return the first matching document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata findByFileEntryTypeId_First(
+		long fileEntryTypeId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
+
+	/**
 	* Returns the first document library file entry metadata in the ordered set where fileEntryTypeId = &#63;.
 	*
 	* @param fileEntryTypeId the file entry type ID
@@ -238,6 +315,17 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
+	* Returns the first document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileEntryTypeId = &#63;.
+	*
+	* @param fileEntryTypeId the file entry type ID
+	* @return the first matching document library file entry metadata, or <code>null</code> if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata fetchByFileEntryTypeId_First(
+		long fileEntryTypeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first document library file entry metadata in the ordered set where fileEntryTypeId = &#63;.
 	*
 	* @param fileEntryTypeId the file entry type ID
@@ -249,6 +337,19 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		long fileEntryTypeId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileEntryTypeId = &#63;.
+	*
+	* @param fileEntryTypeId the file entry type ID
+	* @return the last matching document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata findByFileEntryTypeId_Last(
+		long fileEntryTypeId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
 	* Returns the last document library file entry metadata in the ordered set where fileEntryTypeId = &#63;.
@@ -266,6 +367,17 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
+	* Returns the last document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileEntryTypeId = &#63;.
+	*
+	* @param fileEntryTypeId the file entry type ID
+	* @return the last matching document library file entry metadata, or <code>null</code> if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata fetchByFileEntryTypeId_Last(
+		long fileEntryTypeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last document library file entry metadata in the ordered set where fileEntryTypeId = &#63;.
 	*
 	* @param fileEntryTypeId the file entry type ID
@@ -277,22 +389,6 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		long fileEntryTypeId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the document library file entry metadatas before and after the current document library file entry metadata in the ordered set where fileEntryTypeId = &#63;.
-	*
-	* @param fileEntryMetadataId the primary key of the current document library file entry metadata
-	* @param fileEntryTypeId the file entry type ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library file entry metadata
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata[] findByFileEntryTypeId_PrevAndNext(
-		long fileEntryMetadataId, long fileEntryTypeId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
 	* Removes all the document library file entry metadatas where fileEntryTypeId = &#63; from the database.
@@ -342,6 +438,22 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the document library file entry metadatas before and after the current document library file entry metadata in the ordered set where fileEntryId = &#63;.
+	*
+	* @param fileEntryMetadataId the primary key of the current document library file entry metadata
+	* @param fileEntryId the file entry ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata[] findByFileEntryId_PrevAndNext(
+		long fileEntryMetadataId, long fileEntryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
+
+	/**
 	* Returns an ordered range of all the document library file entry metadatas where fileEntryId = &#63;.
 	*
 	* <p>
@@ -361,6 +473,19 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileEntryId = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @return the first matching document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata findByFileEntryId_First(
+		long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
+
+	/**
 	* Returns the first document library file entry metadata in the ordered set where fileEntryId = &#63;.
 	*
 	* @param fileEntryId the file entry ID
@@ -376,6 +501,17 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
+	* Returns the first document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileEntryId = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @return the first matching document library file entry metadata, or <code>null</code> if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata fetchByFileEntryId_First(
+		long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first document library file entry metadata in the ordered set where fileEntryId = &#63;.
 	*
 	* @param fileEntryId the file entry ID
@@ -387,6 +523,19 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		long fileEntryId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileEntryId = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @return the last matching document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata findByFileEntryId_Last(
+		long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
 	* Returns the last document library file entry metadata in the ordered set where fileEntryId = &#63;.
@@ -404,6 +553,17 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
+	* Returns the last document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileEntryId = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @return the last matching document library file entry metadata, or <code>null</code> if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata fetchByFileEntryId_Last(
+		long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last document library file entry metadata in the ordered set where fileEntryId = &#63;.
 	*
 	* @param fileEntryId the file entry ID
@@ -415,22 +575,6 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		long fileEntryId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the document library file entry metadatas before and after the current document library file entry metadata in the ordered set where fileEntryId = &#63;.
-	*
-	* @param fileEntryMetadataId the primary key of the current document library file entry metadata
-	* @param fileEntryId the file entry ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library file entry metadata
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata[] findByFileEntryId_PrevAndNext(
-		long fileEntryMetadataId, long fileEntryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
 	* Removes all the document library file entry metadatas where fileEntryId = &#63; from the database.
@@ -480,6 +624,22 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the document library file entry metadatas before and after the current document library file entry metadata in the ordered set where fileVersionId = &#63;.
+	*
+	* @param fileEntryMetadataId the primary key of the current document library file entry metadata
+	* @param fileVersionId the file version ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata[] findByFileVersionId_PrevAndNext(
+		long fileEntryMetadataId, long fileVersionId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
+
+	/**
 	* Returns an ordered range of all the document library file entry metadatas where fileVersionId = &#63;.
 	*
 	* <p>
@@ -499,6 +659,19 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileVersionId = &#63;.
+	*
+	* @param fileVersionId the file version ID
+	* @return the first matching document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata findByFileVersionId_First(
+		long fileVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
+
+	/**
 	* Returns the first document library file entry metadata in the ordered set where fileVersionId = &#63;.
 	*
 	* @param fileVersionId the file version ID
@@ -514,6 +687,17 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
+	* Returns the first document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileVersionId = &#63;.
+	*
+	* @param fileVersionId the file version ID
+	* @return the first matching document library file entry metadata, or <code>null</code> if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata fetchByFileVersionId_First(
+		long fileVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first document library file entry metadata in the ordered set where fileVersionId = &#63;.
 	*
 	* @param fileVersionId the file version ID
@@ -525,6 +709,19 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		long fileVersionId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileVersionId = &#63;.
+	*
+	* @param fileVersionId the file version ID
+	* @return the last matching document library file entry metadata
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata findByFileVersionId_Last(
+		long fileVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
 	* Returns the last document library file entry metadata in the ordered set where fileVersionId = &#63;.
@@ -542,6 +739,17 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
+	* Returns the last document library file entry metadata in the default ordered set defined by {@link DLFileEntryMetadataModelImpl#ORDER_BY_JPQL} where fileVersionId = &#63;.
+	*
+	* @param fileVersionId the file version ID
+	* @return the last matching document library file entry metadata, or <code>null</code> if a matching document library file entry metadata could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata fetchByFileVersionId_Last(
+		long fileVersionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last document library file entry metadata in the ordered set where fileVersionId = &#63;.
 	*
 	* @param fileVersionId the file version ID
@@ -553,22 +761,6 @@ public interface DLFileEntryMetadataPersistence extends BasePersistence<DLFileEn
 		long fileVersionId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the document library file entry metadatas before and after the current document library file entry metadata in the ordered set where fileVersionId = &#63;.
-	*
-	* @param fileEntryMetadataId the primary key of the current document library file entry metadata
-	* @param fileVersionId the file version ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library file entry metadata
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException if a document library file entry metadata with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata[] findByFileVersionId_PrevAndNext(
-		long fileEntryMetadataId, long fileVersionId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 
 	/**
 	* Removes all the document library file entry metadatas where fileVersionId = &#63; from the database.

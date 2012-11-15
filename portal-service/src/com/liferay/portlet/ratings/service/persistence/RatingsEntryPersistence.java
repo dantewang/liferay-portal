@@ -68,6 +68,23 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the ratings entries before and after the current ratings entry in the ordered set where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param entryId the primary key of the current ratings entry
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next ratings entry
+	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.ratings.model.RatingsEntry[] findByC_C_PrevAndNext(
+		long entryId, long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.ratings.NoSuchEntryException;
+
+	/**
 	* Returns an ordered range of all the ratings entries where classNameId = &#63; and classPK = &#63;.
 	*
 	* <p>
@@ -88,6 +105,20 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first ratings entry in the default ordered set defined by {@link RatingsEntryModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the first matching ratings entry
+	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a matching ratings entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.ratings.model.RatingsEntry findByC_C_First(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.ratings.NoSuchEntryException;
+
+	/**
 	* Returns the first ratings entry in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -104,6 +135,18 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 			com.liferay.portlet.ratings.NoSuchEntryException;
 
 	/**
+	* Returns the first ratings entry in the default ordered set defined by {@link RatingsEntryModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the first matching ratings entry, or <code>null</code> if a matching ratings entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.ratings.model.RatingsEntry fetchByC_C_First(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first ratings entry in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -116,6 +159,20 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 		long classNameId, long classPK,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last ratings entry in the default ordered set defined by {@link RatingsEntryModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching ratings entry
+	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a matching ratings entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.ratings.model.RatingsEntry findByC_C_Last(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.ratings.NoSuchEntryException;
 
 	/**
 	* Returns the last ratings entry in the ordered set where classNameId = &#63; and classPK = &#63;.
@@ -134,6 +191,18 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 			com.liferay.portlet.ratings.NoSuchEntryException;
 
 	/**
+	* Returns the last ratings entry in the default ordered set defined by {@link RatingsEntryModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching ratings entry, or <code>null</code> if a matching ratings entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.ratings.model.RatingsEntry fetchByC_C_Last(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last ratings entry in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -146,23 +215,6 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 		long classNameId, long classPK,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the ratings entries before and after the current ratings entry in the ordered set where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param entryId the primary key of the current ratings entry
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next ratings entry
-	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.ratings.model.RatingsEntry[] findByC_C_PrevAndNext(
-		long entryId, long classNameId, long classPK,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.ratings.NoSuchEntryException;
 
 	/**
 	* Removes all the ratings entries where classNameId = &#63; and classPK = &#63; from the database.
@@ -286,6 +338,24 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the ratings entries before and after the current ratings entry in the ordered set where classNameId = &#63; and classPK = &#63; and score = &#63;.
+	*
+	* @param entryId the primary key of the current ratings entry
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param score the score
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next ratings entry
+	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.ratings.model.RatingsEntry[] findByC_C_S_PrevAndNext(
+		long entryId, long classNameId, long classPK, double score,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.ratings.NoSuchEntryException;
+
+	/**
 	* Returns an ordered range of all the ratings entries where classNameId = &#63; and classPK = &#63; and score = &#63;.
 	*
 	* <p>
@@ -307,6 +377,21 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first ratings entry in the default ordered set defined by {@link RatingsEntryModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and score = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param score the score
+	* @return the first matching ratings entry
+	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a matching ratings entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.ratings.model.RatingsEntry findByC_C_S_First(
+		long classNameId, long classPK, double score)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.ratings.NoSuchEntryException;
+
+	/**
 	* Returns the first ratings entry in the ordered set where classNameId = &#63; and classPK = &#63; and score = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -324,6 +409,19 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 			com.liferay.portlet.ratings.NoSuchEntryException;
 
 	/**
+	* Returns the first ratings entry in the default ordered set defined by {@link RatingsEntryModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and score = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param score the score
+	* @return the first matching ratings entry, or <code>null</code> if a matching ratings entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.ratings.model.RatingsEntry fetchByC_C_S_First(
+		long classNameId, long classPK, double score)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first ratings entry in the ordered set where classNameId = &#63; and classPK = &#63; and score = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -337,6 +435,21 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 		long classNameId, long classPK, double score,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last ratings entry in the default ordered set defined by {@link RatingsEntryModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and score = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param score the score
+	* @return the last matching ratings entry
+	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a matching ratings entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.ratings.model.RatingsEntry findByC_C_S_Last(
+		long classNameId, long classPK, double score)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.ratings.NoSuchEntryException;
 
 	/**
 	* Returns the last ratings entry in the ordered set where classNameId = &#63; and classPK = &#63; and score = &#63;.
@@ -356,6 +469,19 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 			com.liferay.portlet.ratings.NoSuchEntryException;
 
 	/**
+	* Returns the last ratings entry in the default ordered set defined by {@link RatingsEntryModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and score = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param score the score
+	* @return the last matching ratings entry, or <code>null</code> if a matching ratings entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.ratings.model.RatingsEntry fetchByC_C_S_Last(
+		long classNameId, long classPK, double score)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last ratings entry in the ordered set where classNameId = &#63; and classPK = &#63; and score = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -369,24 +495,6 @@ public interface RatingsEntryPersistence extends BasePersistence<RatingsEntry> {
 		long classNameId, long classPK, double score,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the ratings entries before and after the current ratings entry in the ordered set where classNameId = &#63; and classPK = &#63; and score = &#63;.
-	*
-	* @param entryId the primary key of the current ratings entry
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param score the score
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next ratings entry
-	* @throws com.liferay.portlet.ratings.NoSuchEntryException if a ratings entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.ratings.model.RatingsEntry[] findByC_C_S_PrevAndNext(
-		long entryId, long classNameId, long classPK, double score,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.ratings.NoSuchEntryException;
 
 	/**
 	* Removes all the ratings entries where classNameId = &#63; and classPK = &#63; and score = &#63; from the database.

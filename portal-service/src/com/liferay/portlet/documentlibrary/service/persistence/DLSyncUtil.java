@@ -216,6 +216,29 @@ public class DLSyncUtil {
 	}
 
 	/**
+	* Returns the d l syncs before and after the current d l sync in the ordered set where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
+	*
+	* @param syncId the primary key of the current d l sync
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @param repositoryId the repository ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next d l sync
+	* @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLSync[] findByC_M_R_PrevAndNext(
+		long syncId, long companyId, java.util.Date modifiedDate,
+		long repositoryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchSyncException {
+		return getPersistence()
+				   .findByC_M_R_PrevAndNext(syncId, companyId, modifiedDate,
+			repositoryId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
 	*
 	* <p>
@@ -242,6 +265,24 @@ public class DLSyncUtil {
 	}
 
 	/**
+	* Returns the first d l sync in the default ordered set defined by {@link DLSyncModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @param repositoryId the repository ID
+	* @return the first matching d l sync
+	* @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a matching d l sync could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLSync findByC_M_R_First(
+		long companyId, java.util.Date modifiedDate, long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchSyncException {
+		return getPersistence()
+				   .findByC_M_R_First(companyId, modifiedDate, repositoryId);
+	}
+
+	/**
 	* Returns the first d l sync in the ordered set where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
 	*
 	* @param companyId the company ID
@@ -263,6 +304,22 @@ public class DLSyncUtil {
 	}
 
 	/**
+	* Returns the first d l sync in the default ordered set defined by {@link DLSyncModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @param repositoryId the repository ID
+	* @return the first matching d l sync, or <code>null</code> if a matching d l sync could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLSync fetchByC_M_R_First(
+		long companyId, java.util.Date modifiedDate, long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_M_R_First(companyId, modifiedDate, repositoryId);
+	}
+
+	/**
 	* Returns the first d l sync in the ordered set where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
 	*
 	* @param companyId the company ID
@@ -279,6 +336,24 @@ public class DLSyncUtil {
 		return getPersistence()
 				   .fetchByC_M_R_First(companyId, modifiedDate, repositoryId,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last d l sync in the default ordered set defined by {@link DLSyncModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @param repositoryId the repository ID
+	* @return the last matching d l sync
+	* @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a matching d l sync could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLSync findByC_M_R_Last(
+		long companyId, java.util.Date modifiedDate, long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchSyncException {
+		return getPersistence()
+				   .findByC_M_R_Last(companyId, modifiedDate, repositoryId);
 	}
 
 	/**
@@ -303,6 +378,22 @@ public class DLSyncUtil {
 	}
 
 	/**
+	* Returns the last d l sync in the default ordered set defined by {@link DLSyncModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @param repositoryId the repository ID
+	* @return the last matching d l sync, or <code>null</code> if a matching d l sync could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLSync fetchByC_M_R_Last(
+		long companyId, java.util.Date modifiedDate, long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_M_R_Last(companyId, modifiedDate, repositoryId);
+	}
+
+	/**
 	* Returns the last d l sync in the ordered set where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
 	*
 	* @param companyId the company ID
@@ -319,29 +410,6 @@ public class DLSyncUtil {
 		return getPersistence()
 				   .fetchByC_M_R_Last(companyId, modifiedDate, repositoryId,
 			orderByComparator);
-	}
-
-	/**
-	* Returns the d l syncs before and after the current d l sync in the ordered set where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
-	*
-	* @param syncId the primary key of the current d l sync
-	* @param companyId the company ID
-	* @param modifiedDate the modified date
-	* @param repositoryId the repository ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next d l sync
-	* @throws com.liferay.portlet.documentlibrary.NoSuchSyncException if a d l sync with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLSync[] findByC_M_R_PrevAndNext(
-		long syncId, long companyId, java.util.Date modifiedDate,
-		long repositoryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchSyncException {
-		return getPersistence()
-				   .findByC_M_R_PrevAndNext(syncId, companyId, modifiedDate,
-			repositoryId, orderByComparator);
 	}
 
 	/**

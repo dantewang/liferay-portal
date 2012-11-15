@@ -66,6 +66,22 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the polls questions before and after the current polls question in the ordered set where uuid = &#63;.
+	*
+	* @param questionId the primary key of the current polls question
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next polls question
+	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion[] findByUuid_PrevAndNext(
+		long questionId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchQuestionException;
+
+	/**
 	* Returns an ordered range of all the polls questions where uuid = &#63;.
 	*
 	* <p>
@@ -85,6 +101,19 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching polls question
+	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchQuestionException;
+
+	/**
 	* Returns the first polls question in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -100,6 +129,17 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 			com.liferay.portlet.polls.NoSuchQuestionException;
 
 	/**
+	* Returns the first polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching polls question, or <code>null</code> if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first polls question in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -111,6 +151,19 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching polls question
+	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchQuestionException;
 
 	/**
 	* Returns the last polls question in the ordered set where uuid = &#63;.
@@ -128,6 +181,17 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 			com.liferay.portlet.polls.NoSuchQuestionException;
 
 	/**
+	* Returns the last polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching polls question, or <code>null</code> if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last polls question in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -139,22 +203,6 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the polls questions before and after the current polls question in the ordered set where uuid = &#63;.
-	*
-	* @param questionId the primary key of the current polls question
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next polls question
-	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.polls.model.PollsQuestion[] findByUuid_PrevAndNext(
-		long questionId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.polls.NoSuchQuestionException;
 
 	/**
 	* Removes all the polls questions where uuid = &#63; from the database.
@@ -269,6 +317,23 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the polls questions before and after the current polls question in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param questionId the primary key of the current polls question
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next polls question
+	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion[] findByUuid_C_PrevAndNext(
+		long questionId, java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchQuestionException;
+
+	/**
 	* Returns an ordered range of all the polls questions where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
@@ -289,6 +354,20 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching polls question
+	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion findByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchQuestionException;
+
+	/**
 	* Returns the first polls question in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -305,6 +384,18 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 			com.liferay.portlet.polls.NoSuchQuestionException;
 
 	/**
+	* Returns the first polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching polls question, or <code>null</code> if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion fetchByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first polls question in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -317,6 +408,20 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 		java.lang.String uuid, long companyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching polls question
+	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion findByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchQuestionException;
 
 	/**
 	* Returns the last polls question in the ordered set where uuid = &#63; and companyId = &#63;.
@@ -335,6 +440,18 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 			com.liferay.portlet.polls.NoSuchQuestionException;
 
 	/**
+	* Returns the last polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching polls question, or <code>null</code> if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last polls question in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -347,23 +464,6 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 		java.lang.String uuid, long companyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the polls questions before and after the current polls question in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param questionId the primary key of the current polls question
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next polls question
-	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a polls question with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.polls.model.PollsQuestion[] findByUuid_C_PrevAndNext(
-		long questionId, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.polls.NoSuchQuestionException;
 
 	/**
 	* Removes all the polls questions where uuid = &#63; and companyId = &#63; from the database.
@@ -412,81 +512,6 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 	*/
 	public java.util.List<com.liferay.portlet.polls.model.PollsQuestion> findByGroupId(
 		long groupId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the polls questions where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of polls questions
-	* @param end the upper bound of the range of polls questions (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching polls questions
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portlet.polls.model.PollsQuestion> findByGroupId(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first polls question in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching polls question
-	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.polls.model.PollsQuestion findByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.polls.NoSuchQuestionException;
-
-	/**
-	* Returns the first polls question in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching polls question, or <code>null</code> if a matching polls question could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.polls.model.PollsQuestion fetchByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last polls question in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching polls question
-	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.polls.model.PollsQuestion findByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.polls.NoSuchQuestionException;
-
-	/**
-	* Returns the last polls question in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching polls question, or <code>null</code> if a matching polls question could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.polls.model.PollsQuestion fetchByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
@@ -567,6 +592,129 @@ public interface PollsQuestionPersistence extends BasePersistence<PollsQuestion>
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.polls.NoSuchQuestionException;
+
+	/**
+	* Returns an ordered range of all the polls questions where groupId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param start the lower bound of the range of polls questions
+	* @param end the upper bound of the range of polls questions (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching polls questions
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portlet.polls.model.PollsQuestion> findByGroupId(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching polls question
+	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchQuestionException;
+
+	/**
+	* Returns the first polls question in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching polls question
+	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion findByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchQuestionException;
+
+	/**
+	* Returns the first polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching polls question, or <code>null</code> if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first polls question in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching polls question, or <code>null</code> if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion fetchByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching polls question
+	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchQuestionException;
+
+	/**
+	* Returns the last polls question in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching polls question
+	* @throws com.liferay.portlet.polls.NoSuchQuestionException if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion findByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchQuestionException;
+
+	/**
+	* Returns the last polls question in the default ordered set defined by {@link PollsQuestionModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching polls question, or <code>null</code> if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last polls question in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching polls question, or <code>null</code> if a matching polls question could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsQuestion fetchByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the polls questions where groupId = &#63; from the database.

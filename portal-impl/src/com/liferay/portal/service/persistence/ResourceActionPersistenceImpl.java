@@ -135,222 +135,6 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	}
 
 	/**
-	 * Returns an ordered range of all the resource actions where name = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param name the name
-	 * @param start the lower bound of the range of resource actions
-	 * @param end the upper bound of the range of resource actions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching resource actions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ResourceAction> findByName(String name, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME;
-			finderArgs = new Object[] { name };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_NAME;
-			finderArgs = new Object[] { name, start, end, orderByComparator };
-		}
-
-		List<ResourceAction> list = (List<ResourceAction>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (ResourceAction resourceAction : list) {
-				if (!Validator.equals(name, resourceAction.getName())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_RESOURCEACTION_WHERE);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_NAME_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_NAME_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_NAME_NAME_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(ResourceActionModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				list = (List<ResourceAction>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first resource action in the ordered set where name = &#63;.
-	 *
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching resource action
-	 * @throws com.liferay.portal.NoSuchResourceActionException if a matching resource action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceAction findByName_First(String name,
-		OrderByComparator orderByComparator)
-		throws NoSuchResourceActionException, SystemException {
-		ResourceAction resourceAction = fetchByName_First(name,
-				orderByComparator);
-
-		if (resourceAction != null) {
-			return resourceAction;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchResourceActionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first resource action in the ordered set where name = &#63;.
-	 *
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching resource action, or <code>null</code> if a matching resource action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceAction fetchByName_First(String name,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<ResourceAction> list = findByName(name, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last resource action in the ordered set where name = &#63;.
-	 *
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching resource action
-	 * @throws com.liferay.portal.NoSuchResourceActionException if a matching resource action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceAction findByName_Last(String name,
-		OrderByComparator orderByComparator)
-		throws NoSuchResourceActionException, SystemException {
-		ResourceAction resourceAction = fetchByName_Last(name, orderByComparator);
-
-		if (resourceAction != null) {
-			return resourceAction;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchResourceActionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last resource action in the ordered set where name = &#63;.
-	 *
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching resource action, or <code>null</code> if a matching resource action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceAction fetchByName_Last(String name,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByName(name);
-
-		List<ResourceAction> list = findByName(name, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the resource actions before and after the current resource action in the ordered set where name = &#63;.
 	 *
 	 * @param resourceActionId the primary key of the current resource action
@@ -509,13 +293,280 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	}
 
 	/**
+	 * Returns an ordered range of all the resource actions where name = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param name the name
+	 * @param start the lower bound of the range of resource actions
+	 * @param end the upper bound of the range of resource actions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching resource actions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ResourceAction> findByName(String name, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME;
+			finderArgs = new Object[] { name };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_NAME;
+			finderArgs = new Object[] { name, start, end, orderByComparator };
+		}
+
+		List<ResourceAction> list = (List<ResourceAction>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceAction resourceAction : list) {
+				if (!Validator.equals(name, resourceAction.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_RESOURCEACTION_WHERE);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_NAME_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_NAME_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_NAME_NAME_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(ResourceActionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				list = (List<ResourceAction>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first resource action in the default ordered set defined by {@link ResourceActionModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the first matching resource action
+	 * @throws com.liferay.portal.NoSuchResourceActionException if a matching resource action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction findByName_First(String name)
+		throws NoSuchResourceActionException, SystemException {
+		return findByName_First(name, null);
+	}
+
+	/**
+	 * Returns the first resource action in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching resource action
+	 * @throws com.liferay.portal.NoSuchResourceActionException if a matching resource action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction findByName_First(String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchResourceActionException, SystemException {
+		ResourceAction resourceAction = fetchByName_First(name,
+				orderByComparator);
+
+		if (resourceAction != null) {
+			return resourceAction;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchResourceActionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first resource action in the default ordered set defined by {@link ResourceActionModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the first matching resource action, or <code>null</code> if a matching resource action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction fetchByName_First(String name)
+		throws SystemException {
+		return fetchByName_First(name, null);
+	}
+
+	/**
+	 * Returns the first resource action in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching resource action, or <code>null</code> if a matching resource action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction fetchByName_First(String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<ResourceAction> list = findByName(name, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last resource action in the default ordered set defined by {@link ResourceActionModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the last matching resource action
+	 * @throws com.liferay.portal.NoSuchResourceActionException if a matching resource action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction findByName_Last(String name)
+		throws NoSuchResourceActionException, SystemException {
+		return findByName_Last(name, null);
+	}
+
+	/**
+	 * Returns the last resource action in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching resource action
+	 * @throws com.liferay.portal.NoSuchResourceActionException if a matching resource action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction findByName_Last(String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchResourceActionException, SystemException {
+		ResourceAction resourceAction = fetchByName_Last(name, orderByComparator);
+
+		if (resourceAction != null) {
+			return resourceAction;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchResourceActionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last resource action in the default ordered set defined by {@link ResourceActionModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the last matching resource action, or <code>null</code> if a matching resource action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction fetchByName_Last(String name)
+		throws SystemException {
+		return fetchByName_Last(name, null);
+	}
+
+	/**
+	 * Returns the last resource action in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching resource action, or <code>null</code> if a matching resource action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceAction fetchByName_Last(String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByName(name);
+
+		List<ResourceAction> list = findByName(name, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the resource actions where name = &#63; from the database.
 	 *
 	 * @param name the name
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByName(String name) throws SystemException {
-		for (ResourceAction resourceAction : findByName(name)) {
+		for (ResourceAction resourceAction : findByName(name,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(resourceAction);
 		}
 	}
@@ -591,6 +642,23 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	public static final FinderPath FINDER_PATH_FETCH_BY_N_A = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
 			ResourceActionImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByN_A",
+			new String[] { String.class.getName(), String.class.getName() },
+			ResourceActionModelImpl.NAME_COLUMN_BITMASK |
+			ResourceActionModelImpl.ACTIONID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_N_A = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
+			ResourceActionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByN_A",
+			new String[] {
+				String.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_A = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
+			ResourceActionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByN_A",
 			new String[] { String.class.getName(), String.class.getName() },
 			ResourceActionModelImpl.NAME_COLUMN_BITMASK |
 			ResourceActionModelImpl.ACTIONID_COLUMN_BITMASK);
@@ -705,8 +773,6 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 					query.append(_FINDER_COLUMN_N_A_ACTIONID_2);
 				}
 			}
-
-			query.append(ResourceActionModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 

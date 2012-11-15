@@ -66,6 +66,22 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the d d l record versions before and after the current d d l record version in the ordered set where recordId = &#63;.
+	*
+	* @param recordVersionId the primary key of the current d d l record version
+	* @param recordId the record ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next d d l record version
+	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a d d l record version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion[] findByRecordId_PrevAndNext(
+		long recordVersionId, long recordId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
+
+	/**
 	* Returns an ordered range of all the d d l record versions where recordId = &#63;.
 	*
 	* <p>
@@ -85,6 +101,19 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first d d l record version in the default ordered set defined by {@link DDLRecordVersionModelImpl#ORDER_BY_JPQL} where recordId = &#63;.
+	*
+	* @param recordId the record ID
+	* @return the first matching d d l record version
+	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a matching d d l record version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion findByRecordId_First(
+		long recordId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
+
+	/**
 	* Returns the first d d l record version in the ordered set where recordId = &#63;.
 	*
 	* @param recordId the record ID
@@ -100,6 +129,17 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
 
 	/**
+	* Returns the first d d l record version in the default ordered set defined by {@link DDLRecordVersionModelImpl#ORDER_BY_JPQL} where recordId = &#63;.
+	*
+	* @param recordId the record ID
+	* @return the first matching d d l record version, or <code>null</code> if a matching d d l record version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion fetchByRecordId_First(
+		long recordId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first d d l record version in the ordered set where recordId = &#63;.
 	*
 	* @param recordId the record ID
@@ -111,6 +151,19 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 		long recordId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last d d l record version in the default ordered set defined by {@link DDLRecordVersionModelImpl#ORDER_BY_JPQL} where recordId = &#63;.
+	*
+	* @param recordId the record ID
+	* @return the last matching d d l record version
+	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a matching d d l record version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion findByRecordId_Last(
+		long recordId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
 
 	/**
 	* Returns the last d d l record version in the ordered set where recordId = &#63;.
@@ -128,6 +181,17 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
 
 	/**
+	* Returns the last d d l record version in the default ordered set defined by {@link DDLRecordVersionModelImpl#ORDER_BY_JPQL} where recordId = &#63;.
+	*
+	* @param recordId the record ID
+	* @return the last matching d d l record version, or <code>null</code> if a matching d d l record version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion fetchByRecordId_Last(
+		long recordId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last d d l record version in the ordered set where recordId = &#63;.
 	*
 	* @param recordId the record ID
@@ -139,22 +203,6 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 		long recordId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the d d l record versions before and after the current d d l record version in the ordered set where recordId = &#63;.
-	*
-	* @param recordVersionId the primary key of the current d d l record version
-	* @param recordId the record ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next d d l record version
-	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a d d l record version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion[] findByRecordId_PrevAndNext(
-		long recordVersionId, long recordId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
 
 	/**
 	* Removes all the d d l record versions where recordId = &#63; from the database.
@@ -269,6 +317,23 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the d d l record versions before and after the current d d l record version in the ordered set where recordId = &#63; and status = &#63;.
+	*
+	* @param recordVersionId the primary key of the current d d l record version
+	* @param recordId the record ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next d d l record version
+	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a d d l record version with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion[] findByR_S_PrevAndNext(
+		long recordVersionId, long recordId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
+
+	/**
 	* Returns an ordered range of all the d d l record versions where recordId = &#63; and status = &#63;.
 	*
 	* <p>
@@ -289,6 +354,20 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first d d l record version in the default ordered set defined by {@link DDLRecordVersionModelImpl#ORDER_BY_JPQL} where recordId = &#63; and status = &#63;.
+	*
+	* @param recordId the record ID
+	* @param status the status
+	* @return the first matching d d l record version
+	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a matching d d l record version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion findByR_S_First(
+		long recordId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
+
+	/**
 	* Returns the first d d l record version in the ordered set where recordId = &#63; and status = &#63;.
 	*
 	* @param recordId the record ID
@@ -305,6 +384,18 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
 
 	/**
+	* Returns the first d d l record version in the default ordered set defined by {@link DDLRecordVersionModelImpl#ORDER_BY_JPQL} where recordId = &#63; and status = &#63;.
+	*
+	* @param recordId the record ID
+	* @param status the status
+	* @return the first matching d d l record version, or <code>null</code> if a matching d d l record version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion fetchByR_S_First(
+		long recordId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first d d l record version in the ordered set where recordId = &#63; and status = &#63;.
 	*
 	* @param recordId the record ID
@@ -317,6 +408,20 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 		long recordId, int status,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last d d l record version in the default ordered set defined by {@link DDLRecordVersionModelImpl#ORDER_BY_JPQL} where recordId = &#63; and status = &#63;.
+	*
+	* @param recordId the record ID
+	* @param status the status
+	* @return the last matching d d l record version
+	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a matching d d l record version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion findByR_S_Last(
+		long recordId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
 
 	/**
 	* Returns the last d d l record version in the ordered set where recordId = &#63; and status = &#63;.
@@ -335,6 +440,18 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
 
 	/**
+	* Returns the last d d l record version in the default ordered set defined by {@link DDLRecordVersionModelImpl#ORDER_BY_JPQL} where recordId = &#63; and status = &#63;.
+	*
+	* @param recordId the record ID
+	* @param status the status
+	* @return the last matching d d l record version, or <code>null</code> if a matching d d l record version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion fetchByR_S_Last(
+		long recordId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last d d l record version in the ordered set where recordId = &#63; and status = &#63;.
 	*
 	* @param recordId the record ID
@@ -347,23 +464,6 @@ public interface DDLRecordVersionPersistence extends BasePersistence<DDLRecordVe
 		long recordId, int status,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the d d l record versions before and after the current d d l record version in the ordered set where recordId = &#63; and status = &#63;.
-	*
-	* @param recordVersionId the primary key of the current d d l record version
-	* @param recordId the record ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next d d l record version
-	* @throws com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException if a d d l record version with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion[] findByR_S_PrevAndNext(
-		long recordVersionId, long recordId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
 
 	/**
 	* Removes all the d d l record versions where recordId = &#63; and status = &#63; from the database.

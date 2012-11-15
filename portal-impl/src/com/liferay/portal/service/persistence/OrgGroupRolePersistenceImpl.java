@@ -131,207 +131,6 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	}
 
 	/**
-	 * Returns an ordered range of all the org group roles where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of org group roles
-	 * @param end the upper bound of the range of org group roles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching org group roles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<OrgGroupRole> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<OrgGroupRole> list = (List<OrgGroupRole>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (OrgGroupRole orgGroupRole : list) {
-				if ((groupId != orgGroupRole.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_ORGGROUPROLE_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<OrgGroupRole>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first org group role in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching org group role
-	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public OrgGroupRole findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchOrgGroupRoleException, SystemException {
-		OrgGroupRole orgGroupRole = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (orgGroupRole != null) {
-			return orgGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchOrgGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the first org group role in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching org group role, or <code>null</code> if a matching org group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public OrgGroupRole fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<OrgGroupRole> list = findByGroupId(groupId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last org group role in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching org group role
-	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public OrgGroupRole findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchOrgGroupRoleException, SystemException {
-		OrgGroupRole orgGroupRole = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (orgGroupRole != null) {
-			return orgGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchOrgGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the last org group role in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching org group role, or <code>null</code> if a matching org group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public OrgGroupRole fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<OrgGroupRole> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the org group roles before and after the current org group role in the ordered set where groupId = &#63;.
 	 *
 	 * @param orgGroupRolePK the primary key of the current org group role
@@ -475,13 +274,265 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	}
 
 	/**
+	 * Returns an ordered range of all the org group roles where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of org group roles
+	 * @param end the upper bound of the range of org group roles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching org group roles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<OrgGroupRole> findByGroupId(long groupId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<OrgGroupRole> list = (List<OrgGroupRole>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (OrgGroupRole orgGroupRole : list) {
+				if ((groupId != orgGroupRole.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_ORGGROUPROLE_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<OrgGroupRole>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first org group role in the default ordered set defined by {@link OrgGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching org group role
+	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole findByGroupId_First(long groupId)
+		throws NoSuchOrgGroupRoleException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first org group role in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching org group role
+	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchOrgGroupRoleException, SystemException {
+		OrgGroupRole orgGroupRole = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (orgGroupRole != null) {
+			return orgGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrgGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the first org group role in the default ordered set defined by {@link OrgGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching org group role, or <code>null</code> if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first org group role in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching org group role, or <code>null</code> if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<OrgGroupRole> list = findByGroupId(groupId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last org group role in the default ordered set defined by {@link OrgGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching org group role
+	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole findByGroupId_Last(long groupId)
+		throws NoSuchOrgGroupRoleException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last org group role in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching org group role
+	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchOrgGroupRoleException, SystemException {
+		OrgGroupRole orgGroupRole = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (orgGroupRole != null) {
+			return orgGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrgGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the last org group role in the default ordered set defined by {@link OrgGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching org group role, or <code>null</code> if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last org group role in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching org group role, or <code>null</code> if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<OrgGroupRole> list = findByGroupId(groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the org group roles where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (OrgGroupRole orgGroupRole : findByGroupId(groupId)) {
+		for (OrgGroupRole orgGroupRole : findByGroupId(groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(orgGroupRole);
 		}
 	}
@@ -588,206 +639,6 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	public List<OrgGroupRole> findByRoleId(long roleId, int start, int end)
 		throws SystemException {
 		return findByRoleId(roleId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the org group roles where roleId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param roleId the role ID
-	 * @param start the lower bound of the range of org group roles
-	 * @param end the upper bound of the range of org group roles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching org group roles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<OrgGroupRole> findByRoleId(long roleId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID;
-			finderArgs = new Object[] { roleId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ROLEID;
-			finderArgs = new Object[] { roleId, start, end, orderByComparator };
-		}
-
-		List<OrgGroupRole> list = (List<OrgGroupRole>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (OrgGroupRole orgGroupRole : list) {
-				if ((roleId != orgGroupRole.getRoleId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_ORGGROUPROLE_WHERE);
-
-			query.append(_FINDER_COLUMN_ROLEID_ROLEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(roleId);
-
-				list = (List<OrgGroupRole>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first org group role in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching org group role
-	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public OrgGroupRole findByRoleId_First(long roleId,
-		OrderByComparator orderByComparator)
-		throws NoSuchOrgGroupRoleException, SystemException {
-		OrgGroupRole orgGroupRole = fetchByRoleId_First(roleId,
-				orderByComparator);
-
-		if (orgGroupRole != null) {
-			return orgGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("roleId=");
-		msg.append(roleId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchOrgGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the first org group role in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching org group role, or <code>null</code> if a matching org group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public OrgGroupRole fetchByRoleId_First(long roleId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<OrgGroupRole> list = findByRoleId(roleId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last org group role in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching org group role
-	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public OrgGroupRole findByRoleId_Last(long roleId,
-		OrderByComparator orderByComparator)
-		throws NoSuchOrgGroupRoleException, SystemException {
-		OrgGroupRole orgGroupRole = fetchByRoleId_Last(roleId, orderByComparator);
-
-		if (orgGroupRole != null) {
-			return orgGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("roleId=");
-		msg.append(roleId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchOrgGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the last org group role in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching org group role, or <code>null</code> if a matching org group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public OrgGroupRole fetchByRoleId_Last(long roleId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByRoleId(roleId);
-
-		List<OrgGroupRole> list = findByRoleId(roleId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -934,13 +785,264 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	}
 
 	/**
+	 * Returns an ordered range of all the org group roles where roleId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param roleId the role ID
+	 * @param start the lower bound of the range of org group roles
+	 * @param end the upper bound of the range of org group roles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching org group roles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<OrgGroupRole> findByRoleId(long roleId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID;
+			finderArgs = new Object[] { roleId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ROLEID;
+			finderArgs = new Object[] { roleId, start, end, orderByComparator };
+		}
+
+		List<OrgGroupRole> list = (List<OrgGroupRole>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (OrgGroupRole orgGroupRole : list) {
+				if ((roleId != orgGroupRole.getRoleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_ORGGROUPROLE_WHERE);
+
+			query.append(_FINDER_COLUMN_ROLEID_ROLEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(roleId);
+
+				list = (List<OrgGroupRole>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first org group role in the default ordered set defined by {@link OrgGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the first matching org group role
+	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole findByRoleId_First(long roleId)
+		throws NoSuchOrgGroupRoleException, SystemException {
+		return findByRoleId_First(roleId, null);
+	}
+
+	/**
+	 * Returns the first org group role in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching org group role
+	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole findByRoleId_First(long roleId,
+		OrderByComparator orderByComparator)
+		throws NoSuchOrgGroupRoleException, SystemException {
+		OrgGroupRole orgGroupRole = fetchByRoleId_First(roleId,
+				orderByComparator);
+
+		if (orgGroupRole != null) {
+			return orgGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("roleId=");
+		msg.append(roleId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrgGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the first org group role in the default ordered set defined by {@link OrgGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the first matching org group role, or <code>null</code> if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole fetchByRoleId_First(long roleId)
+		throws SystemException {
+		return fetchByRoleId_First(roleId, null);
+	}
+
+	/**
+	 * Returns the first org group role in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching org group role, or <code>null</code> if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole fetchByRoleId_First(long roleId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<OrgGroupRole> list = findByRoleId(roleId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last org group role in the default ordered set defined by {@link OrgGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the last matching org group role
+	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole findByRoleId_Last(long roleId)
+		throws NoSuchOrgGroupRoleException, SystemException {
+		return findByRoleId_Last(roleId, null);
+	}
+
+	/**
+	 * Returns the last org group role in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching org group role
+	 * @throws com.liferay.portal.NoSuchOrgGroupRoleException if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole findByRoleId_Last(long roleId,
+		OrderByComparator orderByComparator)
+		throws NoSuchOrgGroupRoleException, SystemException {
+		OrgGroupRole orgGroupRole = fetchByRoleId_Last(roleId, orderByComparator);
+
+		if (orgGroupRole != null) {
+			return orgGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("roleId=");
+		msg.append(roleId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrgGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the last org group role in the default ordered set defined by {@link OrgGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the last matching org group role, or <code>null</code> if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole fetchByRoleId_Last(long roleId)
+		throws SystemException {
+		return fetchByRoleId_Last(roleId, null);
+	}
+
+	/**
+	 * Returns the last org group role in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching org group role, or <code>null</code> if a matching org group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupRole fetchByRoleId_Last(long roleId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByRoleId(roleId);
+
+		List<OrgGroupRole> list = findByRoleId(roleId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the org group roles where roleId = &#63; from the database.
 	 *
 	 * @param roleId the role ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByRoleId(long roleId) throws SystemException {
-		for (OrgGroupRole orgGroupRole : findByRoleId(roleId)) {
+		for (OrgGroupRole orgGroupRole : findByRoleId(roleId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(orgGroupRole);
 		}
 	}

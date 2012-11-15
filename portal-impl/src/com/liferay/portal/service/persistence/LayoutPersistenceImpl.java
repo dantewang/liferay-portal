@@ -140,219 +140,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
-	 * Returns an ordered range of all the layouts where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of layouts
-	 * @param end the upper bound of the range of layouts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layouts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Layout> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Layout layout : list) {
-				if (!Validator.equals(uuid, layout.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_LAYOUT_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(LayoutModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByUuid_First(uuid, orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Layout> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByUuid_Last(uuid, orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<Layout> list = findByUuid(uuid, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the layouts before and after the current layout in the ordered set where uuid = &#63;.
 	 *
 	 * @param plid the primary key of the current layout
@@ -510,13 +297,275 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
+	 * Returns an ordered range of all the layouts where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of layouts
+	 * @param end the upper bound of the range of layouts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layouts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Layout> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if (!Validator.equals(uuid, layout.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_LAYOUT_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByUuid_First(String uuid)
+		throws NoSuchLayoutException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByUuid_First(uuid, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByUuid_First(String uuid) throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Layout> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByUuid_Last(String uuid)
+		throws NoSuchLayoutException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByUuid_Last(String uuid) throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<Layout> list = findByUuid(uuid, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layouts where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (Layout layout : findByUuid(uuid)) {
+		for (Layout layout : findByUuid(uuid, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(layout);
 		}
 	}
@@ -592,6 +641,22 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			LayoutModelImpl.UUID_COLUMN_BITMASK |
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_G = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUUID_G",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_G =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUUID_G",
 			new String[] { String.class.getName(), Long.class.getName() },
 			LayoutModelImpl.UUID_COLUMN_BITMASK |
 			LayoutModelImpl.GROUPID_COLUMN_BITMASK);
@@ -696,8 +761,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			}
 
 			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -908,241 +971,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
-	 * Returns an ordered range of all the layouts where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of layouts
-	 * @param end the upper bound of the range of layouts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layouts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Layout> findByUuid_C(String uuid, long companyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Layout layout : list) {
-				if (!Validator.equals(uuid, layout.getUuid()) ||
-						(companyId != layout.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_LAYOUT_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(LayoutModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByUuid_C_First(uuid, companyId, orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Layout> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByUuid_C_Last(uuid, companyId, orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<Layout> list = findByUuid_C(uuid, companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the layouts before and after the current layout in the ordered set where uuid = &#63; and companyId = &#63;.
 	 *
 	 * @param plid the primary key of the current layout
@@ -1306,6 +1134,295 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
+	 * Returns an ordered range of all the layouts where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of layouts
+	 * @param end the upper bound of the range of layouts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layouts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Layout> findByUuid_C(String uuid, long companyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if (!Validator.equals(uuid, layout.getUuid()) ||
+						(companyId != layout.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_LAYOUT_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchLayoutException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByUuid_C_First(uuid, companyId, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Layout> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchLayoutException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByUuid_C_Last(uuid, companyId, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<Layout> list = findByUuid_C(uuid, companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layouts where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1314,7 +1431,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (Layout layout : findByUuid_C(uuid, companyId)) {
+		for (Layout layout : findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(layout);
 		}
 	}
@@ -1441,208 +1559,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the layouts where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of layouts
-	 * @param end the upper bound of the range of layouts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layouts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Layout> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Layout layout : list) {
-				if ((groupId != layout.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_LAYOUT_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(LayoutModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByGroupId_First(groupId, orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Layout> list = findByGroupId(groupId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByGroupId_Last(groupId, orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<Layout> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2102,13 +2018,264 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
+	 * Returns an ordered range of all the layouts where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of layouts
+	 * @param end the upper bound of the range of layouts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layouts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Layout> findByGroupId(long groupId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((groupId != layout.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_LAYOUT_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByGroupId_First(long groupId)
+		throws NoSuchLayoutException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByGroupId_First(groupId, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByGroupId_First(long groupId) throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Layout> list = findByGroupId(groupId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByGroupId_Last(long groupId)
+		throws NoSuchLayoutException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByGroupId_Last(groupId, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByGroupId_Last(long groupId) throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<Layout> list = findByGroupId(groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layouts where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (Layout layout : findByGroupId(groupId)) {
+		for (Layout layout : findByGroupId(groupId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(layout);
 		}
 	}
@@ -2268,208 +2435,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
-	 * Returns an ordered range of all the layouts where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of layouts
-	 * @param end the upper bound of the range of layouts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layouts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Layout> findByCompanyId(long companyId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Layout layout : list) {
-				if ((companyId != layout.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_LAYOUT_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(LayoutModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByCompanyId_First(companyId, orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Layout> list = findByCompanyId(companyId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByCompanyId_Last(companyId, orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<Layout> list = findByCompanyId(companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the layouts before and after the current layout in the ordered set where companyId = &#63;.
 	 *
 	 * @param plid the primary key of the current layout
@@ -2615,13 +2580,266 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
+	 * Returns an ordered range of all the layouts where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of layouts
+	 * @param end the upper bound of the range of layouts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layouts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Layout> findByCompanyId(long companyId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((companyId != layout.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_LAYOUT_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByCompanyId_First(long companyId)
+		throws NoSuchLayoutException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByCompanyId_First(companyId, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Layout> list = findByCompanyId(companyId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByCompanyId_Last(long companyId)
+		throws NoSuchLayoutException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByCompanyId_Last(companyId, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByCompanyId_Last(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<Layout> list = findByCompanyId(companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layouts where companyId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCompanyId(long companyId) throws SystemException {
-		for (Layout layout : findByCompanyId(companyId)) {
+		for (Layout layout : findByCompanyId(companyId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(layout);
 		}
 	}
@@ -2680,9 +2898,20 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "layout.companyId = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_ICONIMAGEID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ICONIMAGEID =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByIconImageId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByIconImageId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ICONIMAGEID =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByIconImageId",
 			new String[] { Long.class.getName() },
 			LayoutModelImpl.ICONIMAGEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_ICONIMAGEID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
@@ -2691,84 +2920,70 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			new String[] { Long.class.getName() });
 
 	/**
-	 * Returns the layout where iconImageId = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
+	 * Returns an ordered range of all the layouts where iconImageId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param iconImageId the icon image ID
-	 * @return the matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @param start the lower bound of the range of layouts
+	 * @param end the upper bound of the range of layouts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layouts
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Layout findByIconImageId(long iconImageId)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByIconImageId(iconImageId);
+	protected List<Layout> findByIconImageId(long iconImageId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (layout == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("iconImageId=");
-			msg.append(iconImageId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchLayoutException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ICONIMAGEID;
+			finderArgs = new Object[] { iconImageId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ICONIMAGEID;
+			finderArgs = new Object[] { iconImageId, start, end, orderByComparator };
 		}
 
-		return layout;
-	}
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the layout where iconImageId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param iconImageId the icon image ID
-	 * @return the matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByIconImageId(long iconImageId)
-		throws SystemException {
-		return fetchByIconImageId(iconImageId, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((iconImageId != layout.getIconImageId())) {
+					list = null;
 
-	/**
-	 * Returns the layout where iconImageId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param iconImageId the icon image ID
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByIconImageId(long iconImageId, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { iconImageId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_ICONIMAGEID,
-					finderArgs, this);
-		}
-
-		if (result instanceof Layout) {
-			Layout layout = (Layout)result;
-
-			if ((iconImageId != layout.getIconImageId())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_LAYOUT_WHERE);
 
 			query.append(_FINDER_COLUMN_ICONIMAGEID_ICONIMAGEID_2);
 
-			query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -2783,63 +2998,191 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				qPos.add(iconImageId);
 
-				List<Layout> list = q.list();
-
-				result = list;
-
-				Layout layout = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_ICONIMAGEID,
-						finderArgs, list);
-				}
-				else {
-					layout = list.get(0);
-
-					cacheResult(layout);
-
-					if ((layout.getIconImageId() != iconImageId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_ICONIMAGEID,
-							finderArgs, layout);
-					}
-				}
-
-				return layout;
+				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ICONIMAGEID,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Layout)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the layout where iconImageId = &#63; from the database.
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where iconImageId = &#63;.
 	 *
 	 * @param iconImageId the icon image ID
-	 * @return the layout that was removed
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Layout removeByIconImageId(long iconImageId)
+	public Layout findByIconImageId_First(long iconImageId)
 		throws NoSuchLayoutException, SystemException {
-		Layout layout = findByIconImageId(iconImageId);
+		return findByIconImageId_First(iconImageId, null);
+	}
 
-		return remove(layout);
+	/**
+	 * Returns the first layout in the ordered set where iconImageId = &#63;.
+	 *
+	 * @param iconImageId the icon image ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByIconImageId_First(long iconImageId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByIconImageId_First(iconImageId, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("iconImageId=");
+		msg.append(iconImageId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where iconImageId = &#63;.
+	 *
+	 * @param iconImageId the icon image ID
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByIconImageId_First(long iconImageId)
+		throws SystemException {
+		return fetchByIconImageId_First(iconImageId, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where iconImageId = &#63;.
+	 *
+	 * @param iconImageId the icon image ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByIconImageId_First(long iconImageId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Layout> list = findByIconImageId(iconImageId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where iconImageId = &#63;.
+	 *
+	 * @param iconImageId the icon image ID
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByIconImageId_Last(long iconImageId)
+		throws NoSuchLayoutException, SystemException {
+		return findByIconImageId_Last(iconImageId, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where iconImageId = &#63;.
+	 *
+	 * @param iconImageId the icon image ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByIconImageId_Last(long iconImageId,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByIconImageId_Last(iconImageId, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("iconImageId=");
+		msg.append(iconImageId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where iconImageId = &#63;.
+	 *
+	 * @param iconImageId the icon image ID
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByIconImageId_Last(long iconImageId)
+		throws SystemException {
+		return fetchByIconImageId_Last(iconImageId, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where iconImageId = &#63;.
+	 *
+	 * @param iconImageId the icon image ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByIconImageId_Last(long iconImageId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByIconImageId(iconImageId);
+
+		List<Layout> list = findByIconImageId(iconImageId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the layouts where iconImageId = &#63; from the database.
+	 *
+	 * @param iconImageId the icon image ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByIconImageId(long iconImageId) throws SystemException {
+		for (Layout layout : findByIconImageId(iconImageId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(layout);
+		}
 	}
 
 	/**
@@ -2949,229 +3292,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByLayoutPrototypeUuid(String layoutPrototypeUuid,
 		int start, int end) throws SystemException {
 		return findByLayoutPrototypeUuid(layoutPrototypeUuid, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the layouts where layoutPrototypeUuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param layoutPrototypeUuid the layout prototype uuid
-	 * @param start the lower bound of the range of layouts
-	 * @param end the upper bound of the range of layouts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layouts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Layout> findByLayoutPrototypeUuid(String layoutPrototypeUuid,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID;
-			finderArgs = new Object[] { layoutPrototypeUuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID;
-			finderArgs = new Object[] {
-					layoutPrototypeUuid,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Layout layout : list) {
-				if (!Validator.equals(layoutPrototypeUuid,
-							layout.getLayoutPrototypeUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_LAYOUT_WHERE);
-
-			if (layoutPrototypeUuid == null) {
-				query.append(_FINDER_COLUMN_LAYOUTPROTOTYPEUUID_LAYOUTPROTOTYPEUUID_1);
-			}
-			else {
-				if (layoutPrototypeUuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_LAYOUTPROTOTYPEUUID_LAYOUTPROTOTYPEUUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_LAYOUTPROTOTYPEUUID_LAYOUTPROTOTYPEUUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(LayoutModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (layoutPrototypeUuid != null) {
-					qPos.add(layoutPrototypeUuid);
-				}
-
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where layoutPrototypeUuid = &#63;.
-	 *
-	 * @param layoutPrototypeUuid the layout prototype uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByLayoutPrototypeUuid_First(String layoutPrototypeUuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByLayoutPrototypeUuid_First(layoutPrototypeUuid,
-				orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("layoutPrototypeUuid=");
-		msg.append(layoutPrototypeUuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where layoutPrototypeUuid = &#63;.
-	 *
-	 * @param layoutPrototypeUuid the layout prototype uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByLayoutPrototypeUuid_First(String layoutPrototypeUuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Layout> list = findByLayoutPrototypeUuid(layoutPrototypeUuid, 0,
-				1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where layoutPrototypeUuid = &#63;.
-	 *
-	 * @param layoutPrototypeUuid the layout prototype uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByLayoutPrototypeUuid_Last(String layoutPrototypeUuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByLayoutPrototypeUuid_Last(layoutPrototypeUuid,
-				orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("layoutPrototypeUuid=");
-		msg.append(layoutPrototypeUuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where layoutPrototypeUuid = &#63;.
-	 *
-	 * @param layoutPrototypeUuid the layout prototype uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByLayoutPrototypeUuid_Last(String layoutPrototypeUuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByLayoutPrototypeUuid(layoutPrototypeUuid);
-
-		List<Layout> list = findByLayoutPrototypeUuid(layoutPrototypeUuid,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3333,6 +3453,279 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
+	 * Returns an ordered range of all the layouts where layoutPrototypeUuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param layoutPrototypeUuid the layout prototype uuid
+	 * @param start the lower bound of the range of layouts
+	 * @param end the upper bound of the range of layouts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layouts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Layout> findByLayoutPrototypeUuid(String layoutPrototypeUuid,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID;
+			finderArgs = new Object[] { layoutPrototypeUuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID;
+			finderArgs = new Object[] {
+					layoutPrototypeUuid,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if (!Validator.equals(layoutPrototypeUuid,
+							layout.getLayoutPrototypeUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_LAYOUT_WHERE);
+
+			if (layoutPrototypeUuid == null) {
+				query.append(_FINDER_COLUMN_LAYOUTPROTOTYPEUUID_LAYOUTPROTOTYPEUUID_1);
+			}
+			else {
+				if (layoutPrototypeUuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_LAYOUTPROTOTYPEUUID_LAYOUTPROTOTYPEUUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_LAYOUTPROTOTYPEUUID_LAYOUTPROTOTYPEUUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (layoutPrototypeUuid != null) {
+					qPos.add(layoutPrototypeUuid);
+				}
+
+				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where layoutPrototypeUuid = &#63;.
+	 *
+	 * @param layoutPrototypeUuid the layout prototype uuid
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByLayoutPrototypeUuid_First(String layoutPrototypeUuid)
+		throws NoSuchLayoutException, SystemException {
+		return findByLayoutPrototypeUuid_First(layoutPrototypeUuid, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where layoutPrototypeUuid = &#63;.
+	 *
+	 * @param layoutPrototypeUuid the layout prototype uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByLayoutPrototypeUuid_First(String layoutPrototypeUuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByLayoutPrototypeUuid_First(layoutPrototypeUuid,
+				orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("layoutPrototypeUuid=");
+		msg.append(layoutPrototypeUuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where layoutPrototypeUuid = &#63;.
+	 *
+	 * @param layoutPrototypeUuid the layout prototype uuid
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByLayoutPrototypeUuid_First(String layoutPrototypeUuid)
+		throws SystemException {
+		return fetchByLayoutPrototypeUuid_First(layoutPrototypeUuid, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where layoutPrototypeUuid = &#63;.
+	 *
+	 * @param layoutPrototypeUuid the layout prototype uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByLayoutPrototypeUuid_First(String layoutPrototypeUuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Layout> list = findByLayoutPrototypeUuid(layoutPrototypeUuid, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where layoutPrototypeUuid = &#63;.
+	 *
+	 * @param layoutPrototypeUuid the layout prototype uuid
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByLayoutPrototypeUuid_Last(String layoutPrototypeUuid)
+		throws NoSuchLayoutException, SystemException {
+		return findByLayoutPrototypeUuid_Last(layoutPrototypeUuid, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where layoutPrototypeUuid = &#63;.
+	 *
+	 * @param layoutPrototypeUuid the layout prototype uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByLayoutPrototypeUuid_Last(String layoutPrototypeUuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByLayoutPrototypeUuid_Last(layoutPrototypeUuid,
+				orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("layoutPrototypeUuid=");
+		msg.append(layoutPrototypeUuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where layoutPrototypeUuid = &#63;.
+	 *
+	 * @param layoutPrototypeUuid the layout prototype uuid
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByLayoutPrototypeUuid_Last(String layoutPrototypeUuid)
+		throws SystemException {
+		return fetchByLayoutPrototypeUuid_Last(layoutPrototypeUuid, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where layoutPrototypeUuid = &#63;.
+	 *
+	 * @param layoutPrototypeUuid the layout prototype uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByLayoutPrototypeUuid_Last(String layoutPrototypeUuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByLayoutPrototypeUuid(layoutPrototypeUuid);
+
+		List<Layout> list = findByLayoutPrototypeUuid(layoutPrototypeUuid,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layouts where layoutPrototypeUuid = &#63; from the database.
 	 *
 	 * @param layoutPrototypeUuid the layout prototype uuid
@@ -3340,7 +3733,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public void removeByLayoutPrototypeUuid(String layoutPrototypeUuid)
 		throws SystemException {
-		for (Layout layout : findByLayoutPrototypeUuid(layoutPrototypeUuid)) {
+		for (Layout layout : findByLayoutPrototypeUuid(layoutPrototypeUuid,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(layout);
 		}
 	}
@@ -3473,231 +3867,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		throws SystemException {
 		return findBySourcePrototypeLayoutUuid(sourcePrototypeLayoutUuid,
 			start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the layouts where sourcePrototypeLayoutUuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	 * @param start the lower bound of the range of layouts
-	 * @param end the upper bound of the range of layouts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layouts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Layout> findBySourcePrototypeLayoutUuid(
-		String sourcePrototypeLayoutUuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID;
-			finderArgs = new Object[] { sourcePrototypeLayoutUuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID;
-			finderArgs = new Object[] {
-					sourcePrototypeLayoutUuid,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Layout layout : list) {
-				if (!Validator.equals(sourcePrototypeLayoutUuid,
-							layout.getSourcePrototypeLayoutUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_LAYOUT_WHERE);
-
-			if (sourcePrototypeLayoutUuid == null) {
-				query.append(_FINDER_COLUMN_SOURCEPROTOTYPELAYOUTUUID_SOURCEPROTOTYPELAYOUTUUID_1);
-			}
-			else {
-				if (sourcePrototypeLayoutUuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_SOURCEPROTOTYPELAYOUTUUID_SOURCEPROTOTYPELAYOUTUUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_SOURCEPROTOTYPELAYOUTUUID_SOURCEPROTOTYPELAYOUTUUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(LayoutModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (sourcePrototypeLayoutUuid != null) {
-					qPos.add(sourcePrototypeLayoutUuid);
-				}
-
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where sourcePrototypeLayoutUuid = &#63;.
-	 *
-	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findBySourcePrototypeLayoutUuid_First(
-		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchBySourcePrototypeLayoutUuid_First(sourcePrototypeLayoutUuid,
-				orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("sourcePrototypeLayoutUuid=");
-		msg.append(sourcePrototypeLayoutUuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where sourcePrototypeLayoutUuid = &#63;.
-	 *
-	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchBySourcePrototypeLayoutUuid_First(
-		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<Layout> list = findBySourcePrototypeLayoutUuid(sourcePrototypeLayoutUuid,
-				0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where sourcePrototypeLayoutUuid = &#63;.
-	 *
-	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findBySourcePrototypeLayoutUuid_Last(
-		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchBySourcePrototypeLayoutUuid_Last(sourcePrototypeLayoutUuid,
-				orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("sourcePrototypeLayoutUuid=");
-		msg.append(sourcePrototypeLayoutUuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where sourcePrototypeLayoutUuid = &#63;.
-	 *
-	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchBySourcePrototypeLayoutUuid_Last(
-		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countBySourcePrototypeLayoutUuid(sourcePrototypeLayoutUuid);
-
-		List<Layout> list = findBySourcePrototypeLayoutUuid(sourcePrototypeLayoutUuid,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3859,6 +4028,287 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
+	 * Returns an ordered range of all the layouts where sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @param start the lower bound of the range of layouts
+	 * @param end the upper bound of the range of layouts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layouts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Layout> findBySourcePrototypeLayoutUuid(
+		String sourcePrototypeLayoutUuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID;
+			finderArgs = new Object[] { sourcePrototypeLayoutUuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID;
+			finderArgs = new Object[] {
+					sourcePrototypeLayoutUuid,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if (!Validator.equals(sourcePrototypeLayoutUuid,
+							layout.getSourcePrototypeLayoutUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_LAYOUT_WHERE);
+
+			if (sourcePrototypeLayoutUuid == null) {
+				query.append(_FINDER_COLUMN_SOURCEPROTOTYPELAYOUTUUID_SOURCEPROTOTYPELAYOUTUUID_1);
+			}
+			else {
+				if (sourcePrototypeLayoutUuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_SOURCEPROTOTYPELAYOUTUUID_SOURCEPROTOTYPELAYOUTUUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_SOURCEPROTOTYPELAYOUTUUID_SOURCEPROTOTYPELAYOUTUUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (sourcePrototypeLayoutUuid != null) {
+					qPos.add(sourcePrototypeLayoutUuid);
+				}
+
+				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findBySourcePrototypeLayoutUuid_First(
+		String sourcePrototypeLayoutUuid)
+		throws NoSuchLayoutException, SystemException {
+		return findBySourcePrototypeLayoutUuid_First(sourcePrototypeLayoutUuid,
+			null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findBySourcePrototypeLayoutUuid_First(
+		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchBySourcePrototypeLayoutUuid_First(sourcePrototypeLayoutUuid,
+				orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("sourcePrototypeLayoutUuid=");
+		msg.append(sourcePrototypeLayoutUuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchBySourcePrototypeLayoutUuid_First(
+		String sourcePrototypeLayoutUuid) throws SystemException {
+		return fetchBySourcePrototypeLayoutUuid_First(sourcePrototypeLayoutUuid,
+			null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchBySourcePrototypeLayoutUuid_First(
+		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<Layout> list = findBySourcePrototypeLayoutUuid(sourcePrototypeLayoutUuid,
+				0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findBySourcePrototypeLayoutUuid_Last(
+		String sourcePrototypeLayoutUuid)
+		throws NoSuchLayoutException, SystemException {
+		return findBySourcePrototypeLayoutUuid_Last(sourcePrototypeLayoutUuid,
+			null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findBySourcePrototypeLayoutUuid_Last(
+		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchBySourcePrototypeLayoutUuid_Last(sourcePrototypeLayoutUuid,
+				orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("sourcePrototypeLayoutUuid=");
+		msg.append(sourcePrototypeLayoutUuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchBySourcePrototypeLayoutUuid_Last(
+		String sourcePrototypeLayoutUuid) throws SystemException {
+		return fetchBySourcePrototypeLayoutUuid_Last(sourcePrototypeLayoutUuid,
+			null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchBySourcePrototypeLayoutUuid_Last(
+		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countBySourcePrototypeLayoutUuid(sourcePrototypeLayoutUuid);
+
+		List<Layout> list = findBySourcePrototypeLayoutUuid(sourcePrototypeLayoutUuid,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layouts where sourcePrototypeLayoutUuid = &#63; from the database.
 	 *
 	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
@@ -3867,7 +4317,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public void removeBySourcePrototypeLayoutUuid(
 		String sourcePrototypeLayoutUuid) throws SystemException {
 		for (Layout layout : findBySourcePrototypeLayoutUuid(
-				sourcePrototypeLayoutUuid)) {
+				sourcePrototypeLayoutUuid, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(layout);
 		}
 	}
@@ -3995,232 +4446,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByG_P(long groupId, boolean privateLayout,
 		int start, int end) throws SystemException {
 		return findByG_P(groupId, privateLayout, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the layouts where groupId = &#63; and privateLayout = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param start the lower bound of the range of layouts
-	 * @param end the upper bound of the range of layouts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layouts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Layout> findByG_P(long groupId, boolean privateLayout,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P;
-			finderArgs = new Object[] { groupId, privateLayout };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P;
-			finderArgs = new Object[] {
-					groupId, privateLayout,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Layout layout : list) {
-				if ((groupId != layout.getGroupId()) ||
-						(privateLayout != layout.getPrivateLayout())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_LAYOUT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_PRIVATELAYOUT_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(LayoutModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(privateLayout);
-
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByG_P_First(long groupId, boolean privateLayout,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByG_P_First(groupId, privateLayout,
-				orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", privateLayout=");
-		msg.append(privateLayout);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByG_P_First(long groupId, boolean privateLayout,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Layout> list = findByG_P(groupId, privateLayout, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByG_P_Last(long groupId, boolean privateLayout,
-		OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByG_P_Last(groupId, privateLayout,
-				orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", privateLayout=");
-		msg.append(privateLayout);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByG_P_Last(long groupId, boolean privateLayout,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_P(groupId, privateLayout);
-
-		List<Layout> list = findByG_P(groupId, privateLayout, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -4701,6 +4926,286 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
+	 * Returns an ordered range of all the layouts where groupId = &#63; and privateLayout = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param start the lower bound of the range of layouts
+	 * @param end the upper bound of the range of layouts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layouts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Layout> findByG_P(long groupId, boolean privateLayout,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P;
+			finderArgs = new Object[] { groupId, privateLayout };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P;
+			finderArgs = new Object[] {
+					groupId, privateLayout,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((groupId != layout.getGroupId()) ||
+						(privateLayout != layout.getPrivateLayout())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_LAYOUT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_PRIVATELAYOUT_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(privateLayout);
+
+				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_First(long groupId, boolean privateLayout)
+		throws NoSuchLayoutException, SystemException {
+		return findByG_P_First(groupId, privateLayout, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_First(long groupId, boolean privateLayout,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByG_P_First(groupId, privateLayout,
+				orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", privateLayout=");
+		msg.append(privateLayout);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_First(long groupId, boolean privateLayout)
+		throws SystemException {
+		return fetchByG_P_First(groupId, privateLayout, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_First(long groupId, boolean privateLayout,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Layout> list = findByG_P(groupId, privateLayout, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_Last(long groupId, boolean privateLayout)
+		throws NoSuchLayoutException, SystemException {
+		return findByG_P_Last(groupId, privateLayout, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_Last(long groupId, boolean privateLayout,
+		OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByG_P_Last(groupId, privateLayout,
+				orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", privateLayout=");
+		msg.append(privateLayout);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_Last(long groupId, boolean privateLayout)
+		throws SystemException {
+		return fetchByG_P_Last(groupId, privateLayout, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_Last(long groupId, boolean privateLayout,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_P(groupId, privateLayout);
+
+		List<Layout> list = findByG_P(groupId, privateLayout, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layouts where groupId = &#63; and privateLayout = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -4709,7 +5214,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public void removeByG_P(long groupId, boolean privateLayout)
 		throws SystemException {
-		for (Layout layout : findByG_P(groupId, privateLayout)) {
+		for (Layout layout : findByG_P(groupId, privateLayout,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(layout);
 		}
 	}
@@ -4839,6 +5345,26 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
 			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
 			LayoutModelImpl.LAYOUTID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_L = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_L",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_L",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				Long.class.getName()
+			},
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			LayoutModelImpl.LAYOUTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_L = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_L",
@@ -4942,8 +5468,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			query.append(_FINDER_COLUMN_G_P_L_PRIVATELAYOUT_2);
 
 			query.append(_FINDER_COLUMN_G_P_L_LAYOUTID_2);
-
-			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -5154,250 +5678,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		long parentLayoutId, int start, int end) throws SystemException {
 		return findByG_P_P(groupId, privateLayout, parentLayoutId, start, end,
 			null);
-	}
-
-	/**
-	 * Returns an ordered range of all the layouts where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param parentLayoutId the parent layout ID
-	 * @param start the lower bound of the range of layouts
-	 * @param end the upper bound of the range of layouts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layouts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Layout> findByG_P_P(long groupId, boolean privateLayout,
-		long parentLayoutId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_P;
-			finderArgs = new Object[] { groupId, privateLayout, parentLayoutId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_P;
-			finderArgs = new Object[] {
-					groupId, privateLayout, parentLayoutId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Layout layout : list) {
-				if ((groupId != layout.getGroupId()) ||
-						(privateLayout != layout.getPrivateLayout()) ||
-						(parentLayoutId != layout.getParentLayoutId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_LAYOUT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_P_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_P_PRIVATELAYOUT_2);
-
-			query.append(_FINDER_COLUMN_G_P_P_PARENTLAYOUTID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(LayoutModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(privateLayout);
-
-				qPos.add(parentLayoutId);
-
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param parentLayoutId the parent layout ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByG_P_P_First(long groupId, boolean privateLayout,
-		long parentLayoutId, OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByG_P_P_First(groupId, privateLayout,
-				parentLayoutId, orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", privateLayout=");
-		msg.append(privateLayout);
-
-		msg.append(", parentLayoutId=");
-		msg.append(parentLayoutId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param parentLayoutId the parent layout ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByG_P_P_First(long groupId, boolean privateLayout,
-		long parentLayoutId, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<Layout> list = findByG_P_P(groupId, privateLayout, parentLayoutId,
-				0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param parentLayoutId the parent layout ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByG_P_P_Last(long groupId, boolean privateLayout,
-		long parentLayoutId, OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByG_P_P_Last(groupId, privateLayout,
-				parentLayoutId, orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", privateLayout=");
-		msg.append(privateLayout);
-
-		msg.append(", parentLayoutId=");
-		msg.append(parentLayoutId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param parentLayoutId the parent layout ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByG_P_P_Last(long groupId, boolean privateLayout,
-		long parentLayoutId, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_P_P(groupId, privateLayout, parentLayoutId);
-
-		List<Layout> list = findByG_P_P(groupId, privateLayout, parentLayoutId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -5899,6 +6179,308 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
+	 * Returns an ordered range of all the layouts where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param parentLayoutId the parent layout ID
+	 * @param start the lower bound of the range of layouts
+	 * @param end the upper bound of the range of layouts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layouts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Layout> findByG_P_P(long groupId, boolean privateLayout,
+		long parentLayoutId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_P;
+			finderArgs = new Object[] { groupId, privateLayout, parentLayoutId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_P;
+			finderArgs = new Object[] {
+					groupId, privateLayout, parentLayoutId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((groupId != layout.getGroupId()) ||
+						(privateLayout != layout.getPrivateLayout()) ||
+						(parentLayoutId != layout.getParentLayoutId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_LAYOUT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_P_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_P_PRIVATELAYOUT_2);
+
+			query.append(_FINDER_COLUMN_G_P_P_PARENTLAYOUTID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(privateLayout);
+
+				qPos.add(parentLayoutId);
+
+				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param parentLayoutId the parent layout ID
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_P_First(long groupId, boolean privateLayout,
+		long parentLayoutId) throws NoSuchLayoutException, SystemException {
+		return findByG_P_P_First(groupId, privateLayout, parentLayoutId, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param parentLayoutId the parent layout ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_P_First(long groupId, boolean privateLayout,
+		long parentLayoutId, OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByG_P_P_First(groupId, privateLayout,
+				parentLayoutId, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", privateLayout=");
+		msg.append(privateLayout);
+
+		msg.append(", parentLayoutId=");
+		msg.append(parentLayoutId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param parentLayoutId the parent layout ID
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_P_First(long groupId, boolean privateLayout,
+		long parentLayoutId) throws SystemException {
+		return fetchByG_P_P_First(groupId, privateLayout, parentLayoutId, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param parentLayoutId the parent layout ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_P_First(long groupId, boolean privateLayout,
+		long parentLayoutId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<Layout> list = findByG_P_P(groupId, privateLayout, parentLayoutId,
+				0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param parentLayoutId the parent layout ID
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_P_Last(long groupId, boolean privateLayout,
+		long parentLayoutId) throws NoSuchLayoutException, SystemException {
+		return findByG_P_P_Last(groupId, privateLayout, parentLayoutId, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param parentLayoutId the parent layout ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_P_Last(long groupId, boolean privateLayout,
+		long parentLayoutId, OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByG_P_P_Last(groupId, privateLayout,
+				parentLayoutId, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", privateLayout=");
+		msg.append(privateLayout);
+
+		msg.append(", parentLayoutId=");
+		msg.append(parentLayoutId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param parentLayoutId the parent layout ID
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_P_Last(long groupId, boolean privateLayout,
+		long parentLayoutId) throws SystemException {
+		return fetchByG_P_P_Last(groupId, privateLayout, parentLayoutId, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param parentLayoutId the parent layout ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_P_Last(long groupId, boolean privateLayout,
+		long parentLayoutId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_P_P(groupId, privateLayout, parentLayoutId);
+
+		List<Layout> list = findByG_P_P(groupId, privateLayout, parentLayoutId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layouts where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -5908,7 +6490,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public void removeByG_P_P(long groupId, boolean privateLayout,
 		long parentLayoutId) throws SystemException {
-		for (Layout layout : findByG_P_P(groupId, privateLayout, parentLayoutId)) {
+		for (Layout layout : findByG_P_P(groupId, privateLayout,
+				parentLayoutId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(layout);
 		}
 	}
@@ -6051,6 +6634,26 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
 			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
 			LayoutModelImpl.FRIENDLYURL_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_F = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_F",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_F = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_F",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				String.class.getName()
+			},
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			LayoutModelImpl.FRIENDLYURL_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_F = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_F",
@@ -6165,8 +6768,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					query.append(_FINDER_COLUMN_G_P_F_FRIENDLYURL_2);
 				}
 			}
-
-			query.append(LayoutModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -6393,262 +6994,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByG_P_T(long groupId, boolean privateLayout,
 		String type, int start, int end) throws SystemException {
 		return findByG_P_T(groupId, privateLayout, type, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the layouts where groupId = &#63; and privateLayout = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param type the type
-	 * @param start the lower bound of the range of layouts
-	 * @param end the upper bound of the range of layouts (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching layouts
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Layout> findByG_P_T(long groupId, boolean privateLayout,
-		String type, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_T;
-			finderArgs = new Object[] { groupId, privateLayout, type };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_T;
-			finderArgs = new Object[] {
-					groupId, privateLayout, type,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Layout layout : list) {
-				if ((groupId != layout.getGroupId()) ||
-						(privateLayout != layout.getPrivateLayout()) ||
-						!Validator.equals(type, layout.getType())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_LAYOUT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_T_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_T_PRIVATELAYOUT_2);
-
-			if (type == null) {
-				query.append(_FINDER_COLUMN_G_P_T_TYPE_1);
-			}
-			else {
-				if (type.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_P_T_TYPE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_P_T_TYPE_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(LayoutModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(privateLayout);
-
-				if (type != null) {
-					qPos.add(type);
-				}
-
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63; and type = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByG_P_T_First(long groupId, boolean privateLayout,
-		String type, OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByG_P_T_First(groupId, privateLayout, type,
-				orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", privateLayout=");
-		msg.append(privateLayout);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63; and type = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByG_P_T_First(long groupId, boolean privateLayout,
-		String type, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<Layout> list = findByG_P_T(groupId, privateLayout, type, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63; and type = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout findByG_P_T_Last(long groupId, boolean privateLayout,
-		String type, OrderByComparator orderByComparator)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByG_P_T_Last(groupId, privateLayout, type,
-				orderByComparator);
-
-		if (layout != null) {
-			return layout;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", privateLayout=");
-		msg.append(privateLayout);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchLayoutException(msg.toString());
-	}
-
-	/**
-	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63; and type = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByG_P_T_Last(long groupId, boolean privateLayout,
-		String type, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_P_T(groupId, privateLayout, type);
-
-		List<Layout> list = findByG_P_T(groupId, privateLayout, type,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -7182,6 +7527,320 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	/**
+	 * Returns an ordered range of all the layouts where groupId = &#63; and privateLayout = &#63; and type = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param type the type
+	 * @param start the lower bound of the range of layouts
+	 * @param end the upper bound of the range of layouts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layouts
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Layout> findByG_P_T(long groupId, boolean privateLayout,
+		String type, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_T;
+			finderArgs = new Object[] { groupId, privateLayout, type };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_T;
+			finderArgs = new Object[] {
+					groupId, privateLayout, type,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((groupId != layout.getGroupId()) ||
+						(privateLayout != layout.getPrivateLayout()) ||
+						!Validator.equals(type, layout.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_LAYOUT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_T_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_T_PRIVATELAYOUT_2);
+
+			if (type == null) {
+				query.append(_FINDER_COLUMN_G_P_T_TYPE_1);
+			}
+			else {
+				if (type.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_P_T_TYPE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_P_T_TYPE_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(privateLayout);
+
+				if (type != null) {
+					qPos.add(type);
+				}
+
+				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and type = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param type the type
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_T_First(long groupId, boolean privateLayout,
+		String type) throws NoSuchLayoutException, SystemException {
+		return findByG_P_T_First(groupId, privateLayout, type, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63; and type = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_T_First(long groupId, boolean privateLayout,
+		String type, OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByG_P_T_First(groupId, privateLayout, type,
+				orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", privateLayout=");
+		msg.append(privateLayout);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and type = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param type the type
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_T_First(long groupId, boolean privateLayout,
+		String type) throws SystemException {
+		return fetchByG_P_T_First(groupId, privateLayout, type, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63; and type = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_T_First(long groupId, boolean privateLayout,
+		String type, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<Layout> list = findByG_P_T(groupId, privateLayout, type, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and type = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param type the type
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_T_Last(long groupId, boolean privateLayout,
+		String type) throws NoSuchLayoutException, SystemException {
+		return findByG_P_T_Last(groupId, privateLayout, type, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63; and type = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_T_Last(long groupId, boolean privateLayout,
+		String type, OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByG_P_T_Last(groupId, privateLayout, type,
+				orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", privateLayout=");
+		msg.append(privateLayout);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and type = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param type the type
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_T_Last(long groupId, boolean privateLayout,
+		String type) throws SystemException {
+		return fetchByG_P_T_Last(groupId, privateLayout, type, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63; and type = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_T_Last(long groupId, boolean privateLayout,
+		String type, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_P_T(groupId, privateLayout, type);
+
+		List<Layout> list = findByG_P_T(groupId, privateLayout, type,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the layouts where groupId = &#63; and privateLayout = &#63; and type = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -7191,7 +7850,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public void removeByG_P_T(long groupId, boolean privateLayout, String type)
 		throws SystemException {
-		for (Layout layout : findByG_P_T(groupId, privateLayout, type)) {
+		for (Layout layout : findByG_P_T(groupId, privateLayout, type,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(layout);
 		}
 	}
@@ -7348,9 +8008,20 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	private static final String _FINDER_COLUMN_G_P_T_TYPE_1 = "layout.type IS NULL";
 	private static final String _FINDER_COLUMN_G_P_T_TYPE_2 = "layout.type = ?";
 	private static final String _FINDER_COLUMN_G_P_T_TYPE_3 = "(layout.type IS NULL OR layout.type = ?)";
-	public static final FinderPath FINDER_PATH_FETCH_BY_G_P_SPLU = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_SPLU = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByG_P_SPLU",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_SPLU",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_SPLU =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_SPLU",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName()
@@ -7367,99 +8038,69 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			});
 
 	/**
-	 * Returns the layout where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
+	 * Returns an ordered range of all the layouts where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param groupId the group ID
 	 * @param privateLayout the private layout
 	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	 * @return the matching layout
-	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @param start the lower bound of the range of layouts
+	 * @param end the upper bound of the range of layouts (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching layouts
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Layout findByG_P_SPLU(long groupId, boolean privateLayout,
-		String sourcePrototypeLayoutUuid)
-		throws NoSuchLayoutException, SystemException {
-		Layout layout = fetchByG_P_SPLU(groupId, privateLayout,
-				sourcePrototypeLayoutUuid);
+	protected List<Layout> findByG_P_SPLU(long groupId, boolean privateLayout,
+		String sourcePrototypeLayoutUuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (layout == null) {
-			StringBundler msg = new StringBundler(8);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("groupId=");
-			msg.append(groupId);
-
-			msg.append(", privateLayout=");
-			msg.append(privateLayout);
-
-			msg.append(", sourcePrototypeLayoutUuid=");
-			msg.append(sourcePrototypeLayoutUuid);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchLayoutException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_SPLU;
+			finderArgs = new Object[] {
+					groupId, privateLayout, sourcePrototypeLayoutUuid
+				};
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_SPLU;
+			finderArgs = new Object[] {
+					groupId, privateLayout, sourcePrototypeLayoutUuid,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		return layout;
-	}
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the layout where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	 * @return the matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByG_P_SPLU(long groupId, boolean privateLayout,
-		String sourcePrototypeLayoutUuid) throws SystemException {
-		return fetchByG_P_SPLU(groupId, privateLayout,
-			sourcePrototypeLayoutUuid, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((groupId != layout.getGroupId()) ||
+						(privateLayout != layout.getPrivateLayout()) ||
+						!Validator.equals(sourcePrototypeLayoutUuid,
+							layout.getSourcePrototypeLayoutUuid())) {
+					list = null;
 
-	/**
-	 * Returns the layout where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param groupId the group ID
-	 * @param privateLayout the private layout
-	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching layout, or <code>null</code> if a matching layout could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Layout fetchByG_P_SPLU(long groupId, boolean privateLayout,
-		String sourcePrototypeLayoutUuid, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, privateLayout, sourcePrototypeLayoutUuid
-			};
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_P_SPLU,
-					finderArgs, this);
-		}
-
-		if (result instanceof Layout) {
-			Layout layout = (Layout)result;
-
-			if ((groupId != layout.getGroupId()) ||
-					(privateLayout != layout.getPrivateLayout()) ||
-					!Validator.equals(sourcePrototypeLayoutUuid,
-						layout.getSourcePrototypeLayoutUuid())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(5);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
 
 			query.append(_SQL_SELECT_LAYOUT_WHERE);
 
@@ -7479,7 +8120,14 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				}
 			}
 
-			query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(LayoutModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -7500,71 +8148,234 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					qPos.add(sourcePrototypeLayoutUuid);
 				}
 
-				List<Layout> list = q.list();
-
-				result = list;
-
-				Layout layout = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_SPLU,
-						finderArgs, list);
-				}
-				else {
-					layout = list.get(0);
-
-					cacheResult(layout);
-
-					if ((layout.getGroupId() != groupId) ||
-							(layout.getPrivateLayout() != privateLayout) ||
-							(layout.getSourcePrototypeLayoutUuid() == null) ||
-							!layout.getSourcePrototypeLayoutUuid()
-									   .equals(sourcePrototypeLayoutUuid)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_SPLU,
-							finderArgs, layout);
-					}
-				}
-
-				return layout;
+				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_SPLU,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Layout)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the layout where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63; from the database.
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param privateLayout the private layout
 	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
-	 * @return the layout that was removed
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Layout removeByG_P_SPLU(long groupId, boolean privateLayout,
+	public Layout findByG_P_SPLU_First(long groupId, boolean privateLayout,
 		String sourcePrototypeLayoutUuid)
 		throws NoSuchLayoutException, SystemException {
-		Layout layout = findByG_P_SPLU(groupId, privateLayout,
+		return findByG_P_SPLU_First(groupId, privateLayout,
+			sourcePrototypeLayoutUuid, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_SPLU_First(long groupId, boolean privateLayout,
+		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByG_P_SPLU_First(groupId, privateLayout,
+				sourcePrototypeLayoutUuid, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", privateLayout=");
+		msg.append(privateLayout);
+
+		msg.append(", sourcePrototypeLayoutUuid=");
+		msg.append(sourcePrototypeLayoutUuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the first layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_SPLU_First(long groupId, boolean privateLayout,
+		String sourcePrototypeLayoutUuid) throws SystemException {
+		return fetchByG_P_SPLU_First(groupId, privateLayout,
+			sourcePrototypeLayoutUuid, null);
+	}
+
+	/**
+	 * Returns the first layout in the ordered set where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_SPLU_First(long groupId, boolean privateLayout,
+		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<Layout> list = findByG_P_SPLU(groupId, privateLayout,
+				sourcePrototypeLayoutUuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_SPLU_Last(long groupId, boolean privateLayout,
+		String sourcePrototypeLayoutUuid)
+		throws NoSuchLayoutException, SystemException {
+		return findByG_P_SPLU_Last(groupId, privateLayout,
+			sourcePrototypeLayoutUuid, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout
+	 * @throws com.liferay.portal.NoSuchLayoutException if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout findByG_P_SPLU_Last(long groupId, boolean privateLayout,
+		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
+		throws NoSuchLayoutException, SystemException {
+		Layout layout = fetchByG_P_SPLU_Last(groupId, privateLayout,
+				sourcePrototypeLayoutUuid, orderByComparator);
+
+		if (layout != null) {
+			return layout;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", privateLayout=");
+		msg.append(privateLayout);
+
+		msg.append(", sourcePrototypeLayoutUuid=");
+		msg.append(sourcePrototypeLayoutUuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchLayoutException(msg.toString());
+	}
+
+	/**
+	 * Returns the last layout in the default ordered set defined by {@link LayoutModelImpl#ORDER_BY_JPQL} where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_SPLU_Last(long groupId, boolean privateLayout,
+		String sourcePrototypeLayoutUuid) throws SystemException {
+		return fetchByG_P_SPLU_Last(groupId, privateLayout,
+			sourcePrototypeLayoutUuid, null);
+	}
+
+	/**
+	 * Returns the last layout in the ordered set where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching layout, or <code>null</code> if a matching layout could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Layout fetchByG_P_SPLU_Last(long groupId, boolean privateLayout,
+		String sourcePrototypeLayoutUuid, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_P_SPLU(groupId, privateLayout,
 				sourcePrototypeLayoutUuid);
 
-		return remove(layout);
+		List<Layout> list = findByG_P_SPLU(groupId, privateLayout,
+				sourcePrototypeLayoutUuid, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the layouts where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayout the private layout
+	 * @param sourcePrototypeLayoutUuid the source prototype layout uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_P_SPLU(long groupId, boolean privateLayout,
+		String sourcePrototypeLayoutUuid) throws SystemException {
+		for (Layout layout : findByG_P_SPLU(groupId, privateLayout,
+				sourcePrototypeLayoutUuid, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(layout);
+		}
 	}
 
 	/**
@@ -7667,9 +8478,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			new Object[] { layout.getUuid(), Long.valueOf(layout.getGroupId()) },
 			layout);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_ICONIMAGEID,
-			new Object[] { Long.valueOf(layout.getIconImageId()) }, layout);
-
 		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_L,
 			new Object[] {
 				Long.valueOf(layout.getGroupId()),
@@ -7683,14 +8491,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				Boolean.valueOf(layout.getPrivateLayout()),
 				
 			layout.getFriendlyURL()
-			}, layout);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_SPLU,
-			new Object[] {
-				Long.valueOf(layout.getGroupId()),
-				Boolean.valueOf(layout.getPrivateLayout()),
-				
-			layout.getSourcePrototypeLayoutUuid()
 			}, layout);
 
 		layout.resetOriginalValues();
@@ -7769,9 +8569,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 			new Object[] { layout.getUuid(), Long.valueOf(layout.getGroupId()) });
 
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ICONIMAGEID,
-			new Object[] { Long.valueOf(layout.getIconImageId()) });
-
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_L,
 			new Object[] {
 				Long.valueOf(layout.getGroupId()),
@@ -7785,14 +8582,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				Boolean.valueOf(layout.getPrivateLayout()),
 				
 			layout.getFriendlyURL()
-			});
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_SPLU,
-			new Object[] {
-				Long.valueOf(layout.getGroupId()),
-				Boolean.valueOf(layout.getPrivateLayout()),
-				
-			layout.getSourcePrototypeLayoutUuid()
 			});
 	}
 
@@ -8133,9 +8922,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				new Object[] { layout.getUuid(), Long.valueOf(
 						layout.getGroupId()) }, layout);
 
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_ICONIMAGEID,
-				new Object[] { Long.valueOf(layout.getIconImageId()) }, layout);
-
 			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_L,
 				new Object[] {
 					Long.valueOf(layout.getGroupId()),
@@ -8149,14 +8935,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					Boolean.valueOf(layout.getPrivateLayout()),
 					
 				layout.getFriendlyURL()
-				}, layout);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_SPLU,
-				new Object[] {
-					Long.valueOf(layout.getGroupId()),
-					Boolean.valueOf(layout.getPrivateLayout()),
-					
-				layout.getSourcePrototypeLayoutUuid()
 				}, layout);
 		}
 		else {
@@ -8175,23 +8953,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					new Object[] {
 						layout.getUuid(), Long.valueOf(layout.getGroupId())
 					}, layout);
-			}
-
-			if ((layoutModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_ICONIMAGEID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(layoutModelImpl.getOriginalIconImageId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ICONIMAGEID,
-					args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ICONIMAGEID,
-					args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_ICONIMAGEID,
-					new Object[] { Long.valueOf(layout.getIconImageId()) },
-					layout);
 			}
 
 			if ((layoutModelImpl.getColumnBitmask() &
@@ -8233,28 +8994,6 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 						Boolean.valueOf(layout.getPrivateLayout()),
 						
 					layout.getFriendlyURL()
-					}, layout);
-			}
-
-			if ((layoutModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_G_P_SPLU.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(layoutModelImpl.getOriginalGroupId()),
-						Boolean.valueOf(layoutModelImpl.getOriginalPrivateLayout()),
-						
-						layoutModelImpl.getOriginalSourcePrototypeLayoutUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_SPLU, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_SPLU, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_SPLU,
-					new Object[] {
-						Long.valueOf(layout.getGroupId()),
-						Boolean.valueOf(layout.getPrivateLayout()),
-						
-					layout.getSourcePrototypeLayoutUuid()
 					}, layout);
 			}
 		}

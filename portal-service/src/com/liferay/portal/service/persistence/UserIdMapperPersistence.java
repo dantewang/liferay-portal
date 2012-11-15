@@ -63,6 +63,22 @@ public interface UserIdMapperPersistence extends BasePersistence<UserIdMapper> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the user ID mappers before and after the current user ID mapper in the ordered set where userId = &#63;.
+	*
+	* @param userIdMapperId the primary key of the current user ID mapper
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user ID mapper
+	* @throws com.liferay.portal.NoSuchUserIdMapperException if a user ID mapper with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserIdMapper[] findByUserId_PrevAndNext(
+		long userIdMapperId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserIdMapperException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the user ID mappers where userId = &#63;.
 	*
 	* <p>
@@ -82,6 +98,18 @@ public interface UserIdMapperPersistence extends BasePersistence<UserIdMapper> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user ID mapper in the default ordered set defined by {@link UserIdMapperModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching user ID mapper
+	* @throws com.liferay.portal.NoSuchUserIdMapperException if a matching user ID mapper could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserIdMapper findByUserId_First(long userId)
+		throws com.liferay.portal.NoSuchUserIdMapperException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user ID mapper in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -97,6 +125,16 @@ public interface UserIdMapperPersistence extends BasePersistence<UserIdMapper> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user ID mapper in the default ordered set defined by {@link UserIdMapperModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching user ID mapper, or <code>null</code> if a matching user ID mapper could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserIdMapper fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user ID mapper in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -108,6 +146,18 @@ public interface UserIdMapperPersistence extends BasePersistence<UserIdMapper> {
 		long userId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user ID mapper in the default ordered set defined by {@link UserIdMapperModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching user ID mapper
+	* @throws com.liferay.portal.NoSuchUserIdMapperException if a matching user ID mapper could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserIdMapper findByUserId_Last(long userId)
+		throws com.liferay.portal.NoSuchUserIdMapperException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user ID mapper in the ordered set where userId = &#63;.
@@ -125,6 +175,16 @@ public interface UserIdMapperPersistence extends BasePersistence<UserIdMapper> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user ID mapper in the default ordered set defined by {@link UserIdMapperModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching user ID mapper, or <code>null</code> if a matching user ID mapper could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserIdMapper fetchByUserId_Last(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user ID mapper in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -136,22 +196,6 @@ public interface UserIdMapperPersistence extends BasePersistence<UserIdMapper> {
 		long userId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user ID mappers before and after the current user ID mapper in the ordered set where userId = &#63;.
-	*
-	* @param userIdMapperId the primary key of the current user ID mapper
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user ID mapper
-	* @throws com.liferay.portal.NoSuchUserIdMapperException if a user ID mapper with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserIdMapper[] findByUserId_PrevAndNext(
-		long userIdMapperId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserIdMapperException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the user ID mappers where userId = &#63; from the database.

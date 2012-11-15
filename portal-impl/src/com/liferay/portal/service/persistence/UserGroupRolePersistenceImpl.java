@@ -134,207 +134,6 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	}
 
 	/**
-	 * Returns an ordered range of all the user group roles where userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId the user ID
-	 * @param start the lower bound of the range of user group roles
-	 * @param end the upper bound of the range of user group roles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching user group roles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<UserGroupRole> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId, start, end, orderByComparator };
-		}
-
-		List<UserGroupRole> list = (List<UserGroupRole>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (UserGroupRole userGroupRole : list) {
-				if ((userId != userGroupRole.getUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_USERGROUPROLE_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				list = (List<UserGroupRole>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user group role in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user group role
-	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole findByUserId_First(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserGroupRoleException, SystemException {
-		UserGroupRole userGroupRole = fetchByUserId_First(userId,
-				orderByComparator);
-
-		if (userGroupRole != null) {
-			return userGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user group role in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<UserGroupRole> list = findByUserId(userId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user group role in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user group role
-	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole findByUserId_Last(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserGroupRoleException, SystemException {
-		UserGroupRole userGroupRole = fetchByUserId_Last(userId,
-				orderByComparator);
-
-		if (userGroupRole != null) {
-			return userGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user group role in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUserId(userId);
-
-		List<UserGroupRole> list = findByUserId(userId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the user group roles before and after the current user group role in the ordered set where userId = &#63;.
 	 *
 	 * @param userGroupRolePK the primary key of the current user group role
@@ -478,13 +277,265 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	}
 
 	/**
+	 * Returns an ordered range of all the user group roles where userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of user group roles
+	 * @param end the upper bound of the range of user group roles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching user group roles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<UserGroupRole> findByUserId(long userId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId, start, end, orderByComparator };
+		}
+
+		List<UserGroupRole> list = (List<UserGroupRole>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroupRole userGroupRole : list) {
+				if ((userId != userGroupRole.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_USERGROUPROLE_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				list = (List<UserGroupRole>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByUserId_First(long userId)
+		throws NoSuchUserGroupRoleException, SystemException {
+		return findByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first user group role in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByUserId_First(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserGroupRoleException, SystemException {
+		UserGroupRole userGroupRole = fetchByUserId_First(userId,
+				orderByComparator);
+
+		if (userGroupRole != null) {
+			return userGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByUserId_First(long userId)
+		throws SystemException {
+		return fetchByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first user group role in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByUserId_First(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<UserGroupRole> list = findByUserId(userId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByUserId_Last(long userId)
+		throws NoSuchUserGroupRoleException, SystemException {
+		return findByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last user group role in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByUserId_Last(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserGroupRoleException, SystemException {
+		UserGroupRole userGroupRole = fetchByUserId_Last(userId,
+				orderByComparator);
+
+		if (userGroupRole != null) {
+			return userGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByUserId_Last(long userId)
+		throws SystemException {
+		return fetchByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last user group role in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByUserId_Last(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUserId(userId);
+
+		List<UserGroupRole> list = findByUserId(userId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the user group roles where userId = &#63; from the database.
 	 *
 	 * @param userId the user ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUserId(long userId) throws SystemException {
-		for (UserGroupRole userGroupRole : findByUserId(userId)) {
+		for (UserGroupRole userGroupRole : findByUserId(userId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(userGroupRole);
 		}
 	}
@@ -592,208 +643,6 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	public List<UserGroupRole> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the user group roles where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of user group roles
-	 * @param end the upper bound of the range of user group roles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching user group roles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<UserGroupRole> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<UserGroupRole> list = (List<UserGroupRole>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (UserGroupRole userGroupRole : list) {
-				if ((groupId != userGroupRole.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_USERGROUPROLE_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<UserGroupRole>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user group role in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user group role
-	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserGroupRoleException, SystemException {
-		UserGroupRole userGroupRole = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (userGroupRole != null) {
-			return userGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user group role in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<UserGroupRole> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user group role in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user group role
-	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserGroupRoleException, SystemException {
-		UserGroupRole userGroupRole = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (userGroupRole != null) {
-			return userGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user group role in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<UserGroupRole> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -940,13 +789,266 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	}
 
 	/**
+	 * Returns an ordered range of all the user group roles where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of user group roles
+	 * @param end the upper bound of the range of user group roles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching user group roles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<UserGroupRole> findByGroupId(long groupId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<UserGroupRole> list = (List<UserGroupRole>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroupRole userGroupRole : list) {
+				if ((groupId != userGroupRole.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_USERGROUPROLE_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<UserGroupRole>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByGroupId_First(long groupId)
+		throws NoSuchUserGroupRoleException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first user group role in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserGroupRoleException, SystemException {
+		UserGroupRole userGroupRole = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (userGroupRole != null) {
+			return userGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first user group role in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<UserGroupRole> list = findByGroupId(groupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByGroupId_Last(long groupId)
+		throws NoSuchUserGroupRoleException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last user group role in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserGroupRoleException, SystemException {
+		UserGroupRole userGroupRole = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (userGroupRole != null) {
+			return userGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last user group role in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<UserGroupRole> list = findByGroupId(groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the user group roles where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (UserGroupRole userGroupRole : findByGroupId(groupId)) {
+		for (UserGroupRole userGroupRole : findByGroupId(groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(userGroupRole);
 		}
 	}
@@ -1054,207 +1156,6 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	public List<UserGroupRole> findByRoleId(long roleId, int start, int end)
 		throws SystemException {
 		return findByRoleId(roleId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the user group roles where roleId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param roleId the role ID
-	 * @param start the lower bound of the range of user group roles
-	 * @param end the upper bound of the range of user group roles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching user group roles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<UserGroupRole> findByRoleId(long roleId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID;
-			finderArgs = new Object[] { roleId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ROLEID;
-			finderArgs = new Object[] { roleId, start, end, orderByComparator };
-		}
-
-		List<UserGroupRole> list = (List<UserGroupRole>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (UserGroupRole userGroupRole : list) {
-				if ((roleId != userGroupRole.getRoleId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_USERGROUPROLE_WHERE);
-
-			query.append(_FINDER_COLUMN_ROLEID_ROLEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(roleId);
-
-				list = (List<UserGroupRole>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user group role in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user group role
-	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole findByRoleId_First(long roleId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserGroupRoleException, SystemException {
-		UserGroupRole userGroupRole = fetchByRoleId_First(roleId,
-				orderByComparator);
-
-		if (userGroupRole != null) {
-			return userGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("roleId=");
-		msg.append(roleId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user group role in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole fetchByRoleId_First(long roleId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<UserGroupRole> list = findByRoleId(roleId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user group role in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user group role
-	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole findByRoleId_Last(long roleId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserGroupRoleException, SystemException {
-		UserGroupRole userGroupRole = fetchByRoleId_Last(roleId,
-				orderByComparator);
-
-		if (userGroupRole != null) {
-			return userGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("roleId=");
-		msg.append(roleId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user group role in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole fetchByRoleId_Last(long roleId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByRoleId(roleId);
-
-		List<UserGroupRole> list = findByRoleId(roleId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1401,13 +1302,265 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	}
 
 	/**
+	 * Returns an ordered range of all the user group roles where roleId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param roleId the role ID
+	 * @param start the lower bound of the range of user group roles
+	 * @param end the upper bound of the range of user group roles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching user group roles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<UserGroupRole> findByRoleId(long roleId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID;
+			finderArgs = new Object[] { roleId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ROLEID;
+			finderArgs = new Object[] { roleId, start, end, orderByComparator };
+		}
+
+		List<UserGroupRole> list = (List<UserGroupRole>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroupRole userGroupRole : list) {
+				if ((roleId != userGroupRole.getRoleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_USERGROUPROLE_WHERE);
+
+			query.append(_FINDER_COLUMN_ROLEID_ROLEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(roleId);
+
+				list = (List<UserGroupRole>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the first matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByRoleId_First(long roleId)
+		throws NoSuchUserGroupRoleException, SystemException {
+		return findByRoleId_First(roleId, null);
+	}
+
+	/**
+	 * Returns the first user group role in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByRoleId_First(long roleId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserGroupRoleException, SystemException {
+		UserGroupRole userGroupRole = fetchByRoleId_First(roleId,
+				orderByComparator);
+
+		if (userGroupRole != null) {
+			return userGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("roleId=");
+		msg.append(roleId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByRoleId_First(long roleId)
+		throws SystemException {
+		return fetchByRoleId_First(roleId, null);
+	}
+
+	/**
+	 * Returns the first user group role in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByRoleId_First(long roleId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<UserGroupRole> list = findByRoleId(roleId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the last matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByRoleId_Last(long roleId)
+		throws NoSuchUserGroupRoleException, SystemException {
+		return findByRoleId_Last(roleId, null);
+	}
+
+	/**
+	 * Returns the last user group role in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByRoleId_Last(long roleId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserGroupRoleException, SystemException {
+		UserGroupRole userGroupRole = fetchByRoleId_Last(roleId,
+				orderByComparator);
+
+		if (userGroupRole != null) {
+			return userGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("roleId=");
+		msg.append(roleId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByRoleId_Last(long roleId)
+		throws SystemException {
+		return fetchByRoleId_Last(roleId, null);
+	}
+
+	/**
+	 * Returns the last user group role in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByRoleId_Last(long roleId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByRoleId(roleId);
+
+		List<UserGroupRole> list = findByRoleId(roleId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the user group roles where roleId = &#63; from the database.
 	 *
 	 * @param roleId the role ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByRoleId(long roleId) throws SystemException {
-		for (UserGroupRole userGroupRole : findByRoleId(roleId)) {
+		for (UserGroupRole userGroupRole : findByRoleId(roleId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(userGroupRole);
 		}
 	}
@@ -1519,228 +1672,6 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	public List<UserGroupRole> findByU_G(long userId, long groupId, int start,
 		int end) throws SystemException {
 		return findByU_G(userId, groupId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the user group roles where userId = &#63; and groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId the user ID
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of user group roles
-	 * @param end the upper bound of the range of user group roles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching user group roles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<UserGroupRole> findByU_G(long userId, long groupId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_G;
-			finderArgs = new Object[] { userId, groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_G;
-			finderArgs = new Object[] {
-					userId, groupId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<UserGroupRole> list = (List<UserGroupRole>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (UserGroupRole userGroupRole : list) {
-				if ((userId != userGroupRole.getUserId()) ||
-						(groupId != userGroupRole.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_USERGROUPROLE_WHERE);
-
-			query.append(_FINDER_COLUMN_U_G_USERID_2);
-
-			query.append(_FINDER_COLUMN_U_G_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				qPos.add(groupId);
-
-				list = (List<UserGroupRole>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user group role in the ordered set where userId = &#63; and groupId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user group role
-	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole findByU_G_First(long userId, long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserGroupRoleException, SystemException {
-		UserGroupRole userGroupRole = fetchByU_G_First(userId, groupId,
-				orderByComparator);
-
-		if (userGroupRole != null) {
-			return userGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(", groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user group role in the ordered set where userId = &#63; and groupId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole fetchByU_G_First(long userId, long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<UserGroupRole> list = findByU_G(userId, groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user group role in the ordered set where userId = &#63; and groupId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user group role
-	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole findByU_G_Last(long userId, long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserGroupRoleException, SystemException {
-		UserGroupRole userGroupRole = fetchByU_G_Last(userId, groupId,
-				orderByComparator);
-
-		if (userGroupRole != null) {
-			return userGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(", groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user group role in the ordered set where userId = &#63; and groupId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole fetchByU_G_Last(long userId, long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByU_G(userId, groupId);
-
-		List<UserGroupRole> list = findByU_G(userId, groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1892,6 +1823,282 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	}
 
 	/**
+	 * Returns an ordered range of all the user group roles where userId = &#63; and groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of user group roles
+	 * @param end the upper bound of the range of user group roles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching user group roles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<UserGroupRole> findByU_G(long userId, long groupId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_G;
+			finderArgs = new Object[] { userId, groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_G;
+			finderArgs = new Object[] {
+					userId, groupId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<UserGroupRole> list = (List<UserGroupRole>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroupRole userGroupRole : list) {
+				if ((userId != userGroupRole.getUserId()) ||
+						(groupId != userGroupRole.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_USERGROUPROLE_WHERE);
+
+			query.append(_FINDER_COLUMN_U_G_USERID_2);
+
+			query.append(_FINDER_COLUMN_U_G_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				qPos.add(groupId);
+
+				list = (List<UserGroupRole>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63; and groupId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param groupId the group ID
+	 * @return the first matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByU_G_First(long userId, long groupId)
+		throws NoSuchUserGroupRoleException, SystemException {
+		return findByU_G_First(userId, groupId, null);
+	}
+
+	/**
+	 * Returns the first user group role in the ordered set where userId = &#63; and groupId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByU_G_First(long userId, long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserGroupRoleException, SystemException {
+		UserGroupRole userGroupRole = fetchByU_G_First(userId, groupId,
+				orderByComparator);
+
+		if (userGroupRole != null) {
+			return userGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63; and groupId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param groupId the group ID
+	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByU_G_First(long userId, long groupId)
+		throws SystemException {
+		return fetchByU_G_First(userId, groupId, null);
+	}
+
+	/**
+	 * Returns the first user group role in the ordered set where userId = &#63; and groupId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByU_G_First(long userId, long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<UserGroupRole> list = findByU_G(userId, groupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63; and groupId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param groupId the group ID
+	 * @return the last matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByU_G_Last(long userId, long groupId)
+		throws NoSuchUserGroupRoleException, SystemException {
+		return findByU_G_Last(userId, groupId, null);
+	}
+
+	/**
+	 * Returns the last user group role in the ordered set where userId = &#63; and groupId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByU_G_Last(long userId, long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserGroupRoleException, SystemException {
+		UserGroupRole userGroupRole = fetchByU_G_Last(userId, groupId,
+				orderByComparator);
+
+		if (userGroupRole != null) {
+			return userGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where userId = &#63; and groupId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param groupId the group ID
+	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByU_G_Last(long userId, long groupId)
+		throws SystemException {
+		return fetchByU_G_Last(userId, groupId, null);
+	}
+
+	/**
+	 * Returns the last user group role in the ordered set where userId = &#63; and groupId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByU_G_Last(long userId, long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByU_G(userId, groupId);
+
+		List<UserGroupRole> list = findByU_G(userId, groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the user group roles where userId = &#63; and groupId = &#63; from the database.
 	 *
 	 * @param userId the user ID
@@ -1900,7 +2107,8 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	public void removeByU_G(long userId, long groupId)
 		throws SystemException {
-		for (UserGroupRole userGroupRole : findByU_G(userId, groupId)) {
+		for (UserGroupRole userGroupRole : findByU_G(userId, groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(userGroupRole);
 		}
 	}
@@ -2018,228 +2226,6 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	public List<UserGroupRole> findByG_R(long groupId, long roleId, int start,
 		int end) throws SystemException {
 		return findByG_R(groupId, roleId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the user group roles where groupId = &#63; and roleId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param roleId the role ID
-	 * @param start the lower bound of the range of user group roles
-	 * @param end the upper bound of the range of user group roles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching user group roles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<UserGroupRole> findByG_R(long groupId, long roleId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R;
-			finderArgs = new Object[] { groupId, roleId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R;
-			finderArgs = new Object[] {
-					groupId, roleId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<UserGroupRole> list = (List<UserGroupRole>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (UserGroupRole userGroupRole : list) {
-				if ((groupId != userGroupRole.getGroupId()) ||
-						(roleId != userGroupRole.getRoleId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_USERGROUPROLE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_R_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_R_ROLEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(roleId);
-
-				list = (List<UserGroupRole>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user group role in the ordered set where groupId = &#63; and roleId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user group role
-	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole findByG_R_First(long groupId, long roleId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserGroupRoleException, SystemException {
-		UserGroupRole userGroupRole = fetchByG_R_First(groupId, roleId,
-				orderByComparator);
-
-		if (userGroupRole != null) {
-			return userGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", roleId=");
-		msg.append(roleId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user group role in the ordered set where groupId = &#63; and roleId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole fetchByG_R_First(long groupId, long roleId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<UserGroupRole> list = findByG_R(groupId, roleId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user group role in the ordered set where groupId = &#63; and roleId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user group role
-	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole findByG_R_Last(long groupId, long roleId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserGroupRoleException, SystemException {
-		UserGroupRole userGroupRole = fetchByG_R_Last(groupId, roleId,
-				orderByComparator);
-
-		if (userGroupRole != null) {
-			return userGroupRole;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", roleId=");
-		msg.append(roleId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserGroupRoleException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user group role in the ordered set where groupId = &#63; and roleId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public UserGroupRole fetchByG_R_Last(long groupId, long roleId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_R(groupId, roleId);
-
-		List<UserGroupRole> list = findByG_R(groupId, roleId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2391,6 +2377,282 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	}
 
 	/**
+	 * Returns an ordered range of all the user group roles where groupId = &#63; and roleId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param roleId the role ID
+	 * @param start the lower bound of the range of user group roles
+	 * @param end the upper bound of the range of user group roles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching user group roles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<UserGroupRole> findByG_R(long groupId, long roleId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R;
+			finderArgs = new Object[] { groupId, roleId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R;
+			finderArgs = new Object[] {
+					groupId, roleId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<UserGroupRole> list = (List<UserGroupRole>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroupRole userGroupRole : list) {
+				if ((groupId != userGroupRole.getGroupId()) ||
+						(roleId != userGroupRole.getRoleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_USERGROUPROLE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_R_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_R_ROLEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(roleId);
+
+				list = (List<UserGroupRole>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and roleId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param roleId the role ID
+	 * @return the first matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByG_R_First(long groupId, long roleId)
+		throws NoSuchUserGroupRoleException, SystemException {
+		return findByG_R_First(groupId, roleId, null);
+	}
+
+	/**
+	 * Returns the first user group role in the ordered set where groupId = &#63; and roleId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByG_R_First(long groupId, long roleId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserGroupRoleException, SystemException {
+		UserGroupRole userGroupRole = fetchByG_R_First(groupId, roleId,
+				orderByComparator);
+
+		if (userGroupRole != null) {
+			return userGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", roleId=");
+		msg.append(roleId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and roleId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param roleId the role ID
+	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByG_R_First(long groupId, long roleId)
+		throws SystemException {
+		return fetchByG_R_First(groupId, roleId, null);
+	}
+
+	/**
+	 * Returns the first user group role in the ordered set where groupId = &#63; and roleId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByG_R_First(long groupId, long roleId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<UserGroupRole> list = findByG_R(groupId, roleId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and roleId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param roleId the role ID
+	 * @return the last matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByG_R_Last(long groupId, long roleId)
+		throws NoSuchUserGroupRoleException, SystemException {
+		return findByG_R_Last(groupId, roleId, null);
+	}
+
+	/**
+	 * Returns the last user group role in the ordered set where groupId = &#63; and roleId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user group role
+	 * @throws com.liferay.portal.NoSuchUserGroupRoleException if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole findByG_R_Last(long groupId, long roleId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserGroupRoleException, SystemException {
+		UserGroupRole userGroupRole = fetchByG_R_Last(groupId, roleId,
+				orderByComparator);
+
+		if (userGroupRole != null) {
+			return userGroupRole;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", roleId=");
+		msg.append(roleId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserGroupRoleException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user group role in the default ordered set defined by {@link UserGroupRoleModelImpl#ORDER_BY_JPQL} where groupId = &#63; and roleId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param roleId the role ID
+	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByG_R_Last(long groupId, long roleId)
+		throws SystemException {
+		return fetchByG_R_Last(groupId, roleId, null);
+	}
+
+	/**
+	 * Returns the last user group role in the ordered set where groupId = &#63; and roleId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user group role, or <code>null</code> if a matching user group role could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public UserGroupRole fetchByG_R_Last(long groupId, long roleId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_R(groupId, roleId);
+
+		List<UserGroupRole> list = findByG_R(groupId, roleId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the user group roles where groupId = &#63; and roleId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -2399,7 +2661,8 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	public void removeByG_R(long groupId, long roleId)
 		throws SystemException {
-		for (UserGroupRole userGroupRole : findByG_R(groupId, roleId)) {
+		for (UserGroupRole userGroupRole : findByG_R(groupId, roleId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(userGroupRole);
 		}
 	}

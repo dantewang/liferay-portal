@@ -66,6 +66,22 @@ public interface ExpandoRowPersistence extends BasePersistence<ExpandoRow> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the expando rows before and after the current expando row in the ordered set where tableId = &#63;.
+	*
+	* @param rowId the primary key of the current expando row
+	* @param tableId the table ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next expando row
+	* @throws com.liferay.portlet.expando.NoSuchRowException if a expando row with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoRow[] findByTableId_PrevAndNext(
+		long rowId, long tableId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchRowException;
+
+	/**
 	* Returns an ordered range of all the expando rows where tableId = &#63;.
 	*
 	* <p>
@@ -85,6 +101,19 @@ public interface ExpandoRowPersistence extends BasePersistence<ExpandoRow> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first expando row in the default ordered set defined by {@link ExpandoRowModelImpl#ORDER_BY_JPQL} where tableId = &#63;.
+	*
+	* @param tableId the table ID
+	* @return the first matching expando row
+	* @throws com.liferay.portlet.expando.NoSuchRowException if a matching expando row could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoRow findByTableId_First(
+		long tableId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchRowException;
+
+	/**
 	* Returns the first expando row in the ordered set where tableId = &#63;.
 	*
 	* @param tableId the table ID
@@ -100,6 +129,17 @@ public interface ExpandoRowPersistence extends BasePersistence<ExpandoRow> {
 			com.liferay.portlet.expando.NoSuchRowException;
 
 	/**
+	* Returns the first expando row in the default ordered set defined by {@link ExpandoRowModelImpl#ORDER_BY_JPQL} where tableId = &#63;.
+	*
+	* @param tableId the table ID
+	* @return the first matching expando row, or <code>null</code> if a matching expando row could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoRow fetchByTableId_First(
+		long tableId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first expando row in the ordered set where tableId = &#63;.
 	*
 	* @param tableId the table ID
@@ -111,6 +151,19 @@ public interface ExpandoRowPersistence extends BasePersistence<ExpandoRow> {
 		long tableId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last expando row in the default ordered set defined by {@link ExpandoRowModelImpl#ORDER_BY_JPQL} where tableId = &#63;.
+	*
+	* @param tableId the table ID
+	* @return the last matching expando row
+	* @throws com.liferay.portlet.expando.NoSuchRowException if a matching expando row could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoRow findByTableId_Last(
+		long tableId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchRowException;
 
 	/**
 	* Returns the last expando row in the ordered set where tableId = &#63;.
@@ -128,6 +181,17 @@ public interface ExpandoRowPersistence extends BasePersistence<ExpandoRow> {
 			com.liferay.portlet.expando.NoSuchRowException;
 
 	/**
+	* Returns the last expando row in the default ordered set defined by {@link ExpandoRowModelImpl#ORDER_BY_JPQL} where tableId = &#63;.
+	*
+	* @param tableId the table ID
+	* @return the last matching expando row, or <code>null</code> if a matching expando row could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.expando.model.ExpandoRow fetchByTableId_Last(
+		long tableId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last expando row in the ordered set where tableId = &#63;.
 	*
 	* @param tableId the table ID
@@ -139,22 +203,6 @@ public interface ExpandoRowPersistence extends BasePersistence<ExpandoRow> {
 		long tableId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the expando rows before and after the current expando row in the ordered set where tableId = &#63;.
-	*
-	* @param rowId the primary key of the current expando row
-	* @param tableId the table ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next expando row
-	* @throws com.liferay.portlet.expando.NoSuchRowException if a expando row with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.expando.model.ExpandoRow[] findByTableId_PrevAndNext(
-		long rowId, long tableId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.expando.NoSuchRowException;
 
 	/**
 	* Removes all the expando rows where tableId = &#63; from the database.

@@ -136,219 +136,6 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	}
 
 	/**
-	 * Returns an ordered range of all the repository entries where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of repository entries
-	 * @param end the upper bound of the range of repository entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching repository entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<RepositoryEntry> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<RepositoryEntry> list = (List<RepositoryEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (RepositoryEntry repositoryEntry : list) {
-				if (!Validator.equals(uuid, repositoryEntry.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_REPOSITORYENTRY_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<RepositoryEntry>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first repository entry in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching repository entry
-	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public RepositoryEntry findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchRepositoryEntryException, SystemException {
-		RepositoryEntry repositoryEntry = fetchByUuid_First(uuid,
-				orderByComparator);
-
-		if (repositoryEntry != null) {
-			return repositoryEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRepositoryEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first repository entry in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching repository entry, or <code>null</code> if a matching repository entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public RepositoryEntry fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<RepositoryEntry> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last repository entry in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching repository entry
-	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public RepositoryEntry findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchRepositoryEntryException, SystemException {
-		RepositoryEntry repositoryEntry = fetchByUuid_Last(uuid,
-				orderByComparator);
-
-		if (repositoryEntry != null) {
-			return repositoryEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRepositoryEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last repository entry in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching repository entry, or <code>null</code> if a matching repository entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public RepositoryEntry fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<RepositoryEntry> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the repository entries before and after the current repository entry in the ordered set where uuid = &#63;.
 	 *
 	 * @param repositoryEntryId the primary key of the current repository entry
@@ -503,13 +290,277 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	}
 
 	/**
+	 * Returns an ordered range of all the repository entries where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of repository entries
+	 * @param end the upper bound of the range of repository entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching repository entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<RepositoryEntry> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<RepositoryEntry> list = (List<RepositoryEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (RepositoryEntry repositoryEntry : list) {
+				if (!Validator.equals(uuid, repositoryEntry.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_REPOSITORYENTRY_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<RepositoryEntry>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching repository entry
+	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry findByUuid_First(String uuid)
+		throws NoSuchRepositoryEntryException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first repository entry in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching repository entry
+	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchRepositoryEntryException, SystemException {
+		RepositoryEntry repositoryEntry = fetchByUuid_First(uuid,
+				orderByComparator);
+
+		if (repositoryEntry != null) {
+			return repositoryEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRepositoryEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry fetchByUuid_First(String uuid)
+		throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first repository entry in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<RepositoryEntry> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching repository entry
+	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry findByUuid_Last(String uuid)
+		throws NoSuchRepositoryEntryException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last repository entry in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching repository entry
+	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchRepositoryEntryException, SystemException {
+		RepositoryEntry repositoryEntry = fetchByUuid_Last(uuid,
+				orderByComparator);
+
+		if (repositoryEntry != null) {
+			return repositoryEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRepositoryEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry fetchByUuid_Last(String uuid)
+		throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last repository entry in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<RepositoryEntry> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the repository entries where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (RepositoryEntry repositoryEntry : findByUuid(uuid)) {
+		for (RepositoryEntry repositoryEntry : findByUuid(uuid,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(repositoryEntry);
 		}
 	}
@@ -586,6 +637,24 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 			RepositoryEntryModelImpl.FINDER_CACHE_ENABLED,
 			RepositoryEntryImpl.class, FINDER_CLASS_NAME_ENTITY,
 			"fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			RepositoryEntryModelImpl.UUID_COLUMN_BITMASK |
+			RepositoryEntryModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_G = new FinderPath(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
+			RepositoryEntryModelImpl.FINDER_CACHE_ENABLED,
+			RepositoryEntryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUUID_G",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_G =
+		new FinderPath(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
+			RepositoryEntryModelImpl.FINDER_CACHE_ENABLED,
+			RepositoryEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUUID_G",
 			new String[] { String.class.getName(), Long.class.getName() },
 			RepositoryEntryModelImpl.UUID_COLUMN_BITMASK |
 			RepositoryEntryModelImpl.GROUPID_COLUMN_BITMASK);
@@ -900,213 +969,6 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	}
 
 	/**
-	 * Returns an ordered range of all the repository entries where repositoryId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param repositoryId the repository ID
-	 * @param start the lower bound of the range of repository entries
-	 * @param end the upper bound of the range of repository entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching repository entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<RepositoryEntry> findByRepositoryId(long repositoryId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_REPOSITORYID;
-			finderArgs = new Object[] { repositoryId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_REPOSITORYID;
-			finderArgs = new Object[] {
-					repositoryId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<RepositoryEntry> list = (List<RepositoryEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (RepositoryEntry repositoryEntry : list) {
-				if ((repositoryId != repositoryEntry.getRepositoryId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_REPOSITORYENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_REPOSITORYID_REPOSITORYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(repositoryId);
-
-				list = (List<RepositoryEntry>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first repository entry in the ordered set where repositoryId = &#63;.
-	 *
-	 * @param repositoryId the repository ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching repository entry
-	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public RepositoryEntry findByRepositoryId_First(long repositoryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRepositoryEntryException, SystemException {
-		RepositoryEntry repositoryEntry = fetchByRepositoryId_First(repositoryId,
-				orderByComparator);
-
-		if (repositoryEntry != null) {
-			return repositoryEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("repositoryId=");
-		msg.append(repositoryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRepositoryEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first repository entry in the ordered set where repositoryId = &#63;.
-	 *
-	 * @param repositoryId the repository ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching repository entry, or <code>null</code> if a matching repository entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public RepositoryEntry fetchByRepositoryId_First(long repositoryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<RepositoryEntry> list = findByRepositoryId(repositoryId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last repository entry in the ordered set where repositoryId = &#63;.
-	 *
-	 * @param repositoryId the repository ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching repository entry
-	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public RepositoryEntry findByRepositoryId_Last(long repositoryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRepositoryEntryException, SystemException {
-		RepositoryEntry repositoryEntry = fetchByRepositoryId_Last(repositoryId,
-				orderByComparator);
-
-		if (repositoryEntry != null) {
-			return repositoryEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("repositoryId=");
-		msg.append(repositoryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRepositoryEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last repository entry in the ordered set where repositoryId = &#63;.
-	 *
-	 * @param repositoryId the repository ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching repository entry, or <code>null</code> if a matching repository entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public RepositoryEntry fetchByRepositoryId_Last(long repositoryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByRepositoryId(repositoryId);
-
-		List<RepositoryEntry> list = findByRepositoryId(repositoryId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the repository entries before and after the current repository entry in the ordered set where repositoryId = &#63;.
 	 *
 	 * @param repositoryEntryId the primary key of the current repository entry
@@ -1250,6 +1112,263 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	}
 
 	/**
+	 * Returns an ordered range of all the repository entries where repositoryId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param repositoryId the repository ID
+	 * @param start the lower bound of the range of repository entries
+	 * @param end the upper bound of the range of repository entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching repository entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<RepositoryEntry> findByRepositoryId(long repositoryId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_REPOSITORYID;
+			finderArgs = new Object[] { repositoryId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_REPOSITORYID;
+			finderArgs = new Object[] {
+					repositoryId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<RepositoryEntry> list = (List<RepositoryEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (RepositoryEntry repositoryEntry : list) {
+				if ((repositoryId != repositoryEntry.getRepositoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_REPOSITORYENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_REPOSITORYID_REPOSITORYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(repositoryId);
+
+				list = (List<RepositoryEntry>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where repositoryId = &#63;.
+	 *
+	 * @param repositoryId the repository ID
+	 * @return the first matching repository entry
+	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry findByRepositoryId_First(long repositoryId)
+		throws NoSuchRepositoryEntryException, SystemException {
+		return findByRepositoryId_First(repositoryId, null);
+	}
+
+	/**
+	 * Returns the first repository entry in the ordered set where repositoryId = &#63;.
+	 *
+	 * @param repositoryId the repository ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching repository entry
+	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry findByRepositoryId_First(long repositoryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRepositoryEntryException, SystemException {
+		RepositoryEntry repositoryEntry = fetchByRepositoryId_First(repositoryId,
+				orderByComparator);
+
+		if (repositoryEntry != null) {
+			return repositoryEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("repositoryId=");
+		msg.append(repositoryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRepositoryEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where repositoryId = &#63;.
+	 *
+	 * @param repositoryId the repository ID
+	 * @return the first matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry fetchByRepositoryId_First(long repositoryId)
+		throws SystemException {
+		return fetchByRepositoryId_First(repositoryId, null);
+	}
+
+	/**
+	 * Returns the first repository entry in the ordered set where repositoryId = &#63;.
+	 *
+	 * @param repositoryId the repository ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry fetchByRepositoryId_First(long repositoryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<RepositoryEntry> list = findByRepositoryId(repositoryId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where repositoryId = &#63;.
+	 *
+	 * @param repositoryId the repository ID
+	 * @return the last matching repository entry
+	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry findByRepositoryId_Last(long repositoryId)
+		throws NoSuchRepositoryEntryException, SystemException {
+		return findByRepositoryId_Last(repositoryId, null);
+	}
+
+	/**
+	 * Returns the last repository entry in the ordered set where repositoryId = &#63;.
+	 *
+	 * @param repositoryId the repository ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching repository entry
+	 * @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry findByRepositoryId_Last(long repositoryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRepositoryEntryException, SystemException {
+		RepositoryEntry repositoryEntry = fetchByRepositoryId_Last(repositoryId,
+				orderByComparator);
+
+		if (repositoryEntry != null) {
+			return repositoryEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("repositoryId=");
+		msg.append(repositoryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRepositoryEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where repositoryId = &#63;.
+	 *
+	 * @param repositoryId the repository ID
+	 * @return the last matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry fetchByRepositoryId_Last(long repositoryId)
+		throws SystemException {
+		return fetchByRepositoryId_Last(repositoryId, null);
+	}
+
+	/**
+	 * Returns the last repository entry in the ordered set where repositoryId = &#63;.
+	 *
+	 * @param repositoryId the repository ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public RepositoryEntry fetchByRepositoryId_Last(long repositoryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByRepositoryId(repositoryId);
+
+		List<RepositoryEntry> list = findByRepositoryId(repositoryId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the repository entries where repositoryId = &#63; from the database.
 	 *
 	 * @param repositoryId the repository ID
@@ -1257,7 +1376,8 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 */
 	public void removeByRepositoryId(long repositoryId)
 		throws SystemException {
-		for (RepositoryEntry repositoryEntry : findByRepositoryId(repositoryId)) {
+		for (RepositoryEntry repositoryEntry : findByRepositoryId(
+				repositoryId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(repositoryEntry);
 		}
 	}
@@ -1319,6 +1439,23 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	public static final FinderPath FINDER_PATH_FETCH_BY_R_M = new FinderPath(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RepositoryEntryModelImpl.FINDER_CACHE_ENABLED,
 			RepositoryEntryImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByR_M",
+			new String[] { Long.class.getName(), String.class.getName() },
+			RepositoryEntryModelImpl.REPOSITORYID_COLUMN_BITMASK |
+			RepositoryEntryModelImpl.MAPPEDID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_M = new FinderPath(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
+			RepositoryEntryModelImpl.FINDER_CACHE_ENABLED,
+			RepositoryEntryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByR_M",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_M = new FinderPath(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
+			RepositoryEntryModelImpl.FINDER_CACHE_ENABLED,
+			RepositoryEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_M",
 			new String[] { Long.class.getName(), String.class.getName() },
 			RepositoryEntryModelImpl.REPOSITORYID_COLUMN_BITMASK |
 			RepositoryEntryModelImpl.MAPPEDID_COLUMN_BITMASK);

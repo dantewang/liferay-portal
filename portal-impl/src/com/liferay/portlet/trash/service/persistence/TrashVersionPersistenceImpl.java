@@ -133,207 +133,6 @@ public class TrashVersionPersistenceImpl extends BasePersistenceImpl<TrashVersio
 	}
 
 	/**
-	 * Returns an ordered range of all the trash versions where entryId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param entryId the entry ID
-	 * @param start the lower bound of the range of trash versions
-	 * @param end the upper bound of the range of trash versions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching trash versions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<TrashVersion> findByEntryId(long entryId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ENTRYID;
-			finderArgs = new Object[] { entryId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ENTRYID;
-			finderArgs = new Object[] { entryId, start, end, orderByComparator };
-		}
-
-		List<TrashVersion> list = (List<TrashVersion>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (TrashVersion trashVersion : list) {
-				if ((entryId != trashVersion.getEntryId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_TRASHVERSION_WHERE);
-
-			query.append(_FINDER_COLUMN_ENTRYID_ENTRYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(entryId);
-
-				list = (List<TrashVersion>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first trash version in the ordered set where entryId = &#63;.
-	 *
-	 * @param entryId the entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching trash version
-	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashVersion findByEntryId_First(long entryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchVersionException, SystemException {
-		TrashVersion trashVersion = fetchByEntryId_First(entryId,
-				orderByComparator);
-
-		if (trashVersion != null) {
-			return trashVersion;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("entryId=");
-		msg.append(entryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchVersionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first trash version in the ordered set where entryId = &#63;.
-	 *
-	 * @param entryId the entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching trash version, or <code>null</code> if a matching trash version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashVersion fetchByEntryId_First(long entryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<TrashVersion> list = findByEntryId(entryId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last trash version in the ordered set where entryId = &#63;.
-	 *
-	 * @param entryId the entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching trash version
-	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashVersion findByEntryId_Last(long entryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchVersionException, SystemException {
-		TrashVersion trashVersion = fetchByEntryId_Last(entryId,
-				orderByComparator);
-
-		if (trashVersion != null) {
-			return trashVersion;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("entryId=");
-		msg.append(entryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchVersionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last trash version in the ordered set where entryId = &#63;.
-	 *
-	 * @param entryId the entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching trash version, or <code>null</code> if a matching trash version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashVersion fetchByEntryId_Last(long entryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByEntryId(entryId);
-
-		List<TrashVersion> list = findByEntryId(entryId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the trash versions before and after the current trash version in the ordered set where entryId = &#63;.
 	 *
 	 * @param versionId the primary key of the current trash version
@@ -476,13 +275,265 @@ public class TrashVersionPersistenceImpl extends BasePersistenceImpl<TrashVersio
 	}
 
 	/**
+	 * Returns an ordered range of all the trash versions where entryId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param entryId the entry ID
+	 * @param start the lower bound of the range of trash versions
+	 * @param end the upper bound of the range of trash versions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching trash versions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<TrashVersion> findByEntryId(long entryId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ENTRYID;
+			finderArgs = new Object[] { entryId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ENTRYID;
+			finderArgs = new Object[] { entryId, start, end, orderByComparator };
+		}
+
+		List<TrashVersion> list = (List<TrashVersion>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (TrashVersion trashVersion : list) {
+				if ((entryId != trashVersion.getEntryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_TRASHVERSION_WHERE);
+
+			query.append(_FINDER_COLUMN_ENTRYID_ENTRYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(entryId);
+
+				list = (List<TrashVersion>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first trash version in the default ordered set defined by {@link TrashVersionModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @return the first matching trash version
+	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion findByEntryId_First(long entryId)
+		throws NoSuchVersionException, SystemException {
+		return findByEntryId_First(entryId, null);
+	}
+
+	/**
+	 * Returns the first trash version in the ordered set where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching trash version
+	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion findByEntryId_First(long entryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchVersionException, SystemException {
+		TrashVersion trashVersion = fetchByEntryId_First(entryId,
+				orderByComparator);
+
+		if (trashVersion != null) {
+			return trashVersion;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("entryId=");
+		msg.append(entryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchVersionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first trash version in the default ordered set defined by {@link TrashVersionModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @return the first matching trash version, or <code>null</code> if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion fetchByEntryId_First(long entryId)
+		throws SystemException {
+		return fetchByEntryId_First(entryId, null);
+	}
+
+	/**
+	 * Returns the first trash version in the ordered set where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching trash version, or <code>null</code> if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion fetchByEntryId_First(long entryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<TrashVersion> list = findByEntryId(entryId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last trash version in the default ordered set defined by {@link TrashVersionModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @return the last matching trash version
+	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion findByEntryId_Last(long entryId)
+		throws NoSuchVersionException, SystemException {
+		return findByEntryId_Last(entryId, null);
+	}
+
+	/**
+	 * Returns the last trash version in the ordered set where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching trash version
+	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion findByEntryId_Last(long entryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchVersionException, SystemException {
+		TrashVersion trashVersion = fetchByEntryId_Last(entryId,
+				orderByComparator);
+
+		if (trashVersion != null) {
+			return trashVersion;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("entryId=");
+		msg.append(entryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchVersionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last trash version in the default ordered set defined by {@link TrashVersionModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @return the last matching trash version, or <code>null</code> if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion fetchByEntryId_Last(long entryId)
+		throws SystemException {
+		return fetchByEntryId_Last(entryId, null);
+	}
+
+	/**
+	 * Returns the last trash version in the ordered set where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching trash version, or <code>null</code> if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion fetchByEntryId_Last(long entryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByEntryId(entryId);
+
+		List<TrashVersion> list = findByEntryId(entryId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the trash versions where entryId = &#63; from the database.
 	 *
 	 * @param entryId the entry ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByEntryId(long entryId) throws SystemException {
-		for (TrashVersion trashVersion : findByEntryId(entryId)) {
+		for (TrashVersion trashVersion : findByEntryId(entryId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(trashVersion);
 		}
 	}
@@ -592,229 +643,6 @@ public class TrashVersionPersistenceImpl extends BasePersistenceImpl<TrashVersio
 	public List<TrashVersion> findByC_C(long classNameId, long classPK,
 		int start, int end) throws SystemException {
 		return findByC_C(classNameId, classPK, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the trash versions where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param start the lower bound of the range of trash versions
-	 * @param end the upper bound of the range of trash versions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching trash versions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<TrashVersion> findByC_C(long classNameId, long classPK,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
-			finderArgs = new Object[] { classNameId, classPK };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
-			finderArgs = new Object[] {
-					classNameId, classPK,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<TrashVersion> list = (List<TrashVersion>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (TrashVersion trashVersion : list) {
-				if ((classNameId != trashVersion.getClassNameId()) ||
-						(classPK != trashVersion.getClassPK())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_TRASHVERSION_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				list = (List<TrashVersion>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first trash version in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching trash version
-	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashVersion findByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
-		throws NoSuchVersionException, SystemException {
-		TrashVersion trashVersion = fetchByC_C_First(classNameId, classPK,
-				orderByComparator);
-
-		if (trashVersion != null) {
-			return trashVersion;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchVersionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first trash version in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching trash version, or <code>null</code> if a matching trash version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashVersion fetchByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<TrashVersion> list = findByC_C(classNameId, classPK, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last trash version in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching trash version
-	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashVersion findByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
-		throws NoSuchVersionException, SystemException {
-		TrashVersion trashVersion = fetchByC_C_Last(classNameId, classPK,
-				orderByComparator);
-
-		if (trashVersion != null) {
-			return trashVersion;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchVersionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last trash version in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching trash version, or <code>null</code> if a matching trash version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TrashVersion fetchByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_C(classNameId, classPK);
-
-		List<TrashVersion> list = findByC_C(classNameId, classPK, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -965,6 +793,283 @@ public class TrashVersionPersistenceImpl extends BasePersistenceImpl<TrashVersio
 	}
 
 	/**
+	 * Returns an ordered range of all the trash versions where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param start the lower bound of the range of trash versions
+	 * @param end the upper bound of the range of trash versions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching trash versions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<TrashVersion> findByC_C(long classNameId, long classPK,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] { classNameId, classPK };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] {
+					classNameId, classPK,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<TrashVersion> list = (List<TrashVersion>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (TrashVersion trashVersion : list) {
+				if ((classNameId != trashVersion.getClassNameId()) ||
+						(classPK != trashVersion.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_TRASHVERSION_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				list = (List<TrashVersion>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first trash version in the default ordered set defined by {@link TrashVersionModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching trash version
+	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion findByC_C_First(long classNameId, long classPK)
+		throws NoSuchVersionException, SystemException {
+		return findByC_C_First(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first trash version in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching trash version
+	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion findByC_C_First(long classNameId, long classPK,
+		OrderByComparator orderByComparator)
+		throws NoSuchVersionException, SystemException {
+		TrashVersion trashVersion = fetchByC_C_First(classNameId, classPK,
+				orderByComparator);
+
+		if (trashVersion != null) {
+			return trashVersion;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchVersionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first trash version in the default ordered set defined by {@link TrashVersionModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching trash version, or <code>null</code> if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion fetchByC_C_First(long classNameId, long classPK)
+		throws SystemException {
+		return fetchByC_C_First(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first trash version in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching trash version, or <code>null</code> if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion fetchByC_C_First(long classNameId, long classPK,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<TrashVersion> list = findByC_C(classNameId, classPK, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last trash version in the default ordered set defined by {@link TrashVersionModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching trash version
+	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion findByC_C_Last(long classNameId, long classPK)
+		throws NoSuchVersionException, SystemException {
+		return findByC_C_Last(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last trash version in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching trash version
+	 * @throws com.liferay.portlet.trash.NoSuchVersionException if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion findByC_C_Last(long classNameId, long classPK,
+		OrderByComparator orderByComparator)
+		throws NoSuchVersionException, SystemException {
+		TrashVersion trashVersion = fetchByC_C_Last(classNameId, classPK,
+				orderByComparator);
+
+		if (trashVersion != null) {
+			return trashVersion;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchVersionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last trash version in the default ordered set defined by {@link TrashVersionModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching trash version, or <code>null</code> if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion fetchByC_C_Last(long classNameId, long classPK)
+		throws SystemException {
+		return fetchByC_C_Last(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last trash version in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching trash version, or <code>null</code> if a matching trash version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TrashVersion fetchByC_C_Last(long classNameId, long classPK,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_C(classNameId, classPK);
+
+		List<TrashVersion> list = findByC_C(classNameId, classPK, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the trash versions where classNameId = &#63; and classPK = &#63; from the database.
 	 *
 	 * @param classNameId the class name ID
@@ -973,7 +1078,8 @@ public class TrashVersionPersistenceImpl extends BasePersistenceImpl<TrashVersio
 	 */
 	public void removeByC_C(long classNameId, long classPK)
 		throws SystemException {
-		for (TrashVersion trashVersion : findByC_C(classNameId, classPK)) {
+		for (TrashVersion trashVersion : findByC_C(classNameId, classPK,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(trashVersion);
 		}
 	}

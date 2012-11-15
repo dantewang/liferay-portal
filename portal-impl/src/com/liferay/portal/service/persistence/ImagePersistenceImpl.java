@@ -126,200 +126,6 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	}
 
 	/**
-	 * Returns an ordered range of all the images where size &lt; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param size the size
-	 * @param start the lower bound of the range of images
-	 * @param end the upper bound of the range of images (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching images
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Image> findByLtSize(int size, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LTSIZE;
-		finderArgs = new Object[] { size, start, end, orderByComparator };
-
-		List<Image> list = (List<Image>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Image image : list) {
-				if ((size != image.getSize())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_IMAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_LTSIZE_SIZE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(ImageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(size);
-
-				list = (List<Image>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first image in the ordered set where size &lt; &#63;.
-	 *
-	 * @param size the size
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching image
-	 * @throws com.liferay.portal.NoSuchImageException if a matching image could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Image findByLtSize_First(int size,
-		OrderByComparator orderByComparator)
-		throws NoSuchImageException, SystemException {
-		Image image = fetchByLtSize_First(size, orderByComparator);
-
-		if (image != null) {
-			return image;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("size=");
-		msg.append(size);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchImageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first image in the ordered set where size &lt; &#63;.
-	 *
-	 * @param size the size
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching image, or <code>null</code> if a matching image could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Image fetchByLtSize_First(int size,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Image> list = findByLtSize(size, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last image in the ordered set where size &lt; &#63;.
-	 *
-	 * @param size the size
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching image
-	 * @throws com.liferay.portal.NoSuchImageException if a matching image could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Image findByLtSize_Last(int size, OrderByComparator orderByComparator)
-		throws NoSuchImageException, SystemException {
-		Image image = fetchByLtSize_Last(size, orderByComparator);
-
-		if (image != null) {
-			return image;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("size=");
-		msg.append(size);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchImageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last image in the ordered set where size &lt; &#63;.
-	 *
-	 * @param size the size
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching image, or <code>null</code> if a matching image could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Image fetchByLtSize_Last(int size,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByLtSize(size);
-
-		List<Image> list = findByLtSize(size, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the images before and after the current image in the ordered set where size &lt; &#63;.
 	 *
 	 * @param imageId the primary key of the current image
@@ -465,13 +271,256 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	}
 
 	/**
+	 * Returns an ordered range of all the images where size &lt; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param size the size
+	 * @param start the lower bound of the range of images
+	 * @param end the upper bound of the range of images (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching images
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Image> findByLtSize(int size, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LTSIZE;
+		finderArgs = new Object[] { size, start, end, orderByComparator };
+
+		List<Image> list = (List<Image>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Image image : list) {
+				if ((size != image.getSize())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_IMAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_LTSIZE_SIZE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(ImageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(size);
+
+				list = (List<Image>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first image in the default ordered set defined by {@link ImageModelImpl#ORDER_BY_JPQL} where size &lt; &#63;.
+	 *
+	 * @param size the size
+	 * @return the first matching image
+	 * @throws com.liferay.portal.NoSuchImageException if a matching image could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image findByLtSize_First(int size)
+		throws NoSuchImageException, SystemException {
+		return findByLtSize_First(size, null);
+	}
+
+	/**
+	 * Returns the first image in the ordered set where size &lt; &#63;.
+	 *
+	 * @param size the size
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching image
+	 * @throws com.liferay.portal.NoSuchImageException if a matching image could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image findByLtSize_First(int size,
+		OrderByComparator orderByComparator)
+		throws NoSuchImageException, SystemException {
+		Image image = fetchByLtSize_First(size, orderByComparator);
+
+		if (image != null) {
+			return image;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("size=");
+		msg.append(size);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchImageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first image in the default ordered set defined by {@link ImageModelImpl#ORDER_BY_JPQL} where size &lt; &#63;.
+	 *
+	 * @param size the size
+	 * @return the first matching image, or <code>null</code> if a matching image could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image fetchByLtSize_First(int size) throws SystemException {
+		return fetchByLtSize_First(size, null);
+	}
+
+	/**
+	 * Returns the first image in the ordered set where size &lt; &#63;.
+	 *
+	 * @param size the size
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching image, or <code>null</code> if a matching image could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image fetchByLtSize_First(int size,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Image> list = findByLtSize(size, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last image in the default ordered set defined by {@link ImageModelImpl#ORDER_BY_JPQL} where size &lt; &#63;.
+	 *
+	 * @param size the size
+	 * @return the last matching image
+	 * @throws com.liferay.portal.NoSuchImageException if a matching image could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image findByLtSize_Last(int size)
+		throws NoSuchImageException, SystemException {
+		return findByLtSize_Last(size, null);
+	}
+
+	/**
+	 * Returns the last image in the ordered set where size &lt; &#63;.
+	 *
+	 * @param size the size
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching image
+	 * @throws com.liferay.portal.NoSuchImageException if a matching image could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image findByLtSize_Last(int size, OrderByComparator orderByComparator)
+		throws NoSuchImageException, SystemException {
+		Image image = fetchByLtSize_Last(size, orderByComparator);
+
+		if (image != null) {
+			return image;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("size=");
+		msg.append(size);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchImageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last image in the default ordered set defined by {@link ImageModelImpl#ORDER_BY_JPQL} where size &lt; &#63;.
+	 *
+	 * @param size the size
+	 * @return the last matching image, or <code>null</code> if a matching image could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image fetchByLtSize_Last(int size) throws SystemException {
+		return fetchByLtSize_Last(size, null);
+	}
+
+	/**
+	 * Returns the last image in the ordered set where size &lt; &#63;.
+	 *
+	 * @param size the size
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching image, or <code>null</code> if a matching image could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image fetchByLtSize_Last(int size,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByLtSize(size);
+
+		List<Image> list = findByLtSize(size, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the images where size &lt; &#63; from the database.
 	 *
 	 * @param size the size
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByLtSize(int size) throws SystemException {
-		for (Image image : findByLtSize(size)) {
+		for (Image image : findByLtSize(size, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(image);
 		}
 	}

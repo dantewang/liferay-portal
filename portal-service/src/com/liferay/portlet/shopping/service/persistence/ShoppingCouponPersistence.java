@@ -66,6 +66,22 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the shopping coupons before and after the current shopping coupon in the ordered set where groupId = &#63;.
+	*
+	* @param couponId the primary key of the current shopping coupon
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next shopping coupon
+	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCoupon[] findByGroupId_PrevAndNext(
+		long couponId, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCouponException;
+
+	/**
 	* Returns an ordered range of all the shopping coupons where groupId = &#63;.
 	*
 	* <p>
@@ -85,6 +101,19 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first shopping coupon in the default ordered set defined by {@link ShoppingCouponModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching shopping coupon
+	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a matching shopping coupon could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCoupon findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCouponException;
+
+	/**
 	* Returns the first shopping coupon in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -100,6 +129,17 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 			com.liferay.portlet.shopping.NoSuchCouponException;
 
 	/**
+	* Returns the first shopping coupon in the default ordered set defined by {@link ShoppingCouponModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching shopping coupon, or <code>null</code> if a matching shopping coupon could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCoupon fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first shopping coupon in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -111,6 +151,19 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last shopping coupon in the default ordered set defined by {@link ShoppingCouponModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching shopping coupon
+	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a matching shopping coupon could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCoupon findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCouponException;
 
 	/**
 	* Returns the last shopping coupon in the ordered set where groupId = &#63;.
@@ -128,6 +181,17 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 			com.liferay.portlet.shopping.NoSuchCouponException;
 
 	/**
+	* Returns the last shopping coupon in the default ordered set defined by {@link ShoppingCouponModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching shopping coupon, or <code>null</code> if a matching shopping coupon could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCoupon fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last shopping coupon in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -139,22 +203,6 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the shopping coupons before and after the current shopping coupon in the ordered set where groupId = &#63;.
-	*
-	* @param couponId the primary key of the current shopping coupon
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next shopping coupon
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCoupon[] findByGroupId_PrevAndNext(
-		long couponId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchCouponException;
 
 	/**
 	* Removes all the shopping coupons where groupId = &#63; from the database.

@@ -81,9 +81,18 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FETCH_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketModelImpl.FINDER_CACHE_ENABLED, TicketImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByKey",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByKey",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
+			TicketModelImpl.FINDER_CACHE_ENABLED, TicketImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByKey",
 			new String[] { String.class.getName() },
 			TicketModelImpl.KEY_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
@@ -92,77 +101,57 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 			new String[] { String.class.getName() });
 
 	/**
-	 * Returns the ticket where key = &#63; or throws a {@link com.liferay.portal.NoSuchTicketException} if it could not be found.
+	 * Returns an ordered range of all the tickets where key = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param key the key
-	 * @return the matching ticket
-	 * @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
+	 * @param start the lower bound of the range of tickets
+	 * @param end the upper bound of the range of tickets (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching tickets
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Ticket findByKey(String key)
-		throws NoSuchTicketException, SystemException {
-		Ticket ticket = fetchByKey(key);
+	protected List<Ticket> findByKey(String key, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (ticket == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("key=");
-			msg.append(key);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchTicketException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KEY;
+			finderArgs = new Object[] { key };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_KEY;
+			finderArgs = new Object[] { key, start, end, orderByComparator };
 		}
 
-		return ticket;
-	}
+		List<Ticket> list = (List<Ticket>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the ticket where key = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param key the key
-	 * @return the matching ticket, or <code>null</code> if a matching ticket could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Ticket fetchByKey(String key) throws SystemException {
-		return fetchByKey(key, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (Ticket ticket : list) {
+				if (!Validator.equals(key, ticket.getKey())) {
+					list = null;
 
-	/**
-	 * Returns the ticket where key = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param key the key
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching ticket, or <code>null</code> if a matching ticket could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Ticket fetchByKey(String key, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { key };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_KEY,
-					finderArgs, this);
-		}
-
-		if (result instanceof Ticket) {
-			Ticket ticket = (Ticket)result;
-
-			if (!Validator.equals(key, ticket.getKey())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_TICKET_WHERE);
 
@@ -178,7 +167,14 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 				}
 			}
 
-			query.append(TicketModelImpl.ORDER_BY_JPQL);
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(TicketModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -195,64 +191,186 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 					qPos.add(key);
 				}
 
-				List<Ticket> list = q.list();
-
-				result = list;
-
-				Ticket ticket = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
-						finderArgs, list);
-				}
-				else {
-					ticket = list.get(0);
-
-					cacheResult(ticket);
-
-					if ((ticket.getKey() == null) ||
-							!ticket.getKey().equals(key)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
-							finderArgs, ticket);
-					}
-				}
-
-				return ticket;
+				list = (List<Ticket>)QueryUtil.list(q, getDialect(), start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KEY,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Ticket)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the ticket where key = &#63; from the database.
+	 * Returns the first ticket in the default ordered set defined by {@link TicketModelImpl#ORDER_BY_JPQL} where key = &#63;.
 	 *
 	 * @param key the key
-	 * @return the ticket that was removed
+	 * @return the first matching ticket
+	 * @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Ticket removeByKey(String key)
+	public Ticket findByKey_First(String key)
 		throws NoSuchTicketException, SystemException {
-		Ticket ticket = findByKey(key);
+		return findByKey_First(key, null);
+	}
 
-		return remove(ticket);
+	/**
+	 * Returns the first ticket in the ordered set where key = &#63;.
+	 *
+	 * @param key the key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching ticket
+	 * @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Ticket findByKey_First(String key,
+		OrderByComparator orderByComparator)
+		throws NoSuchTicketException, SystemException {
+		Ticket ticket = fetchByKey_First(key, orderByComparator);
+
+		if (ticket != null) {
+			return ticket;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("key=");
+		msg.append(key);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTicketException(msg.toString());
+	}
+
+	/**
+	 * Returns the first ticket in the default ordered set defined by {@link TicketModelImpl#ORDER_BY_JPQL} where key = &#63;.
+	 *
+	 * @param key the key
+	 * @return the first matching ticket, or <code>null</code> if a matching ticket could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Ticket fetchByKey_First(String key) throws SystemException {
+		return fetchByKey_First(key, null);
+	}
+
+	/**
+	 * Returns the first ticket in the ordered set where key = &#63;.
+	 *
+	 * @param key the key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching ticket, or <code>null</code> if a matching ticket could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Ticket fetchByKey_First(String key,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Ticket> list = findByKey(key, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last ticket in the default ordered set defined by {@link TicketModelImpl#ORDER_BY_JPQL} where key = &#63;.
+	 *
+	 * @param key the key
+	 * @return the last matching ticket
+	 * @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Ticket findByKey_Last(String key)
+		throws NoSuchTicketException, SystemException {
+		return findByKey_Last(key, null);
+	}
+
+	/**
+	 * Returns the last ticket in the ordered set where key = &#63;.
+	 *
+	 * @param key the key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching ticket
+	 * @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Ticket findByKey_Last(String key, OrderByComparator orderByComparator)
+		throws NoSuchTicketException, SystemException {
+		Ticket ticket = fetchByKey_Last(key, orderByComparator);
+
+		if (ticket != null) {
+			return ticket;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("key=");
+		msg.append(key);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTicketException(msg.toString());
+	}
+
+	/**
+	 * Returns the last ticket in the default ordered set defined by {@link TicketModelImpl#ORDER_BY_JPQL} where key = &#63;.
+	 *
+	 * @param key the key
+	 * @return the last matching ticket, or <code>null</code> if a matching ticket could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Ticket fetchByKey_Last(String key) throws SystemException {
+		return fetchByKey_Last(key, null);
+	}
+
+	/**
+	 * Returns the last ticket in the ordered set where key = &#63;.
+	 *
+	 * @param key the key
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching ticket, or <code>null</code> if a matching ticket could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Ticket fetchByKey_Last(String key,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByKey(key);
+
+		List<Ticket> list = findByKey(key, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the tickets where key = &#63; from the database.
+	 *
+	 * @param key the key
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByKey(String key) throws SystemException {
+		for (Ticket ticket : findByKey(key, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(ticket);
+		}
 	}
 
 	/**
@@ -333,9 +451,6 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 		EntityCacheUtil.putResult(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketImpl.class, ticket.getPrimaryKey(), ticket);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
-			new Object[] { ticket.getKey() }, ticket);
-
 		ticket.resetOriginalValues();
 	}
 
@@ -391,8 +506,6 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(ticket);
 	}
 
 	@Override
@@ -403,14 +516,7 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 		for (Ticket ticket : tickets) {
 			EntityCacheUtil.removeResult(TicketModelImpl.ENTITY_CACHE_ENABLED,
 				TicketImpl.class, ticket.getPrimaryKey());
-
-			clearUniqueFindersCache(ticket);
 		}
-	}
-
-	protected void clearUniqueFindersCache(Ticket ticket) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KEY,
-			new Object[] { ticket.getKey() });
 	}
 
 	/**
@@ -520,8 +626,6 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 
 		boolean isNew = ticket.isNew();
 
-		TicketModelImpl ticketModelImpl = (TicketModelImpl)ticket;
-
 		Session session = null;
 
 		try {
@@ -551,24 +655,6 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 
 		EntityCacheUtil.putResult(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketImpl.class, ticket.getPrimaryKey(), ticket);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
-				new Object[] { ticket.getKey() }, ticket);
-		}
-		else {
-			if ((ticketModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_KEY.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] { ticketModelImpl.getOriginalKey() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KEY, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KEY, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
-					new Object[] { ticket.getKey() }, ticket);
-			}
-		}
 
 		return ticket;
 	}

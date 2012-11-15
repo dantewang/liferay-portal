@@ -64,6 +64,22 @@ public interface ListTypePersistence extends BasePersistence<ListType> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the list types before and after the current list type in the ordered set where type = &#63;.
+	*
+	* @param listTypeId the primary key of the current list type
+	* @param type the type
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next list type
+	* @throws com.liferay.portal.NoSuchListTypeException if a list type with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ListType[] findByType_PrevAndNext(
+		int listTypeId, java.lang.String type,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchListTypeException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the list types where type = &#63;.
 	*
 	* <p>
@@ -83,6 +99,19 @@ public interface ListTypePersistence extends BasePersistence<ListType> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first list type in the default ordered set defined by {@link ListTypeModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	*
+	* @param type the type
+	* @return the first matching list type
+	* @throws com.liferay.portal.NoSuchListTypeException if a matching list type could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ListType findByType_First(
+		java.lang.String type)
+		throws com.liferay.portal.NoSuchListTypeException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first list type in the ordered set where type = &#63;.
 	*
 	* @param type the type
@@ -98,6 +127,17 @@ public interface ListTypePersistence extends BasePersistence<ListType> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first list type in the default ordered set defined by {@link ListTypeModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	*
+	* @param type the type
+	* @return the first matching list type, or <code>null</code> if a matching list type could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ListType fetchByType_First(
+		java.lang.String type)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first list type in the ordered set where type = &#63;.
 	*
 	* @param type the type
@@ -109,6 +149,19 @@ public interface ListTypePersistence extends BasePersistence<ListType> {
 		java.lang.String type,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last list type in the default ordered set defined by {@link ListTypeModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	*
+	* @param type the type
+	* @return the last matching list type
+	* @throws com.liferay.portal.NoSuchListTypeException if a matching list type could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ListType findByType_Last(
+		java.lang.String type)
+		throws com.liferay.portal.NoSuchListTypeException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last list type in the ordered set where type = &#63;.
@@ -126,6 +179,17 @@ public interface ListTypePersistence extends BasePersistence<ListType> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last list type in the default ordered set defined by {@link ListTypeModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	*
+	* @param type the type
+	* @return the last matching list type, or <code>null</code> if a matching list type could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ListType fetchByType_Last(
+		java.lang.String type)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last list type in the ordered set where type = &#63;.
 	*
 	* @param type the type
@@ -137,22 +201,6 @@ public interface ListTypePersistence extends BasePersistence<ListType> {
 		java.lang.String type,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the list types before and after the current list type in the ordered set where type = &#63;.
-	*
-	* @param listTypeId the primary key of the current list type
-	* @param type the type
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next list type
-	* @throws com.liferay.portal.NoSuchListTypeException if a list type with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.ListType[] findByType_PrevAndNext(
-		int listTypeId, java.lang.String type,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchListTypeException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the list types where type = &#63; from the database.

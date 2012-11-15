@@ -138,230 +138,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	}
 
 	/**
-	 * Returns an ordered range of all the service components where buildNamespace = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param buildNamespace the build namespace
-	 * @param start the lower bound of the range of service components
-	 * @param end the upper bound of the range of service components (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching service components
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ServiceComponent> findByBuildNamespace(String buildNamespace,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE;
-			finderArgs = new Object[] { buildNamespace };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_BUILDNAMESPACE;
-			finderArgs = new Object[] {
-					buildNamespace,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<ServiceComponent> list = (List<ServiceComponent>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (ServiceComponent serviceComponent : list) {
-				if (!Validator.equals(buildNamespace,
-							serviceComponent.getBuildNamespace())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SERVICECOMPONENT_WHERE);
-
-			if (buildNamespace == null) {
-				query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_1);
-			}
-			else {
-				if (buildNamespace.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(ServiceComponentModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (buildNamespace != null) {
-					qPos.add(buildNamespace);
-				}
-
-				list = (List<ServiceComponent>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first service component in the ordered set where buildNamespace = &#63;.
-	 *
-	 * @param buildNamespace the build namespace
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching service component
-	 * @throws com.liferay.portal.NoSuchServiceComponentException if a matching service component could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ServiceComponent findByBuildNamespace_First(String buildNamespace,
-		OrderByComparator orderByComparator)
-		throws NoSuchServiceComponentException, SystemException {
-		ServiceComponent serviceComponent = fetchByBuildNamespace_First(buildNamespace,
-				orderByComparator);
-
-		if (serviceComponent != null) {
-			return serviceComponent;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("buildNamespace=");
-		msg.append(buildNamespace);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchServiceComponentException(msg.toString());
-	}
-
-	/**
-	 * Returns the first service component in the ordered set where buildNamespace = &#63;.
-	 *
-	 * @param buildNamespace the build namespace
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching service component, or <code>null</code> if a matching service component could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ServiceComponent fetchByBuildNamespace_First(String buildNamespace,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<ServiceComponent> list = findByBuildNamespace(buildNamespace, 0,
-				1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last service component in the ordered set where buildNamespace = &#63;.
-	 *
-	 * @param buildNamespace the build namespace
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching service component
-	 * @throws com.liferay.portal.NoSuchServiceComponentException if a matching service component could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ServiceComponent findByBuildNamespace_Last(String buildNamespace,
-		OrderByComparator orderByComparator)
-		throws NoSuchServiceComponentException, SystemException {
-		ServiceComponent serviceComponent = fetchByBuildNamespace_Last(buildNamespace,
-				orderByComparator);
-
-		if (serviceComponent != null) {
-			return serviceComponent;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("buildNamespace=");
-		msg.append(buildNamespace);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchServiceComponentException(msg.toString());
-	}
-
-	/**
-	 * Returns the last service component in the ordered set where buildNamespace = &#63;.
-	 *
-	 * @param buildNamespace the build namespace
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching service component, or <code>null</code> if a matching service component could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ServiceComponent fetchByBuildNamespace_Last(String buildNamespace,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByBuildNamespace(buildNamespace);
-
-		List<ServiceComponent> list = findByBuildNamespace(buildNamespace,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the service components before and after the current service component in the ordered set where buildNamespace = &#63;.
 	 *
 	 * @param serviceComponentId the primary key of the current service component
@@ -522,6 +298,280 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	}
 
 	/**
+	 * Returns an ordered range of all the service components where buildNamespace = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param buildNamespace the build namespace
+	 * @param start the lower bound of the range of service components
+	 * @param end the upper bound of the range of service components (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching service components
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ServiceComponent> findByBuildNamespace(String buildNamespace,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE;
+			finderArgs = new Object[] { buildNamespace };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_BUILDNAMESPACE;
+			finderArgs = new Object[] {
+					buildNamespace,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<ServiceComponent> list = (List<ServiceComponent>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ServiceComponent serviceComponent : list) {
+				if (!Validator.equals(buildNamespace,
+							serviceComponent.getBuildNamespace())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SERVICECOMPONENT_WHERE);
+
+			if (buildNamespace == null) {
+				query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_1);
+			}
+			else {
+				if (buildNamespace.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(ServiceComponentModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (buildNamespace != null) {
+					qPos.add(buildNamespace);
+				}
+
+				list = (List<ServiceComponent>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first service component in the default ordered set defined by {@link ServiceComponentModelImpl#ORDER_BY_JPQL} where buildNamespace = &#63;.
+	 *
+	 * @param buildNamespace the build namespace
+	 * @return the first matching service component
+	 * @throws com.liferay.portal.NoSuchServiceComponentException if a matching service component could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ServiceComponent findByBuildNamespace_First(String buildNamespace)
+		throws NoSuchServiceComponentException, SystemException {
+		return findByBuildNamespace_First(buildNamespace, null);
+	}
+
+	/**
+	 * Returns the first service component in the ordered set where buildNamespace = &#63;.
+	 *
+	 * @param buildNamespace the build namespace
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching service component
+	 * @throws com.liferay.portal.NoSuchServiceComponentException if a matching service component could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ServiceComponent findByBuildNamespace_First(String buildNamespace,
+		OrderByComparator orderByComparator)
+		throws NoSuchServiceComponentException, SystemException {
+		ServiceComponent serviceComponent = fetchByBuildNamespace_First(buildNamespace,
+				orderByComparator);
+
+		if (serviceComponent != null) {
+			return serviceComponent;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("buildNamespace=");
+		msg.append(buildNamespace);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchServiceComponentException(msg.toString());
+	}
+
+	/**
+	 * Returns the first service component in the default ordered set defined by {@link ServiceComponentModelImpl#ORDER_BY_JPQL} where buildNamespace = &#63;.
+	 *
+	 * @param buildNamespace the build namespace
+	 * @return the first matching service component, or <code>null</code> if a matching service component could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ServiceComponent fetchByBuildNamespace_First(String buildNamespace)
+		throws SystemException {
+		return fetchByBuildNamespace_First(buildNamespace, null);
+	}
+
+	/**
+	 * Returns the first service component in the ordered set where buildNamespace = &#63;.
+	 *
+	 * @param buildNamespace the build namespace
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching service component, or <code>null</code> if a matching service component could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ServiceComponent fetchByBuildNamespace_First(String buildNamespace,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<ServiceComponent> list = findByBuildNamespace(buildNamespace, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last service component in the default ordered set defined by {@link ServiceComponentModelImpl#ORDER_BY_JPQL} where buildNamespace = &#63;.
+	 *
+	 * @param buildNamespace the build namespace
+	 * @return the last matching service component
+	 * @throws com.liferay.portal.NoSuchServiceComponentException if a matching service component could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ServiceComponent findByBuildNamespace_Last(String buildNamespace)
+		throws NoSuchServiceComponentException, SystemException {
+		return findByBuildNamespace_Last(buildNamespace, null);
+	}
+
+	/**
+	 * Returns the last service component in the ordered set where buildNamespace = &#63;.
+	 *
+	 * @param buildNamespace the build namespace
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching service component
+	 * @throws com.liferay.portal.NoSuchServiceComponentException if a matching service component could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ServiceComponent findByBuildNamespace_Last(String buildNamespace,
+		OrderByComparator orderByComparator)
+		throws NoSuchServiceComponentException, SystemException {
+		ServiceComponent serviceComponent = fetchByBuildNamespace_Last(buildNamespace,
+				orderByComparator);
+
+		if (serviceComponent != null) {
+			return serviceComponent;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("buildNamespace=");
+		msg.append(buildNamespace);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchServiceComponentException(msg.toString());
+	}
+
+	/**
+	 * Returns the last service component in the default ordered set defined by {@link ServiceComponentModelImpl#ORDER_BY_JPQL} where buildNamespace = &#63;.
+	 *
+	 * @param buildNamespace the build namespace
+	 * @return the last matching service component, or <code>null</code> if a matching service component could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ServiceComponent fetchByBuildNamespace_Last(String buildNamespace)
+		throws SystemException {
+		return fetchByBuildNamespace_Last(buildNamespace, null);
+	}
+
+	/**
+	 * Returns the last service component in the ordered set where buildNamespace = &#63;.
+	 *
+	 * @param buildNamespace the build namespace
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching service component, or <code>null</code> if a matching service component could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ServiceComponent fetchByBuildNamespace_Last(String buildNamespace,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByBuildNamespace(buildNamespace);
+
+		List<ServiceComponent> list = findByBuildNamespace(buildNamespace,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the service components where buildNamespace = &#63; from the database.
 	 *
 	 * @param buildNamespace the build namespace
@@ -530,7 +580,7 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	public void removeByBuildNamespace(String buildNamespace)
 		throws SystemException {
 		for (ServiceComponent serviceComponent : findByBuildNamespace(
-				buildNamespace)) {
+				buildNamespace, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(serviceComponent);
 		}
 	}
@@ -608,6 +658,24 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
 			ServiceComponentImpl.class, FINDER_CLASS_NAME_ENTITY,
 			"fetchByBNS_BNU",
+			new String[] { String.class.getName(), Long.class.getName() },
+			ServiceComponentModelImpl.BUILDNAMESPACE_COLUMN_BITMASK |
+			ServiceComponentModelImpl.BUILDNUMBER_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_BNS_BNU = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
+			ServiceComponentImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByBNS_BNU",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BNS_BNU =
+		new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
+			ServiceComponentImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByBNS_BNU",
 			new String[] { String.class.getName(), Long.class.getName() },
 			ServiceComponentModelImpl.BUILDNAMESPACE_COLUMN_BITMASK |
 			ServiceComponentModelImpl.BUILDNUMBER_COLUMN_BITMASK);
@@ -715,8 +783,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			}
 
 			query.append(_FINDER_COLUMN_BNS_BNU_BUILDNUMBER_2);
-
-			query.append(ServiceComponentModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 

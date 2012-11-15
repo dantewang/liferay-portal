@@ -134,208 +134,6 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	}
 
 	/**
-	 * Returns an ordered range of all the regions where countryId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param countryId the country ID
-	 * @param start the lower bound of the range of regions
-	 * @param end the upper bound of the range of regions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching regions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Region> findByCountryId(long countryId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COUNTRYID;
-			finderArgs = new Object[] { countryId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COUNTRYID;
-			finderArgs = new Object[] { countryId, start, end, orderByComparator };
-		}
-
-		List<Region> list = (List<Region>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Region region : list) {
-				if ((countryId != region.getCountryId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_REGION_WHERE);
-
-			query.append(_FINDER_COLUMN_COUNTRYID_COUNTRYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(RegionModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(countryId);
-
-				list = (List<Region>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first region in the ordered set where countryId = &#63;.
-	 *
-	 * @param countryId the country ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching region
-	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region findByCountryId_First(long countryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRegionException, SystemException {
-		Region region = fetchByCountryId_First(countryId, orderByComparator);
-
-		if (region != null) {
-			return region;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("countryId=");
-		msg.append(countryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRegionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first region in the ordered set where countryId = &#63;.
-	 *
-	 * @param countryId the country ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching region, or <code>null</code> if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region fetchByCountryId_First(long countryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Region> list = findByCountryId(countryId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last region in the ordered set where countryId = &#63;.
-	 *
-	 * @param countryId the country ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching region
-	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region findByCountryId_Last(long countryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRegionException, SystemException {
-		Region region = fetchByCountryId_Last(countryId, orderByComparator);
-
-		if (region != null) {
-			return region;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("countryId=");
-		msg.append(countryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRegionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last region in the ordered set where countryId = &#63;.
-	 *
-	 * @param countryId the country ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching region, or <code>null</code> if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region fetchByCountryId_Last(long countryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCountryId(countryId);
-
-		List<Region> list = findByCountryId(countryId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the regions before and after the current region in the ordered set where countryId = &#63;.
 	 *
 	 * @param regionId the primary key of the current region
@@ -481,13 +279,266 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	}
 
 	/**
+	 * Returns an ordered range of all the regions where countryId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param countryId the country ID
+	 * @param start the lower bound of the range of regions
+	 * @param end the upper bound of the range of regions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching regions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Region> findByCountryId(long countryId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COUNTRYID;
+			finderArgs = new Object[] { countryId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COUNTRYID;
+			finderArgs = new Object[] { countryId, start, end, orderByComparator };
+		}
+
+		List<Region> list = (List<Region>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Region region : list) {
+				if ((countryId != region.getCountryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_REGION_WHERE);
+
+			query.append(_FINDER_COLUMN_COUNTRYID_COUNTRYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(RegionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(countryId);
+
+				list = (List<Region>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @return the first matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByCountryId_First(long countryId)
+		throws NoSuchRegionException, SystemException {
+		return findByCountryId_First(countryId, null);
+	}
+
+	/**
+	 * Returns the first region in the ordered set where countryId = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByCountryId_First(long countryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRegionException, SystemException {
+		Region region = fetchByCountryId_First(countryId, orderByComparator);
+
+		if (region != null) {
+			return region;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("countryId=");
+		msg.append(countryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRegionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @return the first matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByCountryId_First(long countryId)
+		throws SystemException {
+		return fetchByCountryId_First(countryId, null);
+	}
+
+	/**
+	 * Returns the first region in the ordered set where countryId = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByCountryId_First(long countryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Region> list = findByCountryId(countryId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @return the last matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByCountryId_Last(long countryId)
+		throws NoSuchRegionException, SystemException {
+		return findByCountryId_Last(countryId, null);
+	}
+
+	/**
+	 * Returns the last region in the ordered set where countryId = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByCountryId_Last(long countryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRegionException, SystemException {
+		Region region = fetchByCountryId_Last(countryId, orderByComparator);
+
+		if (region != null) {
+			return region;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("countryId=");
+		msg.append(countryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRegionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @return the last matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByCountryId_Last(long countryId)
+		throws SystemException {
+		return fetchByCountryId_Last(countryId, null);
+	}
+
+	/**
+	 * Returns the last region in the ordered set where countryId = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByCountryId_Last(long countryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCountryId(countryId);
+
+		List<Region> list = findByCountryId(countryId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the regions where countryId = &#63; from the database.
 	 *
 	 * @param countryId the country ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCountryId(long countryId) throws SystemException {
-		for (Region region : findByCountryId(countryId)) {
+		for (Region region : findByCountryId(countryId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(region);
 		}
 	}
@@ -593,208 +644,6 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	public List<Region> findByActive(boolean active, int start, int end)
 		throws SystemException {
 		return findByActive(active, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the regions where active = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param active the active
-	 * @param start the lower bound of the range of regions
-	 * @param end the upper bound of the range of regions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching regions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Region> findByActive(boolean active, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE;
-			finderArgs = new Object[] { active };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE;
-			finderArgs = new Object[] { active, start, end, orderByComparator };
-		}
-
-		List<Region> list = (List<Region>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Region region : list) {
-				if ((active != region.getActive())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_REGION_WHERE);
-
-			query.append(_FINDER_COLUMN_ACTIVE_ACTIVE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(RegionModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(active);
-
-				list = (List<Region>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first region in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching region
-	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region findByActive_First(boolean active,
-		OrderByComparator orderByComparator)
-		throws NoSuchRegionException, SystemException {
-		Region region = fetchByActive_First(active, orderByComparator);
-
-		if (region != null) {
-			return region;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRegionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first region in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching region, or <code>null</code> if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region fetchByActive_First(boolean active,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Region> list = findByActive(active, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last region in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching region
-	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region findByActive_Last(boolean active,
-		OrderByComparator orderByComparator)
-		throws NoSuchRegionException, SystemException {
-		Region region = fetchByActive_Last(active, orderByComparator);
-
-		if (region != null) {
-			return region;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRegionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last region in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching region, or <code>null</code> if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region fetchByActive_Last(boolean active,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByActive(active);
-
-		List<Region> list = findByActive(active, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -943,13 +792,264 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	}
 
 	/**
+	 * Returns an ordered range of all the regions where active = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param active the active
+	 * @param start the lower bound of the range of regions
+	 * @param end the upper bound of the range of regions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching regions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Region> findByActive(boolean active, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE;
+			finderArgs = new Object[] { active };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE;
+			finderArgs = new Object[] { active, start, end, orderByComparator };
+		}
+
+		List<Region> list = (List<Region>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Region region : list) {
+				if ((active != region.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_REGION_WHERE);
+
+			query.append(_FINDER_COLUMN_ACTIVE_ACTIVE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(RegionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(active);
+
+				list = (List<Region>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the first matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByActive_First(boolean active)
+		throws NoSuchRegionException, SystemException {
+		return findByActive_First(active, null);
+	}
+
+	/**
+	 * Returns the first region in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByActive_First(boolean active,
+		OrderByComparator orderByComparator)
+		throws NoSuchRegionException, SystemException {
+		Region region = fetchByActive_First(active, orderByComparator);
+
+		if (region != null) {
+			return region;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRegionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the first matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByActive_First(boolean active) throws SystemException {
+		return fetchByActive_First(active, null);
+	}
+
+	/**
+	 * Returns the first region in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByActive_First(boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Region> list = findByActive(active, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the last matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByActive_Last(boolean active)
+		throws NoSuchRegionException, SystemException {
+		return findByActive_Last(active, null);
+	}
+
+	/**
+	 * Returns the last region in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByActive_Last(boolean active,
+		OrderByComparator orderByComparator)
+		throws NoSuchRegionException, SystemException {
+		Region region = fetchByActive_Last(active, orderByComparator);
+
+		if (region != null) {
+			return region;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRegionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the last matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByActive_Last(boolean active) throws SystemException {
+		return fetchByActive_Last(active, null);
+	}
+
+	/**
+	 * Returns the last region in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByActive_Last(boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByActive(active);
+
+		List<Region> list = findByActive(active, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the regions where active = &#63; from the database.
 	 *
 	 * @param active the active
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByActive(boolean active) throws SystemException {
-		for (Region region : findByActive(active)) {
+		for (Region region : findByActive(active, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(region);
 		}
 	}
@@ -1011,6 +1111,21 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	public static final FinderPath FINDER_PATH_FETCH_BY_C_R = new FinderPath(RegionModelImpl.ENTITY_CACHE_ENABLED,
 			RegionModelImpl.FINDER_CACHE_ENABLED, RegionImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_R",
+			new String[] { Long.class.getName(), String.class.getName() },
+			RegionModelImpl.COUNTRYID_COLUMN_BITMASK |
+			RegionModelImpl.REGIONCODE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_R = new FinderPath(RegionModelImpl.ENTITY_CACHE_ENABLED,
+			RegionModelImpl.FINDER_CACHE_ENABLED, RegionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_R",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_R = new FinderPath(RegionModelImpl.ENTITY_CACHE_ENABLED,
+			RegionModelImpl.FINDER_CACHE_ENABLED, RegionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_R",
 			new String[] { Long.class.getName(), String.class.getName() },
 			RegionModelImpl.COUNTRYID_COLUMN_BITMASK |
 			RegionModelImpl.REGIONCODE_COLUMN_BITMASK);
@@ -1115,8 +1230,6 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 					query.append(_FINDER_COLUMN_C_R_REGIONCODE_2);
 				}
 			}
-
-			query.append(RegionModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -1326,228 +1439,6 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	}
 
 	/**
-	 * Returns an ordered range of all the regions where countryId = &#63; and active = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param countryId the country ID
-	 * @param active the active
-	 * @param start the lower bound of the range of regions
-	 * @param end the upper bound of the range of regions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching regions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Region> findByC_A(long countryId, boolean active, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A;
-			finderArgs = new Object[] { countryId, active };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_A;
-			finderArgs = new Object[] {
-					countryId, active,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Region> list = (List<Region>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Region region : list) {
-				if ((countryId != region.getCountryId()) ||
-						(active != region.getActive())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_REGION_WHERE);
-
-			query.append(_FINDER_COLUMN_C_A_COUNTRYID_2);
-
-			query.append(_FINDER_COLUMN_C_A_ACTIVE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(RegionModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(countryId);
-
-				qPos.add(active);
-
-				list = (List<Region>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first region in the ordered set where countryId = &#63; and active = &#63;.
-	 *
-	 * @param countryId the country ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching region
-	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region findByC_A_First(long countryId, boolean active,
-		OrderByComparator orderByComparator)
-		throws NoSuchRegionException, SystemException {
-		Region region = fetchByC_A_First(countryId, active, orderByComparator);
-
-		if (region != null) {
-			return region;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("countryId=");
-		msg.append(countryId);
-
-		msg.append(", active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRegionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first region in the ordered set where countryId = &#63; and active = &#63;.
-	 *
-	 * @param countryId the country ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching region, or <code>null</code> if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region fetchByC_A_First(long countryId, boolean active,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Region> list = findByC_A(countryId, active, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last region in the ordered set where countryId = &#63; and active = &#63;.
-	 *
-	 * @param countryId the country ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching region
-	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region findByC_A_Last(long countryId, boolean active,
-		OrderByComparator orderByComparator)
-		throws NoSuchRegionException, SystemException {
-		Region region = fetchByC_A_Last(countryId, active, orderByComparator);
-
-		if (region != null) {
-			return region;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("countryId=");
-		msg.append(countryId);
-
-		msg.append(", active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRegionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last region in the ordered set where countryId = &#63; and active = &#63;.
-	 *
-	 * @param countryId the country ID
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching region, or <code>null</code> if a matching region could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Region fetchByC_A_Last(long countryId, boolean active,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_A(countryId, active);
-
-		List<Region> list = findByC_A(countryId, active, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the regions before and after the current region in the ordered set where countryId = &#63; and active = &#63;.
 	 *
 	 * @param regionId the primary key of the current region
@@ -1699,6 +1590,282 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	}
 
 	/**
+	 * Returns an ordered range of all the regions where countryId = &#63; and active = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param countryId the country ID
+	 * @param active the active
+	 * @param start the lower bound of the range of regions
+	 * @param end the upper bound of the range of regions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching regions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Region> findByC_A(long countryId, boolean active, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_A;
+			finderArgs = new Object[] { countryId, active };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_A;
+			finderArgs = new Object[] {
+					countryId, active,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Region> list = (List<Region>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Region region : list) {
+				if ((countryId != region.getCountryId()) ||
+						(active != region.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_REGION_WHERE);
+
+			query.append(_FINDER_COLUMN_C_A_COUNTRYID_2);
+
+			query.append(_FINDER_COLUMN_C_A_ACTIVE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(RegionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(countryId);
+
+				qPos.add(active);
+
+				list = (List<Region>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63; and active = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param active the active
+	 * @return the first matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByC_A_First(long countryId, boolean active)
+		throws NoSuchRegionException, SystemException {
+		return findByC_A_First(countryId, active, null);
+	}
+
+	/**
+	 * Returns the first region in the ordered set where countryId = &#63; and active = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByC_A_First(long countryId, boolean active,
+		OrderByComparator orderByComparator)
+		throws NoSuchRegionException, SystemException {
+		Region region = fetchByC_A_First(countryId, active, orderByComparator);
+
+		if (region != null) {
+			return region;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("countryId=");
+		msg.append(countryId);
+
+		msg.append(", active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRegionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63; and active = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param active the active
+	 * @return the first matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByC_A_First(long countryId, boolean active)
+		throws SystemException {
+		return fetchByC_A_First(countryId, active, null);
+	}
+
+	/**
+	 * Returns the first region in the ordered set where countryId = &#63; and active = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByC_A_First(long countryId, boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Region> list = findByC_A(countryId, active, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63; and active = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param active the active
+	 * @return the last matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByC_A_Last(long countryId, boolean active)
+		throws NoSuchRegionException, SystemException {
+		return findByC_A_Last(countryId, active, null);
+	}
+
+	/**
+	 * Returns the last region in the ordered set where countryId = &#63; and active = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching region
+	 * @throws com.liferay.portal.NoSuchRegionException if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region findByC_A_Last(long countryId, boolean active,
+		OrderByComparator orderByComparator)
+		throws NoSuchRegionException, SystemException {
+		Region region = fetchByC_A_Last(countryId, active, orderByComparator);
+
+		if (region != null) {
+			return region;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("countryId=");
+		msg.append(countryId);
+
+		msg.append(", active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRegionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last region in the default ordered set defined by {@link RegionModelImpl#ORDER_BY_JPQL} where countryId = &#63; and active = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param active the active
+	 * @return the last matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByC_A_Last(long countryId, boolean active)
+		throws SystemException {
+		return fetchByC_A_Last(countryId, active, null);
+	}
+
+	/**
+	 * Returns the last region in the ordered set where countryId = &#63; and active = &#63;.
+	 *
+	 * @param countryId the country ID
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching region, or <code>null</code> if a matching region could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Region fetchByC_A_Last(long countryId, boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_A(countryId, active);
+
+		List<Region> list = findByC_A(countryId, active, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the regions where countryId = &#63; and active = &#63; from the database.
 	 *
 	 * @param countryId the country ID
@@ -1707,7 +1874,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	public void removeByC_A(long countryId, boolean active)
 		throws SystemException {
-		for (Region region : findByC_A(countryId, active)) {
+		for (Region region : findByC_A(countryId, active, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(region);
 		}
 	}

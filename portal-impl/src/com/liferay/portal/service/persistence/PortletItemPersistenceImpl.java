@@ -135,229 +135,6 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	}
 
 	/**
-	 * Returns an ordered range of all the portlet items where groupId = &#63; and classNameId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param start the lower bound of the range of portlet items
-	 * @param end the upper bound of the range of portlet items (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching portlet items
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<PortletItem> findByG_C(long groupId, long classNameId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C;
-			finderArgs = new Object[] { groupId, classNameId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C;
-			finderArgs = new Object[] {
-					groupId, classNameId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (PortletItem portletItem : list) {
-				if ((groupId != portletItem.getGroupId()) ||
-						(classNameId != portletItem.getClassNameId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_PORTLETITEM_WHERE);
-
-			query.append(_FINDER_COLUMN_G_C_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_C_CLASSNAMEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(classNameId);
-
-				list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching portlet item
-	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortletItem findByG_C_First(long groupId, long classNameId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPortletItemException, SystemException {
-		PortletItem portletItem = fetchByG_C_First(groupId, classNameId,
-				orderByComparator);
-
-		if (portletItem != null) {
-			return portletItem;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPortletItemException(msg.toString());
-	}
-
-	/**
-	 * Returns the first portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortletItem fetchByG_C_First(long groupId, long classNameId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<PortletItem> list = findByG_C(groupId, classNameId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching portlet item
-	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortletItem findByG_C_Last(long groupId, long classNameId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPortletItemException, SystemException {
-		PortletItem portletItem = fetchByG_C_Last(groupId, classNameId,
-				orderByComparator);
-
-		if (portletItem != null) {
-			return portletItem;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPortletItemException(msg.toString());
-	}
-
-	/**
-	 * Returns the last portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortletItem fetchByG_C_Last(long groupId, long classNameId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_C(groupId, classNameId);
-
-		List<PortletItem> list = findByG_C(groupId, classNameId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the portlet items before and after the current portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
 	 *
 	 * @param portletItemId the primary key of the current portlet item
@@ -505,6 +282,283 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	}
 
 	/**
+	 * Returns an ordered range of all the portlet items where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param start the lower bound of the range of portlet items
+	 * @param end the upper bound of the range of portlet items (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching portlet items
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<PortletItem> findByG_C(long groupId, long classNameId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C;
+			finderArgs = new Object[] { groupId, classNameId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C;
+			finderArgs = new Object[] {
+					groupId, classNameId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (PortletItem portletItem : list) {
+				if ((groupId != portletItem.getGroupId()) ||
+						(classNameId != portletItem.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_PORTLETITEM_WHERE);
+
+			query.append(_FINDER_COLUMN_G_C_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_C_CLASSNAMEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(classNameId);
+
+				list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @return the first matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem findByG_C_First(long groupId, long classNameId)
+		throws NoSuchPortletItemException, SystemException {
+		return findByG_C_First(groupId, classNameId, null);
+	}
+
+	/**
+	 * Returns the first portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem findByG_C_First(long groupId, long classNameId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPortletItemException, SystemException {
+		PortletItem portletItem = fetchByG_C_First(groupId, classNameId,
+				orderByComparator);
+
+		if (portletItem != null) {
+			return portletItem;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPortletItemException(msg.toString());
+	}
+
+	/**
+	 * Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_C_First(long groupId, long classNameId)
+		throws SystemException {
+		return fetchByG_C_First(groupId, classNameId, null);
+	}
+
+	/**
+	 * Returns the first portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_C_First(long groupId, long classNameId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<PortletItem> list = findByG_C(groupId, classNameId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @return the last matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem findByG_C_Last(long groupId, long classNameId)
+		throws NoSuchPortletItemException, SystemException {
+		return findByG_C_Last(groupId, classNameId, null);
+	}
+
+	/**
+	 * Returns the last portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem findByG_C_Last(long groupId, long classNameId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPortletItemException, SystemException {
+		PortletItem portletItem = fetchByG_C_Last(groupId, classNameId,
+				orderByComparator);
+
+		if (portletItem != null) {
+			return portletItem;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPortletItemException(msg.toString());
+	}
+
+	/**
+	 * Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_C_Last(long groupId, long classNameId)
+		throws SystemException {
+		return fetchByG_C_Last(groupId, classNameId, null);
+	}
+
+	/**
+	 * Returns the last portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_C_Last(long groupId, long classNameId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_C(groupId, classNameId);
+
+		List<PortletItem> list = findByG_C(groupId, classNameId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the portlet items where groupId = &#63; and classNameId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -513,7 +567,8 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	 */
 	public void removeByG_C(long groupId, long classNameId)
 		throws SystemException {
-		for (PortletItem portletItem : findByG_C(groupId, classNameId)) {
+		for (PortletItem portletItem : findByG_C(groupId, classNameId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(portletItem);
 		}
 	}
@@ -640,259 +695,6 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	public List<PortletItem> findByG_P_C(long groupId, String portletId,
 		long classNameId, int start, int end) throws SystemException {
 		return findByG_P_C(groupId, portletId, classNameId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the portlet items where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param portletId the portlet ID
-	 * @param classNameId the class name ID
-	 * @param start the lower bound of the range of portlet items
-	 * @param end the upper bound of the range of portlet items (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching portlet items
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<PortletItem> findByG_P_C(long groupId, String portletId,
-		long classNameId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_C;
-			finderArgs = new Object[] { groupId, portletId, classNameId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_C;
-			finderArgs = new Object[] {
-					groupId, portletId, classNameId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (PortletItem portletItem : list) {
-				if ((groupId != portletItem.getGroupId()) ||
-						!Validator.equals(portletId, portletItem.getPortletId()) ||
-						(classNameId != portletItem.getClassNameId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_PORTLETITEM_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_C_GROUPID_2);
-
-			if (portletId == null) {
-				query.append(_FINDER_COLUMN_G_P_C_PORTLETID_1);
-			}
-			else {
-				if (portletId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_P_C_PORTLETID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_P_C_PORTLETID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_G_P_C_CLASSNAMEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (portletId != null) {
-					qPos.add(portletId);
-				}
-
-				qPos.add(classNameId);
-
-				list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param portletId the portlet ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching portlet item
-	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortletItem findByG_P_C_First(long groupId, String portletId,
-		long classNameId, OrderByComparator orderByComparator)
-		throws NoSuchPortletItemException, SystemException {
-		PortletItem portletItem = fetchByG_P_C_First(groupId, portletId,
-				classNameId, orderByComparator);
-
-		if (portletItem != null) {
-			return portletItem;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", portletId=");
-		msg.append(portletId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPortletItemException(msg.toString());
-	}
-
-	/**
-	 * Returns the first portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param portletId the portlet ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortletItem fetchByG_P_C_First(long groupId, String portletId,
-		long classNameId, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<PortletItem> list = findByG_P_C(groupId, portletId, classNameId,
-				0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param portletId the portlet ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching portlet item
-	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortletItem findByG_P_C_Last(long groupId, String portletId,
-		long classNameId, OrderByComparator orderByComparator)
-		throws NoSuchPortletItemException, SystemException {
-		PortletItem portletItem = fetchByG_P_C_Last(groupId, portletId,
-				classNameId, orderByComparator);
-
-		if (portletItem != null) {
-			return portletItem;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", portletId=");
-		msg.append(portletId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPortletItemException(msg.toString());
-	}
-
-	/**
-	 * Returns the last portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param portletId the portlet ID
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortletItem fetchByG_P_C_Last(long groupId, String portletId,
-		long classNameId, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_P_C(groupId, portletId, classNameId);
-
-		List<PortletItem> list = findByG_P_C(groupId, portletId, classNameId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1061,6 +863,317 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	}
 
 	/**
+	 * Returns an ordered range of all the portlet items where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @param start the lower bound of the range of portlet items
+	 * @param end the upper bound of the range of portlet items (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching portlet items
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<PortletItem> findByG_P_C(long groupId, String portletId,
+		long classNameId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_C;
+			finderArgs = new Object[] { groupId, portletId, classNameId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_C;
+			finderArgs = new Object[] {
+					groupId, portletId, classNameId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (PortletItem portletItem : list) {
+				if ((groupId != portletItem.getGroupId()) ||
+						!Validator.equals(portletId, portletItem.getPortletId()) ||
+						(classNameId != portletItem.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_PORTLETITEM_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_C_GROUPID_2);
+
+			if (portletId == null) {
+				query.append(_FINDER_COLUMN_G_P_C_PORTLETID_1);
+			}
+			else {
+				if (portletId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_P_C_PORTLETID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_P_C_PORTLETID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_G_P_C_CLASSNAMEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (portletId != null) {
+					qPos.add(portletId);
+				}
+
+				qPos.add(classNameId);
+
+				list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @return the first matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem findByG_P_C_First(long groupId, String portletId,
+		long classNameId) throws NoSuchPortletItemException, SystemException {
+		return findByG_P_C_First(groupId, portletId, classNameId, null);
+	}
+
+	/**
+	 * Returns the first portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem findByG_P_C_First(long groupId, String portletId,
+		long classNameId, OrderByComparator orderByComparator)
+		throws NoSuchPortletItemException, SystemException {
+		PortletItem portletItem = fetchByG_P_C_First(groupId, portletId,
+				classNameId, orderByComparator);
+
+		if (portletItem != null) {
+			return portletItem;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", portletId=");
+		msg.append(portletId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPortletItemException(msg.toString());
+	}
+
+	/**
+	 * Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_P_C_First(long groupId, String portletId,
+		long classNameId) throws SystemException {
+		return fetchByG_P_C_First(groupId, portletId, classNameId, null);
+	}
+
+	/**
+	 * Returns the first portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_P_C_First(long groupId, String portletId,
+		long classNameId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<PortletItem> list = findByG_P_C(groupId, portletId, classNameId,
+				0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @return the last matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem findByG_P_C_Last(long groupId, String portletId,
+		long classNameId) throws NoSuchPortletItemException, SystemException {
+		return findByG_P_C_Last(groupId, portletId, classNameId, null);
+	}
+
+	/**
+	 * Returns the last portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem findByG_P_C_Last(long groupId, String portletId,
+		long classNameId, OrderByComparator orderByComparator)
+		throws NoSuchPortletItemException, SystemException {
+		PortletItem portletItem = fetchByG_P_C_Last(groupId, portletId,
+				classNameId, orderByComparator);
+
+		if (portletItem != null) {
+			return portletItem;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", portletId=");
+		msg.append(portletId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPortletItemException(msg.toString());
+	}
+
+	/**
+	 * Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_P_C_Last(long groupId, String portletId,
+		long classNameId) throws SystemException {
+		return fetchByG_P_C_Last(groupId, portletId, classNameId, null);
+	}
+
+	/**
+	 * Returns the last portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_P_C_Last(long groupId, String portletId,
+		long classNameId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_P_C(groupId, portletId, classNameId);
+
+		List<PortletItem> list = findByG_P_C(groupId, portletId, classNameId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the portlet items where groupId = &#63; and portletId = &#63; and classNameId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -1071,7 +1184,7 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	public void removeByG_P_C(long groupId, String portletId, long classNameId)
 		throws SystemException {
 		for (PortletItem portletItem : findByG_P_C(groupId, portletId,
-				classNameId)) {
+				classNameId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(portletItem);
 		}
 	}
@@ -1157,9 +1270,20 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	private static final String _FINDER_COLUMN_G_P_C_PORTLETID_2 = "portletItem.portletId = ? AND ";
 	private static final String _FINDER_COLUMN_G_P_C_PORTLETID_3 = "(portletItem.portletId IS NULL OR portletItem.portletId = ?) AND ";
 	private static final String _FINDER_COLUMN_G_P_C_CLASSNAMEID_2 = "portletItem.classNameId = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_G_N_P_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N_P_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 			PortletItemModelImpl.FINDER_CACHE_ENABLED, PortletItemImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByG_N_P_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_N_P_C",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N_P_C =
+		new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+			PortletItemModelImpl.FINDER_CACHE_ENABLED, PortletItemImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_N_P_C",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName(), Long.class.getName()
@@ -1177,102 +1301,68 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 			});
 
 	/**
-	 * Returns the portlet item where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; or throws a {@link com.liferay.portal.NoSuchPortletItemException} if it could not be found.
+	 * Returns an ordered range of all the portlet items where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param groupId the group ID
 	 * @param name the name
 	 * @param portletId the portlet ID
 	 * @param classNameId the class name ID
-	 * @return the matching portlet item
-	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @param start the lower bound of the range of portlet items
+	 * @param end the upper bound of the range of portlet items (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching portlet items
 	 * @throws SystemException if a system exception occurred
 	 */
-	public PortletItem findByG_N_P_C(long groupId, String name,
-		String portletId, long classNameId)
-		throws NoSuchPortletItemException, SystemException {
-		PortletItem portletItem = fetchByG_N_P_C(groupId, name, portletId,
-				classNameId);
+	protected List<PortletItem> findByG_N_P_C(long groupId, String name,
+		String portletId, long classNameId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (portletItem == null) {
-			StringBundler msg = new StringBundler(10);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("groupId=");
-			msg.append(groupId);
-
-			msg.append(", name=");
-			msg.append(name);
-
-			msg.append(", portletId=");
-			msg.append(portletId);
-
-			msg.append(", classNameId=");
-			msg.append(classNameId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchPortletItemException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N_P_C;
+			finderArgs = new Object[] { groupId, name, portletId, classNameId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N_P_C;
+			finderArgs = new Object[] {
+					groupId, name, portletId, classNameId,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		return portletItem;
-	}
+		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the portlet item where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param portletId the portlet ID
-	 * @param classNameId the class name ID
-	 * @return the matching portlet item, or <code>null</code> if a matching portlet item could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortletItem fetchByG_N_P_C(long groupId, String name,
-		String portletId, long classNameId) throws SystemException {
-		return fetchByG_N_P_C(groupId, name, portletId, classNameId, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (PortletItem portletItem : list) {
+				if ((groupId != portletItem.getGroupId()) ||
+						!Validator.equals(name, portletItem.getName()) ||
+						!Validator.equals(portletId, portletItem.getPortletId()) ||
+						(classNameId != portletItem.getClassNameId())) {
+					list = null;
 
-	/**
-	 * Returns the portlet item where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param portletId the portlet ID
-	 * @param classNameId the class name ID
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching portlet item, or <code>null</code> if a matching portlet item could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PortletItem fetchByG_N_P_C(long groupId, String name,
-		String portletId, long classNameId, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, name, portletId, classNameId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_N_P_C,
-					finderArgs, this);
-		}
-
-		if (result instanceof PortletItem) {
-			PortletItem portletItem = (PortletItem)result;
-
-			if ((groupId != portletItem.getGroupId()) ||
-					!Validator.equals(name, portletItem.getName()) ||
-					!Validator.equals(portletId, portletItem.getPortletId()) ||
-					(classNameId != portletItem.getClassNameId())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(5);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(6 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
 
 			query.append(_SQL_SELECT_PORTLETITEM_WHERE);
 
@@ -1304,6 +1394,11 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 			query.append(_FINDER_COLUMN_G_N_P_C_CLASSNAMEID_2);
 
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
 			String sql = query.toString();
 
 			Session session = null;
@@ -1327,73 +1422,244 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 				qPos.add(classNameId);
 
-				List<PortletItem> list = q.list();
-
-				result = list;
-
-				PortletItem portletItem = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N_P_C,
-						finderArgs, list);
-				}
-				else {
-					portletItem = list.get(0);
-
-					cacheResult(portletItem);
-
-					if ((portletItem.getGroupId() != groupId) ||
-							(portletItem.getName() == null) ||
-							!portletItem.getName().equals(name) ||
-							(portletItem.getPortletId() == null) ||
-							!portletItem.getPortletId().equals(portletId) ||
-							(portletItem.getClassNameId() != classNameId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N_P_C,
-							finderArgs, portletItem);
-					}
-				}
-
-				return portletItem;
+				list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
+						start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N_P_C,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (PortletItem)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the portlet item where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; from the database.
+	 * Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param name the name
 	 * @param portletId the portlet ID
 	 * @param classNameId the class name ID
-	 * @return the portlet item that was removed
+	 * @return the first matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public PortletItem removeByG_N_P_C(long groupId, String name,
+	public PortletItem findByG_N_P_C_First(long groupId, String name,
 		String portletId, long classNameId)
 		throws NoSuchPortletItemException, SystemException {
-		PortletItem portletItem = findByG_N_P_C(groupId, name, portletId,
-				classNameId);
+		return findByG_N_P_C_First(groupId, name, portletId, classNameId, null);
+	}
 
-		return remove(portletItem);
+	/**
+	 * Returns the first portlet item in the ordered set where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem findByG_N_P_C_First(long groupId, String name,
+		String portletId, long classNameId, OrderByComparator orderByComparator)
+		throws NoSuchPortletItemException, SystemException {
+		PortletItem portletItem = fetchByG_N_P_C_First(groupId, name,
+				portletId, classNameId, orderByComparator);
+
+		if (portletItem != null) {
+			return portletItem;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(", portletId=");
+		msg.append(portletId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPortletItemException(msg.toString());
+	}
+
+	/**
+	 * Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_N_P_C_First(long groupId, String name,
+		String portletId, long classNameId) throws SystemException {
+		return fetchByG_N_P_C_First(groupId, name, portletId, classNameId, null);
+	}
+
+	/**
+	 * Returns the first portlet item in the ordered set where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_N_P_C_First(long groupId, String name,
+		String portletId, long classNameId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<PortletItem> list = findByG_N_P_C(groupId, name, portletId,
+				classNameId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @return the last matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem findByG_N_P_C_Last(long groupId, String name,
+		String portletId, long classNameId)
+		throws NoSuchPortletItemException, SystemException {
+		return findByG_N_P_C_Last(groupId, name, portletId, classNameId, null);
+	}
+
+	/**
+	 * Returns the last portlet item in the ordered set where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching portlet item
+	 * @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem findByG_N_P_C_Last(long groupId, String name,
+		String portletId, long classNameId, OrderByComparator orderByComparator)
+		throws NoSuchPortletItemException, SystemException {
+		PortletItem portletItem = fetchByG_N_P_C_Last(groupId, name, portletId,
+				classNameId, orderByComparator);
+
+		if (portletItem != null) {
+			return portletItem;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(", portletId=");
+		msg.append(portletId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPortletItemException(msg.toString());
+	}
+
+	/**
+	 * Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_N_P_C_Last(long groupId, String name,
+		String portletId, long classNameId) throws SystemException {
+		return fetchByG_N_P_C_Last(groupId, name, portletId, classNameId, null);
+	}
+
+	/**
+	 * Returns the last portlet item in the ordered set where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PortletItem fetchByG_N_P_C_Last(long groupId, String name,
+		String portletId, long classNameId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_N_P_C(groupId, name, portletId, classNameId);
+
+		List<PortletItem> list = findByG_N_P_C(groupId, name, portletId,
+				classNameId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the portlet items where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param portletId the portlet ID
+	 * @param classNameId the class name ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_N_P_C(long groupId, String name, String portletId,
+		long classNameId) throws SystemException {
+		for (PortletItem portletItem : findByG_N_P_C(groupId, name, portletId,
+				classNameId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(portletItem);
+		}
 	}
 
 	/**
@@ -1507,16 +1773,6 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 		EntityCacheUtil.putResult(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 			PortletItemImpl.class, portletItem.getPrimaryKey(), portletItem);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N_P_C,
-			new Object[] {
-				Long.valueOf(portletItem.getGroupId()),
-				
-			portletItem.getName(),
-				
-			portletItem.getPortletId(),
-				Long.valueOf(portletItem.getClassNameId())
-			}, portletItem);
-
 		portletItem.resetOriginalValues();
 	}
 
@@ -1572,8 +1828,6 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(portletItem);
 	}
 
 	@Override
@@ -1584,21 +1838,7 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 		for (PortletItem portletItem : portletItems) {
 			EntityCacheUtil.removeResult(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 				PortletItemImpl.class, portletItem.getPrimaryKey());
-
-			clearUniqueFindersCache(portletItem);
 		}
-	}
-
-	protected void clearUniqueFindersCache(PortletItem portletItem) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N_P_C,
-			new Object[] {
-				Long.valueOf(portletItem.getGroupId()),
-				
-			portletItem.getName(),
-				
-			portletItem.getPortletId(),
-				Long.valueOf(portletItem.getClassNameId())
-			});
 	}
 
 	/**
@@ -1790,45 +2030,6 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 		EntityCacheUtil.putResult(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 			PortletItemImpl.class, portletItem.getPrimaryKey(), portletItem);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N_P_C,
-				new Object[] {
-					Long.valueOf(portletItem.getGroupId()),
-					
-				portletItem.getName(),
-					
-				portletItem.getPortletId(),
-					Long.valueOf(portletItem.getClassNameId())
-				}, portletItem);
-		}
-		else {
-			if ((portletItemModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_G_N_P_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(portletItemModelImpl.getOriginalGroupId()),
-						
-						portletItemModelImpl.getOriginalName(),
-						
-						portletItemModelImpl.getOriginalPortletId(),
-						Long.valueOf(portletItemModelImpl.getOriginalClassNameId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_N_P_C, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N_P_C, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N_P_C,
-					new Object[] {
-						Long.valueOf(portletItem.getGroupId()),
-						
-					portletItem.getName(),
-						
-					portletItem.getPortletId(),
-						Long.valueOf(portletItem.getClassNameId())
-					}, portletItem);
-			}
-		}
 
 		return portletItem;
 	}

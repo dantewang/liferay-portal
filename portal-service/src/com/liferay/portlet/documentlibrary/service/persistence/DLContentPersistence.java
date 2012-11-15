@@ -68,6 +68,23 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the document library contents before and after the current document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
+	*
+	* @param contentId the primary key of the current document library content
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library content
+	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a document library content with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent[] findByC_R_PrevAndNext(
+		long contentId, long companyId, long repositoryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException;
+
+	/**
 	* Returns an ordered range of all the document library contents where companyId = &#63; and repositoryId = &#63;.
 	*
 	* <p>
@@ -88,6 +105,20 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @return the first matching document library content
+	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent findByC_R_First(
+		long companyId, long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException;
+
+	/**
 	* Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
 	*
 	* @param companyId the company ID
@@ -104,6 +135,18 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
+	* Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent fetchByC_R_First(
+		long companyId, long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
 	*
 	* @param companyId the company ID
@@ -116,6 +159,20 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		long companyId, long repositoryId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @return the last matching document library content
+	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent findByC_R_Last(
+		long companyId, long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
 	* Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
@@ -134,6 +191,18 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
+	* Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent fetchByC_R_Last(
+		long companyId, long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
 	*
 	* @param companyId the company ID
@@ -146,23 +215,6 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		long companyId, long repositoryId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the document library contents before and after the current document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
-	*
-	* @param contentId the primary key of the current document library content
-	* @param companyId the company ID
-	* @param repositoryId the repository ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library content
-	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a document library content with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLContent[] findByC_R_PrevAndNext(
-		long contentId, long companyId, long repositoryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
 	* Removes all the document library contents where companyId = &#63; and repositoryId = &#63; from the database.
@@ -218,6 +270,25 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		int end) throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the document library contents before and after the current document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	*
+	* @param contentId the primary key of the current document library content
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library content
+	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a document library content with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent[] findByC_R_P_PrevAndNext(
+		long contentId, long companyId, long repositoryId,
+		java.lang.String path,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException;
+
+	/**
 	* Returns an ordered range of all the document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63;.
 	*
 	* <p>
@@ -240,6 +311,21 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @return the first matching document library content
+	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent findByC_R_P_First(
+		long companyId, long repositoryId, java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException;
+
+	/**
 	* Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
 	*
 	* @param companyId the company ID
@@ -257,6 +343,19 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
+	* Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent fetchByC_R_P_First(
+		long companyId, long repositoryId, java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
 	*
 	* @param companyId the company ID
@@ -270,6 +369,21 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		long companyId, long repositoryId, java.lang.String path,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @return the last matching document library content
+	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent findByC_R_P_Last(
+		long companyId, long repositoryId, java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
 	* Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
@@ -289,6 +403,19 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
+	* Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent fetchByC_R_P_Last(
+		long companyId, long repositoryId, java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
 	*
 	* @param companyId the company ID
@@ -302,25 +429,6 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		long companyId, long repositoryId, java.lang.String path,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the document library contents before and after the current document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
-	*
-	* @param contentId the primary key of the current document library content
-	* @param companyId the company ID
-	* @param repositoryId the repository ID
-	* @param path the path
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library content
-	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a document library content with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLContent[] findByC_R_P_PrevAndNext(
-		long contentId, long companyId, long repositoryId,
-		java.lang.String path,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
 	* Removes all the document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63; from the database.
@@ -380,6 +488,25 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		int end) throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the document library contents before and after the current document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	*
+	* @param contentId the primary key of the current document library content
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library content
+	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a document library content with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent[] findByC_R_LikeP_PrevAndNext(
+		long contentId, long companyId, long repositoryId,
+		java.lang.String path,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException;
+
+	/**
 	* Returns an ordered range of all the document library contents where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
 	*
 	* <p>
@@ -402,6 +529,21 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @return the first matching document library content
+	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent findByC_R_LikeP_First(
+		long companyId, long repositoryId, java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException;
+
+	/**
 	* Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
 	*
 	* @param companyId the company ID
@@ -419,6 +561,19 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
+	* Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent fetchByC_R_LikeP_First(
+		long companyId, long repositoryId, java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
 	*
 	* @param companyId the company ID
@@ -432,6 +587,21 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		long companyId, long repositoryId, java.lang.String path,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @return the last matching document library content
+	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent findByC_R_LikeP_Last(
+		long companyId, long repositoryId, java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
 	* Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
@@ -451,6 +621,19 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
+	* Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param repositoryId the repository ID
+	* @param path the path
+	* @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLContent fetchByC_R_LikeP_Last(
+		long companyId, long repositoryId, java.lang.String path)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
 	*
 	* @param companyId the company ID
@@ -464,25 +647,6 @@ public interface DLContentPersistence extends BasePersistence<DLContent> {
 		long companyId, long repositoryId, java.lang.String path,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the document library contents before and after the current document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
-	*
-	* @param contentId the primary key of the current document library content
-	* @param companyId the company ID
-	* @param repositoryId the repository ID
-	* @param path the path
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library content
-	* @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a document library content with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.documentlibrary.model.DLContent[] findByC_R_LikeP_PrevAndNext(
-		long contentId, long companyId, long repositoryId,
-		java.lang.String path,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchContentException;
 
 	/**
 	* Removes all the document library contents where companyId = &#63; and repositoryId = &#63; and path LIKE &#63; from the database.

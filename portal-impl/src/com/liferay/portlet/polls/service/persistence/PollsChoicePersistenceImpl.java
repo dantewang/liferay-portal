@@ -133,221 +133,6 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 	}
 
 	/**
-	 * Returns an ordered range of all the polls choices where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of polls choices
-	 * @param end the upper bound of the range of polls choices (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching polls choices
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<PollsChoice> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<PollsChoice> list = (List<PollsChoice>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (PollsChoice pollsChoice : list) {
-				if (!Validator.equals(uuid, pollsChoice.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_POLLSCHOICE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(PollsChoiceModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<PollsChoice>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first polls choice in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching polls choice
-	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsChoice findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchChoiceException, SystemException {
-		PollsChoice pollsChoice = fetchByUuid_First(uuid, orderByComparator);
-
-		if (pollsChoice != null) {
-			return pollsChoice;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchChoiceException(msg.toString());
-	}
-
-	/**
-	 * Returns the first polls choice in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching polls choice, or <code>null</code> if a matching polls choice could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsChoice fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<PollsChoice> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last polls choice in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching polls choice
-	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsChoice findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchChoiceException, SystemException {
-		PollsChoice pollsChoice = fetchByUuid_Last(uuid, orderByComparator);
-
-		if (pollsChoice != null) {
-			return pollsChoice;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchChoiceException(msg.toString());
-	}
-
-	/**
-	 * Returns the last polls choice in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching polls choice, or <code>null</code> if a matching polls choice could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsChoice fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<PollsChoice> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the polls choices before and after the current polls choice in the ordered set where uuid = &#63;.
 	 *
 	 * @param choiceId the primary key of the current polls choice
@@ -506,13 +291,277 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 	}
 
 	/**
+	 * Returns an ordered range of all the polls choices where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of polls choices
+	 * @param end the upper bound of the range of polls choices (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching polls choices
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<PollsChoice> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<PollsChoice> list = (List<PollsChoice>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (PollsChoice pollsChoice : list) {
+				if (!Validator.equals(uuid, pollsChoice.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_POLLSCHOICE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(PollsChoiceModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<PollsChoice>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching polls choice
+	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice findByUuid_First(String uuid)
+		throws NoSuchChoiceException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first polls choice in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching polls choice
+	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchChoiceException, SystemException {
+		PollsChoice pollsChoice = fetchByUuid_First(uuid, orderByComparator);
+
+		if (pollsChoice != null) {
+			return pollsChoice;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchChoiceException(msg.toString());
+	}
+
+	/**
+	 * Returns the first polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice fetchByUuid_First(String uuid) throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first polls choice in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<PollsChoice> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching polls choice
+	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice findByUuid_Last(String uuid)
+		throws NoSuchChoiceException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last polls choice in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching polls choice
+	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchChoiceException, SystemException {
+		PollsChoice pollsChoice = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (pollsChoice != null) {
+			return pollsChoice;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchChoiceException(msg.toString());
+	}
+
+	/**
+	 * Returns the last polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice fetchByUuid_Last(String uuid) throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last polls choice in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<PollsChoice> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the polls choices where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (PollsChoice pollsChoice : findByUuid(uuid)) {
+		for (PollsChoice pollsChoice : findByUuid(uuid, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(pollsChoice);
 		}
 	}
@@ -635,212 +684,6 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 	public List<PollsChoice> findByQuestionId(long questionId, int start,
 		int end) throws SystemException {
 		return findByQuestionId(questionId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the polls choices where questionId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param questionId the question ID
-	 * @param start the lower bound of the range of polls choices
-	 * @param end the upper bound of the range of polls choices (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching polls choices
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<PollsChoice> findByQuestionId(long questionId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_QUESTIONID;
-			finderArgs = new Object[] { questionId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_QUESTIONID;
-			finderArgs = new Object[] { questionId, start, end, orderByComparator };
-		}
-
-		List<PollsChoice> list = (List<PollsChoice>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (PollsChoice pollsChoice : list) {
-				if ((questionId != pollsChoice.getQuestionId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_POLLSCHOICE_WHERE);
-
-			query.append(_FINDER_COLUMN_QUESTIONID_QUESTIONID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(PollsChoiceModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(questionId);
-
-				list = (List<PollsChoice>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first polls choice in the ordered set where questionId = &#63;.
-	 *
-	 * @param questionId the question ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching polls choice
-	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsChoice findByQuestionId_First(long questionId,
-		OrderByComparator orderByComparator)
-		throws NoSuchChoiceException, SystemException {
-		PollsChoice pollsChoice = fetchByQuestionId_First(questionId,
-				orderByComparator);
-
-		if (pollsChoice != null) {
-			return pollsChoice;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("questionId=");
-		msg.append(questionId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchChoiceException(msg.toString());
-	}
-
-	/**
-	 * Returns the first polls choice in the ordered set where questionId = &#63;.
-	 *
-	 * @param questionId the question ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching polls choice, or <code>null</code> if a matching polls choice could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsChoice fetchByQuestionId_First(long questionId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<PollsChoice> list = findByQuestionId(questionId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last polls choice in the ordered set where questionId = &#63;.
-	 *
-	 * @param questionId the question ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching polls choice
-	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsChoice findByQuestionId_Last(long questionId,
-		OrderByComparator orderByComparator)
-		throws NoSuchChoiceException, SystemException {
-		PollsChoice pollsChoice = fetchByQuestionId_Last(questionId,
-				orderByComparator);
-
-		if (pollsChoice != null) {
-			return pollsChoice;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("questionId=");
-		msg.append(questionId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchChoiceException(msg.toString());
-	}
-
-	/**
-	 * Returns the last polls choice in the ordered set where questionId = &#63;.
-	 *
-	 * @param questionId the question ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching polls choice, or <code>null</code> if a matching polls choice could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PollsChoice fetchByQuestionId_Last(long questionId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByQuestionId(questionId);
-
-		List<PollsChoice> list = findByQuestionId(questionId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -990,13 +833,270 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 	}
 
 	/**
+	 * Returns an ordered range of all the polls choices where questionId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param questionId the question ID
+	 * @param start the lower bound of the range of polls choices
+	 * @param end the upper bound of the range of polls choices (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching polls choices
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<PollsChoice> findByQuestionId(long questionId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_QUESTIONID;
+			finderArgs = new Object[] { questionId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_QUESTIONID;
+			finderArgs = new Object[] { questionId, start, end, orderByComparator };
+		}
+
+		List<PollsChoice> list = (List<PollsChoice>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (PollsChoice pollsChoice : list) {
+				if ((questionId != pollsChoice.getQuestionId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_POLLSCHOICE_WHERE);
+
+			query.append(_FINDER_COLUMN_QUESTIONID_QUESTIONID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(PollsChoiceModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(questionId);
+
+				list = (List<PollsChoice>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where questionId = &#63;.
+	 *
+	 * @param questionId the question ID
+	 * @return the first matching polls choice
+	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice findByQuestionId_First(long questionId)
+		throws NoSuchChoiceException, SystemException {
+		return findByQuestionId_First(questionId, null);
+	}
+
+	/**
+	 * Returns the first polls choice in the ordered set where questionId = &#63;.
+	 *
+	 * @param questionId the question ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching polls choice
+	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice findByQuestionId_First(long questionId,
+		OrderByComparator orderByComparator)
+		throws NoSuchChoiceException, SystemException {
+		PollsChoice pollsChoice = fetchByQuestionId_First(questionId,
+				orderByComparator);
+
+		if (pollsChoice != null) {
+			return pollsChoice;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("questionId=");
+		msg.append(questionId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchChoiceException(msg.toString());
+	}
+
+	/**
+	 * Returns the first polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where questionId = &#63;.
+	 *
+	 * @param questionId the question ID
+	 * @return the first matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice fetchByQuestionId_First(long questionId)
+		throws SystemException {
+		return fetchByQuestionId_First(questionId, null);
+	}
+
+	/**
+	 * Returns the first polls choice in the ordered set where questionId = &#63;.
+	 *
+	 * @param questionId the question ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice fetchByQuestionId_First(long questionId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<PollsChoice> list = findByQuestionId(questionId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where questionId = &#63;.
+	 *
+	 * @param questionId the question ID
+	 * @return the last matching polls choice
+	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice findByQuestionId_Last(long questionId)
+		throws NoSuchChoiceException, SystemException {
+		return findByQuestionId_Last(questionId, null);
+	}
+
+	/**
+	 * Returns the last polls choice in the ordered set where questionId = &#63;.
+	 *
+	 * @param questionId the question ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching polls choice
+	 * @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice findByQuestionId_Last(long questionId,
+		OrderByComparator orderByComparator)
+		throws NoSuchChoiceException, SystemException {
+		PollsChoice pollsChoice = fetchByQuestionId_Last(questionId,
+				orderByComparator);
+
+		if (pollsChoice != null) {
+			return pollsChoice;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("questionId=");
+		msg.append(questionId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchChoiceException(msg.toString());
+	}
+
+	/**
+	 * Returns the last polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where questionId = &#63;.
+	 *
+	 * @param questionId the question ID
+	 * @return the last matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice fetchByQuestionId_Last(long questionId)
+		throws SystemException {
+		return fetchByQuestionId_Last(questionId, null);
+	}
+
+	/**
+	 * Returns the last polls choice in the ordered set where questionId = &#63;.
+	 *
+	 * @param questionId the question ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PollsChoice fetchByQuestionId_Last(long questionId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByQuestionId(questionId);
+
+		List<PollsChoice> list = findByQuestionId(questionId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the polls choices where questionId = &#63; from the database.
 	 *
 	 * @param questionId the question ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByQuestionId(long questionId) throws SystemException {
-		for (PollsChoice pollsChoice : findByQuestionId(questionId)) {
+		for (PollsChoice pollsChoice : findByQuestionId(questionId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(pollsChoice);
 		}
 	}
@@ -1058,6 +1158,21 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 	public static final FinderPath FINDER_PATH_FETCH_BY_Q_N = new FinderPath(PollsChoiceModelImpl.ENTITY_CACHE_ENABLED,
 			PollsChoiceModelImpl.FINDER_CACHE_ENABLED, PollsChoiceImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByQ_N",
+			new String[] { Long.class.getName(), String.class.getName() },
+			PollsChoiceModelImpl.QUESTIONID_COLUMN_BITMASK |
+			PollsChoiceModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_Q_N = new FinderPath(PollsChoiceModelImpl.ENTITY_CACHE_ENABLED,
+			PollsChoiceModelImpl.FINDER_CACHE_ENABLED, PollsChoiceImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByQ_N",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_Q_N = new FinderPath(PollsChoiceModelImpl.ENTITY_CACHE_ENABLED,
+			PollsChoiceModelImpl.FINDER_CACHE_ENABLED, PollsChoiceImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByQ_N",
 			new String[] { Long.class.getName(), String.class.getName() },
 			PollsChoiceModelImpl.QUESTIONID_COLUMN_BITMASK |
 			PollsChoiceModelImpl.NAME_COLUMN_BITMASK);
@@ -1162,8 +1277,6 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 					query.append(_FINDER_COLUMN_Q_N_NAME_2);
 				}
 			}
-
-			query.append(PollsChoiceModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 

@@ -154,214 +154,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
-	 * Returns an ordered range of all the users where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of users
-	 * @param end the upper bound of the range of users (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching users
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<User> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (User user : list) {
-				if (!Validator.equals(uuid, user.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_USER_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByUuid_First(uuid, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<User> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByUuid_Last(String uuid, OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByUuid_Last(uuid, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<User> list = findByUuid(uuid, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the users before and after the current user in the ordered set where uuid = &#63;.
 	 *
 	 * @param userId the primary key of the current user
@@ -515,13 +307,270 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
+	 * Returns an ordered range of all the users where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<User> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if (!Validator.equals(uuid, user.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_USER_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByUuid_First(String uuid)
+		throws NoSuchUserException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByUuid_First(uuid, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByUuid_First(String uuid) throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<User> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByUuid_Last(String uuid)
+		throws NoSuchUserException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByUuid_Last(String uuid, OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByUuid_Last(String uuid) throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<User> list = findByUuid(uuid, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the users where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (User user : findByUuid(uuid)) {
+		for (User user : findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				null)) {
 			remove(user);
 		}
 	}
@@ -646,236 +695,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public List<User> findByUuid_C(String uuid, long companyId, int start,
 		int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the users where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of users
-	 * @param end the upper bound of the range of users (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching users
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<User> findByUuid_C(String uuid, long companyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (User user : list) {
-				if (!Validator.equals(uuid, user.getUuid()) ||
-						(companyId != user.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_USER_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByUuid_C_First(uuid, companyId, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<User> list = findByUuid_C(uuid, companyId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByUuid_C_Last(uuid, companyId, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<User> list = findByUuid_C(uuid, companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1038,6 +857,290 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
+	 * Returns an ordered range of all the users where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<User> findByUuid_C(String uuid, long companyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if (!Validator.equals(uuid, user.getUuid()) ||
+						(companyId != user.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_USER_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchUserException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByUuid_C_First(uuid, companyId, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<User> list = findByUuid_C(uuid, companyId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchUserException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByUuid_C_Last(uuid, companyId, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<User> list = findByUuid_C(uuid, companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the users where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1046,7 +1149,8 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (User user : findByUuid_C(uuid, companyId)) {
+		for (User user : findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(user);
 		}
 	}
@@ -1175,204 +1279,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public List<User> findByCompanyId(long companyId, int start, int end)
 		throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the users where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of users
-	 * @param end the upper bound of the range of users (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching users
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<User> findByCompanyId(long companyId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (User user : list) {
-				if ((companyId != user.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_USER_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByCompanyId_First(companyId, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<User> list = findByCompanyId(companyId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByCompanyId_Last(companyId, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<User> list = findByCompanyId(companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1517,13 +1423,261 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
+	 * Returns an ordered range of all the users where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<User> findByCompanyId(long companyId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if ((companyId != user.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_USER_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByCompanyId_First(long companyId)
+		throws NoSuchUserException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByCompanyId_First(companyId, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<User> list = findByCompanyId(companyId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByCompanyId_Last(long companyId)
+		throws NoSuchUserException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByCompanyId_Last(companyId, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByCompanyId_Last(long companyId) throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<User> list = findByCompanyId(companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the users where companyId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCompanyId(long companyId) throws SystemException {
-		for (User user : findByCompanyId(companyId)) {
+		for (User user : findByCompanyId(companyId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(user);
 		}
 	}
@@ -1585,6 +1739,22 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_FETCH_BY_CONTACTID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByContactId",
+			new String[] { Long.class.getName() },
+			UserModelImpl.CONTACTID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_CONTACTID =
+		new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByContactId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CONTACTID =
+		new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByContactId",
 			new String[] { Long.class.getName() },
 			UserModelImpl.CONTACTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_CONTACTID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
@@ -1848,221 +2018,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
-	 * Returns an ordered range of all the users where emailAddress = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param emailAddress the email address
-	 * @param start the lower bound of the range of users
-	 * @param end the upper bound of the range of users (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching users
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<User> findByEmailAddress(String emailAddress, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESS;
-			finderArgs = new Object[] { emailAddress };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_EMAILADDRESS;
-			finderArgs = new Object[] {
-					emailAddress,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (User user : list) {
-				if (!Validator.equals(emailAddress, user.getEmailAddress())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_USER_WHERE);
-
-			if (emailAddress == null) {
-				query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_1);
-			}
-			else {
-				if (emailAddress.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (emailAddress != null) {
-					qPos.add(emailAddress);
-				}
-
-				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user in the ordered set where emailAddress = &#63;.
-	 *
-	 * @param emailAddress the email address
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByEmailAddress_First(String emailAddress,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByEmailAddress_First(emailAddress, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("emailAddress=");
-		msg.append(emailAddress);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user in the ordered set where emailAddress = &#63;.
-	 *
-	 * @param emailAddress the email address
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByEmailAddress_First(String emailAddress,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<User> list = findByEmailAddress(emailAddress, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user in the ordered set where emailAddress = &#63;.
-	 *
-	 * @param emailAddress the email address
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByEmailAddress_Last(String emailAddress,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByEmailAddress_Last(emailAddress, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("emailAddress=");
-		msg.append(emailAddress);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user in the ordered set where emailAddress = &#63;.
-	 *
-	 * @param emailAddress the email address
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByEmailAddress_Last(String emailAddress,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByEmailAddress(emailAddress);
-
-		List<User> list = findByEmailAddress(emailAddress, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the users before and after the current user in the ordered set where emailAddress = &#63;.
 	 *
 	 * @param userId the primary key of the current user
@@ -2217,6 +2172,271 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
+	 * Returns an ordered range of all the users where emailAddress = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param emailAddress the email address
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<User> findByEmailAddress(String emailAddress, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EMAILADDRESS;
+			finderArgs = new Object[] { emailAddress };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_EMAILADDRESS;
+			finderArgs = new Object[] {
+					emailAddress,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if (!Validator.equals(emailAddress, user.getEmailAddress())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_USER_WHERE);
+
+			if (emailAddress == null) {
+				query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_1);
+			}
+			else {
+				if (emailAddress.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (emailAddress != null) {
+					qPos.add(emailAddress);
+				}
+
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByEmailAddress_First(String emailAddress)
+		throws NoSuchUserException, SystemException {
+		return findByEmailAddress_First(emailAddress, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByEmailAddress_First(String emailAddress,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByEmailAddress_First(emailAddress, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("emailAddress=");
+		msg.append(emailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByEmailAddress_First(String emailAddress)
+		throws SystemException {
+		return fetchByEmailAddress_First(emailAddress, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByEmailAddress_First(String emailAddress,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<User> list = findByEmailAddress(emailAddress, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByEmailAddress_Last(String emailAddress)
+		throws NoSuchUserException, SystemException {
+		return findByEmailAddress_Last(emailAddress, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByEmailAddress_Last(String emailAddress,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByEmailAddress_Last(emailAddress, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("emailAddress=");
+		msg.append(emailAddress);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByEmailAddress_Last(String emailAddress)
+		throws SystemException {
+		return fetchByEmailAddress_Last(emailAddress, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where emailAddress = &#63;.
+	 *
+	 * @param emailAddress the email address
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByEmailAddress_Last(String emailAddress,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByEmailAddress(emailAddress);
+
+		List<User> list = findByEmailAddress(emailAddress, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the users where emailAddress = &#63; from the database.
 	 *
 	 * @param emailAddress the email address
@@ -2224,7 +2444,8 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	 */
 	public void removeByEmailAddress(String emailAddress)
 		throws SystemException {
-		for (User user : findByEmailAddress(emailAddress)) {
+		for (User user : findByEmailAddress(emailAddress, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(user);
 		}
 	}
@@ -2298,9 +2519,20 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	private static final String _FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_1 = "user.emailAddress IS NULL";
 	private static final String _FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_2 = "user.emailAddress = ?";
 	private static final String _FINDER_COLUMN_EMAILADDRESS_EMAILADDRESS_3 = "(user.emailAddress IS NULL OR user.emailAddress = ?)";
-	public static final FinderPath FINDER_PATH_FETCH_BY_PORTRAITID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_PORTRAITID =
+		new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByPortraitId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByPortraitId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PORTRAITID =
+		new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByPortraitId",
 			new String[] { Long.class.getName() },
 			UserModelImpl.PORTRAITID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_PORTRAITID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
@@ -2309,81 +2541,66 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			new String[] { Long.class.getName() });
 
 	/**
-	 * Returns the user where portraitId = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
+	 * Returns an ordered range of all the users where portraitId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param portraitId the portrait ID
-	 * @return the matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
 	 * @throws SystemException if a system exception occurred
 	 */
-	public User findByPortraitId(long portraitId)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByPortraitId(portraitId);
+	protected List<User> findByPortraitId(long portraitId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (user == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("portraitId=");
-			msg.append(portraitId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchUserException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PORTRAITID;
+			finderArgs = new Object[] { portraitId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PORTRAITID;
+			finderArgs = new Object[] { portraitId, start, end, orderByComparator };
 		}
 
-		return user;
-	}
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the user where portraitId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param portraitId the portrait ID
-	 * @return the matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByPortraitId(long portraitId) throws SystemException {
-		return fetchByPortraitId(portraitId, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if ((portraitId != user.getPortraitId())) {
+					list = null;
 
-	/**
-	 * Returns the user where portraitId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param portraitId the portrait ID
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByPortraitId(long portraitId, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { portraitId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_PORTRAITID,
-					finderArgs, this);
-		}
-
-		if (result instanceof User) {
-			User user = (User)result;
-
-			if ((portraitId != user.getPortraitId())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(2);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
 
 			query.append(_SQL_SELECT_USER_WHERE);
 
 			query.append(_FINDER_COLUMN_PORTRAITID_PORTRAITID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
 
 			String sql = query.toString();
 
@@ -2398,63 +2615,190 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 
 				qPos.add(portraitId);
 
-				List<User> list = q.list();
-
-				result = list;
-
-				User user = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PORTRAITID,
-						finderArgs, list);
-				}
-				else {
-					user = list.get(0);
-
-					cacheResult(user);
-
-					if ((user.getPortraitId() != portraitId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PORTRAITID,
-							finderArgs, user);
-					}
-				}
-
-				return user;
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_PORTRAITID,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (User)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the user where portraitId = &#63; from the database.
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where portraitId = &#63;.
 	 *
 	 * @param portraitId the portrait ID
-	 * @return the user that was removed
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public User removeByPortraitId(long portraitId)
+	public User findByPortraitId_First(long portraitId)
 		throws NoSuchUserException, SystemException {
-		User user = findByPortraitId(portraitId);
+		return findByPortraitId_First(portraitId, null);
+	}
 
-		return remove(user);
+	/**
+	 * Returns the first user in the ordered set where portraitId = &#63;.
+	 *
+	 * @param portraitId the portrait ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByPortraitId_First(long portraitId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByPortraitId_First(portraitId, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("portraitId=");
+		msg.append(portraitId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where portraitId = &#63;.
+	 *
+	 * @param portraitId the portrait ID
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByPortraitId_First(long portraitId)
+		throws SystemException {
+		return fetchByPortraitId_First(portraitId, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where portraitId = &#63;.
+	 *
+	 * @param portraitId the portrait ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByPortraitId_First(long portraitId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<User> list = findByPortraitId(portraitId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where portraitId = &#63;.
+	 *
+	 * @param portraitId the portrait ID
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByPortraitId_Last(long portraitId)
+		throws NoSuchUserException, SystemException {
+		return findByPortraitId_Last(portraitId, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where portraitId = &#63;.
+	 *
+	 * @param portraitId the portrait ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByPortraitId_Last(long portraitId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByPortraitId_Last(portraitId, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("portraitId=");
+		msg.append(portraitId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where portraitId = &#63;.
+	 *
+	 * @param portraitId the portrait ID
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByPortraitId_Last(long portraitId)
+		throws SystemException {
+		return fetchByPortraitId_Last(portraitId, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where portraitId = &#63;.
+	 *
+	 * @param portraitId the portrait ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByPortraitId_Last(long portraitId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByPortraitId(portraitId);
+
+		List<User> list = findByPortraitId(portraitId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the users where portraitId = &#63; from the database.
+	 *
+	 * @param portraitId the portrait ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByPortraitId(long portraitId) throws SystemException {
+		for (User user : findByPortraitId(portraitId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(user);
+		}
 	}
 
 	/**
@@ -2514,6 +2858,21 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_FETCH_BY_C_U = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_U",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.USERID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_U",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_U = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_U",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			UserModelImpl.COMPANYID_COLUMN_BITMASK |
 			UserModelImpl.USERID_COLUMN_BITMASK);
@@ -2800,232 +3159,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
-	 * Returns an ordered range of all the users where companyId = &#63; and createDate = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param createDate the create date
-	 * @param start the lower bound of the range of users
-	 * @param end the upper bound of the range of users (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching users
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<User> findByC_CD(long companyId, Date createDate, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_CD;
-			finderArgs = new Object[] { companyId, createDate };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_CD;
-			finderArgs = new Object[] {
-					companyId, createDate,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (User user : list) {
-				if ((companyId != user.getCompanyId()) ||
-						!Validator.equals(createDate, user.getCreateDate())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_USER_WHERE);
-
-			query.append(_FINDER_COLUMN_C_CD_COMPANYID_2);
-
-			if (createDate == null) {
-				query.append(_FINDER_COLUMN_C_CD_CREATEDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_C_CD_CREATEDATE_2);
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (createDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(createDate));
-				}
-
-				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user in the ordered set where companyId = &#63; and createDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param createDate the create date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByC_CD_First(long companyId, Date createDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByC_CD_First(companyId, createDate, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", createDate=");
-		msg.append(createDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user in the ordered set where companyId = &#63; and createDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param createDate the create date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_CD_First(long companyId, Date createDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<User> list = findByC_CD(companyId, createDate, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user in the ordered set where companyId = &#63; and createDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param createDate the create date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByC_CD_Last(long companyId, Date createDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByC_CD_Last(companyId, createDate, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", createDate=");
-		msg.append(createDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user in the ordered set where companyId = &#63; and createDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param createDate the create date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_CD_Last(long companyId, Date createDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_CD(companyId, createDate);
-
-		List<User> list = findByC_CD(companyId, createDate, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the users before and after the current user in the ordered set where companyId = &#63; and createDate = &#63;.
 	 *
 	 * @param userId the primary key of the current user
@@ -3180,6 +3313,286 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
+	 * Returns an ordered range of all the users where companyId = &#63; and createDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<User> findByC_CD(long companyId, Date createDate, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_CD;
+			finderArgs = new Object[] { companyId, createDate };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_CD;
+			finderArgs = new Object[] {
+					companyId, createDate,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if ((companyId != user.getCompanyId()) ||
+						!Validator.equals(createDate, user.getCreateDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_USER_WHERE);
+
+			query.append(_FINDER_COLUMN_C_CD_COMPANYID_2);
+
+			if (createDate == null) {
+				query.append(_FINDER_COLUMN_C_CD_CREATEDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_C_CD_CREATEDATE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				if (createDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(createDate));
+				}
+
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_CD_First(long companyId, Date createDate)
+		throws NoSuchUserException, SystemException {
+		return findByC_CD_First(companyId, createDate, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and createDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_CD_First(long companyId, Date createDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_CD_First(companyId, createDate, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", createDate=");
+		msg.append(createDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_CD_First(long companyId, Date createDate)
+		throws SystemException {
+		return fetchByC_CD_First(companyId, createDate, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and createDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_CD_First(long companyId, Date createDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<User> list = findByC_CD(companyId, createDate, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_CD_Last(long companyId, Date createDate)
+		throws NoSuchUserException, SystemException {
+		return findByC_CD_Last(companyId, createDate, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and createDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_CD_Last(long companyId, Date createDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_CD_Last(companyId, createDate, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", createDate=");
+		msg.append(createDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_CD_Last(long companyId, Date createDate)
+		throws SystemException {
+		return fetchByC_CD_Last(companyId, createDate, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and createDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_CD_Last(long companyId, Date createDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_CD(companyId, createDate);
+
+		List<User> list = findByC_CD(companyId, createDate, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the users where companyId = &#63; and createDate = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -3188,7 +3601,8 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	 */
 	public void removeByC_CD(long companyId, Date createDate)
 		throws SystemException {
-		for (User user : findByC_CD(companyId, createDate)) {
+		for (User user : findByC_CD(companyId, createDate, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(user);
 		}
 	}
@@ -3313,232 +3727,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public List<User> findByC_MD(long companyId, Date modifiedDate, int start,
 		int end) throws SystemException {
 		return findByC_MD(companyId, modifiedDate, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the users where companyId = &#63; and modifiedDate = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param modifiedDate the modified date
-	 * @param start the lower bound of the range of users
-	 * @param end the upper bound of the range of users (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching users
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<User> findByC_MD(long companyId, Date modifiedDate, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_MD;
-			finderArgs = new Object[] { companyId, modifiedDate };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_MD;
-			finderArgs = new Object[] {
-					companyId, modifiedDate,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (User user : list) {
-				if ((companyId != user.getCompanyId()) ||
-						!Validator.equals(modifiedDate, user.getModifiedDate())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_USER_WHERE);
-
-			query.append(_FINDER_COLUMN_C_MD_COMPANYID_2);
-
-			if (modifiedDate == null) {
-				query.append(_FINDER_COLUMN_C_MD_MODIFIEDDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_C_MD_MODIFIEDDATE_2);
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (modifiedDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
-				}
-
-				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param modifiedDate the modified date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByC_MD_First(long companyId, Date modifiedDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByC_MD_First(companyId, modifiedDate, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", modifiedDate=");
-		msg.append(modifiedDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param modifiedDate the modified date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_MD_First(long companyId, Date modifiedDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<User> list = findByC_MD(companyId, modifiedDate, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param modifiedDate the modified date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByC_MD_Last(long companyId, Date modifiedDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByC_MD_Last(companyId, modifiedDate, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", modifiedDate=");
-		msg.append(modifiedDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param modifiedDate the modified date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_MD_Last(long companyId, Date modifiedDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_MD(companyId, modifiedDate);
-
-		List<User> list = findByC_MD(companyId, modifiedDate, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3696,6 +3884,286 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
+	 * Returns an ordered range of all the users where companyId = &#63; and modifiedDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param modifiedDate the modified date
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<User> findByC_MD(long companyId, Date modifiedDate, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_MD;
+			finderArgs = new Object[] { companyId, modifiedDate };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_MD;
+			finderArgs = new Object[] {
+					companyId, modifiedDate,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if ((companyId != user.getCompanyId()) ||
+						!Validator.equals(modifiedDate, user.getModifiedDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_USER_WHERE);
+
+			query.append(_FINDER_COLUMN_C_MD_COMPANYID_2);
+
+			if (modifiedDate == null) {
+				query.append(_FINDER_COLUMN_C_MD_MODIFIEDDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_C_MD_MODIFIEDDATE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				if (modifiedDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
+				}
+
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param modifiedDate the modified date
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_MD_First(long companyId, Date modifiedDate)
+		throws NoSuchUserException, SystemException {
+		return findByC_MD_First(companyId, modifiedDate, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_MD_First(long companyId, Date modifiedDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_MD_First(companyId, modifiedDate, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", modifiedDate=");
+		msg.append(modifiedDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param modifiedDate the modified date
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_MD_First(long companyId, Date modifiedDate)
+		throws SystemException {
+		return fetchByC_MD_First(companyId, modifiedDate, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_MD_First(long companyId, Date modifiedDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<User> list = findByC_MD(companyId, modifiedDate, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param modifiedDate the modified date
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_MD_Last(long companyId, Date modifiedDate)
+		throws NoSuchUserException, SystemException {
+		return findByC_MD_Last(companyId, modifiedDate, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_MD_Last(long companyId, Date modifiedDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_MD_Last(companyId, modifiedDate, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", modifiedDate=");
+		msg.append(modifiedDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param modifiedDate the modified date
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_MD_Last(long companyId, Date modifiedDate)
+		throws SystemException {
+		return fetchByC_MD_Last(companyId, modifiedDate, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_MD_Last(long companyId, Date modifiedDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_MD(companyId, modifiedDate);
+
+		List<User> list = findByC_MD(companyId, modifiedDate, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the users where companyId = &#63; and modifiedDate = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -3704,7 +4172,8 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	 */
 	public void removeByC_MD(long companyId, Date modifiedDate)
 		throws SystemException {
-		for (User user : findByC_MD(companyId, modifiedDate)) {
+		for (User user : findByC_MD(companyId, modifiedDate, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(user);
 		}
 	}
@@ -3778,9 +4247,18 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	private static final String _FINDER_COLUMN_C_MD_COMPANYID_2 = "user.companyId = ? AND ";
 	private static final String _FINDER_COLUMN_C_MD_MODIFIEDDATE_1 = "user.modifiedDate IS NULL";
 	private static final String _FINDER_COLUMN_C_MD_MODIFIEDDATE_2 = "user.modifiedDate = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_DU = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_DU = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByC_DU",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_DU",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_DU = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_DU",
 			new String[] { Long.class.getName(), Boolean.class.getName() },
 			UserModelImpl.COMPANYID_COLUMN_BITMASK |
 			UserModelImpl.DEFAULTUSER_COLUMN_BITMASK);
@@ -3790,91 +4268,75 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
-	 * Returns the user where companyId = &#63; and defaultUser = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
+	 * Returns an ordered range of all the users where companyId = &#63; and defaultUser = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param companyId the company ID
 	 * @param defaultUser the default user
-	 * @return the matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
 	 * @throws SystemException if a system exception occurred
 	 */
-	public User findByC_DU(long companyId, boolean defaultUser)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByC_DU(companyId, defaultUser);
-
-		if (user == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(", defaultUser=");
-			msg.append(defaultUser);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchUserException(msg.toString());
-		}
-
-		return user;
-	}
-
-	/**
-	 * Returns the user where companyId = &#63; and defaultUser = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param companyId the company ID
-	 * @param defaultUser the default user
-	 * @return the matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_DU(long companyId, boolean defaultUser)
+	protected List<User> findByC_DU(long companyId, boolean defaultUser,
+		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		return fetchByC_DU(companyId, defaultUser, true);
-	}
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-	/**
-	 * Returns the user where companyId = &#63; and defaultUser = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param companyId the company ID
-	 * @param defaultUser the default user
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_DU(long companyId, boolean defaultUser,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, defaultUser };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_DU,
-					finderArgs, this);
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_DU;
+			finderArgs = new Object[] { companyId, defaultUser };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_DU;
+			finderArgs = new Object[] {
+					companyId, defaultUser,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		if (result instanceof User) {
-			User user = (User)result;
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-			if ((companyId != user.getCompanyId()) ||
-					(defaultUser != user.getDefaultUser())) {
-				result = null;
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if ((companyId != user.getCompanyId()) ||
+						(defaultUser != user.getDefaultUser())) {
+					list = null;
+
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_USER_WHERE);
 
 			query.append(_FINDER_COLUMN_C_DU_COMPANYID_2);
 
 			query.append(_FINDER_COLUMN_C_DU_DEFAULTUSER_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
 
 			String sql = query.toString();
 
@@ -3891,65 +4353,207 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 
 				qPos.add(defaultUser);
 
-				List<User> list = q.list();
-
-				result = list;
-
-				User user = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_DU,
-						finderArgs, list);
-				}
-				else {
-					user = list.get(0);
-
-					cacheResult(user);
-
-					if ((user.getCompanyId() != companyId) ||
-							(user.getDefaultUser() != defaultUser)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_DU,
-							finderArgs, user);
-					}
-				}
-
-				return user;
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_DU,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (User)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the user where companyId = &#63; and defaultUser = &#63; from the database.
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultUser = &#63;.
 	 *
 	 * @param companyId the company ID
 	 * @param defaultUser the default user
-	 * @return the user that was removed
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public User removeByC_DU(long companyId, boolean defaultUser)
+	public User findByC_DU_First(long companyId, boolean defaultUser)
 		throws NoSuchUserException, SystemException {
-		User user = findByC_DU(companyId, defaultUser);
+		return findByC_DU_First(companyId, defaultUser, null);
+	}
 
-		return remove(user);
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and defaultUser = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultUser the default user
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_DU_First(long companyId, boolean defaultUser,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_DU_First(companyId, defaultUser, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", defaultUser=");
+		msg.append(defaultUser);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultUser = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultUser the default user
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_DU_First(long companyId, boolean defaultUser)
+		throws SystemException {
+		return fetchByC_DU_First(companyId, defaultUser, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and defaultUser = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultUser the default user
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_DU_First(long companyId, boolean defaultUser,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<User> list = findByC_DU(companyId, defaultUser, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultUser = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultUser the default user
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_DU_Last(long companyId, boolean defaultUser)
+		throws NoSuchUserException, SystemException {
+		return findByC_DU_Last(companyId, defaultUser, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and defaultUser = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultUser the default user
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_DU_Last(long companyId, boolean defaultUser,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_DU_Last(companyId, defaultUser, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", defaultUser=");
+		msg.append(defaultUser);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultUser = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultUser the default user
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_DU_Last(long companyId, boolean defaultUser)
+		throws SystemException {
+		return fetchByC_DU_Last(companyId, defaultUser, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and defaultUser = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultUser the default user
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_DU_Last(long companyId, boolean defaultUser,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_DU(companyId, defaultUser);
+
+		List<User> list = findByC_DU(companyId, defaultUser, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the users where companyId = &#63; and defaultUser = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param defaultUser the default user
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_DU(long companyId, boolean defaultUser)
+		throws SystemException {
+		for (User user : findByC_DU(companyId, defaultUser, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(user);
+		}
 	}
 
 	/**
@@ -4016,6 +4620,21 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_FETCH_BY_C_SN = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_SN",
+			new String[] { Long.class.getName(), String.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.SCREENNAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_SN = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_SN",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_SN = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_SN",
 			new String[] { Long.class.getName(), String.class.getName() },
 			UserModelImpl.COMPANYID_COLUMN_BITMASK |
 			UserModelImpl.SCREENNAME_COLUMN_BITMASK);
@@ -4281,6 +4900,21 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			new String[] { Long.class.getName(), String.class.getName() },
 			UserModelImpl.COMPANYID_COLUMN_BITMASK |
 			UserModelImpl.EMAILADDRESS_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_EA = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_EA",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_EA = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_EA",
+			new String[] { Long.class.getName(), String.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.EMAILADDRESS_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_EA = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_EA",
@@ -4537,9 +5171,18 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	private static final String _FINDER_COLUMN_C_EA_EMAILADDRESS_1 = "user.emailAddress IS NULL";
 	private static final String _FINDER_COLUMN_C_EA_EMAILADDRESS_2 = "user.emailAddress = ?";
 	private static final String _FINDER_COLUMN_C_EA_EMAILADDRESS_3 = "(user.emailAddress IS NULL OR user.emailAddress = ?)";
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_FID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_FID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByC_FID",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_FID",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_FID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_FID",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			UserModelImpl.COMPANYID_COLUMN_BITMASK |
 			UserModelImpl.FACEBOOKID_COLUMN_BITMASK);
@@ -4549,91 +5192,75 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
-	 * Returns the user where companyId = &#63; and facebookId = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
+	 * Returns an ordered range of all the users where companyId = &#63; and facebookId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param companyId the company ID
 	 * @param facebookId the facebook ID
-	 * @return the matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
 	 * @throws SystemException if a system exception occurred
 	 */
-	public User findByC_FID(long companyId, long facebookId)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByC_FID(companyId, facebookId);
-
-		if (user == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(", facebookId=");
-			msg.append(facebookId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchUserException(msg.toString());
-		}
-
-		return user;
-	}
-
-	/**
-	 * Returns the user where companyId = &#63; and facebookId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param companyId the company ID
-	 * @param facebookId the facebook ID
-	 * @return the matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_FID(long companyId, long facebookId)
+	protected List<User> findByC_FID(long companyId, long facebookId,
+		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		return fetchByC_FID(companyId, facebookId, true);
-	}
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-	/**
-	 * Returns the user where companyId = &#63; and facebookId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param companyId the company ID
-	 * @param facebookId the facebook ID
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_FID(long companyId, long facebookId,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, facebookId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_FID,
-					finderArgs, this);
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_FID;
+			finderArgs = new Object[] { companyId, facebookId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_FID;
+			finderArgs = new Object[] {
+					companyId, facebookId,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		if (result instanceof User) {
-			User user = (User)result;
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-			if ((companyId != user.getCompanyId()) ||
-					(facebookId != user.getFacebookId())) {
-				result = null;
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if ((companyId != user.getCompanyId()) ||
+						(facebookId != user.getFacebookId())) {
+					list = null;
+
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_USER_WHERE);
 
 			query.append(_FINDER_COLUMN_C_FID_COMPANYID_2);
 
 			query.append(_FINDER_COLUMN_C_FID_FACEBOOKID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
 
 			String sql = query.toString();
 
@@ -4650,65 +5277,207 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 
 				qPos.add(facebookId);
 
-				List<User> list = q.list();
-
-				result = list;
-
-				User user = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_FID,
-						finderArgs, list);
-				}
-				else {
-					user = list.get(0);
-
-					cacheResult(user);
-
-					if ((user.getCompanyId() != companyId) ||
-							(user.getFacebookId() != facebookId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_FID,
-							finderArgs, user);
-					}
-				}
-
-				return user;
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_FID,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (User)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the user where companyId = &#63; and facebookId = &#63; from the database.
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and facebookId = &#63;.
 	 *
 	 * @param companyId the company ID
 	 * @param facebookId the facebook ID
-	 * @return the user that was removed
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public User removeByC_FID(long companyId, long facebookId)
+	public User findByC_FID_First(long companyId, long facebookId)
 		throws NoSuchUserException, SystemException {
-		User user = findByC_FID(companyId, facebookId);
+		return findByC_FID_First(companyId, facebookId, null);
+	}
 
-		return remove(user);
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and facebookId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param facebookId the facebook ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_FID_First(long companyId, long facebookId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_FID_First(companyId, facebookId, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", facebookId=");
+		msg.append(facebookId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and facebookId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param facebookId the facebook ID
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_FID_First(long companyId, long facebookId)
+		throws SystemException {
+		return fetchByC_FID_First(companyId, facebookId, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and facebookId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param facebookId the facebook ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_FID_First(long companyId, long facebookId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<User> list = findByC_FID(companyId, facebookId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and facebookId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param facebookId the facebook ID
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_FID_Last(long companyId, long facebookId)
+		throws NoSuchUserException, SystemException {
+		return findByC_FID_Last(companyId, facebookId, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and facebookId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param facebookId the facebook ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_FID_Last(long companyId, long facebookId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_FID_Last(companyId, facebookId, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", facebookId=");
+		msg.append(facebookId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and facebookId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param facebookId the facebook ID
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_FID_Last(long companyId, long facebookId)
+		throws SystemException {
+		return fetchByC_FID_Last(companyId, facebookId, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and facebookId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param facebookId the facebook ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_FID_Last(long companyId, long facebookId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_FID(companyId, facebookId);
+
+		List<User> list = findByC_FID(companyId, facebookId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the users where companyId = &#63; and facebookId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param facebookId the facebook ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_FID(long companyId, long facebookId)
+		throws SystemException {
+		for (User user : findByC_FID(companyId, facebookId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(user);
+		}
 	}
 
 	/**
@@ -4772,9 +5541,18 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 
 	private static final String _FINDER_COLUMN_C_FID_COMPANYID_2 = "user.companyId = ? AND ";
 	private static final String _FINDER_COLUMN_C_FID_FACEBOOKID_2 = "user.facebookId = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_O = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_O = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByC_O",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_O",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_O = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
+			UserModelImpl.FINDER_CACHE_ENABLED, UserImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_O",
 			new String[] { Long.class.getName(), String.class.getName() },
 			UserModelImpl.COMPANYID_COLUMN_BITMASK |
 			UserModelImpl.OPENID_COLUMN_BITMASK);
@@ -4784,85 +5562,63 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
-	 * Returns the user where companyId = &#63; and openId = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
+	 * Returns an ordered range of all the users where companyId = &#63; and openId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param companyId the company ID
 	 * @param openId the open ID
-	 * @return the matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
 	 * @throws SystemException if a system exception occurred
 	 */
-	public User findByC_O(long companyId, String openId)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByC_O(companyId, openId);
+	protected List<User> findByC_O(long companyId, String openId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (user == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(", openId=");
-			msg.append(openId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchUserException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_O;
+			finderArgs = new Object[] { companyId, openId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_O;
+			finderArgs = new Object[] {
+					companyId, openId,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		return user;
-	}
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the user where companyId = &#63; and openId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param companyId the company ID
-	 * @param openId the open ID
-	 * @return the matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_O(long companyId, String openId)
-		throws SystemException {
-		return fetchByC_O(companyId, openId, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if ((companyId != user.getCompanyId()) ||
+						!Validator.equals(openId, user.getOpenId())) {
+					list = null;
 
-	/**
-	 * Returns the user where companyId = &#63; and openId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param companyId the company ID
-	 * @param openId the open ID
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_O(long companyId, String openId,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, openId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_O,
-					finderArgs, this);
-		}
-
-		if (result instanceof User) {
-			User user = (User)result;
-
-			if ((companyId != user.getCompanyId()) ||
-					!Validator.equals(openId, user.getOpenId())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_USER_WHERE);
 
@@ -4878,6 +5634,11 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 				else {
 					query.append(_FINDER_COLUMN_C_O_OPENID_2);
 				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
 			}
 
 			String sql = query.toString();
@@ -4897,66 +5658,206 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					qPos.add(openId);
 				}
 
-				List<User> list = q.list();
-
-				result = list;
-
-				User user = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_O,
-						finderArgs, list);
-				}
-				else {
-					user = list.get(0);
-
-					cacheResult(user);
-
-					if ((user.getCompanyId() != companyId) ||
-							(user.getOpenId() == null) ||
-							!user.getOpenId().equals(openId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_O,
-							finderArgs, user);
-					}
-				}
-
-				return user;
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_O,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (User)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the user where companyId = &#63; and openId = &#63; from the database.
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and openId = &#63;.
 	 *
 	 * @param companyId the company ID
 	 * @param openId the open ID
-	 * @return the user that was removed
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public User removeByC_O(long companyId, String openId)
+	public User findByC_O_First(long companyId, String openId)
 		throws NoSuchUserException, SystemException {
-		User user = findByC_O(companyId, openId);
+		return findByC_O_First(companyId, openId, null);
+	}
 
-		return remove(user);
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and openId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param openId the open ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_O_First(long companyId, String openId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_O_First(companyId, openId, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", openId=");
+		msg.append(openId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and openId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param openId the open ID
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_O_First(long companyId, String openId)
+		throws SystemException {
+		return fetchByC_O_First(companyId, openId, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and openId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param openId the open ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_O_First(long companyId, String openId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<User> list = findByC_O(companyId, openId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and openId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param openId the open ID
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_O_Last(long companyId, String openId)
+		throws NoSuchUserException, SystemException {
+		return findByC_O_Last(companyId, openId, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and openId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param openId the open ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_O_Last(long companyId, String openId,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_O_Last(companyId, openId, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", openId=");
+		msg.append(openId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and openId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param openId the open ID
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_O_Last(long companyId, String openId)
+		throws SystemException {
+		return fetchByC_O_Last(companyId, openId, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and openId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param openId the open ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_O_Last(long companyId, String openId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_O(companyId, openId);
+
+		List<User> list = findByC_O(companyId, openId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the users where companyId = &#63; and openId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param openId the open ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_O(long companyId, String openId)
+		throws SystemException {
+		for (User user : findByC_O(companyId, openId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(user);
+		}
 	}
 
 	/**
@@ -5085,224 +5986,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public List<User> findByC_S(long companyId, int status, int start, int end)
 		throws SystemException {
 		return findByC_S(companyId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the users where companyId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param start the lower bound of the range of users
-	 * @param end the upper bound of the range of users (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching users
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<User> findByC_S(long companyId, int status, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S;
-			finderArgs = new Object[] { companyId, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S;
-			finderArgs = new Object[] {
-					companyId, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (User user : list) {
-				if ((companyId != user.getCompanyId()) ||
-						(status != user.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_USER_WHERE);
-
-			query.append(_FINDER_COLUMN_C_S_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(status);
-
-				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user in the ordered set where companyId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByC_S_First(long companyId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByC_S_First(companyId, status, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user in the ordered set where companyId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_S_First(long companyId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<User> list = findByC_S(companyId, status, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user in the ordered set where companyId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByC_S_Last(long companyId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByC_S_Last(companyId, status, orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user in the ordered set where companyId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_S_Last(long companyId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_S(companyId, status);
-
-		List<User> list = findByC_S(companyId, status, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -5453,6 +6136,278 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
+	 * Returns an ordered range of all the users where companyId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<User> findByC_S(long companyId, int status, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S;
+			finderArgs = new Object[] { companyId, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S;
+			finderArgs = new Object[] {
+					companyId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if ((companyId != user.getCompanyId()) ||
+						(status != user.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_USER_WHERE);
+
+			query.append(_FINDER_COLUMN_C_S_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(status);
+
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_S_First(long companyId, int status)
+		throws NoSuchUserException, SystemException {
+		return findByC_S_First(companyId, status, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_S_First(long companyId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_S_First(companyId, status, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_S_First(long companyId, int status)
+		throws SystemException {
+		return fetchByC_S_First(companyId, status, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_S_First(long companyId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<User> list = findByC_S(companyId, status, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_S_Last(long companyId, int status)
+		throws NoSuchUserException, SystemException {
+		return findByC_S_Last(companyId, status, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_S_Last(long companyId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_S_Last(companyId, status, orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_S_Last(long companyId, int status)
+		throws SystemException {
+		return fetchByC_S_Last(companyId, status, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_S_Last(long companyId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_S(companyId, status);
+
+		List<User> list = findByC_S(companyId, status, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the users where companyId = &#63; and status = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -5461,7 +6416,8 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	 */
 	public void removeByC_S(long companyId, int status)
 		throws SystemException {
-		for (User user : findByC_S(companyId, status)) {
+		for (User user : findByC_S(companyId, status, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(user);
 		}
 	}
@@ -5586,260 +6542,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		Date modifiedDate, int start, int end) throws SystemException {
 		return findByC_CD_MD(companyId, createDate, modifiedDate, start, end,
 			null);
-	}
-
-	/**
-	 * Returns an ordered range of all the users where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param createDate the create date
-	 * @param modifiedDate the modified date
-	 * @param start the lower bound of the range of users
-	 * @param end the upper bound of the range of users (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching users
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<User> findByC_CD_MD(long companyId, Date createDate,
-		Date modifiedDate, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_CD_MD;
-			finderArgs = new Object[] { companyId, createDate, modifiedDate };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_CD_MD;
-			finderArgs = new Object[] {
-					companyId, createDate, modifiedDate,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (User user : list) {
-				if ((companyId != user.getCompanyId()) ||
-						!Validator.equals(createDate, user.getCreateDate()) ||
-						!Validator.equals(modifiedDate, user.getModifiedDate())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_USER_WHERE);
-
-			query.append(_FINDER_COLUMN_C_CD_MD_COMPANYID_2);
-
-			if (createDate == null) {
-				query.append(_FINDER_COLUMN_C_CD_MD_CREATEDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_C_CD_MD_CREATEDATE_2);
-			}
-
-			if (modifiedDate == null) {
-				query.append(_FINDER_COLUMN_C_CD_MD_MODIFIEDDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_C_CD_MD_MODIFIEDDATE_2);
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (createDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(createDate));
-				}
-
-				if (modifiedDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
-				}
-
-				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param createDate the create date
-	 * @param modifiedDate the modified date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByC_CD_MD_First(long companyId, Date createDate,
-		Date modifiedDate, OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByC_CD_MD_First(companyId, createDate, modifiedDate,
-				orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", createDate=");
-		msg.append(createDate);
-
-		msg.append(", modifiedDate=");
-		msg.append(modifiedDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the first user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param createDate the create date
-	 * @param modifiedDate the modified date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_CD_MD_First(long companyId, Date createDate,
-		Date modifiedDate, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<User> list = findByC_CD_MD(companyId, createDate, modifiedDate, 0,
-				1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param createDate the create date
-	 * @param modifiedDate the modified date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user
-	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User findByC_CD_MD_Last(long companyId, Date createDate,
-		Date modifiedDate, OrderByComparator orderByComparator)
-		throws NoSuchUserException, SystemException {
-		User user = fetchByC_CD_MD_Last(companyId, createDate, modifiedDate,
-				orderByComparator);
-
-		if (user != null) {
-			return user;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", createDate=");
-		msg.append(createDate);
-
-		msg.append(", modifiedDate=");
-		msg.append(modifiedDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchUserException(msg.toString());
-	}
-
-	/**
-	 * Returns the last user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param createDate the create date
-	 * @param modifiedDate the modified date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching user, or <code>null</code> if a matching user could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public User fetchByC_CD_MD_Last(long companyId, Date createDate,
-		Date modifiedDate, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByC_CD_MD(companyId, createDate, modifiedDate);
-
-		List<User> list = findByC_CD_MD(companyId, createDate, modifiedDate,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -6009,6 +6711,318 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
+	 * Returns an ordered range of all the users where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param modifiedDate the modified date
+	 * @param start the lower bound of the range of users
+	 * @param end the upper bound of the range of users (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching users
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<User> findByC_CD_MD(long companyId, Date createDate,
+		Date modifiedDate, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_CD_MD;
+			finderArgs = new Object[] { companyId, createDate, modifiedDate };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_CD_MD;
+			finderArgs = new Object[] {
+					companyId, createDate, modifiedDate,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if ((companyId != user.getCompanyId()) ||
+						!Validator.equals(createDate, user.getCreateDate()) ||
+						!Validator.equals(modifiedDate, user.getModifiedDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_USER_WHERE);
+
+			query.append(_FINDER_COLUMN_C_CD_MD_COMPANYID_2);
+
+			if (createDate == null) {
+				query.append(_FINDER_COLUMN_C_CD_MD_CREATEDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_C_CD_MD_CREATEDATE_2);
+			}
+
+			if (modifiedDate == null) {
+				query.append(_FINDER_COLUMN_C_CD_MD_MODIFIEDDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_C_CD_MD_MODIFIEDDATE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				if (createDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(createDate));
+				}
+
+				if (modifiedDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
+				}
+
+				list = (List<User>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param modifiedDate the modified date
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_CD_MD_First(long companyId, Date createDate,
+		Date modifiedDate) throws NoSuchUserException, SystemException {
+		return findByC_CD_MD_First(companyId, createDate, modifiedDate, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_CD_MD_First(long companyId, Date createDate,
+		Date modifiedDate, OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_CD_MD_First(companyId, createDate, modifiedDate,
+				orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", createDate=");
+		msg.append(createDate);
+
+		msg.append(", modifiedDate=");
+		msg.append(modifiedDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param modifiedDate the modified date
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_CD_MD_First(long companyId, Date createDate,
+		Date modifiedDate) throws SystemException {
+		return fetchByC_CD_MD_First(companyId, createDate, modifiedDate, null);
+	}
+
+	/**
+	 * Returns the first user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_CD_MD_First(long companyId, Date createDate,
+		Date modifiedDate, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<User> list = findByC_CD_MD(companyId, createDate, modifiedDate, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param modifiedDate the modified date
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_CD_MD_Last(long companyId, Date createDate,
+		Date modifiedDate) throws NoSuchUserException, SystemException {
+		return findByC_CD_MD_Last(companyId, createDate, modifiedDate, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user
+	 * @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User findByC_CD_MD_Last(long companyId, Date createDate,
+		Date modifiedDate, OrderByComparator orderByComparator)
+		throws NoSuchUserException, SystemException {
+		User user = fetchByC_CD_MD_Last(companyId, createDate, modifiedDate,
+				orderByComparator);
+
+		if (user != null) {
+			return user;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", createDate=");
+		msg.append(createDate);
+
+		msg.append(", modifiedDate=");
+		msg.append(modifiedDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchUserException(msg.toString());
+	}
+
+	/**
+	 * Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param modifiedDate the modified date
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_CD_MD_Last(long companyId, Date createDate,
+		Date modifiedDate) throws SystemException {
+		return fetchByC_CD_MD_Last(companyId, createDate, modifiedDate, null);
+	}
+
+	/**
+	 * Returns the last user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param createDate the create date
+	 * @param modifiedDate the modified date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching user, or <code>null</code> if a matching user could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public User fetchByC_CD_MD_Last(long companyId, Date createDate,
+		Date modifiedDate, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByC_CD_MD(companyId, createDate, modifiedDate);
+
+		List<User> list = findByC_CD_MD(companyId, createDate, modifiedDate,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the users where companyId = &#63; and createDate = &#63; and modifiedDate = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -6018,7 +7032,8 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	 */
 	public void removeByC_CD_MD(long companyId, Date createDate,
 		Date modifiedDate) throws SystemException {
-		for (User user : findByC_CD_MD(companyId, createDate, modifiedDate)) {
+		for (User user : findByC_CD_MD(companyId, createDate, modifiedDate,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(user);
 		}
 	}
@@ -6119,19 +7134,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CONTACTID,
 			new Object[] { Long.valueOf(user.getContactId()) }, user);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PORTRAITID,
-			new Object[] { Long.valueOf(user.getPortraitId()) }, user);
-
 		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_U,
 			new Object[] {
 				Long.valueOf(user.getCompanyId()),
 				Long.valueOf(user.getUserId())
-			}, user);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_DU,
-			new Object[] {
-				Long.valueOf(user.getCompanyId()),
-				Boolean.valueOf(user.getDefaultUser())
 			}, user);
 
 		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_SN,
@@ -6144,16 +7150,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 				
 			user.getEmailAddress()
 			}, user);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_FID,
-			new Object[] {
-				Long.valueOf(user.getCompanyId()),
-				Long.valueOf(user.getFacebookId())
-			}, user);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_O,
-			new Object[] { Long.valueOf(user.getCompanyId()), user.getOpenId() },
-			user);
 
 		user.resetOriginalValues();
 	}
@@ -6230,19 +7226,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CONTACTID,
 			new Object[] { Long.valueOf(user.getContactId()) });
 
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_PORTRAITID,
-			new Object[] { Long.valueOf(user.getPortraitId()) });
-
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_U,
 			new Object[] {
 				Long.valueOf(user.getCompanyId()),
 				Long.valueOf(user.getUserId())
-			});
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_DU,
-			new Object[] {
-				Long.valueOf(user.getCompanyId()),
-				Boolean.valueOf(user.getDefaultUser())
 			});
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_SN,
@@ -6254,15 +7241,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 				
 			user.getEmailAddress()
 			});
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_FID,
-			new Object[] {
-				Long.valueOf(user.getCompanyId()),
-				Long.valueOf(user.getFacebookId())
-			});
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_O,
-			new Object[] { Long.valueOf(user.getCompanyId()), user.getOpenId() });
 	}
 
 	/**
@@ -6636,19 +7614,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CONTACTID,
 				new Object[] { Long.valueOf(user.getContactId()) }, user);
 
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PORTRAITID,
-				new Object[] { Long.valueOf(user.getPortraitId()) }, user);
-
 			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_U,
 				new Object[] {
 					Long.valueOf(user.getCompanyId()),
 					Long.valueOf(user.getUserId())
-				}, user);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_DU,
-				new Object[] {
-					Long.valueOf(user.getCompanyId()),
-					Boolean.valueOf(user.getDefaultUser())
 				}, user);
 
 			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_SN,
@@ -6664,16 +7633,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					
 				user.getEmailAddress()
 				}, user);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_FID,
-				new Object[] {
-					Long.valueOf(user.getCompanyId()),
-					Long.valueOf(user.getFacebookId())
-				}, user);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_O,
-				new Object[] { Long.valueOf(user.getCompanyId()), user.getOpenId() },
-				user);
 		}
 		else {
 			if ((userModelImpl.getColumnBitmask() &
@@ -6693,22 +7652,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			}
 
 			if ((userModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_PORTRAITID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(userModelImpl.getOriginalPortraitId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PORTRAITID,
-					args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_PORTRAITID,
-					args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PORTRAITID,
-					new Object[] { Long.valueOf(user.getPortraitId()) }, user);
-			}
-
-			if ((userModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_C_U.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(userModelImpl.getOriginalCompanyId()),
@@ -6723,24 +7666,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					new Object[] {
 						Long.valueOf(user.getCompanyId()),
 						Long.valueOf(user.getUserId())
-					}, user);
-			}
-
-			if ((userModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_C_DU.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(userModelImpl.getOriginalCompanyId()),
-						Boolean.valueOf(userModelImpl.getOriginalDefaultUser())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_DU, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_DU, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_DU,
-					new Object[] {
-						Long.valueOf(user.getCompanyId()),
-						Boolean.valueOf(user.getDefaultUser())
 					}, user);
 			}
 
@@ -6781,44 +7706,6 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 						Long.valueOf(user.getCompanyId()),
 						
 					user.getEmailAddress()
-					}, user);
-			}
-
-			if ((userModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_C_FID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(userModelImpl.getOriginalCompanyId()),
-						Long.valueOf(userModelImpl.getOriginalFacebookId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_FID, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_FID, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_FID,
-					new Object[] {
-						Long.valueOf(user.getCompanyId()),
-						Long.valueOf(user.getFacebookId())
-					}, user);
-			}
-
-			if ((userModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_C_O.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(userModelImpl.getOriginalCompanyId()),
-						
-						userModelImpl.getOriginalOpenId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_O, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_O, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_O,
-					new Object[] {
-						Long.valueOf(user.getCompanyId()),
-						
-					user.getOpenId()
 					}, user);
 			}
 		}

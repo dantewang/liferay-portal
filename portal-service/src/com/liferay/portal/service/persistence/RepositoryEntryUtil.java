@@ -142,6 +142,26 @@ public class RepositoryEntryUtil {
 	}
 
 	/**
+	* Returns the repository entries before and after the current repository entry in the ordered set where uuid = &#63;.
+	*
+	* @param repositoryEntryId the primary key of the current repository entry
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next repository entry
+	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.RepositoryEntry[] findByUuid_PrevAndNext(
+		long repositoryEntryId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRepositoryEntryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByUuid_PrevAndNext(repositoryEntryId, uuid,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the repository entries where uuid = &#63;.
 	*
 	* <p>
@@ -163,6 +183,21 @@ public class RepositoryEntryUtil {
 	}
 
 	/**
+	* Returns the first repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching repository entry
+	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.RepositoryEntry findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.NoSuchRepositoryEntryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first repository entry in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -180,6 +215,19 @@ public class RepositoryEntryUtil {
 	}
 
 	/**
+	* Returns the first repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.RepositoryEntry fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first repository entry in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -192,6 +240,21 @@ public class RepositoryEntryUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching repository entry
+	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.RepositoryEntry findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.NoSuchRepositoryEntryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid_Last(uuid);
 	}
 
 	/**
@@ -212,6 +275,19 @@ public class RepositoryEntryUtil {
 	}
 
 	/**
+	* Returns the last repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.RepositoryEntry fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_Last(uuid);
+	}
+
+	/**
 	* Returns the last repository entry in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -224,26 +300,6 @@ public class RepositoryEntryUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_Last(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the repository entries before and after the current repository entry in the ordered set where uuid = &#63;.
-	*
-	* @param repositoryEntryId the primary key of the current repository entry
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next repository entry
-	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.RepositoryEntry[] findByUuid_PrevAndNext(
-		long repositoryEntryId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRepositoryEntryException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByUuid_PrevAndNext(repositoryEntryId, uuid,
-			orderByComparator);
 	}
 
 	/**
@@ -375,6 +431,26 @@ public class RepositoryEntryUtil {
 	}
 
 	/**
+	* Returns the repository entries before and after the current repository entry in the ordered set where repositoryId = &#63;.
+	*
+	* @param repositoryEntryId the primary key of the current repository entry
+	* @param repositoryId the repository ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next repository entry
+	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.RepositoryEntry[] findByRepositoryId_PrevAndNext(
+		long repositoryEntryId, long repositoryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchRepositoryEntryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByRepositoryId_PrevAndNext(repositoryEntryId,
+			repositoryId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the repository entries where repositoryId = &#63;.
 	*
 	* <p>
@@ -398,6 +474,21 @@ public class RepositoryEntryUtil {
 	}
 
 	/**
+	* Returns the first repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where repositoryId = &#63;.
+	*
+	* @param repositoryId the repository ID
+	* @return the first matching repository entry
+	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.RepositoryEntry findByRepositoryId_First(
+		long repositoryId)
+		throws com.liferay.portal.NoSuchRepositoryEntryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByRepositoryId_First(repositoryId);
+	}
+
+	/**
 	* Returns the first repository entry in the ordered set where repositoryId = &#63;.
 	*
 	* @param repositoryId the repository ID
@@ -416,6 +507,19 @@ public class RepositoryEntryUtil {
 	}
 
 	/**
+	* Returns the first repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where repositoryId = &#63;.
+	*
+	* @param repositoryId the repository ID
+	* @return the first matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.RepositoryEntry fetchByRepositoryId_First(
+		long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByRepositoryId_First(repositoryId);
+	}
+
+	/**
 	* Returns the first repository entry in the ordered set where repositoryId = &#63;.
 	*
 	* @param repositoryId the repository ID
@@ -429,6 +533,21 @@ public class RepositoryEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByRepositoryId_First(repositoryId, orderByComparator);
+	}
+
+	/**
+	* Returns the last repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where repositoryId = &#63;.
+	*
+	* @param repositoryId the repository ID
+	* @return the last matching repository entry
+	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a matching repository entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.RepositoryEntry findByRepositoryId_Last(
+		long repositoryId)
+		throws com.liferay.portal.NoSuchRepositoryEntryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByRepositoryId_Last(repositoryId);
 	}
 
 	/**
@@ -450,6 +569,19 @@ public class RepositoryEntryUtil {
 	}
 
 	/**
+	* Returns the last repository entry in the default ordered set defined by {@link RepositoryEntryModelImpl#ORDER_BY_JPQL} where repositoryId = &#63;.
+	*
+	* @param repositoryId the repository ID
+	* @return the last matching repository entry, or <code>null</code> if a matching repository entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.RepositoryEntry fetchByRepositoryId_Last(
+		long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByRepositoryId_Last(repositoryId);
+	}
+
+	/**
 	* Returns the last repository entry in the ordered set where repositoryId = &#63;.
 	*
 	* @param repositoryId the repository ID
@@ -463,26 +595,6 @@ public class RepositoryEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByRepositoryId_Last(repositoryId, orderByComparator);
-	}
-
-	/**
-	* Returns the repository entries before and after the current repository entry in the ordered set where repositoryId = &#63;.
-	*
-	* @param repositoryEntryId the primary key of the current repository entry
-	* @param repositoryId the repository ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next repository entry
-	* @throws com.liferay.portal.NoSuchRepositoryEntryException if a repository entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.RepositoryEntry[] findByRepositoryId_PrevAndNext(
-		long repositoryEntryId, long repositoryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchRepositoryEntryException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByRepositoryId_PrevAndNext(repositoryEntryId,
-			repositoryId, orderByComparator);
 	}
 
 	/**

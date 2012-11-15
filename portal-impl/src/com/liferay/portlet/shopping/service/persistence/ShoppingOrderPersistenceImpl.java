@@ -142,212 +142,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	}
 
 	/**
-	 * Returns an ordered range of all the shopping orders where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of shopping orders
-	 * @param end the upper bound of the range of shopping orders (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching shopping orders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ShoppingOrder> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<ShoppingOrder> list = (List<ShoppingOrder>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (ShoppingOrder shoppingOrder : list) {
-				if ((groupId != shoppingOrder.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SHOPPINGORDER_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<ShoppingOrder>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first shopping order in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching shopping order
-	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchOrderException, SystemException {
-		ShoppingOrder shoppingOrder = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (shoppingOrder != null) {
-			return shoppingOrder;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchOrderException(msg.toString());
-	}
-
-	/**
-	 * Returns the first shopping order in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<ShoppingOrder> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last shopping order in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching shopping order
-	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchOrderException, SystemException {
-		ShoppingOrder shoppingOrder = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (shoppingOrder != null) {
-			return shoppingOrder;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchOrderException(msg.toString());
-	}
-
-	/**
-	 * Returns the last shopping order in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<ShoppingOrder> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the shopping orders before and after the current shopping order in the ordered set where groupId = &#63;.
 	 *
 	 * @param orderId the primary key of the current shopping order
@@ -806,13 +600,270 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	}
 
 	/**
+	 * Returns an ordered range of all the shopping orders where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of shopping orders
+	 * @param end the upper bound of the range of shopping orders (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching shopping orders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ShoppingOrder> findByGroupId(long groupId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<ShoppingOrder> list = (List<ShoppingOrder>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingOrder shoppingOrder : list) {
+				if ((groupId != shoppingOrder.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SHOPPINGORDER_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<ShoppingOrder>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByGroupId_First(long groupId)
+		throws NoSuchOrderException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first shopping order in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchOrderException, SystemException {
+		ShoppingOrder shoppingOrder = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (shoppingOrder != null) {
+			return shoppingOrder;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrderException(msg.toString());
+	}
+
+	/**
+	 * Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first shopping order in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<ShoppingOrder> list = findByGroupId(groupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByGroupId_Last(long groupId)
+		throws NoSuchOrderException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last shopping order in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchOrderException, SystemException {
+		ShoppingOrder shoppingOrder = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (shoppingOrder != null) {
+			return shoppingOrder;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrderException(msg.toString());
+	}
+
+	/**
+	 * Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last shopping order in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<ShoppingOrder> list = findByGroupId(groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the shopping orders where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (ShoppingOrder shoppingOrder : findByGroupId(groupId)) {
+		for (ShoppingOrder shoppingOrder : findByGroupId(groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(shoppingOrder);
 		}
 	}
@@ -924,6 +975,22 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 			ShoppingOrderImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByNumber",
 			new String[] { String.class.getName() },
 			ShoppingOrderModelImpl.NUMBER_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_NUMBER = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByNumber",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NUMBER =
+		new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByNumber", new String[] { String.class.getName() },
+			ShoppingOrderModelImpl.NUMBER_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_NUMBER = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByNumber",
@@ -1015,8 +1082,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 					query.append(_FINDER_COLUMN_NUMBER_NUMBER_2);
 				}
 			}
-
-			query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -1161,10 +1226,21 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	private static final String _FINDER_COLUMN_NUMBER_NUMBER_1 = "shoppingOrder.number IS NULL";
 	private static final String _FINDER_COLUMN_NUMBER_NUMBER_2 = "shoppingOrder.number = ?";
 	private static final String _FINDER_COLUMN_NUMBER_NUMBER_3 = "(shoppingOrder.number IS NULL OR shoppingOrder.number = ?)";
-	public static final FinderPath FINDER_PATH_FETCH_BY_PPTXNID = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_PPTXNID = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingOrderImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByPPTxnId", new String[] { String.class.getName() },
+			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByPPTxnId",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PPTXNID =
+		new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingOrderImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByPPTxnId", new String[] { String.class.getName() },
 			ShoppingOrderModelImpl.PPTXNID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_PPTXNID = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
@@ -1172,78 +1248,57 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 			new String[] { String.class.getName() });
 
 	/**
-	 * Returns the shopping order where ppTxnId = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
+	 * Returns an ordered range of all the shopping orders where ppTxnId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param ppTxnId the pp txn ID
-	 * @return the matching shopping order
-	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @param start the lower bound of the range of shopping orders
+	 * @param end the upper bound of the range of shopping orders (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching shopping orders
 	 * @throws SystemException if a system exception occurred
 	 */
-	public ShoppingOrder findByPPTxnId(String ppTxnId)
-		throws NoSuchOrderException, SystemException {
-		ShoppingOrder shoppingOrder = fetchByPPTxnId(ppTxnId);
+	protected List<ShoppingOrder> findByPPTxnId(String ppTxnId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (shoppingOrder == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("ppTxnId=");
-			msg.append(ppTxnId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchOrderException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PPTXNID;
+			finderArgs = new Object[] { ppTxnId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PPTXNID;
+			finderArgs = new Object[] { ppTxnId, start, end, orderByComparator };
 		}
 
-		return shoppingOrder;
-	}
+		List<ShoppingOrder> list = (List<ShoppingOrder>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the shopping order where ppTxnId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param ppTxnId the pp txn ID
-	 * @return the matching shopping order, or <code>null</code> if a matching shopping order could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder fetchByPPTxnId(String ppTxnId)
-		throws SystemException {
-		return fetchByPPTxnId(ppTxnId, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingOrder shoppingOrder : list) {
+				if (!Validator.equals(ppTxnId, shoppingOrder.getPpTxnId())) {
+					list = null;
 
-	/**
-	 * Returns the shopping order where ppTxnId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param ppTxnId the pp txn ID
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching shopping order, or <code>null</code> if a matching shopping order could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder fetchByPPTxnId(String ppTxnId,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { ppTxnId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_PPTXNID,
-					finderArgs, this);
-		}
-
-		if (result instanceof ShoppingOrder) {
-			ShoppingOrder shoppingOrder = (ShoppingOrder)result;
-
-			if (!Validator.equals(ppTxnId, shoppingOrder.getPpTxnId())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_SHOPPINGORDER_WHERE);
 
@@ -1259,7 +1314,14 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 				}
 			}
 
-			query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -1276,64 +1338,194 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 					qPos.add(ppTxnId);
 				}
 
-				List<ShoppingOrder> list = q.list();
-
-				result = list;
-
-				ShoppingOrder shoppingOrder = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PPTXNID,
-						finderArgs, list);
-				}
-				else {
-					shoppingOrder = list.get(0);
-
-					cacheResult(shoppingOrder);
-
-					if ((shoppingOrder.getPpTxnId() == null) ||
-							!shoppingOrder.getPpTxnId().equals(ppTxnId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PPTXNID,
-							finderArgs, shoppingOrder);
-					}
-				}
-
-				return shoppingOrder;
+				list = (List<ShoppingOrder>)QueryUtil.list(q, getDialect(),
+						start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_PPTXNID,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (ShoppingOrder)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the shopping order where ppTxnId = &#63; from the database.
+	 * Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where ppTxnId = &#63;.
 	 *
 	 * @param ppTxnId the pp txn ID
-	 * @return the shopping order that was removed
+	 * @return the first matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public ShoppingOrder removeByPPTxnId(String ppTxnId)
+	public ShoppingOrder findByPPTxnId_First(String ppTxnId)
 		throws NoSuchOrderException, SystemException {
-		ShoppingOrder shoppingOrder = findByPPTxnId(ppTxnId);
+		return findByPPTxnId_First(ppTxnId, null);
+	}
 
-		return remove(shoppingOrder);
+	/**
+	 * Returns the first shopping order in the ordered set where ppTxnId = &#63;.
+	 *
+	 * @param ppTxnId the pp txn ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByPPTxnId_First(String ppTxnId,
+		OrderByComparator orderByComparator)
+		throws NoSuchOrderException, SystemException {
+		ShoppingOrder shoppingOrder = fetchByPPTxnId_First(ppTxnId,
+				orderByComparator);
+
+		if (shoppingOrder != null) {
+			return shoppingOrder;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("ppTxnId=");
+		msg.append(ppTxnId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrderException(msg.toString());
+	}
+
+	/**
+	 * Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where ppTxnId = &#63;.
+	 *
+	 * @param ppTxnId the pp txn ID
+	 * @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByPPTxnId_First(String ppTxnId)
+		throws SystemException {
+		return fetchByPPTxnId_First(ppTxnId, null);
+	}
+
+	/**
+	 * Returns the first shopping order in the ordered set where ppTxnId = &#63;.
+	 *
+	 * @param ppTxnId the pp txn ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByPPTxnId_First(String ppTxnId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<ShoppingOrder> list = findByPPTxnId(ppTxnId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where ppTxnId = &#63;.
+	 *
+	 * @param ppTxnId the pp txn ID
+	 * @return the last matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByPPTxnId_Last(String ppTxnId)
+		throws NoSuchOrderException, SystemException {
+		return findByPPTxnId_Last(ppTxnId, null);
+	}
+
+	/**
+	 * Returns the last shopping order in the ordered set where ppTxnId = &#63;.
+	 *
+	 * @param ppTxnId the pp txn ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByPPTxnId_Last(String ppTxnId,
+		OrderByComparator orderByComparator)
+		throws NoSuchOrderException, SystemException {
+		ShoppingOrder shoppingOrder = fetchByPPTxnId_Last(ppTxnId,
+				orderByComparator);
+
+		if (shoppingOrder != null) {
+			return shoppingOrder;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("ppTxnId=");
+		msg.append(ppTxnId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrderException(msg.toString());
+	}
+
+	/**
+	 * Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where ppTxnId = &#63;.
+	 *
+	 * @param ppTxnId the pp txn ID
+	 * @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByPPTxnId_Last(String ppTxnId)
+		throws SystemException {
+		return fetchByPPTxnId_Last(ppTxnId, null);
+	}
+
+	/**
+	 * Returns the last shopping order in the ordered set where ppTxnId = &#63;.
+	 *
+	 * @param ppTxnId the pp txn ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByPPTxnId_Last(String ppTxnId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByPPTxnId(ppTxnId);
+
+		List<ShoppingOrder> list = findByPPTxnId(ppTxnId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the shopping orders where ppTxnId = &#63; from the database.
+	 *
+	 * @param ppTxnId the pp txn ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByPPTxnId(String ppTxnId) throws SystemException {
+		for (ShoppingOrder shoppingOrder : findByPPTxnId(ppTxnId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(shoppingOrder);
+		}
 	}
 
 	/**
@@ -1468,264 +1660,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	public List<ShoppingOrder> findByG_U_PPPS(long groupId, long userId,
 		String ppPaymentStatus, int start, int end) throws SystemException {
 		return findByG_U_PPPS(groupId, userId, ppPaymentStatus, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param ppPaymentStatus the pp payment status
-	 * @param start the lower bound of the range of shopping orders
-	 * @param end the upper bound of the range of shopping orders (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching shopping orders
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ShoppingOrder> findByG_U_PPPS(long groupId, long userId,
-		String ppPaymentStatus, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_PPPS;
-			finderArgs = new Object[] { groupId, userId, ppPaymentStatus };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_PPPS;
-			finderArgs = new Object[] {
-					groupId, userId, ppPaymentStatus,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<ShoppingOrder> list = (List<ShoppingOrder>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (ShoppingOrder shoppingOrder : list) {
-				if ((groupId != shoppingOrder.getGroupId()) ||
-						(userId != shoppingOrder.getUserId()) ||
-						!Validator.equals(ppPaymentStatus,
-							shoppingOrder.getPpPaymentStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_SHOPPINGORDER_WHERE);
-
-			query.append(_FINDER_COLUMN_G_U_PPPS_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_U_PPPS_USERID_2);
-
-			if (ppPaymentStatus == null) {
-				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_1);
-			}
-			else {
-				if (ppPaymentStatus.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(userId);
-
-				if (ppPaymentStatus != null) {
-					qPos.add(ppPaymentStatus);
-				}
-
-				list = (List<ShoppingOrder>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param ppPaymentStatus the pp payment status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching shopping order
-	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder findByG_U_PPPS_First(long groupId, long userId,
-		String ppPaymentStatus, OrderByComparator orderByComparator)
-		throws NoSuchOrderException, SystemException {
-		ShoppingOrder shoppingOrder = fetchByG_U_PPPS_First(groupId, userId,
-				ppPaymentStatus, orderByComparator);
-
-		if (shoppingOrder != null) {
-			return shoppingOrder;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", ppPaymentStatus=");
-		msg.append(ppPaymentStatus);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchOrderException(msg.toString());
-	}
-
-	/**
-	 * Returns the first shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param ppPaymentStatus the pp payment status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder fetchByG_U_PPPS_First(long groupId, long userId,
-		String ppPaymentStatus, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<ShoppingOrder> list = findByG_U_PPPS(groupId, userId,
-				ppPaymentStatus, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param ppPaymentStatus the pp payment status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching shopping order
-	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder findByG_U_PPPS_Last(long groupId, long userId,
-		String ppPaymentStatus, OrderByComparator orderByComparator)
-		throws NoSuchOrderException, SystemException {
-		ShoppingOrder shoppingOrder = fetchByG_U_PPPS_Last(groupId, userId,
-				ppPaymentStatus, orderByComparator);
-
-		if (shoppingOrder != null) {
-			return shoppingOrder;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", ppPaymentStatus=");
-		msg.append(ppPaymentStatus);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchOrderException(msg.toString());
-	}
-
-	/**
-	 * Returns the last shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param ppPaymentStatus the pp payment status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingOrder fetchByG_U_PPPS_Last(long groupId, long userId,
-		String ppPaymentStatus, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_U_PPPS(groupId, userId, ppPaymentStatus);
-
-		List<ShoppingOrder> list = findByG_U_PPPS(groupId, userId,
-				ppPaymentStatus, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2265,6 +2199,322 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	}
 
 	/**
+	 * Returns an ordered range of all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param ppPaymentStatus the pp payment status
+	 * @param start the lower bound of the range of shopping orders
+	 * @param end the upper bound of the range of shopping orders (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching shopping orders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ShoppingOrder> findByG_U_PPPS(long groupId, long userId,
+		String ppPaymentStatus, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_PPPS;
+			finderArgs = new Object[] { groupId, userId, ppPaymentStatus };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_PPPS;
+			finderArgs = new Object[] {
+					groupId, userId, ppPaymentStatus,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<ShoppingOrder> list = (List<ShoppingOrder>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingOrder shoppingOrder : list) {
+				if ((groupId != shoppingOrder.getGroupId()) ||
+						(userId != shoppingOrder.getUserId()) ||
+						!Validator.equals(ppPaymentStatus,
+							shoppingOrder.getPpPaymentStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_SHOPPINGORDER_WHERE);
+
+			query.append(_FINDER_COLUMN_G_U_PPPS_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_U_PPPS_USERID_2);
+
+			if (ppPaymentStatus == null) {
+				query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_1);
+			}
+			else {
+				if (ppPaymentStatus.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_U_PPPS_PPPAYMENTSTATUS_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(ShoppingOrderModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(userId);
+
+				if (ppPaymentStatus != null) {
+					qPos.add(ppPaymentStatus);
+				}
+
+				list = (List<ShoppingOrder>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param ppPaymentStatus the pp payment status
+	 * @return the first matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByG_U_PPPS_First(long groupId, long userId,
+		String ppPaymentStatus) throws NoSuchOrderException, SystemException {
+		return findByG_U_PPPS_First(groupId, userId, ppPaymentStatus, null);
+	}
+
+	/**
+	 * Returns the first shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param ppPaymentStatus the pp payment status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByG_U_PPPS_First(long groupId, long userId,
+		String ppPaymentStatus, OrderByComparator orderByComparator)
+		throws NoSuchOrderException, SystemException {
+		ShoppingOrder shoppingOrder = fetchByG_U_PPPS_First(groupId, userId,
+				ppPaymentStatus, orderByComparator);
+
+		if (shoppingOrder != null) {
+			return shoppingOrder;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", ppPaymentStatus=");
+		msg.append(ppPaymentStatus);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrderException(msg.toString());
+	}
+
+	/**
+	 * Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param ppPaymentStatus the pp payment status
+	 * @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByG_U_PPPS_First(long groupId, long userId,
+		String ppPaymentStatus) throws SystemException {
+		return fetchByG_U_PPPS_First(groupId, userId, ppPaymentStatus, null);
+	}
+
+	/**
+	 * Returns the first shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param ppPaymentStatus the pp payment status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByG_U_PPPS_First(long groupId, long userId,
+		String ppPaymentStatus, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<ShoppingOrder> list = findByG_U_PPPS(groupId, userId,
+				ppPaymentStatus, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param ppPaymentStatus the pp payment status
+	 * @return the last matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByG_U_PPPS_Last(long groupId, long userId,
+		String ppPaymentStatus) throws NoSuchOrderException, SystemException {
+		return findByG_U_PPPS_Last(groupId, userId, ppPaymentStatus, null);
+	}
+
+	/**
+	 * Returns the last shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param ppPaymentStatus the pp payment status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shopping order
+	 * @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder findByG_U_PPPS_Last(long groupId, long userId,
+		String ppPaymentStatus, OrderByComparator orderByComparator)
+		throws NoSuchOrderException, SystemException {
+		ShoppingOrder shoppingOrder = fetchByG_U_PPPS_Last(groupId, userId,
+				ppPaymentStatus, orderByComparator);
+
+		if (shoppingOrder != null) {
+			return shoppingOrder;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", ppPaymentStatus=");
+		msg.append(ppPaymentStatus);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrderException(msg.toString());
+	}
+
+	/**
+	 * Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param ppPaymentStatus the pp payment status
+	 * @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByG_U_PPPS_Last(long groupId, long userId,
+		String ppPaymentStatus) throws SystemException {
+		return fetchByG_U_PPPS_Last(groupId, userId, ppPaymentStatus, null);
+	}
+
+	/**
+	 * Returns the last shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param ppPaymentStatus the pp payment status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingOrder fetchByG_U_PPPS_Last(long groupId, long userId,
+		String ppPaymentStatus, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_U_PPPS(groupId, userId, ppPaymentStatus);
+
+		List<ShoppingOrder> list = findByG_U_PPPS(groupId, userId,
+				ppPaymentStatus, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -2275,7 +2525,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	public void removeByG_U_PPPS(long groupId, long userId,
 		String ppPaymentStatus) throws SystemException {
 		for (ShoppingOrder shoppingOrder : findByG_U_PPPS(groupId, userId,
-				ppPaymentStatus)) {
+				ppPaymentStatus, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(shoppingOrder);
 		}
 	}
@@ -2446,9 +2696,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NUMBER,
 			new Object[] { shoppingOrder.getNumber() }, shoppingOrder);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PPTXNID,
-			new Object[] { shoppingOrder.getPpTxnId() }, shoppingOrder);
-
 		shoppingOrder.resetOriginalValues();
 	}
 
@@ -2524,9 +2771,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	protected void clearUniqueFindersCache(ShoppingOrder shoppingOrder) {
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NUMBER,
 			new Object[] { shoppingOrder.getNumber() });
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_PPTXNID,
-			new Object[] { shoppingOrder.getPpTxnId() });
 	}
 
 	/**
@@ -2721,9 +2965,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 		if (isNew) {
 			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NUMBER,
 				new Object[] { shoppingOrder.getNumber() }, shoppingOrder);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PPTXNID,
-				new Object[] { shoppingOrder.getPpTxnId() }, shoppingOrder);
 		}
 		else {
 			if ((shoppingOrderModelImpl.getColumnBitmask() &
@@ -2738,20 +2979,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NUMBER,
 					new Object[] { shoppingOrder.getNumber() }, shoppingOrder);
-			}
-
-			if ((shoppingOrderModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_PPTXNID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						shoppingOrderModelImpl.getOriginalPpTxnId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PPTXNID, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_PPTXNID, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_PPTXNID,
-					new Object[] { shoppingOrder.getPpTxnId() }, shoppingOrder);
 			}
 		}
 

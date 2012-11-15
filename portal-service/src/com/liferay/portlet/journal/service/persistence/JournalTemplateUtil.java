@@ -143,6 +143,25 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the journal templates before and after the current journal template in the ordered set where uuid = &#63;.
+	*
+	* @param id the primary key of the current journal template
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate[] findByUuid_PrevAndNext(
+		long id, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence()
+				   .findByUuid_PrevAndNext(id, uuid, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal templates where uuid = &#63;.
 	*
 	* <p>
@@ -164,6 +183,21 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first journal template in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -181,6 +215,19 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first journal template in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -193,6 +240,21 @@ public class JournalTemplateUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByUuid_Last(uuid);
 	}
 
 	/**
@@ -213,6 +275,19 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_Last(uuid);
+	}
+
+	/**
 	* Returns the last journal template in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -225,25 +300,6 @@ public class JournalTemplateUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_Last(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the journal templates before and after the current journal template in the ordered set where uuid = &#63;.
-	*
-	* @param id the primary key of the current journal template
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal template
-	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate[] findByUuid_PrevAndNext(
-		long id, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException {
-		return getPersistence()
-				   .findByUuid_PrevAndNext(id, uuid, orderByComparator);
 	}
 
 	/**
@@ -377,6 +433,27 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the journal templates before and after the current journal template in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param id the primary key of the current journal template
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate[] findByUuid_C_PrevAndNext(
+		long id, java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence()
+				   .findByUuid_C_PrevAndNext(id, uuid, companyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal templates where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
@@ -400,6 +477,22 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first journal template in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -419,6 +512,20 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first journal template in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -433,6 +540,22 @@ public class JournalTemplateUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByUuid_C_First(uuid, companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByUuid_C_Last(uuid, companyId);
 	}
 
 	/**
@@ -455,6 +578,20 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_Last(uuid, companyId);
+	}
+
+	/**
 	* Returns the last journal template in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -469,27 +606,6 @@ public class JournalTemplateUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByUuid_C_Last(uuid, companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the journal templates before and after the current journal template in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param id the primary key of the current journal template
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal template
-	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate[] findByUuid_C_PrevAndNext(
-		long id, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException {
-		return getPersistence()
-				   .findByUuid_C_PrevAndNext(id, uuid, companyId,
-			orderByComparator);
 	}
 
 	/**
@@ -547,92 +663,6 @@ public class JournalTemplateUtil {
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByGroupId(groupId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal templates where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of journal templates
-	* @param end the upper bound of the range of journal templates (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal templates
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalTemplate> findByGroupId(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByGroupId(groupId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal template in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal template
-	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate findByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException {
-		return getPersistence().findByGroupId_First(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal template in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate fetchByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal template in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal template
-	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate findByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException {
-		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal template in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate fetchByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
 	}
 
 	/**
@@ -729,6 +759,148 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the journal templates where groupId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param start the lower bound of the range of journal templates
+	* @param end the upper bound of the range of journal templates (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal templates
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalTemplate> findByGroupId(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByGroupId(groupId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByGroupId_First(groupId);
+	}
+
+	/**
+	* Returns the first journal template in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId);
+	}
+
+	/**
+	* Returns the first journal template in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByGroupId_Last(groupId);
+	}
+
+	/**
+	* Returns the last journal template in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId);
+	}
+
+	/**
+	* Returns the last journal template in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
+	}
+
+	/**
 	* Removes all the journal templates where groupId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -796,6 +968,26 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the journal templates before and after the current journal template in the ordered set where templateId = &#63;.
+	*
+	* @param id the primary key of the current journal template
+	* @param templateId the template ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate[] findByTemplateId_PrevAndNext(
+		long id, java.lang.String templateId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence()
+				   .findByTemplateId_PrevAndNext(id, templateId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal templates where templateId = &#63;.
 	*
 	* <p>
@@ -818,6 +1010,21 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	*
+	* @param templateId the template ID
+	* @return the first matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByTemplateId_First(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByTemplateId_First(templateId);
+	}
+
+	/**
 	* Returns the first journal template in the ordered set where templateId = &#63;.
 	*
 	* @param templateId the template ID
@@ -836,6 +1043,19 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	*
+	* @param templateId the template ID
+	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByTemplateId_First(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByTemplateId_First(templateId);
+	}
+
+	/**
 	* Returns the first journal template in the ordered set where templateId = &#63;.
 	*
 	* @param templateId the template ID
@@ -849,6 +1069,21 @@ public class JournalTemplateUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByTemplateId_First(templateId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	*
+	* @param templateId the template ID
+	* @return the last matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByTemplateId_Last(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByTemplateId_Last(templateId);
 	}
 
 	/**
@@ -870,6 +1105,19 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where templateId = &#63;.
+	*
+	* @param templateId the template ID
+	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByTemplateId_Last(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByTemplateId_Last(templateId);
+	}
+
+	/**
 	* Returns the last journal template in the ordered set where templateId = &#63;.
 	*
 	* @param templateId the template ID
@@ -883,26 +1131,6 @@ public class JournalTemplateUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByTemplateId_Last(templateId, orderByComparator);
-	}
-
-	/**
-	* Returns the journal templates before and after the current journal template in the ordered set where templateId = &#63;.
-	*
-	* @param id the primary key of the current journal template
-	* @param templateId the template ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal template
-	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate[] findByTemplateId_PrevAndNext(
-		long id, java.lang.String templateId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException {
-		return getPersistence()
-				   .findByTemplateId_PrevAndNext(id, templateId,
-			orderByComparator);
 	}
 
 	/**
@@ -961,6 +1189,26 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the journal templates before and after the current journal template in the ordered set where structureId = &#63;.
+	*
+	* @param id the primary key of the current journal template
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate[] findByStructureId_PrevAndNext(
+		long id, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence()
+				   .findByStructureId_PrevAndNext(id, structureId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the journal templates where structureId = &#63;.
 	*
 	* <p>
@@ -983,6 +1231,21 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the first matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByStructureId_First(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByStructureId_First(structureId);
+	}
+
+	/**
 	* Returns the first journal template in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -1001,6 +1264,19 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByStructureId_First(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByStructureId_First(structureId);
+	}
+
+	/**
 	* Returns the first journal template in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -1014,6 +1290,21 @@ public class JournalTemplateUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByStructureId_First(structureId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the last matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByStructureId_Last(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByStructureId_Last(structureId);
 	}
 
 	/**
@@ -1035,6 +1326,19 @@ public class JournalTemplateUtil {
 	}
 
 	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByStructureId_Last(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByStructureId_Last(structureId);
+	}
+
+	/**
 	* Returns the last journal template in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -1048,26 +1352,6 @@ public class JournalTemplateUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByStructureId_Last(structureId, orderByComparator);
-	}
-
-	/**
-	* Returns the journal templates before and after the current journal template in the ordered set where structureId = &#63;.
-	*
-	* @param id the primary key of the current journal template
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal template
-	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a journal template with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate[] findByStructureId_PrevAndNext(
-		long id, java.lang.String structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException {
-		return getPersistence()
-				   .findByStructureId_PrevAndNext(id, structureId,
-			orderByComparator);
 	}
 
 	/**
@@ -1094,60 +1378,138 @@ public class JournalTemplateUtil {
 	}
 
 	/**
-	* Returns the journal template where smallImageId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
-	* @return the matching journal template
+	* @return the first matching journal template
 	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate findBySmallImageId(
+	public static com.liferay.portlet.journal.model.JournalTemplate findBySmallImageId_First(
 		long smallImageId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchTemplateException {
-		return getPersistence().findBySmallImageId(smallImageId);
+		return getPersistence().findBySmallImageId_First(smallImageId);
 	}
 
 	/**
-	* Returns the journal template where smallImageId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first journal template in the ordered set where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
-	* @return the matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate fetchBySmallImageId(
+	public static com.liferay.portlet.journal.model.JournalTemplate findBySmallImageId_First(
+		long smallImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence()
+				   .findBySmallImageId_First(smallImageId, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchBySmallImageId_First(
 		long smallImageId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchBySmallImageId(smallImageId);
+		return getPersistence().fetchBySmallImageId_First(smallImageId);
 	}
 
 	/**
-	* Returns the journal template where smallImageId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first journal template in the ordered set where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate fetchBySmallImageId(
-		long smallImageId, boolean retrieveFromCache)
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchBySmallImageId_First(
+		long smallImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchBySmallImageId(smallImageId, retrieveFromCache);
+				   .fetchBySmallImageId_First(smallImageId, orderByComparator);
 	}
 
 	/**
-	* Removes the journal template where smallImageId = &#63; from the database.
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
-	* @return the journal template that was removed
+	* @return the last matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate removeBySmallImageId(
+	public static com.liferay.portlet.journal.model.JournalTemplate findBySmallImageId_Last(
 		long smallImageId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchTemplateException {
-		return getPersistence().removeBySmallImageId(smallImageId);
+		return getPersistence().findBySmallImageId_Last(smallImageId);
+	}
+
+	/**
+	* Returns the last journal template in the ordered set where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findBySmallImageId_Last(
+		long smallImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence()
+				   .findBySmallImageId_Last(smallImageId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchBySmallImageId_Last(
+		long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchBySmallImageId_Last(smallImageId);
+	}
+
+	/**
+	* Returns the last journal template in the ordered set where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchBySmallImageId_Last(
+		long smallImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchBySmallImageId_Last(smallImageId, orderByComparator);
+	}
+
+	/**
+	* Removes all the journal templates where smallImageId = &#63; from the database.
+	*
+	* @param smallImageId the small image ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeBySmallImageId(long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeBySmallImageId(smallImageId);
 	}
 
 	/**
@@ -1271,102 +1633,6 @@ public class JournalTemplateUtil {
 	}
 
 	/**
-	* Returns an ordered range of all the journal templates where groupId = &#63; and structureId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @param start the lower bound of the range of journal templates
-	* @param end the upper bound of the range of journal templates (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal templates
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalTemplate> findByG_S(
-		long groupId, java.lang.String structureId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_S(groupId, structureId, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first journal template in the ordered set where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal template
-	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate findByG_S_First(
-		long groupId, java.lang.String structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException {
-		return getPersistence()
-				   .findByG_S_First(groupId, structureId, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal template in the ordered set where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate fetchByG_S_First(
-		long groupId, java.lang.String structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_S_First(groupId, structureId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal template in the ordered set where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal template
-	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate findByG_S_Last(
-		long groupId, java.lang.String structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchTemplateException {
-		return getPersistence()
-				   .findByG_S_Last(groupId, structureId, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal template in the ordered set where groupId = &#63; and structureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.journal.model.JournalTemplate fetchByG_S_Last(
-		long groupId, java.lang.String structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_S_Last(groupId, structureId, orderByComparator);
-	}
-
-	/**
 	* Returns the journal templates before and after the current journal template in the ordered set where groupId = &#63; and structureId = &#63;.
 	*
 	* @param id the primary key of the current journal template
@@ -1464,6 +1730,162 @@ public class JournalTemplateUtil {
 		return getPersistence()
 				   .filterFindByG_S_PrevAndNext(id, groupId, structureId,
 			orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the journal templates where groupId = &#63; and structureId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @param start the lower bound of the range of journal templates
+	* @param end the upper bound of the range of journal templates (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal templates
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalTemplate> findByG_S(
+		long groupId, java.lang.String structureId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_S(groupId, structureId, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the first matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByG_S_First(
+		long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByG_S_First(groupId, structureId);
+	}
+
+	/**
+	* Returns the first journal template in the ordered set where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByG_S_First(
+		long groupId, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence()
+				   .findByG_S_First(groupId, structureId, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByG_S_First(
+		long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_S_First(groupId, structureId);
+	}
+
+	/**
+	* Returns the first journal template in the ordered set where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByG_S_First(
+		long groupId, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_S_First(groupId, structureId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the last matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByG_S_Last(
+		long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence().findByG_S_Last(groupId, structureId);
+	}
+
+	/**
+	* Returns the last journal template in the ordered set where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal template
+	* @throws com.liferay.portlet.journal.NoSuchTemplateException if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate findByG_S_Last(
+		long groupId, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchTemplateException {
+		return getPersistence()
+				   .findByG_S_Last(groupId, structureId, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal template in the default ordered set defined by {@link JournalTemplateModelImpl#ORDER_BY_JPQL} where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByG_S_Last(
+		long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_S_Last(groupId, structureId);
+	}
+
+	/**
+	* Returns the last journal template in the ordered set where groupId = &#63; and structureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal template, or <code>null</code> if a matching journal template could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.journal.model.JournalTemplate fetchByG_S_Last(
+		long groupId, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_S_Last(groupId, structureId, orderByComparator);
 	}
 
 	/**

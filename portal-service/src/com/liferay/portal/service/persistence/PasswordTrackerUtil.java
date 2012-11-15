@@ -141,6 +141,26 @@ public class PasswordTrackerUtil {
 	}
 
 	/**
+	* Returns the password trackers before and after the current password tracker in the ordered set where userId = &#63;.
+	*
+	* @param passwordTrackerId the primary key of the current password tracker
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next password tracker
+	* @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordTracker[] findByUserId_PrevAndNext(
+		long passwordTrackerId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPasswordTrackerException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByUserId_PrevAndNext(passwordTrackerId, userId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the password trackers where userId = &#63;.
 	*
 	* <p>
@@ -163,6 +183,21 @@ public class PasswordTrackerUtil {
 	}
 
 	/**
+	* Returns the first password tracker in the default ordered set defined by {@link PasswordTrackerModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching password tracker
+	* @throws com.liferay.portal.NoSuchPasswordTrackerException if a matching password tracker could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordTracker findByUserId_First(
+		long userId)
+		throws com.liferay.portal.NoSuchPasswordTrackerException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first password tracker in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -180,6 +215,18 @@ public class PasswordTrackerUtil {
 	}
 
 	/**
+	* Returns the first password tracker in the default ordered set defined by {@link PasswordTrackerModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching password tracker, or <code>null</code> if a matching password tracker could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordTracker fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first password tracker in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -192,6 +239,21 @@ public class PasswordTrackerUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_First(userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last password tracker in the default ordered set defined by {@link PasswordTrackerModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching password tracker
+	* @throws com.liferay.portal.NoSuchPasswordTrackerException if a matching password tracker could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordTracker findByUserId_Last(
+		long userId)
+		throws com.liferay.portal.NoSuchPasswordTrackerException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUserId_Last(userId);
 	}
 
 	/**
@@ -212,6 +274,18 @@ public class PasswordTrackerUtil {
 	}
 
 	/**
+	* Returns the last password tracker in the default ordered set defined by {@link PasswordTrackerModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching password tracker, or <code>null</code> if a matching password tracker could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordTracker fetchByUserId_Last(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_Last(userId);
+	}
+
+	/**
 	* Returns the last password tracker in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -224,26 +298,6 @@ public class PasswordTrackerUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_Last(userId, orderByComparator);
-	}
-
-	/**
-	* Returns the password trackers before and after the current password tracker in the ordered set where userId = &#63;.
-	*
-	* @param passwordTrackerId the primary key of the current password tracker
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next password tracker
-	* @throws com.liferay.portal.NoSuchPasswordTrackerException if a password tracker with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PasswordTracker[] findByUserId_PrevAndNext(
-		long passwordTrackerId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchPasswordTrackerException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByUserId_PrevAndNext(passwordTrackerId, userId,
-			orderByComparator);
 	}
 
 	/**

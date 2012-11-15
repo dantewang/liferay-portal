@@ -137,212 +137,6 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	}
 
 	/**
-	 * Returns an ordered range of all the announcements flags where entryId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param entryId the entry ID
-	 * @param start the lower bound of the range of announcements flags
-	 * @param end the upper bound of the range of announcements flags (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching announcements flags
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AnnouncementsFlag> findByEntryId(long entryId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ENTRYID;
-			finderArgs = new Object[] { entryId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ENTRYID;
-			finderArgs = new Object[] { entryId, start, end, orderByComparator };
-		}
-
-		List<AnnouncementsFlag> list = (List<AnnouncementsFlag>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AnnouncementsFlag announcementsFlag : list) {
-				if ((entryId != announcementsFlag.getEntryId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_ANNOUNCEMENTSFLAG_WHERE);
-
-			query.append(_FINDER_COLUMN_ENTRYID_ENTRYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(AnnouncementsFlagModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(entryId);
-
-				list = (List<AnnouncementsFlag>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first announcements flag in the ordered set where entryId = &#63;.
-	 *
-	 * @param entryId the entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching announcements flag
-	 * @throws com.liferay.portlet.announcements.NoSuchFlagException if a matching announcements flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AnnouncementsFlag findByEntryId_First(long entryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchFlagException, SystemException {
-		AnnouncementsFlag announcementsFlag = fetchByEntryId_First(entryId,
-				orderByComparator);
-
-		if (announcementsFlag != null) {
-			return announcementsFlag;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("entryId=");
-		msg.append(entryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFlagException(msg.toString());
-	}
-
-	/**
-	 * Returns the first announcements flag in the ordered set where entryId = &#63;.
-	 *
-	 * @param entryId the entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching announcements flag, or <code>null</code> if a matching announcements flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AnnouncementsFlag fetchByEntryId_First(long entryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AnnouncementsFlag> list = findByEntryId(entryId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last announcements flag in the ordered set where entryId = &#63;.
-	 *
-	 * @param entryId the entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching announcements flag
-	 * @throws com.liferay.portlet.announcements.NoSuchFlagException if a matching announcements flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AnnouncementsFlag findByEntryId_Last(long entryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchFlagException, SystemException {
-		AnnouncementsFlag announcementsFlag = fetchByEntryId_Last(entryId,
-				orderByComparator);
-
-		if (announcementsFlag != null) {
-			return announcementsFlag;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("entryId=");
-		msg.append(entryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchFlagException(msg.toString());
-	}
-
-	/**
-	 * Returns the last announcements flag in the ordered set where entryId = &#63;.
-	 *
-	 * @param entryId the entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching announcements flag, or <code>null</code> if a matching announcements flag could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AnnouncementsFlag fetchByEntryId_Last(long entryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByEntryId(entryId);
-
-		List<AnnouncementsFlag> list = findByEntryId(entryId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the announcements flags before and after the current announcements flag in the ordered set where entryId = &#63;.
 	 *
 	 * @param flagId the primary key of the current announcements flag
@@ -489,13 +283,270 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	}
 
 	/**
+	 * Returns an ordered range of all the announcements flags where entryId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param entryId the entry ID
+	 * @param start the lower bound of the range of announcements flags
+	 * @param end the upper bound of the range of announcements flags (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching announcements flags
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AnnouncementsFlag> findByEntryId(long entryId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ENTRYID;
+			finderArgs = new Object[] { entryId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ENTRYID;
+			finderArgs = new Object[] { entryId, start, end, orderByComparator };
+		}
+
+		List<AnnouncementsFlag> list = (List<AnnouncementsFlag>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AnnouncementsFlag announcementsFlag : list) {
+				if ((entryId != announcementsFlag.getEntryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_ANNOUNCEMENTSFLAG_WHERE);
+
+			query.append(_FINDER_COLUMN_ENTRYID_ENTRYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(AnnouncementsFlagModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(entryId);
+
+				list = (List<AnnouncementsFlag>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first announcements flag in the default ordered set defined by {@link AnnouncementsFlagModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @return the first matching announcements flag
+	 * @throws com.liferay.portlet.announcements.NoSuchFlagException if a matching announcements flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AnnouncementsFlag findByEntryId_First(long entryId)
+		throws NoSuchFlagException, SystemException {
+		return findByEntryId_First(entryId, null);
+	}
+
+	/**
+	 * Returns the first announcements flag in the ordered set where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching announcements flag
+	 * @throws com.liferay.portlet.announcements.NoSuchFlagException if a matching announcements flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AnnouncementsFlag findByEntryId_First(long entryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchFlagException, SystemException {
+		AnnouncementsFlag announcementsFlag = fetchByEntryId_First(entryId,
+				orderByComparator);
+
+		if (announcementsFlag != null) {
+			return announcementsFlag;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("entryId=");
+		msg.append(entryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFlagException(msg.toString());
+	}
+
+	/**
+	 * Returns the first announcements flag in the default ordered set defined by {@link AnnouncementsFlagModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @return the first matching announcements flag, or <code>null</code> if a matching announcements flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AnnouncementsFlag fetchByEntryId_First(long entryId)
+		throws SystemException {
+		return fetchByEntryId_First(entryId, null);
+	}
+
+	/**
+	 * Returns the first announcements flag in the ordered set where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching announcements flag, or <code>null</code> if a matching announcements flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AnnouncementsFlag fetchByEntryId_First(long entryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AnnouncementsFlag> list = findByEntryId(entryId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last announcements flag in the default ordered set defined by {@link AnnouncementsFlagModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @return the last matching announcements flag
+	 * @throws com.liferay.portlet.announcements.NoSuchFlagException if a matching announcements flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AnnouncementsFlag findByEntryId_Last(long entryId)
+		throws NoSuchFlagException, SystemException {
+		return findByEntryId_Last(entryId, null);
+	}
+
+	/**
+	 * Returns the last announcements flag in the ordered set where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching announcements flag
+	 * @throws com.liferay.portlet.announcements.NoSuchFlagException if a matching announcements flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AnnouncementsFlag findByEntryId_Last(long entryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchFlagException, SystemException {
+		AnnouncementsFlag announcementsFlag = fetchByEntryId_Last(entryId,
+				orderByComparator);
+
+		if (announcementsFlag != null) {
+			return announcementsFlag;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("entryId=");
+		msg.append(entryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchFlagException(msg.toString());
+	}
+
+	/**
+	 * Returns the last announcements flag in the default ordered set defined by {@link AnnouncementsFlagModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @return the last matching announcements flag, or <code>null</code> if a matching announcements flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AnnouncementsFlag fetchByEntryId_Last(long entryId)
+		throws SystemException {
+		return fetchByEntryId_Last(entryId, null);
+	}
+
+	/**
+	 * Returns the last announcements flag in the ordered set where entryId = &#63;.
+	 *
+	 * @param entryId the entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching announcements flag, or <code>null</code> if a matching announcements flag could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AnnouncementsFlag fetchByEntryId_Last(long entryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByEntryId(entryId);
+
+		List<AnnouncementsFlag> list = findByEntryId(entryId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the announcements flags where entryId = &#63; from the database.
 	 *
 	 * @param entryId the entry ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByEntryId(long entryId) throws SystemException {
-		for (AnnouncementsFlag announcementsFlag : findByEntryId(entryId)) {
+		for (AnnouncementsFlag announcementsFlag : findByEntryId(entryId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(announcementsFlag);
 		}
 	}
@@ -558,6 +609,28 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 			AnnouncementsFlagModelImpl.FINDER_CACHE_ENABLED,
 			AnnouncementsFlagImpl.class, FINDER_CLASS_NAME_ENTITY,
 			"fetchByU_E_V",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			},
+			AnnouncementsFlagModelImpl.USERID_COLUMN_BITMASK |
+			AnnouncementsFlagModelImpl.ENTRYID_COLUMN_BITMASK |
+			AnnouncementsFlagModelImpl.VALUE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_U_E_V = new FinderPath(AnnouncementsFlagModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsFlagModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsFlagImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByU_E_V",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_E_V = new FinderPath(AnnouncementsFlagModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsFlagModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsFlagImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByU_E_V",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
@@ -669,8 +742,6 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 			query.append(_FINDER_COLUMN_U_E_V_ENTRYID_2);
 
 			query.append(_FINDER_COLUMN_U_E_V_VALUE_2);
-
-			query.append(AnnouncementsFlagModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 

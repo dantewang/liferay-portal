@@ -140,212 +140,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	}
 
 	/**
-	 * Returns an ordered range of all the social activities where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of social activities
-	 * @param end the upper bound of the range of social activities (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activities
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivity> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivity socialActivity : list) {
-				if ((groupId != socialActivity.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialActivity> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<SocialActivity> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the social activities before and after the current social activity in the ordered set where groupId = &#63;.
 	 *
 	 * @param activityId the primary key of the current social activity
@@ -492,13 +286,270 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	}
 
 	/**
+	 * Returns an ordered range of all the social activities where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of social activities
+	 * @param end the upper bound of the range of social activities (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activities
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivity> findByGroupId(long groupId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((groupId != socialActivity.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByGroupId_First(long groupId)
+		throws NoSuchActivityException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialActivity> list = findByGroupId(groupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByGroupId_Last(long groupId)
+		throws NoSuchActivityException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<SocialActivity> list = findByGroupId(groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activities where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (SocialActivity socialActivity : findByGroupId(groupId)) {
+		for (SocialActivity socialActivity : findByGroupId(groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivity);
 		}
 	}
@@ -609,212 +660,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public List<SocialActivity> findByCompanyId(long companyId, int start,
 		int end) throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activities where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of social activities
-	 * @param end the upper bound of the range of social activities (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activities
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivity> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivity socialActivity : list) {
-				if ((companyId != socialActivity.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByCompanyId_First(companyId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialActivity> list = findByCompanyId(companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByCompanyId_Last(companyId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<SocialActivity> list = findByCompanyId(companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -964,13 +809,270 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	}
 
 	/**
+	 * Returns an ordered range of all the social activities where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of social activities
+	 * @param end the upper bound of the range of social activities (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activities
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivity> findByCompanyId(long companyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((companyId != socialActivity.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByCompanyId_First(long companyId)
+		throws NoSuchActivityException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByCompanyId_First(companyId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialActivity> list = findByCompanyId(companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByCompanyId_Last(long companyId)
+		throws NoSuchActivityException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByCompanyId_Last(companyId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByCompanyId_Last(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<SocialActivity> list = findByCompanyId(companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activities where companyId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCompanyId(long companyId) throws SystemException {
-		for (SocialActivity socialActivity : findByCompanyId(companyId)) {
+		for (SocialActivity socialActivity : findByCompanyId(companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivity);
 		}
 	}
@@ -1079,211 +1181,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public List<SocialActivity> findByUserId(long userId, int start, int end)
 		throws SystemException {
 		return findByUserId(userId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activities where userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId the user ID
-	 * @param start the lower bound of the range of social activities
-	 * @param end the upper bound of the range of social activities (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activities
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivity> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId, start, end, orderByComparator };
-		}
-
-		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivity socialActivity : list) {
-				if ((userId != socialActivity.getUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByUserId_First(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByUserId_First(userId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialActivity> list = findByUserId(userId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByUserId_Last(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByUserId_Last(userId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUserId(userId);
-
-		List<SocialActivity> list = findByUserId(userId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1433,13 +1330,269 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	}
 
 	/**
+	 * Returns an ordered range of all the social activities where userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of social activities
+	 * @param end the upper bound of the range of social activities (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activities
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivity> findByUserId(long userId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId, start, end, orderByComparator };
+		}
+
+		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((userId != socialActivity.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByUserId_First(long userId)
+		throws NoSuchActivityException, SystemException {
+		return findByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByUserId_First(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByUserId_First(userId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByUserId_First(long userId)
+		throws SystemException {
+		return fetchByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByUserId_First(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialActivity> list = findByUserId(userId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByUserId_Last(long userId)
+		throws NoSuchActivityException, SystemException {
+		return findByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByUserId_Last(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByUserId_Last(userId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByUserId_Last(long userId)
+		throws SystemException {
+		return fetchByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByUserId_Last(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUserId(userId);
+
+		List<SocialActivity> list = findByUserId(userId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activities where userId = &#63; from the database.
 	 *
 	 * @param userId the user ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUserId(long userId) throws SystemException {
-		for (SocialActivity socialActivity : findByUserId(userId)) {
+		for (SocialActivity socialActivity : findByUserId(userId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivity);
 		}
 	}
@@ -1498,10 +1651,23 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	}
 
 	private static final String _FINDER_COLUMN_USERID_USERID_2 = "socialActivity.userId = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_MIRRORACTIVITYID = new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_MIRRORACTIVITYID =
+		new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityModelImpl.FINDER_CACHE_ENABLED,
-			SocialActivityImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByMirrorActivityId", new String[] { Long.class.getName() },
+			SocialActivityImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByMirrorActivityId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MIRRORACTIVITYID =
+		new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
+			SocialActivityModelImpl.FINDER_CACHE_ENABLED,
+			SocialActivityImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByMirrorActivityId", new String[] { Long.class.getName() },
 			SocialActivityModelImpl.MIRRORACTIVITYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_MIRRORACTIVITYID = new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityModelImpl.FINDER_CACHE_ENABLED, Long.class,
@@ -1509,84 +1675,75 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 			"countByMirrorActivityId", new String[] { Long.class.getName() });
 
 	/**
-	 * Returns the social activity where mirrorActivityId = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivityException} if it could not be found.
+	 * Returns an ordered range of all the social activities where mirrorActivityId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param mirrorActivityId the mirror activity ID
-	 * @return the matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @param start the lower bound of the range of social activities
+	 * @param end the upper bound of the range of social activities (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activities
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SocialActivity findByMirrorActivityId(long mirrorActivityId)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByMirrorActivityId(mirrorActivityId);
+	protected List<SocialActivity> findByMirrorActivityId(
+		long mirrorActivityId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (socialActivity == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("mirrorActivityId=");
-			msg.append(mirrorActivityId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchActivityException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MIRRORACTIVITYID;
+			finderArgs = new Object[] { mirrorActivityId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_MIRRORACTIVITYID;
+			finderArgs = new Object[] {
+					mirrorActivityId,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		return socialActivity;
-	}
+		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the social activity where mirrorActivityId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param mirrorActivityId the mirror activity ID
-	 * @return the matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByMirrorActivityId(long mirrorActivityId)
-		throws SystemException {
-		return fetchByMirrorActivityId(mirrorActivityId, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((mirrorActivityId != socialActivity.getMirrorActivityId())) {
+					list = null;
 
-	/**
-	 * Returns the social activity where mirrorActivityId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param mirrorActivityId the mirror activity ID
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByMirrorActivityId(long mirrorActivityId,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { mirrorActivityId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_MIRRORACTIVITYID,
-					finderArgs, this);
-		}
-
-		if (result instanceof SocialActivity) {
-			SocialActivity socialActivity = (SocialActivity)result;
-
-			if ((mirrorActivityId != socialActivity.getMirrorActivityId())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
 
 			query.append(_FINDER_COLUMN_MIRRORACTIVITYID_MIRRORACTIVITYID_2);
 
-			query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -1601,63 +1758,195 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 
 				qPos.add(mirrorActivityId);
 
-				List<SocialActivity> list = q.list();
-
-				result = list;
-
-				SocialActivity socialActivity = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_MIRRORACTIVITYID,
-						finderArgs, list);
-				}
-				else {
-					socialActivity = list.get(0);
-
-					cacheResult(socialActivity);
-
-					if ((socialActivity.getMirrorActivityId() != mirrorActivityId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_MIRRORACTIVITYID,
-							finderArgs, socialActivity);
-					}
-				}
-
-				return socialActivity;
+				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
+						start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_MIRRORACTIVITYID,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (SocialActivity)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the social activity where mirrorActivityId = &#63; from the database.
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where mirrorActivityId = &#63;.
 	 *
 	 * @param mirrorActivityId the mirror activity ID
-	 * @return the social activity that was removed
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SocialActivity removeByMirrorActivityId(long mirrorActivityId)
+	public SocialActivity findByMirrorActivityId_First(long mirrorActivityId)
 		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = findByMirrorActivityId(mirrorActivityId);
+		return findByMirrorActivityId_First(mirrorActivityId, null);
+	}
 
-		return remove(socialActivity);
+	/**
+	 * Returns the first social activity in the ordered set where mirrorActivityId = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByMirrorActivityId_First(long mirrorActivityId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByMirrorActivityId_First(mirrorActivityId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("mirrorActivityId=");
+		msg.append(mirrorActivityId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where mirrorActivityId = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByMirrorActivityId_First(long mirrorActivityId)
+		throws SystemException {
+		return fetchByMirrorActivityId_First(mirrorActivityId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where mirrorActivityId = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByMirrorActivityId_First(long mirrorActivityId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialActivity> list = findByMirrorActivityId(mirrorActivityId, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where mirrorActivityId = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByMirrorActivityId_Last(long mirrorActivityId)
+		throws NoSuchActivityException, SystemException {
+		return findByMirrorActivityId_Last(mirrorActivityId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where mirrorActivityId = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByMirrorActivityId_Last(long mirrorActivityId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByMirrorActivityId_Last(mirrorActivityId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("mirrorActivityId=");
+		msg.append(mirrorActivityId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where mirrorActivityId = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByMirrorActivityId_Last(long mirrorActivityId)
+		throws SystemException {
+		return fetchByMirrorActivityId_Last(mirrorActivityId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where mirrorActivityId = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByMirrorActivityId_Last(long mirrorActivityId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByMirrorActivityId(mirrorActivityId);
+
+		List<SocialActivity> list = findByMirrorActivityId(mirrorActivityId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the social activities where mirrorActivityId = &#63; from the database.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByMirrorActivityId(long mirrorActivityId)
+		throws SystemException {
+		for (SocialActivity socialActivity : findByMirrorActivityId(
+				mirrorActivityId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(socialActivity);
+		}
 	}
 
 	/**
@@ -1768,212 +2057,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public List<SocialActivity> findByClassNameId(long classNameId, int start,
 		int end) throws SystemException {
 		return findByClassNameId(classNameId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activities where classNameId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param classNameId the class name ID
-	 * @param start the lower bound of the range of social activities
-	 * @param end the upper bound of the range of social activities (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activities
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivity> findByClassNameId(long classNameId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID;
-			finderArgs = new Object[] { classNameId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_CLASSNAMEID;
-			finderArgs = new Object[] { classNameId, start, end, orderByComparator };
-		}
-
-		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivity socialActivity : list) {
-				if ((classNameId != socialActivity.getClassNameId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
-
-			query.append(_FINDER_COLUMN_CLASSNAMEID_CLASSNAMEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(classNameId);
-
-				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where classNameId = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByClassNameId_First(long classNameId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByClassNameId_First(classNameId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where classNameId = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByClassNameId_First(long classNameId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialActivity> list = findByClassNameId(classNameId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where classNameId = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByClassNameId_Last(long classNameId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByClassNameId_Last(classNameId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where classNameId = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByClassNameId_Last(long classNameId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByClassNameId(classNameId);
-
-		List<SocialActivity> list = findByClassNameId(classNameId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2123,13 +2206,270 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	}
 
 	/**
+	 * Returns an ordered range of all the social activities where classNameId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param classNameId the class name ID
+	 * @param start the lower bound of the range of social activities
+	 * @param end the upper bound of the range of social activities (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activities
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivity> findByClassNameId(long classNameId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID;
+			finderArgs = new Object[] { classNameId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_CLASSNAMEID;
+			finderArgs = new Object[] { classNameId, start, end, orderByComparator };
+		}
+
+		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((classNameId != socialActivity.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
+
+			query.append(_FINDER_COLUMN_CLASSNAMEID_CLASSNAMEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classNameId);
+
+				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByClassNameId_First(long classNameId)
+		throws NoSuchActivityException, SystemException {
+		return findByClassNameId_First(classNameId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByClassNameId_First(long classNameId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByClassNameId_First(classNameId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByClassNameId_First(long classNameId)
+		throws SystemException {
+		return fetchByClassNameId_First(classNameId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByClassNameId_First(long classNameId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialActivity> list = findByClassNameId(classNameId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByClassNameId_Last(long classNameId)
+		throws NoSuchActivityException, SystemException {
+		return findByClassNameId_Last(classNameId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByClassNameId_Last(long classNameId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByClassNameId_Last(classNameId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByClassNameId_Last(long classNameId)
+		throws SystemException {
+		return fetchByClassNameId_Last(classNameId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByClassNameId_Last(long classNameId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByClassNameId(classNameId);
+
+		List<SocialActivity> list = findByClassNameId(classNameId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activities where classNameId = &#63; from the database.
 	 *
 	 * @param classNameId the class name ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByClassNameId(long classNameId) throws SystemException {
-		for (SocialActivity socialActivity : findByClassNameId(classNameId)) {
+		for (SocialActivity socialActivity : findByClassNameId(classNameId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivity);
 		}
 	}
@@ -2240,217 +2580,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public List<SocialActivity> findByReceiverUserId(long receiverUserId,
 		int start, int end) throws SystemException {
 		return findByReceiverUserId(receiverUserId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activities where receiverUserId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param start the lower bound of the range of social activities
-	 * @param end the upper bound of the range of social activities (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activities
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivity> findByReceiverUserId(long receiverUserId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RECEIVERUSERID;
-			finderArgs = new Object[] { receiverUserId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RECEIVERUSERID;
-			finderArgs = new Object[] {
-					receiverUserId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivity socialActivity : list) {
-				if ((receiverUserId != socialActivity.getReceiverUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
-
-			query.append(_FINDER_COLUMN_RECEIVERUSERID_RECEIVERUSERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(receiverUserId);
-
-				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where receiverUserId = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByReceiverUserId_First(long receiverUserId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByReceiverUserId_First(receiverUserId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("receiverUserId=");
-		msg.append(receiverUserId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where receiverUserId = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByReceiverUserId_First(long receiverUserId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialActivity> list = findByReceiverUserId(receiverUserId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where receiverUserId = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByReceiverUserId_Last(long receiverUserId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByReceiverUserId_Last(receiverUserId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("receiverUserId=");
-		msg.append(receiverUserId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where receiverUserId = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByReceiverUserId_Last(long receiverUserId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByReceiverUserId(receiverUserId);
-
-		List<SocialActivity> list = findByReceiverUserId(receiverUserId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2600,6 +2729,267 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	}
 
 	/**
+	 * Returns an ordered range of all the social activities where receiverUserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param start the lower bound of the range of social activities
+	 * @param end the upper bound of the range of social activities (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activities
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivity> findByReceiverUserId(long receiverUserId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RECEIVERUSERID;
+			finderArgs = new Object[] { receiverUserId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RECEIVERUSERID;
+			finderArgs = new Object[] {
+					receiverUserId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((receiverUserId != socialActivity.getReceiverUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
+
+			query.append(_FINDER_COLUMN_RECEIVERUSERID_RECEIVERUSERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(receiverUserId);
+
+				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByReceiverUserId_First(long receiverUserId)
+		throws NoSuchActivityException, SystemException {
+		return findByReceiverUserId_First(receiverUserId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByReceiverUserId_First(long receiverUserId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByReceiverUserId_First(receiverUserId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("receiverUserId=");
+		msg.append(receiverUserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByReceiverUserId_First(long receiverUserId)
+		throws SystemException {
+		return fetchByReceiverUserId_First(receiverUserId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByReceiverUserId_First(long receiverUserId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialActivity> list = findByReceiverUserId(receiverUserId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByReceiverUserId_Last(long receiverUserId)
+		throws NoSuchActivityException, SystemException {
+		return findByReceiverUserId_Last(receiverUserId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByReceiverUserId_Last(long receiverUserId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByReceiverUserId_Last(receiverUserId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("receiverUserId=");
+		msg.append(receiverUserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByReceiverUserId_Last(long receiverUserId)
+		throws SystemException {
+		return fetchByReceiverUserId_Last(receiverUserId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByReceiverUserId_Last(long receiverUserId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByReceiverUserId(receiverUserId);
+
+		List<SocialActivity> list = findByReceiverUserId(receiverUserId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activities where receiverUserId = &#63; from the database.
 	 *
 	 * @param receiverUserId the receiver user ID
@@ -2608,7 +2998,7 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public void removeByReceiverUserId(long receiverUserId)
 		throws SystemException {
 		for (SocialActivity socialActivity : findByReceiverUserId(
-				receiverUserId)) {
+				receiverUserId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivity);
 		}
 	}
@@ -2721,233 +3111,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public List<SocialActivity> findByC_C(long classNameId, long classPK,
 		int start, int end) throws SystemException {
 		return findByC_C(classNameId, classPK, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activities where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param start the lower bound of the range of social activities
-	 * @param end the upper bound of the range of social activities (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activities
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivity> findByC_C(long classNameId, long classPK,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
-			finderArgs = new Object[] { classNameId, classPK };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
-			finderArgs = new Object[] {
-					classNameId, classPK,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivity socialActivity : list) {
-				if ((classNameId != socialActivity.getClassNameId()) ||
-						(classPK != socialActivity.getClassPK())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByC_C_First(classNameId, classPK,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialActivity> list = findByC_C(classNameId, classPK, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByC_C_Last(classNameId, classPK,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_C(classNameId, classPK);
-
-		List<SocialActivity> list = findByC_C(classNameId, classPK, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3102,6 +3265,287 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	}
 
 	/**
+	 * Returns an ordered range of all the social activities where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param start the lower bound of the range of social activities
+	 * @param end the upper bound of the range of social activities (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activities
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivity> findByC_C(long classNameId, long classPK,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] { classNameId, classPK };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] {
+					classNameId, classPK,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((classNameId != socialActivity.getClassNameId()) ||
+						(classPK != socialActivity.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByC_C_First(long classNameId, long classPK)
+		throws NoSuchActivityException, SystemException {
+		return findByC_C_First(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByC_C_First(long classNameId, long classPK,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByC_C_First(classNameId, classPK,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByC_C_First(long classNameId, long classPK)
+		throws SystemException {
+		return fetchByC_C_First(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByC_C_First(long classNameId, long classPK,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialActivity> list = findByC_C(classNameId, classPK, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByC_C_Last(long classNameId, long classPK)
+		throws NoSuchActivityException, SystemException {
+		return findByC_C_Last(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByC_C_Last(long classNameId, long classPK,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByC_C_Last(classNameId, classPK,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByC_C_Last(long classNameId, long classPK)
+		throws SystemException {
+		return fetchByC_C_Last(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByC_C_Last(long classNameId, long classPK,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_C(classNameId, classPK);
+
+		List<SocialActivity> list = findByC_C(classNameId, classPK, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activities where classNameId = &#63; and classPK = &#63; from the database.
 	 *
 	 * @param classNameId the class name ID
@@ -3110,7 +3554,8 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	 */
 	public void removeByC_C(long classNameId, long classPK)
 		throws SystemException {
-		for (SocialActivity socialActivity : findByC_C(classNameId, classPK)) {
+		for (SocialActivity socialActivity : findByC_C(classNameId, classPK,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivity);
 		}
 	}
@@ -3238,251 +3683,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		throws SystemException {
 		return findByM_C_C(mirrorActivityId, classNameId, classPK, start, end,
 			null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activities where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param mirrorActivityId the mirror activity ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param start the lower bound of the range of social activities
-	 * @param end the upper bound of the range of social activities (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activities
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivity> findByM_C_C(long mirrorActivityId,
-		long classNameId, long classPK, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_M_C_C;
-			finderArgs = new Object[] { mirrorActivityId, classNameId, classPK };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_M_C_C;
-			finderArgs = new Object[] {
-					mirrorActivityId, classNameId, classPK,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivity socialActivity : list) {
-				if ((mirrorActivityId != socialActivity.getMirrorActivityId()) ||
-						(classNameId != socialActivity.getClassNameId()) ||
-						(classPK != socialActivity.getClassPK())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
-
-			query.append(_FINDER_COLUMN_M_C_C_MIRRORACTIVITYID_2);
-
-			query.append(_FINDER_COLUMN_M_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_M_C_C_CLASSPK_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(mirrorActivityId);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param mirrorActivityId the mirror activity ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByM_C_C_First(long mirrorActivityId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByM_C_C_First(mirrorActivityId,
-				classNameId, classPK, orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("mirrorActivityId=");
-		msg.append(mirrorActivityId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param mirrorActivityId the mirror activity ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByM_C_C_First(long mirrorActivityId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<SocialActivity> list = findByM_C_C(mirrorActivityId, classNameId,
-				classPK, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param mirrorActivityId the mirror activity ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByM_C_C_Last(long mirrorActivityId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByM_C_C_Last(mirrorActivityId,
-				classNameId, classPK, orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("mirrorActivityId=");
-		msg.append(mirrorActivityId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param mirrorActivityId the mirror activity ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByM_C_C_Last(long mirrorActivityId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByM_C_C(mirrorActivityId, classNameId, classPK);
-
-		List<SocialActivity> list = findByM_C_C(mirrorActivityId, classNameId,
-				classPK, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3645,6 +3845,311 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	}
 
 	/**
+	 * Returns an ordered range of all the social activities where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param start the lower bound of the range of social activities
+	 * @param end the upper bound of the range of social activities (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activities
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivity> findByM_C_C(long mirrorActivityId,
+		long classNameId, long classPK, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_M_C_C;
+			finderArgs = new Object[] { mirrorActivityId, classNameId, classPK };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_M_C_C;
+			finderArgs = new Object[] {
+					mirrorActivityId, classNameId, classPK,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((mirrorActivityId != socialActivity.getMirrorActivityId()) ||
+						(classNameId != socialActivity.getClassNameId()) ||
+						(classPK != socialActivity.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
+
+			query.append(_FINDER_COLUMN_M_C_C_MIRRORACTIVITYID_2);
+
+			query.append(_FINDER_COLUMN_M_C_C_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_M_C_C_CLASSPK_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(mirrorActivityId);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByM_C_C_First(long mirrorActivityId,
+		long classNameId, long classPK)
+		throws NoSuchActivityException, SystemException {
+		return findByM_C_C_First(mirrorActivityId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByM_C_C_First(long mirrorActivityId,
+		long classNameId, long classPK, OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByM_C_C_First(mirrorActivityId,
+				classNameId, classPK, orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("mirrorActivityId=");
+		msg.append(mirrorActivityId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByM_C_C_First(long mirrorActivityId,
+		long classNameId, long classPK) throws SystemException {
+		return fetchByM_C_C_First(mirrorActivityId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByM_C_C_First(long mirrorActivityId,
+		long classNameId, long classPK, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<SocialActivity> list = findByM_C_C(mirrorActivityId, classNameId,
+				classPK, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByM_C_C_Last(long mirrorActivityId,
+		long classNameId, long classPK)
+		throws NoSuchActivityException, SystemException {
+		return findByM_C_C_Last(mirrorActivityId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByM_C_C_Last(long mirrorActivityId,
+		long classNameId, long classPK, OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByM_C_C_Last(mirrorActivityId,
+				classNameId, classPK, orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("mirrorActivityId=");
+		msg.append(mirrorActivityId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByM_C_C_Last(long mirrorActivityId,
+		long classNameId, long classPK) throws SystemException {
+		return fetchByM_C_C_Last(mirrorActivityId, classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param mirrorActivityId the mirror activity ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByM_C_C_Last(long mirrorActivityId,
+		long classNameId, long classPK, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByM_C_C(mirrorActivityId, classNameId, classPK);
+
+		List<SocialActivity> list = findByM_C_C(mirrorActivityId, classNameId,
+				classPK, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activities where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
 	 *
 	 * @param mirrorActivityId the mirror activity ID
@@ -3655,7 +4160,7 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public void removeByM_C_C(long mirrorActivityId, long classNameId,
 		long classPK) throws SystemException {
 		for (SocialActivity socialActivity : findByM_C_C(mirrorActivityId,
-				classNameId, classPK)) {
+				classNameId, classPK, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivity);
 		}
 	}
@@ -3809,309 +4314,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		int start, int end) throws SystemException {
 		return findByG_U_C_C_T_R(groupId, userId, classNameId, classPK, type,
 			receiverUserId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activities where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param receiverUserId the receiver user ID
-	 * @param start the lower bound of the range of social activities
-	 * @param end the upper bound of the range of social activities (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activities
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivity> findByG_U_C_C_T_R(long groupId, long userId,
-		long classNameId, long classPK, int type, long receiverUserId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_C_C_T_R;
-			finderArgs = new Object[] {
-					groupId, userId, classNameId, classPK, type, receiverUserId
-				};
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_C_C_T_R;
-			finderArgs = new Object[] {
-					groupId, userId, classNameId, classPK, type, receiverUserId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivity socialActivity : list) {
-				if ((groupId != socialActivity.getGroupId()) ||
-						(userId != socialActivity.getUserId()) ||
-						(classNameId != socialActivity.getClassNameId()) ||
-						(classPK != socialActivity.getClassPK()) ||
-						(type != socialActivity.getType()) ||
-						(receiverUserId != socialActivity.getReceiverUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(8 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(8);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
-
-			query.append(_FINDER_COLUMN_G_U_C_C_T_R_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_U_C_C_T_R_USERID_2);
-
-			query.append(_FINDER_COLUMN_G_U_C_C_T_R_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_G_U_C_C_T_R_CLASSPK_2);
-
-			query.append(_FINDER_COLUMN_G_U_C_C_T_R_TYPE_2);
-
-			query.append(_FINDER_COLUMN_G_U_C_C_T_R_RECEIVERUSERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(userId);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				qPos.add(type);
-
-				qPos.add(receiverUserId);
-
-				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByG_U_C_C_T_R_First(long groupId, long userId,
-		long classNameId, long classPK, int type, long receiverUserId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByG_U_C_C_T_R_First(groupId,
-				userId, classNameId, classPK, type, receiverUserId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(14);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(", receiverUserId=");
-		msg.append(receiverUserId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByG_U_C_C_T_R_First(long groupId, long userId,
-		long classNameId, long classPK, int type, long receiverUserId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialActivity> list = findByG_U_C_C_T_R(groupId, userId,
-				classNameId, classPK, type, receiverUserId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity
-	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity findByG_U_C_C_T_R_Last(long groupId, long userId,
-		long classNameId, long classPK, int type, long receiverUserId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityException, SystemException {
-		SocialActivity socialActivity = fetchByG_U_C_C_T_R_Last(groupId,
-				userId, classNameId, classPK, type, receiverUserId,
-				orderByComparator);
-
-		if (socialActivity != null) {
-			return socialActivity;
-		}
-
-		StringBundler msg = new StringBundler(14);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(", receiverUserId=");
-		msg.append(receiverUserId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivity fetchByG_U_C_C_T_R_Last(long groupId, long userId,
-		long classNameId, long classPK, int type, long receiverUserId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_U_C_C_T_R(groupId, userId, classNameId, classPK,
-				type, receiverUserId);
-
-		List<SocialActivity> list = findByG_U_C_C_T_R(groupId, userId,
-				classNameId, classPK, type, receiverUserId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -4290,6 +4492,387 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	}
 
 	/**
+	 * Returns an ordered range of all the social activities where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param start the lower bound of the range of social activities
+	 * @param end the upper bound of the range of social activities (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activities
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivity> findByG_U_C_C_T_R(long groupId, long userId,
+		long classNameId, long classPK, int type, long receiverUserId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_C_C_T_R;
+			finderArgs = new Object[] {
+					groupId, userId, classNameId, classPK, type, receiverUserId
+				};
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_C_C_T_R;
+			finderArgs = new Object[] {
+					groupId, userId, classNameId, classPK, type, receiverUserId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((groupId != socialActivity.getGroupId()) ||
+						(userId != socialActivity.getUserId()) ||
+						(classNameId != socialActivity.getClassNameId()) ||
+						(classPK != socialActivity.getClassPK()) ||
+						(type != socialActivity.getType()) ||
+						(receiverUserId != socialActivity.getReceiverUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(8 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(8);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_U_C_C_T_R_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_U_C_C_T_R_USERID_2);
+
+			query.append(_FINDER_COLUMN_G_U_C_C_T_R_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_G_U_C_C_T_R_CLASSPK_2);
+
+			query.append(_FINDER_COLUMN_G_U_C_C_T_R_TYPE_2);
+
+			query.append(_FINDER_COLUMN_G_U_C_C_T_R_RECEIVERUSERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(userId);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				qPos.add(type);
+
+				qPos.add(receiverUserId);
+
+				list = (List<SocialActivity>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByG_U_C_C_T_R_First(long groupId, long userId,
+		long classNameId, long classPK, int type, long receiverUserId)
+		throws NoSuchActivityException, SystemException {
+		return findByG_U_C_C_T_R_First(groupId, userId, classNameId, classPK,
+			type, receiverUserId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByG_U_C_C_T_R_First(long groupId, long userId,
+		long classNameId, long classPK, int type, long receiverUserId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByG_U_C_C_T_R_First(groupId,
+				userId, classNameId, classPK, type, receiverUserId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(14);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(", receiverUserId=");
+		msg.append(receiverUserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByG_U_C_C_T_R_First(long groupId, long userId,
+		long classNameId, long classPK, int type, long receiverUserId)
+		throws SystemException {
+		return fetchByG_U_C_C_T_R_First(groupId, userId, classNameId, classPK,
+			type, receiverUserId, null);
+	}
+
+	/**
+	 * Returns the first social activity in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByG_U_C_C_T_R_First(long groupId, long userId,
+		long classNameId, long classPK, int type, long receiverUserId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialActivity> list = findByG_U_C_C_T_R(groupId, userId,
+				classNameId, classPK, type, receiverUserId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByG_U_C_C_T_R_Last(long groupId, long userId,
+		long classNameId, long classPK, int type, long receiverUserId)
+		throws NoSuchActivityException, SystemException {
+		return findByG_U_C_C_T_R_Last(groupId, userId, classNameId, classPK,
+			type, receiverUserId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity
+	 * @throws com.liferay.portlet.social.NoSuchActivityException if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity findByG_U_C_C_T_R_Last(long groupId, long userId,
+		long classNameId, long classPK, int type, long receiverUserId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityException, SystemException {
+		SocialActivity socialActivity = fetchByG_U_C_C_T_R_Last(groupId,
+				userId, classNameId, classPK, type, receiverUserId,
+				orderByComparator);
+
+		if (socialActivity != null) {
+			return socialActivity;
+		}
+
+		StringBundler msg = new StringBundler(14);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(", receiverUserId=");
+		msg.append(receiverUserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity in the default ordered set defined by {@link SocialActivityModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByG_U_C_C_T_R_Last(long groupId, long userId,
+		long classNameId, long classPK, int type, long receiverUserId)
+		throws SystemException {
+		return fetchByG_U_C_C_T_R_Last(groupId, userId, classNameId, classPK,
+			type, receiverUserId, null);
+	}
+
+	/**
+	 * Returns the last social activity in the ordered set where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity, or <code>null</code> if a matching social activity could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivity fetchByG_U_C_C_T_R_Last(long groupId, long userId,
+		long classNameId, long classPK, int type, long receiverUserId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_U_C_C_T_R(groupId, userId, classNameId, classPK,
+				type, receiverUserId);
+
+		List<SocialActivity> list = findByG_U_C_C_T_R(groupId, userId,
+				classNameId, classPK, type, receiverUserId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activities where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -4304,7 +4887,8 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		long classNameId, long classPK, int type, long receiverUserId)
 		throws SystemException {
 		for (SocialActivity socialActivity : findByG_U_C_C_T_R(groupId, userId,
-				classNameId, classPK, type, receiverUserId)) {
+				classNameId, classPK, type, receiverUserId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(socialActivity);
 		}
 	}
@@ -4400,6 +4984,36 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 			SocialActivityModelImpl.FINDER_CACHE_ENABLED,
 			SocialActivityImpl.class, FINDER_CLASS_NAME_ENTITY,
 			"fetchByG_U_CD_C_C_T_R",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Long.class.getName()
+			},
+			SocialActivityModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityModelImpl.USERID_COLUMN_BITMASK |
+			SocialActivityModelImpl.CREATEDATE_COLUMN_BITMASK |
+			SocialActivityModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivityModelImpl.CLASSPK_COLUMN_BITMASK |
+			SocialActivityModelImpl.TYPE_COLUMN_BITMASK |
+			SocialActivityModelImpl.RECEIVERUSERID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_CD_C_C_T_R =
+		new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
+			SocialActivityModelImpl.FINDER_CACHE_ENABLED,
+			SocialActivityImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_U_CD_C_C_T_R",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_CD_C_C_T_R =
+		new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
+			SocialActivityModelImpl.FINDER_CACHE_ENABLED,
+			SocialActivityImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U_CD_C_C_T_R",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName(), Long.class.getName(),
@@ -4561,8 +5175,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 			query.append(_FINDER_COLUMN_G_U_CD_C_C_T_R_TYPE_2);
 
 			query.append(_FINDER_COLUMN_G_U_CD_C_C_T_R_RECEIVERUSERID_2);
-
-			query.append(SocialActivityModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -4768,10 +5380,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 			SocialActivityImpl.class, socialActivity.getPrimaryKey(),
 			socialActivity);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_MIRRORACTIVITYID,
-			new Object[] { Long.valueOf(socialActivity.getMirrorActivityId()) },
-			socialActivity);
-
 		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_U_CD_C_C_T_R,
 			new Object[] {
 				Long.valueOf(socialActivity.getGroupId()),
@@ -4856,9 +5464,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	}
 
 	protected void clearUniqueFindersCache(SocialActivity socialActivity) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_MIRRORACTIVITYID,
-			new Object[] { Long.valueOf(socialActivity.getMirrorActivityId()) });
-
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_U_CD_C_C_T_R,
 			new Object[] {
 				Long.valueOf(socialActivity.getGroupId()),
@@ -5193,10 +5798,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 			socialActivity);
 
 		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_MIRRORACTIVITYID,
-				new Object[] { Long.valueOf(
-						socialActivity.getMirrorActivityId()) }, socialActivity);
-
 			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_U_CD_C_C_T_R,
 				new Object[] {
 					Long.valueOf(socialActivity.getGroupId()),
@@ -5209,24 +5810,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				}, socialActivity);
 		}
 		else {
-			if ((socialActivityModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_MIRRORACTIVITYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(socialActivityModelImpl.getOriginalMirrorActivityId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_MIRRORACTIVITYID,
-					args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_MIRRORACTIVITYID,
-					args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_MIRRORACTIVITYID,
-					new Object[] {
-						Long.valueOf(socialActivity.getMirrorActivityId())
-					}, socialActivity);
-			}
-
 			if ((socialActivityModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_G_U_CD_C_C_T_R.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {

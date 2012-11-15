@@ -137,233 +137,6 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	}
 
 	/**
-	 * Returns an ordered range of all the document library contents where companyId = &#63; and repositoryId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param start the lower bound of the range of document library contents
-	 * @param end the upper bound of the range of document library contents (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching document library contents
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<DLContent> findByC_R(long companyId, long repositoryId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_R;
-			finderArgs = new Object[] { companyId, repositoryId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_R;
-			finderArgs = new Object[] {
-					companyId, repositoryId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<DLContent> list = (List<DLContent>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (DLContent dlContent : list) {
-				if ((companyId != dlContent.getCompanyId()) ||
-						(repositoryId != dlContent.getRepositoryId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_DLCONTENT_WHERE);
-
-			query.append(_FINDER_COLUMN_C_R_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_R_REPOSITORYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(DLContentModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(repositoryId);
-
-				list = (List<DLContent>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library content
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent findByC_R_First(long companyId, long repositoryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchContentException, SystemException {
-		DLContent dlContent = fetchByC_R_First(companyId, repositoryId,
-				orderByComparator);
-
-		if (dlContent != null) {
-			return dlContent;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", repositoryId=");
-		msg.append(repositoryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchContentException(msg.toString());
-	}
-
-	/**
-	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent fetchByC_R_First(long companyId, long repositoryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<DLContent> list = findByC_R(companyId, repositoryId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library content
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent findByC_R_Last(long companyId, long repositoryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchContentException, SystemException {
-		DLContent dlContent = fetchByC_R_Last(companyId, repositoryId,
-				orderByComparator);
-
-		if (dlContent != null) {
-			return dlContent;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", repositoryId=");
-		msg.append(repositoryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchContentException(msg.toString());
-	}
-
-	/**
-	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent fetchByC_R_Last(long companyId, long repositoryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_R(companyId, repositoryId);
-
-		List<DLContent> list = findByC_R(companyId, repositoryId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the document library contents before and after the current document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
 	 *
 	 * @param contentId the primary key of the current document library content
@@ -515,6 +288,287 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	}
 
 	/**
+	 * Returns an ordered range of all the document library contents where companyId = &#63; and repositoryId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param start the lower bound of the range of document library contents
+	 * @param end the upper bound of the range of document library contents (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document library contents
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<DLContent> findByC_R(long companyId, long repositoryId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_R;
+			finderArgs = new Object[] { companyId, repositoryId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_R;
+			finderArgs = new Object[] {
+					companyId, repositoryId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<DLContent> list = (List<DLContent>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLContent dlContent : list) {
+				if ((companyId != dlContent.getCompanyId()) ||
+						(repositoryId != dlContent.getRepositoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_DLCONTENT_WHERE);
+
+			query.append(_FINDER_COLUMN_C_R_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_R_REPOSITORYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(DLContentModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(repositoryId);
+
+				list = (List<DLContent>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @return the first matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_First(long companyId, long repositoryId)
+		throws NoSuchContentException, SystemException {
+		return findByC_R_First(companyId, repositoryId, null);
+	}
+
+	/**
+	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_First(long companyId, long repositoryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchContentException, SystemException {
+		DLContent dlContent = fetchByC_R_First(companyId, repositoryId,
+				orderByComparator);
+
+		if (dlContent != null) {
+			return dlContent;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", repositoryId=");
+		msg.append(repositoryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchContentException(msg.toString());
+	}
+
+	/**
+	 * Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_First(long companyId, long repositoryId)
+		throws SystemException {
+		return fetchByC_R_First(companyId, repositoryId, null);
+	}
+
+	/**
+	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_First(long companyId, long repositoryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<DLContent> list = findByC_R(companyId, repositoryId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @return the last matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_Last(long companyId, long repositoryId)
+		throws NoSuchContentException, SystemException {
+		return findByC_R_Last(companyId, repositoryId, null);
+	}
+
+	/**
+	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_Last(long companyId, long repositoryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchContentException, SystemException {
+		DLContent dlContent = fetchByC_R_Last(companyId, repositoryId,
+				orderByComparator);
+
+		if (dlContent != null) {
+			return dlContent;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", repositoryId=");
+		msg.append(repositoryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchContentException(msg.toString());
+	}
+
+	/**
+	 * Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_Last(long companyId, long repositoryId)
+		throws SystemException {
+		return fetchByC_R_Last(companyId, repositoryId, null);
+	}
+
+	/**
+	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_Last(long companyId, long repositoryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_R(companyId, repositoryId);
+
+		List<DLContent> list = findByC_R(companyId, repositoryId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the document library contents where companyId = &#63; and repositoryId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -523,7 +577,8 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	public void removeByC_R(long companyId, long repositoryId)
 		throws SystemException {
-		for (DLContent dlContent : findByC_R(companyId, repositoryId)) {
+		for (DLContent dlContent : findByC_R(companyId, repositoryId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(dlContent);
 		}
 	}
@@ -650,263 +705,6 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	public List<DLContent> findByC_R_P(long companyId, long repositoryId,
 		String path, int start, int end) throws SystemException {
 		return findByC_R_P(companyId, repositoryId, path, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param path the path
-	 * @param start the lower bound of the range of document library contents
-	 * @param end the upper bound of the range of document library contents (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching document library contents
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<DLContent> findByC_R_P(long companyId, long repositoryId,
-		String path, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_R_P;
-			finderArgs = new Object[] { companyId, repositoryId, path };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_R_P;
-			finderArgs = new Object[] {
-					companyId, repositoryId, path,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<DLContent> list = (List<DLContent>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (DLContent dlContent : list) {
-				if ((companyId != dlContent.getCompanyId()) ||
-						(repositoryId != dlContent.getRepositoryId()) ||
-						!Validator.equals(path, dlContent.getPath())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_DLCONTENT_WHERE);
-
-			query.append(_FINDER_COLUMN_C_R_P_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_R_P_REPOSITORYID_2);
-
-			if (path == null) {
-				query.append(_FINDER_COLUMN_C_R_P_PATH_1);
-			}
-			else {
-				if (path.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_R_P_PATH_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_R_P_PATH_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(DLContentModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(repositoryId);
-
-				if (path != null) {
-					qPos.add(path);
-				}
-
-				list = (List<DLContent>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param path the path
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library content
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent findByC_R_P_First(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
-		throws NoSuchContentException, SystemException {
-		DLContent dlContent = fetchByC_R_P_First(companyId, repositoryId, path,
-				orderByComparator);
-
-		if (dlContent != null) {
-			return dlContent;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", repositoryId=");
-		msg.append(repositoryId);
-
-		msg.append(", path=");
-		msg.append(path);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchContentException(msg.toString());
-	}
-
-	/**
-	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param path the path
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent fetchByC_R_P_First(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<DLContent> list = findByC_R_P(companyId, repositoryId, path, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param path the path
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library content
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent findByC_R_P_Last(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
-		throws NoSuchContentException, SystemException {
-		DLContent dlContent = fetchByC_R_P_Last(companyId, repositoryId, path,
-				orderByComparator);
-
-		if (dlContent != null) {
-			return dlContent;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", repositoryId=");
-		msg.append(repositoryId);
-
-		msg.append(", path=");
-		msg.append(path);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchContentException(msg.toString());
-	}
-
-	/**
-	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param path the path
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent fetchByC_R_P_Last(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByC_R_P(companyId, repositoryId, path);
-
-		List<DLContent> list = findByC_R_P(companyId, repositoryId, path,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1078,6 +876,321 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	}
 
 	/**
+	 * Returns an ordered range of all the document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @param start the lower bound of the range of document library contents
+	 * @param end the upper bound of the range of document library contents (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document library contents
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<DLContent> findByC_R_P(long companyId, long repositoryId,
+		String path, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_R_P;
+			finderArgs = new Object[] { companyId, repositoryId, path };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_R_P;
+			finderArgs = new Object[] {
+					companyId, repositoryId, path,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<DLContent> list = (List<DLContent>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLContent dlContent : list) {
+				if ((companyId != dlContent.getCompanyId()) ||
+						(repositoryId != dlContent.getRepositoryId()) ||
+						!Validator.equals(path, dlContent.getPath())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_DLCONTENT_WHERE);
+
+			query.append(_FINDER_COLUMN_C_R_P_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_R_P_REPOSITORYID_2);
+
+			if (path == null) {
+				query.append(_FINDER_COLUMN_C_R_P_PATH_1);
+			}
+			else {
+				if (path.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_C_R_P_PATH_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_C_R_P_PATH_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(DLContentModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(repositoryId);
+
+				if (path != null) {
+					qPos.add(path);
+				}
+
+				list = (List<DLContent>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @return the first matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_P_First(long companyId, long repositoryId,
+		String path) throws NoSuchContentException, SystemException {
+		return findByC_R_P_First(companyId, repositoryId, path, null);
+	}
+
+	/**
+	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_P_First(long companyId, long repositoryId,
+		String path, OrderByComparator orderByComparator)
+		throws NoSuchContentException, SystemException {
+		DLContent dlContent = fetchByC_R_P_First(companyId, repositoryId, path,
+				orderByComparator);
+
+		if (dlContent != null) {
+			return dlContent;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", repositoryId=");
+		msg.append(repositoryId);
+
+		msg.append(", path=");
+		msg.append(path);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchContentException(msg.toString());
+	}
+
+	/**
+	 * Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_P_First(long companyId, long repositoryId,
+		String path) throws SystemException {
+		return fetchByC_R_P_First(companyId, repositoryId, path, null);
+	}
+
+	/**
+	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_P_First(long companyId, long repositoryId,
+		String path, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<DLContent> list = findByC_R_P(companyId, repositoryId, path, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @return the last matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_P_Last(long companyId, long repositoryId,
+		String path) throws NoSuchContentException, SystemException {
+		return findByC_R_P_Last(companyId, repositoryId, path, null);
+	}
+
+	/**
+	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_P_Last(long companyId, long repositoryId,
+		String path, OrderByComparator orderByComparator)
+		throws NoSuchContentException, SystemException {
+		DLContent dlContent = fetchByC_R_P_Last(companyId, repositoryId, path,
+				orderByComparator);
+
+		if (dlContent != null) {
+			return dlContent;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", repositoryId=");
+		msg.append(repositoryId);
+
+		msg.append(", path=");
+		msg.append(path);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchContentException(msg.toString());
+	}
+
+	/**
+	 * Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_P_Last(long companyId, long repositoryId,
+		String path) throws SystemException {
+		return fetchByC_R_P_Last(companyId, repositoryId, path, null);
+	}
+
+	/**
+	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_P_Last(long companyId, long repositoryId,
+		String path, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByC_R_P(companyId, repositoryId, path);
+
+		List<DLContent> list = findByC_R_P(companyId, repositoryId, path,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -1087,7 +1200,8 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	public void removeByC_R_P(long companyId, long repositoryId, String path)
 		throws SystemException {
-		for (DLContent dlContent : findByC_R_P(companyId, repositoryId, path)) {
+		for (DLContent dlContent : findByC_R_P(companyId, repositoryId, path,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(dlContent);
 		}
 	}
@@ -1226,256 +1340,6 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	public List<DLContent> findByC_R_LikeP(long companyId, long repositoryId,
 		String path, int start, int end) throws SystemException {
 		return findByC_R_LikeP(companyId, repositoryId, path, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the document library contents where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param path the path
-	 * @param start the lower bound of the range of document library contents
-	 * @param end the upper bound of the range of document library contents (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching document library contents
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<DLContent> findByC_R_LikeP(long companyId, long repositoryId,
-		String path, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_R_LIKEP;
-		finderArgs = new Object[] {
-				companyId, repositoryId, path,
-				
-				start, end, orderByComparator
-			};
-
-		List<DLContent> list = (List<DLContent>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (DLContent dlContent : list) {
-				if ((companyId != dlContent.getCompanyId()) ||
-						(repositoryId != dlContent.getRepositoryId()) ||
-						!Validator.equals(path, dlContent.getPath())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_DLCONTENT_WHERE);
-
-			query.append(_FINDER_COLUMN_C_R_LIKEP_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_R_LIKEP_REPOSITORYID_2);
-
-			if (path == null) {
-				query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_1);
-			}
-			else {
-				if (path.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(DLContentModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(repositoryId);
-
-				if (path != null) {
-					qPos.add(path);
-				}
-
-				list = (List<DLContent>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param path the path
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library content
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent findByC_R_LikeP_First(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
-		throws NoSuchContentException, SystemException {
-		DLContent dlContent = fetchByC_R_LikeP_First(companyId, repositoryId,
-				path, orderByComparator);
-
-		if (dlContent != null) {
-			return dlContent;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", repositoryId=");
-		msg.append(repositoryId);
-
-		msg.append(", path=");
-		msg.append(path);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchContentException(msg.toString());
-	}
-
-	/**
-	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param path the path
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent fetchByC_R_LikeP_First(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<DLContent> list = findByC_R_LikeP(companyId, repositoryId, path,
-				0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param path the path
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library content
-	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent findByC_R_LikeP_Last(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
-		throws NoSuchContentException, SystemException {
-		DLContent dlContent = fetchByC_R_LikeP_Last(companyId, repositoryId,
-				path, orderByComparator);
-
-		if (dlContent != null) {
-			return dlContent;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", repositoryId=");
-		msg.append(repositoryId);
-
-		msg.append(", path=");
-		msg.append(path);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchContentException(msg.toString());
-	}
-
-	/**
-	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param repositoryId the repository ID
-	 * @param path the path
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DLContent fetchByC_R_LikeP_Last(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByC_R_LikeP(companyId, repositoryId, path);
-
-		List<DLContent> list = findByC_R_LikeP(companyId, repositoryId, path,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1648,6 +1512,314 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	}
 
 	/**
+	 * Returns an ordered range of all the document library contents where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @param start the lower bound of the range of document library contents
+	 * @param end the upper bound of the range of document library contents (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document library contents
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<DLContent> findByC_R_LikeP(long companyId, long repositoryId,
+		String path, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_R_LIKEP;
+		finderArgs = new Object[] {
+				companyId, repositoryId, path,
+				
+				start, end, orderByComparator
+			};
+
+		List<DLContent> list = (List<DLContent>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLContent dlContent : list) {
+				if ((companyId != dlContent.getCompanyId()) ||
+						(repositoryId != dlContent.getRepositoryId()) ||
+						!Validator.equals(path, dlContent.getPath())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_DLCONTENT_WHERE);
+
+			query.append(_FINDER_COLUMN_C_R_LIKEP_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_R_LIKEP_REPOSITORYID_2);
+
+			if (path == null) {
+				query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_1);
+			}
+			else {
+				if (path.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_C_R_LIKEP_PATH_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(DLContentModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(repositoryId);
+
+				if (path != null) {
+					qPos.add(path);
+				}
+
+				list = (List<DLContent>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @return the first matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_LikeP_First(long companyId, long repositoryId,
+		String path) throws NoSuchContentException, SystemException {
+		return findByC_R_LikeP_First(companyId, repositoryId, path, null);
+	}
+
+	/**
+	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_LikeP_First(long companyId, long repositoryId,
+		String path, OrderByComparator orderByComparator)
+		throws NoSuchContentException, SystemException {
+		DLContent dlContent = fetchByC_R_LikeP_First(companyId, repositoryId,
+				path, orderByComparator);
+
+		if (dlContent != null) {
+			return dlContent;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", repositoryId=");
+		msg.append(repositoryId);
+
+		msg.append(", path=");
+		msg.append(path);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchContentException(msg.toString());
+	}
+
+	/**
+	 * Returns the first document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_LikeP_First(long companyId, long repositoryId,
+		String path) throws SystemException {
+		return fetchByC_R_LikeP_First(companyId, repositoryId, path, null);
+	}
+
+	/**
+	 * Returns the first document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_LikeP_First(long companyId, long repositoryId,
+		String path, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<DLContent> list = findByC_R_LikeP(companyId, repositoryId, path,
+				0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @return the last matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_LikeP_Last(long companyId, long repositoryId,
+		String path) throws NoSuchContentException, SystemException {
+		return findByC_R_LikeP_Last(companyId, repositoryId, path, null);
+	}
+
+	/**
+	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library content
+	 * @throws com.liferay.portlet.documentlibrary.NoSuchContentException if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent findByC_R_LikeP_Last(long companyId, long repositoryId,
+		String path, OrderByComparator orderByComparator)
+		throws NoSuchContentException, SystemException {
+		DLContent dlContent = fetchByC_R_LikeP_Last(companyId, repositoryId,
+				path, orderByComparator);
+
+		if (dlContent != null) {
+			return dlContent;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", repositoryId=");
+		msg.append(repositoryId);
+
+		msg.append(", path=");
+		msg.append(path);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchContentException(msg.toString());
+	}
+
+	/**
+	 * Returns the last document library content in the default ordered set defined by {@link DLContentModelImpl#ORDER_BY_JPQL} where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_LikeP_Last(long companyId, long repositoryId,
+		String path) throws SystemException {
+		return fetchByC_R_LikeP_Last(companyId, repositoryId, path, null);
+	}
+
+	/**
+	 * Returns the last document library content in the ordered set where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param repositoryId the repository ID
+	 * @param path the path
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document library content, or <code>null</code> if a matching document library content could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLContent fetchByC_R_LikeP_Last(long companyId, long repositoryId,
+		String path, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByC_R_LikeP(companyId, repositoryId, path);
+
+		List<DLContent> list = findByC_R_LikeP(companyId, repositoryId, path,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the document library contents where companyId = &#63; and repositoryId = &#63; and path LIKE &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -1657,7 +1829,8 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	public void removeByC_R_LikeP(long companyId, long repositoryId, String path)
 		throws SystemException {
-		for (DLContent dlContent : findByC_R_LikeP(companyId, repositoryId, path)) {
+		for (DLContent dlContent : findByC_R_LikeP(companyId, repositoryId,
+				path, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(dlContent);
 		}
 	}
@@ -1746,6 +1919,28 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	public static final FinderPath FINDER_PATH_FETCH_BY_C_R_P_V = new FinderPath(DLContentModelImpl.ENTITY_CACHE_ENABLED,
 			DLContentModelImpl.FINDER_CACHE_ENABLED, DLContentImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_R_P_V",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), String.class.getName()
+			},
+			DLContentModelImpl.COMPANYID_COLUMN_BITMASK |
+			DLContentModelImpl.REPOSITORYID_COLUMN_BITMASK |
+			DLContentModelImpl.PATH_COLUMN_BITMASK |
+			DLContentModelImpl.VERSION_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_R_P_V = new FinderPath(DLContentModelImpl.ENTITY_CACHE_ENABLED,
+			DLContentModelImpl.FINDER_CACHE_ENABLED, DLContentImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_R_P_V",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_R_P_V =
+		new FinderPath(DLContentModelImpl.ENTITY_CACHE_ENABLED,
+			DLContentModelImpl.FINDER_CACHE_ENABLED, DLContentImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_R_P_V",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), String.class.getName()
@@ -1891,8 +2086,6 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 					query.append(_FINDER_COLUMN_C_R_P_V_VERSION_2);
 				}
 			}
-
-			query.append(DLContentModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 

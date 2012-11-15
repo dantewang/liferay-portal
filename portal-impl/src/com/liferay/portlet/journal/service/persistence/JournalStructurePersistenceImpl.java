@@ -144,223 +144,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
-	 * Returns an ordered range of all the journal structures where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of journal structures
-	 * @param end the upper bound of the range of journal structures (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalStructure journalStructure : list) {
-				if (!Validator.equals(uuid, journalStructure.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByUuid_First(uuid,
-				orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<JournalStructure> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByUuid_Last(uuid,
-				orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<JournalStructure> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the journal structures before and after the current journal structure in the ordered set where uuid = &#63;.
 	 *
 	 * @param id the primary key of the current journal structure
@@ -519,13 +302,281 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
+	 * Returns an ordered range of all the journal structures where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of journal structures
+	 * @param end the upper bound of the range of journal structures (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if (!Validator.equals(uuid, journalStructure.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByUuid_First(String uuid)
+		throws NoSuchStructureException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByUuid_First(uuid,
+				orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByUuid_First(String uuid)
+		throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<JournalStructure> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByUuid_Last(String uuid)
+		throws NoSuchStructureException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByUuid_Last(uuid,
+				orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByUuid_Last(String uuid)
+		throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<JournalStructure> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the journal structures where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (JournalStructure journalStructure : findByUuid(uuid)) {
+		for (JournalStructure journalStructure : findByUuid(uuid,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalStructure);
 		}
 	}
@@ -602,6 +653,24 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
 			JournalStructureImpl.class, FINDER_CLASS_NAME_ENTITY,
 			"fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalStructureModelImpl.UUID_COLUMN_BITMASK |
+			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_G = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUUID_G",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_G =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUUID_G",
 			new String[] { String.class.getName(), Long.class.getName() },
 			JournalStructureModelImpl.UUID_COLUMN_BITMASK |
 			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK);
@@ -706,8 +775,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			}
 
 			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -920,245 +987,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
-	 * Returns an ordered range of all the journal structures where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of journal structures
-	 * @param end the upper bound of the range of journal structures (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalStructure journalStructure : list) {
-				if (!Validator.equals(uuid, journalStructure.getUuid()) ||
-						(companyId != journalStructure.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByUuid_C_First(uuid,
-				companyId, orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<JournalStructure> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByUuid_C_Last(uuid, companyId,
-				orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<JournalStructure> list = findByUuid_C(uuid, companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the journal structures before and after the current journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
 	 *
 	 * @param id the primary key of the current journal structure
@@ -1322,6 +1150,299 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
+	 * Returns an ordered range of all the journal structures where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of journal structures
+	 * @param end the upper bound of the range of journal structures (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findByUuid_C(String uuid, long companyId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if (!Validator.equals(uuid, journalStructure.getUuid()) ||
+						(companyId != journalStructure.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchStructureException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByUuid_C_First(uuid,
+				companyId, orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<JournalStructure> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchStructureException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByUuid_C_Last(uuid, companyId,
+				orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<JournalStructure> list = findByUuid_C(uuid, companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the journal structures where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1330,7 +1451,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (JournalStructure journalStructure : findByUuid_C(uuid, companyId)) {
+		for (JournalStructure journalStructure : findByUuid_C(uuid, companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalStructure);
 		}
 	}
@@ -1464,212 +1586,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public List<JournalStructure> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal structures where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of journal structures
-	 * @param end the upper bound of the range of journal structures (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalStructure journalStructure : list) {
-				if ((groupId != journalStructure.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<JournalStructure> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<JournalStructure> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1816,159 +1732,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 		else {
 			return null;
 		}
-	}
-
-	/**
-	 * Returns all the journal structures where groupId = any &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupIds the group IDs
-	 * @return the matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findByGroupId(long[] groupIds)
-		throws SystemException {
-		return findByGroupId(groupIds, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-			null);
-	}
-
-	/**
-	 * Returns a range of all the journal structures where groupId = any &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupIds the group IDs
-	 * @param start the lower bound of the range of journal structures
-	 * @param end the upper bound of the range of journal structures (not inclusive)
-	 * @return the range of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findByGroupId(long[] groupIds, int start,
-		int end) throws SystemException {
-		return findByGroupId(groupIds, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal structures where groupId = any &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupIds the group IDs
-	 * @param start the lower bound of the range of journal structures
-	 * @param end the upper bound of the range of journal structures (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findByGroupId(long[] groupIds, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] { StringUtil.merge(groupIds) };
-		}
-		else {
-			finderArgs = new Object[] {
-					StringUtil.merge(groupIds),
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalStructure journalStructure : list) {
-				if (!ArrayUtil.contains(groupIds, journalStructure.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((groupIds == null) || (groupIds.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < groupIds.length; i++) {
-					query.append(_FINDER_COLUMN_GROUPID_GROUPID_5);
-
-					if ((i + 1) < groupIds.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (groupIds != null) {
-					qPos.add(groupIds);
-				}
-
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
 	}
 
 	/**
@@ -2426,13 +2189,423 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
+	 * Returns an ordered range of all the journal structures where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of journal structures
+	 * @param end the upper bound of the range of journal structures (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findByGroupId(long groupId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if ((groupId != journalStructure.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByGroupId_First(long groupId)
+		throws NoSuchStructureException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<JournalStructure> list = findByGroupId(groupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByGroupId_Last(long groupId)
+		throws NoSuchStructureException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<JournalStructure> list = findByGroupId(groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns all the journal structures where groupId = any &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupIds the group IDs
+	 * @return the matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findByGroupId(long[] groupIds)
+		throws SystemException {
+		return findByGroupId(groupIds, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+			null);
+	}
+
+	/**
+	 * Returns a range of all the journal structures where groupId = any &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupIds the group IDs
+	 * @param start the lower bound of the range of journal structures
+	 * @param end the upper bound of the range of journal structures (not inclusive)
+	 * @return the range of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findByGroupId(long[] groupIds, int start,
+		int end) throws SystemException {
+		return findByGroupId(groupIds, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the journal structures where groupId = any &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupIds the group IDs
+	 * @param start the lower bound of the range of journal structures
+	 * @param end the upper bound of the range of journal structures (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findByGroupId(long[] groupIds, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { StringUtil.merge(groupIds) };
+		}
+		else {
+			finderArgs = new Object[] {
+					StringUtil.merge(groupIds),
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if (!ArrayUtil.contains(groupIds, journalStructure.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((groupIds == null) || (groupIds.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < groupIds.length; i++) {
+					query.append(_FINDER_COLUMN_GROUPID_GROUPID_5);
+
+					if ((i + 1) < groupIds.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (groupIds != null) {
+					qPos.add(groupIds);
+				}
+
+				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
 	 * Removes all the journal structures where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (JournalStructure journalStructure : findByGroupId(groupId)) {
+		for (JournalStructure journalStructure : findByGroupId(groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalStructure);
 		}
 	}
@@ -2741,226 +2914,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
-	 * Returns an ordered range of all the journal structures where structureId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param structureId the structure ID
-	 * @param start the lower bound of the range of journal structures
-	 * @param end the upper bound of the range of journal structures (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findByStructureId(String structureId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
-			finderArgs = new Object[] { structureId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID;
-			finderArgs = new Object[] { structureId, start, end, orderByComparator };
-		}
-
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalStructure journalStructure : list) {
-				if (!Validator.equals(structureId,
-							journalStructure.getStructureId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
-
-			if (structureId == null) {
-				query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1);
-			}
-			else {
-				if (structureId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (structureId != null) {
-					qPos.add(structureId);
-				}
-
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByStructureId_First(String structureId,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByStructureId_First(structureId,
-				orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("structureId=");
-		msg.append(structureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByStructureId_First(String structureId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<JournalStructure> list = findByStructureId(structureId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByStructureId_Last(String structureId,
-		OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByStructureId_Last(structureId,
-				orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("structureId=");
-		msg.append(structureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByStructureId_Last(String structureId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByStructureId(structureId);
-
-		List<JournalStructure> list = findByStructureId(structureId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the journal structures before and after the current journal structure in the ordered set where structureId = &#63;.
 	 *
 	 * @param id the primary key of the current journal structure
@@ -3119,6 +3072,276 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
+	 * Returns an ordered range of all the journal structures where structureId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param structureId the structure ID
+	 * @param start the lower bound of the range of journal structures
+	 * @param end the upper bound of the range of journal structures (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findByStructureId(String structureId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
+			finderArgs = new Object[] { structureId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID;
+			finderArgs = new Object[] { structureId, start, end, orderByComparator };
+		}
+
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if (!Validator.equals(structureId,
+							journalStructure.getStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
+
+			if (structureId == null) {
+				query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1);
+			}
+			else {
+				if (structureId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (structureId != null) {
+					qPos.add(structureId);
+				}
+
+				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByStructureId_First(String structureId)
+		throws NoSuchStructureException, SystemException {
+		return findByStructureId_First(structureId, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByStructureId_First(String structureId,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByStructureId_First(structureId,
+				orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByStructureId_First(String structureId)
+		throws SystemException {
+		return fetchByStructureId_First(structureId, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByStructureId_First(String structureId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<JournalStructure> list = findByStructureId(structureId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByStructureId_Last(String structureId)
+		throws NoSuchStructureException, SystemException {
+		return findByStructureId_Last(structureId, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByStructureId_Last(String structureId,
+		OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByStructureId_Last(structureId,
+				orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByStructureId_Last(String structureId)
+		throws SystemException {
+		return fetchByStructureId_Last(structureId, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByStructureId_Last(String structureId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByStructureId(structureId);
+
+		List<JournalStructure> list = findByStructureId(structureId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the journal structures where structureId = &#63; from the database.
 	 *
 	 * @param structureId the structure ID
@@ -3126,7 +3349,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	 */
 	public void removeByStructureId(String structureId)
 		throws SystemException {
-		for (JournalStructure journalStructure : findByStructureId(structureId)) {
+		for (JournalStructure journalStructure : findByStructureId(
+				structureId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalStructure);
 		}
 	}
@@ -3251,232 +3475,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public List<JournalStructure> findByParentStructureId(
 		String parentStructureId, int start, int end) throws SystemException {
 		return findByParentStructureId(parentStructureId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal structures where parentStructureId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param parentStructureId the parent structure ID
-	 * @param start the lower bound of the range of journal structures
-	 * @param end the upper bound of the range of journal structures (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findByParentStructureId(
-		String parentStructureId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID;
-			finderArgs = new Object[] { parentStructureId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PARENTSTRUCTUREID;
-			finderArgs = new Object[] {
-					parentStructureId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalStructure journalStructure : list) {
-				if (!Validator.equals(parentStructureId,
-							journalStructure.getParentStructureId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
-
-			if (parentStructureId == null) {
-				query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_1);
-			}
-			else {
-				if (parentStructureId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (parentStructureId != null) {
-					qPos.add(parentStructureId);
-				}
-
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where parentStructureId = &#63;.
-	 *
-	 * @param parentStructureId the parent structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByParentStructureId_First(
-		String parentStructureId, OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByParentStructureId_First(parentStructureId,
-				orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("parentStructureId=");
-		msg.append(parentStructureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where parentStructureId = &#63;.
-	 *
-	 * @param parentStructureId the parent structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByParentStructureId_First(
-		String parentStructureId, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<JournalStructure> list = findByParentStructureId(parentStructureId,
-				0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where parentStructureId = &#63;.
-	 *
-	 * @param parentStructureId the parent structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByParentStructureId_Last(
-		String parentStructureId, OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByParentStructureId_Last(parentStructureId,
-				orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("parentStructureId=");
-		msg.append(parentStructureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where parentStructureId = &#63;.
-	 *
-	 * @param parentStructureId the parent structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByParentStructureId_Last(
-		String parentStructureId, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByParentStructureId(parentStructureId);
-
-		List<JournalStructure> list = findByParentStructureId(parentStructureId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3640,6 +3638,284 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
+	 * Returns an ordered range of all the journal structures where parentStructureId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentStructureId the parent structure ID
+	 * @param start the lower bound of the range of journal structures
+	 * @param end the upper bound of the range of journal structures (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findByParentStructureId(
+		String parentStructureId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID;
+			finderArgs = new Object[] { parentStructureId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PARENTSTRUCTUREID;
+			finderArgs = new Object[] {
+					parentStructureId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if (!Validator.equals(parentStructureId,
+							journalStructure.getParentStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
+
+			if (parentStructureId == null) {
+				query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_1);
+			}
+			else {
+				if (parentStructureId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_PARENTSTRUCTUREID_PARENTSTRUCTUREID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (parentStructureId != null) {
+					qPos.add(parentStructureId);
+				}
+
+				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where parentStructureId = &#63;.
+	 *
+	 * @param parentStructureId the parent structure ID
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByParentStructureId_First(
+		String parentStructureId)
+		throws NoSuchStructureException, SystemException {
+		return findByParentStructureId_First(parentStructureId, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where parentStructureId = &#63;.
+	 *
+	 * @param parentStructureId the parent structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByParentStructureId_First(
+		String parentStructureId, OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByParentStructureId_First(parentStructureId,
+				orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("parentStructureId=");
+		msg.append(parentStructureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where parentStructureId = &#63;.
+	 *
+	 * @param parentStructureId the parent structure ID
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByParentStructureId_First(
+		String parentStructureId) throws SystemException {
+		return fetchByParentStructureId_First(parentStructureId, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where parentStructureId = &#63;.
+	 *
+	 * @param parentStructureId the parent structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByParentStructureId_First(
+		String parentStructureId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<JournalStructure> list = findByParentStructureId(parentStructureId,
+				0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where parentStructureId = &#63;.
+	 *
+	 * @param parentStructureId the parent structure ID
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByParentStructureId_Last(
+		String parentStructureId)
+		throws NoSuchStructureException, SystemException {
+		return findByParentStructureId_Last(parentStructureId, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where parentStructureId = &#63;.
+	 *
+	 * @param parentStructureId the parent structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByParentStructureId_Last(
+		String parentStructureId, OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByParentStructureId_Last(parentStructureId,
+				orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("parentStructureId=");
+		msg.append(parentStructureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where parentStructureId = &#63;.
+	 *
+	 * @param parentStructureId the parent structure ID
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByParentStructureId_Last(
+		String parentStructureId) throws SystemException {
+		return fetchByParentStructureId_Last(parentStructureId, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where parentStructureId = &#63;.
+	 *
+	 * @param parentStructureId the parent structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByParentStructureId_Last(
+		String parentStructureId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByParentStructureId(parentStructureId);
+
+		List<JournalStructure> list = findByParentStructureId(parentStructureId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the journal structures where parentStructureId = &#63; from the database.
 	 *
 	 * @param parentStructureId the parent structure ID
@@ -3648,7 +3924,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public void removeByParentStructureId(String parentStructureId)
 		throws SystemException {
 		for (JournalStructure journalStructure : findByParentStructureId(
-				parentStructureId)) {
+				parentStructureId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalStructure);
 		}
 	}
@@ -3728,6 +4004,23 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public static final FinderPath FINDER_PATH_FETCH_BY_G_S = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
 			JournalStructureImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByG_S",
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_S",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_S",
 			new String[] { Long.class.getName(), String.class.getName() },
 			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK |
 			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
@@ -3833,8 +4126,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					query.append(_FINDER_COLUMN_G_S_STRUCTUREID_2);
 				}
 			}
-
-			query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -4044,248 +4335,6 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public List<JournalStructure> findByG_P(long groupId,
 		String parentStructureId, int start, int end) throws SystemException {
 		return findByG_P(groupId, parentStructureId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the journal structures where groupId = &#63; and parentStructureId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentStructureId the parent structure ID
-	 * @param start the lower bound of the range of journal structures
-	 * @param end the upper bound of the range of journal structures (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching journal structures
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JournalStructure> findByG_P(long groupId,
-		String parentStructureId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P;
-			finderArgs = new Object[] { groupId, parentStructureId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P;
-			finderArgs = new Object[] {
-					groupId, parentStructureId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (JournalStructure journalStructure : list) {
-				if ((groupId != journalStructure.getGroupId()) ||
-						!Validator.equals(parentStructureId,
-							journalStructure.getParentStructureId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_GROUPID_2);
-
-			if (parentStructureId == null) {
-				query.append(_FINDER_COLUMN_G_P_PARENTSTRUCTUREID_1);
-			}
-			else {
-				if (parentStructureId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_P_PARENTSTRUCTUREID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_P_PARENTSTRUCTUREID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (parentStructureId != null) {
-					qPos.add(parentStructureId);
-				}
-
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentStructureId the parent structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByG_P_First(long groupId,
-		String parentStructureId, OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByG_P_First(groupId,
-				parentStructureId, orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", parentStructureId=");
-		msg.append(parentStructureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the first journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentStructureId the parent structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByG_P_First(long groupId,
-		String parentStructureId, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<JournalStructure> list = findByG_P(groupId, parentStructureId, 0,
-				1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentStructureId the parent structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure
-	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure findByG_P_Last(long groupId,
-		String parentStructureId, OrderByComparator orderByComparator)
-		throws NoSuchStructureException, SystemException {
-		JournalStructure journalStructure = fetchByG_P_Last(groupId,
-				parentStructureId, orderByComparator);
-
-		if (journalStructure != null) {
-			return journalStructure;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", parentStructureId=");
-		msg.append(parentStructureId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchStructureException(msg.toString());
-	}
-
-	/**
-	 * Returns the last journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentStructureId the parent structure ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JournalStructure fetchByG_P_Last(long groupId,
-		String parentStructureId, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_P(groupId, parentStructureId);
-
-		List<JournalStructure> list = findByG_P(groupId, parentStructureId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -4806,6 +4855,304 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	}
 
 	/**
+	 * Returns an ordered range of all the journal structures where groupId = &#63; and parentStructureId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentStructureId the parent structure ID
+	 * @param start the lower bound of the range of journal structures
+	 * @param end the upper bound of the range of journal structures (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching journal structures
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JournalStructure> findByG_P(long groupId,
+		String parentStructureId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P;
+			finderArgs = new Object[] { groupId, parentStructureId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P;
+			finderArgs = new Object[] {
+					groupId, parentStructureId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if ((groupId != journalStructure.getGroupId()) ||
+						!Validator.equals(parentStructureId,
+							journalStructure.getParentStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_JOURNALSTRUCTURE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_GROUPID_2);
+
+			if (parentStructureId == null) {
+				query.append(_FINDER_COLUMN_G_P_PARENTSTRUCTUREID_1);
+			}
+			else {
+				if (parentStructureId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_P_PARENTSTRUCTUREID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_P_PARENTSTRUCTUREID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (parentStructureId != null) {
+					qPos.add(parentStructureId);
+				}
+
+				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentStructureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentStructureId the parent structure ID
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByG_P_First(long groupId,
+		String parentStructureId)
+		throws NoSuchStructureException, SystemException {
+		return findByG_P_First(groupId, parentStructureId, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentStructureId the parent structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByG_P_First(long groupId,
+		String parentStructureId, OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByG_P_First(groupId,
+				parentStructureId, orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", parentStructureId=");
+		msg.append(parentStructureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentStructureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentStructureId the parent structure ID
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByG_P_First(long groupId,
+		String parentStructureId) throws SystemException {
+		return fetchByG_P_First(groupId, parentStructureId, null);
+	}
+
+	/**
+	 * Returns the first journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentStructureId the parent structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByG_P_First(long groupId,
+		String parentStructureId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<JournalStructure> list = findByG_P(groupId, parentStructureId, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentStructureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentStructureId the parent structure ID
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByG_P_Last(long groupId,
+		String parentStructureId)
+		throws NoSuchStructureException, SystemException {
+		return findByG_P_Last(groupId, parentStructureId, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentStructureId the parent structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure
+	 * @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure findByG_P_Last(long groupId,
+		String parentStructureId, OrderByComparator orderByComparator)
+		throws NoSuchStructureException, SystemException {
+		JournalStructure journalStructure = fetchByG_P_Last(groupId,
+				parentStructureId, orderByComparator);
+
+		if (journalStructure != null) {
+			return journalStructure;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", parentStructureId=");
+		msg.append(parentStructureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchStructureException(msg.toString());
+	}
+
+	/**
+	 * Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentStructureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentStructureId the parent structure ID
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByG_P_Last(long groupId,
+		String parentStructureId) throws SystemException {
+		return fetchByG_P_Last(groupId, parentStructureId, null);
+	}
+
+	/**
+	 * Returns the last journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentStructureId the parent structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JournalStructure fetchByG_P_Last(long groupId,
+		String parentStructureId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_P(groupId, parentStructureId);
+
+		List<JournalStructure> list = findByG_P(groupId, parentStructureId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the journal structures where groupId = &#63; and parentStructureId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -4815,7 +5162,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public void removeByG_P(long groupId, String parentStructureId)
 		throws SystemException {
 		for (JournalStructure journalStructure : findByG_P(groupId,
-				parentStructureId)) {
+				parentStructureId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(journalStructure);
 		}
 	}

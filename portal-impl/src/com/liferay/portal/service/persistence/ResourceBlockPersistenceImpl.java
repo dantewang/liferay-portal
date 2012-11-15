@@ -139,241 +139,6 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	}
 
 	/**
-	 * Returns an ordered range of all the resource blocks where companyId = &#63; and name = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @param start the lower bound of the range of resource blocks
-	 * @param end the upper bound of the range of resource blocks (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching resource blocks
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ResourceBlock> findByC_N(long companyId, String name,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N;
-			finderArgs = new Object[] { companyId, name };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_N;
-			finderArgs = new Object[] {
-					companyId, name,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<ResourceBlock> list = (List<ResourceBlock>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (ResourceBlock resourceBlock : list) {
-				if ((companyId != resourceBlock.getCompanyId()) ||
-						!Validator.equals(name, resourceBlock.getName())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_RESOURCEBLOCK_WHERE);
-
-			query.append(_FINDER_COLUMN_C_N_COMPANYID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_C_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_N_NAME_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				list = (List<ResourceBlock>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first resource block in the ordered set where companyId = &#63; and name = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching resource block
-	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceBlock findByC_N_First(long companyId, String name,
-		OrderByComparator orderByComparator)
-		throws NoSuchResourceBlockException, SystemException {
-		ResourceBlock resourceBlock = fetchByC_N_First(companyId, name,
-				orderByComparator);
-
-		if (resourceBlock != null) {
-			return resourceBlock;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchResourceBlockException(msg.toString());
-	}
-
-	/**
-	 * Returns the first resource block in the ordered set where companyId = &#63; and name = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching resource block, or <code>null</code> if a matching resource block could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceBlock fetchByC_N_First(long companyId, String name,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<ResourceBlock> list = findByC_N(companyId, name, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last resource block in the ordered set where companyId = &#63; and name = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching resource block
-	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceBlock findByC_N_Last(long companyId, String name,
-		OrderByComparator orderByComparator)
-		throws NoSuchResourceBlockException, SystemException {
-		ResourceBlock resourceBlock = fetchByC_N_Last(companyId, name,
-				orderByComparator);
-
-		if (resourceBlock != null) {
-			return resourceBlock;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchResourceBlockException(msg.toString());
-	}
-
-	/**
-	 * Returns the last resource block in the ordered set where companyId = &#63; and name = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching resource block, or <code>null</code> if a matching resource block could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceBlock fetchByC_N_Last(long companyId, String name,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_N(companyId, name);
-
-		List<ResourceBlock> list = findByC_N(companyId, name, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the resource blocks before and after the current resource block in the ordered set where companyId = &#63; and name = &#63;.
 	 *
 	 * @param resourceBlockId the primary key of the current resource block
@@ -533,6 +298,295 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	}
 
 	/**
+	 * Returns an ordered range of all the resource blocks where companyId = &#63; and name = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param start the lower bound of the range of resource blocks
+	 * @param end the upper bound of the range of resource blocks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching resource blocks
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ResourceBlock> findByC_N(long companyId, String name,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N;
+			finderArgs = new Object[] { companyId, name };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_N;
+			finderArgs = new Object[] {
+					companyId, name,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<ResourceBlock> list = (List<ResourceBlock>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceBlock resourceBlock : list) {
+				if ((companyId != resourceBlock.getCompanyId()) ||
+						!Validator.equals(name, resourceBlock.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_RESOURCEBLOCK_WHERE);
+
+			query.append(_FINDER_COLUMN_C_N_COMPANYID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_C_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_C_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_C_N_NAME_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				list = (List<ResourceBlock>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @return the first matching resource block
+	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock findByC_N_First(long companyId, String name)
+		throws NoSuchResourceBlockException, SystemException {
+		return findByC_N_First(companyId, name, null);
+	}
+
+	/**
+	 * Returns the first resource block in the ordered set where companyId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching resource block
+	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock findByC_N_First(long companyId, String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchResourceBlockException, SystemException {
+		ResourceBlock resourceBlock = fetchByC_N_First(companyId, name,
+				orderByComparator);
+
+		if (resourceBlock != null) {
+			return resourceBlock;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchResourceBlockException(msg.toString());
+	}
+
+	/**
+	 * Returns the first resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @return the first matching resource block, or <code>null</code> if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock fetchByC_N_First(long companyId, String name)
+		throws SystemException {
+		return fetchByC_N_First(companyId, name, null);
+	}
+
+	/**
+	 * Returns the first resource block in the ordered set where companyId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching resource block, or <code>null</code> if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock fetchByC_N_First(long companyId, String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<ResourceBlock> list = findByC_N(companyId, name, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @return the last matching resource block
+	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock findByC_N_Last(long companyId, String name)
+		throws NoSuchResourceBlockException, SystemException {
+		return findByC_N_Last(companyId, name, null);
+	}
+
+	/**
+	 * Returns the last resource block in the ordered set where companyId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching resource block
+	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock findByC_N_Last(long companyId, String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchResourceBlockException, SystemException {
+		ResourceBlock resourceBlock = fetchByC_N_Last(companyId, name,
+				orderByComparator);
+
+		if (resourceBlock != null) {
+			return resourceBlock;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchResourceBlockException(msg.toString());
+	}
+
+	/**
+	 * Returns the last resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @return the last matching resource block, or <code>null</code> if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock fetchByC_N_Last(long companyId, String name)
+		throws SystemException {
+		return fetchByC_N_Last(companyId, name, null);
+	}
+
+	/**
+	 * Returns the last resource block in the ordered set where companyId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching resource block, or <code>null</code> if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock fetchByC_N_Last(long companyId, String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_N(companyId, name);
+
+		List<ResourceBlock> list = findByC_N(companyId, name, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the resource blocks where companyId = &#63; and name = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -541,7 +595,8 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	public void removeByC_N(long companyId, String name)
 		throws SystemException {
-		for (ResourceBlock resourceBlock : findByC_N(companyId, name)) {
+		for (ResourceBlock resourceBlock : findByC_N(companyId, name,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(resourceBlock);
 		}
 	}
@@ -684,259 +739,6 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	public List<ResourceBlock> findByC_G_N(long companyId, long groupId,
 		String name, int start, int end) throws SystemException {
 		return findByC_G_N(companyId, groupId, name, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the resource blocks where companyId = &#63; and groupId = &#63; and name = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param start the lower bound of the range of resource blocks
-	 * @param end the upper bound of the range of resource blocks (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching resource blocks
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ResourceBlock> findByC_G_N(long companyId, long groupId,
-		String name, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_G_N;
-			finderArgs = new Object[] { companyId, groupId, name };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_G_N;
-			finderArgs = new Object[] {
-					companyId, groupId, name,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<ResourceBlock> list = (List<ResourceBlock>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (ResourceBlock resourceBlock : list) {
-				if ((companyId != resourceBlock.getCompanyId()) ||
-						(groupId != resourceBlock.getGroupId()) ||
-						!Validator.equals(name, resourceBlock.getName())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_RESOURCEBLOCK_WHERE);
-
-			query.append(_FINDER_COLUMN_C_G_N_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_G_N_GROUPID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_C_G_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_G_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_G_N_NAME_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(groupId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				list = (List<ResourceBlock>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching resource block
-	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceBlock findByC_G_N_First(long companyId, long groupId,
-		String name, OrderByComparator orderByComparator)
-		throws NoSuchResourceBlockException, SystemException {
-		ResourceBlock resourceBlock = fetchByC_G_N_First(companyId, groupId,
-				name, orderByComparator);
-
-		if (resourceBlock != null) {
-			return resourceBlock;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", groupId=");
-		msg.append(groupId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchResourceBlockException(msg.toString());
-	}
-
-	/**
-	 * Returns the first resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching resource block, or <code>null</code> if a matching resource block could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceBlock fetchByC_G_N_First(long companyId, long groupId,
-		String name, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<ResourceBlock> list = findByC_G_N(companyId, groupId, name, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching resource block
-	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceBlock findByC_G_N_Last(long companyId, long groupId,
-		String name, OrderByComparator orderByComparator)
-		throws NoSuchResourceBlockException, SystemException {
-		ResourceBlock resourceBlock = fetchByC_G_N_Last(companyId, groupId,
-				name, orderByComparator);
-
-		if (resourceBlock != null) {
-			return resourceBlock;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", groupId=");
-		msg.append(groupId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchResourceBlockException(msg.toString());
-	}
-
-	/**
-	 * Returns the last resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching resource block, or <code>null</code> if a matching resource block could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceBlock fetchByC_G_N_Last(long companyId, long groupId,
-		String name, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByC_G_N(companyId, groupId, name);
-
-		List<ResourceBlock> list = findByC_G_N(companyId, groupId, name,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1105,6 +907,317 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	}
 
 	/**
+	 * Returns an ordered range of all the resource blocks where companyId = &#63; and groupId = &#63; and name = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param start the lower bound of the range of resource blocks
+	 * @param end the upper bound of the range of resource blocks (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching resource blocks
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ResourceBlock> findByC_G_N(long companyId, long groupId,
+		String name, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_G_N;
+			finderArgs = new Object[] { companyId, groupId, name };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_G_N;
+			finderArgs = new Object[] {
+					companyId, groupId, name,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<ResourceBlock> list = (List<ResourceBlock>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceBlock resourceBlock : list) {
+				if ((companyId != resourceBlock.getCompanyId()) ||
+						(groupId != resourceBlock.getGroupId()) ||
+						!Validator.equals(name, resourceBlock.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_RESOURCEBLOCK_WHERE);
+
+			query.append(_FINDER_COLUMN_C_G_N_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_G_N_GROUPID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_C_G_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_C_G_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_C_G_N_NAME_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(groupId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				list = (List<ResourceBlock>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and groupId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the first matching resource block
+	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock findByC_G_N_First(long companyId, long groupId,
+		String name) throws NoSuchResourceBlockException, SystemException {
+		return findByC_G_N_First(companyId, groupId, name, null);
+	}
+
+	/**
+	 * Returns the first resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching resource block
+	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock findByC_G_N_First(long companyId, long groupId,
+		String name, OrderByComparator orderByComparator)
+		throws NoSuchResourceBlockException, SystemException {
+		ResourceBlock resourceBlock = fetchByC_G_N_First(companyId, groupId,
+				name, orderByComparator);
+
+		if (resourceBlock != null) {
+			return resourceBlock;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", groupId=");
+		msg.append(groupId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchResourceBlockException(msg.toString());
+	}
+
+	/**
+	 * Returns the first resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and groupId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the first matching resource block, or <code>null</code> if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock fetchByC_G_N_First(long companyId, long groupId,
+		String name) throws SystemException {
+		return fetchByC_G_N_First(companyId, groupId, name, null);
+	}
+
+	/**
+	 * Returns the first resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching resource block, or <code>null</code> if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock fetchByC_G_N_First(long companyId, long groupId,
+		String name, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<ResourceBlock> list = findByC_G_N(companyId, groupId, name, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and groupId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the last matching resource block
+	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock findByC_G_N_Last(long companyId, long groupId,
+		String name) throws NoSuchResourceBlockException, SystemException {
+		return findByC_G_N_Last(companyId, groupId, name, null);
+	}
+
+	/**
+	 * Returns the last resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching resource block
+	 * @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock findByC_G_N_Last(long companyId, long groupId,
+		String name, OrderByComparator orderByComparator)
+		throws NoSuchResourceBlockException, SystemException {
+		ResourceBlock resourceBlock = fetchByC_G_N_Last(companyId, groupId,
+				name, orderByComparator);
+
+		if (resourceBlock != null) {
+			return resourceBlock;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", groupId=");
+		msg.append(groupId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchResourceBlockException(msg.toString());
+	}
+
+	/**
+	 * Returns the last resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and groupId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the last matching resource block, or <code>null</code> if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock fetchByC_G_N_Last(long companyId, long groupId,
+		String name) throws SystemException {
+		return fetchByC_G_N_Last(companyId, groupId, name, null);
+	}
+
+	/**
+	 * Returns the last resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching resource block, or <code>null</code> if a matching resource block could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceBlock fetchByC_G_N_Last(long companyId, long groupId,
+		String name, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByC_G_N(companyId, groupId, name);
+
+		List<ResourceBlock> list = findByC_G_N(companyId, groupId, name,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the resource blocks where companyId = &#63; and groupId = &#63; and name = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -1114,7 +1227,8 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	public void removeByC_G_N(long companyId, long groupId, String name)
 		throws SystemException {
-		for (ResourceBlock resourceBlock : findByC_G_N(companyId, groupId, name)) {
+		for (ResourceBlock resourceBlock : findByC_G_N(companyId, groupId,
+				name, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(resourceBlock);
 		}
 	}
@@ -1204,6 +1318,30 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 			ResourceBlockModelImpl.FINDER_CACHE_ENABLED,
 			ResourceBlockImpl.class, FINDER_CLASS_NAME_ENTITY,
 			"fetchByC_G_N_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), String.class.getName()
+			},
+			ResourceBlockModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourceBlockModelImpl.GROUPID_COLUMN_BITMASK |
+			ResourceBlockModelImpl.NAME_COLUMN_BITMASK |
+			ResourceBlockModelImpl.PERMISSIONSHASH_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_G_N_P = new FinderPath(ResourceBlockModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceBlockModelImpl.FINDER_CACHE_ENABLED,
+			ResourceBlockImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByC_G_N_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_G_N_P =
+		new FinderPath(ResourceBlockModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceBlockModelImpl.FINDER_CACHE_ENABLED,
+			ResourceBlockImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByC_G_N_P",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), String.class.getName()

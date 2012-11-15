@@ -138,218 +138,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	}
 
 	/**
-	 * Returns an ordered range of all the social relations where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of social relations
-	 * @param end the upper bound of the range of social relations (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social relations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRelation> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRelation socialRelation : list) {
-				if (!Validator.equals(uuid, socialRelation.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByUuid_First(uuid,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRelation> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByUuid_Last(uuid, orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<SocialRelation> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the social relations before and after the current social relation in the ordered set where uuid = &#63;.
 	 *
 	 * @param relationId the primary key of the current social relation
@@ -504,13 +292,276 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	}
 
 	/**
+	 * Returns an ordered range of all the social relations where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of social relations
+	 * @param end the upper bound of the range of social relations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social relations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRelation> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if (!Validator.equals(uuid, socialRelation.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUuid_First(String uuid)
+		throws NoSuchRelationException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUuid_First(uuid,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUuid_First(String uuid)
+		throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRelation> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUuid_Last(String uuid)
+		throws NoSuchRelationException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUuid_Last(String uuid)
+		throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<SocialRelation> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social relations where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (SocialRelation socialRelation : findByUuid(uuid)) {
+		for (SocialRelation socialRelation : findByUuid(uuid,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRelation);
 		}
 	}
@@ -637,241 +688,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public List<SocialRelation> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social relations where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of social relations
-	 * @param end the upper bound of the range of social relations (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social relations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRelation> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRelation socialRelation : list) {
-				if (!Validator.equals(uuid, socialRelation.getUuid()) ||
-						(companyId != socialRelation.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByUuid_C_First(uuid, companyId,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRelation> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByUuid_C_Last(uuid, companyId,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<SocialRelation> list = findByUuid_C(uuid, companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1034,6 +850,295 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	}
 
 	/**
+	 * Returns an ordered range of all the social relations where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of social relations
+	 * @param end the upper bound of the range of social relations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social relations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRelation> findByUuid_C(String uuid, long companyId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if (!Validator.equals(uuid, socialRelation.getUuid()) ||
+						(companyId != socialRelation.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchRelationException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUuid_C_First(uuid, companyId,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRelation> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchRelationException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUuid_C_Last(uuid, companyId,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<SocialRelation> list = findByUuid_C(uuid, companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social relations where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1042,7 +1147,8 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (SocialRelation socialRelation : findByUuid_C(uuid, companyId)) {
+		for (SocialRelation socialRelation : findByUuid_C(uuid, companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRelation);
 		}
 	}
@@ -1174,208 +1280,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public List<SocialRelation> findByCompanyId(long companyId, int start,
 		int end) throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social relations where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of social relations
-	 * @param end the upper bound of the range of social relations (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social relations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRelation> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRelation socialRelation : list) {
-				if ((companyId != socialRelation.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByCompanyId_First(companyId,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRelation> list = findByCompanyId(companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByCompanyId_Last(companyId,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<SocialRelation> list = findByCompanyId(companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1521,13 +1425,266 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	}
 
 	/**
+	 * Returns an ordered range of all the social relations where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of social relations
+	 * @param end the upper bound of the range of social relations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social relations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRelation> findByCompanyId(long companyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((companyId != socialRelation.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByCompanyId_First(long companyId)
+		throws NoSuchRelationException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByCompanyId_First(companyId,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRelation> list = findByCompanyId(companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByCompanyId_Last(long companyId)
+		throws NoSuchRelationException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByCompanyId_Last(companyId,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByCompanyId_Last(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<SocialRelation> list = findByCompanyId(companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social relations where companyId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCompanyId(long companyId) throws SystemException {
-		for (SocialRelation socialRelation : findByCompanyId(companyId)) {
+		for (SocialRelation socialRelation : findByCompanyId(companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRelation);
 		}
 	}
@@ -1636,208 +1793,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public List<SocialRelation> findByUserId1(long userId1, int start, int end)
 		throws SystemException {
 		return findByUserId1(userId1, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social relations where userId1 = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId1 the user id1
-	 * @param start the lower bound of the range of social relations
-	 * @param end the upper bound of the range of social relations (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social relations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRelation> findByUserId1(long userId1, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID1;
-			finderArgs = new Object[] { userId1 };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID1;
-			finderArgs = new Object[] { userId1, start, end, orderByComparator };
-		}
-
-		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRelation socialRelation : list) {
-				if ((userId1 != socialRelation.getUserId1())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID1_USERID1_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId1);
-
-				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where userId1 = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByUserId1_First(long userId1,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByUserId1_First(userId1,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId1=");
-		msg.append(userId1);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where userId1 = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByUserId1_First(long userId1,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRelation> list = findByUserId1(userId1, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where userId1 = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByUserId1_Last(long userId1,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByUserId1_Last(userId1,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId1=");
-		msg.append(userId1);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where userId1 = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByUserId1_Last(long userId1,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUserId1(userId1);
-
-		List<SocialRelation> list = findByUserId1(userId1, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1983,13 +1938,266 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	}
 
 	/**
+	 * Returns an ordered range of all the social relations where userId1 = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId1 the user id1
+	 * @param start the lower bound of the range of social relations
+	 * @param end the upper bound of the range of social relations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social relations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRelation> findByUserId1(long userId1, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID1;
+			finderArgs = new Object[] { userId1 };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID1;
+			finderArgs = new Object[] { userId1, start, end, orderByComparator };
+		}
+
+		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((userId1 != socialRelation.getUserId1())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID1_USERID1_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId1);
+
+				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUserId1_First(long userId1)
+		throws NoSuchRelationException, SystemException {
+		return findByUserId1_First(userId1, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId1 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUserId1_First(long userId1,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUserId1_First(userId1,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId1_First(long userId1)
+		throws SystemException {
+		return fetchByUserId1_First(userId1, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId1 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId1_First(long userId1,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRelation> list = findByUserId1(userId1, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUserId1_Last(long userId1)
+		throws NoSuchRelationException, SystemException {
+		return findByUserId1_Last(userId1, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId1 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUserId1_Last(long userId1,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUserId1_Last(userId1,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId1_Last(long userId1)
+		throws SystemException {
+		return fetchByUserId1_Last(userId1, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId1 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId1_Last(long userId1,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUserId1(userId1);
+
+		List<SocialRelation> list = findByUserId1(userId1, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social relations where userId1 = &#63; from the database.
 	 *
 	 * @param userId1 the user id1
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUserId1(long userId1) throws SystemException {
-		for (SocialRelation socialRelation : findByUserId1(userId1)) {
+		for (SocialRelation socialRelation : findByUserId1(userId1,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRelation);
 		}
 	}
@@ -2098,208 +2306,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public List<SocialRelation> findByUserId2(long userId2, int start, int end)
 		throws SystemException {
 		return findByUserId2(userId2, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social relations where userId2 = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId2 the user id2
-	 * @param start the lower bound of the range of social relations
-	 * @param end the upper bound of the range of social relations (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social relations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRelation> findByUserId2(long userId2, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID2;
-			finderArgs = new Object[] { userId2 };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID2;
-			finderArgs = new Object[] { userId2, start, end, orderByComparator };
-		}
-
-		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRelation socialRelation : list) {
-				if ((userId2 != socialRelation.getUserId2())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID2_USERID2_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId2);
-
-				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where userId2 = &#63;.
-	 *
-	 * @param userId2 the user id2
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByUserId2_First(long userId2,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByUserId2_First(userId2,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId2=");
-		msg.append(userId2);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where userId2 = &#63;.
-	 *
-	 * @param userId2 the user id2
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByUserId2_First(long userId2,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRelation> list = findByUserId2(userId2, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where userId2 = &#63;.
-	 *
-	 * @param userId2 the user id2
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByUserId2_Last(long userId2,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByUserId2_Last(userId2,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId2=");
-		msg.append(userId2);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where userId2 = &#63;.
-	 *
-	 * @param userId2 the user id2
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByUserId2_Last(long userId2,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUserId2(userId2);
-
-		List<SocialRelation> list = findByUserId2(userId2, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2445,13 +2451,266 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	}
 
 	/**
+	 * Returns an ordered range of all the social relations where userId2 = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId2 the user id2
+	 * @param start the lower bound of the range of social relations
+	 * @param end the upper bound of the range of social relations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social relations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRelation> findByUserId2(long userId2, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID2;
+			finderArgs = new Object[] { userId2 };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID2;
+			finderArgs = new Object[] { userId2, start, end, orderByComparator };
+		}
+
+		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((userId2 != socialRelation.getUserId2())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID2_USERID2_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId2);
+
+				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId2 = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUserId2_First(long userId2)
+		throws NoSuchRelationException, SystemException {
+		return findByUserId2_First(userId2, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId2 = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUserId2_First(long userId2,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUserId2_First(userId2,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId2=");
+		msg.append(userId2);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId2 = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId2_First(long userId2)
+		throws SystemException {
+		return fetchByUserId2_First(userId2, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId2 = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId2_First(long userId2,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRelation> list = findByUserId2(userId2, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId2 = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUserId2_Last(long userId2)
+		throws NoSuchRelationException, SystemException {
+		return findByUserId2_Last(userId2, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId2 = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByUserId2_Last(long userId2,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUserId2_Last(userId2,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId2=");
+		msg.append(userId2);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId2 = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId2_Last(long userId2)
+		throws SystemException {
+		return fetchByUserId2_Last(userId2, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId2 = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId2_Last(long userId2,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUserId2(userId2);
+
+		List<SocialRelation> list = findByUserId2(userId2, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social relations where userId2 = &#63; from the database.
 	 *
 	 * @param userId2 the user id2
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUserId2(long userId2) throws SystemException {
-		for (SocialRelation socialRelation : findByUserId2(userId2)) {
+		for (SocialRelation socialRelation : findByUserId2(userId2,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRelation);
 		}
 	}
@@ -2558,206 +2817,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public List<SocialRelation> findByType(int type, int start, int end)
 		throws SystemException {
 		return findByType(type, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social relations where type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param type the type
-	 * @param start the lower bound of the range of social relations
-	 * @param end the upper bound of the range of social relations (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social relations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRelation> findByType(int type, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TYPE;
-			finderArgs = new Object[] { type };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TYPE;
-			finderArgs = new Object[] { type, start, end, orderByComparator };
-		}
-
-		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRelation socialRelation : list) {
-				if ((type != socialRelation.getType())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
-
-			query.append(_FINDER_COLUMN_TYPE_TYPE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(type);
-
-				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where type = &#63;.
-	 *
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByType_First(int type,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByType_First(type,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where type = &#63;.
-	 *
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByType_First(int type,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRelation> list = findByType(type, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where type = &#63;.
-	 *
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByType_Last(int type,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByType_Last(type, orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where type = &#63;.
-	 *
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByType_Last(int type,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByType(type);
-
-		List<SocialRelation> list = findByType(type, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2903,13 +2962,262 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	}
 
 	/**
+	 * Returns an ordered range of all the social relations where type = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param type the type
+	 * @param start the lower bound of the range of social relations
+	 * @param end the upper bound of the range of social relations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social relations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRelation> findByType(int type, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TYPE;
+			finderArgs = new Object[] { type };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TYPE;
+			finderArgs = new Object[] { type, start, end, orderByComparator };
+		}
+
+		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((type != socialRelation.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
+
+			query.append(_FINDER_COLUMN_TYPE_TYPE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(type);
+
+				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	 *
+	 * @param type the type
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByType_First(int type)
+		throws NoSuchRelationException, SystemException {
+		return findByType_First(type, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByType_First(int type,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByType_First(type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	 *
+	 * @param type the type
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByType_First(int type) throws SystemException {
+		return fetchByType_First(type, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByType_First(int type,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRelation> list = findByType(type, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	 *
+	 * @param type the type
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByType_Last(int type)
+		throws NoSuchRelationException, SystemException {
+		return findByType_Last(type, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByType_Last(int type,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByType_Last(type, orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	 *
+	 * @param type the type
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByType_Last(int type) throws SystemException {
+		return fetchByType_Last(type, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByType_Last(int type,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByType(type);
+
+		List<SocialRelation> list = findByType(type, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social relations where type = &#63; from the database.
 	 *
 	 * @param type the type
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByType(int type) throws SystemException {
-		for (SocialRelation socialRelation : findByType(type)) {
+		for (SocialRelation socialRelation : findByType(type,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRelation);
 		}
 	}
@@ -3021,228 +3329,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public List<SocialRelation> findByC_T(long companyId, int type, int start,
 		int end) throws SystemException {
 		return findByC_T(companyId, type, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social relations where companyId = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param type the type
-	 * @param start the lower bound of the range of social relations
-	 * @param end the upper bound of the range of social relations (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social relations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRelation> findByC_T(long companyId, int type, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_T;
-			finderArgs = new Object[] { companyId, type };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_T;
-			finderArgs = new Object[] {
-					companyId, type,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRelation socialRelation : list) {
-				if ((companyId != socialRelation.getCompanyId()) ||
-						(type != socialRelation.getType())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
-
-			query.append(_FINDER_COLUMN_C_T_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_T_TYPE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(type);
-
-				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where companyId = &#63; and type = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByC_T_First(long companyId, int type,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByC_T_First(companyId, type,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where companyId = &#63; and type = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByC_T_First(long companyId, int type,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRelation> list = findByC_T(companyId, type, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where companyId = &#63; and type = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByC_T_Last(long companyId, int type,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByC_T_Last(companyId, type,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where companyId = &#63; and type = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByC_T_Last(long companyId, int type,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_T(companyId, type);
-
-		List<SocialRelation> list = findByC_T(companyId, type, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3393,6 +3479,282 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	}
 
 	/**
+	 * Returns an ordered range of all the social relations where companyId = &#63; and type = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param type the type
+	 * @param start the lower bound of the range of social relations
+	 * @param end the upper bound of the range of social relations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social relations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRelation> findByC_T(long companyId, int type, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_T;
+			finderArgs = new Object[] { companyId, type };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_T;
+			finderArgs = new Object[] {
+					companyId, type,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((companyId != socialRelation.getCompanyId()) ||
+						(type != socialRelation.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
+
+			query.append(_FINDER_COLUMN_C_T_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_T_TYPE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(type);
+
+				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where companyId = &#63; and type = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param type the type
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByC_T_First(long companyId, int type)
+		throws NoSuchRelationException, SystemException {
+		return findByC_T_First(companyId, type, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where companyId = &#63; and type = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByC_T_First(long companyId, int type,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByC_T_First(companyId, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where companyId = &#63; and type = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param type the type
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByC_T_First(long companyId, int type)
+		throws SystemException {
+		return fetchByC_T_First(companyId, type, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where companyId = &#63; and type = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByC_T_First(long companyId, int type,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRelation> list = findByC_T(companyId, type, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where companyId = &#63; and type = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param type the type
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByC_T_Last(long companyId, int type)
+		throws NoSuchRelationException, SystemException {
+		return findByC_T_Last(companyId, type, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where companyId = &#63; and type = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByC_T_Last(long companyId, int type,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByC_T_Last(companyId, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where companyId = &#63; and type = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param type the type
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByC_T_Last(long companyId, int type)
+		throws SystemException {
+		return fetchByC_T_Last(companyId, type, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where companyId = &#63; and type = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByC_T_Last(long companyId, int type,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_T(companyId, type);
+
+		List<SocialRelation> list = findByC_T(companyId, type, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social relations where companyId = &#63; and type = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -3400,7 +3762,8 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByC_T(long companyId, int type) throws SystemException {
-		for (SocialRelation socialRelation : findByC_T(companyId, type)) {
+		for (SocialRelation socialRelation : findByC_T(companyId, type,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRelation);
 		}
 	}
@@ -3518,229 +3881,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public List<SocialRelation> findByU1_U2(long userId1, long userId2,
 		int start, int end) throws SystemException {
 		return findByU1_U2(userId1, userId2, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social relations where userId1 = &#63; and userId2 = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId1 the user id1
-	 * @param userId2 the user id2
-	 * @param start the lower bound of the range of social relations
-	 * @param end the upper bound of the range of social relations (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social relations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRelation> findByU1_U2(long userId1, long userId2,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U1_U2;
-			finderArgs = new Object[] { userId1, userId2 };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U1_U2;
-			finderArgs = new Object[] {
-					userId1, userId2,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRelation socialRelation : list) {
-				if ((userId1 != socialRelation.getUserId1()) ||
-						(userId2 != socialRelation.getUserId2())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
-
-			query.append(_FINDER_COLUMN_U1_U2_USERID1_2);
-
-			query.append(_FINDER_COLUMN_U1_U2_USERID2_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId1);
-
-				qPos.add(userId2);
-
-				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param userId2 the user id2
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByU1_U2_First(long userId1, long userId2,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByU1_U2_First(userId1, userId2,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId1=");
-		msg.append(userId1);
-
-		msg.append(", userId2=");
-		msg.append(userId2);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param userId2 the user id2
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByU1_U2_First(long userId1, long userId2,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRelation> list = findByU1_U2(userId1, userId2, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param userId2 the user id2
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByU1_U2_Last(long userId1, long userId2,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByU1_U2_Last(userId1, userId2,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId1=");
-		msg.append(userId1);
-
-		msg.append(", userId2=");
-		msg.append(userId2);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param userId2 the user id2
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByU1_U2_Last(long userId1, long userId2,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByU1_U2(userId1, userId2);
-
-		List<SocialRelation> list = findByU1_U2(userId1, userId2, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3891,6 +4031,283 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	}
 
 	/**
+	 * Returns an ordered range of all the social relations where userId1 = &#63; and userId2 = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId1 the user id1
+	 * @param userId2 the user id2
+	 * @param start the lower bound of the range of social relations
+	 * @param end the upper bound of the range of social relations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social relations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRelation> findByU1_U2(long userId1, long userId2,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U1_U2;
+			finderArgs = new Object[] { userId1, userId2 };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U1_U2;
+			finderArgs = new Object[] {
+					userId1, userId2,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((userId1 != socialRelation.getUserId1()) ||
+						(userId2 != socialRelation.getUserId2())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
+
+			query.append(_FINDER_COLUMN_U1_U2_USERID1_2);
+
+			query.append(_FINDER_COLUMN_U1_U2_USERID2_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId1);
+
+				qPos.add(userId2);
+
+				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63; and userId2 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param userId2 the user id2
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU1_U2_First(long userId1, long userId2)
+		throws NoSuchRelationException, SystemException {
+		return findByU1_U2_First(userId1, userId2, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU1_U2_First(long userId1, long userId2,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU1_U2_First(userId1, userId2,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(", userId2=");
+		msg.append(userId2);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63; and userId2 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param userId2 the user id2
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_U2_First(long userId1, long userId2)
+		throws SystemException {
+		return fetchByU1_U2_First(userId1, userId2, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_U2_First(long userId1, long userId2,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRelation> list = findByU1_U2(userId1, userId2, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63; and userId2 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param userId2 the user id2
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU1_U2_Last(long userId1, long userId2)
+		throws NoSuchRelationException, SystemException {
+		return findByU1_U2_Last(userId1, userId2, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU1_U2_Last(long userId1, long userId2,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU1_U2_Last(userId1, userId2,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(", userId2=");
+		msg.append(userId2);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63; and userId2 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param userId2 the user id2
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_U2_Last(long userId1, long userId2)
+		throws SystemException {
+		return fetchByU1_U2_Last(userId1, userId2, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_U2_Last(long userId1, long userId2,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByU1_U2(userId1, userId2);
+
+		List<SocialRelation> list = findByU1_U2(userId1, userId2, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social relations where userId1 = &#63; and userId2 = &#63; from the database.
 	 *
 	 * @param userId1 the user id1
@@ -3899,7 +4316,8 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	 */
 	public void removeByU1_U2(long userId1, long userId2)
 		throws SystemException {
-		for (SocialRelation socialRelation : findByU1_U2(userId1, userId2)) {
+		for (SocialRelation socialRelation : findByU1_U2(userId1, userId2,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRelation);
 		}
 	}
@@ -4018,228 +4436,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public List<SocialRelation> findByU1_T(long userId1, int type, int start,
 		int end) throws SystemException {
 		return findByU1_T(userId1, type, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social relations where userId1 = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId1 the user id1
-	 * @param type the type
-	 * @param start the lower bound of the range of social relations
-	 * @param end the upper bound of the range of social relations (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social relations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRelation> findByU1_T(long userId1, int type, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U1_T;
-			finderArgs = new Object[] { userId1, type };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U1_T;
-			finderArgs = new Object[] {
-					userId1, type,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRelation socialRelation : list) {
-				if ((userId1 != socialRelation.getUserId1()) ||
-						(type != socialRelation.getType())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
-
-			query.append(_FINDER_COLUMN_U1_T_USERID1_2);
-
-			query.append(_FINDER_COLUMN_U1_T_TYPE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId1);
-
-				qPos.add(type);
-
-				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where userId1 = &#63; and type = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByU1_T_First(long userId1, int type,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByU1_T_First(userId1, type,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId1=");
-		msg.append(userId1);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where userId1 = &#63; and type = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByU1_T_First(long userId1, int type,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRelation> list = findByU1_T(userId1, type, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where userId1 = &#63; and type = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByU1_T_Last(long userId1, int type,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByU1_T_Last(userId1, type,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId1=");
-		msg.append(userId1);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where userId1 = &#63; and type = &#63;.
-	 *
-	 * @param userId1 the user id1
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByU1_T_Last(long userId1, int type,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByU1_T(userId1, type);
-
-		List<SocialRelation> list = findByU1_T(userId1, type, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -4390,6 +4586,282 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	}
 
 	/**
+	 * Returns an ordered range of all the social relations where userId1 = &#63; and type = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId1 the user id1
+	 * @param type the type
+	 * @param start the lower bound of the range of social relations
+	 * @param end the upper bound of the range of social relations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social relations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRelation> findByU1_T(long userId1, int type, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U1_T;
+			finderArgs = new Object[] { userId1, type };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U1_T;
+			finderArgs = new Object[] {
+					userId1, type,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((userId1 != socialRelation.getUserId1()) ||
+						(type != socialRelation.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
+
+			query.append(_FINDER_COLUMN_U1_T_USERID1_2);
+
+			query.append(_FINDER_COLUMN_U1_T_TYPE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId1);
+
+				qPos.add(type);
+
+				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63; and type = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param type the type
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU1_T_First(long userId1, int type)
+		throws NoSuchRelationException, SystemException {
+		return findByU1_T_First(userId1, type, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId1 = &#63; and type = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU1_T_First(long userId1, int type,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU1_T_First(userId1, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63; and type = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param type the type
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_T_First(long userId1, int type)
+		throws SystemException {
+		return fetchByU1_T_First(userId1, type, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId1 = &#63; and type = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_T_First(long userId1, int type,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRelation> list = findByU1_T(userId1, type, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63; and type = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param type the type
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU1_T_Last(long userId1, int type)
+		throws NoSuchRelationException, SystemException {
+		return findByU1_T_Last(userId1, type, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId1 = &#63; and type = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU1_T_Last(long userId1, int type,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU1_T_Last(userId1, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId1 = &#63; and type = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param type the type
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_T_Last(long userId1, int type)
+		throws SystemException {
+		return fetchByU1_T_Last(userId1, type, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId1 = &#63; and type = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_T_Last(long userId1, int type,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByU1_T(userId1, type);
+
+		List<SocialRelation> list = findByU1_T(userId1, type, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social relations where userId1 = &#63; and type = &#63; from the database.
 	 *
 	 * @param userId1 the user id1
@@ -4397,7 +4869,8 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByU1_T(long userId1, int type) throws SystemException {
-		for (SocialRelation socialRelation : findByU1_T(userId1, type)) {
+		for (SocialRelation socialRelation : findByU1_T(userId1, type,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRelation);
 		}
 	}
@@ -4515,228 +4988,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public List<SocialRelation> findByU2_T(long userId2, int type, int start,
 		int end) throws SystemException {
 		return findByU2_T(userId2, type, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social relations where userId2 = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId2 the user id2
-	 * @param type the type
-	 * @param start the lower bound of the range of social relations
-	 * @param end the upper bound of the range of social relations (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social relations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRelation> findByU2_T(long userId2, int type, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U2_T;
-			finderArgs = new Object[] { userId2, type };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U2_T;
-			finderArgs = new Object[] {
-					userId2, type,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRelation socialRelation : list) {
-				if ((userId2 != socialRelation.getUserId2()) ||
-						(type != socialRelation.getType())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
-
-			query.append(_FINDER_COLUMN_U2_T_USERID2_2);
-
-			query.append(_FINDER_COLUMN_U2_T_TYPE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId2);
-
-				qPos.add(type);
-
-				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where userId2 = &#63; and type = &#63;.
-	 *
-	 * @param userId2 the user id2
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByU2_T_First(long userId2, int type,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByU2_T_First(userId2, type,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId2=");
-		msg.append(userId2);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social relation in the ordered set where userId2 = &#63; and type = &#63;.
-	 *
-	 * @param userId2 the user id2
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByU2_T_First(long userId2, int type,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRelation> list = findByU2_T(userId2, type, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where userId2 = &#63; and type = &#63;.
-	 *
-	 * @param userId2 the user id2
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation
-	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation findByU2_T_Last(long userId2, int type,
-		OrderByComparator orderByComparator)
-		throws NoSuchRelationException, SystemException {
-		SocialRelation socialRelation = fetchByU2_T_Last(userId2, type,
-				orderByComparator);
-
-		if (socialRelation != null) {
-			return socialRelation;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId2=");
-		msg.append(userId2);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRelationException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social relation in the ordered set where userId2 = &#63; and type = &#63;.
-	 *
-	 * @param userId2 the user id2
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRelation fetchByU2_T_Last(long userId2, int type,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByU2_T(userId2, type);
-
-		List<SocialRelation> list = findByU2_T(userId2, type, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -4887,6 +5138,282 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	}
 
 	/**
+	 * Returns an ordered range of all the social relations where userId2 = &#63; and type = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId2 the user id2
+	 * @param type the type
+	 * @param start the lower bound of the range of social relations
+	 * @param end the upper bound of the range of social relations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social relations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRelation> findByU2_T(long userId2, int type, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U2_T;
+			finderArgs = new Object[] { userId2, type };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U2_T;
+			finderArgs = new Object[] {
+					userId2, type,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((userId2 != socialRelation.getUserId2()) ||
+						(type != socialRelation.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALRELATION_WHERE);
+
+			query.append(_FINDER_COLUMN_U2_T_USERID2_2);
+
+			query.append(_FINDER_COLUMN_U2_T_TYPE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId2);
+
+				qPos.add(type);
+
+				list = (List<SocialRelation>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId2 = &#63; and type = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param type the type
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU2_T_First(long userId2, int type)
+		throws NoSuchRelationException, SystemException {
+		return findByU2_T_First(userId2, type, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId2 = &#63; and type = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU2_T_First(long userId2, int type,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU2_T_First(userId2, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId2=");
+		msg.append(userId2);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId2 = &#63; and type = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param type the type
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU2_T_First(long userId2, int type)
+		throws SystemException {
+		return fetchByU2_T_First(userId2, type, null);
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId2 = &#63; and type = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU2_T_First(long userId2, int type,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRelation> list = findByU2_T(userId2, type, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId2 = &#63; and type = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param type the type
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU2_T_Last(long userId2, int type)
+		throws NoSuchRelationException, SystemException {
+		return findByU2_T_Last(userId2, type, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId2 = &#63; and type = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation
+	 * @throws com.liferay.portlet.social.NoSuchRelationException if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation findByU2_T_Last(long userId2, int type,
+		OrderByComparator orderByComparator)
+		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU2_T_Last(userId2, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId2=");
+		msg.append(userId2);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the default ordered set defined by {@link SocialRelationModelImpl#ORDER_BY_JPQL} where userId2 = &#63; and type = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param type the type
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU2_T_Last(long userId2, int type)
+		throws SystemException {
+		return fetchByU2_T_Last(userId2, type, null);
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId2 = &#63; and type = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU2_T_Last(long userId2, int type,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByU2_T(userId2, type);
+
+		List<SocialRelation> list = findByU2_T(userId2, type, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social relations where userId2 = &#63; and type = &#63; from the database.
 	 *
 	 * @param userId2 the user id2
@@ -4894,7 +5421,8 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByU2_T(long userId2, int type) throws SystemException {
-		for (SocialRelation socialRelation : findByU2_T(userId2, type)) {
+		for (SocialRelation socialRelation : findByU2_T(userId2, type,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRelation);
 		}
 	}
@@ -4963,6 +5491,29 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			SocialRelationModelImpl.FINDER_CACHE_ENABLED,
 			SocialRelationImpl.class, FINDER_CLASS_NAME_ENTITY,
 			"fetchByU1_U2_T",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			},
+			SocialRelationModelImpl.USERID1_COLUMN_BITMASK |
+			SocialRelationModelImpl.USERID2_COLUMN_BITMASK |
+			SocialRelationModelImpl.TYPE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_U1_U2_T = new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
+			SocialRelationModelImpl.FINDER_CACHE_ENABLED,
+			SocialRelationImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByU1_U2_T",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U1_U2_T =
+		new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
+			SocialRelationModelImpl.FINDER_CACHE_ENABLED,
+			SocialRelationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByU1_U2_T",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()

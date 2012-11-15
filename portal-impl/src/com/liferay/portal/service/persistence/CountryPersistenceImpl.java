@@ -86,6 +86,20 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			FINDER_CLASS_NAME_ENTITY, "fetchByName",
 			new String[] { String.class.getName() },
 			CountryModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_NAME = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
+			CountryModelImpl.FINDER_CACHE_ENABLED, CountryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByName",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
+			CountryModelImpl.FINDER_CACHE_ENABLED, CountryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByName",
+			new String[] { String.class.getName() },
+			CountryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_NAME = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByName",
@@ -177,8 +191,6 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 					query.append(_FINDER_COLUMN_NAME_NAME_2);
 				}
 			}
-
-			query.append(CountryModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -328,6 +340,20 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			FINDER_CLASS_NAME_ENTITY, "fetchByA2",
 			new String[] { String.class.getName() },
 			CountryModelImpl.A2_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_A2 = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
+			CountryModelImpl.FINDER_CACHE_ENABLED, CountryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByA2",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A2 = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
+			CountryModelImpl.FINDER_CACHE_ENABLED, CountryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByA2",
+			new String[] { String.class.getName() },
+			CountryModelImpl.A2_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_A2 = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByA2",
@@ -419,8 +445,6 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 					query.append(_FINDER_COLUMN_A2_A2_2);
 				}
 			}
-
-			query.append(CountryModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -570,6 +594,20 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			FINDER_CLASS_NAME_ENTITY, "fetchByA3",
 			new String[] { String.class.getName() },
 			CountryModelImpl.A3_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_A3 = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
+			CountryModelImpl.FINDER_CACHE_ENABLED, CountryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByA3",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A3 = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
+			CountryModelImpl.FINDER_CACHE_ENABLED, CountryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByA3",
+			new String[] { String.class.getName() },
+			CountryModelImpl.A3_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_A3 = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByA3",
@@ -661,8 +699,6 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 					query.append(_FINDER_COLUMN_A3_A3_2);
 				}
 			}
-
-			query.append(CountryModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -857,208 +893,6 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	}
 
 	/**
-	 * Returns an ordered range of all the countries where active = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param active the active
-	 * @param start the lower bound of the range of countries
-	 * @param end the upper bound of the range of countries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching countries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<Country> findByActive(boolean active, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE;
-			finderArgs = new Object[] { active };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE;
-			finderArgs = new Object[] { active, start, end, orderByComparator };
-		}
-
-		List<Country> list = (List<Country>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (Country country : list) {
-				if ((active != country.getActive())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_COUNTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_ACTIVE_ACTIVE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(CountryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(active);
-
-				list = (List<Country>)QueryUtil.list(q, getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first country in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching country
-	 * @throws com.liferay.portal.NoSuchCountryException if a matching country could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Country findByActive_First(boolean active,
-		OrderByComparator orderByComparator)
-		throws NoSuchCountryException, SystemException {
-		Country country = fetchByActive_First(active, orderByComparator);
-
-		if (country != null) {
-			return country;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCountryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first country in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching country, or <code>null</code> if a matching country could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Country fetchByActive_First(boolean active,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<Country> list = findByActive(active, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last country in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching country
-	 * @throws com.liferay.portal.NoSuchCountryException if a matching country could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Country findByActive_Last(boolean active,
-		OrderByComparator orderByComparator)
-		throws NoSuchCountryException, SystemException {
-		Country country = fetchByActive_Last(active, orderByComparator);
-
-		if (country != null) {
-			return country;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("active=");
-		msg.append(active);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchCountryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last country in the ordered set where active = &#63;.
-	 *
-	 * @param active the active
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching country, or <code>null</code> if a matching country could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Country fetchByActive_Last(boolean active,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByActive(active);
-
-		List<Country> list = findByActive(active, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the countries before and after the current country in the ordered set where active = &#63;.
 	 *
 	 * @param countryId the primary key of the current country
@@ -1204,13 +1038,265 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	}
 
 	/**
+	 * Returns an ordered range of all the countries where active = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param active the active
+	 * @param start the lower bound of the range of countries
+	 * @param end the upper bound of the range of countries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching countries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Country> findByActive(boolean active, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE;
+			finderArgs = new Object[] { active };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE;
+			finderArgs = new Object[] { active, start, end, orderByComparator };
+		}
+
+		List<Country> list = (List<Country>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Country country : list) {
+				if ((active != country.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_COUNTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_ACTIVE_ACTIVE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(CountryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(active);
+
+				list = (List<Country>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first country in the default ordered set defined by {@link CountryModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the first matching country
+	 * @throws com.liferay.portal.NoSuchCountryException if a matching country could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Country findByActive_First(boolean active)
+		throws NoSuchCountryException, SystemException {
+		return findByActive_First(active, null);
+	}
+
+	/**
+	 * Returns the first country in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching country
+	 * @throws com.liferay.portal.NoSuchCountryException if a matching country could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Country findByActive_First(boolean active,
+		OrderByComparator orderByComparator)
+		throws NoSuchCountryException, SystemException {
+		Country country = fetchByActive_First(active, orderByComparator);
+
+		if (country != null) {
+			return country;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCountryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first country in the default ordered set defined by {@link CountryModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the first matching country, or <code>null</code> if a matching country could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Country fetchByActive_First(boolean active)
+		throws SystemException {
+		return fetchByActive_First(active, null);
+	}
+
+	/**
+	 * Returns the first country in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching country, or <code>null</code> if a matching country could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Country fetchByActive_First(boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Country> list = findByActive(active, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last country in the default ordered set defined by {@link CountryModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the last matching country
+	 * @throws com.liferay.portal.NoSuchCountryException if a matching country could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Country findByActive_Last(boolean active)
+		throws NoSuchCountryException, SystemException {
+		return findByActive_Last(active, null);
+	}
+
+	/**
+	 * Returns the last country in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching country
+	 * @throws com.liferay.portal.NoSuchCountryException if a matching country could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Country findByActive_Last(boolean active,
+		OrderByComparator orderByComparator)
+		throws NoSuchCountryException, SystemException {
+		Country country = fetchByActive_Last(active, orderByComparator);
+
+		if (country != null) {
+			return country;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCountryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last country in the default ordered set defined by {@link CountryModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	 *
+	 * @param active the active
+	 * @return the last matching country, or <code>null</code> if a matching country could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Country fetchByActive_Last(boolean active) throws SystemException {
+		return fetchByActive_Last(active, null);
+	}
+
+	/**
+	 * Returns the last country in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching country, or <code>null</code> if a matching country could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Country fetchByActive_Last(boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByActive(active);
+
+		List<Country> list = findByActive(active, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the countries where active = &#63; from the database.
 	 *
 	 * @param active the active
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByActive(boolean active) throws SystemException {
-		for (Country country : findByActive(active)) {
+		for (Country country : findByActive(active, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(country);
 		}
 	}

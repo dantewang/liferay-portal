@@ -66,6 +66,22 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the journal structures before and after the current journal structure in the ordered set where uuid = &#63;.
+	*
+	* @param id the primary key of the current journal structure
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure[] findByUuid_PrevAndNext(
+		long id, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
 	* Returns an ordered range of all the journal structures where uuid = &#63;.
 	*
 	* <p>
@@ -85,6 +101,19 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
 	* Returns the first journal structure in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -100,6 +129,17 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first journal structure in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -111,6 +151,19 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
 	* Returns the last journal structure in the ordered set where uuid = &#63;.
@@ -128,6 +181,17 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last journal structure in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -139,22 +203,6 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the journal structures before and after the current journal structure in the ordered set where uuid = &#63;.
-	*
-	* @param id the primary key of the current journal structure
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal structure
-	* @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure[] findByUuid_PrevAndNext(
-		long id, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
 	* Removes all the journal structures where uuid = &#63; from the database.
@@ -269,6 +317,23 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the journal structures before and after the current journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param id the primary key of the current journal structure
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure[] findByUuid_C_PrevAndNext(
+		long id, java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
 	* Returns an ordered range of all the journal structures where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
@@ -289,6 +354,20 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
 	* Returns the first journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -305,6 +384,18 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -317,6 +408,20 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		java.lang.String uuid, long companyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
 	* Returns the last journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
@@ -335,6 +440,18 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -347,23 +464,6 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		java.lang.String uuid, long companyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the journal structures before and after the current journal structure in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param id the primary key of the current journal structure
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal structure
-	* @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure[] findByUuid_C_PrevAndNext(
-		long id, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
 	* Removes all the journal structures where uuid = &#63; and companyId = &#63; from the database.
@@ -415,81 +515,6 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns an ordered range of all the journal structures where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of journal structures
-	* @param end the upper bound of the range of journal structures (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portlet.journal.model.JournalStructure> findByGroupId(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first journal structure in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal structure
-	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure findByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchStructureException;
-
-	/**
-	* Returns the first journal structure in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure fetchByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last journal structure in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal structure
-	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure findByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchStructureException;
-
-	/**
-	* Returns the last journal structure in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure fetchByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns the journal structures before and after the current journal structure in the ordered set where groupId = &#63;.
 	*
 	* @param id the primary key of the current journal structure
@@ -504,57 +529,6 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchStructureException;
-
-	/**
-	* Returns all the journal structures where groupId = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupIds the group IDs
-	* @return the matching journal structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portlet.journal.model.JournalStructure> findByGroupId(
-		long[] groupIds)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the journal structures where groupId = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupIds the group IDs
-	* @param start the lower bound of the range of journal structures
-	* @param end the upper bound of the range of journal structures (not inclusive)
-	* @return the range of matching journal structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portlet.journal.model.JournalStructure> findByGroupId(
-		long[] groupIds, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the journal structures where groupId = any &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupIds the group IDs
-	* @param start the lower bound of the range of journal structures
-	* @param end the upper bound of the range of journal structures (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portlet.journal.model.JournalStructure> findByGroupId(
-		long[] groupIds, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns all the journal structures that the user has permission to view where groupId = &#63;.
@@ -667,6 +641,180 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns an ordered range of all the journal structures where groupId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param start the lower bound of the range of journal structures
+	* @param end the upper bound of the range of journal structures (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portlet.journal.model.JournalStructure> findByGroupId(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
+	* Returns the first journal structure in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first journal structure in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
+	* Returns the last journal structure in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last journal structure in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns all the journal structures where groupId = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupIds the group IDs
+	* @return the matching journal structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portlet.journal.model.JournalStructure> findByGroupId(
+		long[] groupIds)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the journal structures where groupId = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupIds the group IDs
+	* @param start the lower bound of the range of journal structures
+	* @param end the upper bound of the range of journal structures (not inclusive)
+	* @return the range of matching journal structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portlet.journal.model.JournalStructure> findByGroupId(
+		long[] groupIds, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the journal structures where groupId = any &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupIds the group IDs
+	* @param start the lower bound of the range of journal structures
+	* @param end the upper bound of the range of journal structures (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portlet.journal.model.JournalStructure> findByGroupId(
+		long[] groupIds, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Removes all the journal structures where groupId = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -744,6 +892,22 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the journal structures before and after the current journal structure in the ordered set where structureId = &#63;.
+	*
+	* @param id the primary key of the current journal structure
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure[] findByStructureId_PrevAndNext(
+		long id, java.lang.String structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
 	* Returns an ordered range of all the journal structures where structureId = &#63;.
 	*
 	* <p>
@@ -763,6 +927,19 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the first matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByStructureId_First(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
 	* Returns the first journal structure in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -778,6 +955,17 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByStructureId_First(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first journal structure in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -789,6 +977,19 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		java.lang.String structureId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the last matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByStructureId_Last(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
 	* Returns the last journal structure in the ordered set where structureId = &#63;.
@@ -806,6 +1007,17 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByStructureId_Last(
+		java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last journal structure in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -817,22 +1029,6 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		java.lang.String structureId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the journal structures before and after the current journal structure in the ordered set where structureId = &#63;.
-	*
-	* @param id the primary key of the current journal structure
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal structure
-	* @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure[] findByStructureId_PrevAndNext(
-		long id, java.lang.String structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
 	* Removes all the journal structures where structureId = &#63; from the database.
@@ -882,6 +1078,22 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the journal structures before and after the current journal structure in the ordered set where parentStructureId = &#63;.
+	*
+	* @param id the primary key of the current journal structure
+	* @param parentStructureId the parent structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure[] findByParentStructureId_PrevAndNext(
+		long id, java.lang.String parentStructureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
 	* Returns an ordered range of all the journal structures where parentStructureId = &#63;.
 	*
 	* <p>
@@ -901,6 +1113,19 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where parentStructureId = &#63;.
+	*
+	* @param parentStructureId the parent structure ID
+	* @return the first matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByParentStructureId_First(
+		java.lang.String parentStructureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
 	* Returns the first journal structure in the ordered set where parentStructureId = &#63;.
 	*
 	* @param parentStructureId the parent structure ID
@@ -916,6 +1141,17 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where parentStructureId = &#63;.
+	*
+	* @param parentStructureId the parent structure ID
+	* @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByParentStructureId_First(
+		java.lang.String parentStructureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first journal structure in the ordered set where parentStructureId = &#63;.
 	*
 	* @param parentStructureId the parent structure ID
@@ -927,6 +1163,19 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		java.lang.String parentStructureId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where parentStructureId = &#63;.
+	*
+	* @param parentStructureId the parent structure ID
+	* @return the last matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByParentStructureId_Last(
+		java.lang.String parentStructureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
 	* Returns the last journal structure in the ordered set where parentStructureId = &#63;.
@@ -944,6 +1193,17 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where parentStructureId = &#63;.
+	*
+	* @param parentStructureId the parent structure ID
+	* @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByParentStructureId_Last(
+		java.lang.String parentStructureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last journal structure in the ordered set where parentStructureId = &#63;.
 	*
 	* @param parentStructureId the parent structure ID
@@ -955,22 +1215,6 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		java.lang.String parentStructureId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the journal structures before and after the current journal structure in the ordered set where parentStructureId = &#63;.
-	*
-	* @param id the primary key of the current journal structure
-	* @param parentStructureId the parent structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next journal structure
-	* @throws com.liferay.portlet.journal.NoSuchStructureException if a journal structure with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure[] findByParentStructureId_PrevAndNext(
-		long id, java.lang.String parentStructureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchStructureException;
 
 	/**
 	* Removes all the journal structures where parentStructureId = &#63; from the database.
@@ -1085,86 +1329,6 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns an ordered range of all the journal structures where groupId = &#63; and parentStructureId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param parentStructureId the parent structure ID
-	* @param start the lower bound of the range of journal structures
-	* @param end the upper bound of the range of journal structures (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal structures
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portlet.journal.model.JournalStructure> findByG_P(
-		long groupId, java.lang.String parentStructureId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentStructureId the parent structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal structure
-	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure findByG_P_First(
-		long groupId, java.lang.String parentStructureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchStructureException;
-
-	/**
-	* Returns the first journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentStructureId the parent structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure fetchByG_P_First(
-		long groupId, java.lang.String parentStructureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentStructureId the parent structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal structure
-	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure findByG_P_Last(
-		long groupId, java.lang.String parentStructureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.journal.NoSuchStructureException;
-
-	/**
-	* Returns the last journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param parentStructureId the parent structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.journal.model.JournalStructure fetchByG_P_Last(
-		long groupId, java.lang.String parentStructureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns the journal structures before and after the current journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
 	*
 	* @param id the primary key of the current journal structure
@@ -1247,6 +1411,138 @@ public interface JournalStructurePersistence extends BasePersistence<JournalStru
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
+	* Returns an ordered range of all the journal structures where groupId = &#63; and parentStructureId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param parentStructureId the parent structure ID
+	* @param start the lower bound of the range of journal structures
+	* @param end the upper bound of the range of journal structures (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal structures
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portlet.journal.model.JournalStructure> findByG_P(
+		long groupId, java.lang.String parentStructureId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentStructureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentStructureId the parent structure ID
+	* @return the first matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByG_P_First(
+		long groupId, java.lang.String parentStructureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
+	* Returns the first journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentStructureId the parent structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByG_P_First(
+		long groupId, java.lang.String parentStructureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
+	* Returns the first journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentStructureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentStructureId the parent structure ID
+	* @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByG_P_First(
+		long groupId, java.lang.String parentStructureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentStructureId the parent structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByG_P_First(
+		long groupId, java.lang.String parentStructureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentStructureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentStructureId the parent structure ID
+	* @return the last matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByG_P_Last(
+		long groupId, java.lang.String parentStructureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
+	* Returns the last journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentStructureId the parent structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal structure
+	* @throws com.liferay.portlet.journal.NoSuchStructureException if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure findByG_P_Last(
+		long groupId, java.lang.String parentStructureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.journal.NoSuchStructureException;
+
+	/**
+	* Returns the last journal structure in the default ordered set defined by {@link JournalStructureModelImpl#ORDER_BY_JPQL} where groupId = &#63; and parentStructureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentStructureId the parent structure ID
+	* @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByG_P_Last(
+		long groupId, java.lang.String parentStructureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last journal structure in the ordered set where groupId = &#63; and parentStructureId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentStructureId the parent structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal structure, or <code>null</code> if a matching journal structure could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.journal.model.JournalStructure fetchByG_P_Last(
+		long groupId, java.lang.String parentStructureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the journal structures where groupId = &#63; and parentStructureId = &#63; from the database.

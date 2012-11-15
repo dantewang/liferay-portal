@@ -64,6 +64,22 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the users before and after the current user in the ordered set where uuid = &#63;.
+	*
+	* @param userId the primary key of the current user
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user
+	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User[] findByUuid_PrevAndNext(long userId,
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the users where uuid = &#63;.
 	*
 	* <p>
@@ -83,6 +99,18 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByUuid_First(java.lang.String uuid)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -98,6 +126,17 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -109,6 +148,18 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByUuid_Last(java.lang.String uuid)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user in the ordered set where uuid = &#63;.
@@ -126,6 +177,16 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByUuid_Last(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -137,22 +198,6 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the users before and after the current user in the ordered set where uuid = &#63;.
-	*
-	* @param userId the primary key of the current user
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user
-	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User[] findByUuid_PrevAndNext(long userId,
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the users where uuid = &#63; from the database.
@@ -204,6 +249,23 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the users before and after the current user in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param userId the primary key of the current user
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user
+	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User[] findByUuid_C_PrevAndNext(
+		long userId, java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the users where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
@@ -224,6 +286,20 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -240,6 +316,18 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -252,6 +340,20 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.lang.String uuid, long companyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user in the ordered set where uuid = &#63; and companyId = &#63;.
@@ -270,6 +372,18 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -282,23 +396,6 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.lang.String uuid, long companyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the users before and after the current user in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param userId the primary key of the current user
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user
-	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User[] findByUuid_C_PrevAndNext(
-		long userId, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the users where uuid = &#63; and companyId = &#63; from the database.
@@ -350,6 +447,22 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the users before and after the current user in the ordered set where companyId = &#63;.
+	*
+	* @param userId the primary key of the current user
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user
+	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User[] findByCompanyId_PrevAndNext(
+		long userId, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the users where companyId = &#63;.
 	*
 	* <p>
@@ -369,6 +482,18 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByCompanyId_First(long companyId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -383,6 +508,16 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByCompanyId_First(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -394,6 +529,18 @@ public interface UserPersistence extends BasePersistence<User> {
 		long companyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByCompanyId_Last(long companyId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user in the ordered set where companyId = &#63;.
@@ -410,6 +557,16 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByCompanyId_Last(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -420,22 +577,6 @@ public interface UserPersistence extends BasePersistence<User> {
 	public com.liferay.portal.model.User fetchByCompanyId_Last(long companyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the users before and after the current user in the ordered set where companyId = &#63;.
-	*
-	* @param userId the primary key of the current user
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user
-	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User[] findByCompanyId_PrevAndNext(
-		long userId, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the users where companyId = &#63; from the database.
@@ -540,6 +681,22 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the users before and after the current user in the ordered set where emailAddress = &#63;.
+	*
+	* @param userId the primary key of the current user
+	* @param emailAddress the email address
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user
+	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User[] findByEmailAddress_PrevAndNext(
+		long userId, java.lang.String emailAddress,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the users where emailAddress = &#63;.
 	*
 	* <p>
@@ -559,6 +716,19 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where emailAddress = &#63;.
+	*
+	* @param emailAddress the email address
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByEmailAddress_First(
+		java.lang.String emailAddress)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where emailAddress = &#63;.
 	*
 	* @param emailAddress the email address
@@ -574,6 +744,17 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where emailAddress = &#63;.
+	*
+	* @param emailAddress the email address
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByEmailAddress_First(
+		java.lang.String emailAddress)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where emailAddress = &#63;.
 	*
 	* @param emailAddress the email address
@@ -585,6 +766,19 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.lang.String emailAddress,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where emailAddress = &#63;.
+	*
+	* @param emailAddress the email address
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByEmailAddress_Last(
+		java.lang.String emailAddress)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user in the ordered set where emailAddress = &#63;.
@@ -602,6 +796,17 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where emailAddress = &#63;.
+	*
+	* @param emailAddress the email address
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByEmailAddress_Last(
+		java.lang.String emailAddress)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user in the ordered set where emailAddress = &#63;.
 	*
 	* @param emailAddress the email address
@@ -613,22 +818,6 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.lang.String emailAddress,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the users before and after the current user in the ordered set where emailAddress = &#63;.
-	*
-	* @param userId the primary key of the current user
-	* @param emailAddress the email address
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user
-	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User[] findByEmailAddress_PrevAndNext(
-		long userId, java.lang.String emailAddress,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the users where emailAddress = &#63; from the database.
@@ -650,49 +839,114 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the user where portraitId = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where portraitId = &#63;.
 	*
 	* @param portraitId the portrait ID
-	* @return the matching user
+	* @return the first matching user
 	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User findByPortraitId(long portraitId)
+	public com.liferay.portal.model.User findByPortraitId_First(long portraitId)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the user where portraitId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first user in the ordered set where portraitId = &#63;.
 	*
 	* @param portraitId the portrait ID
-	* @return the matching user, or <code>null</code> if a matching user could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User fetchByPortraitId(long portraitId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user where portraitId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param portraitId the portrait ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching user, or <code>null</code> if a matching user could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User fetchByPortraitId(long portraitId,
-		boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the user where portraitId = &#63; from the database.
-	*
-	* @param portraitId the portrait ID
-	* @return the user that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User removeByPortraitId(long portraitId)
+	public com.liferay.portal.model.User findByPortraitId_First(
+		long portraitId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where portraitId = &#63;.
+	*
+	* @param portraitId the portrait ID
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByPortraitId_First(
+		long portraitId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first user in the ordered set where portraitId = &#63;.
+	*
+	* @param portraitId the portrait ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByPortraitId_First(
+		long portraitId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where portraitId = &#63;.
+	*
+	* @param portraitId the portrait ID
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByPortraitId_Last(long portraitId)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the ordered set where portraitId = &#63;.
+	*
+	* @param portraitId the portrait ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByPortraitId_Last(
+		long portraitId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where portraitId = &#63;.
+	*
+	* @param portraitId the portrait ID
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByPortraitId_Last(long portraitId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the ordered set where portraitId = &#63;.
+	*
+	* @param portraitId the portrait ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByPortraitId_Last(
+		long portraitId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the users where portraitId = &#63; from the database.
+	*
+	* @param portraitId the portrait ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByPortraitId(long portraitId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the number of users where portraitId = &#63;.
@@ -795,6 +1049,23 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the users before and after the current user in the ordered set where companyId = &#63; and createDate = &#63;.
+	*
+	* @param userId the primary key of the current user
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user
+	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User[] findByC_CD_PrevAndNext(long userId,
+		long companyId, java.util.Date createDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the users where companyId = &#63; and createDate = &#63;.
 	*
 	* <p>
@@ -815,6 +1086,20 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByC_CD_First(long companyId,
+		java.util.Date createDate)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where companyId = &#63; and createDate = &#63;.
 	*
 	* @param companyId the company ID
@@ -831,6 +1116,18 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_CD_First(long companyId,
+		java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where companyId = &#63; and createDate = &#63;.
 	*
 	* @param companyId the company ID
@@ -843,6 +1140,20 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.util.Date createDate,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByC_CD_Last(long companyId,
+		java.util.Date createDate)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user in the ordered set where companyId = &#63; and createDate = &#63;.
@@ -861,6 +1172,18 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_CD_Last(long companyId,
+		java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user in the ordered set where companyId = &#63; and createDate = &#63;.
 	*
 	* @param companyId the company ID
@@ -873,23 +1196,6 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.util.Date createDate,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the users before and after the current user in the ordered set where companyId = &#63; and createDate = &#63;.
-	*
-	* @param userId the primary key of the current user
-	* @param companyId the company ID
-	* @param createDate the create date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user
-	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User[] findByC_CD_PrevAndNext(long userId,
-		long companyId, java.util.Date createDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the users where companyId = &#63; and createDate = &#63; from the database.
@@ -943,6 +1249,23 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the users before and after the current user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
+	*
+	* @param userId the primary key of the current user
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user
+	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User[] findByC_MD_PrevAndNext(long userId,
+		long companyId, java.util.Date modifiedDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the users where companyId = &#63; and modifiedDate = &#63;.
 	*
 	* <p>
@@ -963,6 +1286,20 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByC_MD_First(long companyId,
+		java.util.Date modifiedDate)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
 	*
 	* @param companyId the company ID
@@ -979,6 +1316,18 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_MD_First(long companyId,
+		java.util.Date modifiedDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
 	*
 	* @param companyId the company ID
@@ -991,6 +1340,20 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.util.Date modifiedDate,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByC_MD_Last(long companyId,
+		java.util.Date modifiedDate)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
@@ -1009,6 +1372,18 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and modifiedDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param modifiedDate the modified date
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_MD_Last(long companyId,
+		java.util.Date modifiedDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
 	*
 	* @param companyId the company ID
@@ -1021,23 +1396,6 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.util.Date modifiedDate,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the users before and after the current user in the ordered set where companyId = &#63; and modifiedDate = &#63;.
-	*
-	* @param userId the primary key of the current user
-	* @param companyId the company ID
-	* @param modifiedDate the modified date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user
-	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User[] findByC_MD_PrevAndNext(long userId,
-		long companyId, java.util.Date modifiedDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the users where companyId = &#63; and modifiedDate = &#63; from the database.
@@ -1061,56 +1419,126 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the user where companyId = &#63; and defaultUser = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultUser = &#63;.
 	*
 	* @param companyId the company ID
 	* @param defaultUser the default user
-	* @return the matching user
+	* @return the first matching user
 	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User findByC_DU(long companyId,
+	public com.liferay.portal.model.User findByC_DU_First(long companyId,
 		boolean defaultUser)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the user where companyId = &#63; and defaultUser = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first user in the ordered set where companyId = &#63; and defaultUser = &#63;.
 	*
 	* @param companyId the company ID
 	* @param defaultUser the default user
-	* @return the matching user, or <code>null</code> if a matching user could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User fetchByC_DU(long companyId,
+	public com.liferay.portal.model.User findByC_DU_First(long companyId,
+		boolean defaultUser,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultUser = &#63;.
+	*
+	* @param companyId the company ID
+	* @param defaultUser the default user
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_DU_First(long companyId,
 		boolean defaultUser)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the user where companyId = &#63; and defaultUser = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first user in the ordered set where companyId = &#63; and defaultUser = &#63;.
 	*
 	* @param companyId the company ID
 	* @param defaultUser the default user
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching user, or <code>null</code> if a matching user could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User fetchByC_DU(long companyId,
-		boolean defaultUser, boolean retrieveFromCache)
+	public com.liferay.portal.model.User fetchByC_DU_First(long companyId,
+		boolean defaultUser,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes the user where companyId = &#63; and defaultUser = &#63; from the database.
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultUser = &#63;.
 	*
 	* @param companyId the company ID
 	* @param defaultUser the default user
-	* @return the user that was removed
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User removeByC_DU(long companyId,
+	public com.liferay.portal.model.User findByC_DU_Last(long companyId,
 		boolean defaultUser)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the ordered set where companyId = &#63; and defaultUser = &#63;.
+	*
+	* @param companyId the company ID
+	* @param defaultUser the default user
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByC_DU_Last(long companyId,
+		boolean defaultUser,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultUser = &#63;.
+	*
+	* @param companyId the company ID
+	* @param defaultUser the default user
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_DU_Last(long companyId,
+		boolean defaultUser)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the ordered set where companyId = &#63; and defaultUser = &#63;.
+	*
+	* @param companyId the company ID
+	* @param defaultUser the default user
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_DU_Last(long companyId,
+		boolean defaultUser,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the users where companyId = &#63; and defaultUser = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param defaultUser the default user
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_DU(long companyId, boolean defaultUser)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the number of users where companyId = &#63; and defaultUser = &#63;.
@@ -1250,56 +1678,126 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the user where companyId = &#63; and facebookId = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and facebookId = &#63;.
 	*
 	* @param companyId the company ID
 	* @param facebookId the facebook ID
-	* @return the matching user
+	* @return the first matching user
 	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User findByC_FID(long companyId,
+	public com.liferay.portal.model.User findByC_FID_First(long companyId,
 		long facebookId)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the user where companyId = &#63; and facebookId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first user in the ordered set where companyId = &#63; and facebookId = &#63;.
 	*
 	* @param companyId the company ID
 	* @param facebookId the facebook ID
-	* @return the matching user, or <code>null</code> if a matching user could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User fetchByC_FID(long companyId,
+	public com.liferay.portal.model.User findByC_FID_First(long companyId,
+		long facebookId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and facebookId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param facebookId the facebook ID
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_FID_First(long companyId,
 		long facebookId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the user where companyId = &#63; and facebookId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first user in the ordered set where companyId = &#63; and facebookId = &#63;.
 	*
 	* @param companyId the company ID
 	* @param facebookId the facebook ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching user, or <code>null</code> if a matching user could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User fetchByC_FID(long companyId,
-		long facebookId, boolean retrieveFromCache)
+	public com.liferay.portal.model.User fetchByC_FID_First(long companyId,
+		long facebookId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes the user where companyId = &#63; and facebookId = &#63; from the database.
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and facebookId = &#63;.
 	*
 	* @param companyId the company ID
 	* @param facebookId the facebook ID
-	* @return the user that was removed
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User removeByC_FID(long companyId,
+	public com.liferay.portal.model.User findByC_FID_Last(long companyId,
 		long facebookId)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the ordered set where companyId = &#63; and facebookId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param facebookId the facebook ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByC_FID_Last(long companyId,
+		long facebookId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and facebookId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param facebookId the facebook ID
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_FID_Last(long companyId,
+		long facebookId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the ordered set where companyId = &#63; and facebookId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param facebookId the facebook ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_FID_Last(long companyId,
+		long facebookId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the users where companyId = &#63; and facebookId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param facebookId the facebook ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_FID(long companyId, long facebookId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the number of users where companyId = &#63; and facebookId = &#63;.
@@ -1313,56 +1811,126 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the user where companyId = &#63; and openId = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and openId = &#63;.
 	*
 	* @param companyId the company ID
 	* @param openId the open ID
-	* @return the matching user
+	* @return the first matching user
 	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User findByC_O(long companyId,
+	public com.liferay.portal.model.User findByC_O_First(long companyId,
 		java.lang.String openId)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the user where companyId = &#63; and openId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first user in the ordered set where companyId = &#63; and openId = &#63;.
 	*
 	* @param companyId the company ID
 	* @param openId the open ID
-	* @return the matching user, or <code>null</code> if a matching user could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User fetchByC_O(long companyId,
+	public com.liferay.portal.model.User findByC_O_First(long companyId,
+		java.lang.String openId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and openId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param openId the open ID
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_O_First(long companyId,
 		java.lang.String openId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the user where companyId = &#63; and openId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first user in the ordered set where companyId = &#63; and openId = &#63;.
 	*
 	* @param companyId the company ID
 	* @param openId the open ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching user, or <code>null</code> if a matching user could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User fetchByC_O(long companyId,
-		java.lang.String openId, boolean retrieveFromCache)
+	public com.liferay.portal.model.User fetchByC_O_First(long companyId,
+		java.lang.String openId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes the user where companyId = &#63; and openId = &#63; from the database.
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and openId = &#63;.
 	*
 	* @param companyId the company ID
 	* @param openId the open ID
-	* @return the user that was removed
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portal.model.User removeByC_O(long companyId,
+	public com.liferay.portal.model.User findByC_O_Last(long companyId,
 		java.lang.String openId)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the ordered set where companyId = &#63; and openId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param openId the open ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByC_O_Last(long companyId,
+		java.lang.String openId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and openId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param openId the open ID
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_O_Last(long companyId,
+		java.lang.String openId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the ordered set where companyId = &#63; and openId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param openId the open ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_O_Last(long companyId,
+		java.lang.String openId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the users where companyId = &#63; and openId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param openId the open ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_O(long companyId, java.lang.String openId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the number of users where companyId = &#63; and openId = &#63;.
@@ -1406,6 +1974,23 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the users before and after the current user in the ordered set where companyId = &#63; and status = &#63;.
+	*
+	* @param userId the primary key of the current user
+	* @param companyId the company ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user
+	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User[] findByC_S_PrevAndNext(long userId,
+		long companyId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the users where companyId = &#63; and status = &#63;.
 	*
 	* <p>
@@ -1426,6 +2011,20 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByC_S_First(long companyId,
+		int status)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where companyId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -1442,6 +2041,17 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_S_First(long companyId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where companyId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -1454,6 +2064,20 @@ public interface UserPersistence extends BasePersistence<User> {
 		int status,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByC_S_Last(long companyId,
+		int status)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user in the ordered set where companyId = &#63; and status = &#63;.
@@ -1472,6 +2096,17 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and status = &#63;.
+	*
+	* @param companyId the company ID
+	* @param status the status
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_S_Last(long companyId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user in the ordered set where companyId = &#63; and status = &#63;.
 	*
 	* @param companyId the company ID
@@ -1484,23 +2119,6 @@ public interface UserPersistence extends BasePersistence<User> {
 		int status,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the users before and after the current user in the ordered set where companyId = &#63; and status = &#63;.
-	*
-	* @param userId the primary key of the current user
-	* @param companyId the company ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user
-	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User[] findByC_S_PrevAndNext(long userId,
-		long companyId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the users where companyId = &#63; and status = &#63; from the database.
@@ -1557,6 +2175,25 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the users before and after the current user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	*
+	* @param userId the primary key of the current user
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @param modifiedDate the modified date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user
+	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User[] findByC_CD_MD_PrevAndNext(
+		long userId, long companyId, java.util.Date createDate,
+		java.util.Date modifiedDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the users where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
 	*
 	* <p>
@@ -1579,6 +2216,21 @@ public interface UserPersistence extends BasePersistence<User> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @param modifiedDate the modified date
+	* @return the first matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByC_CD_MD_First(long companyId,
+		java.util.Date createDate, java.util.Date modifiedDate)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
 	*
 	* @param companyId the company ID
@@ -1596,6 +2248,19 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @param modifiedDate the modified date
+	* @return the first matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_CD_MD_First(long companyId,
+		java.util.Date createDate, java.util.Date modifiedDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
 	*
 	* @param companyId the company ID
@@ -1609,6 +2274,21 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.util.Date createDate, java.util.Date modifiedDate,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @param modifiedDate the modified date
+	* @return the last matching user
+	* @throws com.liferay.portal.NoSuchUserException if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User findByC_CD_MD_Last(long companyId,
+		java.util.Date createDate, java.util.Date modifiedDate)
+		throws com.liferay.portal.NoSuchUserException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
@@ -1628,6 +2308,19 @@ public interface UserPersistence extends BasePersistence<User> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user in the default ordered set defined by {@link UserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
+	*
+	* @param companyId the company ID
+	* @param createDate the create date
+	* @param modifiedDate the modified date
+	* @return the last matching user, or <code>null</code> if a matching user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.User fetchByC_CD_MD_Last(long companyId,
+		java.util.Date createDate, java.util.Date modifiedDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
 	*
 	* @param companyId the company ID
@@ -1641,25 +2334,6 @@ public interface UserPersistence extends BasePersistence<User> {
 		java.util.Date createDate, java.util.Date modifiedDate,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the users before and after the current user in the ordered set where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.
-	*
-	* @param userId the primary key of the current user
-	* @param companyId the company ID
-	* @param createDate the create date
-	* @param modifiedDate the modified date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user
-	* @throws com.liferay.portal.NoSuchUserException if a user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.User[] findByC_CD_MD_PrevAndNext(
-		long userId, long companyId, java.util.Date createDate,
-		java.util.Date modifiedDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the users where companyId = &#63; and createDate = &#63; and modifiedDate = &#63; from the database.

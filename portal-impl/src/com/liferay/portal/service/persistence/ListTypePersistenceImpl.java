@@ -130,221 +130,6 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 	}
 
 	/**
-	 * Returns an ordered range of all the list types where type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param type the type
-	 * @param start the lower bound of the range of list types
-	 * @param end the upper bound of the range of list types (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching list types
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ListType> findByType(String type, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TYPE;
-			finderArgs = new Object[] { type };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TYPE;
-			finderArgs = new Object[] { type, start, end, orderByComparator };
-		}
-
-		List<ListType> list = (List<ListType>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (ListType listType : list) {
-				if (!Validator.equals(type, listType.getType())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_LISTTYPE_WHERE);
-
-			if (type == null) {
-				query.append(_FINDER_COLUMN_TYPE_TYPE_1);
-			}
-			else {
-				if (type.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_TYPE_TYPE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_TYPE_TYPE_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(ListTypeModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (type != null) {
-					qPos.add(type);
-				}
-
-				list = (List<ListType>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first list type in the ordered set where type = &#63;.
-	 *
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching list type
-	 * @throws com.liferay.portal.NoSuchListTypeException if a matching list type could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ListType findByType_First(String type,
-		OrderByComparator orderByComparator)
-		throws NoSuchListTypeException, SystemException {
-		ListType listType = fetchByType_First(type, orderByComparator);
-
-		if (listType != null) {
-			return listType;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchListTypeException(msg.toString());
-	}
-
-	/**
-	 * Returns the first list type in the ordered set where type = &#63;.
-	 *
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching list type, or <code>null</code> if a matching list type could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ListType fetchByType_First(String type,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<ListType> list = findByType(type, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last list type in the ordered set where type = &#63;.
-	 *
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching list type
-	 * @throws com.liferay.portal.NoSuchListTypeException if a matching list type could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ListType findByType_Last(String type,
-		OrderByComparator orderByComparator)
-		throws NoSuchListTypeException, SystemException {
-		ListType listType = fetchByType_Last(type, orderByComparator);
-
-		if (listType != null) {
-			return listType;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("type=");
-		msg.append(type);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchListTypeException(msg.toString());
-	}
-
-	/**
-	 * Returns the last list type in the ordered set where type = &#63;.
-	 *
-	 * @param type the type
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching list type, or <code>null</code> if a matching list type could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ListType fetchByType_Last(String type,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByType(type);
-
-		List<ListType> list = findByType(type, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the list types before and after the current list type in the ordered set where type = &#63;.
 	 *
 	 * @param listTypeId the primary key of the current list type
@@ -503,13 +288,277 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 	}
 
 	/**
+	 * Returns an ordered range of all the list types where type = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param type the type
+	 * @param start the lower bound of the range of list types
+	 * @param end the upper bound of the range of list types (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching list types
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ListType> findByType(String type, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TYPE;
+			finderArgs = new Object[] { type };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TYPE;
+			finderArgs = new Object[] { type, start, end, orderByComparator };
+		}
+
+		List<ListType> list = (List<ListType>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ListType listType : list) {
+				if (!Validator.equals(type, listType.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_LISTTYPE_WHERE);
+
+			if (type == null) {
+				query.append(_FINDER_COLUMN_TYPE_TYPE_1);
+			}
+			else {
+				if (type.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_TYPE_TYPE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_TYPE_TYPE_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(ListTypeModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (type != null) {
+					qPos.add(type);
+				}
+
+				list = (List<ListType>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first list type in the default ordered set defined by {@link ListTypeModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	 *
+	 * @param type the type
+	 * @return the first matching list type
+	 * @throws com.liferay.portal.NoSuchListTypeException if a matching list type could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ListType findByType_First(String type)
+		throws NoSuchListTypeException, SystemException {
+		return findByType_First(type, null);
+	}
+
+	/**
+	 * Returns the first list type in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching list type
+	 * @throws com.liferay.portal.NoSuchListTypeException if a matching list type could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ListType findByType_First(String type,
+		OrderByComparator orderByComparator)
+		throws NoSuchListTypeException, SystemException {
+		ListType listType = fetchByType_First(type, orderByComparator);
+
+		if (listType != null) {
+			return listType;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchListTypeException(msg.toString());
+	}
+
+	/**
+	 * Returns the first list type in the default ordered set defined by {@link ListTypeModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	 *
+	 * @param type the type
+	 * @return the first matching list type, or <code>null</code> if a matching list type could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ListType fetchByType_First(String type) throws SystemException {
+		return fetchByType_First(type, null);
+	}
+
+	/**
+	 * Returns the first list type in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching list type, or <code>null</code> if a matching list type could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ListType fetchByType_First(String type,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<ListType> list = findByType(type, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last list type in the default ordered set defined by {@link ListTypeModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	 *
+	 * @param type the type
+	 * @return the last matching list type
+	 * @throws com.liferay.portal.NoSuchListTypeException if a matching list type could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ListType findByType_Last(String type)
+		throws NoSuchListTypeException, SystemException {
+		return findByType_Last(type, null);
+	}
+
+	/**
+	 * Returns the last list type in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching list type
+	 * @throws com.liferay.portal.NoSuchListTypeException if a matching list type could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ListType findByType_Last(String type,
+		OrderByComparator orderByComparator)
+		throws NoSuchListTypeException, SystemException {
+		ListType listType = fetchByType_Last(type, orderByComparator);
+
+		if (listType != null) {
+			return listType;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchListTypeException(msg.toString());
+	}
+
+	/**
+	 * Returns the last list type in the default ordered set defined by {@link ListTypeModelImpl#ORDER_BY_JPQL} where type = &#63;.
+	 *
+	 * @param type the type
+	 * @return the last matching list type, or <code>null</code> if a matching list type could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ListType fetchByType_Last(String type) throws SystemException {
+		return fetchByType_Last(type, null);
+	}
+
+	/**
+	 * Returns the last list type in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching list type, or <code>null</code> if a matching list type could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ListType fetchByType_Last(String type,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByType(type);
+
+		List<ListType> list = findByType(type, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the list types where type = &#63; from the database.
 	 *
 	 * @param type the type
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByType(String type) throws SystemException {
-		for (ListType listType : findByType(type)) {
+		for (ListType listType : findByType(type, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(listType);
 		}
 	}

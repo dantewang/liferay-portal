@@ -159,208 +159,6 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	}
 
 	/**
-	 * Returns an ordered range of all the asset entries where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of asset entries
-	 * @param end the upper bound of the range of asset entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetEntry> findByCompanyId(long companyId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetEntry assetEntry : list) {
-				if ((companyId != assetEntry.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset entry
-	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = fetchByCompanyId_First(companyId,
-				orderByComparator);
-
-		if (assetEntry != null) {
-			return assetEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetEntry> list = findByCompanyId(companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset entry
-	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = fetchByCompanyId_Last(companyId,
-				orderByComparator);
-
-		if (assetEntry != null) {
-			return assetEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<AssetEntry> list = findByCompanyId(companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the asset entries before and after the current asset entry in the ordered set where companyId = &#63;.
 	 *
 	 * @param entryId the primary key of the current asset entry
@@ -503,13 +301,266 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	}
 
 	/**
+	 * Returns an ordered range of all the asset entries where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of asset entries
+	 * @param end the upper bound of the range of asset entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetEntry> findByCompanyId(long companyId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetEntry assetEntry : list) {
+				if ((companyId != assetEntry.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByCompanyId_First(long companyId)
+		throws NoSuchEntryException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first asset entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByCompanyId_First(companyId,
+				orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first asset entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetEntry> list = findByCompanyId(companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByCompanyId_Last(long companyId)
+		throws NoSuchEntryException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByCompanyId_Last(companyId,
+				orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByCompanyId_Last(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<AssetEntry> list = findByCompanyId(companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset entries where companyId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCompanyId(long companyId) throws SystemException {
-		for (AssetEntry assetEntry : findByCompanyId(companyId)) {
+		for (AssetEntry assetEntry : findByCompanyId(companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetEntry);
 		}
 	}
@@ -616,205 +667,6 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public List<AssetEntry> findByVisible(boolean visible, int start, int end)
 		throws SystemException {
 		return findByVisible(visible, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset entries where visible = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param visible the visible
-	 * @param start the lower bound of the range of asset entries
-	 * @param end the upper bound of the range of asset entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetEntry> findByVisible(boolean visible, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_VISIBLE;
-			finderArgs = new Object[] { visible };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_VISIBLE;
-			finderArgs = new Object[] { visible, start, end, orderByComparator };
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetEntry assetEntry : list) {
-				if ((visible != assetEntry.getVisible())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_VISIBLE_VISIBLE_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(visible);
-
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset entry in the ordered set where visible = &#63;.
-	 *
-	 * @param visible the visible
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset entry
-	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry findByVisible_First(boolean visible,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = fetchByVisible_First(visible, orderByComparator);
-
-		if (assetEntry != null) {
-			return assetEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("visible=");
-		msg.append(visible);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset entry in the ordered set where visible = &#63;.
-	 *
-	 * @param visible the visible
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByVisible_First(boolean visible,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetEntry> list = findByVisible(visible, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset entry in the ordered set where visible = &#63;.
-	 *
-	 * @param visible the visible
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset entry
-	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry findByVisible_Last(boolean visible,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = fetchByVisible_Last(visible, orderByComparator);
-
-		if (assetEntry != null) {
-			return assetEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("visible=");
-		msg.append(visible);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset entry in the ordered set where visible = &#63;.
-	 *
-	 * @param visible the visible
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByVisible_Last(boolean visible,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByVisible(visible);
-
-		List<AssetEntry> list = findByVisible(visible, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -960,13 +812,263 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	}
 
 	/**
+	 * Returns an ordered range of all the asset entries where visible = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param visible the visible
+	 * @param start the lower bound of the range of asset entries
+	 * @param end the upper bound of the range of asset entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetEntry> findByVisible(boolean visible, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_VISIBLE;
+			finderArgs = new Object[] { visible };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_VISIBLE;
+			finderArgs = new Object[] { visible, start, end, orderByComparator };
+		}
+
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetEntry assetEntry : list) {
+				if ((visible != assetEntry.getVisible())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_VISIBLE_VISIBLE_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(visible);
+
+				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where visible = &#63;.
+	 *
+	 * @param visible the visible
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByVisible_First(boolean visible)
+		throws NoSuchEntryException, SystemException {
+		return findByVisible_First(visible, null);
+	}
+
+	/**
+	 * Returns the first asset entry in the ordered set where visible = &#63;.
+	 *
+	 * @param visible the visible
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByVisible_First(boolean visible,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByVisible_First(visible, orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("visible=");
+		msg.append(visible);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where visible = &#63;.
+	 *
+	 * @param visible the visible
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByVisible_First(boolean visible)
+		throws SystemException {
+		return fetchByVisible_First(visible, null);
+	}
+
+	/**
+	 * Returns the first asset entry in the ordered set where visible = &#63;.
+	 *
+	 * @param visible the visible
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByVisible_First(boolean visible,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetEntry> list = findByVisible(visible, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where visible = &#63;.
+	 *
+	 * @param visible the visible
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByVisible_Last(boolean visible)
+		throws NoSuchEntryException, SystemException {
+		return findByVisible_Last(visible, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where visible = &#63;.
+	 *
+	 * @param visible the visible
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByVisible_Last(boolean visible,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByVisible_Last(visible, orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("visible=");
+		msg.append(visible);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where visible = &#63;.
+	 *
+	 * @param visible the visible
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByVisible_Last(boolean visible)
+		throws SystemException {
+		return fetchByVisible_Last(visible, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where visible = &#63;.
+	 *
+	 * @param visible the visible
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByVisible_Last(boolean visible,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByVisible(visible);
+
+		List<AssetEntry> list = findByVisible(visible, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset entries where visible = &#63; from the database.
 	 *
 	 * @param visible the visible
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByVisible(boolean visible) throws SystemException {
-		for (AssetEntry assetEntry : findByVisible(visible)) {
+		for (AssetEntry assetEntry : findByVisible(visible, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(assetEntry);
 		}
 	}
@@ -1075,215 +1177,6 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public List<AssetEntry> findByPublishDate(Date publishDate, int start,
 		int end) throws SystemException {
 		return findByPublishDate(publishDate, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset entries where publishDate = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param publishDate the publish date
-	 * @param start the lower bound of the range of asset entries
-	 * @param end the upper bound of the range of asset entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetEntry> findByPublishDate(Date publishDate, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PUBLISHDATE;
-			finderArgs = new Object[] { publishDate };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PUBLISHDATE;
-			finderArgs = new Object[] { publishDate, start, end, orderByComparator };
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetEntry assetEntry : list) {
-				if (!Validator.equals(publishDate, assetEntry.getPublishDate())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
-
-			if (publishDate == null) {
-				query.append(_FINDER_COLUMN_PUBLISHDATE_PUBLISHDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_PUBLISHDATE_PUBLISHDATE_2);
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (publishDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(publishDate));
-				}
-
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset entry in the ordered set where publishDate = &#63;.
-	 *
-	 * @param publishDate the publish date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset entry
-	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry findByPublishDate_First(Date publishDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = fetchByPublishDate_First(publishDate,
-				orderByComparator);
-
-		if (assetEntry != null) {
-			return assetEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("publishDate=");
-		msg.append(publishDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset entry in the ordered set where publishDate = &#63;.
-	 *
-	 * @param publishDate the publish date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByPublishDate_First(Date publishDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetEntry> list = findByPublishDate(publishDate, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset entry in the ordered set where publishDate = &#63;.
-	 *
-	 * @param publishDate the publish date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset entry
-	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry findByPublishDate_Last(Date publishDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = fetchByPublishDate_Last(publishDate,
-				orderByComparator);
-
-		if (assetEntry != null) {
-			return assetEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("publishDate=");
-		msg.append(publishDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset entry in the ordered set where publishDate = &#63;.
-	 *
-	 * @param publishDate the publish date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByPublishDate_Last(Date publishDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByPublishDate(publishDate);
-
-		List<AssetEntry> list = findByPublishDate(publishDate, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1436,13 +1329,273 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	}
 
 	/**
+	 * Returns an ordered range of all the asset entries where publishDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param publishDate the publish date
+	 * @param start the lower bound of the range of asset entries
+	 * @param end the upper bound of the range of asset entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetEntry> findByPublishDate(Date publishDate, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PUBLISHDATE;
+			finderArgs = new Object[] { publishDate };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PUBLISHDATE;
+			finderArgs = new Object[] { publishDate, start, end, orderByComparator };
+		}
+
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetEntry assetEntry : list) {
+				if (!Validator.equals(publishDate, assetEntry.getPublishDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
+
+			if (publishDate == null) {
+				query.append(_FINDER_COLUMN_PUBLISHDATE_PUBLISHDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_PUBLISHDATE_PUBLISHDATE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (publishDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(publishDate));
+				}
+
+				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where publishDate = &#63;.
+	 *
+	 * @param publishDate the publish date
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByPublishDate_First(Date publishDate)
+		throws NoSuchEntryException, SystemException {
+		return findByPublishDate_First(publishDate, null);
+	}
+
+	/**
+	 * Returns the first asset entry in the ordered set where publishDate = &#63;.
+	 *
+	 * @param publishDate the publish date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByPublishDate_First(Date publishDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByPublishDate_First(publishDate,
+				orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("publishDate=");
+		msg.append(publishDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where publishDate = &#63;.
+	 *
+	 * @param publishDate the publish date
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByPublishDate_First(Date publishDate)
+		throws SystemException {
+		return fetchByPublishDate_First(publishDate, null);
+	}
+
+	/**
+	 * Returns the first asset entry in the ordered set where publishDate = &#63;.
+	 *
+	 * @param publishDate the publish date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByPublishDate_First(Date publishDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetEntry> list = findByPublishDate(publishDate, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where publishDate = &#63;.
+	 *
+	 * @param publishDate the publish date
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByPublishDate_Last(Date publishDate)
+		throws NoSuchEntryException, SystemException {
+		return findByPublishDate_Last(publishDate, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where publishDate = &#63;.
+	 *
+	 * @param publishDate the publish date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByPublishDate_Last(Date publishDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByPublishDate_Last(publishDate,
+				orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("publishDate=");
+		msg.append(publishDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where publishDate = &#63;.
+	 *
+	 * @param publishDate the publish date
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByPublishDate_Last(Date publishDate)
+		throws SystemException {
+		return fetchByPublishDate_Last(publishDate, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where publishDate = &#63;.
+	 *
+	 * @param publishDate the publish date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByPublishDate_Last(Date publishDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByPublishDate(publishDate);
+
+		List<AssetEntry> list = findByPublishDate(publishDate, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset entries where publishDate = &#63; from the database.
 	 *
 	 * @param publishDate the publish date
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByPublishDate(Date publishDate) throws SystemException {
-		for (AssetEntry assetEntry : findByPublishDate(publishDate)) {
+		for (AssetEntry assetEntry : findByPublishDate(publishDate,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetEntry);
 		}
 	}
@@ -1559,221 +1712,6 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public List<AssetEntry> findByExpirationDate(Date expirationDate,
 		int start, int end) throws SystemException {
 		return findByExpirationDate(expirationDate, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset entries where expirationDate = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param expirationDate the expiration date
-	 * @param start the lower bound of the range of asset entries
-	 * @param end the upper bound of the range of asset entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetEntry> findByExpirationDate(Date expirationDate,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EXPIRATIONDATE;
-			finderArgs = new Object[] { expirationDate };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_EXPIRATIONDATE;
-			finderArgs = new Object[] {
-					expirationDate,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetEntry assetEntry : list) {
-				if (!Validator.equals(expirationDate,
-							assetEntry.getExpirationDate())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
-
-			if (expirationDate == null) {
-				query.append(_FINDER_COLUMN_EXPIRATIONDATE_EXPIRATIONDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_EXPIRATIONDATE_EXPIRATIONDATE_2);
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (expirationDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(expirationDate));
-				}
-
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset entry in the ordered set where expirationDate = &#63;.
-	 *
-	 * @param expirationDate the expiration date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset entry
-	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry findByExpirationDate_First(Date expirationDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = fetchByExpirationDate_First(expirationDate,
-				orderByComparator);
-
-		if (assetEntry != null) {
-			return assetEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("expirationDate=");
-		msg.append(expirationDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset entry in the ordered set where expirationDate = &#63;.
-	 *
-	 * @param expirationDate the expiration date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByExpirationDate_First(Date expirationDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetEntry> list = findByExpirationDate(expirationDate, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset entry in the ordered set where expirationDate = &#63;.
-	 *
-	 * @param expirationDate the expiration date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset entry
-	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry findByExpirationDate_Last(Date expirationDate,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = fetchByExpirationDate_Last(expirationDate,
-				orderByComparator);
-
-		if (assetEntry != null) {
-			return assetEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("expirationDate=");
-		msg.append(expirationDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset entry in the ordered set where expirationDate = &#63;.
-	 *
-	 * @param expirationDate the expiration date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByExpirationDate_Last(Date expirationDate,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByExpirationDate(expirationDate);
-
-		List<AssetEntry> list = findByExpirationDate(expirationDate, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1926,6 +1864,271 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	}
 
 	/**
+	 * Returns an ordered range of all the asset entries where expirationDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param expirationDate the expiration date
+	 * @param start the lower bound of the range of asset entries
+	 * @param end the upper bound of the range of asset entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetEntry> findByExpirationDate(Date expirationDate,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EXPIRATIONDATE;
+			finderArgs = new Object[] { expirationDate };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_EXPIRATIONDATE;
+			finderArgs = new Object[] {
+					expirationDate,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetEntry assetEntry : list) {
+				if (!Validator.equals(expirationDate,
+							assetEntry.getExpirationDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
+
+			if (expirationDate == null) {
+				query.append(_FINDER_COLUMN_EXPIRATIONDATE_EXPIRATIONDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_EXPIRATIONDATE_EXPIRATIONDATE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (expirationDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(expirationDate));
+				}
+
+				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where expirationDate = &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByExpirationDate_First(Date expirationDate)
+		throws NoSuchEntryException, SystemException {
+		return findByExpirationDate_First(expirationDate, null);
+	}
+
+	/**
+	 * Returns the first asset entry in the ordered set where expirationDate = &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByExpirationDate_First(Date expirationDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByExpirationDate_First(expirationDate,
+				orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("expirationDate=");
+		msg.append(expirationDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where expirationDate = &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByExpirationDate_First(Date expirationDate)
+		throws SystemException {
+		return fetchByExpirationDate_First(expirationDate, null);
+	}
+
+	/**
+	 * Returns the first asset entry in the ordered set where expirationDate = &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByExpirationDate_First(Date expirationDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetEntry> list = findByExpirationDate(expirationDate, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where expirationDate = &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByExpirationDate_Last(Date expirationDate)
+		throws NoSuchEntryException, SystemException {
+		return findByExpirationDate_Last(expirationDate, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where expirationDate = &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByExpirationDate_Last(Date expirationDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByExpirationDate_Last(expirationDate,
+				orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("expirationDate=");
+		msg.append(expirationDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where expirationDate = &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByExpirationDate_Last(Date expirationDate)
+		throws SystemException {
+		return fetchByExpirationDate_Last(expirationDate, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where expirationDate = &#63;.
+	 *
+	 * @param expirationDate the expiration date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByExpirationDate_Last(Date expirationDate,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByExpirationDate(expirationDate);
+
+		List<AssetEntry> list = findByExpirationDate(expirationDate, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset entries where expirationDate = &#63; from the database.
 	 *
 	 * @param expirationDate the expiration date
@@ -1933,7 +2136,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 */
 	public void removeByExpirationDate(Date expirationDate)
 		throws SystemException {
-		for (AssetEntry assetEntry : findByExpirationDate(expirationDate)) {
+		for (AssetEntry assetEntry : findByExpirationDate(expirationDate,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetEntry);
 		}
 	}
@@ -2051,220 +2255,6 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public List<AssetEntry> findByLayoutUuid(String layoutUuid, int start,
 		int end) throws SystemException {
 		return findByLayoutUuid(layoutUuid, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the asset entries where layoutUuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param layoutUuid the layout uuid
-	 * @param start the lower bound of the range of asset entries
-	 * @param end the upper bound of the range of asset entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching asset entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<AssetEntry> findByLayoutUuid(String layoutUuid, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTUUID;
-			finderArgs = new Object[] { layoutUuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LAYOUTUUID;
-			finderArgs = new Object[] { layoutUuid, start, end, orderByComparator };
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (AssetEntry assetEntry : list) {
-				if (!Validator.equals(layoutUuid, assetEntry.getLayoutUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
-
-			if (layoutUuid == null) {
-				query.append(_FINDER_COLUMN_LAYOUTUUID_LAYOUTUUID_1);
-			}
-			else {
-				if (layoutUuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_LAYOUTUUID_LAYOUTUUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_LAYOUTUUID_LAYOUTUUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (layoutUuid != null) {
-					qPos.add(layoutUuid);
-				}
-
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first asset entry in the ordered set where layoutUuid = &#63;.
-	 *
-	 * @param layoutUuid the layout uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset entry
-	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry findByLayoutUuid_First(String layoutUuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = fetchByLayoutUuid_First(layoutUuid,
-				orderByComparator);
-
-		if (assetEntry != null) {
-			return assetEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("layoutUuid=");
-		msg.append(layoutUuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first asset entry in the ordered set where layoutUuid = &#63;.
-	 *
-	 * @param layoutUuid the layout uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByLayoutUuid_First(String layoutUuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<AssetEntry> list = findByLayoutUuid(layoutUuid, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last asset entry in the ordered set where layoutUuid = &#63;.
-	 *
-	 * @param layoutUuid the layout uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset entry
-	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry findByLayoutUuid_Last(String layoutUuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = fetchByLayoutUuid_Last(layoutUuid,
-				orderByComparator);
-
-		if (assetEntry != null) {
-			return assetEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("layoutUuid=");
-		msg.append(layoutUuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last asset entry in the ordered set where layoutUuid = &#63;.
-	 *
-	 * @param layoutUuid the layout uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByLayoutUuid_Last(String layoutUuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByLayoutUuid(layoutUuid);
-
-		List<AssetEntry> list = findByLayoutUuid(layoutUuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2422,13 +2412,278 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	}
 
 	/**
+	 * Returns an ordered range of all the asset entries where layoutUuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param layoutUuid the layout uuid
+	 * @param start the lower bound of the range of asset entries
+	 * @param end the upper bound of the range of asset entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<AssetEntry> findByLayoutUuid(String layoutUuid, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTUUID;
+			finderArgs = new Object[] { layoutUuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LAYOUTUUID;
+			finderArgs = new Object[] { layoutUuid, start, end, orderByComparator };
+		}
+
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetEntry assetEntry : list) {
+				if (!Validator.equals(layoutUuid, assetEntry.getLayoutUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
+
+			if (layoutUuid == null) {
+				query.append(_FINDER_COLUMN_LAYOUTUUID_LAYOUTUUID_1);
+			}
+			else {
+				if (layoutUuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_LAYOUTUUID_LAYOUTUUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_LAYOUTUUID_LAYOUTUUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (layoutUuid != null) {
+					qPos.add(layoutUuid);
+				}
+
+				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where layoutUuid = &#63;.
+	 *
+	 * @param layoutUuid the layout uuid
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByLayoutUuid_First(String layoutUuid)
+		throws NoSuchEntryException, SystemException {
+		return findByLayoutUuid_First(layoutUuid, null);
+	}
+
+	/**
+	 * Returns the first asset entry in the ordered set where layoutUuid = &#63;.
+	 *
+	 * @param layoutUuid the layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByLayoutUuid_First(String layoutUuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByLayoutUuid_First(layoutUuid,
+				orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("layoutUuid=");
+		msg.append(layoutUuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where layoutUuid = &#63;.
+	 *
+	 * @param layoutUuid the layout uuid
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByLayoutUuid_First(String layoutUuid)
+		throws SystemException {
+		return fetchByLayoutUuid_First(layoutUuid, null);
+	}
+
+	/**
+	 * Returns the first asset entry in the ordered set where layoutUuid = &#63;.
+	 *
+	 * @param layoutUuid the layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByLayoutUuid_First(String layoutUuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetEntry> list = findByLayoutUuid(layoutUuid, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where layoutUuid = &#63;.
+	 *
+	 * @param layoutUuid the layout uuid
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByLayoutUuid_Last(String layoutUuid)
+		throws NoSuchEntryException, SystemException {
+		return findByLayoutUuid_Last(layoutUuid, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where layoutUuid = &#63;.
+	 *
+	 * @param layoutUuid the layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByLayoutUuid_Last(String layoutUuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByLayoutUuid_Last(layoutUuid,
+				orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("layoutUuid=");
+		msg.append(layoutUuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where layoutUuid = &#63;.
+	 *
+	 * @param layoutUuid the layout uuid
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByLayoutUuid_Last(String layoutUuid)
+		throws SystemException {
+		return fetchByLayoutUuid_Last(layoutUuid, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where layoutUuid = &#63;.
+	 *
+	 * @param layoutUuid the layout uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByLayoutUuid_Last(String layoutUuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByLayoutUuid(layoutUuid);
+
+		List<AssetEntry> list = findByLayoutUuid(layoutUuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the asset entries where layoutUuid = &#63; from the database.
 	 *
 	 * @param layoutUuid the layout uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByLayoutUuid(String layoutUuid) throws SystemException {
-		for (AssetEntry assetEntry : findByLayoutUuid(layoutUuid)) {
+		for (AssetEntry assetEntry : findByLayoutUuid(layoutUuid,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(assetEntry);
 		}
 	}
@@ -2501,9 +2756,18 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	private static final String _FINDER_COLUMN_LAYOUTUUID_LAYOUTUUID_1 = "assetEntry.layoutUuid IS NULL";
 	private static final String _FINDER_COLUMN_LAYOUTUUID_LAYOUTUUID_2 = "assetEntry.layoutUuid = ?";
 	private static final String _FINDER_COLUMN_LAYOUTUUID_LAYOUTUUID_3 = "(assetEntry.layoutUuid IS NULL OR assetEntry.layoutUuid = ?)";
-	public static final FinderPath FINDER_PATH_FETCH_BY_G_CU = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_CU = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByG_CU",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_CU",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_CU = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_CU",
 			new String[] { Long.class.getName(), String.class.getName() },
 			AssetEntryModelImpl.GROUPID_COLUMN_BITMASK |
 			AssetEntryModelImpl.CLASSUUID_COLUMN_BITMASK);
@@ -2513,85 +2777,64 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
-	 * Returns the asset entry where groupId = &#63; and classUuid = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchEntryException} if it could not be found.
+	 * Returns an ordered range of all the asset entries where groupId = &#63; and classUuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param groupId the group ID
 	 * @param classUuid the class uuid
-	 * @return the matching asset entry
-	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @param start the lower bound of the range of asset entries
+	 * @param end the upper bound of the range of asset entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching asset entries
 	 * @throws SystemException if a system exception occurred
 	 */
-	public AssetEntry findByG_CU(long groupId, String classUuid)
-		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = fetchByG_CU(groupId, classUuid);
-
-		if (assetEntry == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("groupId=");
-			msg.append(groupId);
-
-			msg.append(", classUuid=");
-			msg.append(classUuid);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchEntryException(msg.toString());
-		}
-
-		return assetEntry;
-	}
-
-	/**
-	 * Returns the asset entry where groupId = &#63; and classUuid = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param groupId the group ID
-	 * @param classUuid the class uuid
-	 * @return the matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByG_CU(long groupId, String classUuid)
+	protected List<AssetEntry> findByG_CU(long groupId, String classUuid,
+		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		return fetchByG_CU(groupId, classUuid, true);
-	}
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-	/**
-	 * Returns the asset entry where groupId = &#63; and classUuid = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param groupId the group ID
-	 * @param classUuid the class uuid
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching asset entry, or <code>null</code> if a matching asset entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public AssetEntry fetchByG_CU(long groupId, String classUuid,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, classUuid };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_CU,
-					finderArgs, this);
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_CU;
+			finderArgs = new Object[] { groupId, classUuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_CU;
+			finderArgs = new Object[] {
+					groupId, classUuid,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		if (result instanceof AssetEntry) {
-			AssetEntry assetEntry = (AssetEntry)result;
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-			if ((groupId != assetEntry.getGroupId()) ||
-					!Validator.equals(classUuid, assetEntry.getClassUuid())) {
-				result = null;
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetEntry assetEntry : list) {
+				if ((groupId != assetEntry.getGroupId()) ||
+						!Validator.equals(classUuid, assetEntry.getClassUuid())) {
+					list = null;
+
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_ASSETENTRY_WHERE);
 
@@ -2607,6 +2850,11 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				else {
 					query.append(_FINDER_COLUMN_G_CU_CLASSUUID_2);
 				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
 			}
 
 			String sql = query.toString();
@@ -2626,66 +2874,210 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 					qPos.add(classUuid);
 				}
 
-				List<AssetEntry> list = q.list();
-
-				result = list;
-
-				AssetEntry assetEntry = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_CU,
-						finderArgs, list);
-				}
-				else {
-					assetEntry = list.get(0);
-
-					cacheResult(assetEntry);
-
-					if ((assetEntry.getGroupId() != groupId) ||
-							(assetEntry.getClassUuid() == null) ||
-							!assetEntry.getClassUuid().equals(classUuid)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_CU,
-							finderArgs, assetEntry);
-					}
-				}
-
-				return assetEntry;
+				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
+						end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_CU,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (AssetEntry)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the asset entry where groupId = &#63; and classUuid = &#63; from the database.
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classUuid = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param classUuid the class uuid
-	 * @return the asset entry that was removed
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public AssetEntry removeByG_CU(long groupId, String classUuid)
+	public AssetEntry findByG_CU_First(long groupId, String classUuid)
 		throws NoSuchEntryException, SystemException {
-		AssetEntry assetEntry = findByG_CU(groupId, classUuid);
+		return findByG_CU_First(groupId, classUuid, null);
+	}
 
-		return remove(assetEntry);
+	/**
+	 * Returns the first asset entry in the ordered set where groupId = &#63; and classUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classUuid the class uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByG_CU_First(long groupId, String classUuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByG_CU_First(groupId, classUuid,
+				orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classUuid=");
+		msg.append(classUuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classUuid the class uuid
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByG_CU_First(long groupId, String classUuid)
+		throws SystemException {
+		return fetchByG_CU_First(groupId, classUuid, null);
+	}
+
+	/**
+	 * Returns the first asset entry in the ordered set where groupId = &#63; and classUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classUuid the class uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByG_CU_First(long groupId, String classUuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<AssetEntry> list = findByG_CU(groupId, classUuid, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classUuid the class uuid
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByG_CU_Last(long groupId, String classUuid)
+		throws NoSuchEntryException, SystemException {
+		return findByG_CU_Last(groupId, classUuid, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where groupId = &#63; and classUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classUuid the class uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry
+	 * @throws com.liferay.portlet.asset.NoSuchEntryException if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry findByG_CU_Last(long groupId, String classUuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchEntryException, SystemException {
+		AssetEntry assetEntry = fetchByG_CU_Last(groupId, classUuid,
+				orderByComparator);
+
+		if (assetEntry != null) {
+			return assetEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", classUuid=");
+		msg.append(classUuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last asset entry in the default ordered set defined by {@link AssetEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classUuid the class uuid
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByG_CU_Last(long groupId, String classUuid)
+		throws SystemException {
+		return fetchByG_CU_Last(groupId, classUuid, null);
+	}
+
+	/**
+	 * Returns the last asset entry in the ordered set where groupId = &#63; and classUuid = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param classUuid the class uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching asset entry, or <code>null</code> if a matching asset entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public AssetEntry fetchByG_CU_Last(long groupId, String classUuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_CU(groupId, classUuid);
+
+		List<AssetEntry> list = findByG_CU(groupId, classUuid, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the asset entries where groupId = &#63; and classUuid = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param classUuid the class uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_CU(long groupId, String classUuid)
+		throws SystemException {
+		for (AssetEntry assetEntry : findByG_CU(groupId, classUuid,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(assetEntry);
+		}
 	}
 
 	/**
@@ -2766,6 +3158,21 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public static final FinderPath FINDER_PATH_FETCH_BY_C_C = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			AssetEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			AssetEntryModelImpl.CLASSPK_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			AssetEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
 			AssetEntryModelImpl.CLASSPK_COLUMN_BITMASK);
@@ -3008,13 +3415,6 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 		EntityCacheUtil.putResult(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryImpl.class, assetEntry.getPrimaryKey(), assetEntry);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_CU,
-			new Object[] {
-				Long.valueOf(assetEntry.getGroupId()),
-				
-			assetEntry.getClassUuid()
-			}, assetEntry);
-
 		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
 			new Object[] {
 				Long.valueOf(assetEntry.getClassNameId()),
@@ -3094,13 +3494,6 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	}
 
 	protected void clearUniqueFindersCache(AssetEntry assetEntry) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_CU,
-			new Object[] {
-				Long.valueOf(assetEntry.getGroupId()),
-				
-			assetEntry.getClassUuid()
-			});
-
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C,
 			new Object[] {
 				Long.valueOf(assetEntry.getClassNameId()),
@@ -3370,13 +3763,6 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			AssetEntryImpl.class, assetEntry.getPrimaryKey(), assetEntry);
 
 		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_CU,
-				new Object[] {
-					Long.valueOf(assetEntry.getGroupId()),
-					
-				assetEntry.getClassUuid()
-				}, assetEntry);
-
 			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
 				new Object[] {
 					Long.valueOf(assetEntry.getClassNameId()),
@@ -3384,26 +3770,6 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				}, assetEntry);
 		}
 		else {
-			if ((assetEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_G_CU.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(assetEntryModelImpl.getOriginalGroupId()),
-						
-						assetEntryModelImpl.getOriginalClassUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_CU, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_CU, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_CU,
-					new Object[] {
-						Long.valueOf(assetEntry.getGroupId()),
-						
-					assetEntry.getClassUuid()
-					}, assetEntry);
-			}
-
 			if ((assetEntryModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_C_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {

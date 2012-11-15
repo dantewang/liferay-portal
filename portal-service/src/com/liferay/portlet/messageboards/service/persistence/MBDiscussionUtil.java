@@ -143,6 +143,26 @@ public class MBDiscussionUtil {
 	}
 
 	/**
+	* Returns the message boards discussions before and after the current message boards discussion in the ordered set where classNameId = &#63;.
+	*
+	* @param discussionId the primary key of the current message boards discussion
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next message boards discussion
+	* @throws com.liferay.portlet.messageboards.NoSuchDiscussionException if a message boards discussion with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBDiscussion[] findByClassNameId_PrevAndNext(
+		long discussionId, long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchDiscussionException {
+		return getPersistence()
+				   .findByClassNameId_PrevAndNext(discussionId, classNameId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the message boards discussions where classNameId = &#63;.
 	*
 	* <p>
@@ -165,6 +185,21 @@ public class MBDiscussionUtil {
 	}
 
 	/**
+	* Returns the first message boards discussion in the default ordered set defined by {@link MBDiscussionModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @return the first matching message boards discussion
+	* @throws com.liferay.portlet.messageboards.NoSuchDiscussionException if a matching message boards discussion could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBDiscussion findByClassNameId_First(
+		long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchDiscussionException {
+		return getPersistence().findByClassNameId_First(classNameId);
+	}
+
+	/**
 	* Returns the first message boards discussion in the ordered set where classNameId = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -183,6 +218,19 @@ public class MBDiscussionUtil {
 	}
 
 	/**
+	* Returns the first message boards discussion in the default ordered set defined by {@link MBDiscussionModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @return the first matching message boards discussion, or <code>null</code> if a matching message boards discussion could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBDiscussion fetchByClassNameId_First(
+		long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByClassNameId_First(classNameId);
+	}
+
+	/**
 	* Returns the first message boards discussion in the ordered set where classNameId = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -196,6 +244,21 @@ public class MBDiscussionUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByClassNameId_First(classNameId, orderByComparator);
+	}
+
+	/**
+	* Returns the last message boards discussion in the default ordered set defined by {@link MBDiscussionModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @return the last matching message boards discussion
+	* @throws com.liferay.portlet.messageboards.NoSuchDiscussionException if a matching message boards discussion could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBDiscussion findByClassNameId_Last(
+		long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchDiscussionException {
+		return getPersistence().findByClassNameId_Last(classNameId);
 	}
 
 	/**
@@ -217,6 +280,19 @@ public class MBDiscussionUtil {
 	}
 
 	/**
+	* Returns the last message boards discussion in the default ordered set defined by {@link MBDiscussionModelImpl#ORDER_BY_JPQL} where classNameId = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @return the last matching message boards discussion, or <code>null</code> if a matching message boards discussion could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBDiscussion fetchByClassNameId_Last(
+		long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByClassNameId_Last(classNameId);
+	}
+
+	/**
 	* Returns the last message boards discussion in the ordered set where classNameId = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -230,26 +306,6 @@ public class MBDiscussionUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByClassNameId_Last(classNameId, orderByComparator);
-	}
-
-	/**
-	* Returns the message boards discussions before and after the current message boards discussion in the ordered set where classNameId = &#63;.
-	*
-	* @param discussionId the primary key of the current message boards discussion
-	* @param classNameId the class name ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next message boards discussion
-	* @throws com.liferay.portlet.messageboards.NoSuchDiscussionException if a message boards discussion with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBDiscussion[] findByClassNameId_PrevAndNext(
-		long discussionId, long classNameId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchDiscussionException {
-		return getPersistence()
-				   .findByClassNameId_PrevAndNext(discussionId, classNameId,
-			orderByComparator);
 	}
 
 	/**

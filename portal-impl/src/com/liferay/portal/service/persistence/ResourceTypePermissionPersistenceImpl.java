@@ -136,208 +136,6 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	}
 
 	/**
-	 * Returns an ordered range of all the resource type permissions where roleId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param roleId the role ID
-	 * @param start the lower bound of the range of resource type permissions
-	 * @param end the upper bound of the range of resource type permissions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching resource type permissions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ResourceTypePermission> findByRoleId(long roleId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID;
-			finderArgs = new Object[] { roleId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ROLEID;
-			finderArgs = new Object[] { roleId, start, end, orderByComparator };
-		}
-
-		List<ResourceTypePermission> list = (List<ResourceTypePermission>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (ResourceTypePermission resourceTypePermission : list) {
-				if ((roleId != resourceTypePermission.getRoleId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_RESOURCETYPEPERMISSION_WHERE);
-
-			query.append(_FINDER_COLUMN_ROLEID_ROLEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(roleId);
-
-				list = (List<ResourceTypePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first resource type permission in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching resource type permission
-	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceTypePermission findByRoleId_First(long roleId,
-		OrderByComparator orderByComparator)
-		throws NoSuchResourceTypePermissionException, SystemException {
-		ResourceTypePermission resourceTypePermission = fetchByRoleId_First(roleId,
-				orderByComparator);
-
-		if (resourceTypePermission != null) {
-			return resourceTypePermission;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("roleId=");
-		msg.append(roleId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchResourceTypePermissionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first resource type permission in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceTypePermission fetchByRoleId_First(long roleId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<ResourceTypePermission> list = findByRoleId(roleId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last resource type permission in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching resource type permission
-	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceTypePermission findByRoleId_Last(long roleId,
-		OrderByComparator orderByComparator)
-		throws NoSuchResourceTypePermissionException, SystemException {
-		ResourceTypePermission resourceTypePermission = fetchByRoleId_Last(roleId,
-				orderByComparator);
-
-		if (resourceTypePermission != null) {
-			return resourceTypePermission;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("roleId=");
-		msg.append(roleId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchResourceTypePermissionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last resource type permission in the ordered set where roleId = &#63;.
-	 *
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceTypePermission fetchByRoleId_Last(long roleId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByRoleId(roleId);
-
-		List<ResourceTypePermission> list = findByRoleId(roleId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Returns the resource type permissions before and after the current resource type permission in the ordered set where roleId = &#63;.
 	 *
 	 * @param resourceTypePermissionId the primary key of the current resource type permission
@@ -481,6 +279,258 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	}
 
 	/**
+	 * Returns an ordered range of all the resource type permissions where roleId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param roleId the role ID
+	 * @param start the lower bound of the range of resource type permissions
+	 * @param end the upper bound of the range of resource type permissions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching resource type permissions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ResourceTypePermission> findByRoleId(long roleId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID;
+			finderArgs = new Object[] { roleId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ROLEID;
+			finderArgs = new Object[] { roleId, start, end, orderByComparator };
+		}
+
+		List<ResourceTypePermission> list = (List<ResourceTypePermission>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceTypePermission resourceTypePermission : list) {
+				if ((roleId != resourceTypePermission.getRoleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_RESOURCETYPEPERMISSION_WHERE);
+
+			query.append(_FINDER_COLUMN_ROLEID_ROLEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(roleId);
+
+				list = (List<ResourceTypePermission>)QueryUtil.list(q,
+						getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the first matching resource type permission
+	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission findByRoleId_First(long roleId)
+		throws NoSuchResourceTypePermissionException, SystemException {
+		return findByRoleId_First(roleId, null);
+	}
+
+	/**
+	 * Returns the first resource type permission in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching resource type permission
+	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission findByRoleId_First(long roleId,
+		OrderByComparator orderByComparator)
+		throws NoSuchResourceTypePermissionException, SystemException {
+		ResourceTypePermission resourceTypePermission = fetchByRoleId_First(roleId,
+				orderByComparator);
+
+		if (resourceTypePermission != null) {
+			return resourceTypePermission;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("roleId=");
+		msg.append(roleId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchResourceTypePermissionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the first matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission fetchByRoleId_First(long roleId)
+		throws SystemException {
+		return fetchByRoleId_First(roleId, null);
+	}
+
+	/**
+	 * Returns the first resource type permission in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission fetchByRoleId_First(long roleId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<ResourceTypePermission> list = findByRoleId(roleId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the last matching resource type permission
+	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission findByRoleId_Last(long roleId)
+		throws NoSuchResourceTypePermissionException, SystemException {
+		return findByRoleId_Last(roleId, null);
+	}
+
+	/**
+	 * Returns the last resource type permission in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching resource type permission
+	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission findByRoleId_Last(long roleId,
+		OrderByComparator orderByComparator)
+		throws NoSuchResourceTypePermissionException, SystemException {
+		ResourceTypePermission resourceTypePermission = fetchByRoleId_Last(roleId,
+				orderByComparator);
+
+		if (resourceTypePermission != null) {
+			return resourceTypePermission;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("roleId=");
+		msg.append(roleId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchResourceTypePermissionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @return the last matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission fetchByRoleId_Last(long roleId)
+		throws SystemException {
+		return fetchByRoleId_Last(roleId, null);
+	}
+
+	/**
+	 * Returns the last resource type permission in the ordered set where roleId = &#63;.
+	 *
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission fetchByRoleId_Last(long roleId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByRoleId(roleId);
+
+		List<ResourceTypePermission> list = findByRoleId(roleId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the resource type permissions where roleId = &#63; from the database.
 	 *
 	 * @param roleId the role ID
@@ -488,7 +538,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 */
 	public void removeByRoleId(long roleId) throws SystemException {
 		for (ResourceTypePermission resourceTypePermission : findByRoleId(
-				roleId)) {
+				roleId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(resourceTypePermission);
 		}
 	}
@@ -610,259 +660,6 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	public List<ResourceTypePermission> findByC_N_R(long companyId,
 		String name, long roleId, int start, int end) throws SystemException {
 		return findByC_N_R(companyId, name, roleId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the resource type permissions where companyId = &#63; and name = &#63; and roleId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @param roleId the role ID
-	 * @param start the lower bound of the range of resource type permissions
-	 * @param end the upper bound of the range of resource type permissions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching resource type permissions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ResourceTypePermission> findByC_N_R(long companyId,
-		String name, long roleId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N_R;
-			finderArgs = new Object[] { companyId, name, roleId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_N_R;
-			finderArgs = new Object[] {
-					companyId, name, roleId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<ResourceTypePermission> list = (List<ResourceTypePermission>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (ResourceTypePermission resourceTypePermission : list) {
-				if ((companyId != resourceTypePermission.getCompanyId()) ||
-						!Validator.equals(name, resourceTypePermission.getName()) ||
-						(roleId != resourceTypePermission.getRoleId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_RESOURCETYPEPERMISSION_WHERE);
-
-			query.append(_FINDER_COLUMN_C_N_R_COMPANYID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_C_N_R_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_C_N_R_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_C_N_R_NAME_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_C_N_R_ROLEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				qPos.add(roleId);
-
-				list = (List<ResourceTypePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching resource type permission
-	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceTypePermission findByC_N_R_First(long companyId,
-		String name, long roleId, OrderByComparator orderByComparator)
-		throws NoSuchResourceTypePermissionException, SystemException {
-		ResourceTypePermission resourceTypePermission = fetchByC_N_R_First(companyId,
-				name, roleId, orderByComparator);
-
-		if (resourceTypePermission != null) {
-			return resourceTypePermission;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(", roleId=");
-		msg.append(roleId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchResourceTypePermissionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceTypePermission fetchByC_N_R_First(long companyId,
-		String name, long roleId, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<ResourceTypePermission> list = findByC_N_R(companyId, name,
-				roleId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching resource type permission
-	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceTypePermission findByC_N_R_Last(long companyId, String name,
-		long roleId, OrderByComparator orderByComparator)
-		throws NoSuchResourceTypePermissionException, SystemException {
-		ResourceTypePermission resourceTypePermission = fetchByC_N_R_Last(companyId,
-				name, roleId, orderByComparator);
-
-		if (resourceTypePermission != null) {
-			return resourceTypePermission;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(", roleId=");
-		msg.append(roleId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchResourceTypePermissionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param name the name
-	 * @param roleId the role ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ResourceTypePermission fetchByC_N_R_Last(long companyId,
-		String name, long roleId, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByC_N_R(companyId, name, roleId);
-
-		List<ResourceTypePermission> list = findByC_N_R(companyId, name,
-				roleId, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1032,6 +829,319 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	}
 
 	/**
+	 * Returns an ordered range of all the resource type permissions where companyId = &#63; and name = &#63; and roleId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param roleId the role ID
+	 * @param start the lower bound of the range of resource type permissions
+	 * @param end the upper bound of the range of resource type permissions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching resource type permissions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ResourceTypePermission> findByC_N_R(long companyId,
+		String name, long roleId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N_R;
+			finderArgs = new Object[] { companyId, name, roleId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_N_R;
+			finderArgs = new Object[] {
+					companyId, name, roleId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<ResourceTypePermission> list = (List<ResourceTypePermission>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceTypePermission resourceTypePermission : list) {
+				if ((companyId != resourceTypePermission.getCompanyId()) ||
+						!Validator.equals(name, resourceTypePermission.getName()) ||
+						(roleId != resourceTypePermission.getRoleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_RESOURCETYPEPERMISSION_WHERE);
+
+			query.append(_FINDER_COLUMN_C_N_R_COMPANYID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_C_N_R_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_C_N_R_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_C_N_R_NAME_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_C_N_R_ROLEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				qPos.add(roleId);
+
+				list = (List<ResourceTypePermission>)QueryUtil.list(q,
+						getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63; and roleId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param roleId the role ID
+	 * @return the first matching resource type permission
+	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission findByC_N_R_First(long companyId,
+		String name, long roleId)
+		throws NoSuchResourceTypePermissionException, SystemException {
+		return findByC_N_R_First(companyId, name, roleId, null);
+	}
+
+	/**
+	 * Returns the first resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching resource type permission
+	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission findByC_N_R_First(long companyId,
+		String name, long roleId, OrderByComparator orderByComparator)
+		throws NoSuchResourceTypePermissionException, SystemException {
+		ResourceTypePermission resourceTypePermission = fetchByC_N_R_First(companyId,
+				name, roleId, orderByComparator);
+
+		if (resourceTypePermission != null) {
+			return resourceTypePermission;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(", roleId=");
+		msg.append(roleId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchResourceTypePermissionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63; and roleId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param roleId the role ID
+	 * @return the first matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission fetchByC_N_R_First(long companyId,
+		String name, long roleId) throws SystemException {
+		return fetchByC_N_R_First(companyId, name, roleId, null);
+	}
+
+	/**
+	 * Returns the first resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission fetchByC_N_R_First(long companyId,
+		String name, long roleId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<ResourceTypePermission> list = findByC_N_R(companyId, name,
+				roleId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63; and roleId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param roleId the role ID
+	 * @return the last matching resource type permission
+	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission findByC_N_R_Last(long companyId, String name,
+		long roleId)
+		throws NoSuchResourceTypePermissionException, SystemException {
+		return findByC_N_R_Last(companyId, name, roleId, null);
+	}
+
+	/**
+	 * Returns the last resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching resource type permission
+	 * @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission findByC_N_R_Last(long companyId, String name,
+		long roleId, OrderByComparator orderByComparator)
+		throws NoSuchResourceTypePermissionException, SystemException {
+		ResourceTypePermission resourceTypePermission = fetchByC_N_R_Last(companyId,
+				name, roleId, orderByComparator);
+
+		if (resourceTypePermission != null) {
+			return resourceTypePermission;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(", roleId=");
+		msg.append(roleId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchResourceTypePermissionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63; and roleId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param roleId the role ID
+	 * @return the last matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission fetchByC_N_R_Last(long companyId,
+		String name, long roleId) throws SystemException {
+		return fetchByC_N_R_Last(companyId, name, roleId, null);
+	}
+
+	/**
+	 * Returns the last resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param name the name
+	 * @param roleId the role ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ResourceTypePermission fetchByC_N_R_Last(long companyId,
+		String name, long roleId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByC_N_R(companyId, name, roleId);
+
+		List<ResourceTypePermission> list = findByC_N_R(companyId, name,
+				roleId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the resource type permissions where companyId = &#63; and name = &#63; and roleId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
@@ -1042,7 +1152,8 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	public void removeByC_N_R(long companyId, String name, long roleId)
 		throws SystemException {
 		for (ResourceTypePermission resourceTypePermission : findByC_N_R(
-				companyId, name, roleId)) {
+				companyId, name, roleId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				null)) {
 			remove(resourceTypePermission);
 		}
 	}
@@ -1132,6 +1243,30 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 			ResourceTypePermissionModelImpl.FINDER_CACHE_ENABLED,
 			ResourceTypePermissionImpl.class, FINDER_CLASS_NAME_ENTITY,
 			"fetchByC_G_N_R",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), Long.class.getName()
+			},
+			ResourceTypePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourceTypePermissionModelImpl.GROUPID_COLUMN_BITMASK |
+			ResourceTypePermissionModelImpl.NAME_COLUMN_BITMASK |
+			ResourceTypePermissionModelImpl.ROLEID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_G_N_R = new FinderPath(ResourceTypePermissionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceTypePermissionModelImpl.FINDER_CACHE_ENABLED,
+			ResourceTypePermissionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_G_N_R",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_G_N_R =
+		new FinderPath(ResourceTypePermissionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceTypePermissionModelImpl.FINDER_CACHE_ENABLED,
+			ResourceTypePermissionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_G_N_R",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Long.class.getName()
