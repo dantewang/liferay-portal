@@ -81,7 +81,7 @@ public class AssetCategoryFinderImpl
 	public static final FinderPath FINDER_PATH_FIND_BY_G_L = new FinderPath(
 		AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 		AssetCategoryModelImpl.FINDER_CACHE_ENABLED, List.class,
-		AssetCategoryPersistenceImpl.FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+		AssetCategoryPersistenceImpl.FINDER_CLASS_NAME_LIST,
 		"findByG_L", new String[] {Long.class.getName()});
 
 	public int countByG_C_N(long groupId, long classNameId, String name)
