@@ -75,10 +75,6 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED,
 			UserGroupGroupRoleImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED,
-			UserGroupGroupRoleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -90,16 +86,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERGROUPID =
-		new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED,
-			UserGroupGroupRoleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserGroupId",
-			new String[] { Long.class.getName() },
-			UserGroupGroupRoleModelImpl.USERGROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERGROUPID = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserGroupId",
@@ -299,20 +288,13 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 	public List<UserGroupGroupRole> findByUserGroupId(long userGroupId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				userGroupId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERGROUPID;
-			finderArgs = new Object[] { userGroupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERGROUPID;
-			finderArgs = new Object[] { userGroupId, start, end, orderByComparator };
-		}
-
-		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(finderPath,
+		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_USERGROUPID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -369,12 +351,14 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_USERGROUPID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_USERGROUPID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -612,16 +596,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED,
-			UserGroupGroupRoleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			UserGroupGroupRoleModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
@@ -819,20 +796,13 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 	 */
 	public List<UserGroupGroupRole> findByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(finderPath,
+		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -889,12 +859,14 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1132,16 +1104,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID =
-		new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED,
-			UserGroupGroupRoleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByRoleId",
-			new String[] { Long.class.getName() },
-			UserGroupGroupRoleModelImpl.ROLEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_ROLEID = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRoleId",
@@ -1339,20 +1304,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 	 */
 	public List<UserGroupGroupRole> findByRoleId(long roleId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] { roleId, start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID;
-			finderArgs = new Object[] { roleId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ROLEID;
-			finderArgs = new Object[] { roleId, start, end, orderByComparator };
-		}
-
-		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(finderPath,
+		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_ROLEID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1409,12 +1363,14 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_ROLEID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_ROLEID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1652,16 +1608,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_G = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED,
-			UserGroupGroupRoleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByU_G",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			UserGroupGroupRoleModelImpl.USERGROUPID_COLUMN_BITMASK |
-			UserGroupGroupRoleModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_G = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_G",
@@ -1869,24 +1818,13 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 	public List<UserGroupGroupRole> findByU_G(long userGroupId, long groupId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				userGroupId, groupId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_G;
-			finderArgs = new Object[] { userGroupId, groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_G;
-			finderArgs = new Object[] {
-					userGroupId, groupId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(finderPath,
+		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_U_G,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1948,12 +1886,14 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_U_G,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_U_G,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2214,16 +2154,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
-			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED,
-			UserGroupGroupRoleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_R",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			UserGroupGroupRoleModelImpl.GROUPID_COLUMN_BITMASK |
-			UserGroupGroupRoleModelImpl.ROLEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_R = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_R",
@@ -2431,24 +2364,13 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 	public List<UserGroupGroupRole> findByG_R(long groupId, long roleId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, roleId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R;
-			finderArgs = new Object[] { groupId, roleId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R;
-			finderArgs = new Object[] {
-					groupId, roleId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(finderPath,
+		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2510,12 +2432,14 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2989,14 +2913,12 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 
 		else {
 			if ((userGroupGroupRoleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERGROUPID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_USERGROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(userGroupGroupRoleModelImpl.getOriginalUserGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERGROUPID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERGROUPID,
 					args);
 
 				args = new Object[] {
@@ -3005,58 +2927,46 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERGROUPID,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERGROUPID,
-					args);
 			}
 
 			if ((userGroupGroupRoleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_GROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(userGroupGroupRoleModelImpl.getOriginalGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(userGroupGroupRoleModelImpl.getGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
 			}
 
 			if ((userGroupGroupRoleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_ROLEID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(userGroupGroupRoleModelImpl.getOriginalRoleId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ROLEID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(userGroupGroupRoleModelImpl.getRoleId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ROLEID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID,
-					args);
 			}
 
 			if ((userGroupGroupRoleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_G.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_U_G.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(userGroupGroupRoleModelImpl.getOriginalUserGroupId()),
 						Long.valueOf(userGroupGroupRoleModelImpl.getOriginalGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_G, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_G,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(userGroupGroupRoleModelImpl.getUserGroupId()),
@@ -3064,20 +2974,16 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_G, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_G,
-					args);
 			}
 
 			if ((userGroupGroupRoleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_G_R.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(userGroupGroupRoleModelImpl.getOriginalGroupId()),
 						Long.valueOf(userGroupGroupRoleModelImpl.getOriginalRoleId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(userGroupGroupRoleModelImpl.getGroupId()),
@@ -3085,8 +2991,6 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R,
-					args);
 			}
 		}
 
@@ -3259,20 +3163,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 	 */
 	public List<UserGroupGroupRole> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(finderPath,
+		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -3317,12 +3210,14 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

@@ -76,10 +76,6 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED,
 			PasswordPolicyImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
-			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED,
-			PasswordPolicyImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -90,16 +86,9 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
-			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED,
-			PasswordPolicyImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_DP",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			PasswordPolicyModelImpl.COMPANYID_COLUMN_BITMASK |
-			PasswordPolicyModelImpl.DEFAULTPOLICY_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_DP",
@@ -123,24 +112,13 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	protected List<PasswordPolicy> findByC_DP(long companyId,
 		boolean defaultPolicy, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				companyId, defaultPolicy,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_DP;
-			finderArgs = new Object[] { companyId, defaultPolicy };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_DP;
-			finderArgs = new Object[] {
-					companyId, defaultPolicy,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<PasswordPolicy> list = (List<PasswordPolicy>)FinderCacheUtil.getResult(finderPath,
+		List<PasswordPolicy> list = (List<PasswordPolicy>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_DP,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -202,12 +180,14 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_DP,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_DP,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -476,16 +456,9 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
-			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED,
-			PasswordPolicyImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_N",
-			new String[] { Long.class.getName(), String.class.getName() },
-			PasswordPolicyModelImpl.COMPANYID_COLUMN_BITMASK |
-			PasswordPolicyModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_N",
@@ -1205,20 +1178,9 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	 */
 	public List<PasswordPolicy> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<PasswordPolicy> list = (List<PasswordPolicy>)FinderCacheUtil.getResult(finderPath,
+		List<PasswordPolicy> list = (List<PasswordPolicy>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -1263,12 +1225,14 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

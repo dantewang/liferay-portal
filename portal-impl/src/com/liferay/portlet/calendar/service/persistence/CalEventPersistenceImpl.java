@@ -96,9 +96,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -108,14 +105,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
-			new String[] { String.class.getName() },
-			CalEventModelImpl.UUID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -323,20 +315,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] { uuid, start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(finderPath,
+		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -405,12 +386,14 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -662,16 +645,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_G =
-		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			CalEventModelImpl.UUID_COLUMN_BITMASK |
-			CalEventModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
@@ -934,16 +910,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			CalEventModelImpl.UUID_COLUMN_BITMASK |
-			CalEventModelImpl.COMPANYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
@@ -1161,24 +1130,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByUuid_C(String uuid, long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				uuid, companyId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(finderPath,
+		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1252,12 +1210,14 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1532,15 +1492,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			CalEventModelImpl.COMPANYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
@@ -1738,20 +1692,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				companyId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(finderPath,
+		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1808,12 +1755,14 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2047,15 +1996,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			CalEventModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
@@ -2560,20 +2503,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(finderPath,
+		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2630,12 +2566,14 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2917,13 +2855,12 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			new String[] {
 				Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_NOTREMINDBY =
-		new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_COUNT_BY_NOTREMINDBY = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByNotRemindBy",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByNotRemindBy",
 			new String[] { Integer.class.getName() });
 
 	/**
@@ -3118,13 +3055,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByNotRemindBy(int remindBy, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				remindBy,
+				
+				start, end, orderByComparator
+			};
 
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_NOTREMINDBY;
-		finderArgs = new Object[] { remindBy, start, end, orderByComparator };
-
-		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(finderPath,
+		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_NOTREMINDBY,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -3181,12 +3118,14 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_NOTREMINDBY,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_NOTREMINDBY,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -3371,7 +3310,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public int countByNotRemindBy(int remindBy) throws SystemException {
 		Object[] finderArgs = new Object[] { remindBy };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_NOTREMINDBY,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_NOTREMINDBY,
 				finderArgs, this);
 
 		if (count == null) {
@@ -3404,7 +3343,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_NOTREMINDBY,
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NOTREMINDBY,
 					finderArgs, count);
 
 				closeSession(session);
@@ -3421,22 +3360,12 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_T",
-			new String[] { Long.class.getName(), String.class.getName() },
-			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
-			CalEventModelImpl.TYPE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_T",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_T",
 			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
@@ -4162,24 +4091,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByG_T(long groupId, String type, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, type,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T;
-			finderArgs = new Object[] { groupId, type };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T;
-			finderArgs = new Object[] {
-					groupId, type,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(finderPath,
+		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -4253,12 +4171,14 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -4708,7 +4628,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 		throws SystemException {
 		Object[] finderArgs = new Object[] { groupId, StringUtil.merge(types) };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_T,
 				finderArgs, this);
 
 		if (count == null) {
@@ -4785,8 +4705,8 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T,
-					finderArgs, count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_T, finderArgs,
+					count);
 
 				closeSession(session);
 			}
@@ -4973,15 +4893,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_R",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
-			CalEventModelImpl.REPEATING_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_R",
@@ -5510,24 +5424,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByG_R(long groupId, boolean repeating, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, repeating,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R;
-			finderArgs = new Object[] { groupId, repeating };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R;
-			finderArgs = new Object[] {
-					groupId, repeating,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(finderPath,
+		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -5589,12 +5492,14 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_R,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -5909,29 +5814,12 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				Long.class.getName(), String.class.getName(),
 				Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, CalEventImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_T_R",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				Boolean.class.getName()
-			},
-			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
-			CalEventModelImpl.TYPE_COLUMN_BITMASK |
-			CalEventModelImpl.REPEATING_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_T_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_T_R",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_T_R",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Boolean.class.getName()
@@ -6697,24 +6585,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public List<CalEvent> findByG_T_R(long groupId, String type,
 		boolean repeating, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, type, repeating,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R;
-			finderArgs = new Object[] { groupId, type, repeating };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T_R;
-			finderArgs = new Object[] {
-					groupId, type, repeating,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(finderPath,
+		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T_R,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -6793,12 +6670,14 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T_R,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_T_R,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -7294,7 +7173,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				groupId, StringUtil.merge(types), repeating
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T_R,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_T_R,
 				finderArgs, this);
 
 		if (count == null) {
@@ -7381,7 +7260,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_T_R,
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_T_R,
 					finderArgs, count);
 
 				closeSession(session);
@@ -7855,30 +7734,24 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 
 		else {
 			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_UUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] { calEventModelImpl.getOriginalUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
 
 				args = new Object[] { calEventModelImpl.getUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
 			}
 
 			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_UUID_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						calEventModelImpl.getOriginalUuid(),
 						Long.valueOf(calEventModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
 
 				args = new Object[] {
 						calEventModelImpl.getUuid(),
@@ -7886,19 +7759,15 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
 			}
 
 			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_COMPANYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(calEventModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
 					args);
 
 				args = new Object[] {
@@ -7907,29 +7776,23 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
 			}
 
 			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_GROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(calEventModelImpl.getOriginalGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
 
 				args = new Object[] { Long.valueOf(calEventModelImpl.getGroupId()) };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
 			}
 
 			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_G_T.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(calEventModelImpl.getOriginalGroupId()),
 						
@@ -7937,8 +7800,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(calEventModelImpl.getGroupId()),
@@ -7947,20 +7808,16 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T,
-					args);
 			}
 
 			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_G_R.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(calEventModelImpl.getOriginalGroupId()),
 						Boolean.valueOf(calEventModelImpl.getOriginalRepeating())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(calEventModelImpl.getGroupId()),
@@ -7968,12 +7825,10 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R,
-					args);
 			}
 
 			if ((calEventModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_G_T_R.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(calEventModelImpl.getOriginalGroupId()),
 						
@@ -7982,8 +7837,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(calEventModelImpl.getGroupId()),
@@ -7993,8 +7846,6 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T_R, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R,
-					args);
 			}
 		}
 
@@ -8205,20 +8056,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(finderPath,
+		List<CalEvent> list = (List<CalEvent>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -8263,12 +8103,14 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

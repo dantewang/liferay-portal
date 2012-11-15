@@ -86,9 +86,6 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagModelImpl.FINDER_CACHE_ENABLED, AssetTagImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagModelImpl.FINDER_CACHE_ENABLED, AssetTagImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -98,15 +95,9 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagModelImpl.FINDER_CACHE_ENABLED, AssetTagImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			AssetTagModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
@@ -611,20 +602,13 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 */
 	public List<AssetTag> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<AssetTag> list = (List<AssetTag>)FinderCacheUtil.getResult(finderPath,
+		List<AssetTag> list = (List<AssetTag>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -681,12 +665,14 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -967,15 +953,9 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagModelImpl.FINDER_CACHE_ENABLED, AssetTagImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_N",
-			new String[] { Long.class.getName(), String.class.getName() },
-			AssetTagModelImpl.GROUPID_COLUMN_BITMASK |
-			AssetTagModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_N",
@@ -998,24 +978,13 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 */
 	protected List<AssetTag> findByG_N(long groupId, String name, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, name,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N;
-			finderArgs = new Object[] { groupId, name };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N;
-			finderArgs = new Object[] {
-					groupId, name,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetTag> list = (List<AssetTag>)FinderCacheUtil.getResult(finderPath,
+		List<AssetTag> list = (List<AssetTag>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1089,12 +1058,14 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1586,20 +1557,16 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 
 		else {
 			if ((assetTagModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_GROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(assetTagModelImpl.getOriginalGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
 
 				args = new Object[] { Long.valueOf(assetTagModelImpl.getGroupId()) };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
 			}
 		}
 
@@ -1771,20 +1738,9 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	 */
 	public List<AssetTag> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<AssetTag> list = (List<AssetTag>)FinderCacheUtil.getResult(finderPath,
+		List<AssetTag> list = (List<AssetTag>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -1829,12 +1785,14 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

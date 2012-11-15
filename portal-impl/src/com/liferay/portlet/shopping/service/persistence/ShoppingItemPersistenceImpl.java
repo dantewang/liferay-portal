@@ -83,9 +83,6 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, ShoppingItemImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, ShoppingItemImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -96,15 +93,9 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SMALLIMAGEID =
-		new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, ShoppingItemImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findBySmallImageId",
-			new String[] { Long.class.getName() },
-			ShoppingItemModelImpl.SMALLIMAGEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_SMALLIMAGEID = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBySmallImageId",
@@ -127,24 +118,13 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	protected List<ShoppingItem> findBySmallImageId(long smallImageId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				smallImageId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SMALLIMAGEID;
-			finderArgs = new Object[] { smallImageId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_SMALLIMAGEID;
-			finderArgs = new Object[] {
-					smallImageId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<ShoppingItem> list = (List<ShoppingItem>)FinderCacheUtil.getResult(finderPath,
+		List<ShoppingItem> list = (List<ShoppingItem>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_SMALLIMAGEID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -201,12 +181,14 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_SMALLIMAGEID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_SMALLIMAGEID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -445,15 +427,9 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEDIUMIMAGEID =
-		new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, ShoppingItemImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByMediumImageId",
-			new String[] { Long.class.getName() },
-			ShoppingItemModelImpl.MEDIUMIMAGEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_MEDIUMIMAGEID = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByMediumImageId",
@@ -476,24 +452,13 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	protected List<ShoppingItem> findByMediumImageId(long mediumImageId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				mediumImageId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEDIUMIMAGEID;
-			finderArgs = new Object[] { mediumImageId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_MEDIUMIMAGEID;
-			finderArgs = new Object[] {
-					mediumImageId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<ShoppingItem> list = (List<ShoppingItem>)FinderCacheUtil.getResult(finderPath,
+		List<ShoppingItem> list = (List<ShoppingItem>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_MEDIUMIMAGEID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -550,12 +515,14 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_MEDIUMIMAGEID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_MEDIUMIMAGEID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -795,15 +762,9 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LARGEIMAGEID =
-		new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, ShoppingItemImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByLargeImageId",
-			new String[] { Long.class.getName() },
-			ShoppingItemModelImpl.LARGEIMAGEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_LARGEIMAGEID = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByLargeImageId",
@@ -826,24 +787,13 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	protected List<ShoppingItem> findByLargeImageId(long largeImageId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				largeImageId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LARGEIMAGEID;
-			finderArgs = new Object[] { largeImageId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LARGEIMAGEID;
-			finderArgs = new Object[] {
-					largeImageId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<ShoppingItem> list = (List<ShoppingItem>)FinderCacheUtil.getResult(finderPath,
+		List<ShoppingItem> list = (List<ShoppingItem>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LARGEIMAGEID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -900,12 +850,14 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LARGEIMAGEID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LARGEIMAGEID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1143,15 +1095,9 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, ShoppingItemImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_C",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			ShoppingItemModelImpl.GROUPID_COLUMN_BITMASK |
-			ShoppingItemModelImpl.CATEGORYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_C",
@@ -1682,24 +1628,13 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	public List<ShoppingItem> findByG_C(long groupId, long categoryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, categoryId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C;
-			finderArgs = new Object[] { groupId, categoryId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C;
-			finderArgs = new Object[] {
-					groupId, categoryId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<ShoppingItem> list = (List<ShoppingItem>)FinderCacheUtil.getResult(finderPath,
+		List<ShoppingItem> list = (List<ShoppingItem>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1761,12 +1696,14 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2086,15 +2023,9 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, ShoppingItemImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_S",
-			new String[] { Long.class.getName(), String.class.getName() },
-			ShoppingItemModelImpl.COMPANYID_COLUMN_BITMASK |
-			ShoppingItemModelImpl.SKU_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_S",
@@ -2589,15 +2520,13 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 
 		else {
 			if ((shoppingItemModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_G_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(shoppingItemModelImpl.getOriginalGroupId()),
 						Long.valueOf(shoppingItemModelImpl.getOriginalCategoryId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(shoppingItemModelImpl.getGroupId()),
@@ -2605,8 +2534,6 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C,
-					args);
 			}
 		}
 
@@ -2835,20 +2762,9 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	 */
 	public List<ShoppingItem> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<ShoppingItem> list = (List<ShoppingItem>)FinderCacheUtil.getResult(finderPath,
+		List<ShoppingItem> list = (List<ShoppingItem>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -2893,12 +2809,14 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

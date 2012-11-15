@@ -81,10 +81,6 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 			ExpandoColumnModelImpl.FINDER_CACHE_ENABLED,
 			ExpandoColumnImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
-			ExpandoColumnModelImpl.FINDER_CACHE_ENABLED,
-			ExpandoColumnImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoColumnModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -95,15 +91,9 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TABLEID =
-		new FinderPath(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
-			ExpandoColumnModelImpl.FINDER_CACHE_ENABLED,
-			ExpandoColumnImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByTableId", new String[] { Long.class.getName() },
-			ExpandoColumnModelImpl.TABLEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_TABLEID = new FinderPath(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoColumnModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByTableId",
@@ -611,20 +601,13 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 */
 	public List<ExpandoColumn> findByTableId(long tableId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				tableId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TABLEID;
-			finderArgs = new Object[] { tableId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TABLEID;
-			finderArgs = new Object[] { tableId, start, end, orderByComparator };
-		}
-
-		List<ExpandoColumn> list = (List<ExpandoColumn>)FinderCacheUtil.getResult(finderPath,
+		List<ExpandoColumn> list = (List<ExpandoColumn>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_TABLEID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -681,12 +664,14 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_TABLEID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_TABLEID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -978,23 +963,12 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_N = new FinderPath(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
-			ExpandoColumnModelImpl.FINDER_CACHE_ENABLED,
-			ExpandoColumnImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByT_N",
-			new String[] { Long.class.getName(), String.class.getName() },
-			ExpandoColumnModelImpl.TABLEID_COLUMN_BITMASK |
-			ExpandoColumnModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_N = new FinderPath(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoColumnModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByT_N",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_T_N = new FinderPath(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
-			ExpandoColumnModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByT_N",
 			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
@@ -1434,7 +1408,7 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 		throws SystemException {
 		Object[] finderArgs = new Object[] { tableId, StringUtil.merge(names) };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_T_N,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_T_N,
 				finderArgs, this);
 
 		if (count == null) {
@@ -1511,8 +1485,8 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_T_N,
-					finderArgs, count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_N, finderArgs,
+					count);
 
 				closeSession(session);
 			}
@@ -1933,26 +1907,22 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 
 		else {
 			if ((expandoColumnModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TABLEID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_TABLEID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(expandoColumnModelImpl.getOriginalTableId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TABLEID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TABLEID,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(expandoColumnModelImpl.getTableId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TABLEID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TABLEID,
-					args);
 			}
 
 			if ((expandoColumnModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_N.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_T_N.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(expandoColumnModelImpl.getOriginalTableId()),
 						
@@ -1960,8 +1930,6 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_N, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_N,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(expandoColumnModelImpl.getTableId()),
@@ -1970,8 +1938,6 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_N, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_N,
-					args);
 			}
 		}
 
@@ -2174,20 +2140,9 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	 */
 	public List<ExpandoColumn> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<ExpandoColumn> list = (List<ExpandoColumn>)FinderCacheUtil.getResult(finderPath,
+		List<ExpandoColumn> list = (List<ExpandoColumn>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -2232,12 +2187,14 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

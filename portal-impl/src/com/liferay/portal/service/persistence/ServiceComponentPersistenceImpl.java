@@ -76,10 +76,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
 			ServiceComponentImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
-			ServiceComponentImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
 			ServiceComponentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -91,16 +87,9 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE =
-		new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
-			ServiceComponentImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByBuildNamespace",
-			new String[] { String.class.getName() },
-			ServiceComponentModelImpl.BUILDNAMESPACE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_BUILDNAMESPACE = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
 			ServiceComponentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByBuildNamespace",
@@ -313,24 +302,13 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	public List<ServiceComponent> findByBuildNamespace(String buildNamespace,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				buildNamespace,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE;
-			finderArgs = new Object[] { buildNamespace };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_BUILDNAMESPACE;
-			finderArgs = new Object[] {
-					buildNamespace,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<ServiceComponent> list = (List<ServiceComponent>)FinderCacheUtil.getResult(finderPath,
+		List<ServiceComponent> list = (List<ServiceComponent>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_BUILDNAMESPACE,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -400,12 +378,14 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_BUILDNAMESPACE,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_BUILDNAMESPACE,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -666,17 +646,9 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BNS_BNU =
-		new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
-			ServiceComponentImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByBNS_BNU",
-			new String[] { String.class.getName(), Long.class.getName() },
-			ServiceComponentModelImpl.BUILDNAMESPACE_COLUMN_BITMASK |
-			ServiceComponentModelImpl.BUILDNUMBER_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_BNS_BNU = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
 			ServiceComponentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByBNS_BNU",
@@ -1178,14 +1150,12 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 
 		else {
 			if ((serviceComponentModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_BUILDNAMESPACE.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						serviceComponentModelImpl.getOriginalBuildNamespace()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BUILDNAMESPACE,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE,
 					args);
 
 				args = new Object[] {
@@ -1193,8 +1163,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BUILDNAMESPACE,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE,
 					args);
 			}
 		}
@@ -1396,20 +1364,9 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	 */
 	public List<ServiceComponent> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<ServiceComponent> list = (List<ServiceComponent>)FinderCacheUtil.getResult(finderPath,
+		List<ServiceComponent> list = (List<ServiceComponent>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -1454,12 +1411,14 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

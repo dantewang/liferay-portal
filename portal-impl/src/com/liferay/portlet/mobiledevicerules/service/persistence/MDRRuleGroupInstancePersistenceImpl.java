@@ -83,10 +83,6 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
 			MDRRuleGroupInstanceImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
-			MDRRuleGroupInstanceImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -97,15 +93,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
-			MDRRuleGroupInstanceImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
-			new String[] { String.class.getName() },
-			MDRRuleGroupInstanceModelImpl.UUID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -315,20 +305,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public List<MDRRuleGroupInstance> findByUuid(String uuid, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] { uuid, start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -397,12 +376,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -661,17 +642,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_G =
-		new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
-			MDRRuleGroupInstanceImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			MDRRuleGroupInstanceModelImpl.UUID_COLUMN_BITMASK |
-			MDRRuleGroupInstanceModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
@@ -935,17 +908,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
-			MDRRuleGroupInstanceImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			MDRRuleGroupInstanceModelImpl.UUID_COLUMN_BITMASK |
-			MDRRuleGroupInstanceModelImpl.COMPANYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
@@ -1165,24 +1130,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				uuid, companyId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1256,12 +1210,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1537,16 +1493,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
-			MDRRuleGroupInstanceImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			MDRRuleGroupInstanceModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
@@ -2057,20 +2006,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public List<MDRRuleGroupInstance> findByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2127,12 +2069,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2419,16 +2363,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPID =
-		new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
-			MDRRuleGroupInstanceImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByRuleGroupId",
-			new String[] { Long.class.getName() },
-			MDRRuleGroupInstanceModelImpl.RULEGROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_RULEGROUPID = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRuleGroupId",
@@ -2628,20 +2565,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByRuleGroupId(long ruleGroupId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				ruleGroupId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPID;
-			finderArgs = new Object[] { ruleGroupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RULEGROUPID;
-			finderArgs = new Object[] { ruleGroupId, start, end, orderByComparator };
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_RULEGROUPID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2698,12 +2628,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_RULEGROUPID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_RULEGROUPID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2941,16 +2873,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
-			MDRRuleGroupInstanceImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			MDRRuleGroupInstanceModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			MDRRuleGroupInstanceModelImpl.CLASSPK_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
@@ -3158,24 +3083,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByC_C(long classNameId, long classPK,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				classNameId, classPK,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
-			finderArgs = new Object[] { classNameId, classPK };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
-			finderArgs = new Object[] {
-					classNameId, classPK,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -3237,12 +3151,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -3504,19 +3420,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
-			MDRRuleGroupInstanceImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_C_C",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			},
-			MDRRuleGroupInstanceModelImpl.GROUPID_COLUMN_BITMASK |
-			MDRRuleGroupInstanceModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			MDRRuleGroupInstanceModelImpl.CLASSPK_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_C_C",
@@ -4078,24 +3984,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByG_C_C(long groupId,
 		long classNameId, long classPK, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, classNameId, classPK,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C;
-			finderArgs = new Object[] { groupId, classNameId, classPK };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_C;
-			finderArgs = new Object[] {
-					groupId, classNameId, classPK,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_C,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -4162,12 +4057,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_C,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_C,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -4522,19 +4419,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_R = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
-			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED,
-			MDRRuleGroupInstanceImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_R",
-			new String[] {
-				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			},
-			MDRRuleGroupInstanceModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			MDRRuleGroupInstanceModelImpl.CLASSPK_COLUMN_BITMASK |
-			MDRRuleGroupInstanceModelImpl.RULEGROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_R = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_R",
@@ -5054,32 +4941,26 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 		else {
 			if ((mdrRuleGroupInstanceModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_UUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						mdrRuleGroupInstanceModelImpl.getOriginalUuid()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
 
 				args = new Object[] { mdrRuleGroupInstanceModelImpl.getUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
 			}
 
 			if ((mdrRuleGroupInstanceModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_UUID_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						mdrRuleGroupInstanceModelImpl.getOriginalUuid(),
 						Long.valueOf(mdrRuleGroupInstanceModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
 
 				args = new Object[] {
 						mdrRuleGroupInstanceModelImpl.getUuid(),
@@ -5087,38 +4968,30 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
 			}
 
 			if ((mdrRuleGroupInstanceModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_GROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(mdrRuleGroupInstanceModelImpl.getOriginalGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(mdrRuleGroupInstanceModelImpl.getGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
 			}
 
 			if ((mdrRuleGroupInstanceModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_RULEGROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(mdrRuleGroupInstanceModelImpl.getOriginalRuleGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RULEGROUPID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPID,
 					args);
 
 				args = new Object[] {
@@ -5127,20 +5000,16 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RULEGROUPID,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPID,
-					args);
 			}
 
 			if ((mdrRuleGroupInstanceModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_C_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(mdrRuleGroupInstanceModelImpl.getOriginalClassNameId()),
 						Long.valueOf(mdrRuleGroupInstanceModelImpl.getOriginalClassPK())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(mdrRuleGroupInstanceModelImpl.getClassNameId()),
@@ -5148,12 +5017,10 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
-					args);
 			}
 
 			if ((mdrRuleGroupInstanceModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_G_C_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(mdrRuleGroupInstanceModelImpl.getOriginalGroupId()),
 						Long.valueOf(mdrRuleGroupInstanceModelImpl.getOriginalClassNameId()),
@@ -5161,8 +5028,6 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(mdrRuleGroupInstanceModelImpl.getGroupId()),
@@ -5171,8 +5036,6 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C,
-					args);
 			}
 		}
 
@@ -5407,20 +5270,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public List<MDRRuleGroupInstance> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(finderPath,
+		List<MDRRuleGroupInstance> list = (List<MDRRuleGroupInstance>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -5465,12 +5317,14 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

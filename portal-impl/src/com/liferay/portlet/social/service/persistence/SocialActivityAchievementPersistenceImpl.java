@@ -80,10 +80,6 @@ public class SocialActivityAchievementPersistenceImpl
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			SocialActivityAchievementImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
-			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
-			SocialActivityAchievementImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll",
@@ -95,16 +91,9 @@ public class SocialActivityAchievementPersistenceImpl
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
-			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
-			SocialActivityAchievementImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -303,20 +292,13 @@ public class SocialActivityAchievementPersistenceImpl
 	public List<SocialActivityAchievement> findByGroupId(long groupId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
+		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -373,12 +355,14 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -616,16 +600,9 @@ public class SocialActivityAchievementPersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
-			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
-			SocialActivityAchievementImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
-			SocialActivityAchievementModelImpl.USERID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -834,24 +811,13 @@ public class SocialActivityAchievementPersistenceImpl
 	public List<SocialActivityAchievement> findByG_U(long groupId, long userId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, userId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U;
-			finderArgs = new Object[] { groupId, userId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U;
-			finderArgs = new Object[] {
-					groupId, userId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
+		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -913,12 +879,14 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1179,16 +1147,9 @@ public class SocialActivityAchievementPersistenceImpl
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
-			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
-			SocialActivityAchievementImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_N",
-			new String[] { Long.class.getName(), String.class.getName() },
-			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
-			SocialActivityAchievementModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -1409,24 +1370,13 @@ public class SocialActivityAchievementPersistenceImpl
 	public List<SocialActivityAchievement> findByG_N(long groupId, String name,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, name,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N;
-			finderArgs = new Object[] { groupId, name };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N;
-			finderArgs = new Object[] {
-					groupId, name,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
+		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1501,12 +1451,14 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1781,16 +1733,9 @@ public class SocialActivityAchievementPersistenceImpl
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
-			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
-			SocialActivityAchievementImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_F",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
-			SocialActivityAchievementModelImpl.FIRSTINGROUP_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -2000,24 +1945,13 @@ public class SocialActivityAchievementPersistenceImpl
 	public List<SocialActivityAchievement> findByG_F(long groupId,
 		boolean firstInGroup, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, firstInGroup,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F;
-			finderArgs = new Object[] { groupId, firstInGroup };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F;
-			finderArgs = new Object[] {
-					groupId, firstInGroup,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
+		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2079,12 +2013,14 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2362,20 +2298,9 @@ public class SocialActivityAchievementPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_N = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
-			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
-			SocialActivityAchievementImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U_N",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName()
-			},
-			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
-			SocialActivityAchievementModelImpl.USERID_COLUMN_BITMASK |
-			SocialActivityAchievementModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U_N = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -2665,20 +2590,9 @@ public class SocialActivityAchievementPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_F = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
-			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
-			SocialActivityAchievementImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U_F",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			},
-			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
-			SocialActivityAchievementModelImpl.USERID_COLUMN_BITMASK |
-			SocialActivityAchievementModelImpl.FIRSTINGROUP_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U_F = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -2902,24 +2816,13 @@ public class SocialActivityAchievementPersistenceImpl
 	public List<SocialActivityAchievement> findByG_U_F(long groupId,
 		long userId, boolean firstInGroup, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, userId, firstInGroup,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_F;
-			finderArgs = new Object[] { groupId, userId, firstInGroup };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_F;
-			finderArgs = new Object[] {
-					groupId, userId, firstInGroup,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
+		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_F,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2986,12 +2889,14 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_F,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_F,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -3521,34 +3426,28 @@ public class SocialActivityAchievementPersistenceImpl
 
 		else {
 			if ((socialActivityAchievementModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_GROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(socialActivityAchievementModelImpl.getOriginalGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(socialActivityAchievementModelImpl.getGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
 			}
 
 			if ((socialActivityAchievementModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_G_U.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(socialActivityAchievementModelImpl.getOriginalGroupId()),
 						Long.valueOf(socialActivityAchievementModelImpl.getOriginalUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(socialActivityAchievementModelImpl.getGroupId()),
@@ -3556,12 +3455,10 @@ public class SocialActivityAchievementPersistenceImpl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U,
-					args);
 			}
 
 			if ((socialActivityAchievementModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_G_N.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(socialActivityAchievementModelImpl.getOriginalGroupId()),
 						
@@ -3569,8 +3466,6 @@ public class SocialActivityAchievementPersistenceImpl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_N, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(socialActivityAchievementModelImpl.getGroupId()),
@@ -3579,20 +3474,16 @@ public class SocialActivityAchievementPersistenceImpl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_N, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N,
-					args);
 			}
 
 			if ((socialActivityAchievementModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_G_F.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(socialActivityAchievementModelImpl.getOriginalGroupId()),
 						Boolean.valueOf(socialActivityAchievementModelImpl.getOriginalFirstInGroup())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_F, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(socialActivityAchievementModelImpl.getGroupId()),
@@ -3600,12 +3491,10 @@ public class SocialActivityAchievementPersistenceImpl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_F, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F,
-					args);
 			}
 
 			if ((socialActivityAchievementModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_F.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_G_U_F.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(socialActivityAchievementModelImpl.getOriginalGroupId()),
 						Long.valueOf(socialActivityAchievementModelImpl.getOriginalUserId()),
@@ -3613,8 +3502,6 @@ public class SocialActivityAchievementPersistenceImpl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_F, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_F,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(socialActivityAchievementModelImpl.getGroupId()),
@@ -3623,8 +3510,6 @@ public class SocialActivityAchievementPersistenceImpl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_F, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_F,
-					args);
 			}
 		}
 
@@ -3834,20 +3719,9 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	public List<SocialActivityAchievement> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
+		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -3892,12 +3766,14 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

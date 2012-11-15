@@ -75,10 +75,6 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED,
 			PortalPreferencesImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			PortalPreferencesImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -89,16 +85,9 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_O = new FinderPath(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			PortalPreferencesImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByO_O",
-			new String[] { Long.class.getName(), Integer.class.getName() },
-			PortalPreferencesModelImpl.OWNERID_COLUMN_BITMASK |
-			PortalPreferencesModelImpl.OWNERTYPE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_O_O = new FinderPath(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByO_O",
@@ -122,24 +111,13 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 	protected List<PortalPreferences> findByO_O(long ownerId, int ownerType,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				ownerId, ownerType,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_O;
-			finderArgs = new Object[] { ownerId, ownerType };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_O_O;
-			finderArgs = new Object[] {
-					ownerId, ownerType,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<PortalPreferences> list = (List<PortalPreferences>)FinderCacheUtil.getResult(finderPath,
+		List<PortalPreferences> list = (List<PortalPreferences>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_O_O,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -201,12 +179,14 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_O_O,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_O_O,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -846,20 +826,9 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 	 */
 	public List<PortalPreferences> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<PortalPreferences> list = (List<PortalPreferences>)FinderCacheUtil.getResult(finderPath,
+		List<PortalPreferences> list = (List<PortalPreferences>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -904,12 +873,14 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

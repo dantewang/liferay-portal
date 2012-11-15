@@ -100,9 +100,6 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -113,15 +110,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			AssetEntryModelImpl.COMPANYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
@@ -319,20 +310,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 */
 	public List<AssetEntry> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				companyId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -389,12 +373,14 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -631,15 +617,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			new String[] {
 				Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_VISIBLE =
-		new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByVisible",
-			new String[] { Boolean.class.getName() },
-			AssetEntryModelImpl.VISIBLE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_VISIBLE = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByVisible",
@@ -836,20 +816,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 */
 	public List<AssetEntry> findByVisible(boolean visible, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				visible,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_VISIBLE;
-			finderArgs = new Object[] { visible };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_VISIBLE;
-			finderArgs = new Object[] { visible, start, end, orderByComparator };
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_VISIBLE,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -906,12 +879,14 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_VISIBLE,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_VISIBLE,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1146,15 +1121,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			new String[] {
 				Date.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PUBLISHDATE =
-		new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByPublishDate",
-			new String[] { Date.class.getName() },
-			AssetEntryModelImpl.PUBLISHDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_PUBLISHDATE = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByPublishDate",
@@ -1359,20 +1328,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 */
 	public List<AssetEntry> findByPublishDate(Date publishDate, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				publishDate,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PUBLISHDATE;
-			finderArgs = new Object[] { publishDate };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PUBLISHDATE;
-			finderArgs = new Object[] { publishDate, start, end, orderByComparator };
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_PUBLISHDATE,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1436,12 +1398,14 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_PUBLISHDATE,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_PUBLISHDATE,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1687,15 +1651,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			new String[] {
 				Date.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EXPIRATIONDATE =
-		new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByExpirationDate",
-			new String[] { Date.class.getName() },
-			AssetEntryModelImpl.EXPIRATIONDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_EXPIRATIONDATE = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByExpirationDate",
@@ -1901,24 +1859,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public List<AssetEntry> findByExpirationDate(Date expirationDate,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				expirationDate,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EXPIRATIONDATE;
-			finderArgs = new Object[] { expirationDate };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_EXPIRATIONDATE;
-			finderArgs = new Object[] {
-					expirationDate,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_EXPIRATIONDATE,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1983,12 +1930,14 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_EXPIRATIONDATE,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_EXPIRATIONDATE,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2236,15 +2185,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTUUID =
-		new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByLayoutUuid",
-			new String[] { String.class.getName() },
-			AssetEntryModelImpl.LAYOUTUUID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_LAYOUTUUID = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByLayoutUuid",
@@ -2454,20 +2397,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 */
 	public List<AssetEntry> findByLayoutUuid(String layoutUuid, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				layoutUuid,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTUUID;
-			finderArgs = new Object[] { layoutUuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LAYOUTUUID;
-			finderArgs = new Object[] { layoutUuid, start, end, orderByComparator };
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LAYOUTUUID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2536,12 +2472,14 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LAYOUTUUID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LAYOUTUUID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2792,15 +2730,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_CU = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_CU",
-			new String[] { Long.class.getName(), String.class.getName() },
-			AssetEntryModelImpl.GROUPID_COLUMN_BITMASK |
-			AssetEntryModelImpl.CLASSUUID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_CU = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_CU",
@@ -2824,24 +2756,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	protected List<AssetEntry> findByG_CU(long groupId, String classUuid,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				groupId, classUuid,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_CU;
-			finderArgs = new Object[] { groupId, classUuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_CU;
-			finderArgs = new Object[] {
-					groupId, classUuid,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_CU,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2915,12 +2836,14 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_CU,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_CU,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -3200,15 +3123,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AssetEntryModelImpl.FINDER_CACHE_ENABLED, AssetEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			AssetEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			AssetEntryModelImpl.CLASSPK_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
@@ -3695,14 +3612,12 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 
 		else {
 			if ((assetEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_COMPANYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(assetEntryModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
 					args);
 
 				args = new Object[] {
@@ -3711,83 +3626,65 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
 			}
 
 			if ((assetEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_VISIBLE.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_VISIBLE.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Boolean.valueOf(assetEntryModelImpl.getOriginalVisible())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_VISIBLE, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_VISIBLE,
-					args);
 
 				args = new Object[] {
 						Boolean.valueOf(assetEntryModelImpl.getVisible())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_VISIBLE, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_VISIBLE,
-					args);
 			}
 
 			if ((assetEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PUBLISHDATE.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_PUBLISHDATE.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						assetEntryModelImpl.getOriginalPublishDate()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PUBLISHDATE,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PUBLISHDATE,
-					args);
 
 				args = new Object[] { assetEntryModelImpl.getPublishDate() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PUBLISHDATE,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PUBLISHDATE,
-					args);
 			}
 
 			if ((assetEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EXPIRATIONDATE.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_EXPIRATIONDATE.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						assetEntryModelImpl.getOriginalExpirationDate()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_EXPIRATIONDATE,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EXPIRATIONDATE,
-					args);
 
 				args = new Object[] { assetEntryModelImpl.getExpirationDate() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_EXPIRATIONDATE,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EXPIRATIONDATE,
-					args);
 			}
 
 			if ((assetEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTUUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_LAYOUTUUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						assetEntryModelImpl.getOriginalLayoutUuid()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LAYOUTUUID,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTUUID,
-					args);
 
 				args = new Object[] { assetEntryModelImpl.getLayoutUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LAYOUTUUID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTUUID,
 					args);
 			}
 		}
@@ -4005,20 +3902,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 */
 	public List<AssetEntry> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
+		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -4063,12 +3949,14 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

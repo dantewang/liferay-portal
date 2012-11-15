@@ -79,10 +79,6 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
 			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -93,15 +89,9 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
-			new String[] { String.class.getName() },
-			DDMStorageLinkModelImpl.UUID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -310,20 +300,9 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 */
 	public List<DDMStorageLink> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] { uuid, start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(finderPath,
+		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -392,12 +371,14 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -652,16 +633,9 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSPK =
-		new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByClassPK",
-			new String[] { Long.class.getName() },
-			DDMStorageLinkModelImpl.CLASSPK_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSPK = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByClassPK",
@@ -879,16 +853,9 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID =
-		new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStructureId",
-			new String[] { Long.class.getName() },
-			DDMStorageLinkModelImpl.STRUCTUREID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStructureId",
@@ -1086,20 +1053,13 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 */
 	public List<DDMStorageLink> findByStructureId(long structureId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				structureId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
-			finderArgs = new Object[] { structureId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID;
-			finderArgs = new Object[] { structureId, start, end, orderByComparator };
-		}
-
-		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(finderPath,
+		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1156,12 +1116,14 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1635,31 +1597,25 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 
 		else {
 			if ((ddmStorageLinkModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_UUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						ddmStorageLinkModelImpl.getOriginalUuid()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
 
 				args = new Object[] { ddmStorageLinkModelImpl.getUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
 			}
 
 			if ((ddmStorageLinkModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_STRUCTUREID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(ddmStorageLinkModelImpl.getOriginalStructureId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
 					args);
 
 				args = new Object[] {
@@ -1667,8 +1623,6 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
 					args);
 			}
 		}
@@ -1863,20 +1817,9 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 */
 	public List<DDMStorageLink> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(finderPath,
+		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -1921,12 +1864,14 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

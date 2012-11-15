@@ -76,10 +76,6 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED,
 			PortletPreferencesImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			PortletPreferencesImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -90,15 +86,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PLID = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			PortletPreferencesImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByPlid",
-			new String[] { Long.class.getName() },
-			PortletPreferencesModelImpl.PLID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_PLID = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByPlid",
@@ -296,20 +286,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 	 */
 	public List<PortletPreferences> findByPlid(long plid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] { plid, start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PLID;
-			finderArgs = new Object[] { plid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PLID;
-			finderArgs = new Object[] { plid, start, end, orderByComparator };
-		}
-
-		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(finderPath,
+		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_PLID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -366,12 +345,14 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_PLID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_PLID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -609,16 +590,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PORTLETID =
-		new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			PortletPreferencesImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByPortletId",
-			new String[] { String.class.getName() },
-			PortletPreferencesModelImpl.PORTLETID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_PORTLETID = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByPortletId",
@@ -830,20 +804,13 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 	public List<PortletPreferences> findByPortletId(String portletId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				portletId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PORTLETID;
-			finderArgs = new Object[] { portletId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PORTLETID;
-			finderArgs = new Object[] { portletId, start, end, orderByComparator };
-		}
-
-		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(finderPath,
+		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_PORTLETID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -913,12 +880,14 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_PORTLETID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_PORTLETID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1170,16 +1139,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_P = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			PortletPreferencesImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_P",
-			new String[] { Long.class.getName(), String.class.getName() },
-			PortletPreferencesModelImpl.PLID_COLUMN_BITMASK |
-			PortletPreferencesModelImpl.PORTLETID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_P = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_P",
@@ -1399,24 +1361,13 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 	public List<PortletPreferences> findByP_P(long plid, String portletId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				plid, portletId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_P;
-			finderArgs = new Object[] { plid, portletId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_P_P;
-			finderArgs = new Object[] {
-					plid, portletId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(finderPath,
+		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_P,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1491,12 +1442,14 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_P,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_P,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1772,20 +1725,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 				Long.class.getName(), Integer.class.getName(),
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_O_P = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			PortletPreferencesImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByO_O_P",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Long.class.getName()
-			},
-			PortletPreferencesModelImpl.OWNERID_COLUMN_BITMASK |
-			PortletPreferencesModelImpl.OWNERTYPE_COLUMN_BITMASK |
-			PortletPreferencesModelImpl.PLID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_O_O_P = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByO_O_P",
@@ -2004,24 +1946,13 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 	public List<PortletPreferences> findByO_O_P(long ownerId, int ownerType,
 		long plid, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				ownerId, ownerType, plid,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_O_P;
-			finderArgs = new Object[] { ownerId, ownerType, plid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_O_O_P;
-			finderArgs = new Object[] {
-					ownerId, ownerType, plid,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(finderPath,
+		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_O_O_P,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2088,12 +2019,14 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_O_O_P,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_O_O_P,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2378,20 +2311,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 				Integer.class.getName(), Long.class.getName(),
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_P_P = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			PortletPreferencesImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByO_P_P",
-			new String[] {
-				Integer.class.getName(), Long.class.getName(),
-				String.class.getName()
-			},
-			PortletPreferencesModelImpl.OWNERTYPE_COLUMN_BITMASK |
-			PortletPreferencesModelImpl.PLID_COLUMN_BITMASK |
-			PortletPreferencesModelImpl.PORTLETID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_O_P_P = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByO_P_P",
@@ -2622,24 +2544,13 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 	public List<PortletPreferences> findByO_P_P(int ownerType, long plid,
 		String portletId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				ownerType, plid, portletId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_P_P;
-			finderArgs = new Object[] { ownerType, plid, portletId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_O_P_P;
-			finderArgs = new Object[] {
-					ownerType, plid, portletId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(finderPath,
+		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_O_P_P,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2719,12 +2630,14 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_O_P_P,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_O_P_P,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -3037,22 +2950,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 				Long.class.getName(), Integer.class.getName(),
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_O_P_P =
-		new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			PortletPreferencesImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByO_O_P_P",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Long.class.getName(), String.class.getName()
-			},
-			PortletPreferencesModelImpl.OWNERID_COLUMN_BITMASK |
-			PortletPreferencesModelImpl.OWNERTYPE_COLUMN_BITMASK |
-			PortletPreferencesModelImpl.PLID_COLUMN_BITMASK |
-			PortletPreferencesModelImpl.PORTLETID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_O_O_P_P = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByO_O_P_P",
@@ -3602,45 +3502,37 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 
 		else {
 			if ((portletPreferencesModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PLID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_PLID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(portletPreferencesModelImpl.getOriginalPlid())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PLID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PLID,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(portletPreferencesModelImpl.getPlid())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PLID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PLID,
-					args);
 			}
 
 			if ((portletPreferencesModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PORTLETID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_PORTLETID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						portletPreferencesModelImpl.getOriginalPortletId()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PORTLETID,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PORTLETID,
-					args);
 
 				args = new Object[] { portletPreferencesModelImpl.getPortletId() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PORTLETID,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PORTLETID,
-					args);
 			}
 
 			if ((portletPreferencesModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_P.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_P_P.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(portletPreferencesModelImpl.getOriginalPlid()),
 						
@@ -3648,8 +3540,6 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_P,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(portletPreferencesModelImpl.getPlid()),
@@ -3658,12 +3548,10 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_P,
-					args);
 			}
 
 			if ((portletPreferencesModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_O_P.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_O_O_P.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(portletPreferencesModelImpl.getOriginalOwnerId()),
 						Integer.valueOf(portletPreferencesModelImpl.getOriginalOwnerType()),
@@ -3671,8 +3559,6 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_O_O_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_O_P,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(portletPreferencesModelImpl.getOwnerId()),
@@ -3681,12 +3567,10 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_O_O_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_O_P,
-					args);
 			}
 
 			if ((portletPreferencesModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_P_P.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_O_P_P.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Integer.valueOf(portletPreferencesModelImpl.getOriginalOwnerType()),
 						Long.valueOf(portletPreferencesModelImpl.getOriginalPlid()),
@@ -3695,8 +3579,6 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_O_P_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_P_P,
-					args);
 
 				args = new Object[] {
 						Integer.valueOf(portletPreferencesModelImpl.getOwnerType()),
@@ -3706,8 +3588,6 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_O_P_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_O_P_P,
-					args);
 			}
 		}
 
@@ -3918,20 +3798,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 	 */
 	public List<PortletPreferences> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(finderPath,
+		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -3976,12 +3845,14 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

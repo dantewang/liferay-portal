@@ -76,9 +76,6 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -88,12 +85,12 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 			new String[] {
 				Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_COUNT_BY_LTSIZE = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByLtSize",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByLtSize",
 			new String[] { Integer.class.getName() });
 
 	/**
@@ -285,13 +282,9 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	 */
 	public List<Image> findByLtSize(int size, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] { size, start, end, orderByComparator };
 
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LTSIZE;
-		finderArgs = new Object[] { size, start, end, orderByComparator };
-
-		List<Image> list = (List<Image>)FinderCacheUtil.getResult(finderPath,
+		List<Image> list = (List<Image>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LTSIZE,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -347,12 +340,14 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LTSIZE,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LTSIZE,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -533,7 +528,7 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	public int countByLtSize(int size) throws SystemException {
 		Object[] finderArgs = new Object[] { size };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_LTSIZE,
 				finderArgs, this);
 
 		if (count == null) {
@@ -566,7 +561,7 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE,
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_LTSIZE,
 					finderArgs, count);
 
 				closeSession(session);
@@ -954,20 +949,9 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	 */
 	public List<Image> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<Image> list = (List<Image>)FinderCacheUtil.getResult(finderPath,
+		List<Image> list = (List<Image>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -1012,12 +996,14 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

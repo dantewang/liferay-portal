@@ -87,9 +87,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -100,15 +97,9 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
@@ -617,20 +608,13 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	 */
 	public List<Organization> findByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				companyId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<Organization> list = (List<Organization>)FinderCacheUtil.getResult(finderPath,
+		List<Organization> list = (List<Organization>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -687,12 +671,14 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -978,15 +964,9 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS =
-		new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByLocations",
-			new String[] { Long.class.getName() },
-			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_LOCATIONS = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByLocations",
@@ -1495,20 +1475,13 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	 */
 	public List<Organization> findByLocations(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				companyId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LOCATIONS;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<Organization> list = (List<Organization>)FinderCacheUtil.getResult(finderPath,
+		List<Organization> list = (List<Organization>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LOCATIONS,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1565,12 +1538,14 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LOCATIONS,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LOCATIONS,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1855,15 +1830,9 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_P",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK |
-			OrganizationModelImpl.PARENTORGANIZATIONID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_P",
@@ -2399,24 +2368,13 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	public List<Organization> findByC_P(long companyId,
 		long parentOrganizationId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				companyId, parentOrganizationId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P;
-			finderArgs = new Object[] { companyId, parentOrganizationId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_P;
-			finderArgs = new Object[] {
-					companyId, parentOrganizationId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Organization> list = (List<Organization>)FinderCacheUtil.getResult(finderPath,
+		List<Organization> list = (List<Organization>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_P,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2478,12 +2436,14 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_P,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_P,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2806,15 +2766,9 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
-			OrganizationModelImpl.FINDER_CACHE_ENABLED, OrganizationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_N",
-			new String[] { Long.class.getName(), String.class.getName() },
-			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK |
-			OrganizationModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_N",
@@ -3330,14 +3284,12 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 
 		else {
 			if ((organizationModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_COMPANYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(organizationModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
 					args);
 
 				args = new Object[] {
@@ -3346,19 +3298,15 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
 			}
 
 			if ((organizationModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_LOCATIONS.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(organizationModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LOCATIONS,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS,
 					args);
 
 				args = new Object[] {
@@ -3367,20 +3315,16 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LOCATIONS,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOCATIONS,
-					args);
 			}
 
 			if ((organizationModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_C_P.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(organizationModelImpl.getOriginalCompanyId()),
 						Long.valueOf(organizationModelImpl.getOriginalParentOrganizationId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(organizationModelImpl.getCompanyId()),
@@ -3388,8 +3332,6 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P,
-					args);
 			}
 		}
 
@@ -3596,20 +3538,9 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	 */
 	public List<Organization> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<Organization> list = (List<Organization>)FinderCacheUtil.getResult(finderPath,
+		List<Organization> list = (List<Organization>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -3654,12 +3585,14 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

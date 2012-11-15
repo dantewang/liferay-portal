@@ -78,9 +78,6 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, LockImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
-			LockModelImpl.FINDER_CACHE_ENABLED, LockImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -90,14 +87,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
-			LockModelImpl.FINDER_CACHE_ENABLED, LockImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
-			new String[] { String.class.getName() },
-			LockModelImpl.UUID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -304,20 +296,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	public List<Lock> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] { uuid, start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
+		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -385,12 +366,14 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -634,16 +617,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
-			LockModelImpl.FINDER_CACHE_ENABLED, LockImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			LockModelImpl.UUID_COLUMN_BITMASK |
-			LockModelImpl.COMPANYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
@@ -861,24 +837,13 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	public List<Lock> findByUuid_C(String uuid, long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				uuid, companyId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
+		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -951,12 +916,14 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1228,14 +1195,13 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			new String[] {
 				Date.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTEXPIRATIONDATE =
-		new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_COUNT_BY_LTEXPIRATIONDATE = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByLtExpirationDate",
-			new String[] { Date.class.getName() });
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByLtExpirationDate", new String[] { Date.class.getName() });
 
 	/**
 	 * Returns all the locks where expirationDate &lt; &#63;.
@@ -1436,13 +1402,13 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	public List<Lock> findByLtExpirationDate(Date expirationDate, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				expirationDate,
+				
+				start, end, orderByComparator
+			};
 
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LTEXPIRATIONDATE;
-		finderArgs = new Object[] { expirationDate, start, end, orderByComparator };
-
-		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
+		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LTEXPIRATIONDATE,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1505,12 +1471,14 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LTEXPIRATIONDATE,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_LTEXPIRATIONDATE,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1699,7 +1667,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		throws SystemException {
 		Object[] finderArgs = new Object[] { expirationDate };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTEXPIRATIONDATE,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_LTEXPIRATIONDATE,
 				finderArgs, this);
 
 		if (count == null) {
@@ -1739,7 +1707,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTEXPIRATIONDATE,
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_LTEXPIRATIONDATE,
 					finderArgs, count);
 
 				closeSession(session);
@@ -1759,15 +1727,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			new String[] {
 				String.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
-			LockModelImpl.FINDER_CACHE_ENABLED, LockImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_K",
-			new String[] { String.class.getName(), String.class.getName() },
-			LockModelImpl.CLASSNAME_COLUMN_BITMASK |
-			LockModelImpl.KEY_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_K = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_K",
@@ -1790,24 +1752,13 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	protected List<Lock> findByC_K(String className, String key, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				className, key,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K;
-			finderArgs = new Object[] { className, key };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_K;
-			finderArgs = new Object[] {
-					className, key,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
+		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_K,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1892,12 +1843,14 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_K,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_K,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -2193,19 +2146,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 				String.class.getName(), String.class.getName(),
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K_O = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
-			LockModelImpl.FINDER_CACHE_ENABLED, LockImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_K_O",
-			new String[] {
-				String.class.getName(), String.class.getName(),
-				String.class.getName()
-			},
-			LockModelImpl.CLASSNAME_COLUMN_BITMASK |
-			LockModelImpl.KEY_COLUMN_BITMASK |
-			LockModelImpl.OWNER_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_K_O = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_K_O",
@@ -2774,30 +2717,24 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 
 		else {
 			if ((lockModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_UUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] { lockModelImpl.getOriginalUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
 
 				args = new Object[] { lockModelImpl.getUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
 			}
 
 			if ((lockModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_UUID_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						lockModelImpl.getOriginalUuid(),
 						Long.valueOf(lockModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
 
 				args = new Object[] {
 						lockModelImpl.getUuid(),
@@ -2805,8 +2742,6 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
 			}
 		}
 
@@ -3010,20 +2945,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	public List<Lock> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
+		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -3068,12 +2992,14 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);

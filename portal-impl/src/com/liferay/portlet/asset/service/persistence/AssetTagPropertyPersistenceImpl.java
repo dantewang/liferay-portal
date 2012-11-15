@@ -78,10 +78,6 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED,
 			AssetTagPropertyImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED,
-			AssetTagPropertyImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -93,16 +89,9 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED,
-			AssetTagPropertyImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			AssetTagPropertyModelImpl.COMPANYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
@@ -300,20 +289,13 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	 */
 	public List<AssetTagProperty> findByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				companyId,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<AssetTagProperty> list = (List<AssetTagProperty>)FinderCacheUtil.getResult(finderPath,
+		List<AssetTagProperty> list = (List<AssetTagProperty>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -370,12 +352,14 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -613,15 +597,9 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TAGID = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED,
-			AssetTagPropertyImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByTagId",
-			new String[] { Long.class.getName() },
-			AssetTagPropertyModelImpl.TAGID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_TAGID = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByTagId",
@@ -818,20 +796,9 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	 */
 	public List<AssetTagProperty> findByTagId(long tagId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] { tagId, start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TAGID;
-			finderArgs = new Object[] { tagId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TAGID;
-			finderArgs = new Object[] { tagId, start, end, orderByComparator };
-		}
-
-		List<AssetTagProperty> list = (List<AssetTagProperty>)FinderCacheUtil.getResult(finderPath,
+		List<AssetTagProperty> list = (List<AssetTagProperty>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_TAGID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -888,12 +855,14 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_TAGID,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_TAGID,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1130,16 +1099,9 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED,
-			AssetTagPropertyImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_K",
-			new String[] { Long.class.getName(), String.class.getName() },
-			AssetTagPropertyModelImpl.COMPANYID_COLUMN_BITMASK |
-			AssetTagPropertyModelImpl.KEY_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_K = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_K",
@@ -1358,24 +1320,13 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	public List<AssetTagProperty> findByC_K(long companyId, String key,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
+		Object[] finderArgs = new Object[] {
+				companyId, key,
+				
+				start, end, orderByComparator
+			};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K;
-			finderArgs = new Object[] { companyId, key };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_K;
-			finderArgs = new Object[] {
-					companyId, key,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<AssetTagProperty> list = (List<AssetTagProperty>)FinderCacheUtil.getResult(finderPath,
+		List<AssetTagProperty> list = (List<AssetTagProperty>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_K,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1449,12 +1400,14 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_K,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_C_K,
+						finderArgs, list);
 				}
 
 				closeSession(session);
@@ -1734,16 +1687,9 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_K = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
-			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED,
-			AssetTagPropertyImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByT_K",
-			new String[] { Long.class.getName(), String.class.getName() },
-			AssetTagPropertyModelImpl.TAGID_COLUMN_BITMASK |
-			AssetTagPropertyModelImpl.KEY_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_K = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByT_K",
@@ -2240,14 +2186,12 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 
 		else {
 			if ((assetTagPropertyModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_COMPANYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(assetTagPropertyModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
 					args);
 
 				args = new Object[] {
@@ -2256,31 +2200,25 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
 			}
 
 			if ((assetTagPropertyModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TAGID.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_TAGID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(assetTagPropertyModelImpl.getOriginalTagId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TAGID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TAGID,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(assetTagPropertyModelImpl.getTagId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TAGID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TAGID,
-					args);
 			}
 
 			if ((assetTagPropertyModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K.getColumnBitmask()) != 0) {
+					FINDER_PATH_COUNT_BY_C_K.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(assetTagPropertyModelImpl.getOriginalCompanyId()),
 						
@@ -2288,8 +2226,6 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_K, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K,
-					args);
 
 				args = new Object[] {
 						Long.valueOf(assetTagPropertyModelImpl.getCompanyId()),
@@ -2298,8 +2234,6 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_K, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K,
-					args);
 			}
 		}
 
@@ -2506,20 +2440,9 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	 */
 	public List<AssetTagProperty> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<AssetTagProperty> list = (List<AssetTagProperty>)FinderCacheUtil.getResult(finderPath,
+		List<AssetTagProperty> list = (List<AssetTagProperty>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -2564,12 +2487,14 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL,
+						finderArgs, list);
 				}
 
 				closeSession(session);
