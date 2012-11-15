@@ -42,7 +42,7 @@ public class MBThreadFlagLocalServiceImpl
 
 		long threadId = thread.getThreadId();
 
-		MBThreadFlag threadFlag = mbThreadFlagPersistence.fetchByU_T(
+		MBThreadFlag threadFlag = mbThreadFlagPersistence.fetchByU_T_First(
 			userId, threadId);
 
 		if (threadFlag == null) {
@@ -64,8 +64,8 @@ public class MBThreadFlagLocalServiceImpl
 							threadId + "}");
 				}
 
-				threadFlag = mbThreadFlagPersistence.fetchByU_T(
-					userId, threadId, false);
+				threadFlag = mbThreadFlagPersistence.fetchByU_T_First(
+					userId, threadId);
 
 				if (threadFlag == null) {
 					throw se;
@@ -116,7 +116,8 @@ public class MBThreadFlagLocalServiceImpl
 			return null;
 		}
 
-		return mbThreadFlagPersistence.fetchByU_T(userId, thread.getThreadId());
+		return mbThreadFlagPersistence.fetchByU_T_First(
+			userId, thread.getThreadId());
 	}
 
 	public boolean hasThreadFlag(long userId, MBThread thread)
@@ -128,7 +129,7 @@ public class MBThreadFlagLocalServiceImpl
 			return true;
 		}
 
-		MBThreadFlag threadFlag = mbThreadFlagPersistence.fetchByU_T(
+		MBThreadFlag threadFlag = mbThreadFlagPersistence.fetchByU_T_First(
 			userId, thread.getThreadId());
 
 		if ((threadFlag != null) &&
