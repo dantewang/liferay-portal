@@ -1,22 +1,27 @@
 <#assign finderColsList = finder.getColumns()>
 
-<#if finder.isCollection()>
+<#if finder.isUnique()>
 	/**
-	 * Removes all the ${entity.humanNames} where ${finder.getHumanConditions(false)} from the database.
+	 * Removes the ${entity.humanName} where ${finder.getHumanConditions(false)} from the database.
 	 *
 	<#list finderColsList as finderCol>
 	 * @param ${finderCol.name} the ${finderCol.humanName}
 	</#list>
+	 * @return the ${entity.humanName} that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public void removeBy${finder.name}(
+	public ${entity.name} removeBy${finder.name}(
 
 	<#list finderColsList as finderCol>
-		${finderCol.type} ${finderCol.name}<#if finderCol_has_next>,</#if>
+		${finderCol.type} ${finderCol.name}
+
+		<#if finderCol_has_next>
+			,
+		</#if>
 	</#list>
 
-	) throws SystemException {
-		for (${entity.name} ${entity.varName} : findBy${finder.name}(
+	) throws ${noSuchEntity}Exception, SystemException {
+		${entity.name} ${entity.varName} = findBy${finder.name}(
 
 		<#list finderColsList as finderCol>
 			${finderCol.name}
@@ -26,33 +31,28 @@
 			</#if>
 		</#list>
 
-		)) {
-			remove(${entity.varName});
-		}
+		);
+
+		return remove(${entity.varName});
 	}
 <#else>
-	<#if finder.isUnique()>
+	<#if finder.isCollection()>
 		/**
-		 * Removes the ${entity.humanName} where ${finder.getHumanConditions(false)} from the database.
+		 * Removes all the ${entity.humanNames} where ${finder.getHumanConditions(false)} from the database.
 		 *
 		<#list finderColsList as finderCol>
 		 * @param ${finderCol.name} the ${finderCol.humanName}
 		</#list>
-		 * @return the ${entity.humanName} that was removed
 		 * @throws SystemException if a system exception occurred
 		 */
-		public ${entity.name} removeBy${finder.name}(
+		public void removeBy${finder.name}(
 
 		<#list finderColsList as finderCol>
-			${finderCol.type} ${finderCol.name}
-
-			<#if finderCol_has_next>
-				,
-			</#if>
+			${finderCol.type} ${finderCol.name}<#if finderCol_has_next>,</#if>
 		</#list>
 
-		) throws ${noSuchEntity}Exception, SystemException {
-			${entity.name} ${entity.varName} = findBy${finder.name}(
+		) throws SystemException {
+			for (${entity.name} ${entity.varName} : findBy${finder.name}(
 
 			<#list finderColsList as finderCol>
 				${finderCol.name}
@@ -62,9 +62,9 @@
 				</#if>
 			</#list>
 
-			);
-
-			return remove(${entity.varName});
+			)) {
+				remove(${entity.varName});
+			}
 		}
 	</#if>
 </#if>

@@ -47,220 +47,6 @@
 <#-- Case 2 : finder.isUnique() == true && finder.isCollection() == false -->
 
 <#if finder.isUnique() && !finder.isCollection()>
-/**
- * Returns the ${entity.humanName} where ${finder.getHumanConditions(false)} or throws a {@link ${packagePath}.${noSuchEntity}Exception} if it could not be found.
- *
-<#list finderColsList as finderCol>
- * @param ${finderCol.name} the ${finderCol.humanName}
-</#list>
- * @return the matching ${entity.humanName}
- * @throws ${packagePath}.${noSuchEntity}Exception if a matching ${entity.humanName} could not be found
- * @throws SystemException if a system exception occurred
- */
-public ${entity.name} findBy${finder.name}(
-
-<#list finderColsList as finderCol>
-	${finderCol.type} ${finderCol.name}
-
-	<#if finderCol_has_next>
-		,
-	</#if>
-</#list>
-
-) throws ${noSuchEntity}Exception, SystemException {
-	${entity.name} ${entity.varName} = fetchBy${finder.name}(
-
-	<#list finderColsList as finderCol>
-		${finderCol.name}
-
-		<#if finderCol_has_next>
-			,
-		</#if>
-	</#list>
-
-	);
-
-	if ( ${entity.varName} == null) {
-		StringBundler msg = new StringBundler(${(finderColsList?size * 2) + 2});
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		<#list finderColsList as finderCol>
-			msg.append("<#if finderCol_index != 0>, </#if>${finderCol.name}=");
-			msg.append(${finderCol.name});
-
-			<#if !finderCol_has_next>
-				msg.append(StringPool.CLOSE_CURLY_BRACE);
-			</#if>
-		</#list>
-
-		if (_log.isWarnEnabled()) {
-			_log.warn(msg.toString());
-		}
-
-		throw new ${noSuchEntity}Exception(msg.toString());
-	}
-
-	return ${entity.varName};
-}
-
-/**
- * Returns the ${entity.humanName} where ${finder.getHumanConditions(false)} or returns <code>null</code> if it could not be found. Uses the finder cache.
- *
-<#list finderColsList as finderCol>
- * @param ${finderCol.name} the ${finderCol.humanName}
-</#list>
- * @return the matching ${entity.humanName}, or <code>null</code> if a matching ${entity.humanName} could not be found
- * @throws SystemException if a system exception occurred
- */
-public ${entity.name} fetchBy${finder.name}(
-
-<#list finderColsList as finderCol>
-	${finderCol.type} ${finderCol.name}
-
-	<#if finderCol_has_next>
-		,
-	</#if>
-</#list>
-
-) throws SystemException {
-	return fetchBy${finder.name}(
-
-	<#list finderColsList as finderCol>
-		${finderCol.name},
-	</#list>
-
-	true);
-}
-
-/**
- * Returns the ${entity.humanName} where ${finder.getHumanConditions(false)} or returns <code>null</code> if it could not be found, optionally using the finder cache.
- *
-<#list finderColsList as finderCol>
- * @param ${finderCol.name} the ${finderCol.humanName}
-</#list>
- * @param retrieveFromCache whether to use the finder cache
- * @return the matching ${entity.humanName}, or <code>null</code> if a matching ${entity.humanName} could not be found
- * @throws SystemException if a system exception occurred
- */
-public ${entity.name} fetchBy${finder.name}(
-
-<#list finderColsList as finderCol>
-	${finderCol.type} ${finderCol.name}
-
-	,
-</#list>
-
-boolean retrieveFromCache) throws SystemException {
-	Object[] finderArgs = new Object[] {
-		<#list finderColsList as finderCol>
-			${finderCol.name}
-
-			<#if finderCol_has_next>
-				,
-			</#if>
-		</#list>
-	};
-
-	Object result = null;
-
-	if (retrieveFromCache) {
-		result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs, this);
-	}
-
-	if (result instanceof ${entity.name}) {
-		${entity.name} ${entity.varName} = (${entity.name})result;
-
-		if (
-			<#list finderColsList as finderCol>
-				<#if finderCol.isPrimitiveType(false)>
-					(${finderCol.name} != ${entity.varName}.get${finderCol.methodName}())
-				<#else>
-					!Validator.equals(${finderCol.name}, ${entity.varName}.get${finderCol.methodName}())
-				</#if>
-
-				<#if finderCol_has_next>
-					||
-				</#if>
-			</#list>
-		) {
-			result = null;
-		}
-	}
-
-	if (result == null) {
-		StringBundler query = new StringBundler(<#if entity.getOrder()??>${finderColsList?size + 2}<#else>${finderColsList?size + 1}</#if>);
-
-		query.append(_SQL_SELECT_${entity.alias?upper_case}_WHERE);
-
-		<#include "persistence_impl_finder_cols.ftl">
-
-		String sql = query.toString();
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Query q = session.createQuery(sql);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			<#include "persistence_impl_finder_qpos.ftl">
-
-			List<${entity.name}> list = q.list();
-
-			result = list;
-
-			${entity.name} ${entity.varName} = null;
-
-			if (list.isEmpty()) {
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs, list);
-			}
-			else {
-				${entity.varName} = list.get(0);
-
-				cacheResult(${entity.varName});
-
-				if (
-					<#list finderColsList as finderCol>
-						<#if finderCol.isPrimitiveType()>
-							(${entity.varName}.get${finderCol.methodName}() != ${finderCol.name})
-						<#else>
-							(${entity.varName}.get${finderCol.methodName}() == null) || !${entity.varName}.get${finderCol.methodName}().equals(${finderCol.name})
-						</#if>
-
-						<#if finderCol_has_next>
-							||
-						</#if>
-					</#list>
-				) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs, ${entity.varName});
-				}
-			}
-
-			return ${entity.varName};
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			if (result == null) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs);
-			}
-
-			closeSession(session);
-		}
-	}
-	else {
-		if (result instanceof List<?>) {
-			return null;
-		}
-		else {
-			return (${entity.name})result;
-		}
-	}
-}
 </#if>
 
 <#-- Case 3 : finder.isUnique() == false && finder.isCollection() == true -->
@@ -425,542 +211,7 @@ boolean retrieveFromCache) throws SystemException {
 			return null;
 		}
 	}
-</#if>
 
-<#-- Case 4 : finder.isUnique() == false && finder.isCollection() == false -->
-
-<#if !finder.isUnique() && !finder.isCollection()>
-</#if>
-
-<#-- Case 5 : finder.isUnique() == true -->
-
-<#if finder.isUnique()>
-</#if>
-
-<#-- Case 6 : finder.isUnique() == false -->
-
-<#if !finder.isUnique()>
-/**
- * Returns an ordered range of all the ${entity.humanNames} where ${finder.getHumanConditions(false)}.
- *
- * <p>
- * <#include "range_comment.ftl">
- * </p>
- *
-<#list finderColsList as finderCol>
- * @param ${finderCol.name} the ${finderCol.humanName}
-</#list>
- * @param start the lower bound of the range of ${entity.humanNames}
- * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
- * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
- * @return the ordered range of matching ${entity.humanNames}
- * @throws SystemException if a system exception occurred
- */
-<#if finder.isCollection()>
-	public
-<#else>
-	protected
-</#if>
-
-List<${entity.name}> findBy${finder.name}(
-
-<#list finderColsList as finderCol>
-	${finderCol.type} ${finderCol.name},
-</#list>
-
-int start, int end, OrderByComparator orderByComparator) throws SystemException {
-	FinderPath finderPath = null;
-	Object[] finderArgs = null;
-
-	<#if !finder.hasCustomComparator()>
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case};
-			finderArgs = new Object[] {
-				<#list finderColsList as finderCol>
-					${finderCol.name}
-
-					<#if finderCol_has_next>
-						,
-					</#if>
-				</#list>
-			};
-		}
-		else {
-	</#if>
-
-	finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case};
-	finderArgs = new Object[] {
-		<#list finderColsList as finderCol>
-			${finderCol.name},
-		</#list>
-
-		start, end, orderByComparator
-	};
-
-	<#if !finder.hasCustomComparator()>
-		}
-	</#if>
-
-	List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(finderPath, finderArgs, this);
-
-	if ((list != null) && !list.isEmpty()) {
-		for (${entity.name} ${entity.varName} : list) {
-			if (
-				<#list finderColsList as finderCol>
-					<#if finderCol.isPrimitiveType(false)>
-						(${finderCol.name} != ${entity.varName}.get${finderCol.methodName}())
-					<#else>
-						!Validator.equals(${finderCol.name}, ${entity.varName}.get${finderCol.methodName}())
-					</#if>
-
-					<#if finderCol_has_next>
-						||
-					</#if>
-				</#list>
-			) {
-				list = null;
-
-				break;
-			}
-		}
-	}
-
-	if (list == null) {
-		<#include "persistence_impl_find_by_query.ftl">
-
-		String sql = query.toString();
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Query q = session.createQuery(sql);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			<#include "persistence_impl_finder_qpos.ftl">
-
-			list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			if (list == null) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-			}
-			else {
-				cacheResult(list);
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, list);
-			}
-
-			closeSession(session);
-		}
-	}
-
-	return list;
-}
-
-/**
- * Returns the first ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
- *
-<#list finderColsList as finderCol>
- * @param ${finderCol.name} the ${finderCol.humanName}
-</#list>
- * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
- * @return the first matching ${entity.humanName}
- * @throws ${packagePath}.${noSuchEntity}Exception if a matching ${entity.humanName} could not be found
- * @throws SystemException if a system exception occurred
- */
-public ${entity.name} findBy${finder.name}_First(
-
-<#list finderColsList as finderCol>
-	${finderCol.type} ${finderCol.name},
-</#list>
-
-OrderByComparator orderByComparator) throws ${noSuchEntity}Exception, SystemException {
-	${entity.name} ${entity.varName} = fetchBy${finder.name}_First(
-
-	<#list finderColsList as finderCol>
-		${finderCol.name},
-	</#list>
-
-	orderByComparator);
-
-	if (${entity.varName} != null) {
-		return ${entity.varName};
-	}
-
-	StringBundler msg = new StringBundler(${(finderColsList?size * 2) + 2});
-
-	msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-	<#list finderColsList as finderCol>
-		msg.append("<#if finderCol_index != 0>, </#if>${finderCol.name}=");
-		msg.append(${finderCol.name});
-
-		<#if !finderCol_has_next>
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-		</#if>
-	</#list>
-
-	throw new ${noSuchEntity}Exception(msg.toString());
-}
-
-/**
- * Returns the first ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
- *
-<#list finderColsList as finderCol>
- * @param ${finderCol.name} the ${finderCol.humanName}
-</#list>
- * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
- * @return the first matching ${entity.humanName}, or <code>null</code> if a matching ${entity.humanName} could not be found
- * @throws SystemException if a system exception occurred
- */
-public ${entity.name} fetchBy${finder.name}_First(
-
-<#list finderColsList as finderCol>
-	${finderCol.type} ${finderCol.name},
-</#list>
-
-OrderByComparator orderByComparator) throws SystemException {
-	List<${entity.name}> list = findBy${finder.name}(
-
-	<#list finderColsList as finderCol>
-		${finderCol.name},
-	</#list>
-
-	0, 1, orderByComparator);
-
-	if (!list.isEmpty()) {
-		return list.get(0);
-	}
-
-	return null;
-}
-
-/**
- * Returns the last ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
- *
-<#list finderColsList as finderCol>
- * @param ${finderCol.name} the ${finderCol.humanName}
-</#list>
- * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
- * @return the last matching ${entity.humanName}
- * @throws ${packagePath}.${noSuchEntity}Exception if a matching ${entity.humanName} could not be found
- * @throws SystemException if a system exception occurred
- */
-public ${entity.name} findBy${finder.name}_Last(
-
-<#list finderColsList as finderCol>
-	${finderCol.type} ${finderCol.name},
-</#list>
-
-OrderByComparator orderByComparator) throws ${noSuchEntity}Exception, SystemException {
-	${entity.name} ${entity.varName} = fetchBy${finder.name}_Last(
-
-	<#list finderColsList as finderCol>
-		${finderCol.name},
-	</#list>
-
-	orderByComparator);
-
-	if (${entity.varName} != null) {
-		return ${entity.varName};
-	}
-
-	StringBundler msg = new StringBundler(${(finderColsList?size * 2) + 2});
-
-	msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-	<#list finderColsList as finderCol>
-		msg.append("<#if finderCol_index != 0>, </#if>${finderCol.name}=");
-		msg.append(${finderCol.name});
-
-		<#if !finderCol_has_next>
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-		</#if>
-	</#list>
-
-	throw new ${noSuchEntity}Exception(msg.toString());
-}
-
-/**
- * Returns the last ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
- *
-<#list finderColsList as finderCol>
- * @param ${finderCol.name} the ${finderCol.humanName}
-</#list>
- * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
- * @return the last matching ${entity.humanName}, or <code>null</code> if a matching ${entity.humanName} could not be found
- * @throws SystemException if a system exception occurred
- */
-public ${entity.name} fetchBy${finder.name}_Last(
-
-<#list finderColsList as finderCol>
-	${finderCol.type} ${finderCol.name},
-</#list>
-
-OrderByComparator orderByComparator) throws SystemException {
-	int count = countBy${finder.name}(
-
-	<#list finderColsList as finderCol>
-		${finderCol.name}
-
-		<#if finderCol_has_next>
-			,
-		</#if>
-	</#list>
-
-	);
-
-	List<${entity.name}> list = findBy${finder.name}(
-
-	<#list finderColsList as finderCol>
-		${finderCol.name},
-	</#list>
-
-	count - 1, count, orderByComparator);
-
-	if (!list.isEmpty()) {
-		return list.get(0);
-	}
-
-	return null;
-}
-</#if>
-
-<#-- Case 7 : finder.isCollection() == true -->
-
-<#if finder.isCollection()>
-	<#if finder.hasArrayableOperator()>
-		/**
-		 * Returns all the ${entity.humanNames} where ${finder.getHumanConditions(true)}.
-		 *
-		 * <p>
-		 * <#include "range_comment.ftl">
-		 * </p>
-		 *
-		<#list finderColsList as finderCol>
-			<#if finderCol.hasArrayableOperator()>
-		 * @param ${finderCol.names} the ${finderCol.humanNames}
-			<#else>
-		 * @param ${finderCol.name} the ${finderCol.humanName}
-			</#if>
-		</#list>
-		 * @return the matching ${entity.humanNames}
-		 * @throws SystemException if a system exception occurred
-		 */
-		public List<${entity.name}> findBy${finder.name}(
-
-		<#list finderColsList as finderCol>
-			<#if finderCol.hasArrayableOperator()>
-				${finderCol.type}[] ${finderCol.names}
-			<#else>
-				${finderCol.type} ${finderCol.name}
-			</#if>
-
-			<#if finderCol_has_next>
-				,
-			</#if>
-		</#list>
-
-		) throws SystemException {
-			return findBy${finder.name}(
-
-			<#list finderColsList as finderCol>
-				<#if finderCol.hasArrayableOperator()>
-					${finderCol.names},
-				<#else>
-					${finderCol.name},
-				</#if>
-			</#list>
-
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-		}
-
-		/**
-		 * Returns a range of all the ${entity.humanNames} where ${finder.getHumanConditions(true)}.
-		 *
-		 * <p>
-		 * <#include "range_comment.ftl">
-		 * </p>
-		 *
-		<#list finderColsList as finderCol>
-			<#if finderCol.hasArrayableOperator()>
-		 * @param ${finderCol.names} the ${finderCol.humanNames}
-			<#else>
-		 * @param ${finderCol.name} the ${finderCol.humanName}
-			</#if>
-		</#list>
-		 * @param start the lower bound of the range of ${entity.humanNames}
-		 * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
-		 * @return the range of matching ${entity.humanNames}
-		 * @throws SystemException if a system exception occurred
-		 */
-		public List<${entity.name}> findBy${finder.name}(
-
-		<#list finderColsList as finderCol>
-			<#if finderCol.hasArrayableOperator()>
-				${finderCol.type}[] ${finderCol.names},
-			<#else>
-				${finderCol.type} ${finderCol.name},
-			</#if>
-		</#list>
-
-		int start, int end) throws SystemException {
-			return findBy${finder.name}(
-
-			<#list finderColsList as finderCol>
-				<#if finderCol.hasArrayableOperator()>
-					${finderCol.names},
-				<#else>
-					${finderCol.name},
-				</#if>
-			</#list>
-
-			start, end, null);
-		}
-
-		/**
-		 * Returns an ordered range of all the ${entity.humanNames} where ${finder.getHumanConditions(true)}.
-		 *
-		 * <p>
-		 * <#include "range_comment.ftl">
-		 * </p>
-		 *
-		<#list finderColsList as finderCol>
-			<#if finderCol.hasArrayableOperator()>
-		 * @param ${finderCol.names} the ${finderCol.humanNames}
-			<#else>
-		 * @param ${finderCol.name} the ${finderCol.humanName}
-			</#if>
-		</#list>
-		 * @param start the lower bound of the range of ${entity.humanNames}
-		 * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
-		 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-		 * @return the ordered range of matching ${entity.humanNames}
-		 * @throws SystemException if a system exception occurred
-		 */
-		public List<${entity.name}> findBy${finder.name}(
-
-		<#list finderColsList as finderCol>
-			<#if finderCol.hasArrayableOperator()>
-				${finderCol.type}[] ${finderCol.names},
-			<#else>
-				${finderCol.type} ${finderCol.name},
-			</#if>
-		</#list>
-
-		int start, int end, OrderByComparator orderByComparator) throws SystemException {
-			FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case};
-			Object[] finderArgs = null;
-
-			if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
-				finderArgs = new Object[] {
-					<#list finderColsList as finderCol>
-						<#if finderCol.hasArrayableOperator()>
-							StringUtil.merge(${finderCol.names})
-						<#else>
-							${finderCol.name}
-						</#if>
-
-						<#if finderCol_has_next>
-							,
-						</#if>
-					</#list>
-				};
-			}
-			else {
-				finderArgs = new Object[] {
-					<#list finderColsList as finderCol>
-						<#if finderCol.hasArrayableOperator()>
-							StringUtil.merge(${finderCol.names}),
-						<#else>
-							${finderCol.name},
-						</#if>
-					</#list>
-
-					start, end, orderByComparator
-				};
-			}
-
-			List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(finderPath, finderArgs, this);
-
-			if ((list != null) && !list.isEmpty()) {
-				for (${entity.name} ${entity.varName} : list) {
-					if (
-						<#list finderColsList as finderCol>
-							<#if finderCol.hasArrayableOperator()>
-								!ArrayUtil.contains(${finderCol.names}, ${entity.varName}.get${finderCol.methodName}())
-							<#else>
-								<#if finderCol.isPrimitiveType(false)>
-									(${finderCol.name} != ${entity.varName}.get${finderCol.methodName}())
-								<#else>
-									!Validator.equals(${finderCol.name}, ${entity.varName}.get${finderCol.methodName}())
-								</#if>
-							</#if>
-
-							<#if finderCol_has_next>
-								||
-							</#if>
-						</#list>
-					) {
-						list = null;
-
-						break;
-					}
-				}
-			}
-
-			if (list == null) {
-				<#include "persistence_impl_find_by_arrayable_query.ftl">
-
-				String sql = query.toString();
-
-				Session session = null;
-
-				try {
-					session = openSession();
-
-					Query q = session.createQuery(sql);
-
-					QueryPos qPos = QueryPos.getInstance(q);
-
-					<#include "persistence_impl_finder_arrayable_qpos.ftl">
-
-					list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
-				}
-				catch (Exception e) {
-					throw processException(e);
-				}
-				finally {
-					if (list == null) {
-						FinderCacheUtil.removeResult(finderPath, finderArgs);
-					}
-					else {
-						cacheResult(list);
-
-						FinderCacheUtil.putResult(finderPath, finderArgs, list);
-					}
-
-					closeSession(session);
-				}
-			}
-
-			return list;
-		}
-	</#if>
-</#if>
-
-<#-- Case 8 : finder.isCollection() == false -->
-
-<#if !finder.isCollection()>
-</#if>
-
-<#if finder.isCollection()>
 	<#if entity.isPermissionCheckEnabled(finder)>
 		/**
 		 * Returns all the ${entity.humanNames} that the user has permission to view where ${finder.getHumanConditions(false)}.
@@ -1647,4 +898,751 @@ OrderByComparator orderByComparator) throws SystemException {
 			}
 		</#if>
 	</#if>
+</#if>
+
+<#-- Case 4 : finder.isUnique() == false && finder.isCollection() == false -->
+
+<#if !finder.isUnique() && !finder.isCollection()>
+</#if>
+
+<#-- Case 5 : finder.isUnique() == true -->
+
+<#if finder.isUnique()>
+	/**
+	 * Returns the ${entity.humanName} where ${finder.getHumanConditions(false)} or throws a {@link ${packagePath}.${noSuchEntity}Exception} if it could not be found.
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @return the matching ${entity.humanName}
+	 * @throws ${packagePath}.${noSuchEntity}Exception if a matching ${entity.humanName} could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name} findBy${finder.name}(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name}
+
+		<#if finderCol_has_next>
+			,
+		</#if>
+	</#list>
+
+	) throws ${noSuchEntity}Exception, SystemException {
+		${entity.name} ${entity.varName} = fetchBy${finder.name}(
+
+		<#list finderColsList as finderCol>
+			${finderCol.name}
+
+			<#if finderCol_has_next>
+				,
+			</#if>
+		</#list>
+
+		);
+
+		if ( ${entity.varName} == null) {
+			StringBundler msg = new StringBundler(${(finderColsList?size * 2) + 2});
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			<#list finderColsList as finderCol>
+				msg.append("<#if finderCol_index != 0>, </#if>${finderCol.name}=");
+				msg.append(${finderCol.name});
+
+				<#if !finderCol_has_next>
+					msg.append(StringPool.CLOSE_CURLY_BRACE);
+				</#if>
+			</#list>
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new ${noSuchEntity}Exception(msg.toString());
+		}
+
+		return ${entity.varName};
+	}
+
+	/**
+	 * Returns the ${entity.humanName} where ${finder.getHumanConditions(false)} or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @return the matching ${entity.humanName}, or <code>null</code> if a matching ${entity.humanName} could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name} fetchBy${finder.name}(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name}
+
+		<#if finderCol_has_next>
+			,
+		</#if>
+	</#list>
+
+	) throws SystemException {
+		return fetchBy${finder.name}(
+
+		<#list finderColsList as finderCol>
+			${finderCol.name},
+		</#list>
+
+		true);
+	}
+
+	/**
+	 * Returns the ${entity.humanName} where ${finder.getHumanConditions(false)} or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching ${entity.humanName}, or <code>null</code> if a matching ${entity.humanName} could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name} fetchBy${finder.name}(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name}
+
+		,
+	</#list>
+
+	boolean retrieveFromCache) throws SystemException {
+		Object[] finderArgs = new Object[] {
+			<#list finderColsList as finderCol>
+				${finderCol.name}
+
+				<#if finderCol_has_next>
+					,
+				</#if>
+			</#list>
+		};
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs, this);
+		}
+
+		if (result instanceof ${entity.name}) {
+			${entity.name} ${entity.varName} = (${entity.name})result;
+
+			if (
+				<#list finderColsList as finderCol>
+					<#if finderCol.isPrimitiveType(false)>
+						(${finderCol.name} != ${entity.varName}.get${finderCol.methodName}())
+					<#else>
+						!Validator.equals(${finderCol.name}, ${entity.varName}.get${finderCol.methodName}())
+					</#if>
+
+					<#if finderCol_has_next>
+						||
+					</#if>
+				</#list>
+			) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(<#if entity.getOrder()??>${finderColsList?size + 2}<#else>${finderColsList?size + 1}</#if>);
+
+			query.append(_SQL_SELECT_${entity.alias?upper_case}_WHERE);
+
+			<#include "persistence_impl_finder_cols.ftl">
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				<#include "persistence_impl_finder_qpos.ftl">
+
+				List<${entity.name}> list = q.list();
+
+				result = list;
+
+				${entity.name} ${entity.varName} = null;
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs, list);
+				}
+				else {
+					${entity.varName} = list.get(0);
+
+					cacheResult(${entity.varName});
+
+					if (
+						<#list finderColsList as finderCol>
+							<#if finderCol.isPrimitiveType()>
+								(${entity.varName}.get${finderCol.methodName}() != ${finderCol.name})
+							<#else>
+								(${entity.varName}.get${finderCol.methodName}() == null) || !${entity.varName}.get${finderCol.methodName}().equals(${finderCol.name})
+							</#if>
+
+							<#if finderCol_has_next>
+								||
+							</#if>
+						</#list>
+					) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs, ${entity.varName});
+					}
+				}
+
+				return ${entity.varName};
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs);
+				}
+
+				closeSession(session);
+			}
+		}
+		else {
+			if (result instanceof List<?>) {
+				return null;
+			}
+			else {
+				return (${entity.name})result;
+			}
+		}
+	}
+</#if>
+
+<#-- Case 6 : finder.isUnique() == false -->
+
+<#if !finder.isUnique()>
+	/**
+	 * Returns an ordered range of all the ${entity.humanNames} where ${finder.getHumanConditions(false)}.
+	 *
+	 * <p>
+	 * <#include "range_comment.ftl">
+	 * </p>
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @param start the lower bound of the range of ${entity.humanNames}
+	 * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching ${entity.humanNames}
+	 * @throws SystemException if a system exception occurred
+	 */
+	<#if finder.isCollection()>
+		public
+	<#else>
+		protected
+	</#if>
+
+	List<${entity.name}> findBy${finder.name}(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name},
+	</#list>
+
+	int start, int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		<#if !finder.hasCustomComparator()>
+			if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
+				finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case};
+				finderArgs = new Object[] {
+					<#list finderColsList as finderCol>
+						${finderCol.name}
+
+						<#if finderCol_has_next>
+							,
+						</#if>
+					</#list>
+				};
+			}
+			else {
+		</#if>
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case};
+		finderArgs = new Object[] {
+			<#list finderColsList as finderCol>
+				${finderCol.name},
+			</#list>
+
+			start, end, orderByComparator
+		};
+
+		<#if !finder.hasCustomComparator()>
+			}
+		</#if>
+
+		List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(finderPath, finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (${entity.name} ${entity.varName} : list) {
+				if (
+					<#list finderColsList as finderCol>
+						<#if finderCol.isPrimitiveType(false)>
+							(${finderCol.name} != ${entity.varName}.get${finderCol.methodName}())
+						<#else>
+							!Validator.equals(${finderCol.name}, ${entity.varName}.get${finderCol.methodName}())
+						</#if>
+
+						<#if finderCol_has_next>
+							||
+						</#if>
+					</#list>
+				) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			<#include "persistence_impl_find_by_query.ftl">
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				<#include "persistence_impl_finder_qpos.ftl">
+
+				list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching ${entity.humanName}
+	 * @throws ${packagePath}.${noSuchEntity}Exception if a matching ${entity.humanName} could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name} findBy${finder.name}_First(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name},
+	</#list>
+
+	OrderByComparator orderByComparator) throws ${noSuchEntity}Exception, SystemException {
+		${entity.name} ${entity.varName} = fetchBy${finder.name}_First(
+
+		<#list finderColsList as finderCol>
+			${finderCol.name},
+		</#list>
+
+		orderByComparator);
+
+		if (${entity.varName} != null) {
+			return ${entity.varName};
+		}
+
+		StringBundler msg = new StringBundler(${(finderColsList?size * 2) + 2});
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		<#list finderColsList as finderCol>
+			msg.append("<#if finderCol_index != 0>, </#if>${finderCol.name}=");
+			msg.append(${finderCol.name});
+
+			<#if !finderCol_has_next>
+				msg.append(StringPool.CLOSE_CURLY_BRACE);
+			</#if>
+		</#list>
+
+		throw new ${noSuchEntity}Exception(msg.toString());
+	}
+
+	/**
+	 * Returns the first ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching ${entity.humanName}, or <code>null</code> if a matching ${entity.humanName} could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name} fetchBy${finder.name}_First(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name},
+	</#list>
+
+	OrderByComparator orderByComparator) throws SystemException {
+		List<${entity.name}> list = findBy${finder.name}(
+
+		<#list finderColsList as finderCol>
+			${finderCol.name},
+		</#list>
+
+		0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching ${entity.humanName}
+	 * @throws ${packagePath}.${noSuchEntity}Exception if a matching ${entity.humanName} could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name} findBy${finder.name}_Last(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name},
+	</#list>
+
+	OrderByComparator orderByComparator) throws ${noSuchEntity}Exception, SystemException {
+		${entity.name} ${entity.varName} = fetchBy${finder.name}_Last(
+
+		<#list finderColsList as finderCol>
+			${finderCol.name},
+		</#list>
+
+		orderByComparator);
+
+		if (${entity.varName} != null) {
+			return ${entity.varName};
+		}
+
+		StringBundler msg = new StringBundler(${(finderColsList?size * 2) + 2});
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		<#list finderColsList as finderCol>
+			msg.append("<#if finderCol_index != 0>, </#if>${finderCol.name}=");
+			msg.append(${finderCol.name});
+
+			<#if !finderCol_has_next>
+				msg.append(StringPool.CLOSE_CURLY_BRACE);
+			</#if>
+		</#list>
+
+		throw new ${noSuchEntity}Exception(msg.toString());
+	}
+
+	/**
+	 * Returns the last ${entity.humanName} in the ordered set where ${finder.getHumanConditions(false)}.
+	 *
+	<#list finderColsList as finderCol>
+	 * @param ${finderCol.name} the ${finderCol.humanName}
+	</#list>
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching ${entity.humanName}, or <code>null</code> if a matching ${entity.humanName} could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ${entity.name} fetchBy${finder.name}_Last(
+
+	<#list finderColsList as finderCol>
+		${finderCol.type} ${finderCol.name},
+	</#list>
+
+	OrderByComparator orderByComparator) throws SystemException {
+		int count = countBy${finder.name}(
+
+		<#list finderColsList as finderCol>
+			${finderCol.name}
+
+			<#if finderCol_has_next>
+				,
+			</#if>
+		</#list>
+
+		);
+
+		List<${entity.name}> list = findBy${finder.name}(
+
+		<#list finderColsList as finderCol>
+			${finderCol.name},
+		</#list>
+
+		count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+</#if>
+
+<#-- Case 7 : finder.isCollection() == true -->
+
+<#if finder.isCollection()>
+	<#if finder.hasArrayableOperator()>
+		/**
+		 * Returns all the ${entity.humanNames} where ${finder.getHumanConditions(true)}.
+		 *
+		 * <p>
+		 * <#include "range_comment.ftl">
+		 * </p>
+		 *
+		<#list finderColsList as finderCol>
+			<#if finderCol.hasArrayableOperator()>
+		 * @param ${finderCol.names} the ${finderCol.humanNames}
+			<#else>
+		 * @param ${finderCol.name} the ${finderCol.humanName}
+			</#if>
+		</#list>
+		 * @return the matching ${entity.humanNames}
+		 * @throws SystemException if a system exception occurred
+		 */
+		public List<${entity.name}> findBy${finder.name}(
+
+		<#list finderColsList as finderCol>
+			<#if finderCol.hasArrayableOperator()>
+				${finderCol.type}[] ${finderCol.names}
+			<#else>
+				${finderCol.type} ${finderCol.name}
+			</#if>
+
+			<#if finderCol_has_next>
+				,
+			</#if>
+		</#list>
+
+		) throws SystemException {
+			return findBy${finder.name}(
+
+			<#list finderColsList as finderCol>
+				<#if finderCol.hasArrayableOperator()>
+					${finderCol.names},
+				<#else>
+					${finderCol.name},
+				</#if>
+			</#list>
+
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+		}
+
+		/**
+		 * Returns a range of all the ${entity.humanNames} where ${finder.getHumanConditions(true)}.
+		 *
+		 * <p>
+		 * <#include "range_comment.ftl">
+		 * </p>
+		 *
+		<#list finderColsList as finderCol>
+			<#if finderCol.hasArrayableOperator()>
+		 * @param ${finderCol.names} the ${finderCol.humanNames}
+			<#else>
+		 * @param ${finderCol.name} the ${finderCol.humanName}
+			</#if>
+		</#list>
+		 * @param start the lower bound of the range of ${entity.humanNames}
+		 * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
+		 * @return the range of matching ${entity.humanNames}
+		 * @throws SystemException if a system exception occurred
+		 */
+		public List<${entity.name}> findBy${finder.name}(
+
+		<#list finderColsList as finderCol>
+			<#if finderCol.hasArrayableOperator()>
+				${finderCol.type}[] ${finderCol.names},
+			<#else>
+				${finderCol.type} ${finderCol.name},
+			</#if>
+		</#list>
+
+		int start, int end) throws SystemException {
+			return findBy${finder.name}(
+
+			<#list finderColsList as finderCol>
+				<#if finderCol.hasArrayableOperator()>
+					${finderCol.names},
+				<#else>
+					${finderCol.name},
+				</#if>
+			</#list>
+
+			start, end, null);
+		}
+
+		/**
+		 * Returns an ordered range of all the ${entity.humanNames} where ${finder.getHumanConditions(true)}.
+		 *
+		 * <p>
+		 * <#include "range_comment.ftl">
+		 * </p>
+		 *
+		<#list finderColsList as finderCol>
+			<#if finderCol.hasArrayableOperator()>
+		 * @param ${finderCol.names} the ${finderCol.humanNames}
+			<#else>
+		 * @param ${finderCol.name} the ${finderCol.humanName}
+			</#if>
+		</#list>
+		 * @param start the lower bound of the range of ${entity.humanNames}
+		 * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
+		 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+		 * @return the ordered range of matching ${entity.humanNames}
+		 * @throws SystemException if a system exception occurred
+		 */
+		public List<${entity.name}> findBy${finder.name}(
+
+		<#list finderColsList as finderCol>
+			<#if finderCol.hasArrayableOperator()>
+				${finderCol.type}[] ${finderCol.names},
+			<#else>
+				${finderCol.type} ${finderCol.name},
+			</#if>
+		</#list>
+
+		int start, int end, OrderByComparator orderByComparator) throws SystemException {
+			FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case};
+			Object[] finderArgs = null;
+
+			if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
+				finderArgs = new Object[] {
+					<#list finderColsList as finderCol>
+						<#if finderCol.hasArrayableOperator()>
+							StringUtil.merge(${finderCol.names})
+						<#else>
+							${finderCol.name}
+						</#if>
+
+						<#if finderCol_has_next>
+							,
+						</#if>
+					</#list>
+				};
+			}
+			else {
+				finderArgs = new Object[] {
+					<#list finderColsList as finderCol>
+						<#if finderCol.hasArrayableOperator()>
+							StringUtil.merge(${finderCol.names}),
+						<#else>
+							${finderCol.name},
+						</#if>
+					</#list>
+
+					start, end, orderByComparator
+				};
+			}
+
+			List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (${entity.name} ${entity.varName} : list) {
+					if (
+						<#list finderColsList as finderCol>
+							<#if finderCol.hasArrayableOperator()>
+								!ArrayUtil.contains(${finderCol.names}, ${entity.varName}.get${finderCol.methodName}())
+							<#else>
+								<#if finderCol.isPrimitiveType(false)>
+									(${finderCol.name} != ${entity.varName}.get${finderCol.methodName}())
+								<#else>
+									!Validator.equals(${finderCol.name}, ${entity.varName}.get${finderCol.methodName}())
+								</#if>
+							</#if>
+
+							<#if finderCol_has_next>
+								||
+							</#if>
+						</#list>
+					) {
+						list = null;
+
+						break;
+					}
+				}
+			}
+
+			if (list == null) {
+				<#include "persistence_impl_find_by_arrayable_query.ftl">
+
+				String sql = query.toString();
+
+				Session session = null;
+
+				try {
+					session = openSession();
+
+					Query q = session.createQuery(sql);
+
+					QueryPos qPos = QueryPos.getInstance(q);
+
+					<#include "persistence_impl_finder_arrayable_qpos.ftl">
+
+					list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
+				}
+				catch (Exception e) {
+					throw processException(e);
+				}
+				finally {
+					if (list == null) {
+						FinderCacheUtil.removeResult(finderPath, finderArgs);
+					}
+					else {
+						cacheResult(list);
+
+						FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					}
+
+					closeSession(session);
+				}
+			}
+
+			return list;
+		}
+	</#if>
+</#if>
+
+<#-- Case 8 : finder.isCollection() == false -->
+
+<#if !finder.isCollection()>
 </#if>
