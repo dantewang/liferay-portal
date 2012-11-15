@@ -113,14 +113,6 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		"findAll",
 		new String[0]);
 
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(
-		${entity.name}ModelImpl.ENTITY_CACHE_ENABLED,
-		${entity.name}ModelImpl.FINDER_CACHE_ENABLED,
-		${entity.name}Impl.class,
-		FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-		"findAll",
-		new String[0]);
-
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(
 		${entity.name}ModelImpl.ENTITY_CACHE_ENABLED,
 		${entity.name}ModelImpl.FINDER_CACHE_ENABLED,
@@ -562,7 +554,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 					if (
 						<#if columnBitmaskEnabled>
-							(${entity.varName}ModelImpl.getColumnBitmask() & FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case}.getColumnBitmask()) != 0
+							(${entity.varName}ModelImpl.getColumnBitmask() & FINDER_PATH_COUNT_BY_${finder.name?upper_case}.getColumnBitmask()) != 0
 						<#else>
 							<#list finderColsList as finderCol>
 								<#if finderCol.isPrimitiveType()>
@@ -597,7 +589,6 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						};
 
 						FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, args);
-						FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case}, args);
 
 						args = new Object[] {
 							<#list finderColsList as finderCol>
@@ -618,7 +609,6 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						};
 
 						FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, args);
-						FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case}, args);
 					}
 				</#if>
 			</#list>
@@ -894,19 +884,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * @throws SystemException if a system exception occurred
 	 */
 	public List<${entity.name}> findAll(int start, int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
 		Object[] finderArgs = new Object[] {start, end, orderByComparator};
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] {start, end, orderByComparator};
-		}
-
-		List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(finderPath, finderArgs, this);
+		List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL, finderArgs, this);
 
 		if (list == null) {
 			StringBundler query = null;
@@ -946,12 +926,12 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL, finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_ALL, finderArgs, list);
 				}
 
 				closeSession(session);

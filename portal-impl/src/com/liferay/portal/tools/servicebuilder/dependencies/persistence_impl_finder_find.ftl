@@ -1147,27 +1147,7 @@
 	</#list>
 
 	int start, int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		<#if !finder.hasCustomComparator()>
-			if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
-				finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case};
-				finderArgs = new Object[] {
-					<#list finderColsList as finderCol>
-						${finderCol.name}
-
-						<#if finderCol_has_next>
-							,
-						</#if>
-					</#list>
-				};
-			}
-			else {
-		</#if>
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case};
-		finderArgs = new Object[] {
+		Object[] finderArgs = new Object[] {
 			<#list finderColsList as finderCol>
 				${finderCol.name},
 			</#list>
@@ -1175,11 +1155,7 @@
 			start, end, orderByComparator
 		};
 
-		<#if !finder.hasCustomComparator()>
-			}
-		</#if>
-
-		List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(finderPath, finderArgs, this);
+		List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case}, finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
 			for (${entity.name} ${entity.varName} : list) {
@@ -1226,12 +1202,12 @@
 			}
 			finally {
 				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case}, finderArgs);
 				}
 				else {
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case}, finderArgs, list);
 				}
 
 				closeSession(session);
