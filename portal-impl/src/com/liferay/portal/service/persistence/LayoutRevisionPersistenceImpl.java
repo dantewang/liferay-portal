@@ -287,11 +287,19 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public List<LayoutRevision> findByLayoutSetBranchId(
 		long layoutSetBranchId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				layoutSetBranchId,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { layoutSetBranchId };
+		}
+		else {
+			finderArgs = new Object[] {
+					layoutSetBranchId,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_LAYOUTSETBRANCHID,
 				finderArgs, this);
@@ -797,7 +805,15 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 */
 	public List<LayoutRevision> findByPlid(long plid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] { plid, start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { plid };
+		}
+		else {
+			finderArgs = new Object[] { plid, start, end, orderByComparator };
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_PLID,
 				finderArgs, this);
@@ -1307,11 +1323,19 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public List<LayoutRevision> findByL_H(long layoutSetBranchId, boolean head,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				layoutSetBranchId, head,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { layoutSetBranchId, head };
+		}
+		else {
+			finderArgs = new Object[] {
+					layoutSetBranchId, head,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_L_H,
 				finderArgs, this);
@@ -1852,11 +1876,19 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public List<LayoutRevision> findByL_P(long layoutSetBranchId, long plid,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				layoutSetBranchId, plid,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { layoutSetBranchId, plid };
+		}
+		else {
+			finderArgs = new Object[] {
+					layoutSetBranchId, plid,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_L_P,
 				finderArgs, this);
@@ -2396,11 +2428,19 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public List<LayoutRevision> findByL_S(long layoutSetBranchId, int status,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				layoutSetBranchId, status,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { layoutSetBranchId, status };
+		}
+		else {
+			finderArgs = new Object[] {
+					layoutSetBranchId, status,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_L_S,
 				finderArgs, this);
@@ -2938,11 +2978,15 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 */
 	public List<LayoutRevision> findByH_P(boolean head, long plid, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				head, plid,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { head, plid };
+		}
+		else {
+			finderArgs = new Object[] { head, plid, start, end, orderByComparator };
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_H_P,
 				finderArgs, this);
@@ -3479,11 +3523,19 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 */
 	public List<LayoutRevision> findByP_NotS(long plid, int status, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				plid, status,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { plid, status };
+		}
+		else {
+			finderArgs = new Object[] {
+					plid, status,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_P_NOTS,
 				finderArgs, this);
@@ -4037,11 +4089,19 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public List<LayoutRevision> findByL_L_P(long layoutSetBranchId,
 		long layoutBranchId, long plid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				layoutSetBranchId, layoutBranchId, plid,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { layoutSetBranchId, layoutBranchId, plid };
+		}
+		else {
+			finderArgs = new Object[] {
+					layoutSetBranchId, layoutBranchId, plid,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_L_L_P,
 				finderArgs, this);
@@ -4629,11 +4689,21 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public List<LayoutRevision> findByL_P_P(long layoutSetBranchId,
 		long parentLayoutRevisionId, long plid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				layoutSetBranchId, parentLayoutRevisionId, plid,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] {
+					layoutSetBranchId, parentLayoutRevisionId, plid
+				};
+		}
+		else {
+			finderArgs = new Object[] {
+					layoutSetBranchId, parentLayoutRevisionId, plid,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_L_P_P,
 				finderArgs, this);
@@ -5035,11 +5105,19 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	protected List<LayoutRevision> findByL_H_P(long layoutSetBranchId,
 		boolean head, long plid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				layoutSetBranchId, head, plid,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { layoutSetBranchId, head, plid };
+		}
+		else {
+			finderArgs = new Object[] {
+					layoutSetBranchId, head, plid,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_L_H_P,
 				finderArgs, this);
@@ -5622,11 +5700,19 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public List<LayoutRevision> findByL_P_S(long layoutSetBranchId, long plid,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				layoutSetBranchId, plid, status,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { layoutSetBranchId, plid, status };
+		}
+		else {
+			finderArgs = new Object[] {
+					layoutSetBranchId, plid, status,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_L_P_S,
 				finderArgs, this);
@@ -6550,7 +6636,15 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	 */
 	public List<LayoutRevision> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);

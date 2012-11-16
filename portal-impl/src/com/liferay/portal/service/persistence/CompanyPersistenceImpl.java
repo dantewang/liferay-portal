@@ -348,7 +348,15 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	 */
 	protected List<Company> findByMx(String mx, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] { mx, start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { mx };
+		}
+		else {
+			finderArgs = new Object[] { mx, start, end, orderByComparator };
+		}
 
 		List<Company> list = (List<Company>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_MX,
 				finderArgs, this);
@@ -692,7 +700,15 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	 */
 	protected List<Company> findByLogoId(long logoId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] { logoId, start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { logoId };
+		}
+		else {
+			finderArgs = new Object[] { logoId, start, end, orderByComparator };
+		}
 
 		List<Company> list = (List<Company>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_LOGOID,
 				finderArgs, this);
@@ -1186,7 +1202,15 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	 */
 	public List<Company> findBySystem(boolean system, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] { system, start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { system };
+		}
+		else {
+			finderArgs = new Object[] { system, start, end, orderByComparator };
+		}
 
 		List<Company> list = (List<Company>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_SYSTEM,
 				finderArgs, this);
@@ -1908,7 +1932,15 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	 */
 	public List<Company> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
 
 		List<Company> list = (List<Company>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);

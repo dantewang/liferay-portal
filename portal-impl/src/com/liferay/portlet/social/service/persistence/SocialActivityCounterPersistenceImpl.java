@@ -301,11 +301,19 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	public List<SocialActivityCounter> findByC_C(long classNameId,
 		long classPK, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				classNameId, classPK,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { classNameId, classPK };
+		}
+		else {
+			finderArgs = new Object[] {
+					classNameId, classPK,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<SocialActivityCounter> list = (List<SocialActivityCounter>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C,
 				finderArgs, this);
@@ -875,11 +883,19 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	public List<SocialActivityCounter> findByG_C_C_O(long groupId,
 		long classNameId, long classPK, int ownerType, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, classNameId, classPK, ownerType,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { groupId, classNameId, classPK, ownerType };
+		}
+		else {
+			finderArgs = new Object[] {
+					groupId, classNameId, classPK, ownerType,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<SocialActivityCounter> list = (List<SocialActivityCounter>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_C_C_O,
 				finderArgs, this);
@@ -2568,7 +2584,15 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	public List<SocialActivityCounter> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
 
 		List<SocialActivityCounter> list = (List<SocialActivityCounter>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);

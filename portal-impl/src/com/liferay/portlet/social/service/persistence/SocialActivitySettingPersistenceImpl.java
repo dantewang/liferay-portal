@@ -289,11 +289,15 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	public List<SocialActivitySetting> findByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
 
 		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_GROUPID,
 				finderArgs, this);
@@ -807,11 +811,19 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	public List<SocialActivitySetting> findByG_C(long groupId,
 		long classNameId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, classNameId,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { groupId, classNameId };
+		}
+		else {
+			finderArgs = new Object[] {
+					groupId, classNameId,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_C,
 				finderArgs, this);
@@ -1355,11 +1367,19 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	public List<SocialActivitySetting> findByG_A(long groupId,
 		int activityType, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, activityType,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { groupId, activityType };
+		}
+		else {
+			finderArgs = new Object[] {
+					groupId, activityType,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_A,
 				finderArgs, this);
@@ -1917,11 +1937,19 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	public List<SocialActivitySetting> findByG_C_A(long groupId,
 		long classNameId, int activityType, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, classNameId, activityType,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { groupId, classNameId, activityType };
+		}
+		else {
+			finderArgs = new Object[] {
+					groupId, classNameId, activityType,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_C_A,
 				finderArgs, this);
@@ -2316,11 +2344,19 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	protected List<SocialActivitySetting> findByG_C_A_N(long groupId,
 		long classNameId, int activityType, String name, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, classNameId, activityType, name,
-				
-				start, end, orderByComparator
-			};
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { groupId, classNameId, activityType, name };
+		}
+		else {
+			finderArgs = new Object[] {
+					groupId, classNameId, activityType, name,
+					
+					start, end, orderByComparator
+				};
+		}
 
 		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_C_A_N,
 				finderArgs, this);
@@ -3199,7 +3235,15 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	public List<SocialActivitySetting> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
 
 		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
