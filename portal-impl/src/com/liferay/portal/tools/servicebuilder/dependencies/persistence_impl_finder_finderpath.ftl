@@ -62,4 +62,18 @@ public static final FinderPath FINDER_PATH_COUNT_BY_${finder.name?upper_case} = 
 				,
 			</#if>
 		</#list>
-	});
+	}
+
+	<#if columnBitmaskEnabled>
+		,
+
+		<#list finderColsList as finderCol>
+			${entity.name}ModelImpl.${finderCol.name?upper_case}_COLUMN_BITMASK
+
+			<#if finderCol_has_next>
+				|
+			</#if>
+		</#list>
+	</#if>
+
+);
