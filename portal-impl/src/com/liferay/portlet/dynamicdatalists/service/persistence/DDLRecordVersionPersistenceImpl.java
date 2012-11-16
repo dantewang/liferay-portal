@@ -579,11 +579,13 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RECORDID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RECORDID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RECORDID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -720,16 +722,22 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 
 				List<DDLRecordVersion> list = q.list();
 
-				result = list;
+				if (!list.isEmpty()) {
+					result = list.get(0);
+				}
 
-				DDLRecordVersion ddlRecordVersion = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_V,
-						finderArgs, list);
+				return (DDLRecordVersion)result;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_V,
+						finderArgs);
 				}
 				else {
-					ddlRecordVersion = list.get(0);
+					DDLRecordVersion ddlRecordVersion = (DDLRecordVersion)result;
 
 					cacheResult(ddlRecordVersion);
 
@@ -739,17 +747,6 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_V,
 							finderArgs, ddlRecordVersion);
 					}
-				}
-
-				return ddlRecordVersion;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_V,
-						finderArgs);
 				}
 
 				closeSession(session);
@@ -838,11 +835,13 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_V,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_V, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_V,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1391,11 +1390,13 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_S,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_S, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_S,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1996,11 +1997,13 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

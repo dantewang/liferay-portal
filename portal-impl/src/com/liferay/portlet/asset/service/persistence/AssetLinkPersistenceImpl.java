@@ -569,11 +569,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_E1,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E1, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E1,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1073,11 +1075,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_E2,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E2, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E2,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1623,11 +1627,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_E_E,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E_E, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E_E,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2171,11 +2177,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_E1_T,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E1_T,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E1_T,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2719,11 +2727,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_E2_T,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E2_T,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E2_T,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2867,16 +2877,22 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 
 				List<AssetLink> list = q.list();
 
-				result = list;
+				if (!list.isEmpty()) {
+					result = list.get(0);
+				}
 
-				AssetLink assetLink = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_E_E_T,
-						finderArgs, list);
+				return (AssetLink)result;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_E_E_T,
+						finderArgs);
 				}
 				else {
-					assetLink = list.get(0);
+					AssetLink assetLink = (AssetLink)result;
 
 					cacheResult(assetLink);
 
@@ -2886,17 +2902,6 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_E_E_T,
 							finderArgs, assetLink);
 					}
-				}
-
-				return assetLink;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_E_E_T,
-						finderArgs);
 				}
 
 				closeSession(session);
@@ -2979,11 +2984,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_E_E_T,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E_E_T,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_E_E_T,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -3622,11 +3629,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

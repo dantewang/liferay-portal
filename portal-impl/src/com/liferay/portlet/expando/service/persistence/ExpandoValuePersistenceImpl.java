@@ -575,11 +575,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TABLEID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TABLEID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TABLEID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1086,11 +1088,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COLUMNID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COLUMNID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COLUMNID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1591,11 +1595,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ROWID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ROWID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ROWID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2141,11 +2147,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_C,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_C, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_C,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2693,11 +2701,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_CPK,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_CPK,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_CPK,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -3242,11 +3252,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_R,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_R, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_R,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -3372,27 +3384,11 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 				List<ExpandoValue> list = q.list();
 
-				result = list;
-
-				ExpandoValue expandoValue = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_R,
-						finderArgs, list);
-				}
-				else {
-					expandoValue = list.get(0);
-
-					cacheResult(expandoValue);
-
-					if ((expandoValue.getColumnId() != columnId) ||
-							(expandoValue.getRowId() != rowId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_R,
-							finderArgs, expandoValue);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return expandoValue;
+				return (ExpandoValue)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -3401,6 +3397,17 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_R,
 						finderArgs);
+				}
+				else {
+					ExpandoValue expandoValue = (ExpandoValue)result;
+
+					cacheResult(expandoValue);
+
+					if ((expandoValue.getColumnId() != columnId) ||
+							(expandoValue.getRowId() != rowId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_R,
+							finderArgs, expandoValue);
+					}
 				}
 
 				closeSession(session);
@@ -3476,11 +3483,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_R,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_R, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_R,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -4028,11 +4037,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -4174,16 +4185,22 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 				List<ExpandoValue> list = q.list();
 
-				result = list;
+				if (!list.isEmpty()) {
+					result = list.get(0);
+				}
 
-				ExpandoValue expandoValue = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_T_C_C,
-						finderArgs, list);
+				return (ExpandoValue)result;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_T_C_C,
+						finderArgs);
 				}
 				else {
-					expandoValue = list.get(0);
+					ExpandoValue expandoValue = (ExpandoValue)result;
 
 					cacheResult(expandoValue);
 
@@ -4193,17 +4210,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_T_C_C,
 							finderArgs, expandoValue);
 					}
-				}
-
-				return expandoValue;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_T_C_C,
-						finderArgs);
 				}
 
 				closeSession(session);
@@ -4286,11 +4292,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_C_C,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_C_C,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_C_C,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -4914,11 +4922,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_C_D,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_C_D,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_C_D,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -5648,11 +5658,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

@@ -185,26 +185,11 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 
 				List<DLSync> list = q.list();
 
-				result = list;
-
-				DLSync dlSync = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_FILEID,
-						finderArgs, list);
-				}
-				else {
-					dlSync = list.get(0);
-
-					cacheResult(dlSync);
-
-					if ((dlSync.getFileId() != fileId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_FILEID,
-							finderArgs, dlSync);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return dlSync;
+				return (DLSync)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -213,6 +198,16 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_FILEID,
 						finderArgs);
+				}
+				else {
+					DLSync dlSync = (DLSync)result;
+
+					cacheResult(dlSync);
+
+					if ((dlSync.getFileId() != fileId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_FILEID,
+							finderArgs, dlSync);
+					}
 				}
 
 				closeSession(session);
@@ -282,11 +277,13 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FILEID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FILEID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FILEID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -892,11 +889,13 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_M_R,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_M_R,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_M_R,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1436,11 +1435,13 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

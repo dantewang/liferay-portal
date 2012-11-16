@@ -576,11 +576,13 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -693,26 +695,11 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 
 				List<MBDiscussion> list = q.list();
 
-				result = list;
-
-				MBDiscussion mbDiscussion = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_THREADID,
-						finderArgs, list);
-				}
-				else {
-					mbDiscussion = list.get(0);
-
-					cacheResult(mbDiscussion);
-
-					if ((mbDiscussion.getThreadId() != threadId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_THREADID,
-							finderArgs, mbDiscussion);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return mbDiscussion;
+				return (MBDiscussion)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -721,6 +708,16 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_THREADID,
 						finderArgs);
+				}
+				else {
+					MBDiscussion mbDiscussion = (MBDiscussion)result;
+
+					cacheResult(mbDiscussion);
+
+					if ((mbDiscussion.getThreadId() != threadId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_THREADID,
+							finderArgs, mbDiscussion);
+					}
 				}
 
 				closeSession(session);
@@ -790,11 +787,13 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_THREADID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_THREADID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_THREADID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -919,27 +918,11 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 
 				List<MBDiscussion> list = q.list();
 
-				result = list;
-
-				MBDiscussion mbDiscussion = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-						finderArgs, list);
-				}
-				else {
-					mbDiscussion = list.get(0);
-
-					cacheResult(mbDiscussion);
-
-					if ((mbDiscussion.getClassNameId() != classNameId) ||
-							(mbDiscussion.getClassPK() != classPK)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-							finderArgs, mbDiscussion);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return mbDiscussion;
+				return (MBDiscussion)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -948,6 +931,17 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C,
 						finderArgs);
+				}
+				else {
+					MBDiscussion mbDiscussion = (MBDiscussion)result;
+
+					cacheResult(mbDiscussion);
+
+					if ((mbDiscussion.getClassNameId() != classNameId) ||
+							(mbDiscussion.getClassPK() != classPK)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
+							finderArgs, mbDiscussion);
+					}
 				}
 
 				closeSession(session);
@@ -1024,11 +1018,13 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1619,11 +1615,13 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

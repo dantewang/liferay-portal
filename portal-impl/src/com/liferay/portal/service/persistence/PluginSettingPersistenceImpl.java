@@ -576,11 +576,13 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -748,16 +750,22 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 
 				List<PluginSetting> list = q.list();
 
-				result = list;
+				if (!list.isEmpty()) {
+					result = list.get(0);
+				}
 
-				PluginSetting pluginSetting = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_I_T,
-						finderArgs, list);
+				return (PluginSetting)result;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_I_T,
+						finderArgs);
 				}
 				else {
-					pluginSetting = list.get(0);
+					PluginSetting pluginSetting = (PluginSetting)result;
 
 					cacheResult(pluginSetting);
 
@@ -769,17 +777,6 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_I_T,
 							finderArgs, pluginSetting);
 					}
-				}
-
-				return pluginSetting;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_I_T,
-						finderArgs);
 				}
 
 				closeSession(session);
@@ -887,11 +884,13 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_I_T,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_I_T,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_I_T,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1481,11 +1480,13 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

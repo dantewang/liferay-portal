@@ -576,11 +576,13 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_QUESTIONID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_QUESTIONID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_QUESTIONID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1084,11 +1086,13 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CHOICEID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CHOICEID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CHOICEID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1213,27 +1217,11 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 
 				List<PollsVote> list = q.list();
 
-				result = list;
-
-				PollsVote pollsVote = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_Q_U,
-						finderArgs, list);
-				}
-				else {
-					pollsVote = list.get(0);
-
-					cacheResult(pollsVote);
-
-					if ((pollsVote.getQuestionId() != questionId) ||
-							(pollsVote.getUserId() != userId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_Q_U,
-							finderArgs, pollsVote);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return pollsVote;
+				return (PollsVote)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -1242,6 +1230,17 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_Q_U,
 						finderArgs);
+				}
+				else {
+					PollsVote pollsVote = (PollsVote)result;
+
+					cacheResult(pollsVote);
+
+					if ((pollsVote.getQuestionId() != questionId) ||
+							(pollsVote.getUserId() != userId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_Q_U,
+							finderArgs, pollsVote);
+					}
 				}
 
 				closeSession(session);
@@ -1318,11 +1317,13 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_Q_U,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_Q_U, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_Q_U,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1906,11 +1907,13 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

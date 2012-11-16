@@ -193,27 +193,11 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 
 				List<VirtualHost> list = q.list();
 
-				result = list;
-
-				VirtualHost virtualHost = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_HOSTNAME,
-						finderArgs, list);
-				}
-				else {
-					virtualHost = list.get(0);
-
-					cacheResult(virtualHost);
-
-					if ((virtualHost.getHostname() == null) ||
-							!virtualHost.getHostname().equals(hostname)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_HOSTNAME,
-							finderArgs, virtualHost);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return virtualHost;
+				return (VirtualHost)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -222,6 +206,17 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_HOSTNAME,
 						finderArgs);
+				}
+				else {
+					VirtualHost virtualHost = (VirtualHost)result;
+
+					cacheResult(virtualHost);
+
+					if ((virtualHost.getHostname() == null) ||
+							!virtualHost.getHostname().equals(hostname)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_HOSTNAME,
+							finderArgs, virtualHost);
+					}
 				}
 
 				closeSession(session);
@@ -303,11 +298,13 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_HOSTNAME,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_HOSTNAME,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_HOSTNAME,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -434,27 +431,11 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 
 				List<VirtualHost> list = q.list();
 
-				result = list;
-
-				VirtualHost virtualHost = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_L,
-						finderArgs, list);
-				}
-				else {
-					virtualHost = list.get(0);
-
-					cacheResult(virtualHost);
-
-					if ((virtualHost.getCompanyId() != companyId) ||
-							(virtualHost.getLayoutSetId() != layoutSetId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_L,
-							finderArgs, virtualHost);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return virtualHost;
+				return (VirtualHost)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -463,6 +444,17 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_L,
 						finderArgs);
+				}
+				else {
+					VirtualHost virtualHost = (VirtualHost)result;
+
+					cacheResult(virtualHost);
+
+					if ((virtualHost.getCompanyId() != companyId) ||
+							(virtualHost.getLayoutSetId() != layoutSetId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_L,
+							finderArgs, virtualHost);
+					}
 				}
 
 				closeSession(session);
@@ -539,11 +531,13 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_L,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_L, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_L,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1112,11 +1106,13 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

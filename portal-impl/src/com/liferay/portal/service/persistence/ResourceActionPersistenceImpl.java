@@ -609,11 +609,13 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -764,16 +766,22 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 
 				List<ResourceAction> list = q.list();
 
-				result = list;
+				if (!list.isEmpty()) {
+					result = list.get(0);
+				}
 
-				ResourceAction resourceAction = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_N_A,
-						finderArgs, list);
+				return (ResourceAction)result;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_A,
+						finderArgs);
 				}
 				else {
-					resourceAction = list.get(0);
+					ResourceAction resourceAction = (ResourceAction)result;
 
 					cacheResult(resourceAction);
 
@@ -784,17 +792,6 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_N_A,
 							finderArgs, resourceAction);
 					}
-				}
-
-				return resourceAction;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_A,
-						finderArgs);
 				}
 
 				closeSession(session);
@@ -895,11 +892,13 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_N_A,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_A, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_A,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1465,11 +1464,13 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

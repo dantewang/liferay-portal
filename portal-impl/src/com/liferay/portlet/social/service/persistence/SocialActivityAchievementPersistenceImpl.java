@@ -582,11 +582,13 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1135,11 +1137,13 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1726,11 +1730,13 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_N,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_N, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_N,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2288,11 +2294,13 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_F,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_F, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_F,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2450,16 +2458,22 @@ public class SocialActivityAchievementPersistenceImpl
 
 				List<SocialActivityAchievement> list = q.list();
 
-				result = list;
+				if (!list.isEmpty()) {
+					result = list.get(0);
+				}
 
-				SocialActivityAchievement socialActivityAchievement = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_U_N,
-						finderArgs, list);
+				return (SocialActivityAchievement)result;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_U_N,
+						finderArgs);
 				}
 				else {
-					socialActivityAchievement = list.get(0);
+					SocialActivityAchievement socialActivityAchievement = (SocialActivityAchievement)result;
 
 					cacheResult(socialActivityAchievement);
 
@@ -2470,17 +2484,6 @@ public class SocialActivityAchievementPersistenceImpl
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_U_N,
 							finderArgs, socialActivityAchievement);
 					}
-				}
-
-				return socialActivityAchievement;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_U_N,
-						finderArgs);
 				}
 
 				closeSession(session);
@@ -2576,11 +2579,13 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_N,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U_N,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U_N,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -3179,11 +3184,13 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_F,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U_F,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U_F,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -3846,11 +3853,13 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

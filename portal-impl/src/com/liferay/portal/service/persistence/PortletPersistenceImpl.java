@@ -571,11 +571,13 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -712,16 +714,22 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 
 				List<Portlet> list = q.list();
 
-				result = list;
+				if (!list.isEmpty()) {
+					result = list.get(0);
+				}
 
-				Portlet portlet = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_P,
-						finderArgs, list);
+				return (Portlet)result;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_P,
+						finderArgs);
 				}
 				else {
-					portlet = list.get(0);
+					Portlet portlet = (Portlet)result;
 
 					cacheResult(portlet);
 
@@ -731,17 +739,6 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_P,
 							finderArgs, portlet);
 					}
-				}
-
-				return portlet;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_P,
-						finderArgs);
 				}
 
 				closeSession(session);
@@ -830,11 +827,13 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_P, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_P,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1402,11 +1401,13 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

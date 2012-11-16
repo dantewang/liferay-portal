@@ -617,11 +617,13 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1144,11 +1146,13 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FILEENTRYTYPEID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FILEENTRYTYPEID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FILEENTRYTYPEID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1659,11 +1663,13 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FILEENTRYID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FILEENTRYID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FILEENTRYID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2180,11 +2186,13 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FILEVERSIONID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FILEVERSIONID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FILEVERSIONID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2312,27 +2320,11 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 
 				List<DLFileEntryMetadata> list = q.list();
 
-				result = list;
-
-				DLFileEntryMetadata dlFileEntryMetadata = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_D_F,
-						finderArgs, list);
-				}
-				else {
-					dlFileEntryMetadata = list.get(0);
-
-					cacheResult(dlFileEntryMetadata);
-
-					if ((dlFileEntryMetadata.getDDMStructureId() != DDMStructureId) ||
-							(dlFileEntryMetadata.getFileVersionId() != fileVersionId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_D_F,
-							finderArgs, dlFileEntryMetadata);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return dlFileEntryMetadata;
+				return (DLFileEntryMetadata)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -2341,6 +2333,17 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_D_F,
 						finderArgs);
+				}
+				else {
+					DLFileEntryMetadata dlFileEntryMetadata = (DLFileEntryMetadata)result;
+
+					cacheResult(dlFileEntryMetadata);
+
+					if ((dlFileEntryMetadata.getDDMStructureId() != DDMStructureId) ||
+							(dlFileEntryMetadata.getFileVersionId() != fileVersionId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_D_F,
+							finderArgs, dlFileEntryMetadata);
+					}
 				}
 
 				closeSession(session);
@@ -2419,11 +2422,13 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_D_F,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_D_F, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_D_F,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -3056,11 +3061,13 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

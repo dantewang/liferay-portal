@@ -611,11 +611,13 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -754,16 +756,22 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 
 				List<MBMailingList> list = q.list();
 
-				result = list;
+				if (!list.isEmpty()) {
+					result = list.get(0);
+				}
 
-				MBMailingList mbMailingList = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs, list);
+				return (MBMailingList)result;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+						finderArgs);
 				}
 				else {
-					mbMailingList = list.get(0);
+					MBMailingList mbMailingList = (MBMailingList)result;
 
 					cacheResult(mbMailingList);
 
@@ -773,17 +781,6 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
 							finderArgs, mbMailingList);
 					}
-				}
-
-				return mbMailingList;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs);
 				}
 
 				closeSession(session);
@@ -872,11 +869,13 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1462,11 +1461,13 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1974,11 +1975,13 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVE,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ACTIVE,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ACTIVE,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2103,27 +2106,11 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 
 				List<MBMailingList> list = q.list();
 
-				result = list;
-
-				MBMailingList mbMailingList = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_C,
-						finderArgs, list);
-				}
-				else {
-					mbMailingList = list.get(0);
-
-					cacheResult(mbMailingList);
-
-					if ((mbMailingList.getGroupId() != groupId) ||
-							(mbMailingList.getCategoryId() != categoryId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_C,
-							finderArgs, mbMailingList);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return mbMailingList;
+				return (MBMailingList)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -2132,6 +2119,17 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_C,
 						finderArgs);
+				}
+				else {
+					MBMailingList mbMailingList = (MBMailingList)result;
+
+					cacheResult(mbMailingList);
+
+					if ((mbMailingList.getGroupId() != groupId) ||
+							(mbMailingList.getCategoryId() != categoryId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_C,
+							finderArgs, mbMailingList);
+					}
 				}
 
 				closeSession(session);
@@ -2208,11 +2206,13 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2876,11 +2876,13 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

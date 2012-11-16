@@ -192,27 +192,11 @@ public class WebDAVPropsPersistenceImpl extends BasePersistenceImpl<WebDAVProps>
 
 				List<WebDAVProps> list = q.list();
 
-				result = list;
-
-				WebDAVProps webDAVProps = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-						finderArgs, list);
-				}
-				else {
-					webDAVProps = list.get(0);
-
-					cacheResult(webDAVProps);
-
-					if ((webDAVProps.getClassNameId() != classNameId) ||
-							(webDAVProps.getClassPK() != classPK)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-							finderArgs, webDAVProps);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return webDAVProps;
+				return (WebDAVProps)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -221,6 +205,17 @@ public class WebDAVPropsPersistenceImpl extends BasePersistenceImpl<WebDAVProps>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C,
 						finderArgs);
+				}
+				else {
+					WebDAVProps webDAVProps = (WebDAVProps)result;
+
+					cacheResult(webDAVProps);
+
+					if ((webDAVProps.getClassNameId() != classNameId) ||
+							(webDAVProps.getClassPK() != classPK)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
+							finderArgs, webDAVProps);
+					}
 				}
 
 				closeSession(session);
@@ -297,11 +292,13 @@ public class WebDAVPropsPersistenceImpl extends BasePersistenceImpl<WebDAVProps>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -850,11 +847,13 @@ public class WebDAVPropsPersistenceImpl extends BasePersistenceImpl<WebDAVProps>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

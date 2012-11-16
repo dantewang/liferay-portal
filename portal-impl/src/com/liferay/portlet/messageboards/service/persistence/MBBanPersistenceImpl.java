@@ -567,11 +567,13 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1069,11 +1071,13 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1575,11 +1579,13 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BANUSERID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_BANUSERID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_BANUSERID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1704,27 +1710,11 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 
 				List<MBBan> list = q.list();
 
-				result = list;
-
-				MBBan mbBan = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_B,
-						finderArgs, list);
-				}
-				else {
-					mbBan = list.get(0);
-
-					cacheResult(mbBan);
-
-					if ((mbBan.getGroupId() != groupId) ||
-							(mbBan.getBanUserId() != banUserId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_B,
-							finderArgs, mbBan);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return mbBan;
+				return (MBBan)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -1733,6 +1723,17 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_B,
 						finderArgs);
+				}
+				else {
+					MBBan mbBan = (MBBan)result;
+
+					cacheResult(mbBan);
+
+					if ((mbBan.getGroupId() != groupId) ||
+							(mbBan.getBanUserId() != banUserId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_B,
+							finderArgs, mbBan);
+					}
 				}
 
 				closeSession(session);
@@ -1809,11 +1810,13 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_B,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_B, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_B,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2398,11 +2401,13 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

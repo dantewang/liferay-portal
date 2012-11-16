@@ -623,11 +623,13 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BUILDNAMESPACE,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_BUILDNAMESPACE,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_BUILDNAMESPACE,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -770,16 +772,22 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 
 				List<ServiceComponent> list = q.list();
 
-				result = list;
+				if (!list.isEmpty()) {
+					result = list.get(0);
+				}
 
-				ServiceComponent serviceComponent = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_BNS_BNU,
-						finderArgs, list);
+				return (ServiceComponent)result;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_BNS_BNU,
+						finderArgs);
 				}
 				else {
-					serviceComponent = list.get(0);
+					ServiceComponent serviceComponent = (ServiceComponent)result;
 
 					cacheResult(serviceComponent);
 
@@ -790,17 +798,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_BNS_BNU,
 							finderArgs, serviceComponent);
 					}
-				}
-
-				return serviceComponent;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_BNS_BNU,
-						finderArgs);
 				}
 
 				closeSession(session);
@@ -891,11 +888,13 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BNS_BNU,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_BNS_BNU,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_BNS_BNU,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1469,11 +1468,13 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

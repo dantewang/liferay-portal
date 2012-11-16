@@ -591,11 +591,13 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -723,27 +725,11 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 
 				List<ResourceBlockPermission> list = q.list();
 
-				result = list;
-
-				ResourceBlockPermission resourceBlockPermission = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_R,
-						finderArgs, list);
-				}
-				else {
-					resourceBlockPermission = list.get(0);
-
-					cacheResult(resourceBlockPermission);
-
-					if ((resourceBlockPermission.getResourceBlockId() != resourceBlockId) ||
-							(resourceBlockPermission.getRoleId() != roleId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_R,
-							finderArgs, resourceBlockPermission);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return resourceBlockPermission;
+				return (ResourceBlockPermission)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -752,6 +738,17 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_R,
 						finderArgs);
+				}
+				else {
+					ResourceBlockPermission resourceBlockPermission = (ResourceBlockPermission)result;
+
+					cacheResult(resourceBlockPermission);
+
+					if ((resourceBlockPermission.getResourceBlockId() != resourceBlockId) ||
+							(resourceBlockPermission.getRoleId() != roleId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_R,
+							finderArgs, resourceBlockPermission);
+					}
 				}
 
 				closeSession(session);
@@ -829,11 +826,13 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_R,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_R, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_R,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1412,11 +1411,13 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

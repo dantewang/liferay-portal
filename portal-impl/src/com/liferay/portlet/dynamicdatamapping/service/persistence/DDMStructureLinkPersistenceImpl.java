@@ -580,11 +580,13 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -697,26 +699,11 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 
 				List<DDMStructureLink> list = q.list();
 
-				result = list;
-
-				DDMStructureLink ddmStructureLink = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSPK,
-						finderArgs, list);
-				}
-				else {
-					ddmStructureLink = list.get(0);
-
-					cacheResult(ddmStructureLink);
-
-					if ((ddmStructureLink.getClassPK() != classPK)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSPK,
-							finderArgs, ddmStructureLink);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return ddmStructureLink;
+				return (DDMStructureLink)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -725,6 +712,16 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSPK,
 						finderArgs);
+				}
+				else {
+					DDMStructureLink ddmStructureLink = (DDMStructureLink)result;
+
+					cacheResult(ddmStructureLink);
+
+					if ((ddmStructureLink.getClassPK() != classPK)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSPK,
+							finderArgs, ddmStructureLink);
+					}
 				}
 
 				closeSession(session);
@@ -794,11 +791,13 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSPK,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSPK,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSPK,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1308,11 +1307,13 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1888,11 +1889,13 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

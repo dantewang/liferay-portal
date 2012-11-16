@@ -192,27 +192,11 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 
 				List<ClassName> list = q.list();
 
-				result = list;
-
-				ClassName className = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_VALUE,
-						finderArgs, list);
-				}
-				else {
-					className = list.get(0);
-
-					cacheResult(className);
-
-					if ((className.getValue() == null) ||
-							!className.getValue().equals(value)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_VALUE,
-							finderArgs, className);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return className;
+				return (ClassName)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -221,6 +205,17 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_VALUE,
 						finderArgs);
+				}
+				else {
+					ClassName className = (ClassName)result;
+
+					cacheResult(className);
+
+					if ((className.getValue() == null) ||
+							!className.getValue().equals(value)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_VALUE,
+							finderArgs, className);
+					}
 				}
 
 				closeSession(session);
@@ -302,11 +297,13 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_VALUE,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_VALUE,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_VALUE,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -837,11 +834,13 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

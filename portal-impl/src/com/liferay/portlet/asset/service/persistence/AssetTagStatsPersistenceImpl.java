@@ -574,11 +574,13 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TAGID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TAGID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TAGID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1086,11 +1088,13 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1215,27 +1219,11 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 
 				List<AssetTagStats> list = q.list();
 
-				result = list;
-
-				AssetTagStats assetTagStats = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_T_C,
-						finderArgs, list);
-				}
-				else {
-					assetTagStats = list.get(0);
-
-					cacheResult(assetTagStats);
-
-					if ((assetTagStats.getTagId() != tagId) ||
-							(assetTagStats.getClassNameId() != classNameId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_T_C,
-							finderArgs, assetTagStats);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return assetTagStats;
+				return (AssetTagStats)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -1244,6 +1232,17 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_T_C,
 						finderArgs);
+				}
+				else {
+					AssetTagStats assetTagStats = (AssetTagStats)result;
+
+					cacheResult(assetTagStats);
+
+					if ((assetTagStats.getTagId() != tagId) ||
+							(assetTagStats.getClassNameId() != classNameId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_T_C,
+							finderArgs, assetTagStats);
+					}
 				}
 
 				closeSession(session);
@@ -1320,11 +1319,13 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_C,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_C, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_C,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1906,11 +1907,13 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

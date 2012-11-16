@@ -577,11 +577,13 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ROLEID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ROLEID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ROLEID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1209,11 +1211,13 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_N_R,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_N_R,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_N_R,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1388,16 +1392,22 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 				List<ResourceTypePermission> list = q.list();
 
-				result = list;
+				if (!list.isEmpty()) {
+					result = list.get(0);
+				}
 
-				ResourceTypePermission resourceTypePermission = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_G_N_R,
-						finderArgs, list);
+				return (ResourceTypePermission)result;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_G_N_R,
+						finderArgs);
 				}
 				else {
-					resourceTypePermission = list.get(0);
+					ResourceTypePermission resourceTypePermission = (ResourceTypePermission)result;
 
 					cacheResult(resourceTypePermission);
 
@@ -1409,17 +1419,6 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_G_N_R,
 							finderArgs, resourceTypePermission);
 					}
-				}
-
-				return resourceTypePermission;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_G_N_R,
-						finderArgs);
 				}
 
 				closeSession(session);
@@ -1522,11 +1521,13 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_G_N_R,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_G_N_R,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_G_N_R,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2143,11 +2144,13 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

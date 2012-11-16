@@ -192,27 +192,11 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 
 				List<Country> list = q.list();
 
-				result = list;
-
-				Country country = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
-						finderArgs, list);
-				}
-				else {
-					country = list.get(0);
-
-					cacheResult(country);
-
-					if ((country.getName() == null) ||
-							!country.getName().equals(name)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
-							finderArgs, country);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return country;
+				return (Country)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -221,6 +205,17 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
 						finderArgs);
+				}
+				else {
+					Country country = (Country)result;
+
+					cacheResult(country);
+
+					if ((country.getName() == null) ||
+							!country.getName().equals(name)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
+							finderArgs, country);
+					}
 				}
 
 				closeSession(session);
@@ -302,11 +297,13 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -432,27 +429,11 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 
 				List<Country> list = q.list();
 
-				result = list;
-
-				Country country = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A2,
-						finderArgs, list);
-				}
-				else {
-					country = list.get(0);
-
-					cacheResult(country);
-
-					if ((country.getA2() == null) ||
-							!country.getA2().equals(a2)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A2,
-							finderArgs, country);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return country;
+				return (Country)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -461,6 +442,17 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A2,
 						finderArgs);
+				}
+				else {
+					Country country = (Country)result;
+
+					cacheResult(country);
+
+					if ((country.getA2() == null) ||
+							!country.getA2().equals(a2)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A2,
+							finderArgs, country);
+					}
 				}
 
 				closeSession(session);
@@ -542,11 +534,13 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A2,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A2, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A2,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -672,27 +666,11 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 
 				List<Country> list = q.list();
 
-				result = list;
-
-				Country country = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A3,
-						finderArgs, list);
-				}
-				else {
-					country = list.get(0);
-
-					cacheResult(country);
-
-					if ((country.getA3() == null) ||
-							!country.getA3().equals(a3)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A3,
-							finderArgs, country);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return country;
+				return (Country)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -701,6 +679,17 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A3,
 						finderArgs);
+				}
+				else {
+					Country country = (Country)result;
+
+					cacheResult(country);
+
+					if ((country.getA3() == null) ||
+							!country.getA3().equals(a3)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A3,
+							finderArgs, country);
+					}
 				}
 
 				closeSession(session);
@@ -782,11 +771,13 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A3,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A3, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A3,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1287,11 +1278,13 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVE,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ACTIVE,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ACTIVE,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1879,11 +1872,13 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

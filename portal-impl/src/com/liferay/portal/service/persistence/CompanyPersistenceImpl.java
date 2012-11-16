@@ -192,27 +192,11 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 				List<Company> list = q.list();
 
-				result = list;
-
-				Company company = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_WEBID,
-						finderArgs, list);
-				}
-				else {
-					company = list.get(0);
-
-					cacheResult(company);
-
-					if ((company.getWebId() == null) ||
-							!company.getWebId().equals(webId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_WEBID,
-							finderArgs, company);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return company;
+				return (Company)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -221,6 +205,17 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_WEBID,
 						finderArgs);
+				}
+				else {
+					Company company = (Company)result;
+
+					cacheResult(company);
+
+					if ((company.getWebId() == null) ||
+							!company.getWebId().equals(webId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_WEBID,
+							finderArgs, company);
+					}
 				}
 
 				closeSession(session);
@@ -302,11 +297,13 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_WEBID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_WEBID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_WEBID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -654,11 +651,13 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_MX,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_MX, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_MX,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -985,11 +984,13 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LOGOID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_LOGOID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_LOGOID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1488,11 +1489,13 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SYSTEM,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_SYSTEM,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_SYSTEM,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -2040,11 +2043,13 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

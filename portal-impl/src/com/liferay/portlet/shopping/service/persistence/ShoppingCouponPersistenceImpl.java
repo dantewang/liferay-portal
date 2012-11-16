@@ -577,11 +577,13 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -705,27 +707,11 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 
 				List<ShoppingCoupon> list = q.list();
 
-				result = list;
-
-				ShoppingCoupon shoppingCoupon = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CODE,
-						finderArgs, list);
-				}
-				else {
-					shoppingCoupon = list.get(0);
-
-					cacheResult(shoppingCoupon);
-
-					if ((shoppingCoupon.getCode() == null) ||
-							!shoppingCoupon.getCode().equals(code)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CODE,
-							finderArgs, shoppingCoupon);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return shoppingCoupon;
+				return (ShoppingCoupon)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -734,6 +720,17 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CODE,
 						finderArgs);
+				}
+				else {
+					ShoppingCoupon shoppingCoupon = (ShoppingCoupon)result;
+
+					cacheResult(shoppingCoupon);
+
+					if ((shoppingCoupon.getCode() == null) ||
+							!shoppingCoupon.getCode().equals(code)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CODE,
+							finderArgs, shoppingCoupon);
+					}
 				}
 
 				closeSession(session);
@@ -815,11 +812,13 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CODE,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CODE,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CODE,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1386,11 +1385,13 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}

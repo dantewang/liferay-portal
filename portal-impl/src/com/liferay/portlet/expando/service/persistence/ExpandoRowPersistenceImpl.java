@@ -572,11 +572,13 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TABLEID,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TABLEID,
-					finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_TABLEID,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -701,27 +703,11 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 
 				List<ExpandoRow> list = q.list();
 
-				result = list;
-
-				ExpandoRow expandoRow = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_T_C,
-						finderArgs, list);
-				}
-				else {
-					expandoRow = list.get(0);
-
-					cacheResult(expandoRow);
-
-					if ((expandoRow.getTableId() != tableId) ||
-							(expandoRow.getClassPK() != classPK)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_T_C,
-							finderArgs, expandoRow);
-					}
+				if (!list.isEmpty()) {
+					result = list.get(0);
 				}
 
-				return expandoRow;
+				return (ExpandoRow)result;
 			}
 			catch (Exception e) {
 				throw processException(e);
@@ -730,6 +716,17 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 				if (result == null) {
 					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_T_C,
 						finderArgs);
+				}
+				else {
+					ExpandoRow expandoRow = (ExpandoRow)result;
+
+					cacheResult(expandoRow);
+
+					if ((expandoRow.getTableId() != tableId) ||
+							(expandoRow.getClassPK() != classPK)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_T_C,
+							finderArgs, expandoRow);
+					}
 				}
 
 				closeSession(session);
@@ -805,11 +802,13 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_C,
+						finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_C, finderArgs,
-					count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_C,
+						finderArgs, count);
+				}
 
 				closeSession(session);
 			}
@@ -1372,11 +1371,13 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+						FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}
