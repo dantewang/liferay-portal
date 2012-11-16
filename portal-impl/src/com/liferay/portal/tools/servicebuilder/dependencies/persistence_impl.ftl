@@ -805,8 +805,6 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		if (${entity.varName} == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
@@ -823,20 +821,20 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				</#if>
 
 				);
+
+				if (${entity.varName} != null) {
+					cacheResult(${entity.varName});
+				}
+				else {
+					EntityCacheUtil.putResult(${entity.name}ModelImpl.ENTITY_CACHE_ENABLED, ${entity.name}Impl.class, ${entity.PKVarName}, _null${entity.name});
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(${entity.name}ModelImpl.ENTITY_CACHE_ENABLED, ${entity.name}Impl.class, ${entity.PKVarName});
 
 				throw processException(e);
 			}
 			finally {
-				if (${entity.varName} != null) {
-					cacheResult(${entity.varName});
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(${entity.name}ModelImpl.ENTITY_CACHE_ENABLED, ${entity.name}Impl.class, ${entity.PKVarName}, _null${entity.name});
-				}
-
 				closeSession(session);
 			}
 		}
