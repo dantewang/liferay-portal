@@ -1147,13 +1147,28 @@
 	</#list>
 
 	int start, int end, OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-			<#list finderColsList as finderCol>
-				${finderCol.name},
-			</#list>
+		Object[] finderArgs = null;
 
-			start, end, orderByComparator
-		};
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
+			finderArgs = new Object[] {
+				<#list finderColsList as finderCol>
+					${finderCol.name}
+
+					<#if finderCol_has_next>
+						,
+					</#if>
+				</#list>
+			};
+		}
+		else {
+			finderArgs = new Object[] {
+				<#list finderColsList as finderCol>
+					${finderCol.name},
+				</#list>
+
+				start, end, orderByComparator
+			};
+		}
 
 		List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs, this);
 
@@ -1627,17 +1642,36 @@
 		</#list>
 
 		int start, int end, OrderByComparator orderByComparator) throws SystemException {
-			Object[] finderArgs = new Object[] {
-				<#list finderColsList as finderCol>
-					<#if finderCol.hasArrayableOperator()>
-						StringUtil.merge(${finderCol.names}),
-					<#else>
-						${finderCol.name},
-					</#if>
-				</#list>
+			Object[] finderArgs = null;
 
-				start, end, orderByComparator
-			};
+			if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
+				finderArgs = new Object[] {
+					<#list finderColsList as finderCol>
+						<#if finderCol.hasArrayableOperator()>
+							StringUtil.merge(${finderCol.names})
+						<#else>
+							${finderCol.name}
+						</#if>
+
+						<#if finderCol_has_next>
+							,
+						</#if>
+					</#list>
+				};
+			}
+			else {
+				finderArgs = new Object[] {
+					<#list finderColsList as finderCol>
+						<#if finderCol.hasArrayableOperator()>
+							StringUtil.merge(${finderCol.names}),
+						<#else>
+							${finderCol.name},
+						</#if>
+					</#list>
+
+					start, end, orderByComparator
+				};
+			}
 
 			List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs, this);
 
