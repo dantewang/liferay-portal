@@ -12175,28 +12175,27 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 		if (wikiPage == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				wikiPage = (WikiPage)session.get(WikiPageImpl.class,
 						Long.valueOf(pageId));
+
+				if (wikiPage != null) {
+					cacheResult(wikiPage);
+				}
+				else {
+					EntityCacheUtil.putResult(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
+						WikiPageImpl.class, pageId, _nullWikiPage);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
+					WikiPageImpl.class, pageId);
 
 				throw processException(e);
 			}
 			finally {
-				if (wikiPage != null) {
-					cacheResult(wikiPage);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
-						WikiPageImpl.class, pageId, _nullWikiPage);
-				}
-
 				closeSession(session);
 			}
 		}

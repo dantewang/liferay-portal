@@ -3104,29 +3104,28 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 		if (userGroupGroupRole == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				userGroupGroupRole = (UserGroupGroupRole)session.get(UserGroupGroupRoleImpl.class,
 						userGroupGroupRolePK);
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (userGroupGroupRole != null) {
 					cacheResult(userGroupGroupRole);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 						UserGroupGroupRoleImpl.class, userGroupGroupRolePK,
 						_nullUserGroupGroupRole);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
+					UserGroupGroupRoleImpl.class, userGroupGroupRolePK);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

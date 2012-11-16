@@ -925,29 +925,28 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 		if (shoppingItemPrice == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				shoppingItemPrice = (ShoppingItemPrice)session.get(ShoppingItemPriceImpl.class,
 						Long.valueOf(itemPriceId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (shoppingItemPrice != null) {
 					cacheResult(shoppingItemPrice);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
 						ShoppingItemPriceImpl.class, itemPriceId,
 						_nullShoppingItemPrice);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+					ShoppingItemPriceImpl.class, itemPriceId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

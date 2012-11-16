@@ -8848,28 +8848,27 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		if (layout == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				layout = (Layout)session.get(LayoutImpl.class,
 						Long.valueOf(plid));
+
+				if (layout != null) {
+					cacheResult(layout);
+				}
+				else {
+					EntityCacheUtil.putResult(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+						LayoutImpl.class, plid, _nullLayout);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+					LayoutImpl.class, plid);
 
 				throw processException(e);
 			}
 			finally {
-				if (layout != null) {
-					cacheResult(layout);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(LayoutModelImpl.ENTITY_CACHE_ENABLED,
-						LayoutImpl.class, plid, _nullLayout);
-				}
-
 				closeSession(session);
 			}
 		}

@@ -2676,29 +2676,28 @@ public class UserNotificationEventPersistenceImpl extends BasePersistenceImpl<Us
 		if (userNotificationEvent == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				userNotificationEvent = (UserNotificationEvent)session.get(UserNotificationEventImpl.class,
 						Long.valueOf(userNotificationEventId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (userNotificationEvent != null) {
 					cacheResult(userNotificationEvent);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(UserNotificationEventModelImpl.ENTITY_CACHE_ENABLED,
 						UserNotificationEventImpl.class,
 						userNotificationEventId, _nullUserNotificationEvent);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(UserNotificationEventModelImpl.ENTITY_CACHE_ENABLED,
+					UserNotificationEventImpl.class, userNotificationEventId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

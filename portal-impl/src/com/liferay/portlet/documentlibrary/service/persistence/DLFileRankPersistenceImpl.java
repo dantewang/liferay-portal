@@ -2915,28 +2915,27 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 		if (dlFileRank == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				dlFileRank = (DLFileRank)session.get(DLFileRankImpl.class,
 						Long.valueOf(fileRankId));
+
+				if (dlFileRank != null) {
+					cacheResult(dlFileRank);
+				}
+				else {
+					EntityCacheUtil.putResult(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+						DLFileRankImpl.class, fileRankId, _nullDLFileRank);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+					DLFileRankImpl.class, fileRankId);
 
 				throw processException(e);
 			}
 			finally {
-				if (dlFileRank != null) {
-					cacheResult(dlFileRank);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
-						DLFileRankImpl.class, fileRankId, _nullDLFileRank);
-				}
-
 				closeSession(session);
 			}
 		}

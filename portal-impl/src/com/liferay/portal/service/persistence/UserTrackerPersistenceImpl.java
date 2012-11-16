@@ -1999,28 +1999,27 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 		if (userTracker == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				userTracker = (UserTracker)session.get(UserTrackerImpl.class,
 						Long.valueOf(userTrackerId));
+
+				if (userTracker != null) {
+					cacheResult(userTracker);
+				}
+				else {
+					EntityCacheUtil.putResult(UserTrackerModelImpl.ENTITY_CACHE_ENABLED,
+						UserTrackerImpl.class, userTrackerId, _nullUserTracker);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(UserTrackerModelImpl.ENTITY_CACHE_ENABLED,
+					UserTrackerImpl.class, userTrackerId);
 
 				throw processException(e);
 			}
 			finally {
-				if (userTracker != null) {
-					cacheResult(userTracker);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(UserTrackerModelImpl.ENTITY_CACHE_ENABLED,
-						UserTrackerImpl.class, userTrackerId, _nullUserTracker);
-				}
-
 				closeSession(session);
 			}
 		}

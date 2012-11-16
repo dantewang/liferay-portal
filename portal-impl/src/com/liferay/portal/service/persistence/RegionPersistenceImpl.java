@@ -2284,28 +2284,27 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 		if (region == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				region = (Region)session.get(RegionImpl.class,
 						Long.valueOf(regionId));
+
+				if (region != null) {
+					cacheResult(region);
+				}
+				else {
+					EntityCacheUtil.putResult(RegionModelImpl.ENTITY_CACHE_ENABLED,
+						RegionImpl.class, regionId, _nullRegion);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(RegionModelImpl.ENTITY_CACHE_ENABLED,
+					RegionImpl.class, regionId);
 
 				throw processException(e);
 			}
 			finally {
-				if (region != null) {
-					cacheResult(region);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(RegionModelImpl.ENTITY_CACHE_ENABLED,
-						RegionImpl.class, regionId, _nullRegion);
-				}
-
 				closeSession(session);
 			}
 		}

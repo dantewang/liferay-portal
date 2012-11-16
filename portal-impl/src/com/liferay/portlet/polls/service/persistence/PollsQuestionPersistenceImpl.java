@@ -2758,28 +2758,27 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 		if (pollsQuestion == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				pollsQuestion = (PollsQuestion)session.get(PollsQuestionImpl.class,
 						Long.valueOf(questionId));
+
+				if (pollsQuestion != null) {
+					cacheResult(pollsQuestion);
+				}
+				else {
+					EntityCacheUtil.putResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+						PollsQuestionImpl.class, questionId, _nullPollsQuestion);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
+					PollsQuestionImpl.class, questionId);
 
 				throw processException(e);
 			}
 			finally {
-				if (pollsQuestion != null) {
-					cacheResult(pollsQuestion);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(PollsQuestionModelImpl.ENTITY_CACHE_ENABLED,
-						PollsQuestionImpl.class, questionId, _nullPollsQuestion);
-				}
-
 				closeSession(session);
 			}
 		}

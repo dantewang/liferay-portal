@@ -2375,28 +2375,27 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 		if (mdrRule == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mdrRule = (MDRRule)session.get(MDRRuleImpl.class,
 						Long.valueOf(ruleId));
+
+				if (mdrRule != null) {
+					cacheResult(mdrRule);
+				}
+				else {
+					EntityCacheUtil.putResult(MDRRuleModelImpl.ENTITY_CACHE_ENABLED,
+						MDRRuleImpl.class, ruleId, _nullMDRRule);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MDRRuleModelImpl.ENTITY_CACHE_ENABLED,
+					MDRRuleImpl.class, ruleId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mdrRule != null) {
-					cacheResult(mdrRule);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MDRRuleModelImpl.ENTITY_CACHE_ENABLED,
-						MDRRuleImpl.class, ruleId, _nullMDRRule);
-				}
-
 				closeSession(session);
 			}
 		}

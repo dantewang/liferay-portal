@@ -3455,29 +3455,28 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 		if (organization == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				organization = (Organization)session.get(OrganizationImpl.class,
 						Long.valueOf(organizationId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (organization != null) {
 					cacheResult(organization);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 						OrganizationImpl.class, organizationId,
 						_nullOrganization);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
+					OrganizationImpl.class, organizationId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

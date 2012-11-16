@@ -5190,29 +5190,28 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 		if (mdrRuleGroupInstance == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mdrRuleGroupInstance = (MDRRuleGroupInstance)session.get(MDRRuleGroupInstanceImpl.class,
 						Long.valueOf(ruleGroupInstanceId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (mdrRuleGroupInstance != null) {
 					cacheResult(mdrRuleGroupInstance);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 						MDRRuleGroupInstanceImpl.class, ruleGroupInstanceId,
 						_nullMDRRuleGroupInstance);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
+					MDRRuleGroupInstanceImpl.class, ruleGroupInstanceId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

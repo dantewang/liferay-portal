@@ -1094,28 +1094,27 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 		if (shard == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				shard = (Shard)session.get(ShardImpl.class,
 						Long.valueOf(shardId));
+
+				if (shard != null) {
+					cacheResult(shard);
+				}
+				else {
+					EntityCacheUtil.putResult(ShardModelImpl.ENTITY_CACHE_ENABLED,
+						ShardImpl.class, shardId, _nullShard);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ShardModelImpl.ENTITY_CACHE_ENABLED,
+					ShardImpl.class, shardId);
 
 				throw processException(e);
 			}
 			finally {
-				if (shard != null) {
-					cacheResult(shard);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ShardModelImpl.ENTITY_CACHE_ENABLED,
-						ShardImpl.class, shardId, _nullShard);
-				}
-
 				closeSession(session);
 			}
 		}

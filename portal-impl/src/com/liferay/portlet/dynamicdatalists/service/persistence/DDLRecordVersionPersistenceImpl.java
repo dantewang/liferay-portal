@@ -1803,29 +1803,28 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 		if (ddlRecordVersion == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ddlRecordVersion = (DDLRecordVersion)session.get(DDLRecordVersionImpl.class,
 						Long.valueOf(recordVersionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (ddlRecordVersion != null) {
 					cacheResult(ddlRecordVersion);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
 						DDLRecordVersionImpl.class, recordVersionId,
 						_nullDDLRecordVersion);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
+					DDLRecordVersionImpl.class, recordVersionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

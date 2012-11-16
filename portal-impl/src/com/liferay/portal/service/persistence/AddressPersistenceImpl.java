@@ -3915,28 +3915,27 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		if (address == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				address = (Address)session.get(AddressImpl.class,
 						Long.valueOf(addressId));
+
+				if (address != null) {
+					cacheResult(address);
+				}
+				else {
+					EntityCacheUtil.putResult(AddressModelImpl.ENTITY_CACHE_ENABLED,
+						AddressImpl.class, addressId, _nullAddress);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(AddressModelImpl.ENTITY_CACHE_ENABLED,
+					AddressImpl.class, addressId);
 
 				throw processException(e);
 			}
 			finally {
-				if (address != null) {
-					cacheResult(address);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AddressModelImpl.ENTITY_CACHE_ENABLED,
-						AddressImpl.class, addressId, _nullAddress);
-				}
-
 				closeSession(session);
 			}
 		}

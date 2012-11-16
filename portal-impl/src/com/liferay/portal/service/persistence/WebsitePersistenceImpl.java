@@ -3252,28 +3252,27 @@ public class WebsitePersistenceImpl extends BasePersistenceImpl<Website>
 		if (website == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				website = (Website)session.get(WebsiteImpl.class,
 						Long.valueOf(websiteId));
+
+				if (website != null) {
+					cacheResult(website);
+				}
+				else {
+					EntityCacheUtil.putResult(WebsiteModelImpl.ENTITY_CACHE_ENABLED,
+						WebsiteImpl.class, websiteId, _nullWebsite);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(WebsiteModelImpl.ENTITY_CACHE_ENABLED,
+					WebsiteImpl.class, websiteId);
 
 				throw processException(e);
 			}
 			finally {
-				if (website != null) {
-					cacheResult(website);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(WebsiteModelImpl.ENTITY_CACHE_ENABLED,
-						WebsiteImpl.class, websiteId, _nullWebsite);
-				}
-
 				closeSession(session);
 			}
 		}

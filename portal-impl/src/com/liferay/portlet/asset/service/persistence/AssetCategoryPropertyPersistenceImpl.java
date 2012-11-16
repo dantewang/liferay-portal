@@ -2377,29 +2377,28 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 		if (assetCategoryProperty == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				assetCategoryProperty = (AssetCategoryProperty)session.get(AssetCategoryPropertyImpl.class,
 						Long.valueOf(categoryPropertyId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (assetCategoryProperty != null) {
 					cacheResult(assetCategoryProperty);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(AssetCategoryPropertyModelImpl.ENTITY_CACHE_ENABLED,
 						AssetCategoryPropertyImpl.class, categoryPropertyId,
 						_nullAssetCategoryProperty);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(AssetCategoryPropertyModelImpl.ENTITY_CACHE_ENABLED,
+					AssetCategoryPropertyImpl.class, categoryPropertyId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

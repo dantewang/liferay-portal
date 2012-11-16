@@ -650,28 +650,27 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 		if (className == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				className = (ClassName)session.get(ClassNameImpl.class,
 						Long.valueOf(classNameId));
+
+				if (className != null) {
+					cacheResult(className);
+				}
+				else {
+					EntityCacheUtil.putResult(ClassNameModelImpl.ENTITY_CACHE_ENABLED,
+						ClassNameImpl.class, classNameId, _nullClassName);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ClassNameModelImpl.ENTITY_CACHE_ENABLED,
+					ClassNameImpl.class, classNameId);
 
 				throw processException(e);
 			}
 			finally {
-				if (className != null) {
-					cacheResult(className);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ClassNameModelImpl.ENTITY_CACHE_ENABLED,
-						ClassNameImpl.class, classNameId, _nullClassName);
-				}
-
 				closeSession(session);
 			}
 		}

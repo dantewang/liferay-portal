@@ -4649,29 +4649,28 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 		if (bookmarksFolder == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				bookmarksFolder = (BookmarksFolder)session.get(BookmarksFolderImpl.class,
 						Long.valueOf(folderId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (bookmarksFolder != null) {
 					cacheResult(bookmarksFolder);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
 						BookmarksFolderImpl.class, folderId,
 						_nullBookmarksFolder);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
+					BookmarksFolderImpl.class, folderId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

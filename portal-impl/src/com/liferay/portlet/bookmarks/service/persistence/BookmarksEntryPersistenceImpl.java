@@ -5472,28 +5472,27 @@ public class BookmarksEntryPersistenceImpl extends BasePersistenceImpl<Bookmarks
 		if (bookmarksEntry == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				bookmarksEntry = (BookmarksEntry)session.get(BookmarksEntryImpl.class,
 						Long.valueOf(entryId));
+
+				if (bookmarksEntry != null) {
+					cacheResult(bookmarksEntry);
+				}
+				else {
+					EntityCacheUtil.putResult(BookmarksEntryModelImpl.ENTITY_CACHE_ENABLED,
+						BookmarksEntryImpl.class, entryId, _nullBookmarksEntry);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(BookmarksEntryModelImpl.ENTITY_CACHE_ENABLED,
+					BookmarksEntryImpl.class, entryId);
 
 				throw processException(e);
 			}
 			finally {
-				if (bookmarksEntry != null) {
-					cacheResult(bookmarksEntry);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(BookmarksEntryModelImpl.ENTITY_CACHE_ENABLED,
-						BookmarksEntryImpl.class, entryId, _nullBookmarksEntry);
-				}
-
 				closeSession(session);
 			}
 		}

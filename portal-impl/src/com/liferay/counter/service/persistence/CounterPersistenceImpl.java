@@ -379,27 +379,26 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 		if (counter == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				counter = (Counter)session.get(CounterImpl.class, name);
+
+				if (counter != null) {
+					cacheResult(counter);
+				}
+				else {
+					EntityCacheUtil.putResult(CounterModelImpl.ENTITY_CACHE_ENABLED,
+						CounterImpl.class, name, _nullCounter);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(CounterModelImpl.ENTITY_CACHE_ENABLED,
+					CounterImpl.class, name);
 
 				throw processException(e);
 			}
 			finally {
-				if (counter != null) {
-					cacheResult(counter);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(CounterModelImpl.ENTITY_CACHE_ENABLED,
-						CounterImpl.class, name, _nullCounter);
-				}
-
 				closeSession(session);
 			}
 		}

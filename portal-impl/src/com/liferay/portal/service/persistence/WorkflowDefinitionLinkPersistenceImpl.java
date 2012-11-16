@@ -2095,29 +2095,28 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 		if (workflowDefinitionLink == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				workflowDefinitionLink = (WorkflowDefinitionLink)session.get(WorkflowDefinitionLinkImpl.class,
 						Long.valueOf(workflowDefinitionLinkId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (workflowDefinitionLink != null) {
 					cacheResult(workflowDefinitionLink);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
 						WorkflowDefinitionLinkImpl.class,
 						workflowDefinitionLinkId, _nullWorkflowDefinitionLink);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
+					WorkflowDefinitionLinkImpl.class, workflowDefinitionLinkId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

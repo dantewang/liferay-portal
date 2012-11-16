@@ -1954,29 +1954,28 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 		if (resourceTypePermission == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				resourceTypePermission = (ResourceTypePermission)session.get(ResourceTypePermissionImpl.class,
 						Long.valueOf(resourceTypePermissionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (resourceTypePermission != null) {
 					cacheResult(resourceTypePermission);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(ResourceTypePermissionModelImpl.ENTITY_CACHE_ENABLED,
 						ResourceTypePermissionImpl.class,
 						resourceTypePermissionId, _nullResourceTypePermission);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ResourceTypePermissionModelImpl.ENTITY_CACHE_ENABLED,
+					ResourceTypePermissionImpl.class, resourceTypePermissionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

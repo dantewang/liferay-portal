@@ -5047,28 +5047,27 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 		if (wikiNode == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				wikiNode = (WikiNode)session.get(WikiNodeImpl.class,
 						Long.valueOf(nodeId));
+
+				if (wikiNode != null) {
+					cacheResult(wikiNode);
+				}
+				else {
+					EntityCacheUtil.putResult(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
+						WikiNodeImpl.class, nodeId, _nullWikiNode);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
+					WikiNodeImpl.class, nodeId);
 
 				throw processException(e);
 			}
 			finally {
-				if (wikiNode != null) {
-					cacheResult(wikiNode);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
-						WikiNodeImpl.class, nodeId, _nullWikiNode);
-				}
-
 				closeSession(session);
 			}
 		}

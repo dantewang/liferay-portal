@@ -1694,29 +1694,28 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 		if (ddmStructureLink == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ddmStructureLink = (DDMStructureLink)session.get(DDMStructureLinkImpl.class,
 						Long.valueOf(structureLinkId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (ddmStructureLink != null) {
 					cacheResult(ddmStructureLink);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(DDMStructureLinkModelImpl.ENTITY_CACHE_ENABLED,
 						DDMStructureLinkImpl.class, structureLinkId,
 						_nullDDMStructureLink);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(DDMStructureLinkModelImpl.ENTITY_CACHE_ENABLED,
+					DDMStructureLinkImpl.class, structureLinkId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

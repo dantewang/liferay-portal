@@ -2780,29 +2780,28 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 		if (scFrameworkVersion == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				scFrameworkVersion = (SCFrameworkVersion)session.get(SCFrameworkVersionImpl.class,
 						Long.valueOf(frameworkVersionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (scFrameworkVersion != null) {
 					cacheResult(scFrameworkVersion);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
 						SCFrameworkVersionImpl.class, frameworkVersionId,
 						_nullSCFrameworkVersion);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SCFrameworkVersionModelImpl.ENTITY_CACHE_ENABLED,
+					SCFrameworkVersionImpl.class, frameworkVersionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

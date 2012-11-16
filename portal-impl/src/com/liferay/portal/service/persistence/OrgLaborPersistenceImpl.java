@@ -931,28 +931,27 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 		if (orgLabor == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				orgLabor = (OrgLabor)session.get(OrgLaborImpl.class,
 						Long.valueOf(orgLaborId));
+
+				if (orgLabor != null) {
+					cacheResult(orgLabor);
+				}
+				else {
+					EntityCacheUtil.putResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+						OrgLaborImpl.class, orgLaborId, _nullOrgLabor);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
+					OrgLaborImpl.class, orgLaborId);
 
 				throw processException(e);
 			}
 			finally {
-				if (orgLabor != null) {
-					cacheResult(orgLabor);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
-						OrgLaborImpl.class, orgLaborId, _nullOrgLabor);
-				}
-
 				closeSession(session);
 			}
 		}

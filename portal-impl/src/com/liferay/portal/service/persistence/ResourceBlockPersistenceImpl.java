@@ -2060,29 +2060,28 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 		if (resourceBlock == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				resourceBlock = (ResourceBlock)session.get(ResourceBlockImpl.class,
 						Long.valueOf(resourceBlockId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (resourceBlock != null) {
 					cacheResult(resourceBlock);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(ResourceBlockModelImpl.ENTITY_CACHE_ENABLED,
 						ResourceBlockImpl.class, resourceBlockId,
 						_nullResourceBlock);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ResourceBlockModelImpl.ENTITY_CACHE_ENABLED,
+					ResourceBlockImpl.class, resourceBlockId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

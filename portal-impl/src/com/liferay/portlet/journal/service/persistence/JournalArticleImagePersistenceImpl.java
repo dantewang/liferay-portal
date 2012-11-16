@@ -2645,29 +2645,28 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 		if (journalArticleImage == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				journalArticleImage = (JournalArticleImage)session.get(JournalArticleImageImpl.class,
 						Long.valueOf(articleImageId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (journalArticleImage != null) {
 					cacheResult(journalArticleImage);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(JournalArticleImageModelImpl.ENTITY_CACHE_ENABLED,
 						JournalArticleImageImpl.class, articleImageId,
 						_nullJournalArticleImage);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(JournalArticleImageModelImpl.ENTITY_CACHE_ENABLED,
+					JournalArticleImageImpl.class, articleImageId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

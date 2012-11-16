@@ -4949,28 +4949,27 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 		if (journalFolder == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				journalFolder = (JournalFolder)session.get(JournalFolderImpl.class,
 						Long.valueOf(folderId));
+
+				if (journalFolder != null) {
+					cacheResult(journalFolder);
+				}
+				else {
+					EntityCacheUtil.putResult(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
+						JournalFolderImpl.class, folderId, _nullJournalFolder);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
+					JournalFolderImpl.class, folderId);
 
 				throw processException(e);
 			}
 			finally {
-				if (journalFolder != null) {
-					cacheResult(journalFolder);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
-						JournalFolderImpl.class, folderId, _nullJournalFolder);
-				}
-
 				closeSession(session);
 			}
 		}

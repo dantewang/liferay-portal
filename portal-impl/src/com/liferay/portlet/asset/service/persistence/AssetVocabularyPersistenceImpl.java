@@ -3585,29 +3585,28 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 		if (assetVocabulary == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				assetVocabulary = (AssetVocabulary)session.get(AssetVocabularyImpl.class,
 						Long.valueOf(vocabularyId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (assetVocabulary != null) {
 					cacheResult(assetVocabulary);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(AssetVocabularyModelImpl.ENTITY_CACHE_ENABLED,
 						AssetVocabularyImpl.class, vocabularyId,
 						_nullAssetVocabulary);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(AssetVocabularyModelImpl.ENTITY_CACHE_ENABLED,
+					AssetVocabularyImpl.class, vocabularyId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

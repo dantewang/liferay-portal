@@ -4755,27 +4755,26 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 		if (role == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				role = (Role)session.get(RoleImpl.class, Long.valueOf(roleId));
+
+				if (role != null) {
+					cacheResult(role);
+				}
+				else {
+					EntityCacheUtil.putResult(RoleModelImpl.ENTITY_CACHE_ENABLED,
+						RoleImpl.class, roleId, _nullRole);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(RoleModelImpl.ENTITY_CACHE_ENABLED,
+					RoleImpl.class, roleId);
 
 				throw processException(e);
 			}
 			finally {
-				if (role != null) {
-					cacheResult(role);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(RoleModelImpl.ENTITY_CACHE_ENABLED,
-						RoleImpl.class, roleId, _nullRole);
-				}
-
 				closeSession(session);
 			}
 		}

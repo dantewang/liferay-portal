@@ -2880,27 +2880,26 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		if (lock == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				lock = (Lock)session.get(LockImpl.class, Long.valueOf(lockId));
+
+				if (lock != null) {
+					cacheResult(lock);
+				}
+				else {
+					EntityCacheUtil.putResult(LockModelImpl.ENTITY_CACHE_ENABLED,
+						LockImpl.class, lockId, _nullLock);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(LockModelImpl.ENTITY_CACHE_ENABLED,
+					LockImpl.class, lockId);
 
 				throw processException(e);
 			}
 			finally {
-				if (lock != null) {
-					cacheResult(lock);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(LockModelImpl.ENTITY_CACHE_ENABLED,
-						LockImpl.class, lockId, _nullLock);
-				}
-
 				closeSession(session);
 			}
 		}

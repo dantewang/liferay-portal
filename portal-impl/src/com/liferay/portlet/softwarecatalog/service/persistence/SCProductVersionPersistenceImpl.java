@@ -1332,29 +1332,28 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 		if (scProductVersion == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				scProductVersion = (SCProductVersion)session.get(SCProductVersionImpl.class,
 						Long.valueOf(productVersionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (scProductVersion != null) {
 					cacheResult(scProductVersion);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 						SCProductVersionImpl.class, productVersionId,
 						_nullSCProductVersion);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
+					SCProductVersionImpl.class, productVersionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

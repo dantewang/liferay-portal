@@ -2020,28 +2020,27 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 		if (contact == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				contact = (Contact)session.get(ContactImpl.class,
 						Long.valueOf(contactId));
+
+				if (contact != null) {
+					cacheResult(contact);
+				}
+				else {
+					EntityCacheUtil.putResult(ContactModelImpl.ENTITY_CACHE_ENABLED,
+						ContactImpl.class, contactId, _nullContact);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ContactModelImpl.ENTITY_CACHE_ENABLED,
+					ContactImpl.class, contactId);
 
 				throw processException(e);
 			}
 			finally {
-				if (contact != null) {
-					cacheResult(contact);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ContactModelImpl.ENTITY_CACHE_ENABLED,
-						ContactImpl.class, contactId, _nullContact);
-				}
-
 				closeSession(session);
 			}
 		}

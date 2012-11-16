@@ -3826,28 +3826,27 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 		if (assetEntry == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				assetEntry = (AssetEntry)session.get(AssetEntryImpl.class,
 						Long.valueOf(entryId));
+
+				if (assetEntry != null) {
+					cacheResult(assetEntry);
+				}
+				else {
+					EntityCacheUtil.putResult(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
+						AssetEntryImpl.class, entryId, _nullAssetEntry);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
+					AssetEntryImpl.class, entryId);
 
 				throw processException(e);
 			}
 			finally {
-				if (assetEntry != null) {
-					cacheResult(assetEntry);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
-						AssetEntryImpl.class, entryId, _nullAssetEntry);
-				}
-
 				closeSession(session);
 			}
 		}

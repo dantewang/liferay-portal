@@ -6539,29 +6539,28 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 		if (layoutRevision == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				layoutRevision = (LayoutRevision)session.get(LayoutRevisionImpl.class,
 						Long.valueOf(layoutRevisionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (layoutRevision != null) {
 					cacheResult(layoutRevision);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(LayoutRevisionModelImpl.ENTITY_CACHE_ENABLED,
 						LayoutRevisionImpl.class, layoutRevisionId,
 						_nullLayoutRevision);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(LayoutRevisionModelImpl.ENTITY_CACHE_ENABLED,
+					LayoutRevisionImpl.class, layoutRevisionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

@@ -1279,29 +1279,28 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 		if (serviceComponent == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				serviceComponent = (ServiceComponent)session.get(ServiceComponentImpl.class,
 						Long.valueOf(serviceComponentId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (serviceComponent != null) {
 					cacheResult(serviceComponent);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
 						ServiceComponentImpl.class, serviceComponentId,
 						_nullServiceComponent);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+					ServiceComponentImpl.class, serviceComponentId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

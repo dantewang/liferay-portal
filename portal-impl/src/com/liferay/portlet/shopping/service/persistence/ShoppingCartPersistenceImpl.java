@@ -1712,28 +1712,27 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 		if (shoppingCart == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				shoppingCart = (ShoppingCart)session.get(ShoppingCartImpl.class,
 						Long.valueOf(cartId));
+
+				if (shoppingCart != null) {
+					cacheResult(shoppingCart);
+				}
+				else {
+					EntityCacheUtil.putResult(ShoppingCartModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingCartImpl.class, cartId, _nullShoppingCart);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ShoppingCartModelImpl.ENTITY_CACHE_ENABLED,
+					ShoppingCartImpl.class, cartId);
 
 				throw processException(e);
 			}
 			finally {
-				if (shoppingCart != null) {
-					cacheResult(shoppingCart);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ShoppingCartModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingCartImpl.class, cartId, _nullShoppingCart);
-				}
-
 				closeSession(session);
 			}
 		}

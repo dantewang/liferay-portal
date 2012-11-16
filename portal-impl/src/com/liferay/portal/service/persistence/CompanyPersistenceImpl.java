@@ -1843,28 +1843,27 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 		if (company == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				company = (Company)session.get(CompanyImpl.class,
 						Long.valueOf(companyId));
+
+				if (company != null) {
+					cacheResult(company);
+				}
+				else {
+					EntityCacheUtil.putResult(CompanyModelImpl.ENTITY_CACHE_ENABLED,
+						CompanyImpl.class, companyId, _nullCompany);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(CompanyModelImpl.ENTITY_CACHE_ENABLED,
+					CompanyImpl.class, companyId);
 
 				throw processException(e);
 			}
 			finally {
-				if (company != null) {
-					cacheResult(company);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(CompanyModelImpl.ENTITY_CACHE_ENABLED,
-						CompanyImpl.class, companyId, _nullCompany);
-				}
-
 				closeSession(session);
 			}
 		}

@@ -1799,28 +1799,27 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 		if (mbThreadFlag == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mbThreadFlag = (MBThreadFlag)session.get(MBThreadFlagImpl.class,
 						Long.valueOf(threadFlagId));
+
+				if (mbThreadFlag != null) {
+					cacheResult(mbThreadFlag);
+				}
+				else {
+					EntityCacheUtil.putResult(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
+						MBThreadFlagImpl.class, threadFlagId, _nullMBThreadFlag);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
+					MBThreadFlagImpl.class, threadFlagId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mbThreadFlag != null) {
-					cacheResult(mbThreadFlag);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
-						MBThreadFlagImpl.class, threadFlagId, _nullMBThreadFlag);
-				}
-
 				closeSession(session);
 			}
 		}

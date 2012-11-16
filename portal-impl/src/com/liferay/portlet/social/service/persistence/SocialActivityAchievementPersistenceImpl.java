@@ -3647,29 +3647,28 @@ public class SocialActivityAchievementPersistenceImpl
 		if (socialActivityAchievement == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				socialActivityAchievement = (SocialActivityAchievement)session.get(SocialActivityAchievementImpl.class,
 						Long.valueOf(activityAchievementId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (socialActivityAchievement != null) {
 					cacheResult(socialActivityAchievement);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 						SocialActivityAchievementImpl.class,
 						activityAchievementId, _nullSocialActivityAchievement);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
+					SocialActivityAchievementImpl.class, activityAchievementId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

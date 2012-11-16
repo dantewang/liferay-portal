@@ -1423,28 +1423,27 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 		if (mbDiscussion == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mbDiscussion = (MBDiscussion)session.get(MBDiscussionImpl.class,
 						Long.valueOf(discussionId));
+
+				if (mbDiscussion != null) {
+					cacheResult(mbDiscussion);
+				}
+				else {
+					EntityCacheUtil.putResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+						MBDiscussionImpl.class, discussionId, _nullMBDiscussion);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+					MBDiscussionImpl.class, discussionId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mbDiscussion != null) {
-					cacheResult(mbDiscussion);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-						MBDiscussionImpl.class, discussionId, _nullMBDiscussion);
-				}
-
 				closeSession(session);
 			}
 		}

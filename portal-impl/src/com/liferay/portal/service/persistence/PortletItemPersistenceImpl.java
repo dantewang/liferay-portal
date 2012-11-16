@@ -2096,28 +2096,27 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 		if (portletItem == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				portletItem = (PortletItem)session.get(PortletItemImpl.class,
 						Long.valueOf(portletItemId));
+
+				if (portletItem != null) {
+					cacheResult(portletItem);
+				}
+				else {
+					EntityCacheUtil.putResult(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+						PortletItemImpl.class, portletItemId, _nullPortletItem);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+					PortletItemImpl.class, portletItemId);
 
 				throw processException(e);
 			}
 			finally {
-				if (portletItem != null) {
-					cacheResult(portletItem);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
-						PortletItemImpl.class, portletItemId, _nullPortletItem);
-				}
-
 				closeSession(session);
 			}
 		}

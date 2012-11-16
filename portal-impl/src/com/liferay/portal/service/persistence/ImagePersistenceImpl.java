@@ -883,28 +883,27 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 		if (image == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				image = (Image)session.get(ImageImpl.class,
 						Long.valueOf(imageId));
+
+				if (image != null) {
+					cacheResult(image);
+				}
+				else {
+					EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+						ImageImpl.class, imageId, _nullImage);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+					ImageImpl.class, imageId);
 
 				throw processException(e);
 			}
 			finally {
-				if (image != null) {
-					cacheResult(image);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-						ImageImpl.class, imageId, _nullImage);
-				}
-
 				closeSession(session);
 			}
 		}

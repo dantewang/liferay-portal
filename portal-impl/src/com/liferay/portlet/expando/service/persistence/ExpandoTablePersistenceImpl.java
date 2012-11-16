@@ -1296,28 +1296,27 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 		if (expandoTable == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				expandoTable = (ExpandoTable)session.get(ExpandoTableImpl.class,
 						Long.valueOf(tableId));
+
+				if (expandoTable != null) {
+					cacheResult(expandoTable);
+				}
+				else {
+					EntityCacheUtil.putResult(ExpandoTableModelImpl.ENTITY_CACHE_ENABLED,
+						ExpandoTableImpl.class, tableId, _nullExpandoTable);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ExpandoTableModelImpl.ENTITY_CACHE_ENABLED,
+					ExpandoTableImpl.class, tableId);
 
 				throw processException(e);
 			}
 			finally {
-				if (expandoTable != null) {
-					cacheResult(expandoTable);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ExpandoTableModelImpl.ENTITY_CACHE_ENABLED,
-						ExpandoTableImpl.class, tableId, _nullExpandoTable);
-				}
-
 				closeSession(session);
 			}
 		}

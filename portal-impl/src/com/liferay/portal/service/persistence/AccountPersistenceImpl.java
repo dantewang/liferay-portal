@@ -391,28 +391,27 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 		if (account == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				account = (Account)session.get(AccountImpl.class,
 						Long.valueOf(accountId));
+
+				if (account != null) {
+					cacheResult(account);
+				}
+				else {
+					EntityCacheUtil.putResult(AccountModelImpl.ENTITY_CACHE_ENABLED,
+						AccountImpl.class, accountId, _nullAccount);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(AccountModelImpl.ENTITY_CACHE_ENABLED,
+					AccountImpl.class, accountId);
 
 				throw processException(e);
 			}
 			finally {
-				if (account != null) {
-					cacheResult(account);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AccountModelImpl.ENTITY_CACHE_ENABLED,
-						AccountImpl.class, accountId, _nullAccount);
-				}
-
 				closeSession(session);
 			}
 		}

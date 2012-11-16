@@ -19836,28 +19836,27 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		if (mbMessage == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mbMessage = (MBMessage)session.get(MBMessageImpl.class,
 						Long.valueOf(messageId));
+
+				if (mbMessage != null) {
+					cacheResult(mbMessage);
+				}
+				else {
+					EntityCacheUtil.putResult(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
+						MBMessageImpl.class, messageId, _nullMBMessage);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
+					MBMessageImpl.class, messageId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mbMessage != null) {
-					cacheResult(mbMessage);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
-						MBMessageImpl.class, messageId, _nullMBMessage);
-				}
-
 				closeSession(session);
 			}
 		}

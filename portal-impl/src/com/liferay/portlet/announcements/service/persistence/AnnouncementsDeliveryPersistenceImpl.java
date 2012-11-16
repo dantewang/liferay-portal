@@ -1232,29 +1232,28 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 		if (announcementsDelivery == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				announcementsDelivery = (AnnouncementsDelivery)session.get(AnnouncementsDeliveryImpl.class,
 						Long.valueOf(deliveryId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (announcementsDelivery != null) {
 					cacheResult(announcementsDelivery);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(AnnouncementsDeliveryModelImpl.ENTITY_CACHE_ENABLED,
 						AnnouncementsDeliveryImpl.class, deliveryId,
 						_nullAnnouncementsDelivery);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(AnnouncementsDeliveryModelImpl.ENTITY_CACHE_ENABLED,
+					AnnouncementsDeliveryImpl.class, deliveryId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

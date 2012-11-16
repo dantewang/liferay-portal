@@ -1479,28 +1479,27 @@ public class TrashVersionPersistenceImpl extends BasePersistenceImpl<TrashVersio
 		if (trashVersion == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				trashVersion = (TrashVersion)session.get(TrashVersionImpl.class,
 						Long.valueOf(versionId));
+
+				if (trashVersion != null) {
+					cacheResult(trashVersion);
+				}
+				else {
+					EntityCacheUtil.putResult(TrashVersionModelImpl.ENTITY_CACHE_ENABLED,
+						TrashVersionImpl.class, versionId, _nullTrashVersion);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(TrashVersionModelImpl.ENTITY_CACHE_ENABLED,
+					TrashVersionImpl.class, versionId);
 
 				throw processException(e);
 			}
 			finally {
-				if (trashVersion != null) {
-					cacheResult(trashVersion);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(TrashVersionModelImpl.ENTITY_CACHE_ENABLED,
-						TrashVersionImpl.class, versionId, _nullTrashVersion);
-				}
-
 				closeSession(session);
 			}
 		}

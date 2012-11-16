@@ -2294,28 +2294,27 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 		if (trashEntry == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				trashEntry = (TrashEntry)session.get(TrashEntryImpl.class,
 						Long.valueOf(entryId));
+
+				if (trashEntry != null) {
+					cacheResult(trashEntry);
+				}
+				else {
+					EntityCacheUtil.putResult(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
+						TrashEntryImpl.class, entryId, _nullTrashEntry);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
+					TrashEntryImpl.class, entryId);
 
 				throw processException(e);
 			}
 			finally {
-				if (trashEntry != null) {
-					cacheResult(trashEntry);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
-						TrashEntryImpl.class, entryId, _nullTrashEntry);
-				}
-
 				closeSession(session);
 			}
 		}

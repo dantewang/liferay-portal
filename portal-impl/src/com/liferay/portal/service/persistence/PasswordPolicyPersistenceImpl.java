@@ -1094,29 +1094,28 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 		if (passwordPolicy == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				passwordPolicy = (PasswordPolicy)session.get(PasswordPolicyImpl.class,
 						Long.valueOf(passwordPolicyId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (passwordPolicy != null) {
 					cacheResult(passwordPolicy);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 						PasswordPolicyImpl.class, passwordPolicyId,
 						_nullPasswordPolicy);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
+					PasswordPolicyImpl.class, passwordPolicyId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

@@ -2652,28 +2652,27 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 		if (dlContent == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				dlContent = (DLContent)session.get(DLContentImpl.class,
 						Long.valueOf(contentId));
+
+				if (dlContent != null) {
+					cacheResult(dlContent);
+				}
+				else {
+					EntityCacheUtil.putResult(DLContentModelImpl.ENTITY_CACHE_ENABLED,
+						DLContentImpl.class, contentId, _nullDLContent);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(DLContentModelImpl.ENTITY_CACHE_ENABLED,
+					DLContentImpl.class, contentId);
 
 				throw processException(e);
 			}
 			finally {
-				if (dlContent != null) {
-					cacheResult(dlContent);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DLContentModelImpl.ENTITY_CACHE_ENABLED,
-						DLContentImpl.class, contentId, _nullDLContent);
-				}
-
 				closeSession(session);
 			}
 		}

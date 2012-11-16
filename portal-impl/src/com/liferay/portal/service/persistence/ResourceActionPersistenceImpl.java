@@ -1275,29 +1275,28 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 		if (resourceAction == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				resourceAction = (ResourceAction)session.get(ResourceActionImpl.class,
 						Long.valueOf(resourceActionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (resourceAction != null) {
 					cacheResult(resourceAction);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
 						ResourceActionImpl.class, resourceActionId,
 						_nullResourceAction);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+					ResourceActionImpl.class, resourceActionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

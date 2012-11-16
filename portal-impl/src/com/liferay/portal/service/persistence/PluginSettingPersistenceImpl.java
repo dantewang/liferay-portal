@@ -1292,29 +1292,28 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 		if (pluginSetting == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				pluginSetting = (PluginSetting)session.get(PluginSettingImpl.class,
 						Long.valueOf(pluginSettingId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (pluginSetting != null) {
 					cacheResult(pluginSetting);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
 						PluginSettingImpl.class, pluginSettingId,
 						_nullPluginSetting);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
+					PluginSettingImpl.class, pluginSettingId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

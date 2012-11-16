@@ -664,28 +664,27 @@ public class WebDAVPropsPersistenceImpl extends BasePersistenceImpl<WebDAVProps>
 		if (webDAVProps == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				webDAVProps = (WebDAVProps)session.get(WebDAVPropsImpl.class,
 						Long.valueOf(webDavPropsId));
+
+				if (webDAVProps != null) {
+					cacheResult(webDAVProps);
+				}
+				else {
+					EntityCacheUtil.putResult(WebDAVPropsModelImpl.ENTITY_CACHE_ENABLED,
+						WebDAVPropsImpl.class, webDavPropsId, _nullWebDAVProps);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(WebDAVPropsModelImpl.ENTITY_CACHE_ENABLED,
+					WebDAVPropsImpl.class, webDavPropsId);
 
 				throw processException(e);
 			}
 			finally {
-				if (webDAVProps != null) {
-					cacheResult(webDAVProps);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(WebDAVPropsModelImpl.ENTITY_CACHE_ENABLED,
-						WebDAVPropsImpl.class, webDavPropsId, _nullWebDAVProps);
-				}
-
 				closeSession(session);
 			}
 		}

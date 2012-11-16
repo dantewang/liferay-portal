@@ -925,29 +925,28 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 		if (shoppingOrderItem == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				shoppingOrderItem = (ShoppingOrderItem)session.get(ShoppingOrderItemImpl.class,
 						Long.valueOf(orderItemId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (shoppingOrderItem != null) {
 					cacheResult(shoppingOrderItem);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
 						ShoppingOrderItemImpl.class, orderItemId,
 						_nullShoppingOrderItem);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
+					ShoppingOrderItemImpl.class, orderItemId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

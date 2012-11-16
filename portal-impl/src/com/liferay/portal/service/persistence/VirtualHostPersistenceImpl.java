@@ -919,28 +919,27 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 		if (virtualHost == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				virtualHost = (VirtualHost)session.get(VirtualHostImpl.class,
 						Long.valueOf(virtualHostId));
+
+				if (virtualHost != null) {
+					cacheResult(virtualHost);
+				}
+				else {
+					EntityCacheUtil.putResult(VirtualHostModelImpl.ENTITY_CACHE_ENABLED,
+						VirtualHostImpl.class, virtualHostId, _nullVirtualHost);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(VirtualHostModelImpl.ENTITY_CACHE_ENABLED,
+					VirtualHostImpl.class, virtualHostId);
 
 				throw processException(e);
 			}
 			finally {
-				if (virtualHost != null) {
-					cacheResult(virtualHost);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(VirtualHostModelImpl.ENTITY_CACHE_ENABLED,
-						VirtualHostImpl.class, virtualHostId, _nullVirtualHost);
-				}
-
 				closeSession(session);
 			}
 		}

@@ -1714,28 +1714,27 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 		if (assetTagStats == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				assetTagStats = (AssetTagStats)session.get(AssetTagStatsImpl.class,
 						Long.valueOf(tagStatsId));
+
+				if (assetTagStats != null) {
+					cacheResult(assetTagStats);
+				}
+				else {
+					EntityCacheUtil.putResult(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
+						AssetTagStatsImpl.class, tagStatsId, _nullAssetTagStats);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
+					AssetTagStatsImpl.class, tagStatsId);
 
 				throw processException(e);
 			}
 			finally {
-				if (assetTagStats != null) {
-					cacheResult(assetTagStats);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
-						AssetTagStatsImpl.class, tagStatsId, _nullAssetTagStats);
-				}
-
 				closeSession(session);
 			}
 		}

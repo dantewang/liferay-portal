@@ -2297,28 +2297,27 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 		if (mbStatsUser == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mbStatsUser = (MBStatsUser)session.get(MBStatsUserImpl.class,
 						Long.valueOf(statsUserId));
+
+				if (mbStatsUser != null) {
+					cacheResult(mbStatsUser);
+				}
+				else {
+					EntityCacheUtil.putResult(MBStatsUserModelImpl.ENTITY_CACHE_ENABLED,
+						MBStatsUserImpl.class, statsUserId, _nullMBStatsUser);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MBStatsUserModelImpl.ENTITY_CACHE_ENABLED,
+					MBStatsUserImpl.class, statsUserId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mbStatsUser != null) {
-					cacheResult(mbStatsUser);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MBStatsUserModelImpl.ENTITY_CACHE_ENABLED,
-						MBStatsUserImpl.class, statsUserId, _nullMBStatsUser);
-				}
-
 				closeSession(session);
 			}
 		}

@@ -18999,28 +18999,27 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		if (blogsEntry == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				blogsEntry = (BlogsEntry)session.get(BlogsEntryImpl.class,
 						Long.valueOf(entryId));
+
+				if (blogsEntry != null) {
+					cacheResult(blogsEntry);
+				}
+				else {
+					EntityCacheUtil.putResult(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+						BlogsEntryImpl.class, entryId, _nullBlogsEntry);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+					BlogsEntryImpl.class, entryId);
 
 				throw processException(e);
 			}
 			finally {
-				if (blogsEntry != null) {
-					cacheResult(blogsEntry);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-						BlogsEntryImpl.class, entryId, _nullBlogsEntry);
-				}
-
 				closeSession(session);
 			}
 		}

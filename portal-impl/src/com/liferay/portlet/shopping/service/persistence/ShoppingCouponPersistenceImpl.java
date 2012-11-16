@@ -1196,28 +1196,27 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 		if (shoppingCoupon == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				shoppingCoupon = (ShoppingCoupon)session.get(ShoppingCouponImpl.class,
 						Long.valueOf(couponId));
+
+				if (shoppingCoupon != null) {
+					cacheResult(shoppingCoupon);
+				}
+				else {
+					EntityCacheUtil.putResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingCouponImpl.class, couponId, _nullShoppingCoupon);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+					ShoppingCouponImpl.class, couponId);
 
 				throw processException(e);
 			}
 			finally {
-				if (shoppingCoupon != null) {
-					cacheResult(shoppingCoupon);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingCouponImpl.class, couponId, _nullShoppingCoupon);
-				}
-
 				closeSession(session);
 			}
 		}

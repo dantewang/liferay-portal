@@ -1937,29 +1937,28 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 		if (socialActivityLimit == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				socialActivityLimit = (SocialActivityLimit)session.get(SocialActivityLimitImpl.class,
 						Long.valueOf(activityLimitId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (socialActivityLimit != null) {
 					cacheResult(socialActivityLimit);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SocialActivityLimitModelImpl.ENTITY_CACHE_ENABLED,
 						SocialActivityLimitImpl.class, activityLimitId,
 						_nullSocialActivityLimit);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SocialActivityLimitModelImpl.ENTITY_CACHE_ENABLED,
+					SocialActivityLimitImpl.class, activityLimitId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

@@ -2233,29 +2233,28 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 		if (shoppingCategory == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				shoppingCategory = (ShoppingCategory)session.get(ShoppingCategoryImpl.class,
 						Long.valueOf(categoryId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (shoppingCategory != null) {
 					cacheResult(shoppingCategory);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(ShoppingCategoryModelImpl.ENTITY_CACHE_ENABLED,
 						ShoppingCategoryImpl.class, categoryId,
 						_nullShoppingCategory);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ShoppingCategoryModelImpl.ENTITY_CACHE_ENABLED,
+					ShoppingCategoryImpl.class, categoryId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

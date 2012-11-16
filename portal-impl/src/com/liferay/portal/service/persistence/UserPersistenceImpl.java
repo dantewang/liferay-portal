@@ -7654,27 +7654,26 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		if (user == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				user = (User)session.get(UserImpl.class, Long.valueOf(userId));
+
+				if (user != null) {
+					cacheResult(user);
+				}
+				else {
+					EntityCacheUtil.putResult(UserModelImpl.ENTITY_CACHE_ENABLED,
+						UserImpl.class, userId, _nullUser);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(UserModelImpl.ENTITY_CACHE_ENABLED,
+					UserImpl.class, userId);
 
 				throw processException(e);
 			}
 			finally {
-				if (user != null) {
-					cacheResult(user);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(UserModelImpl.ENTITY_CACHE_ENABLED,
-						UserImpl.class, userId, _nullUser);
-				}
-
 				closeSession(session);
 			}
 		}

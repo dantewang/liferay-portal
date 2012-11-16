@@ -1270,29 +1270,28 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 		if (wikiPageResource == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				wikiPageResource = (WikiPageResource)session.get(WikiPageResourceImpl.class,
 						Long.valueOf(resourcePrimKey));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (wikiPageResource != null) {
 					cacheResult(wikiPageResource);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(WikiPageResourceModelImpl.ENTITY_CACHE_ENABLED,
 						WikiPageResourceImpl.class, resourcePrimKey,
 						_nullWikiPageResource);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(WikiPageResourceModelImpl.ENTITY_CACHE_ENABLED,
+					WikiPageResourceImpl.class, resourcePrimKey);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

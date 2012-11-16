@@ -1249,28 +1249,27 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 		if (dlSync == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				dlSync = (DLSync)session.get(DLSyncImpl.class,
 						Long.valueOf(syncId));
+
+				if (dlSync != null) {
+					cacheResult(dlSync);
+				}
+				else {
+					EntityCacheUtil.putResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+						DLSyncImpl.class, syncId, _nullDLSync);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+					DLSyncImpl.class, syncId);
 
 				throw processException(e);
 			}
 			finally {
-				if (dlSync != null) {
-					cacheResult(dlSync);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
-						DLSyncImpl.class, syncId, _nullDLSync);
-				}
-
 				closeSession(session);
 			}
 		}

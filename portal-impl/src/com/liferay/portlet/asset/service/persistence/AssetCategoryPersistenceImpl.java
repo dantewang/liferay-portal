@@ -7999,28 +7999,27 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 		if (assetCategory == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				assetCategory = (AssetCategory)session.get(AssetCategoryImpl.class,
 						Long.valueOf(categoryId));
+
+				if (assetCategory != null) {
+					cacheResult(assetCategory);
+				}
+				else {
+					EntityCacheUtil.putResult(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
+						AssetCategoryImpl.class, categoryId, _nullAssetCategory);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
+					AssetCategoryImpl.class, categoryId);
 
 				throw processException(e);
 			}
 			finally {
-				if (assetCategory != null) {
-					cacheResult(assetCategory);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
-						AssetCategoryImpl.class, categoryId, _nullAssetCategory);
-				}
-
 				closeSession(session);
 			}
 		}

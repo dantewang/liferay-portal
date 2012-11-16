@@ -12197,28 +12197,27 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 		if (mbThread == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mbThread = (MBThread)session.get(MBThreadImpl.class,
 						Long.valueOf(threadId));
+
+				if (mbThread != null) {
+					cacheResult(mbThread);
+				}
+				else {
+					EntityCacheUtil.putResult(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
+						MBThreadImpl.class, threadId, _nullMBThread);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
+					MBThreadImpl.class, threadId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mbThread != null) {
-					cacheResult(mbThread);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
-						MBThreadImpl.class, threadId, _nullMBThread);
-				}
-
 				closeSession(session);
 			}
 		}

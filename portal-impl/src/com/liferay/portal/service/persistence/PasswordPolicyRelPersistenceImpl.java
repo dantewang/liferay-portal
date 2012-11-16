@@ -1704,29 +1704,28 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 		if (passwordPolicyRel == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				passwordPolicyRel = (PasswordPolicyRel)session.get(PasswordPolicyRelImpl.class,
 						Long.valueOf(passwordPolicyRelId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (passwordPolicyRel != null) {
 					cacheResult(passwordPolicyRel);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(PasswordPolicyRelModelImpl.ENTITY_CACHE_ENABLED,
 						PasswordPolicyRelImpl.class, passwordPolicyRelId,
 						_nullPasswordPolicyRel);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(PasswordPolicyRelModelImpl.ENTITY_CACHE_ENABLED,
+					PasswordPolicyRelImpl.class, passwordPolicyRelId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

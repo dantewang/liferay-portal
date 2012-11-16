@@ -2101,29 +2101,28 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 		if (journalArticleResource == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				journalArticleResource = (JournalArticleResource)session.get(JournalArticleResourceImpl.class,
 						Long.valueOf(resourcePrimKey));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (journalArticleResource != null) {
 					cacheResult(journalArticleResource);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(JournalArticleResourceModelImpl.ENTITY_CACHE_ENABLED,
 						JournalArticleResourceImpl.class, resourcePrimKey,
 						_nullJournalArticleResource);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(JournalArticleResourceModelImpl.ENTITY_CACHE_ENABLED,
+					JournalArticleResourceImpl.class, resourcePrimKey);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

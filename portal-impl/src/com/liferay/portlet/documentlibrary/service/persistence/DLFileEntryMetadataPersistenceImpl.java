@@ -2857,29 +2857,28 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 		if (dlFileEntryMetadata == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				dlFileEntryMetadata = (DLFileEntryMetadata)session.get(DLFileEntryMetadataImpl.class,
 						Long.valueOf(fileEntryMetadataId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (dlFileEntryMetadata != null) {
 					cacheResult(dlFileEntryMetadata);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(DLFileEntryMetadataModelImpl.ENTITY_CACHE_ENABLED,
 						DLFileEntryMetadataImpl.class, fileEntryMetadataId,
 						_nullDLFileEntryMetadata);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(DLFileEntryMetadataModelImpl.ENTITY_CACHE_ENABLED,
+					DLFileEntryMetadataImpl.class, fileEntryMetadataId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

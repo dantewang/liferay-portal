@@ -8882,29 +8882,28 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		if (resourcePermission == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				resourcePermission = (ResourcePermission)session.get(ResourcePermissionImpl.class,
 						Long.valueOf(resourcePermissionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (resourcePermission != null) {
 					cacheResult(resourcePermission);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(ResourcePermissionModelImpl.ENTITY_CACHE_ENABLED,
 						ResourcePermissionImpl.class, resourcePermissionId,
 						_nullResourcePermission);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ResourcePermissionModelImpl.ENTITY_CACHE_ENABLED,
+					ResourcePermissionImpl.class, resourcePermissionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

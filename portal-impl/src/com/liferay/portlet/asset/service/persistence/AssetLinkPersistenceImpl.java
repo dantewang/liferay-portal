@@ -3420,28 +3420,27 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 		if (assetLink == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				assetLink = (AssetLink)session.get(AssetLinkImpl.class,
 						Long.valueOf(linkId));
+
+				if (assetLink != null) {
+					cacheResult(assetLink);
+				}
+				else {
+					EntityCacheUtil.putResult(AssetLinkModelImpl.ENTITY_CACHE_ENABLED,
+						AssetLinkImpl.class, linkId, _nullAssetLink);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(AssetLinkModelImpl.ENTITY_CACHE_ENABLED,
+					AssetLinkImpl.class, linkId);
 
 				throw processException(e);
 			}
 			finally {
-				if (assetLink != null) {
-					cacheResult(assetLink);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AssetLinkModelImpl.ENTITY_CACHE_ENABLED,
-						AssetLinkImpl.class, linkId, _nullAssetLink);
-				}
-
 				closeSession(session);
 			}
 		}

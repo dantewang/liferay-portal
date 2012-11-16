@@ -1881,28 +1881,27 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 		if (ratingsEntry == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ratingsEntry = (RatingsEntry)session.get(RatingsEntryImpl.class,
 						Long.valueOf(entryId));
+
+				if (ratingsEntry != null) {
+					cacheResult(ratingsEntry);
+				}
+				else {
+					EntityCacheUtil.putResult(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
+						RatingsEntryImpl.class, entryId, _nullRatingsEntry);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
+					RatingsEntryImpl.class, entryId);
 
 				throw processException(e);
 			}
 			finally {
-				if (ratingsEntry != null) {
-					cacheResult(ratingsEntry);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
-						RatingsEntryImpl.class, entryId, _nullRatingsEntry);
-				}
-
 				closeSession(session);
 			}
 		}

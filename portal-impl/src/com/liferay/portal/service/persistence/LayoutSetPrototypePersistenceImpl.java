@@ -4224,29 +4224,28 @@ public class LayoutSetPrototypePersistenceImpl extends BasePersistenceImpl<Layou
 		if (layoutSetPrototype == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				layoutSetPrototype = (LayoutSetPrototype)session.get(LayoutSetPrototypeImpl.class,
 						Long.valueOf(layoutSetPrototypeId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (layoutSetPrototype != null) {
 					cacheResult(layoutSetPrototype);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(LayoutSetPrototypeModelImpl.ENTITY_CACHE_ENABLED,
 						LayoutSetPrototypeImpl.class, layoutSetPrototypeId,
 						_nullLayoutSetPrototype);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(LayoutSetPrototypeModelImpl.ENTITY_CACHE_ENABLED,
+					LayoutSetPrototypeImpl.class, layoutSetPrototypeId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

@@ -2096,29 +2096,28 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 		if (repositoryEntry == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				repositoryEntry = (RepositoryEntry)session.get(RepositoryEntryImpl.class,
 						Long.valueOf(repositoryEntryId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (repositoryEntry != null) {
 					cacheResult(repositoryEntry);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
 						RepositoryEntryImpl.class, repositoryEntryId,
 						_nullRepositoryEntry);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
+					RepositoryEntryImpl.class, repositoryEntryId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

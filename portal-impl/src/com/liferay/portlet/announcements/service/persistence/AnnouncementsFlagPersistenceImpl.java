@@ -1228,29 +1228,28 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 		if (announcementsFlag == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				announcementsFlag = (AnnouncementsFlag)session.get(AnnouncementsFlagImpl.class,
 						Long.valueOf(flagId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (announcementsFlag != null) {
 					cacheResult(announcementsFlag);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(AnnouncementsFlagModelImpl.ENTITY_CACHE_ENABLED,
 						AnnouncementsFlagImpl.class, flagId,
 						_nullAnnouncementsFlag);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(AnnouncementsFlagModelImpl.ENTITY_CACHE_ENABLED,
+					AnnouncementsFlagImpl.class, flagId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

@@ -2401,28 +2401,27 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 		if (mdrAction == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mdrAction = (MDRAction)session.get(MDRActionImpl.class,
 						Long.valueOf(actionId));
+
+				if (mdrAction != null) {
+					cacheResult(mdrAction);
+				}
+				else {
+					EntityCacheUtil.putResult(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
+						MDRActionImpl.class, actionId, _nullMDRAction);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
+					MDRActionImpl.class, actionId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mdrAction != null) {
-					cacheResult(mdrAction);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
-						MDRActionImpl.class, actionId, _nullMDRAction);
-				}
-
 				closeSession(session);
 			}
 		}

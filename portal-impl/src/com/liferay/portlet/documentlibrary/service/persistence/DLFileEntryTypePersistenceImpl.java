@@ -3524,29 +3524,28 @@ public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEn
 		if (dlFileEntryType == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				dlFileEntryType = (DLFileEntryType)session.get(DLFileEntryTypeImpl.class,
 						Long.valueOf(fileEntryTypeId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (dlFileEntryType != null) {
 					cacheResult(dlFileEntryType);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(DLFileEntryTypeModelImpl.ENTITY_CACHE_ENABLED,
 						DLFileEntryTypeImpl.class, fileEntryTypeId,
 						_nullDLFileEntryType);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(DLFileEntryTypeModelImpl.ENTITY_CACHE_ENABLED,
+					DLFileEntryTypeImpl.class, fileEntryTypeId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

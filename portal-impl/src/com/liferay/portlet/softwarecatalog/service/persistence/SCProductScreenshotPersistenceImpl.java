@@ -1976,29 +1976,28 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 		if (scProductScreenshot == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				scProductScreenshot = (SCProductScreenshot)session.get(SCProductScreenshotImpl.class,
 						Long.valueOf(productScreenshotId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (scProductScreenshot != null) {
 					cacheResult(scProductScreenshot);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SCProductScreenshotModelImpl.ENTITY_CACHE_ENABLED,
 						SCProductScreenshotImpl.class, productScreenshotId,
 						_nullSCProductScreenshot);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SCProductScreenshotModelImpl.ENTITY_CACHE_ENABLED,
+					SCProductScreenshotImpl.class, productScreenshotId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

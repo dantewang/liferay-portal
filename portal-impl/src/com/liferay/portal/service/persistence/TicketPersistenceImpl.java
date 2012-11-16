@@ -736,28 +736,27 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 		if (ticket == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ticket = (Ticket)session.get(TicketImpl.class,
 						Long.valueOf(ticketId));
+
+				if (ticket != null) {
+					cacheResult(ticket);
+				}
+				else {
+					EntityCacheUtil.putResult(TicketModelImpl.ENTITY_CACHE_ENABLED,
+						TicketImpl.class, ticketId, _nullTicket);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(TicketModelImpl.ENTITY_CACHE_ENABLED,
+					TicketImpl.class, ticketId);
 
 				throw processException(e);
 			}
 			finally {
-				if (ticket != null) {
-					cacheResult(ticket);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(TicketModelImpl.ENTITY_CACHE_ENABLED,
-						TicketImpl.class, ticketId, _nullTicket);
-				}
-
 				closeSession(session);
 			}
 		}

@@ -927,29 +927,28 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 		if (userTrackerPath == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				userTrackerPath = (UserTrackerPath)session.get(UserTrackerPathImpl.class,
 						Long.valueOf(userTrackerPathId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (userTrackerPath != null) {
 					cacheResult(userTrackerPath);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
 						UserTrackerPathImpl.class, userTrackerPathId,
 						_nullUserTrackerPath);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
+					UserTrackerPathImpl.class, userTrackerPathId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

@@ -1222,29 +1222,28 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 		if (resourceBlockPermission == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				resourceBlockPermission = (ResourceBlockPermission)session.get(ResourceBlockPermissionImpl.class,
 						Long.valueOf(resourceBlockPermissionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (resourceBlockPermission != null) {
 					cacheResult(resourceBlockPermission);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
 						ResourceBlockPermissionImpl.class,
 						resourceBlockPermissionId, _nullResourceBlockPermission);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
+					ResourceBlockPermissionImpl.class, resourceBlockPermissionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

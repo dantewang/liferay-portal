@@ -1672,28 +1672,27 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 		if (country == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				country = (Country)session.get(CountryImpl.class,
 						Long.valueOf(countryId));
+
+				if (country != null) {
+					cacheResult(country);
+				}
+				else {
+					EntityCacheUtil.putResult(CountryModelImpl.ENTITY_CACHE_ENABLED,
+						CountryImpl.class, countryId, _nullCountry);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(CountryModelImpl.ENTITY_CACHE_ENABLED,
+					CountryImpl.class, countryId);
 
 				throw processException(e);
 			}
 			finally {
-				if (country != null) {
-					cacheResult(country);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(CountryModelImpl.ENTITY_CACHE_ENABLED,
-						CountryImpl.class, countryId, _nullCountry);
-				}
-
 				closeSession(session);
 			}
 		}

@@ -2225,28 +2225,27 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 		if (scLicense == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				scLicense = (SCLicense)session.get(SCLicenseImpl.class,
 						Long.valueOf(licenseId));
+
+				if (scLicense != null) {
+					cacheResult(scLicense);
+				}
+				else {
+					EntityCacheUtil.putResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+						SCLicenseImpl.class, licenseId, _nullSCLicense);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
+					SCLicenseImpl.class, licenseId);
 
 				throw processException(e);
 			}
 			finally {
-				if (scLicense != null) {
-					cacheResult(scLicense);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-						SCLicenseImpl.class, licenseId, _nullSCLicense);
-				}
-
 				closeSession(session);
 			}
 		}

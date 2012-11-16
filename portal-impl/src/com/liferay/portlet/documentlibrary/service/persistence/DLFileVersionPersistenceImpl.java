@@ -4619,29 +4619,28 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 		if (dlFileVersion == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				dlFileVersion = (DLFileVersion)session.get(DLFileVersionImpl.class,
 						Long.valueOf(fileVersionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (dlFileVersion != null) {
 					cacheResult(dlFileVersion);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(DLFileVersionModelImpl.ENTITY_CACHE_ENABLED,
 						DLFileVersionImpl.class, fileVersionId,
 						_nullDLFileVersion);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(DLFileVersionModelImpl.ENTITY_CACHE_ENABLED,
+					DLFileVersionImpl.class, fileVersionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

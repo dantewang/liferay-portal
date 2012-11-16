@@ -5556,28 +5556,27 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 		if (journalTemplate == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				journalTemplate = (JournalTemplate)session.get(JournalTemplateImpl.class,
 						Long.valueOf(id));
+
+				if (journalTemplate != null) {
+					cacheResult(journalTemplate);
+				}
+				else {
+					EntityCacheUtil.putResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+						JournalTemplateImpl.class, id, _nullJournalTemplate);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
+					JournalTemplateImpl.class, id);
 
 				throw processException(e);
 			}
 			finally {
-				if (journalTemplate != null) {
-					cacheResult(journalTemplate);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
-						JournalTemplateImpl.class, id, _nullJournalTemplate);
-				}
-
 				closeSession(session);
 			}
 		}

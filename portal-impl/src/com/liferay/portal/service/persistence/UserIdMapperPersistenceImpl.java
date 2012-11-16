@@ -1542,29 +1542,28 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 		if (userIdMapper == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				userIdMapper = (UserIdMapper)session.get(UserIdMapperImpl.class,
 						Long.valueOf(userIdMapperId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (userIdMapper != null) {
 					cacheResult(userIdMapper);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(UserIdMapperModelImpl.ENTITY_CACHE_ENABLED,
 						UserIdMapperImpl.class, userIdMapperId,
 						_nullUserIdMapper);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(UserIdMapperModelImpl.ENTITY_CACHE_ENABLED,
+					UserIdMapperImpl.class, userIdMapperId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

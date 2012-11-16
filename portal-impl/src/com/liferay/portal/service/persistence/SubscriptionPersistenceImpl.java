@@ -2434,29 +2434,28 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 		if (subscription == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				subscription = (Subscription)session.get(SubscriptionImpl.class,
 						Long.valueOf(subscriptionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (subscription != null) {
 					cacheResult(subscription);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SubscriptionModelImpl.ENTITY_CACHE_ENABLED,
 						SubscriptionImpl.class, subscriptionId,
 						_nullSubscription);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SubscriptionModelImpl.ENTITY_CACHE_ENABLED,
+					SubscriptionImpl.class, subscriptionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

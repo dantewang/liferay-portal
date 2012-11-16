@@ -5441,29 +5441,28 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 		if (dlFileShortcut == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				dlFileShortcut = (DLFileShortcut)session.get(DLFileShortcutImpl.class,
 						Long.valueOf(fileShortcutId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (dlFileShortcut != null) {
 					cacheResult(dlFileShortcut);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 						DLFileShortcutImpl.class, fileShortcutId,
 						_nullDLFileShortcut);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+					DLFileShortcutImpl.class, fileShortcutId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

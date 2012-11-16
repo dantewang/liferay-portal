@@ -1731,29 +1731,28 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		if (ddmStorageLink == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ddmStorageLink = (DDMStorageLink)session.get(DDMStorageLinkImpl.class,
 						Long.valueOf(storageLinkId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (ddmStorageLink != null) {
 					cacheResult(ddmStorageLink);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 						DDMStorageLinkImpl.class, storageLinkId,
 						_nullDDMStorageLink);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+					DDMStorageLinkImpl.class, storageLinkId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

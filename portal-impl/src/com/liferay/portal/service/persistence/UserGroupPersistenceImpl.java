@@ -2559,28 +2559,27 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 		if (userGroup == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				userGroup = (UserGroup)session.get(UserGroupImpl.class,
 						Long.valueOf(userGroupId));
+
+				if (userGroup != null) {
+					cacheResult(userGroup);
+				}
+				else {
+					EntityCacheUtil.putResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+						UserGroupImpl.class, userGroupId, _nullUserGroup);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
+					UserGroupImpl.class, userGroupId);
 
 				throw processException(e);
 			}
 			finally {
-				if (userGroup != null) {
-					cacheResult(userGroup);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
-						UserGroupImpl.class, userGroupId, _nullUserGroup);
-				}
-
 				closeSession(session);
 			}
 		}

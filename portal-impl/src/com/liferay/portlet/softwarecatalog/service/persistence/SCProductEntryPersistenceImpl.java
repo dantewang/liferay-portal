@@ -3205,29 +3205,28 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 		if (scProductEntry == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				scProductEntry = (SCProductEntry)session.get(SCProductEntryImpl.class,
 						Long.valueOf(productEntryId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (scProductEntry != null) {
 					cacheResult(scProductEntry);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 						SCProductEntryImpl.class, productEntryId,
 						_nullSCProductEntry);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+					SCProductEntryImpl.class, productEntryId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

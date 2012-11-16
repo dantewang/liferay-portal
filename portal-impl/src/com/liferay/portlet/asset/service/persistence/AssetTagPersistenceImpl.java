@@ -1673,28 +1673,27 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 		if (assetTag == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				assetTag = (AssetTag)session.get(AssetTagImpl.class,
 						Long.valueOf(tagId));
+
+				if (assetTag != null) {
+					cacheResult(assetTag);
+				}
+				else {
+					EntityCacheUtil.putResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+						AssetTagImpl.class, tagId, _nullAssetTag);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
+					AssetTagImpl.class, tagId);
 
 				throw processException(e);
 			}
 			finally {
-				if (assetTag != null) {
-					cacheResult(assetTag);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
-						AssetTagImpl.class, tagId, _nullAssetTag);
-				}
-
 				closeSession(session);
 			}
 		}

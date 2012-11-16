@@ -8013,28 +8013,27 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 		if (ddmTemplate == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ddmTemplate = (DDMTemplate)session.get(DDMTemplateImpl.class,
 						Long.valueOf(templateId));
+
+				if (ddmTemplate != null) {
+					cacheResult(ddmTemplate);
+				}
+				else {
+					EntityCacheUtil.putResult(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
+						DDMTemplateImpl.class, templateId, _nullDDMTemplate);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
+					DDMTemplateImpl.class, templateId);
 
 				throw processException(e);
 			}
 			finally {
-				if (ddmTemplate != null) {
-					cacheResult(ddmTemplate);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
-						DDMTemplateImpl.class, templateId, _nullDDMTemplate);
-				}
-
 				closeSession(session);
 			}
 		}

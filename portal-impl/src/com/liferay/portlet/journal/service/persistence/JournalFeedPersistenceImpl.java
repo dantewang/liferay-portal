@@ -3054,28 +3054,27 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 		if (journalFeed == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				journalFeed = (JournalFeed)session.get(JournalFeedImpl.class,
 						Long.valueOf(id));
+
+				if (journalFeed != null) {
+					cacheResult(journalFeed);
+				}
+				else {
+					EntityCacheUtil.putResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+						JournalFeedImpl.class, id, _nullJournalFeed);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
+					JournalFeedImpl.class, id);
 
 				throw processException(e);
 			}
 			finally {
-				if (journalFeed != null) {
-					cacheResult(journalFeed);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-						JournalFeedImpl.class, id, _nullJournalFeed);
-				}
-
 				closeSession(session);
 			}
 		}

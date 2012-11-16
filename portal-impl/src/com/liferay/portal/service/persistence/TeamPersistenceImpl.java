@@ -1576,27 +1576,26 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 		if (team == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				team = (Team)session.get(TeamImpl.class, Long.valueOf(teamId));
+
+				if (team != null) {
+					cacheResult(team);
+				}
+				else {
+					EntityCacheUtil.putResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
+						TeamImpl.class, teamId, _nullTeam);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
+					TeamImpl.class, teamId);
 
 				throw processException(e);
 			}
 			finally {
-				if (team != null) {
-					cacheResult(team);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
-						TeamImpl.class, teamId, _nullTeam);
-				}
-
 				closeSession(session);
 			}
 		}

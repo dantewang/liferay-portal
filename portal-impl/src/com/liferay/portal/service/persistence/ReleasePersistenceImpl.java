@@ -663,28 +663,27 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 		if (release == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				release = (Release)session.get(ReleaseImpl.class,
 						Long.valueOf(releaseId));
+
+				if (release != null) {
+					cacheResult(release);
+				}
+				else {
+					EntityCacheUtil.putResult(ReleaseModelImpl.ENTITY_CACHE_ENABLED,
+						ReleaseImpl.class, releaseId, _nullRelease);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ReleaseModelImpl.ENTITY_CACHE_ENABLED,
+					ReleaseImpl.class, releaseId);
 
 				throw processException(e);
 			}
 			finally {
-				if (release != null) {
-					cacheResult(release);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ReleaseModelImpl.ENTITY_CACHE_ENABLED,
-						ReleaseImpl.class, releaseId, _nullRelease);
-				}
-
 				closeSession(session);
 			}
 		}

@@ -2625,29 +2625,28 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 		if (membershipRequest == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				membershipRequest = (MembershipRequest)session.get(MembershipRequestImpl.class,
 						Long.valueOf(membershipRequestId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (membershipRequest != null) {
 					cacheResult(membershipRequest);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
 						MembershipRequestImpl.class, membershipRequestId,
 						_nullMembershipRequest);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
+					MembershipRequestImpl.class, membershipRequestId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

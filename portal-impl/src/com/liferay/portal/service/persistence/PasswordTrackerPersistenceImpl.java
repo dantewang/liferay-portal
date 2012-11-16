@@ -915,29 +915,28 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 		if (passwordTracker == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				passwordTracker = (PasswordTracker)session.get(PasswordTrackerImpl.class,
 						Long.valueOf(passwordTrackerId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (passwordTracker != null) {
 					cacheResult(passwordTracker);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
 						PasswordTrackerImpl.class, passwordTrackerId,
 						_nullPasswordTracker);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
+					PasswordTrackerImpl.class, passwordTrackerId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

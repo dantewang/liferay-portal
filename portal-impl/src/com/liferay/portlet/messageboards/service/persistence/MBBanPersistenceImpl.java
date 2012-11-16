@@ -2205,27 +2205,26 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 		if (mbBan == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mbBan = (MBBan)session.get(MBBanImpl.class, Long.valueOf(banId));
+
+				if (mbBan != null) {
+					cacheResult(mbBan);
+				}
+				else {
+					EntityCacheUtil.putResult(MBBanModelImpl.ENTITY_CACHE_ENABLED,
+						MBBanImpl.class, banId, _nullMBBan);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MBBanModelImpl.ENTITY_CACHE_ENABLED,
+					MBBanImpl.class, banId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mbBan != null) {
-					cacheResult(mbBan);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MBBanModelImpl.ENTITY_CACHE_ENABLED,
-						MBBanImpl.class, banId, _nullMBBan);
-				}
-
 				closeSession(session);
 			}
 		}

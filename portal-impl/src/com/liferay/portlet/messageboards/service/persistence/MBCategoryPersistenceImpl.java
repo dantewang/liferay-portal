@@ -4717,28 +4717,27 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 		if (mbCategory == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mbCategory = (MBCategory)session.get(MBCategoryImpl.class,
 						Long.valueOf(categoryId));
+
+				if (mbCategory != null) {
+					cacheResult(mbCategory);
+				}
+				else {
+					EntityCacheUtil.putResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+						MBCategoryImpl.class, categoryId, _nullMBCategory);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+					MBCategoryImpl.class, categoryId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mbCategory != null) {
-					cacheResult(mbCategory);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
-						MBCategoryImpl.class, categoryId, _nullMBCategory);
-				}
-
 				closeSession(session);
 			}
 		}

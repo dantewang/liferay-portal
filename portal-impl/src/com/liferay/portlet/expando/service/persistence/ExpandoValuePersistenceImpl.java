@@ -5436,28 +5436,27 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 		if (expandoValue == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				expandoValue = (ExpandoValue)session.get(ExpandoValueImpl.class,
 						Long.valueOf(valueId));
+
+				if (expandoValue != null) {
+					cacheResult(expandoValue);
+				}
+				else {
+					EntityCacheUtil.putResult(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+						ExpandoValueImpl.class, valueId, _nullExpandoValue);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+					ExpandoValueImpl.class, valueId);
 
 				throw processException(e);
 			}
 			finally {
-				if (expandoValue != null) {
-					cacheResult(expandoValue);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
-						ExpandoValueImpl.class, valueId, _nullExpandoValue);
-				}
-
 				closeSession(session);
 			}
 		}

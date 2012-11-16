@@ -2692,28 +2692,27 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 		if (shoppingItem == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				shoppingItem = (ShoppingItem)session.get(ShoppingItemImpl.class,
 						Long.valueOf(itemId));
+
+				if (shoppingItem != null) {
+					cacheResult(shoppingItem);
+				}
+				else {
+					EntityCacheUtil.putResult(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingItemImpl.class, itemId, _nullShoppingItem);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
+					ShoppingItemImpl.class, itemId);
 
 				throw processException(e);
 			}
 			finally {
-				if (shoppingItem != null) {
-					cacheResult(shoppingItem);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingItemImpl.class, itemId, _nullShoppingItem);
-				}
-
 				closeSession(session);
 			}
 		}

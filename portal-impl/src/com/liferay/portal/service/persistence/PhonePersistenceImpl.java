@@ -3247,28 +3247,27 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 		if (phone == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				phone = (Phone)session.get(PhoneImpl.class,
 						Long.valueOf(phoneId));
+
+				if (phone != null) {
+					cacheResult(phone);
+				}
+				else {
+					EntityCacheUtil.putResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+						PhoneImpl.class, phoneId, _nullPhone);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
+					PhoneImpl.class, phoneId);
 
 				throw processException(e);
 			}
 			finally {
-				if (phone != null) {
-					cacheResult(phone);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(PhoneModelImpl.ENTITY_CACHE_ENABLED,
-						PhoneImpl.class, phoneId, _nullPhone);
-				}
-
 				closeSession(session);
 			}
 		}

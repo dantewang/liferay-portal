@@ -5149,29 +5149,28 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		if (journalContentSearch == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				journalContentSearch = (JournalContentSearch)session.get(JournalContentSearchImpl.class,
 						Long.valueOf(contentSearchId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (journalContentSearch != null) {
 					cacheResult(journalContentSearch);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(JournalContentSearchModelImpl.ENTITY_CACHE_ENABLED,
 						JournalContentSearchImpl.class, contentSearchId,
 						_nullJournalContentSearch);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(JournalContentSearchModelImpl.ENTITY_CACHE_ENABLED,
+					JournalContentSearchImpl.class, contentSearchId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

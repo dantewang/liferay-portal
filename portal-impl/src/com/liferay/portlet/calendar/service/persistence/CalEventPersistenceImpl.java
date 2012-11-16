@@ -7992,28 +7992,27 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 		if (calEvent == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				calEvent = (CalEvent)session.get(CalEventImpl.class,
 						Long.valueOf(eventId));
+
+				if (calEvent != null) {
+					cacheResult(calEvent);
+				}
+				else {
+					EntityCacheUtil.putResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+						CalEventImpl.class, eventId, _nullCalEvent);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
+					CalEventImpl.class, eventId);
 
 				throw processException(e);
 			}
 			finally {
-				if (calEvent != null) {
-					cacheResult(calEvent);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
-						CalEventImpl.class, eventId, _nullCalEvent);
-				}
-
 				closeSession(session);
 			}
 		}

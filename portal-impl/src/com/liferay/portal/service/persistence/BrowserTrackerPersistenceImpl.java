@@ -630,29 +630,28 @@ public class BrowserTrackerPersistenceImpl extends BasePersistenceImpl<BrowserTr
 		if (browserTracker == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				browserTracker = (BrowserTracker)session.get(BrowserTrackerImpl.class,
 						Long.valueOf(browserTrackerId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (browserTracker != null) {
 					cacheResult(browserTracker);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(BrowserTrackerModelImpl.ENTITY_CACHE_ENABLED,
 						BrowserTrackerImpl.class, browserTrackerId,
 						_nullBrowserTracker);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(BrowserTrackerModelImpl.ENTITY_CACHE_ENABLED,
+					BrowserTrackerImpl.class, browserTrackerId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

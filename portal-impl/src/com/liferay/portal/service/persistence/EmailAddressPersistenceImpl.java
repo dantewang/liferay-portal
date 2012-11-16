@@ -3276,29 +3276,28 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 		if (emailAddress == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				emailAddress = (EmailAddress)session.get(EmailAddressImpl.class,
 						Long.valueOf(emailAddressId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (emailAddress != null) {
 					cacheResult(emailAddress);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 						EmailAddressImpl.class, emailAddressId,
 						_nullEmailAddress);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+					EmailAddressImpl.class, emailAddressId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

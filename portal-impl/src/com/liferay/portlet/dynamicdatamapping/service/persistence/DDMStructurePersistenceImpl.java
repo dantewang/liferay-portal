@@ -5744,28 +5744,27 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 		if (ddmStructure == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ddmStructure = (DDMStructure)session.get(DDMStructureImpl.class,
 						Long.valueOf(structureId));
+
+				if (ddmStructure != null) {
+					cacheResult(ddmStructure);
+				}
+				else {
+					EntityCacheUtil.putResult(DDMStructureModelImpl.ENTITY_CACHE_ENABLED,
+						DDMStructureImpl.class, structureId, _nullDDMStructure);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(DDMStructureModelImpl.ENTITY_CACHE_ENABLED,
+					DDMStructureImpl.class, structureId);
 
 				throw processException(e);
 			}
 			finally {
-				if (ddmStructure != null) {
-					cacheResult(ddmStructure);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DDMStructureModelImpl.ENTITY_CACHE_ENABLED,
-						DDMStructureImpl.class, structureId, _nullDDMStructure);
-				}
-
 				closeSession(session);
 			}
 		}

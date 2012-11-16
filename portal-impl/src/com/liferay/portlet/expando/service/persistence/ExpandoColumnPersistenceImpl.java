@@ -2057,28 +2057,27 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 		if (expandoColumn == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				expandoColumn = (ExpandoColumn)session.get(ExpandoColumnImpl.class,
 						Long.valueOf(columnId));
+
+				if (expandoColumn != null) {
+					cacheResult(expandoColumn);
+				}
+				else {
+					EntityCacheUtil.putResult(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
+						ExpandoColumnImpl.class, columnId, _nullExpandoColumn);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
+					ExpandoColumnImpl.class, columnId);
 
 				throw processException(e);
 			}
 			finally {
-				if (expandoColumn != null) {
-					cacheResult(expandoColumn);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
-						ExpandoColumnImpl.class, columnId, _nullExpandoColumn);
-				}
-
 				closeSession(session);
 			}
 		}

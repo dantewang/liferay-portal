@@ -3052,28 +3052,27 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 		if (ddlRecordSet == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ddlRecordSet = (DDLRecordSet)session.get(DDLRecordSetImpl.class,
 						Long.valueOf(recordSetId));
+
+				if (ddlRecordSet != null) {
+					cacheResult(ddlRecordSet);
+				}
+				else {
+					EntityCacheUtil.putResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+						DDLRecordSetImpl.class, recordSetId, _nullDDLRecordSet);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
+					DDLRecordSetImpl.class, recordSetId);
 
 				throw processException(e);
 			}
 			finally {
-				if (ddlRecordSet != null) {
-					cacheResult(ddlRecordSet);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
-						DDLRecordSetImpl.class, recordSetId, _nullDDLRecordSet);
-				}
-
 				closeSession(session);
 			}
 		}

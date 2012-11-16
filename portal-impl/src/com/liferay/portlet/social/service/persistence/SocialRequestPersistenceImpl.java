@@ -6355,28 +6355,27 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 		if (socialRequest == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				socialRequest = (SocialRequest)session.get(SocialRequestImpl.class,
 						Long.valueOf(requestId));
+
+				if (socialRequest != null) {
+					cacheResult(socialRequest);
+				}
+				else {
+					EntityCacheUtil.putResult(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
+						SocialRequestImpl.class, requestId, _nullSocialRequest);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
+					SocialRequestImpl.class, requestId);
 
 				throw processException(e);
 			}
 			finally {
-				if (socialRequest != null) {
-					cacheResult(socialRequest);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
-						SocialRequestImpl.class, requestId, _nullSocialRequest);
-				}
-
 				closeSession(session);
 			}
 		}

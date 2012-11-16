@@ -3410,29 +3410,28 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 		if (blogsStatsUser == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				blogsStatsUser = (BlogsStatsUser)session.get(BlogsStatsUserImpl.class,
 						Long.valueOf(statsUserId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (blogsStatsUser != null) {
 					cacheResult(blogsStatsUser);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(BlogsStatsUserModelImpl.ENTITY_CACHE_ENABLED,
 						BlogsStatsUserImpl.class, statsUserId,
 						_nullBlogsStatsUser);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(BlogsStatsUserModelImpl.ENTITY_CACHE_ENABLED,
+					BlogsStatsUserImpl.class, statsUserId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

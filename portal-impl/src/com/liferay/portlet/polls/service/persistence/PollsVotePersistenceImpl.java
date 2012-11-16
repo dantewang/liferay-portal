@@ -1714,28 +1714,27 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		if (pollsVote == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				pollsVote = (PollsVote)session.get(PollsVoteImpl.class,
 						Long.valueOf(voteId));
+
+				if (pollsVote != null) {
+					cacheResult(pollsVote);
+				}
+				else {
+					EntityCacheUtil.putResult(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
+						PollsVoteImpl.class, voteId, _nullPollsVote);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
+					PollsVoteImpl.class, voteId);
 
 				throw processException(e);
 			}
 			finally {
-				if (pollsVote != null) {
-					cacheResult(pollsVote);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(PollsVoteModelImpl.ENTITY_CACHE_ENABLED,
-						PollsVoteImpl.class, voteId, _nullPollsVote);
-				}
-
 				closeSession(session);
 			}
 		}

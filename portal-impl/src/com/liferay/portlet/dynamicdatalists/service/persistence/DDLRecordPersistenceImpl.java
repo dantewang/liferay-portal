@@ -3483,28 +3483,27 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 		if (ddlRecord == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ddlRecord = (DDLRecord)session.get(DDLRecordImpl.class,
 						Long.valueOf(recordId));
+
+				if (ddlRecord != null) {
+					cacheResult(ddlRecord);
+				}
+				else {
+					EntityCacheUtil.putResult(DDLRecordModelImpl.ENTITY_CACHE_ENABLED,
+						DDLRecordImpl.class, recordId, _nullDDLRecord);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(DDLRecordModelImpl.ENTITY_CACHE_ENABLED,
+					DDLRecordImpl.class, recordId);
 
 				throw processException(e);
 			}
 			finally {
-				if (ddlRecord != null) {
-					cacheResult(ddlRecord);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DDLRecordModelImpl.ENTITY_CACHE_ENABLED,
-						DDLRecordImpl.class, recordId, _nullDDLRecord);
-				}
-
 				closeSession(session);
 			}
 		}

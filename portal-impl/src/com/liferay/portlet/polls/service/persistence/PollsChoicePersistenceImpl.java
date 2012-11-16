@@ -1787,28 +1787,27 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 		if (pollsChoice == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				pollsChoice = (PollsChoice)session.get(PollsChoiceImpl.class,
 						Long.valueOf(choiceId));
+
+				if (pollsChoice != null) {
+					cacheResult(pollsChoice);
+				}
+				else {
+					EntityCacheUtil.putResult(PollsChoiceModelImpl.ENTITY_CACHE_ENABLED,
+						PollsChoiceImpl.class, choiceId, _nullPollsChoice);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(PollsChoiceModelImpl.ENTITY_CACHE_ENABLED,
+					PollsChoiceImpl.class, choiceId);
 
 				throw processException(e);
 			}
 			finally {
-				if (pollsChoice != null) {
-					cacheResult(pollsChoice);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(PollsChoiceModelImpl.ENTITY_CACHE_ENABLED,
-						PollsChoiceImpl.class, choiceId, _nullPollsChoice);
-				}
-
 				closeSession(session);
 			}
 		}

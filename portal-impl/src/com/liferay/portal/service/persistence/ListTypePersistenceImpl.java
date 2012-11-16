@@ -936,28 +936,27 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 		if (listType == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				listType = (ListType)session.get(ListTypeImpl.class,
 						Integer.valueOf(listTypeId));
+
+				if (listType != null) {
+					cacheResult(listType);
+				}
+				else {
+					EntityCacheUtil.putResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+						ListTypeImpl.class, listTypeId, _nullListType);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
+					ListTypeImpl.class, listTypeId);
 
 				throw processException(e);
 			}
 			finally {
-				if (listType != null) {
-					cacheResult(listType);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
-						ListTypeImpl.class, listTypeId, _nullListType);
-				}
-
 				closeSession(session);
 			}
 		}

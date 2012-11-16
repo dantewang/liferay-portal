@@ -2675,29 +2675,28 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 		if (mbMailingList == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mbMailingList = (MBMailingList)session.get(MBMailingListImpl.class,
 						Long.valueOf(mailingListId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (mbMailingList != null) {
 					cacheResult(mbMailingList);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(MBMailingListModelImpl.ENTITY_CACHE_ENABLED,
 						MBMailingListImpl.class, mailingListId,
 						_nullMBMailingList);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(MBMailingListModelImpl.ENTITY_CACHE_ENABLED,
+					MBMailingListImpl.class, mailingListId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

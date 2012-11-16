@@ -3038,28 +3038,27 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 		if (shoppingOrder == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				shoppingOrder = (ShoppingOrder)session.get(ShoppingOrderImpl.class,
 						Long.valueOf(orderId));
+
+				if (shoppingOrder != null) {
+					cacheResult(shoppingOrder);
+				}
+				else {
+					EntityCacheUtil.putResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingOrderImpl.class, orderId, _nullShoppingOrder);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
+					ShoppingOrderImpl.class, orderId);
 
 				throw processException(e);
 			}
 			finally {
-				if (shoppingOrder != null) {
-					cacheResult(shoppingOrder);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingOrderImpl.class, orderId, _nullShoppingOrder);
-				}
-
 				closeSession(session);
 			}
 		}

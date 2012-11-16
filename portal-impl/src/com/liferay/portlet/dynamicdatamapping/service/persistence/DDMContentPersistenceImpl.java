@@ -2909,28 +2909,27 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 		if (ddmContent == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ddmContent = (DDMContent)session.get(DDMContentImpl.class,
 						Long.valueOf(contentId));
+
+				if (ddmContent != null) {
+					cacheResult(ddmContent);
+				}
+				else {
+					EntityCacheUtil.putResult(DDMContentModelImpl.ENTITY_CACHE_ENABLED,
+						DDMContentImpl.class, contentId, _nullDDMContent);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(DDMContentModelImpl.ENTITY_CACHE_ENABLED,
+					DDMContentImpl.class, contentId);
 
 				throw processException(e);
 			}
 			finally {
-				if (ddmContent != null) {
-					cacheResult(ddmContent);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DDMContentModelImpl.ENTITY_CACHE_ENABLED,
-						DDMContentImpl.class, contentId, _nullDDMContent);
-				}
-
 				closeSession(session);
 			}
 		}

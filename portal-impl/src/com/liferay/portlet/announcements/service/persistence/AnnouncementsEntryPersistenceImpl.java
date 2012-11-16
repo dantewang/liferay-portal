@@ -5236,29 +5236,28 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 		if (announcementsEntry == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				announcementsEntry = (AnnouncementsEntry)session.get(AnnouncementsEntryImpl.class,
 						Long.valueOf(entryId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (announcementsEntry != null) {
 					cacheResult(announcementsEntry);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 						AnnouncementsEntryImpl.class, entryId,
 						_nullAnnouncementsEntry);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+					AnnouncementsEntryImpl.class, entryId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

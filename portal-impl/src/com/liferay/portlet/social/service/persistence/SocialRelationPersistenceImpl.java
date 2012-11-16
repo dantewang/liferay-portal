@@ -6222,29 +6222,28 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 		if (socialRelation == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				socialRelation = (SocialRelation)session.get(SocialRelationImpl.class,
 						Long.valueOf(relationId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (socialRelation != null) {
 					cacheResult(socialRelation);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
 						SocialRelationImpl.class, relationId,
 						_nullSocialRelation);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
+					SocialRelationImpl.class, relationId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

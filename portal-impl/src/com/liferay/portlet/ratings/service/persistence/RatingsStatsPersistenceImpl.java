@@ -665,28 +665,27 @@ public class RatingsStatsPersistenceImpl extends BasePersistenceImpl<RatingsStat
 		if (ratingsStats == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				ratingsStats = (RatingsStats)session.get(RatingsStatsImpl.class,
 						Long.valueOf(statsId));
+
+				if (ratingsStats != null) {
+					cacheResult(ratingsStats);
+				}
+				else {
+					EntityCacheUtil.putResult(RatingsStatsModelImpl.ENTITY_CACHE_ENABLED,
+						RatingsStatsImpl.class, statsId, _nullRatingsStats);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(RatingsStatsModelImpl.ENTITY_CACHE_ENABLED,
+					RatingsStatsImpl.class, statsId);
 
 				throw processException(e);
 			}
 			finally {
-				if (ratingsStats != null) {
-					cacheResult(ratingsStats);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(RatingsStatsModelImpl.ENTITY_CACHE_ENABLED,
-						RatingsStatsImpl.class, statsId, _nullRatingsStats);
-				}
-
 				closeSession(session);
 			}
 		}

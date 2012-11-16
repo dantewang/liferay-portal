@@ -1069,29 +1069,28 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 		if (workflowInstanceLink == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				workflowInstanceLink = (WorkflowInstanceLink)session.get(WorkflowInstanceLinkImpl.class,
 						Long.valueOf(workflowInstanceLinkId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (workflowInstanceLink != null) {
 					cacheResult(workflowInstanceLink);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
 						WorkflowInstanceLinkImpl.class, workflowInstanceLinkId,
 						_nullWorkflowInstanceLink);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+					WorkflowInstanceLinkImpl.class, workflowInstanceLinkId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

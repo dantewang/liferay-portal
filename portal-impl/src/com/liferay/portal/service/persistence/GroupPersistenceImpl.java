@@ -5185,28 +5185,27 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 		if (group == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				group = (Group)session.get(GroupImpl.class,
 						Long.valueOf(groupId));
+
+				if (group != null) {
+					cacheResult(group);
+				}
+				else {
+					EntityCacheUtil.putResult(GroupModelImpl.ENTITY_CACHE_ENABLED,
+						GroupImpl.class, groupId, _nullGroup);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(GroupModelImpl.ENTITY_CACHE_ENABLED,
+					GroupImpl.class, groupId);
 
 				throw processException(e);
 			}
 			finally {
-				if (group != null) {
-					cacheResult(group);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(GroupModelImpl.ENTITY_CACHE_ENABLED,
-						GroupImpl.class, groupId, _nullGroup);
-				}
-
 				closeSession(session);
 			}
 		}

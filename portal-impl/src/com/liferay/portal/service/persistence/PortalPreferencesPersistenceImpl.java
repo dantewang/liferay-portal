@@ -757,29 +757,28 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 		if (portalPreferences == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				portalPreferences = (PortalPreferences)session.get(PortalPreferencesImpl.class,
 						Long.valueOf(portalPreferencesId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (portalPreferences != null) {
 					cacheResult(portalPreferences);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 						PortalPreferencesImpl.class, portalPreferencesId,
 						_nullPortalPreferences);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
+					PortalPreferencesImpl.class, portalPreferencesId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

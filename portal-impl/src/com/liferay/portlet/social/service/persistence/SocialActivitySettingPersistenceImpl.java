@@ -3152,29 +3152,28 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 		if (socialActivitySetting == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				socialActivitySetting = (SocialActivitySetting)session.get(SocialActivitySettingImpl.class,
 						Long.valueOf(activitySettingId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (socialActivitySetting != null) {
 					cacheResult(socialActivitySetting);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SocialActivitySettingModelImpl.ENTITY_CACHE_ENABLED,
 						SocialActivitySettingImpl.class, activitySettingId,
 						_nullSocialActivitySetting);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SocialActivitySettingModelImpl.ENTITY_CACHE_ENABLED,
+					SocialActivitySettingImpl.class, activitySettingId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

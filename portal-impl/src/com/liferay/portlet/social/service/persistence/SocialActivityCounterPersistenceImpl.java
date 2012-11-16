@@ -2504,29 +2504,28 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 		if (socialActivityCounter == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				socialActivityCounter = (SocialActivityCounter)session.get(SocialActivityCounterImpl.class,
 						Long.valueOf(activityCounterId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (socialActivityCounter != null) {
 					cacheResult(socialActivityCounter);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SocialActivityCounterModelImpl.ENTITY_CACHE_ENABLED,
 						SocialActivityCounterImpl.class, activityCounterId,
 						_nullSocialActivityCounter);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SocialActivityCounterModelImpl.ENTITY_CACHE_ENABLED,
+					SocialActivityCounterImpl.class, activityCounterId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

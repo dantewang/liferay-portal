@@ -1431,29 +1431,28 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 		if (orgGroupRole == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				orgGroupRole = (OrgGroupRole)session.get(OrgGroupRoleImpl.class,
 						orgGroupRolePK);
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (orgGroupRole != null) {
 					cacheResult(orgGroupRole);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(OrgGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 						OrgGroupRoleImpl.class, orgGroupRolePK,
 						_nullOrgGroupRole);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(OrgGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
+					OrgGroupRoleImpl.class, orgGroupRolePK);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

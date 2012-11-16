@@ -9681,28 +9681,27 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		if (dlFolder == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				dlFolder = (DLFolder)session.get(DLFolderImpl.class,
 						Long.valueOf(folderId));
+
+				if (dlFolder != null) {
+					cacheResult(dlFolder);
+				}
+				else {
+					EntityCacheUtil.putResult(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+						DLFolderImpl.class, folderId, _nullDLFolder);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
+					DLFolderImpl.class, folderId);
 
 				throw processException(e);
 			}
 			finally {
-				if (dlFolder != null) {
-					cacheResult(dlFolder);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
-						DLFolderImpl.class, folderId, _nullDLFolder);
-				}
-
 				closeSession(session);
 			}
 		}

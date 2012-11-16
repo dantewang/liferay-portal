@@ -2235,29 +2235,28 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 		if (layoutBranch == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				layoutBranch = (LayoutBranch)session.get(LayoutBranchImpl.class,
 						Long.valueOf(LayoutBranchId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (layoutBranch != null) {
 					cacheResult(layoutBranch);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(LayoutBranchModelImpl.ENTITY_CACHE_ENABLED,
 						LayoutBranchImpl.class, LayoutBranchId,
 						_nullLayoutBranch);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(LayoutBranchModelImpl.ENTITY_CACHE_ENABLED,
+					LayoutBranchImpl.class, LayoutBranchId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

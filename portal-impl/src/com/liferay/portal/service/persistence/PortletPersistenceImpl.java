@@ -1214,28 +1214,27 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 		if (portlet == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				portlet = (Portlet)session.get(PortletImpl.class,
 						Long.valueOf(id));
+
+				if (portlet != null) {
+					cacheResult(portlet);
+				}
+				else {
+					EntityCacheUtil.putResult(PortletModelImpl.ENTITY_CACHE_ENABLED,
+						PortletImpl.class, id, _nullPortlet);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(PortletModelImpl.ENTITY_CACHE_ENABLED,
+					PortletImpl.class, id);
 
 				throw processException(e);
 			}
 			finally {
-				if (portlet != null) {
-					cacheResult(portlet);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(PortletModelImpl.ENTITY_CACHE_ENABLED,
-						PortletImpl.class, id, _nullPortlet);
-				}
-
 				closeSession(session);
 			}
 		}

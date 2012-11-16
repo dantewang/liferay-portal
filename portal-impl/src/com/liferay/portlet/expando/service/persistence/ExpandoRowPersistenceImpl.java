@@ -1183,28 +1183,27 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 		if (expandoRow == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				expandoRow = (ExpandoRow)session.get(ExpandoRowImpl.class,
 						Long.valueOf(rowId));
+
+				if (expandoRow != null) {
+					cacheResult(expandoRow);
+				}
+				else {
+					EntityCacheUtil.putResult(ExpandoRowModelImpl.ENTITY_CACHE_ENABLED,
+						ExpandoRowImpl.class, rowId, _nullExpandoRow);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ExpandoRowModelImpl.ENTITY_CACHE_ENABLED,
+					ExpandoRowImpl.class, rowId);
 
 				throw processException(e);
 			}
 			finally {
-				if (expandoRow != null) {
-					cacheResult(expandoRow);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ExpandoRowModelImpl.ENTITY_CACHE_ENABLED,
-						ExpandoRowImpl.class, rowId, _nullExpandoRow);
-				}
-
 				closeSession(session);
 			}
 		}

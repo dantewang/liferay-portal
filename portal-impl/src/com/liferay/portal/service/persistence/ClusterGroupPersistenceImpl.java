@@ -383,29 +383,28 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 		if (clusterGroup == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				clusterGroup = (ClusterGroup)session.get(ClusterGroupImpl.class,
 						Long.valueOf(clusterGroupId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (clusterGroup != null) {
 					cacheResult(clusterGroup);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(ClusterGroupModelImpl.ENTITY_CACHE_ENABLED,
 						ClusterGroupImpl.class, clusterGroupId,
 						_nullClusterGroup);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ClusterGroupModelImpl.ENTITY_CACHE_ENABLED,
+					ClusterGroupImpl.class, clusterGroupId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}

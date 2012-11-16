@@ -3732,29 +3732,28 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 		if (portletPreferences == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				portletPreferences = (PortletPreferences)session.get(PortletPreferencesImpl.class,
 						Long.valueOf(portletPreferencesId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (portletPreferences != null) {
 					cacheResult(portletPreferences);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 						PortletPreferencesImpl.class, portletPreferencesId,
 						_nullPortletPreferences);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
+					PortletPreferencesImpl.class, portletPreferencesId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
