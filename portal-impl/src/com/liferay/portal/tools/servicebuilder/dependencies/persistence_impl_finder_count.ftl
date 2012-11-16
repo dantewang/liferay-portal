@@ -56,11 +56,11 @@ public int countBy${finder.name}(
 		}
 		finally {
 			if (count == null) {
-				count = Long.valueOf(0);
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs);
 			}
-
-			FinderCacheUtil.putResult(
-				FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs, count);
+			else {
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs, count);
+			}
 
 			closeSession(session);
 		}
@@ -137,10 +137,11 @@ public int countBy${finder.name}(
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs, count);
+				}
 
 				closeSession(session);
 			}

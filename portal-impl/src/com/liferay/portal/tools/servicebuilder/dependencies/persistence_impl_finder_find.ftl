@@ -1062,15 +1062,21 @@
 
 				List<${entity.name}> list = q.list();
 
-				result = list;
+				if (!list.isEmpty()) {
+					result = list.get(0);
+				}
 
-				${entity.name} ${entity.varName} = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs, list);
+				return (${entity.name})result;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs);
 				}
 				else {
-					${entity.varName} = list.get(0);
+					${entity.name} ${entity.varName} = (${entity.name})result;
 
 					cacheResult(${entity.varName});
 
@@ -1089,16 +1095,6 @@
 					) {
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs, ${entity.varName});
 					}
-				}
-
-				return ${entity.varName};
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs);
 				}
 
 				closeSession(session);

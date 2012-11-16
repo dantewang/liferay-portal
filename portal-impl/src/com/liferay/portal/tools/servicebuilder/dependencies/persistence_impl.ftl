@@ -983,10 +983,11 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			}
 			finally {
 				if (count == null) {
-					count = Long.valueOf(0);
+					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY);
 				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY, count);
+				else {
+					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY, count);
+				}
 
 				closeSession(session);
 			}
@@ -1189,10 +1190,11 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 					}
 					finally {
 						if (count == null) {
-							count = Long.valueOf(0);
+							FinderCacheUtil.removeResult(FINDER_PATH_GET_${tempEntity.names?upper_case}_SIZE, finderArgs);
 						}
-
-						FinderCacheUtil.putResult(FINDER_PATH_GET_${tempEntity.names?upper_case}_SIZE, finderArgs, count);
+						else {
+							FinderCacheUtil.putResult(FINDER_PATH_GET_${tempEntity.names?upper_case}_SIZE, finderArgs, count);
+						}
 
 						closeSession(session);
 					}
@@ -1255,10 +1257,11 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 					}
 					finally {
 						if (value == null) {
-							value = Boolean.FALSE;
+							FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_${tempEntity.name?upper_case}, finderArgs);
 						}
-
-						FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_${tempEntity.name?upper_case}, finderArgs, value);
+						else {
+							FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_${tempEntity.name?upper_case}, finderArgs, value);
+						}
 					}
 				}
 
