@@ -50,7 +50,6 @@ import com.liferay.portlet.journal.model.impl.JournalContentSearchModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -380,22 +379,19 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				list = (List<JournalContentSearch>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_PORTLETID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_PORTLETID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_PORTLETID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_PORTLETID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -616,20 +612,17 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PORTLETID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PORTLETID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PORTLETID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PORTLETID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -936,22 +929,19 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				list = (List<JournalContentSearch>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_ARTICLEID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_ARTICLEID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_ARTICLEID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_ARTICLEID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1172,20 +1162,17 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ARTICLEID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ARTICLEID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ARTICLEID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ARTICLEID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1485,22 +1472,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				list = (List<JournalContentSearch>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1735,20 +1718,17 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				qPos.add(privateLayout);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P, finderArgs,
+					count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2071,22 +2051,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				list = (List<JournalContentSearch>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_A, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_A, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_A,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_A,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2330,20 +2306,17 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_A, finderArgs,
+					count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_A,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_A,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_A,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2664,22 +2637,19 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				list = (List<JournalContentSearch>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_L,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_L,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_L,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_L,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2937,20 +2907,17 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				qPos.add(layoutId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_L,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_L,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_L,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_L,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3295,22 +3262,19 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				list = (List<JournalContentSearch>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_A,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_A,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_A,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_A,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3580,20 +3544,17 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_A,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_A,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_A,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_A,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3960,22 +3921,19 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				list = (List<JournalContentSearch>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_L_P,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_L_P,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_L_P,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_L_P,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4273,20 +4231,17 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_L_P,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_L_P,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_L_P,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_L_P,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4498,22 +4453,14 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				List<JournalContentSearch> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (JournalContentSearch)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_L_P_A,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_L_P_A,
+						finderArgs, list);
 				}
 				else {
-					JournalContentSearch journalContentSearch = (JournalContentSearch)result;
+					JournalContentSearch journalContentSearch = list.get(0);
+
+					result = journalContentSearch;
 
 					cacheResult(journalContentSearch);
 
@@ -4530,17 +4477,23 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 							finderArgs, journalContentSearch);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_L_P_A,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (JournalContentSearch)result;
-			}
+			return (JournalContentSearch)result;
 		}
 	}
 
@@ -4646,20 +4599,17 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_L_P_A,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_L_P_A,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_L_P_A,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_L_P_A,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5310,32 +5260,19 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<JournalContentSearch>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<JournalContentSearch>)QueryUtil.list(q,
+						getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<JournalContentSearch>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
-						list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5373,20 +5310,17 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				Query q = session.createQuery(_SQL_COUNT_JOURNALCONTENTSEARCH);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}

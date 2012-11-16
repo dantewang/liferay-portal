@@ -50,7 +50,6 @@ import com.liferay.portlet.social.model.impl.SocialActivityCounterModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -373,22 +372,18 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 
 				list = (List<SocialActivityCounter>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -621,20 +616,17 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 				qPos.add(classPK);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
+					count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -971,22 +963,19 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 
 				list = (List<SocialActivityCounter>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_C_C_O,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_C_C_O,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_C_C_O,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_C_C_O,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1271,20 +1260,17 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 				qPos.add(ownerType);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C_C_O,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_O,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_O,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C_C_O,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1493,22 +1479,14 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 
 				List<SocialActivityCounter> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (SocialActivityCounter)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_C_C_N_O_S,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_C_C_N_O_S,
+						finderArgs, list);
 				}
 				else {
-					SocialActivityCounter socialActivityCounter = (SocialActivityCounter)result;
+					SocialActivityCounter socialActivityCounter = list.get(0);
+
+					result = socialActivityCounter;
 
 					cacheResult(socialActivityCounter);
 
@@ -1523,17 +1501,23 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 							finderArgs, socialActivityCounter);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_C_C_N_O_S,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (SocialActivityCounter)result;
-			}
+			return (SocialActivityCounter)result;
 		}
 	}
 
@@ -1632,20 +1616,17 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 				qPos.add(startPeriod);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C_C_N_O_S,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_N_O_S,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_N_O_S,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C_C_N_O_S,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1858,22 +1839,14 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 
 				List<SocialActivityCounter> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (SocialActivityCounter)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_C_C_N_O_E,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_C_C_N_O_E,
+						finderArgs, list);
 				}
 				else {
-					SocialActivityCounter socialActivityCounter = (SocialActivityCounter)result;
+					SocialActivityCounter socialActivityCounter = list.get(0);
+
+					result = socialActivityCounter;
 
 					cacheResult(socialActivityCounter);
 
@@ -1888,17 +1861,23 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 							finderArgs, socialActivityCounter);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_C_C_N_O_E,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (SocialActivityCounter)result;
-			}
+			return (SocialActivityCounter)result;
 		}
 	}
 
@@ -1997,20 +1976,17 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 				qPos.add(endPeriod);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C_C_N_O_E,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_N_O_E,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_N_O_E,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C_C_N_O_E,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2639,32 +2615,19 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<SocialActivityCounter>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<SocialActivityCounter>)QueryUtil.list(q,
+						getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<SocialActivityCounter>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
-						list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2702,20 +2665,17 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 				Query q = session.createQuery(_SQL_COUNT_SOCIALACTIVITYCOUNTER);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}

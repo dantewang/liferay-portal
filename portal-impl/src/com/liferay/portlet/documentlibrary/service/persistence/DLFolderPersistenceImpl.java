@@ -63,7 +63,6 @@ import com.liferay.portlet.trash.service.persistence.TrashEntryPersistence;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -387,22 +386,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -618,20 +614,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -771,22 +764,14 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				List<DLFolder> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (DLFolder)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+						finderArgs, list);
 				}
 				else {
-					DLFolder dlFolder = (DLFolder)result;
+					DLFolder dlFolder = list.get(0);
+
+					result = dlFolder;
 
 					cacheResult(dlFolder);
 
@@ -797,17 +782,23 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 							finderArgs, dlFolder);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (DLFolder)result;
-			}
+			return (DLFolder)result;
 		}
 	}
 
@@ -878,20 +869,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1213,22 +1201,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID_C,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID_C,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID_C,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID_C,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1471,20 +1456,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2072,22 +2054,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_GROUPID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_GROUPID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_GROUPID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_GROUPID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2292,20 +2271,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2630,22 +2606,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_COMPANYID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_COMPANYID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_COMPANYID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_COMPANYID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2851,20 +2824,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2969,22 +2939,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_REPOSITORYID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_REPOSITORYID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_REPOSITORYID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_REPOSITORYID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3194,20 +3161,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				qPos.add(repositoryId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_REPOSITORYID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_REPOSITORYID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_REPOSITORYID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_REPOSITORYID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3827,22 +3791,18 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4073,20 +4033,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				qPos.add(parentFolderId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P, finderArgs,
+					count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4461,22 +4418,18 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_P_N, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_P_N, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_P_N,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_P_N,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4719,20 +4672,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_N, finderArgs,
+					count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_N,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_N,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_N,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5390,22 +5340,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_M_P,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_M_P,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_M_P,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_M_P,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5658,20 +5605,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				qPos.add(parentFolderId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_M_P,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M_P,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M_P,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_M_P,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5889,22 +5833,14 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				List<DLFolder> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (DLFolder)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_N,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_P_N,
+						finderArgs, list);
 				}
 				else {
-					DLFolder dlFolder = (DLFolder)result;
+					DLFolder dlFolder = list.get(0);
+
+					result = dlFolder;
 
 					cacheResult(dlFolder);
 
@@ -5916,17 +5852,23 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 							finderArgs, dlFolder);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_N,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (DLFolder)result;
-			}
+			return (DLFolder)result;
 		}
 	}
 
@@ -6003,20 +5945,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_N,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_N,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_N,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_N,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -6672,22 +6611,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_S,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_S,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_S,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_S,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -6940,20 +6876,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_S,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_S,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_S,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_S,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -7702,22 +7635,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_M_P_H,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_M_P_H,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_M_P_H,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_M_P_H,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -7999,20 +7929,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				qPos.add(hidden);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_M_P_H,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M_P_H,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M_P_H,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_M_P_H,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -8767,22 +8694,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_M_P_S,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_M_P_S,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_M_P_S,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_M_P_S,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -9064,20 +8988,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_M_P_S,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M_P_S,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M_P_S,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_M_P_S,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -9869,32 +9790,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<DLFolder>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<DLFolder>)QueryUtil.list(q, getDialect(), start,
+						end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<DLFolder>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
-						list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -9932,20 +9840,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				Query q = session.createQuery(_SQL_COUNT_DLFOLDER);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -10054,22 +9959,19 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 				list = (List<com.liferay.portlet.documentlibrary.model.DLFileEntryType>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				dlFileEntryTypePersistence.cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_DLFILEENTRYTYPES,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_DLFILEENTRYTYPES,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_DLFILEENTRYTYPES,
-						finderArgs);
-				}
-				else {
-					dlFileEntryTypePersistence.cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_GET_DLFILEENTRYTYPES,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -10116,20 +10018,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				qPos.add(pk);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_DLFILEENTRYTYPES_SIZE,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_DLFILEENTRYTYPES_SIZE,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_DLFILEENTRYTYPES_SIZE,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_GET_DLFILEENTRYTYPES_SIZE,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -10163,19 +10062,15 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			try {
 				value = Boolean.valueOf(containsDLFileEntryType.contains(pk,
 							dlFileEntryTypePK));
+
+				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_DLFILEENTRYTYPE,
+					finderArgs, value);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_DLFILEENTRYTYPE,
+					finderArgs);
+
 				throw processException(e);
-			}
-			finally {
-				if (value == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_DLFILEENTRYTYPE,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_DLFILEENTRYTYPE,
-						finderArgs, value);
-				}
 			}
 		}
 

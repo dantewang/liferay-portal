@@ -48,7 +48,6 @@ import com.liferay.portlet.social.model.impl.SocialActivityLimitModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -350,22 +349,19 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 
 				list = (List<SocialActivityLimit>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_USERID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_USERID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_USERID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_USERID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -574,20 +570,17 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 				qPos.add(userId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -883,22 +876,18 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 
 				list = (List<SocialActivityLimit>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1129,20 +1118,17 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 				qPos.add(classPK);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
+					count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1353,22 +1339,14 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 
 				List<SocialActivityLimit> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (SocialActivityLimit)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_U_C_C_A_A,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_U_C_C_A_A,
+						finderArgs, list);
 				}
 				else {
-					SocialActivityLimit socialActivityLimit = (SocialActivityLimit)result;
+					SocialActivityLimit socialActivityLimit = list.get(0);
+
+					result = socialActivityLimit;
 
 					cacheResult(socialActivityLimit);
 
@@ -1384,17 +1362,23 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 							finderArgs, socialActivityLimit);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_U_C_C_A_A,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (SocialActivityLimit)result;
-			}
+			return (SocialActivityLimit)result;
 		}
 	}
 
@@ -1496,20 +1480,17 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U_C_C_A_A,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_C_C_A_A,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_C_C_A_A,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U_C_C_A_A,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2067,32 +2048,19 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<SocialActivityLimit>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<SocialActivityLimit>)QueryUtil.list(q,
+						getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<SocialActivityLimit>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
-						list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2130,20 +2098,17 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 				Query q = session.createQuery(_SQL_COUNT_SOCIALACTIVITYLIMIT);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}

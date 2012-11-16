@@ -44,7 +44,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -349,22 +348,19 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 
 				list = (List<OrgLabor>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_ORGANIZATIONID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_ORGANIZATIONID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_ORGANIZATIONID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_ORGANIZATIONID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -575,20 +571,17 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 				qPos.add(organizationId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ORGANIZATIONID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1047,32 +1040,19 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<OrgLabor>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<OrgLabor>)QueryUtil.list(q, getDialect(), start,
+						end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<OrgLabor>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
-						list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1110,20 +1090,17 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 				Query q = session.createQuery(_SQL_COUNT_ORGLABOR);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}

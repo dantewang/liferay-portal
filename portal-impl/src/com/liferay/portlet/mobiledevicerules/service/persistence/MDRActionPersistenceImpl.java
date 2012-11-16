@@ -48,7 +48,6 @@ import com.liferay.portlet.mobiledevicerules.model.impl.MDRActionModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -371,22 +370,19 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 
 				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -602,20 +598,17 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -755,22 +748,14 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 
 				List<MDRAction> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (MDRAction)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+						finderArgs, list);
 				}
 				else {
-					MDRAction mdrAction = (MDRAction)result;
+					MDRAction mdrAction = list.get(0);
+
+					result = mdrAction;
 
 					cacheResult(mdrAction);
 
@@ -781,17 +766,23 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 							finderArgs, mdrAction);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (MDRAction)result;
-			}
+			return (MDRAction)result;
 		}
 	}
 
@@ -862,20 +853,17 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1197,22 +1185,19 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 
 				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID_C,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID_C,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID_C,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID_C,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1455,20 +1440,17 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1753,22 +1735,19 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 
 				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_RULEGROUPINSTANCEID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_RULEGROUPINSTANCEID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_RULEGROUPINSTANCEID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_RULEGROUPINSTANCEID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1980,20 +1959,17 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				qPos.add(ruleGroupInstanceId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RULEGROUPINSTANCEID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RULEGROUPINSTANCEID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RULEGROUPINSTANCEID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RULEGROUPINSTANCEID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2535,32 +2511,19 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
+						end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
-						list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2598,20 +2561,17 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				Query q = session.createQuery(_SQL_COUNT_MDRACTION);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}

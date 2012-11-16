@@ -54,7 +54,6 @@ import com.liferay.portlet.softwarecatalog.model.impl.SCProductVersionModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -365,22 +364,19 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 				list = (List<SCProductVersion>)QueryUtil.list(q, getDialect(),
 						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_PRODUCTENTRYID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_PRODUCTENTRYID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_PRODUCTENTRYID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_PRODUCTENTRYID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -591,20 +587,17 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				qPos.add(productEntryId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PRODUCTENTRYID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PRODUCTENTRYID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PRODUCTENTRYID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PRODUCTENTRYID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -724,22 +717,19 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 				list = (List<SCProductVersion>)QueryUtil.list(q, getDialect(),
 						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_DIRECTDOWNLOADURL,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_DIRECTDOWNLOADURL,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_DIRECTDOWNLOADURL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_DIRECTDOWNLOADURL,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -966,20 +956,17 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_DIRECTDOWNLOADURL,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_DIRECTDOWNLOADURL,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_DIRECTDOWNLOADURL,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_DIRECTDOWNLOADURL,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1456,32 +1443,19 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<SCProductVersion>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<SCProductVersion>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<SCProductVersion>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
-						list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1519,20 +1493,17 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				Query q = session.createQuery(_SQL_COUNT_SCPRODUCTVERSION);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1641,22 +1612,19 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 				list = (List<com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				scFrameworkVersionPersistence.cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS,
-						finderArgs);
-				}
-				else {
-					scFrameworkVersionPersistence.cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1703,20 +1671,17 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				qPos.add(pk);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS_SIZE,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS_SIZE,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS_SIZE,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS_SIZE,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1750,19 +1715,15 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 			try {
 				value = Boolean.valueOf(containsSCFrameworkVersion.contains(
 							pk, scFrameworkVersionPK));
+
+				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_SCFRAMEWORKVERSION,
+					finderArgs, value);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_SCFRAMEWORKVERSION,
+					finderArgs);
+
 				throw processException(e);
-			}
-			finally {
-				if (value == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_SCFRAMEWORKVERSION,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_SCFRAMEWORKVERSION,
-						finderArgs, value);
-				}
 			}
 		}
 

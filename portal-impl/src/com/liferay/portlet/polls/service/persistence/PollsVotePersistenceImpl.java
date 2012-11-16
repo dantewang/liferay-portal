@@ -46,7 +46,6 @@ import com.liferay.portlet.polls.model.impl.PollsVoteModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -347,22 +346,19 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 
 				list = (List<PollsVote>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_QUESTIONID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_QUESTIONID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_QUESTIONID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_QUESTIONID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -571,20 +567,17 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 				qPos.add(questionId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_QUESTIONID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_QUESTIONID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_QUESTIONID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_QUESTIONID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -861,22 +854,19 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 
 				list = (List<PollsVote>)QueryUtil.list(q, getDialect(), start,
 						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_CHOICEID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_CHOICEID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_CHOICEID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_CHOICEID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1082,20 +1072,17 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 				qPos.add(choiceId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CHOICEID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CHOICEID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CHOICEID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CHOICEID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1221,22 +1208,14 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 
 				List<PollsVote> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (PollsVote)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_Q_U,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_Q_U,
+						finderArgs, list);
 				}
 				else {
-					PollsVote pollsVote = (PollsVote)result;
+					PollsVote pollsVote = list.get(0);
+
+					result = pollsVote;
 
 					cacheResult(pollsVote);
 
@@ -1246,17 +1225,23 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 							finderArgs, pollsVote);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_Q_U,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (PollsVote)result;
-			}
+			return (PollsVote)result;
 		}
 	}
 
@@ -1315,20 +1300,17 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 				qPos.add(userId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_Q_U, finderArgs,
+					count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_Q_U,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_Q_U,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_Q_U,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1842,32 +1824,19 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<PollsVote>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<PollsVote>)QueryUtil.list(q, getDialect(), start,
+						end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<PollsVote>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
-						list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1905,20 +1874,17 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 				Query q = session.createQuery(_SQL_COUNT_POLLSVOTE);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}

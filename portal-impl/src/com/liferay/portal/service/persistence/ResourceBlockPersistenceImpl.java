@@ -45,7 +45,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -390,22 +389,18 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 
 				list = (List<ResourceBlock>)QueryUtil.list(q, getDialect(),
 						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_N, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_N, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_N,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_N,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -648,20 +643,17 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_N, finderArgs,
+					count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_N,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_N,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_N,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1003,22 +995,19 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 
 				list = (List<ResourceBlock>)QueryUtil.list(q, getDialect(),
 						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_G_N,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_G_N,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_G_N,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_G_N,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1283,20 +1272,17 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_G_N,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_G_N,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_G_N,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_G_N,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1489,22 +1475,14 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 
 				List<ResourceBlock> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (ResourceBlock)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_G_N_P,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_G_N_P,
+						finderArgs, list);
 				}
 				else {
-					ResourceBlock resourceBlock = (ResourceBlock)result;
+					ResourceBlock resourceBlock = list.get(0);
+
+					result = resourceBlock;
 
 					cacheResult(resourceBlock);
 
@@ -1519,17 +1497,23 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 							finderArgs, resourceBlock);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_G_N_P,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (ResourceBlock)result;
-			}
+			return (ResourceBlock)result;
 		}
 	}
 
@@ -1628,20 +1612,17 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_G_N_P,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_G_N_P,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_G_N_P,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_G_N_P,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2190,32 +2171,19 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<ResourceBlock>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<ResourceBlock>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<ResourceBlock>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
-						list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2253,20 +2221,17 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 				Query q = session.createQuery(_SQL_COUNT_RESOURCEBLOCK);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}

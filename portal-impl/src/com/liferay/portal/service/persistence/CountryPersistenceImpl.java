@@ -45,7 +45,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -193,22 +192,14 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 
 				List<Country> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (Country)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
+						finderArgs, list);
 				}
 				else {
-					Country country = (Country)result;
+					Country country = list.get(0);
+
+					result = country;
 
 					cacheResult(country);
 
@@ -218,17 +209,23 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 							finderArgs, country);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Country)result;
-			}
+			return (Country)result;
 		}
 	}
 
@@ -292,20 +289,17 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -431,22 +425,14 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 
 				List<Country> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (Country)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A2,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A2,
+						finderArgs, list);
 				}
 				else {
-					Country country = (Country)result;
+					Country country = list.get(0);
+
+					result = country;
 
 					cacheResult(country);
 
@@ -456,17 +442,22 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 							finderArgs, country);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A2, finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Country)result;
-			}
+			return (Country)result;
 		}
 	}
 
@@ -530,20 +521,16 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A2, finderArgs,
+					count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A2, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A2,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A2,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -669,22 +656,14 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 
 				List<Country> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (Country)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A3,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A3,
+						finderArgs, list);
 				}
 				else {
-					Country country = (Country)result;
+					Country country = list.get(0);
+
+					result = country;
 
 					cacheResult(country);
 
@@ -694,17 +673,22 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 							finderArgs, country);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A3, finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Country)result;
-			}
+			return (Country)result;
 		}
 	}
 
@@ -768,20 +752,16 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A3, finderArgs,
+					count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A3, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A3,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A3,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1056,22 +1036,19 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				qPos.add(active);
 
 				list = (List<Country>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_ACTIVE,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_ACTIVE,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_ACTIVE,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_ACTIVE,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1276,20 +1253,17 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				qPos.add(active);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ACTIVE,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVE,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVE,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ACTIVE,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1807,32 +1781,18 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<Country>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<Country>)QueryUtil.list(q, getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<Country>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
-						list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1870,20 +1830,17 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				Query q = session.createQuery(_SQL_COUNT_COUNTRY);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}

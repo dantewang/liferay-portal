@@ -53,7 +53,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -659,22 +658,19 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				qPos.add(groupId);
 
 				list = (List<Team>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_GROUPID,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_GROUPID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_GROUPID,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_GROUPID,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -878,20 +874,17 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1076,22 +1069,14 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 
 				List<Team> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (Team)result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N,
-						finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_N,
+						finderArgs, list);
 				}
 				else {
-					Team team = (Team)result;
+					Team team = list.get(0);
+
+					result = team;
 
 					cacheResult(team);
 
@@ -1102,17 +1087,23 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 							finderArgs, team);
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Team)result;
-			}
+			return (Team)result;
 		}
 	}
 
@@ -1182,20 +1173,17 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_N, finderArgs,
+					count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_N,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_N,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_N,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1696,32 +1684,18 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<Team>)QueryUtil.list(q, getDialect(), start,
-							end, false);
+				list = (List<Team>)QueryUtil.list(q, getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<Team>)QueryUtil.list(q, getDialect(), start,
-							end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL,
-						finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs,
-						list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1759,20 +1733,17 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				Query q = session.createQuery(_SQL_COUNT_TEAM);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
-						FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1879,22 +1850,18 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 
 				list = (List<com.liferay.portal.model.User>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				userPersistence.cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_USERS, finderArgs,
+					list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERS, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_USERS,
-						finderArgs);
-				}
-				else {
-					userPersistence.cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_GET_USERS,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1940,20 +1907,17 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				qPos.add(pk);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_USERS_SIZE,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERS_SIZE,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_USERS_SIZE,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_GET_USERS_SIZE,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1983,19 +1947,15 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 		if (value == null) {
 			try {
 				value = Boolean.valueOf(containsUser.contains(pk, userPK));
+
+				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_USER,
+					finderArgs, value);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_USER,
+					finderArgs);
+
 				throw processException(e);
-			}
-			finally {
-				if (value == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_USER,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_USER,
-						finderArgs, value);
-				}
 			}
 		}
 
@@ -2359,22 +2319,19 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 
 				list = (List<com.liferay.portal.model.UserGroup>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				userGroupPersistence.cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_USERGROUPS,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERGROUPS,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_USERGROUPS,
-						finderArgs);
-				}
-				else {
-					userGroupPersistence.cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_GET_USERGROUPS,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2420,20 +2377,17 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				qPos.add(pk);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_USERGROUPS_SIZE,
+					finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_USERGROUPS_SIZE,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_USERGROUPS_SIZE,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_GET_USERGROUPS_SIZE,
-						finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2466,19 +2420,15 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 			try {
 				value = Boolean.valueOf(containsUserGroup.contains(pk,
 							userGroupPK));
+
+				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_USERGROUP,
+					finderArgs, value);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_USERGROUP,
+					finderArgs);
+
 				throw processException(e);
-			}
-			finally {
-				if (value == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_USERGROUP,
-						finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_USERGROUP,
-						finderArgs, value);
-				}
 			}
 		}
 
