@@ -1062,21 +1062,13 @@
 
 				List<${entity.name}> list = q.list();
 
-				if (!list.isEmpty()) {
-					result = list.get(0);
-				}
-
-				return (${entity.name})result;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs);
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs, list);
 				}
 				else {
-					${entity.name} ${entity.varName} = (${entity.name})result;
+					${entity.name} ${entity.varName} = list.get(0);
+
+					result = ${entity.varName};
 
 					cacheResult(${entity.varName});
 
@@ -1096,17 +1088,22 @@
 						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs, ${entity.varName});
 					}
 				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_${finder.name?upper_case}, finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (${entity.name})result;
-			}
+			return (${entity.name})result;
 		}
 	}
 </#if>
@@ -1207,20 +1204,17 @@
 				<#include "persistence_impl_finder_qpos.ftl">
 
 				list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1714,20 +1708,17 @@
 					<#include "persistence_impl_finder_arrayable_qpos.ftl">
 
 					list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
+
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs, list);
 				}
 				catch (Exception e) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs);
+
 					throw processException(e);
 				}
 				finally {
-					if (list == null) {
-						FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs);
-					}
-					else {
-						cacheResult(list);
-
-						FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs, list);
-					}
-
 					closeSession(session);
 				}
 			}

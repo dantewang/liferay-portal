@@ -50,18 +50,15 @@ public int countBy${finder.name}(
 			<#include "persistence_impl_finder_qpos.ftl">
 
 			count = (Long)q.uniqueResult();
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs, count);
 		}
 		catch (Exception e) {
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs);
+
 			throw processException(e);
 		}
 		finally {
-			if (count == null) {
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs);
-			}
-			else {
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs, count);
-			}
-
 			closeSession(session);
 		}
 	}
@@ -131,18 +128,15 @@ public int countBy${finder.name}(
 				<#include "persistence_impl_finder_arrayable_qpos.ftl">
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, finderArgs, count);
-				}
-
 				closeSession(session);
 			}
 		}

@@ -919,28 +919,18 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end, false);
+				list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -977,18 +967,15 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				Query q = session.createQuery(_SQL_COUNT_${entity.alias?upper_case});
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY);
-				}
-				else {
-					FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY, count);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1108,20 +1095,17 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						qPos.add(pk);
 
 						list = (List<${tempEntity.packagePath}.model.${tempEntity.name}>)QueryUtil.list(q, getDialect(), start, end);
+
+						${tempEntity.varName}Persistence.cacheResult(list);
+
+						FinderCacheUtil.putResult(FINDER_PATH_GET_${tempEntity.names?upper_case}, finderArgs, list);
 					}
 					catch (Exception e) {
+						FinderCacheUtil.removeResult(FINDER_PATH_GET_${tempEntity.names?upper_case}, finderArgs);
+
 						throw processException(e);
 					}
 					finally {
-						if (list == null) {
-							FinderCacheUtil.removeResult(FINDER_PATH_GET_${tempEntity.names?upper_case}, finderArgs);
-						}
-						else {
-							${tempEntity.varName}Persistence.cacheResult(list);
-
-							FinderCacheUtil.putResult(FINDER_PATH_GET_${tempEntity.names?upper_case}, finderArgs, list);
-						}
-
 						closeSession(session);
 					}
 				}
@@ -1184,18 +1168,15 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						qPos.add(pk);
 
 						count = (Long)q.uniqueResult();
+
+						FinderCacheUtil.putResult(FINDER_PATH_GET_${tempEntity.names?upper_case}_SIZE, finderArgs, count);
 					}
 					catch (Exception e) {
+						FinderCacheUtil.removeResult(FINDER_PATH_GET_${tempEntity.names?upper_case}_SIZE, finderArgs);
+
 						throw processException(e);
 					}
 					finally {
-						if (count == null) {
-							FinderCacheUtil.removeResult(FINDER_PATH_GET_${tempEntity.names?upper_case}_SIZE, finderArgs);
-						}
-						else {
-							FinderCacheUtil.putResult(FINDER_PATH_GET_${tempEntity.names?upper_case}_SIZE, finderArgs, count);
-						}
-
 						closeSession(session);
 					}
 				}
@@ -1251,17 +1232,13 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				if (value == null) {
 					try {
 						value = Boolean.valueOf(contains${tempEntity.name}.contains(pk, ${tempEntity.varName}PK));
+
+						FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_${tempEntity.name?upper_case}, finderArgs, value);
 					}
 					catch (Exception e) {
+						FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_${tempEntity.name?upper_case}, finderArgs);
+
 						throw processException(e);
-					}
-					finally {
-						if (value == null) {
-							FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_${tempEntity.name?upper_case}, finderArgs);
-						}
-						else {
-							FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_${tempEntity.name?upper_case}, finderArgs, value);
-						}
 					}
 				}
 
