@@ -102,7 +102,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public static final FinderPath FINDER_PATH_COUNT_BY_PRODUCTENTRYID = new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByProductEntryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SCProductVersionModelImpl.PRODUCTENTRYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the s c product versions where productEntryId = &#63;.
@@ -625,7 +626,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public static final FinderPath FINDER_PATH_COUNT_BY_DIRECTDOWNLOADURL = new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByDirectDownloadURL",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			SCProductVersionModelImpl.DIRECTDOWNLOADURL_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the s c product versions where directDownloadURL = &#63;.

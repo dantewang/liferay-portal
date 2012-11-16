@@ -95,7 +95,9 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			RatingsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			RatingsEntryModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the ratings entries where classNameId = &#63; and classPK = &#63;.
@@ -651,7 +653,10 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 			FINDER_CLASS_NAME_COUNT, "countByU_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			RatingsEntryModelImpl.USERID_COLUMN_BITMASK |
+			RatingsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			RatingsEntryModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns the ratings entry where userId = &#63; and classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.ratings.NoSuchEntryException} if it could not be found.
@@ -909,7 +914,10 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Double.class.getName()
-			});
+			},
+			RatingsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			RatingsEntryModelImpl.CLASSPK_COLUMN_BITMASK |
+			RatingsEntryModelImpl.SCORE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the ratings entries where classNameId = &#63; and classPK = &#63; and score = &#63;.

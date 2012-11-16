@@ -90,7 +90,9 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 			PortletItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			PortletItemModelImpl.GROUPID_COLUMN_BITMASK |
+			PortletItemModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the portlet items where groupId = &#63; and classNameId = &#63;.
@@ -648,7 +650,10 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Long.class.getName()
-			});
+			},
+			PortletItemModelImpl.GROUPID_COLUMN_BITMASK |
+			PortletItemModelImpl.PORTLETID_COLUMN_BITMASK |
+			PortletItemModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the portlet items where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
@@ -1281,7 +1286,11 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName(), Long.class.getName()
-			});
+			},
+			PortletItemModelImpl.GROUPID_COLUMN_BITMASK |
+			PortletItemModelImpl.NAME_COLUMN_BITMASK |
+			PortletItemModelImpl.PORTLETID_COLUMN_BITMASK |
+			PortletItemModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the portlet items where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.

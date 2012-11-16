@@ -97,7 +97,8 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			DDLRecordSetModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d l record sets where uuid = &#63;.
@@ -639,7 +640,9 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DDLRecordSetModelImpl.UUID_COLUMN_BITMASK |
+			DDLRecordSetModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the d d l record set where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException} if it could not be found.
@@ -901,7 +904,9 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DDLRecordSetModelImpl.UUID_COLUMN_BITMASK |
+			DDLRecordSetModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d l record sets where uuid = &#63; and companyId = &#63;.
@@ -1493,7 +1498,8 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DDLRecordSetModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d l record sets where groupId = &#63;.
@@ -2360,7 +2366,9 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_R = new FinderPath(DDLRecordSetModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordSetModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_R",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			DDLRecordSetModelImpl.GROUPID_COLUMN_BITMASK |
+			DDLRecordSetModelImpl.RECORDSETKEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns the d d l record set where groupId = &#63; and recordSetKey = &#63; or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException} if it could not be found.

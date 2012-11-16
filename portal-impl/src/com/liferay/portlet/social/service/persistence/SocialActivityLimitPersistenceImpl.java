@@ -95,7 +95,8 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(SocialActivityLimitModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityLimitModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialActivityLimitModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity limits where userId = &#63;.
@@ -607,7 +608,9 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(SocialActivityLimitModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityLimitModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			SocialActivityLimitModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivityLimitModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity limits where classNameId = &#63; and classPK = &#63;.
@@ -1171,7 +1174,13 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName(), Integer.class.getName(),
 				String.class.getName()
-			});
+			},
+			SocialActivityLimitModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityLimitModelImpl.USERID_COLUMN_BITMASK |
+			SocialActivityLimitModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivityLimitModelImpl.CLASSPK_COLUMN_BITMASK |
+			SocialActivityLimitModelImpl.ACTIVITYTYPE_COLUMN_BITMASK |
+			SocialActivityLimitModelImpl.ACTIVITYCOUNTERNAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the social activity limit where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and activityType = &#63; and activityCounterName = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivityLimitException} if it could not be found.

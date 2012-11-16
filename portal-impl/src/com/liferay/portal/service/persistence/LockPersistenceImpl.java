@@ -93,7 +93,8 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			LockModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the locks where uuid = &#63;.
@@ -633,7 +634,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			LockModelImpl.UUID_COLUMN_BITMASK |
+			LockModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the locks where uuid = &#63; and companyId = &#63;.
@@ -1220,7 +1223,8 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	public static final FinderPath FINDER_PATH_COUNT_BY_LTEXPIRATIONDATE = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLtExpirationDate",
-			new String[] { Date.class.getName() });
+			new String[] { Date.class.getName() },
+			LockModelImpl.EXPIRATIONDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the locks where expirationDate &lt; &#63;.
@@ -1762,7 +1766,9 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_K = new FinderPath(LockModelImpl.ENTITY_CACHE_ENABLED,
 			LockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_K",
-			new String[] { String.class.getName(), String.class.getName() });
+			new String[] { String.class.getName(), String.class.getName() },
+			LockModelImpl.CLASSNAME_COLUMN_BITMASK |
+			LockModelImpl.KEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the locks where className = &#63; and key = &#63;.
@@ -2184,7 +2190,10 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			new String[] {
 				String.class.getName(), String.class.getName(),
 				String.class.getName()
-			});
+			},
+			LockModelImpl.CLASSNAME_COLUMN_BITMASK |
+			LockModelImpl.KEY_COLUMN_BITMASK |
+			LockModelImpl.OWNER_COLUMN_BITMASK);
 
 	/**
 	 * Returns the lock where className = &#63; and key = &#63; and owner = &#63; or throws a {@link com.liferay.portal.NoSuchLockException} if it could not be found.

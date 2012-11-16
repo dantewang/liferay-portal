@@ -99,7 +99,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			RoleModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the roles where companyId = &#63;.
@@ -959,7 +960,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	public static final FinderPath FINDER_PATH_COUNT_BY_NAME = new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByName",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			RoleModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the roles where name = &#63;.
@@ -1886,7 +1888,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	public static final FinderPath FINDER_PATH_COUNT_BY_SUBTYPE = new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countBySubtype",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			RoleModelImpl.SUBTYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the roles where subtype = &#63;.
@@ -2814,7 +2817,9 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			RoleModelImpl.COMPANYID_COLUMN_BITMASK |
+			RoleModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the role where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchRoleException} if it could not be found.
@@ -3076,7 +3081,9 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_S = new FinderPath(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByT_S",
-			new String[] { Integer.class.getName(), String.class.getName() });
+			new String[] { Integer.class.getName(), String.class.getName() },
+			RoleModelImpl.TYPE_COLUMN_BITMASK |
+			RoleModelImpl.SUBTYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the roles where type = &#63; and subtype = &#63;.
@@ -4071,7 +4078,10 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 			FINDER_CLASS_NAME_COUNT, "countByC_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			RoleModelImpl.COMPANYID_COLUMN_BITMASK |
+			RoleModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			RoleModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns the role where companyId = &#63; and classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portal.NoSuchRoleException} if it could not be found.

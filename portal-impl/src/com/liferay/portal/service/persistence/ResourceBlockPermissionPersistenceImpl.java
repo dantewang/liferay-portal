@@ -91,7 +91,8 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 	public static final FinderPath FINDER_PATH_COUNT_BY_RESOURCEBLOCKID = new FinderPath(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceBlockPermissionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByResourceBlockId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ResourceBlockPermissionModelImpl.RESOURCEBLOCKID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource block permissions where resourceBlockId = &#63;.
@@ -618,7 +619,9 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_R = new FinderPath(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceBlockPermissionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByR_R",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			ResourceBlockPermissionModelImpl.RESOURCEBLOCKID_COLUMN_BITMASK |
+			ResourceBlockPermissionModelImpl.ROLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the resource block permission where resourceBlockId = &#63; and roleId = &#63; or throws a {@link com.liferay.portal.NoSuchResourceBlockPermissionException} if it could not be found.

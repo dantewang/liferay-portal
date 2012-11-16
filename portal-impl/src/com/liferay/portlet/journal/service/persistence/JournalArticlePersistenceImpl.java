@@ -110,7 +110,8 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalArticleModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where uuid = &#63;.
@@ -656,7 +657,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalArticleModelImpl.UUID_COLUMN_BITMASK |
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal article where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchArticleException} if it could not be found.
@@ -918,7 +921,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalArticleModelImpl.UUID_COLUMN_BITMASK |
+			JournalArticleModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where uuid = &#63; and companyId = &#63;.
@@ -1511,7 +1516,8 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_RESOURCEPRIMKEY = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByResourcePrimKey",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where resourcePrimKey = &#63;.
@@ -2032,7 +2038,8 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63;.
@@ -2903,7 +2910,8 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalArticleModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where companyId = &#63;.
@@ -3417,7 +3425,8 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByStructureId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalArticleModelImpl.STRUCTUREID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where structureId = &#63;.
@@ -3972,7 +3981,8 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_TEMPLATEID = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByTemplateId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalArticleModelImpl.TEMPLATEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where templateId = &#63;.
@@ -4524,7 +4534,8 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_LAYOUTUUID = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLayoutUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalArticleModelImpl.LAYOUTUUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where layoutUuid = &#63;.
@@ -5076,7 +5087,8 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_SMALLIMAGEID = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countBySmallImageId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalArticleModelImpl.SMALLIMAGEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where smallImageId = &#63;.
@@ -5595,7 +5607,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_ST = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByR_ST",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			JournalArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			JournalArticleModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where resourcePrimKey = &#63; and status = &#63;.
@@ -6149,7 +6163,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and userId = &#63;.
@@ -7078,7 +7094,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_F",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.FOLDERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and folderId = &#63;.
@@ -8508,7 +8526,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_A = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_A",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.ARTICLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and articleId = &#63;.
@@ -9515,7 +9535,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_UT = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_UT",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.URLTITLE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and urlTitle = &#63;.
@@ -10521,7 +10543,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_S",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.STRUCTUREID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and structureId = &#63;.
@@ -11528,7 +11552,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_T = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_T",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.TEMPLATEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and templateId = &#63;.
@@ -12535,7 +12561,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_L = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_L",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.LAYOUTUUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and layoutUuid = &#63;.
@@ -13542,7 +13570,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_ST = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_ST",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and status = &#63;.
@@ -14471,7 +14501,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_V = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_V",
-			new String[] { Long.class.getName(), Double.class.getName() });
+			new String[] { Long.class.getName(), Double.class.getName() },
+			JournalArticleModelImpl.COMPANYID_COLUMN_BITMASK |
+			JournalArticleModelImpl.VERSION_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where companyId = &#63; and version = &#63;.
@@ -15025,7 +15057,9 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_ST = new FinderPath(JournalArticleModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_ST",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			JournalArticleModelImpl.COMPANYID_COLUMN_BITMASK |
+			JournalArticleModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where companyId = &#63; and status = &#63;.
@@ -15583,7 +15617,10 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.FOLDERID_COLUMN_BITMASK |
+			JournalArticleModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and folderId = &#63; and status = &#63;.
@@ -17125,7 +17162,10 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 			FINDER_CLASS_NAME_COUNT, "countByG_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			JournalArticleModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -18117,7 +18157,10 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			JournalArticleModelImpl.STRUCTUREID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the journal articles where groupId = &#63; and classNameId = &#63; and structureId = &#63;.
@@ -18548,7 +18591,10 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			JournalArticleModelImpl.TEMPLATEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and classNameId = &#63; and templateId = &#63;.
@@ -19616,7 +19662,10 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			JournalArticleModelImpl.LAYOUTUUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and classNameId = &#63; and layoutUuid = &#63;.
@@ -20682,7 +20731,10 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 			FINDER_CLASS_NAME_COUNT, "countByG_U_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.USERID_COLUMN_BITMASK |
+			JournalArticleModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and userId = &#63; and classNameId = &#63;.
@@ -21673,7 +21725,10 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Double.class.getName()
-			});
+			},
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.ARTICLEID_COLUMN_BITMASK |
+			JournalArticleModelImpl.VERSION_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal article where groupId = &#63; and articleId = &#63; and version = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchArticleException} if it could not be found.
@@ -21958,7 +22013,10 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.ARTICLEID_COLUMN_BITMASK |
+			JournalArticleModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and articleId = &#63; and status = &#63;.
@@ -23632,7 +23690,10 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			JournalArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleModelImpl.URLTITLE_COLUMN_BITMASK |
+			JournalArticleModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where groupId = &#63; and urlTitle = &#63; and status = &#63;.
@@ -24698,7 +24759,10 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 			new String[] {
 				Long.class.getName(), Double.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			JournalArticleModelImpl.COMPANYID_COLUMN_BITMASK |
+			JournalArticleModelImpl.VERSION_COLUMN_BITMASK |
+			JournalArticleModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal articles where companyId = &#63; and version = &#63; and status = &#63;.

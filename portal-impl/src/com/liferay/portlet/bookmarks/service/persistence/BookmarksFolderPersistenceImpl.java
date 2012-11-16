@@ -99,7 +99,8 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	public static final FinderPath FINDER_PATH_COUNT_BY_RESOURCEBLOCKID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByResourceBlockId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			BookmarksFolderModelImpl.RESOURCEBLOCKID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks folders where resourceBlockId = &#63;.
@@ -620,7 +621,8 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			BookmarksFolderModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks folders where uuid = &#63;.
@@ -1167,7 +1169,9 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			BookmarksFolderModelImpl.UUID_COLUMN_BITMASK |
+			BookmarksFolderModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the bookmarks folder where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.bookmarks.NoSuchFolderException} if it could not be found.
@@ -1429,7 +1433,9 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			BookmarksFolderModelImpl.UUID_COLUMN_BITMASK |
+			BookmarksFolderModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks folders where uuid = &#63; and companyId = &#63;.
@@ -2021,7 +2027,8 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			BookmarksFolderModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks folders where groupId = &#63;.
@@ -2833,7 +2840,8 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			BookmarksFolderModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks folders where companyId = &#63;.
@@ -3346,7 +3354,9 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(BookmarksFolderModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			BookmarksFolderModelImpl.GROUPID_COLUMN_BITMASK |
+			BookmarksFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks folders where groupId = &#63; and parentFolderId = &#63;.

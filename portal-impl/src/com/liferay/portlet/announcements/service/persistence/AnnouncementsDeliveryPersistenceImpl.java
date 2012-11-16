@@ -94,7 +94,8 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(AnnouncementsDeliveryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsDeliveryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AnnouncementsDeliveryModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the announcements deliveries where userId = &#63;.
@@ -604,7 +605,9 @@ public class AnnouncementsDeliveryPersistenceImpl extends BasePersistenceImpl<An
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_T = new FinderPath(AnnouncementsDeliveryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsDeliveryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU_T",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			AnnouncementsDeliveryModelImpl.USERID_COLUMN_BITMASK |
+			AnnouncementsDeliveryModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns the announcements delivery where userId = &#63; and type = &#63; or throws a {@link com.liferay.portlet.announcements.NoSuchDeliveryException} if it could not be found.

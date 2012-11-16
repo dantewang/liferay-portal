@@ -91,7 +91,8 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 	public static final FinderPath FINDER_PATH_COUNT_BY_PLID = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByPlid",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			PortletPreferencesModelImpl.PLID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the portlet preferenceses where plid = &#63;.
@@ -604,7 +605,8 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 	public static final FinderPath FINDER_PATH_COUNT_BY_PORTLETID = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByPortletId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			PortletPreferencesModelImpl.PORTLETID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the portlet preferenceses where portletId = &#63;.
@@ -1158,7 +1160,9 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_P = new FinderPath(PortletPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortletPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByP_P",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			PortletPreferencesModelImpl.PLID_COLUMN_BITMASK |
+			PortletPreferencesModelImpl.PORTLETID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the portlet preferenceses where plid = &#63; and portletId = &#63;.
@@ -1757,7 +1761,10 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				Long.class.getName()
-			});
+			},
+			PortletPreferencesModelImpl.OWNERID_COLUMN_BITMASK |
+			PortletPreferencesModelImpl.OWNERTYPE_COLUMN_BITMASK |
+			PortletPreferencesModelImpl.PLID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the portlet preferenceses where ownerId = &#63; and ownerType = &#63; and plid = &#63;.
@@ -2353,7 +2360,10 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			new String[] {
 				Integer.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			PortletPreferencesModelImpl.OWNERTYPE_COLUMN_BITMASK |
+			PortletPreferencesModelImpl.PLID_COLUMN_BITMASK |
+			PortletPreferencesModelImpl.PORTLETID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the portlet preferenceses where ownerType = &#63; and plid = &#63; and portletId = &#63;.
@@ -2991,7 +3001,11 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				Long.class.getName(), String.class.getName()
-			});
+			},
+			PortletPreferencesModelImpl.OWNERID_COLUMN_BITMASK |
+			PortletPreferencesModelImpl.OWNERTYPE_COLUMN_BITMASK |
+			PortletPreferencesModelImpl.PLID_COLUMN_BITMASK |
+			PortletPreferencesModelImpl.PORTLETID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the portlet preferences where ownerId = &#63; and ownerType = &#63; and plid = &#63; and portletId = &#63; or throws a {@link com.liferay.portal.NoSuchPortletPreferencesException} if it could not be found.

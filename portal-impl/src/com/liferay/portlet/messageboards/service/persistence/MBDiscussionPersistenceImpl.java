@@ -91,7 +91,8 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSNAMEID = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
 			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByClassNameId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBDiscussionModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards discussions where classNameId = &#63;.
@@ -600,7 +601,8 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	public static final FinderPath FINDER_PATH_COUNT_BY_THREADID = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
 			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByThreadId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBDiscussionModelImpl.THREADID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the message boards discussion where threadId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchDiscussionException} if it could not be found.
@@ -812,7 +814,9 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
 			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBDiscussionModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			MBDiscussionModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns the message boards discussion where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchDiscussionException} if it could not be found.

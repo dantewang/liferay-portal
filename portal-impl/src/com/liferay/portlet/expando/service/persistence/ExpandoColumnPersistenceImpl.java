@@ -96,7 +96,8 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	public static final FinderPath FINDER_PATH_COUNT_BY_TABLEID = new FinderPath(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoColumnModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByTableId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ExpandoColumnModelImpl.TABLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the expando columns where tableId = &#63;.
@@ -973,7 +974,9 @@ public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoCol
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_N = new FinderPath(ExpandoColumnModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoColumnModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByT_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			ExpandoColumnModelImpl.TABLEID_COLUMN_BITMASK |
+			ExpandoColumnModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the expando column where tableId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.expando.NoSuchColumnException} if it could not be found.

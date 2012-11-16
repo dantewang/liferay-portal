@@ -99,7 +99,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			DLFileShortcutModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file shortcuts where uuid = &#63;.
@@ -645,7 +646,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DLFileShortcutModelImpl.UUID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the document library file shortcut where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileShortcutException} if it could not be found.
@@ -907,7 +910,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DLFileShortcutModelImpl.UUID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file shortcuts where uuid = &#63; and companyId = &#63;.
@@ -1500,7 +1505,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public static final FinderPath FINDER_PATH_COUNT_BY_TOFILEENTRYID = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByToFileEntryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DLFileShortcutModelImpl.TOFILEENTRYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file shortcuts where toFileEntryId = &#63;.
@@ -2021,7 +2027,9 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_F",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FOLDERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file shortcuts where groupId = &#63; and folderId = &#63;.
@@ -2957,7 +2965,10 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FOLDERID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.ACTIVE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63;.
@@ -3949,7 +3960,11 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(), Integer.class.getName()
-			});
+			},
+			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FOLDERID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.ACTIVE_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.

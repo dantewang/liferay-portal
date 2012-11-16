@@ -91,7 +91,8 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	public static final FinderPath FINDER_PATH_COUNT_BY_LTSIZE = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLtSize",
-			new String[] { Integer.class.getName() });
+			new String[] { Integer.class.getName() },
+			ImageModelImpl.SIZE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the images where size &lt; &#63;.

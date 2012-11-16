@@ -90,7 +90,8 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(UserTrackerModelImpl.ENTITY_CACHE_ENABLED,
 			UserTrackerModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserTrackerModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user trackers where companyId = &#63;.
@@ -603,7 +604,8 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(UserTrackerModelImpl.ENTITY_CACHE_ENABLED,
 			UserTrackerModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserTrackerModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user trackers where userId = &#63;.
@@ -1112,7 +1114,8 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	public static final FinderPath FINDER_PATH_COUNT_BY_SESSIONID = new FinderPath(UserTrackerModelImpl.ENTITY_CACHE_ENABLED,
 			UserTrackerModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countBySessionId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			UserTrackerModelImpl.SESSIONID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user trackers where sessionId = &#63;.

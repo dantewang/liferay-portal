@@ -97,7 +97,8 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DDMStructureModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			DDMStructureModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m structures where uuid = &#63;.
@@ -639,7 +640,9 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(DDMStructureModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DDMStructureModelImpl.UUID_COLUMN_BITMASK |
+			DDMStructureModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the d d m structure where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchStructureException} if it could not be found.
@@ -901,7 +904,9 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DDMStructureModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DDMStructureModelImpl.UUID_COLUMN_BITMASK |
+			DDMStructureModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m structures where uuid = &#63; and companyId = &#63;.
@@ -1493,7 +1498,8 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(DDMStructureModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DDMStructureModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m structures where groupId = &#63;.
@@ -2805,7 +2811,8 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSNAMEID = new FinderPath(DDMStructureModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByClassNameId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DDMStructureModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m structures where classNameId = &#63;.
@@ -3315,7 +3322,9 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(DDMStructureModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_S",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			DDMStructureModelImpl.GROUPID_COLUMN_BITMASK |
+			DDMStructureModelImpl.STRUCTUREKEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns the d d m structure where groupId = &#63; and structureKey = &#63; or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchStructureException} if it could not be found.
@@ -3578,7 +3587,9 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(DDMStructureModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			DDMStructureModelImpl.COMPANYID_COLUMN_BITMASK |
+			DDMStructureModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m structures where companyId = &#63; and classNameId = &#63;.
@@ -4136,7 +4147,10 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
-			});
+			},
+			DDMStructureModelImpl.GROUPID_COLUMN_BITMASK |
+			DDMStructureModelImpl.NAME_COLUMN_BITMASK |
+			DDMStructureModelImpl.DESCRIPTION_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m structures where groupId = &#63; and name = &#63; and description = &#63;.

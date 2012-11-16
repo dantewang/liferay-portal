@@ -100,7 +100,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalStructureModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal structures where uuid = &#63;.
@@ -647,7 +648,9 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalStructureModelImpl.UUID_COLUMN_BITMASK |
+			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal structure where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchStructureException} if it could not be found.
@@ -909,7 +912,9 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalStructureModelImpl.UUID_COLUMN_BITMASK |
+			JournalStructureModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal structures where uuid = &#63; and companyId = &#63;.
@@ -1502,7 +1507,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal structures where groupId = &#63;.
@@ -2816,7 +2822,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByStructureId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal structures where structureId = &#63;.
@@ -3371,7 +3378,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public static final FinderPath FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByParentStructureId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalStructureModelImpl.PARENTSTRUCTUREID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal structures where parentStructureId = &#63;.
@@ -3936,7 +3944,9 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_S",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal structure where groupId = &#63; and structureId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchStructureException} if it could not be found.
@@ -4200,7 +4210,9 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_P",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalStructureModelImpl.PARENTSTRUCTUREID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal structures where groupId = &#63; and parentStructureId = &#63;.

@@ -94,7 +94,8 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	public static final FinderPath FINDER_PATH_COUNT_BY_PRODUCTENTRYID = new FinderPath(SCProductScreenshotModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductScreenshotModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByProductEntryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SCProductScreenshotModelImpl.PRODUCTENTRYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the s c product screenshots where productEntryId = &#63;.
@@ -619,7 +620,8 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	public static final FinderPath FINDER_PATH_COUNT_BY_THUMBNAILID = new FinderPath(SCProductScreenshotModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductScreenshotModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByThumbnailId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SCProductScreenshotModelImpl.THUMBNAILID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the s c product screenshots where thumbnailId = &#63;.
@@ -958,7 +960,8 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	public static final FinderPath FINDER_PATH_COUNT_BY_FULLIMAGEID = new FinderPath(SCProductScreenshotModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductScreenshotModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByFullImageId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SCProductScreenshotModelImpl.FULLIMAGEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the s c product screenshots where fullImageId = &#63;.
@@ -1296,7 +1299,9 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_P = new FinderPath(SCProductScreenshotModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductScreenshotModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByP_P",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			SCProductScreenshotModelImpl.PRODUCTENTRYID_COLUMN_BITMASK |
+			SCProductScreenshotModelImpl.PRIORITY_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the s c product screenshots where productEntryId = &#63; and priority = &#63;.

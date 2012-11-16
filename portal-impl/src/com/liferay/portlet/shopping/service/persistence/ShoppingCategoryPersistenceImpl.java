@@ -95,7 +95,8 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(ShoppingCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ShoppingCategoryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the shopping categories where groupId = &#63;.
@@ -966,7 +967,9 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(ShoppingCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			ShoppingCategoryModelImpl.GROUPID_COLUMN_BITMASK |
+			ShoppingCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the shopping categories where groupId = &#63; and parentCategoryId = &#63;.

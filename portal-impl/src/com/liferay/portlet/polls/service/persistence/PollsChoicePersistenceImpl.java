@@ -93,7 +93,8 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(PollsChoiceModelImpl.ENTITY_CACHE_ENABLED,
 			PollsChoiceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			PollsChoiceModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the polls choices where uuid = &#63;.
@@ -637,7 +638,8 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 	public static final FinderPath FINDER_PATH_COUNT_BY_QUESTIONID = new FinderPath(PollsChoiceModelImpl.ENTITY_CACHE_ENABLED,
 			PollsChoiceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByQuestionId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			PollsChoiceModelImpl.QUESTIONID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the polls choices where questionId = &#63;.
@@ -1147,7 +1149,9 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 	public static final FinderPath FINDER_PATH_COUNT_BY_Q_N = new FinderPath(PollsChoiceModelImpl.ENTITY_CACHE_ENABLED,
 			PollsChoiceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByQ_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			PollsChoiceModelImpl.QUESTIONID_COLUMN_BITMASK |
+			PollsChoiceModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the polls choice where questionId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.polls.NoSuchChoiceException} if it could not be found.

@@ -92,7 +92,8 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RepositoryEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			RepositoryEntryModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the repository entries where uuid = &#63;.
@@ -639,7 +640,9 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RepositoryEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			RepositoryEntryModelImpl.UUID_COLUMN_BITMASK |
+			RepositoryEntryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the repository entry where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portal.NoSuchRepositoryEntryException} if it could not be found.
@@ -902,7 +905,8 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	public static final FinderPath FINDER_PATH_COUNT_BY_REPOSITORYID = new FinderPath(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RepositoryEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRepositoryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			RepositoryEntryModelImpl.REPOSITORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the repository entries where repositoryId = &#63;.
@@ -1419,7 +1423,9 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_M = new FinderPath(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RepositoryEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByR_M",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			RepositoryEntryModelImpl.REPOSITORYID_COLUMN_BITMASK |
+			RepositoryEntryModelImpl.MAPPEDID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the repository entry where repositoryId = &#63; and mappedId = &#63; or throws a {@link com.liferay.portal.NoSuchRepositoryEntryException} if it could not be found.

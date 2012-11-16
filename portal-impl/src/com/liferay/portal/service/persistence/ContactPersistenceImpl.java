@@ -89,7 +89,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ContactModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the contacts where companyId = &#63;.
@@ -598,7 +599,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	public static final FinderPath FINDER_PATH_COUNT_BY_ACCOUNTID = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByAccountId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ContactModelImpl.ACCOUNTID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the contacts where accountId = &#63;.
@@ -1107,7 +1109,9 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			ContactModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			ContactModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the contacts where classNameId = &#63; and classPK = &#63;.

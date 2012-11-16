@@ -93,7 +93,8 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	public static final FinderPath FINDER_PATH_COUNT_BY_ENTRYID = new FinderPath(AnnouncementsFlagModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsFlagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByEntryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AnnouncementsFlagModelImpl.ENTRYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the announcements flags where entryId = &#63;.
@@ -610,7 +611,10 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			AnnouncementsFlagModelImpl.USERID_COLUMN_BITMASK |
+			AnnouncementsFlagModelImpl.ENTRYID_COLUMN_BITMASK |
+			AnnouncementsFlagModelImpl.VALUE_COLUMN_BITMASK);
 
 	/**
 	 * Returns the announcements flag where userId = &#63; and entryId = &#63; and value = &#63; or throws a {@link com.liferay.portlet.announcements.NoSuchFlagException} if it could not be found.

@@ -96,7 +96,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			DDMTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			DDMTemplateModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m templates where uuid = &#63;.
@@ -637,7 +638,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			DDMTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DDMTemplateModelImpl.UUID_COLUMN_BITMASK |
+			DDMTemplateModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the d d m template where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchTemplateException} if it could not be found.
@@ -899,7 +902,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			DDMTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DDMTemplateModelImpl.UUID_COLUMN_BITMASK |
+			DDMTemplateModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m templates where uuid = &#63; and companyId = &#63;.
@@ -1491,7 +1496,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			DDMTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DDMTemplateModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m templates where groupId = &#63;.
@@ -2359,7 +2365,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSPK = new FinderPath(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			DDMTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByClassPK",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DDMTemplateModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m templates where classPK = &#63;.
@@ -2869,7 +2876,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public static final FinderPath FINDER_PATH_COUNT_BY_TYPE = new FinderPath(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			DDMTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByType",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			DDMTemplateModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m templates where type = &#63;.
@@ -3413,7 +3421,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public static final FinderPath FINDER_PATH_COUNT_BY_LANGUAGE = new FinderPath(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			DDMTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLanguage",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			DDMTemplateModelImpl.LANGUAGE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m templates where language = &#63;.
@@ -3964,7 +3973,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			DDMTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			DDMTemplateModelImpl.GROUPID_COLUMN_BITMASK |
+			DDMTemplateModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m templates where groupId = &#63; and classNameId = &#63;.
@@ -4892,7 +4903,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_T = new FinderPath(DDMTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			DDMTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_T",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			DDMTemplateModelImpl.GROUPID_COLUMN_BITMASK |
+			DDMTemplateModelImpl.TEMPLATEKEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns the d d m template where groupId = &#63; and templateKey = &#63; or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchTemplateException} if it could not be found.
@@ -5156,7 +5169,10 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			FINDER_CLASS_NAME_COUNT, "countByG_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			DDMTemplateModelImpl.GROUPID_COLUMN_BITMASK |
+			DDMTemplateModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			DDMTemplateModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m templates where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -6146,7 +6162,10 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			DDMTemplateModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			DDMTemplateModelImpl.CLASSPK_COLUMN_BITMASK |
+			DDMTemplateModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m templates where classNameId = &#63; and classPK = &#63; and type = &#63;.
@@ -6779,7 +6798,11 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), String.class.getName()
-			});
+			},
+			DDMTemplateModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			DDMTemplateModelImpl.CLASSPK_COLUMN_BITMASK |
+			DDMTemplateModelImpl.TYPE_COLUMN_BITMASK |
+			DDMTemplateModelImpl.MODE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m templates where classNameId = &#63; and classPK = &#63; and type = &#63; and mode = &#63;.

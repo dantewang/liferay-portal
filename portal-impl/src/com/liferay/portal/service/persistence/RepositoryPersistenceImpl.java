@@ -97,7 +97,8 @@ public class RepositoryPersistenceImpl extends BasePersistenceImpl<Repository>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(RepositoryModelImpl.ENTITY_CACHE_ENABLED,
 			RepositoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			RepositoryModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the repositories where uuid = &#63;.
@@ -638,7 +639,9 @@ public class RepositoryPersistenceImpl extends BasePersistenceImpl<Repository>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(RepositoryModelImpl.ENTITY_CACHE_ENABLED,
 			RepositoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			RepositoryModelImpl.UUID_COLUMN_BITMASK |
+			RepositoryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the repository where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portal.NoSuchRepositoryException} if it could not be found.
@@ -900,7 +903,9 @@ public class RepositoryPersistenceImpl extends BasePersistenceImpl<Repository>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(RepositoryModelImpl.ENTITY_CACHE_ENABLED,
 			RepositoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			RepositoryModelImpl.UUID_COLUMN_BITMASK |
+			RepositoryModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the repositories where uuid = &#63; and companyId = &#63;.
@@ -1492,7 +1497,8 @@ public class RepositoryPersistenceImpl extends BasePersistenceImpl<Repository>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(RepositoryModelImpl.ENTITY_CACHE_ENABLED,
 			RepositoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			RepositoryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the repositories where groupId = &#63;.
@@ -2005,7 +2011,10 @@ public class RepositoryPersistenceImpl extends BasePersistenceImpl<Repository>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
-			});
+			},
+			RepositoryModelImpl.GROUPID_COLUMN_BITMASK |
+			RepositoryModelImpl.NAME_COLUMN_BITMASK |
+			RepositoryModelImpl.PORTLETID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the repository where groupId = &#63; and name = &#63; and portletId = &#63; or throws a {@link com.liferay.portal.NoSuchRepositoryException} if it could not be found.

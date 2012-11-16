@@ -86,7 +86,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	public static final FinderPath FINDER_PATH_COUNT_BY_NAME = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByName",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			CountryModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the country where name = &#63; or throws a {@link com.liferay.portal.NoSuchCountryException} if it could not be found.
@@ -323,7 +324,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	public static final FinderPath FINDER_PATH_COUNT_BY_A2 = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByA2",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			CountryModelImpl.A2_COLUMN_BITMASK);
 
 	/**
 	 * Returns the country where a2 = &#63; or throws a {@link com.liferay.portal.NoSuchCountryException} if it could not be found.
@@ -560,7 +562,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	public static final FinderPath FINDER_PATH_COUNT_BY_A3 = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByA3",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			CountryModelImpl.A3_COLUMN_BITMASK);
 
 	/**
 	 * Returns the country where a3 = &#63; or throws a {@link com.liferay.portal.NoSuchCountryException} if it could not be found.
@@ -801,7 +804,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	public static final FinderPath FINDER_PATH_COUNT_BY_ACTIVE = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByActive",
-			new String[] { Boolean.class.getName() });
+			new String[] { Boolean.class.getName() },
+			CountryModelImpl.ACTIVE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the countries where active = &#63;.

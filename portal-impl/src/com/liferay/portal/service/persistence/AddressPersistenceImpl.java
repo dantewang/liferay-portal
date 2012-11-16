@@ -89,7 +89,8 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(AddressModelImpl.ENTITY_CACHE_ENABLED,
 			AddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AddressModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the addresses where companyId = &#63;.
@@ -598,7 +599,8 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(AddressModelImpl.ENTITY_CACHE_ENABLED,
 			AddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AddressModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the addresses where userId = &#63;.
@@ -1102,7 +1104,9 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(AddressModelImpl.ENTITY_CACHE_ENABLED,
 			AddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			AddressModelImpl.COMPANYID_COLUMN_BITMASK |
+			AddressModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the addresses where companyId = &#63; and classNameId = &#63;.
@@ -1656,7 +1660,10 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 			FINDER_CLASS_NAME_COUNT, "countByC_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			AddressModelImpl.COMPANYID_COLUMN_BITMASK |
+			AddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			AddressModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -2249,7 +2256,11 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			AddressModelImpl.COMPANYID_COLUMN_BITMASK |
+			AddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			AddressModelImpl.CLASSPK_COLUMN_BITMASK |
+			AddressModelImpl.MAILING_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and mailing = &#63;.
@@ -2886,7 +2897,11 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			AddressModelImpl.COMPANYID_COLUMN_BITMASK |
+			AddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			AddressModelImpl.CLASSPK_COLUMN_BITMASK |
+			AddressModelImpl.PRIMARY_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.

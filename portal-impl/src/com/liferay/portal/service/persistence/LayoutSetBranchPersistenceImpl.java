@@ -93,7 +93,8 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			LayoutSetBranchModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout set branchs where groupId = &#63;.
@@ -965,7 +966,9 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(LayoutSetBranchModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutSetBranchModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_P",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			LayoutSetBranchModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutSetBranchModelImpl.PRIVATELAYOUT_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout set branchs where groupId = &#63; and privateLayout = &#63;.
@@ -1905,7 +1908,10 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName()
-			});
+			},
+			LayoutSetBranchModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutSetBranchModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			LayoutSetBranchModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the layout set branch where groupId = &#63; and privateLayout = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutSetBranchException} if it could not be found.

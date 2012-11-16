@@ -101,7 +101,8 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserGroupModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user groups where companyId = &#63;.
@@ -968,7 +969,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			UserGroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserGroupModelImpl.PARENTUSERGROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user groups where companyId = &#63; and parentUserGroupId = &#63;.
@@ -1895,7 +1898,9 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			UserGroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserGroupModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the user group where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchUserGroupException} if it could not be found.

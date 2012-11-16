@@ -89,7 +89,8 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			PhoneModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the phones where companyId = &#63;.
@@ -597,7 +598,8 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			PhoneModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the phones where userId = &#63;.
@@ -1101,7 +1103,9 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(PhoneModelImpl.ENTITY_CACHE_ENABLED,
 			PhoneModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
+			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the phones where companyId = &#63; and classNameId = &#63;.
@@ -1653,7 +1657,10 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			FINDER_CLASS_NAME_COUNT, "countByC_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
+			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			PhoneModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -2246,7 +2253,11 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			PhoneModelImpl.COMPANYID_COLUMN_BITMASK |
+			PhoneModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			PhoneModelImpl.CLASSPK_COLUMN_BITMASK |
+			PhoneModelImpl.PRIMARY_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the phones where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.

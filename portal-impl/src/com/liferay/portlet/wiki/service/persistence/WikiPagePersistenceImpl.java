@@ -111,7 +111,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			WikiPageModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where uuid = &#63;.
@@ -652,7 +653,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			WikiPageModelImpl.UUID_COLUMN_BITMASK |
+			WikiPageModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the wiki page where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.wiki.NoSuchPageException} if it could not be found.
@@ -914,7 +917,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			WikiPageModelImpl.UUID_COLUMN_BITMASK |
+			WikiPageModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where uuid = &#63; and companyId = &#63;.
@@ -1505,7 +1510,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_NODEID = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByNodeId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where nodeId = &#63;.
@@ -2011,7 +2017,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_FORMAT = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByFormat",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			WikiPageModelImpl.FORMAT_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where format = &#63;.
@@ -2556,7 +2563,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_N = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByR_N",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			WikiPageModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63;.
@@ -3110,7 +3119,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_T = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByN_T",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where nodeId = &#63; and title = &#63;.
@@ -3697,7 +3708,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_H = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByN_H",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.HEAD_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where nodeId = &#63; and head = &#63;.
@@ -4246,7 +4259,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_P = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByN_P",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.PARENTTITLE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where nodeId = &#63; and parentTitle = &#63;.
@@ -4837,7 +4852,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_R = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByN_R",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.REDIRECTTITLE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where nodeId = &#63; and redirectTitle = &#63;.
@@ -5430,7 +5447,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByN_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where nodeId = &#63; and status = &#63;.
@@ -5982,7 +6001,10 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Double.class.getName()
-			});
+			},
+			WikiPageModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 
 	/**
 	 * Returns the wiki page where resourcePrimKey = &#63; and nodeId = &#63; and version = &#63; or throws a {@link com.liferay.portlet.wiki.NoSuchPageException} if it could not be found.
@@ -6240,7 +6262,10 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			WikiPageModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.HEAD_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
@@ -6835,7 +6860,10 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			WikiPageModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
@@ -7430,7 +7458,10 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			WikiPageModelImpl.USERID_COLUMN_BITMASK |
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where userId = &#63; and nodeId = &#63; and status = &#63;.
@@ -8022,7 +8053,10 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Double.class.getName()
-			});
+			},
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 
 	/**
 	 * Returns the wiki page where nodeId = &#63; and title = &#63; and version = &#63; or throws a {@link com.liferay.portlet.wiki.NoSuchPageException} if it could not be found.
@@ -8307,7 +8341,10 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.HEAD_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where nodeId = &#63; and title = &#63; and head = &#63;.
@@ -8937,7 +8974,10 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where nodeId = &#63; and title = &#63; and status = &#63;.
@@ -9567,7 +9607,10 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName()
-			});
+			},
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.HEAD_COLUMN_BITMASK |
+			WikiPageModelImpl.PARENTTITLE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
@@ -10199,7 +10242,10 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.HEAD_COLUMN_BITMASK |
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where nodeId = &#63; and head = &#63; and status = &#63;.
@@ -10791,7 +10837,11 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName(), Integer.class.getName()
-			});
+			},
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.HEAD_COLUMN_BITMASK |
+			WikiPageModelImpl.PARENTTITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.

@@ -98,7 +98,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
 			WikiNodeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			WikiNodeModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki nodes where uuid = &#63;.
@@ -639,7 +640,9 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
 			WikiNodeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			WikiNodeModelImpl.UUID_COLUMN_BITMASK |
+			WikiNodeModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the wiki node where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.wiki.NoSuchNodeException} if it could not be found.
@@ -901,7 +904,9 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
 			WikiNodeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			WikiNodeModelImpl.UUID_COLUMN_BITMASK |
+			WikiNodeModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki nodes where uuid = &#63; and companyId = &#63;.
@@ -1492,7 +1497,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
 			WikiNodeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			WikiNodeModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki nodes where groupId = &#63;.
@@ -2356,7 +2362,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
 			WikiNodeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			WikiNodeModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki nodes where companyId = &#63;.
@@ -2863,7 +2870,9 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
 			WikiNodeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			WikiNodeModelImpl.GROUPID_COLUMN_BITMASK |
+			WikiNodeModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the wiki node where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.wiki.NoSuchNodeException} if it could not be found.
@@ -3124,7 +3133,9 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
 			WikiNodeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			WikiNodeModelImpl.GROUPID_COLUMN_BITMASK |
+			WikiNodeModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki nodes where groupId = &#63; and status = &#63;.
@@ -4048,7 +4059,9 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
 			WikiNodeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			WikiNodeModelImpl.COMPANYID_COLUMN_BITMASK |
+			WikiNodeModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki nodes where companyId = &#63; and status = &#63;.

@@ -96,7 +96,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(BlogsStatsUserModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsStatsUserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			BlogsStatsUserModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs stats users where groupId = &#63;.
@@ -608,7 +609,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(BlogsStatsUserModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsStatsUserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			BlogsStatsUserModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs stats users where userId = &#63;.
@@ -1116,7 +1118,9 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(BlogsStatsUserModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsStatsUserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			BlogsStatsUserModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsStatsUserModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the blogs stats user where groupId = &#63; and userId = &#63; or throws a {@link com.liferay.portlet.blogs.NoSuchStatsUserException} if it could not be found.
@@ -1350,7 +1354,9 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_NOTE = new FinderPath(BlogsStatsUserModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsStatsUserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_NotE",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			BlogsStatsUserModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsStatsUserModelImpl.ENTRYCOUNT_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs stats users where groupId = &#63; and entryCount &ne; &#63;.
@@ -1904,7 +1910,9 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_NOTE = new FinderPath(BlogsStatsUserModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsStatsUserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_NotE",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			BlogsStatsUserModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsStatsUserModelImpl.ENTRYCOUNT_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs stats users where companyId = &#63; and entryCount &ne; &#63;.
@@ -2458,7 +2466,9 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_L = new FinderPath(BlogsStatsUserModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsStatsUserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU_L",
-			new String[] { Long.class.getName(), Date.class.getName() });
+			new String[] { Long.class.getName(), Date.class.getName() },
+			BlogsStatsUserModelImpl.USERID_COLUMN_BITMASK |
+			BlogsStatsUserModelImpl.LASTPOSTDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs stats users where userId = &#63; and lastPostDate = &#63;.

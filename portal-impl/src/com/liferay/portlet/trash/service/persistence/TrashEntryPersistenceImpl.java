@@ -99,7 +99,8 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			TrashEntryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the trash entries where groupId = &#63;.
@@ -608,7 +609,8 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			TrashEntryModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the trash entries where companyId = &#63;.
@@ -1121,7 +1123,9 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_LTCD = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_LtCD",
-			new String[] { Long.class.getName(), Date.class.getName() });
+			new String[] { Long.class.getName(), Date.class.getName() },
+			TrashEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			TrashEntryModelImpl.CREATEDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the trash entries where groupId = &#63; and createDate &lt; &#63;.
@@ -1694,7 +1698,9 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			TrashEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			TrashEntryModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns the trash entry where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.trash.NoSuchEntryException} if it could not be found.

@@ -90,7 +90,8 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(UserIdMapperModelImpl.ENTITY_CACHE_ENABLED,
 			UserIdMapperModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserIdMapperModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user ID mappers where userId = &#63;.
@@ -597,7 +598,9 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_T = new FinderPath(UserIdMapperModelImpl.ENTITY_CACHE_ENABLED,
 			UserIdMapperModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU_T",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			UserIdMapperModelImpl.USERID_COLUMN_BITMASK |
+			UserIdMapperModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns the user ID mapper where userId = &#63; and type = &#63; or throws a {@link com.liferay.portal.NoSuchUserIdMapperException} if it could not be found.
@@ -855,7 +858,9 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_E = new FinderPath(UserIdMapperModelImpl.ENTITY_CACHE_ENABLED,
 			UserIdMapperModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByT_E",
-			new String[] { String.class.getName(), String.class.getName() });
+			new String[] { String.class.getName(), String.class.getName() },
+			UserIdMapperModelImpl.TYPE_COLUMN_BITMASK |
+			UserIdMapperModelImpl.EXTERNALUSERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the user ID mapper where type = &#63; and externalUserId = &#63; or throws a {@link com.liferay.portal.NoSuchUserIdMapperException} if it could not be found.

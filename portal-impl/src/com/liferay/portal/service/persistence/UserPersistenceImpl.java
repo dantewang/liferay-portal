@@ -114,7 +114,8 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			UserModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the users where uuid = &#63;.
@@ -654,7 +655,9 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			UserModelImpl.UUID_COLUMN_BITMASK |
+			UserModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the users where uuid = &#63; and companyId = &#63;.
@@ -1241,7 +1244,8 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the users where companyId = &#63;.
@@ -1743,7 +1747,8 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_CONTACTID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByContactId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserModelImpl.CONTACTID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the user where contactId = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
@@ -1957,7 +1962,8 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_EMAILADDRESS = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByEmailAddress",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			UserModelImpl.EMAILADDRESS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the users where emailAddress = &#63;.
@@ -2511,7 +2517,8 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_PORTRAITID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByPortraitId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserModelImpl.PORTRAITID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the users where portraitId = &#63;.
@@ -2841,7 +2848,9 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_U = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the user where companyId = &#63; and userId = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
@@ -3076,7 +3085,9 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_CD = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_CD",
-			new String[] { Long.class.getName(), Date.class.getName() });
+			new String[] { Long.class.getName(), Date.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.CREATEDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the users where companyId = &#63; and createDate = &#63;.
@@ -3648,7 +3659,9 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_MD = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_MD",
-			new String[] { Long.class.getName(), Date.class.getName() });
+			new String[] { Long.class.getName(), Date.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the users where companyId = &#63; and modifiedDate = &#63;.
@@ -4220,7 +4233,9 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_DU = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_DU",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.DEFAULTUSER_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the users where companyId = &#63; and defaultUser = &#63;.
@@ -4585,7 +4600,9 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_SN = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_SN",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.SCREENNAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the user where companyId = &#63; and screenName = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
@@ -4844,7 +4861,9 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_EA = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_EA",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.EMAILADDRESS_COLUMN_BITMASK);
 
 	/**
 	 * Returns the user where companyId = &#63; and emailAddress = &#63; or throws a {@link com.liferay.portal.NoSuchUserException} if it could not be found.
@@ -5106,7 +5125,9 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_FID = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_FID",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.FACEBOOKID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the users where companyId = &#63; and facebookId = &#63;.
@@ -5474,7 +5495,9 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_O = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_O",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.OPENID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the users where companyId = &#63; and openId = &#63;.
@@ -5866,7 +5889,9 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(UserModelImpl.ENTITY_CACHE_ENABLED,
 			UserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the users where companyId = &#63; and status = &#63;.
@@ -6416,7 +6441,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			FINDER_CLASS_NAME_COUNT, "countByC_CD_MD",
 			new String[] {
 				Long.class.getName(), Date.class.getName(), Date.class.getName()
-			});
+			},
+			UserModelImpl.COMPANYID_COLUMN_BITMASK |
+			UserModelImpl.CREATEDATE_COLUMN_BITMASK |
+			UserModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the users where companyId = &#63; and createDate = &#63; and modifiedDate = &#63;.

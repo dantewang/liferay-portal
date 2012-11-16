@@ -94,7 +94,8 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(WikiPageResourceModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageResourceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			WikiPageResourceModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the wiki page resources where uuid = &#63;.
@@ -640,7 +641,9 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_T = new FinderPath(WikiPageResourceModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageResourceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByN_T",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			WikiPageResourceModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageResourceModelImpl.TITLE_COLUMN_BITMASK);
 
 	/**
 	 * Returns the wiki page resource where nodeId = &#63; and title = &#63; or throws a {@link com.liferay.portlet.wiki.NoSuchPageResourceException} if it could not be found.

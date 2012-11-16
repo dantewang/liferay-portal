@@ -100,7 +100,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalTemplateModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal templates where uuid = &#63;.
@@ -647,7 +648,9 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalTemplateModelImpl.UUID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal template where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
@@ -909,7 +912,9 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalTemplateModelImpl.UUID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal templates where uuid = &#63; and companyId = &#63;.
@@ -1501,7 +1506,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal templates where groupId = &#63;.
@@ -2372,7 +2378,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public static final FinderPath FINDER_PATH_COUNT_BY_TEMPLATEID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByTemplateId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal templates where templateId = &#63;.
@@ -2925,7 +2932,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByStructureId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalTemplateModelImpl.STRUCTUREID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal templates where structureId = &#63;.
@@ -3480,7 +3488,8 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public static final FinderPath FINDER_PATH_COUNT_BY_SMALLIMAGEID = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countBySmallImageId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalTemplateModelImpl.SMALLIMAGEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the journal templates where smallImageId = &#63;.
@@ -3820,7 +3829,9 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_T = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_T",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.TEMPLATEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal template where groupId = &#63; and templateId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchTemplateException} if it could not be found.
@@ -4083,7 +4094,9 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(JournalTemplateModelImpl.ENTITY_CACHE_ENABLED,
 			JournalTemplateModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_S",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalTemplateModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalTemplateModelImpl.STRUCTUREID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal templates where groupId = &#63; and structureId = &#63;.

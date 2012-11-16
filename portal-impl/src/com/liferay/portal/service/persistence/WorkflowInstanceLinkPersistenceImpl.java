@@ -95,7 +95,11 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName()
-			});
+			},
+			WorkflowInstanceLinkModelImpl.GROUPID_COLUMN_BITMASK |
+			WorkflowInstanceLinkModelImpl.COMPANYID_COLUMN_BITMASK |
+			WorkflowInstanceLinkModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			WorkflowInstanceLinkModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63;.

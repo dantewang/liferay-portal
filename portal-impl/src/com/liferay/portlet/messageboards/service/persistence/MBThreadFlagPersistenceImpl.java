@@ -91,7 +91,8 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadFlagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBThreadFlagModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards thread flags where userId = &#63;.
@@ -601,7 +602,8 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	public static final FinderPath FINDER_PATH_COUNT_BY_THREADID = new FinderPath(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadFlagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByThreadId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBThreadFlagModelImpl.THREADID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards thread flags where threadId = &#63;.
@@ -1114,7 +1116,9 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_T = new FinderPath(MBThreadFlagModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadFlagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU_T",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBThreadFlagModelImpl.USERID_COLUMN_BITMASK |
+			MBThreadFlagModelImpl.THREADID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the message boards thread flags where userId = &#63; and threadId = &#63;.

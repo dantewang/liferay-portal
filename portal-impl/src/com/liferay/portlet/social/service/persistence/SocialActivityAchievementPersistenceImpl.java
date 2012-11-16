@@ -96,7 +96,8 @@ public class SocialActivityAchievementPersistenceImpl
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity achievements where groupId = &#63;.
@@ -611,7 +612,9 @@ public class SocialActivityAchievementPersistenceImpl
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_COUNT, "countByG_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity achievements where groupId = &#63; and userId = &#63;.
@@ -1167,7 +1170,9 @@ public class SocialActivityAchievementPersistenceImpl
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_COUNT, "countByG_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity achievements where groupId = &#63; and name = &#63;.
@@ -1762,7 +1767,9 @@ public class SocialActivityAchievementPersistenceImpl
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_COUNT, "countByG_F",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.FIRSTINGROUP_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity achievements where groupId = &#63; and firstInGroup = &#63;.
@@ -2328,7 +2335,10 @@ public class SocialActivityAchievementPersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.USERID_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the social activity achievement where groupId = &#63; and userId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivityAchievementException} if it could not be found.
@@ -2616,7 +2626,10 @@ public class SocialActivityAchievementPersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.USERID_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.FIRSTINGROUP_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity achievements where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.

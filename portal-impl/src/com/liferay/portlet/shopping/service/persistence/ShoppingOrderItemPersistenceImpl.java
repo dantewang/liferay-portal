@@ -93,7 +93,8 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 	public static final FinderPath FINDER_PATH_COUNT_BY_ORDERID = new FinderPath(ShoppingOrderItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByOrderId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ShoppingOrderItemModelImpl.ORDERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the shopping order items where orderId = &#63;.

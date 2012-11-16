@@ -94,7 +94,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			SocialRequestModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social requests where uuid = &#63;.
@@ -638,7 +639,9 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			SocialRequestModelImpl.UUID_COLUMN_BITMASK |
+			SocialRequestModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the social request where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.social.NoSuchRequestException} if it could not be found.
@@ -900,7 +903,9 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			SocialRequestModelImpl.UUID_COLUMN_BITMASK |
+			SocialRequestModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social requests where uuid = &#63; and companyId = &#63;.
@@ -1492,7 +1497,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialRequestModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social requests where companyId = &#63;.
@@ -2005,7 +2011,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialRequestModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social requests where userId = &#63;.
@@ -2517,7 +2524,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public static final FinderPath FINDER_PATH_COUNT_BY_RECEIVERUSERID = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByReceiverUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialRequestModelImpl.RECEIVERUSERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social requests where receiverUserId = &#63;.
@@ -3037,7 +3045,9 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_S = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			SocialRequestModelImpl.USERID_COLUMN_BITMASK |
+			SocialRequestModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social requests where userId = &#63; and status = &#63;.
@@ -3588,7 +3598,9 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_S = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByR_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			SocialRequestModelImpl.RECEIVERUSERID_COLUMN_BITMASK |
+			SocialRequestModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social requests where receiverUserId = &#63; and status = &#63;.
@@ -4149,7 +4161,12 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(), Long.class.getName()
-			});
+			},
+			SocialRequestModelImpl.USERID_COLUMN_BITMASK |
+			SocialRequestModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialRequestModelImpl.CLASSPK_COLUMN_BITMASK |
+			SocialRequestModelImpl.TYPE_COLUMN_BITMASK |
+			SocialRequestModelImpl.RECEIVERUSERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the social request where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; or throws a {@link com.liferay.portlet.social.NoSuchRequestException} if it could not be found.
@@ -4455,7 +4472,12 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(), Integer.class.getName()
-			});
+			},
+			SocialRequestModelImpl.USERID_COLUMN_BITMASK |
+			SocialRequestModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialRequestModelImpl.CLASSPK_COLUMN_BITMASK |
+			SocialRequestModelImpl.TYPE_COLUMN_BITMASK |
+			SocialRequestModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social requests where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
@@ -5134,7 +5156,12 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			SocialRequestModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialRequestModelImpl.CLASSPK_COLUMN_BITMASK |
+			SocialRequestModelImpl.TYPE_COLUMN_BITMASK |
+			SocialRequestModelImpl.RECEIVERUSERID_COLUMN_BITMASK |
+			SocialRequestModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social requests where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.

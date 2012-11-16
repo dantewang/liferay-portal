@@ -100,7 +100,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			LayoutModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layouts where uuid = &#63;.
@@ -638,7 +639,9 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			LayoutModelImpl.UUID_COLUMN_BITMASK |
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the layout where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
@@ -900,7 +903,9 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			LayoutModelImpl.UUID_COLUMN_BITMASK |
+			LayoutModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layouts where uuid = &#63; and companyId = &#63;.
@@ -1488,7 +1493,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layouts where groupId = &#63;.
@@ -2349,7 +2355,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			LayoutModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layouts where companyId = &#63;.
@@ -2857,7 +2864,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public static final FinderPath FINDER_PATH_COUNT_BY_ICONIMAGEID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByIconImageId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			LayoutModelImpl.ICONIMAGEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the layouts where iconImageId = &#63;.
@@ -3191,7 +3199,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public static final FinderPath FINDER_PATH_COUNT_BY_LAYOUTPROTOTYPEUUID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLayoutPrototypeUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			LayoutModelImpl.LAYOUTPROTOTYPEUUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layouts where layoutPrototypeUuid = &#63;.
@@ -3754,7 +3763,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countBySourcePrototypeLayoutUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			LayoutModelImpl.SOURCEPROTOTYPELAYOUTUUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layouts where sourcePrototypeLayoutUuid = &#63;.
@@ -4326,7 +4336,9 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_P",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layouts where groupId = &#63; and privateLayout = &#63;.
@@ -5261,7 +5273,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName()
-			});
+			},
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			LayoutModelImpl.LAYOUTID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the layout where groupId = &#63; and privateLayout = &#63; and layoutId = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
@@ -5519,7 +5534,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName()
-			});
+			},
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layouts where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
@@ -6514,7 +6532,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName()
-			});
+			},
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			LayoutModelImpl.FRIENDLYURL_COLUMN_BITMASK);
 
 	/**
 	 * Returns the layout where groupId = &#63; and privateLayout = &#63; and friendlyURL = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
@@ -6800,7 +6821,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName()
-			});
+			},
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			LayoutModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layouts where groupId = &#63; and privateLayout = &#63; and type = &#63;.
@@ -7862,7 +7886,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName()
-			});
+			},
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			LayoutModelImpl.SOURCEPROTOTYPELAYOUTUUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the layouts where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.

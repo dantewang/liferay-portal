@@ -91,7 +91,8 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 	public static final FinderPath FINDER_PATH_COUNT_BY_PASSWORDPOLICYID = new FinderPath(PasswordPolicyRelModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyRelModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByPasswordPolicyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			PasswordPolicyRelModelImpl.PASSWORDPOLICYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the password policy rels where passwordPolicyId = &#63;.
@@ -617,7 +618,9 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(PasswordPolicyRelModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyRelModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			PasswordPolicyRelModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			PasswordPolicyRelModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the password policy rels where classNameId = &#63; and classPK = &#63;.
@@ -990,7 +993,10 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 			FINDER_CLASS_NAME_COUNT, "countByP_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			PasswordPolicyRelModelImpl.PASSWORDPOLICYID_COLUMN_BITMASK |
+			PasswordPolicyRelModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			PasswordPolicyRelModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the password policy rels where passwordPolicyId = &#63; and classNameId = &#63; and classPK = &#63;.

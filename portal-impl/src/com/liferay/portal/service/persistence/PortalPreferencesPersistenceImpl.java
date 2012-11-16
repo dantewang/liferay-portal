@@ -90,7 +90,9 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 	public static final FinderPath FINDER_PATH_COUNT_BY_O_O = new FinderPath(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortalPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByO_O",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			PortalPreferencesModelImpl.OWNERID_COLUMN_BITMASK |
+			PortalPreferencesModelImpl.OWNERTYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the portal preferenceses where ownerId = &#63; and ownerType = &#63;.

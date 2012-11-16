@@ -101,7 +101,8 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AssetTagModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset tags where groupId = &#63;.
@@ -965,7 +966,9 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(AssetTagModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			AssetTagModelImpl.GROUPID_COLUMN_BITMASK |
+			AssetTagModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the asset tags where groupId = &#63; and name = &#63;.

@@ -99,7 +99,8 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
 			TeamModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			TeamModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the teams where groupId = &#63;.
@@ -956,7 +957,9 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
 			TeamModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			TeamModelImpl.GROUPID_COLUMN_BITMASK |
+			TeamModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the team where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchTeamException} if it could not be found.

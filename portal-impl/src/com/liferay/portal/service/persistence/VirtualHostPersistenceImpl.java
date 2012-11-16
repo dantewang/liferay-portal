@@ -86,7 +86,8 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 	public static final FinderPath FINDER_PATH_COUNT_BY_HOSTNAME = new FinderPath(VirtualHostModelImpl.ENTITY_CACHE_ENABLED,
 			VirtualHostModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByHostname",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			VirtualHostModelImpl.HOSTNAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the virtual host where hostname = &#63; or throws a {@link com.liferay.portal.NoSuchVirtualHostException} if it could not be found.
@@ -325,7 +326,9 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_L = new FinderPath(VirtualHostModelImpl.ENTITY_CACHE_ENABLED,
 			VirtualHostModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_L",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			VirtualHostModelImpl.COMPANYID_COLUMN_BITMASK |
+			VirtualHostModelImpl.LAYOUTSETID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the virtual host where companyId = &#63; and layoutSetId = &#63; or throws a {@link com.liferay.portal.NoSuchVirtualHostException} if it could not be found.

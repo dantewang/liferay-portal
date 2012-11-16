@@ -93,7 +93,8 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ShoppingCouponModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the shopping coupons where groupId = &#63;.
@@ -601,7 +602,8 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 	public static final FinderPath FINDER_PATH_COUNT_BY_CODE = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCode",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			ShoppingCouponModelImpl.CODE_COLUMN_BITMASK);
 
 	/**
 	 * Returns the shopping coupon where code = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchCouponException} if it could not be found.

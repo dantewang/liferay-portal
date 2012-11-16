@@ -98,7 +98,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ShoppingOrderModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the shopping orders where groupId = &#63;.
@@ -964,7 +965,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	public static final FinderPath FINDER_PATH_COUNT_BY_NUMBER = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByNumber",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			ShoppingOrderModelImpl.NUMBER_COLUMN_BITMASK);
 
 	/**
 	 * Returns the shopping order where number = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
@@ -1205,7 +1207,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	public static final FinderPath FINDER_PATH_COUNT_BY_PPTXNID = new FinderPath(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByPPTxnId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			ShoppingOrderModelImpl.PPTXNID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the shopping orders where ppTxnId = &#63;.
@@ -1572,7 +1575,10 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			ShoppingOrderModelImpl.GROUPID_COLUMN_BITMASK |
+			ShoppingOrderModelImpl.USERID_COLUMN_BITMASK |
+			ShoppingOrderModelImpl.PPPAYMENTSTATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.

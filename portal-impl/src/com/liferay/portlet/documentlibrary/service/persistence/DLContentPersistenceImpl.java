@@ -92,7 +92,9 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_R = new FinderPath(DLContentModelImpl.ENTITY_CACHE_ENABLED,
 			DLContentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_R",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			DLContentModelImpl.COMPANYID_COLUMN_BITMASK |
+			DLContentModelImpl.REPOSITORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library contents where companyId = &#63; and repositoryId = &#63;.
@@ -650,7 +652,10 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			DLContentModelImpl.COMPANYID_COLUMN_BITMASK |
+			DLContentModelImpl.REPOSITORYID_COLUMN_BITMASK |
+			DLContentModelImpl.PATH_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library contents where companyId = &#63; and repositoryId = &#63; and path = &#63;.
@@ -1282,7 +1287,10 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			DLContentModelImpl.COMPANYID_COLUMN_BITMASK |
+			DLContentModelImpl.REPOSITORYID_COLUMN_BITMASK |
+			DLContentModelImpl.PATH_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library contents where companyId = &#63; and repositoryId = &#63; and path LIKE &#63;.
@@ -1916,7 +1924,11 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), String.class.getName()
-			});
+			},
+			DLContentModelImpl.COMPANYID_COLUMN_BITMASK |
+			DLContentModelImpl.REPOSITORYID_COLUMN_BITMASK |
+			DLContentModelImpl.PATH_COLUMN_BITMASK |
+			DLContentModelImpl.VERSION_COLUMN_BITMASK);
 
 	/**
 	 * Returns the document library content where companyId = &#63; and repositoryId = &#63; and path = &#63; and version = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchContentException} if it could not be found.

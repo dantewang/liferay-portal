@@ -89,7 +89,8 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(OrgGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			OrgGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			OrgGroupRoleModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the org group roles where groupId = &#63;.
@@ -601,7 +602,8 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 	public static final FinderPath FINDER_PATH_COUNT_BY_ROLEID = new FinderPath(OrgGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			OrgGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRoleId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			OrgGroupRoleModelImpl.ROLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the org group roles where roleId = &#63;.

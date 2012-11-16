@@ -102,7 +102,8 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the organizations where companyId = &#63;.
@@ -974,7 +975,8 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	public static final FinderPath FINDER_PATH_COUNT_BY_LOCATIONS = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLocations",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the organizations where companyId = &#63;.
@@ -1846,7 +1848,9 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK |
+			OrganizationModelImpl.PARENTORGANIZATIONID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the organizations where companyId = &#63; and parentOrganizationId = &#63;.
@@ -2783,7 +2787,9 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(OrganizationModelImpl.ENTITY_CACHE_ENABLED,
 			OrganizationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			OrganizationModelImpl.COMPANYID_COLUMN_BITMASK |
+			OrganizationModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the organization where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchOrganizationException} if it could not be found.

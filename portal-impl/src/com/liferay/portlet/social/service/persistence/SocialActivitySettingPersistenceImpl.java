@@ -95,7 +95,8 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(SocialActivitySettingModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivitySettingModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialActivitySettingModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity settings where groupId = &#63;.
@@ -609,7 +610,9 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(SocialActivitySettingModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivitySettingModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			SocialActivitySettingModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivitySettingModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity settings where groupId = &#63; and classNameId = &#63;.
@@ -1167,7 +1170,9 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_A = new FinderPath(SocialActivitySettingModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivitySettingModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_A",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			SocialActivitySettingModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivitySettingModelImpl.ACTIVITYTYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity settings where groupId = &#63; and activityType = &#63;.
@@ -1729,7 +1734,10 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			SocialActivitySettingModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivitySettingModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivitySettingModelImpl.ACTIVITYTYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity settings where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
@@ -2330,7 +2338,11 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(), String.class.getName()
-			});
+			},
+			SocialActivitySettingModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivitySettingModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivitySettingModelImpl.ACTIVITYTYPE_COLUMN_BITMASK |
+			SocialActivitySettingModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the social activity settings where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.

@@ -95,7 +95,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalArticleImageModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalArticleImageModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal article images where groupId = &#63;.
@@ -608,7 +609,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	public static final FinderPath FINDER_PATH_COUNT_BY_TEMPIMAGE = new FinderPath(JournalArticleImageModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByTempImage",
-			new String[] { Boolean.class.getName() });
+			new String[] { Boolean.class.getName() },
+			JournalArticleImageModelImpl.TEMPIMAGE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal article images where tempImage = &#63;.
@@ -1128,7 +1130,10 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Double.class.getName()
-			});
+			},
+			JournalArticleImageModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleImageModelImpl.ARTICLEID_COLUMN_BITMASK |
+			JournalArticleImageModelImpl.VERSION_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal article images where groupId = &#63; and articleId = &#63; and version = &#63;.
@@ -1771,7 +1776,13 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 				Long.class.getName(), String.class.getName(),
 				Double.class.getName(), String.class.getName(),
 				String.class.getName(), String.class.getName()
-			});
+			},
+			JournalArticleImageModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleImageModelImpl.ARTICLEID_COLUMN_BITMASK |
+			JournalArticleImageModelImpl.VERSION_COLUMN_BITMASK |
+			JournalArticleImageModelImpl.ELINSTANCEID_COLUMN_BITMASK |
+			JournalArticleImageModelImpl.ELNAME_COLUMN_BITMASK |
+			JournalArticleImageModelImpl.LANGUAGEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal article image where groupId = &#63; and articleId = &#63; and version = &#63; and elInstanceId = &#63; and elName = &#63; and languageId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchArticleImageException} if it could not be found.

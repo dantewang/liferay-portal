@@ -94,7 +94,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DLFileVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			DLFileVersionModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file versions where uuid = &#63;.
@@ -638,7 +639,9 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(DLFileVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DLFileVersionModelImpl.UUID_COLUMN_BITMASK |
+			DLFileVersionModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the document library file version where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileVersionException} if it could not be found.
@@ -900,7 +903,9 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DLFileVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DLFileVersionModelImpl.UUID_COLUMN_BITMASK |
+			DLFileVersionModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file versions where uuid = &#63; and companyId = &#63;.
@@ -1493,7 +1498,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	public static final FinderPath FINDER_PATH_COUNT_BY_FILEENTRYID = new FinderPath(DLFileVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByFileEntryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DLFileVersionModelImpl.FILEENTRYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file versions where fileEntryId = &#63;.
@@ -2003,7 +2009,9 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	public static final FinderPath FINDER_PATH_COUNT_BY_F_V = new FinderPath(DLFileVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByF_V",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			DLFileVersionModelImpl.FILEENTRYID_COLUMN_BITMASK |
+			DLFileVersionModelImpl.VERSION_COLUMN_BITMASK);
 
 	/**
 	 * Returns the document library file version where fileEntryId = &#63; and version = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileVersionException} if it could not be found.
@@ -2265,7 +2273,9 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	public static final FinderPath FINDER_PATH_COUNT_BY_F_S = new FinderPath(DLFileVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByF_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			DLFileVersionModelImpl.FILEENTRYID_COLUMN_BITMASK |
+			DLFileVersionModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file versions where fileEntryId = &#63; and status = &#63;.
@@ -2823,7 +2833,10 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			DLFileVersionModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFileVersionModelImpl.FOLDERID_COLUMN_BITMASK |
+			DLFileVersionModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file versions where groupId = &#63; and folderId = &#63; and status = &#63;.
@@ -3418,7 +3431,11 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), String.class.getName()
-			});
+			},
+			DLFileVersionModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFileVersionModelImpl.FOLDERID_COLUMN_BITMASK |
+			DLFileVersionModelImpl.TITLE_COLUMN_BITMASK |
+			DLFileVersionModelImpl.VERSION_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file versions where groupId = &#63; and folderId = &#63; and title = &#63; and version = &#63;.

@@ -86,7 +86,8 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	public static final FinderPath FINDER_PATH_COUNT_BY_WEBID = new FinderPath(CompanyModelImpl.ENTITY_CACHE_ENABLED,
 			CompanyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByWebId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			CompanyModelImpl.WEBID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the company where webId = &#63; or throws a {@link com.liferay.portal.NoSuchCompanyException} if it could not be found.
@@ -327,7 +328,8 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	public static final FinderPath FINDER_PATH_COUNT_BY_MX = new FinderPath(CompanyModelImpl.ENTITY_CACHE_ENABLED,
 			CompanyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByMx",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			CompanyModelImpl.MX_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the companies where mx = &#63;.
@@ -681,7 +683,8 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	public static final FinderPath FINDER_PATH_COUNT_BY_LOGOID = new FinderPath(CompanyModelImpl.ENTITY_CACHE_ENABLED,
 			CompanyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLogoId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			CompanyModelImpl.LOGOID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the companies where logoId = &#63;.
@@ -1012,7 +1015,8 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	public static final FinderPath FINDER_PATH_COUNT_BY_SYSTEM = new FinderPath(CompanyModelImpl.ENTITY_CACHE_ENABLED,
 			CompanyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countBySystem",
-			new String[] { Boolean.class.getName() });
+			new String[] { Boolean.class.getName() },
+			CompanyModelImpl.SYSTEM_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the companies where system = &#63;.

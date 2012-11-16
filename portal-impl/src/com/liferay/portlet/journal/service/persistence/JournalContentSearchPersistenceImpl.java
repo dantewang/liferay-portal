@@ -97,7 +97,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	public static final FinderPath FINDER_PATH_COUNT_BY_PORTLETID = new FinderPath(JournalContentSearchModelImpl.ENTITY_CACHE_ENABLED,
 			JournalContentSearchModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByPortletId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalContentSearchModelImpl.PORTLETID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal content searchs where portletId = &#63;.
@@ -652,7 +653,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	public static final FinderPath FINDER_PATH_COUNT_BY_ARTICLEID = new FinderPath(JournalContentSearchModelImpl.ENTITY_CACHE_ENABLED,
 			JournalContentSearchModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByArticleId",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalContentSearchModelImpl.ARTICLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal content searchs where articleId = &#63;.
@@ -1207,7 +1209,9 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(JournalContentSearchModelImpl.ENTITY_CACHE_ENABLED,
 			JournalContentSearchModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_P",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			JournalContentSearchModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.PRIVATELAYOUT_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal content searchs where groupId = &#63; and privateLayout = &#63;.
@@ -1767,7 +1771,9 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_A = new FinderPath(JournalContentSearchModelImpl.ENTITY_CACHE_ENABLED,
 			JournalContentSearchModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_A",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalContentSearchModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.ARTICLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal content searchs where groupId = &#63; and articleId = &#63;.
@@ -2366,7 +2372,10 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName()
-			});
+			},
+			JournalContentSearchModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.LAYOUTID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal content searchs where groupId = &#63; and privateLayout = &#63; and layoutId = &#63;.
@@ -2969,7 +2978,10 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName()
-			});
+			},
+			JournalContentSearchModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.ARTICLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal content searchs where groupId = &#63; and privateLayout = &#63; and articleId = &#63;.
@@ -3611,7 +3623,11 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName(), String.class.getName()
-			});
+			},
+			JournalContentSearchModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.LAYOUTID_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.PORTLETID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal content searchs where groupId = &#63; and privateLayout = &#63; and layoutId = &#63; and portletId = &#63;.
@@ -4305,7 +4321,12 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
-			});
+			},
+			JournalContentSearchModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.LAYOUTID_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.PORTLETID_COLUMN_BITMASK |
+			JournalContentSearchModelImpl.ARTICLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal content search where groupId = &#63; and privateLayout = &#63; and layoutId = &#63; and portletId = &#63; and articleId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchContentSearchException} if it could not be found.

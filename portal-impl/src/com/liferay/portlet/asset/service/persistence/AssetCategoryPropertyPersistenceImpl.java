@@ -94,7 +94,8 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(AssetCategoryPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AssetCategoryPropertyModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset category properties where companyId = &#63;.
@@ -610,7 +611,8 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 	public static final FinderPath FINDER_PATH_COUNT_BY_CATEGORYID = new FinderPath(AssetCategoryPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCategoryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AssetCategoryPropertyModelImpl.CATEGORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset category properties where categoryId = &#63;.
@@ -1126,7 +1128,9 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_K = new FinderPath(AssetCategoryPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_K",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			AssetCategoryPropertyModelImpl.COMPANYID_COLUMN_BITMASK |
+			AssetCategoryPropertyModelImpl.KEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset category properties where companyId = &#63; and key = &#63;.
@@ -1716,7 +1720,9 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 	public static final FinderPath FINDER_PATH_COUNT_BY_CA_K = new FinderPath(AssetCategoryPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCA_K",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			AssetCategoryPropertyModelImpl.CATEGORYID_COLUMN_BITMASK |
+			AssetCategoryPropertyModelImpl.KEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns the asset category property where categoryId = &#63; and key = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchCategoryPropertyException} if it could not be found.

@@ -91,7 +91,8 @@ public class TrashVersionPersistenceImpl extends BasePersistenceImpl<TrashVersio
 	public static final FinderPath FINDER_PATH_COUNT_BY_ENTRYID = new FinderPath(TrashVersionModelImpl.ENTITY_CACHE_ENABLED,
 			TrashVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByEntryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			TrashVersionModelImpl.ENTRYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the trash versions where entryId = &#63;.
@@ -602,7 +603,9 @@ public class TrashVersionPersistenceImpl extends BasePersistenceImpl<TrashVersio
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(TrashVersionModelImpl.ENTITY_CACHE_ENABLED,
 			TrashVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			TrashVersionModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			TrashVersionModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the trash versions where classNameId = &#63; and classPK = &#63;.

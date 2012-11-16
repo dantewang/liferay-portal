@@ -93,7 +93,8 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	public static final FinderPath FINDER_PATH_COUNT_BY_SCOPE = new FinderPath(ResourcePermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourcePermissionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByScope",
-			new String[] { Integer.class.getName() });
+			new String[] { Integer.class.getName() },
+			ResourcePermissionModelImpl.SCOPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource permissions where scope = &#63;.
@@ -838,7 +839,8 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	public static final FinderPath FINDER_PATH_COUNT_BY_ROLEID = new FinderPath(ResourcePermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourcePermissionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRoleId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ResourcePermissionModelImpl.ROLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource permissions where roleId = &#63;.
@@ -1351,7 +1353,9 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(ResourcePermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourcePermissionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_P",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			ResourcePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.PRIMKEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource permissions where companyId = &#63; and primKey LIKE &#63;.
@@ -1950,7 +1954,10 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			ResourcePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.NAME_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.SCOPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63;.
@@ -2584,7 +2591,10 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Long.class.getName()
-			});
+			},
+			ResourcePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.PRIMKEY_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.ROLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource permissions where companyId = &#63; and primKey = &#63; and roleId = &#63;.
@@ -3219,7 +3229,11 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName(), String.class.getName()
-			});
+			},
+			ResourcePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.NAME_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.SCOPE_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.PRIMKEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63;.
@@ -3930,7 +3944,11 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName(), Long.class.getName()
-			});
+			},
+			ResourcePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.NAME_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.PRIMKEY_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.OWNERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and ownerId = &#63;.
@@ -4644,7 +4662,12 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName(), String.class.getName(),
 				Long.class.getName()
-			});
+			},
+			ResourcePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.NAME_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.SCOPE_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.PRIMKEY_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.ROLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63;.
@@ -5813,7 +5836,12 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				Long.class.getName(), String.class.getName(),
 				String.class.getName(), Long.class.getName(),
 				Long.class.getName()
-			});
+			},
+			ResourcePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.NAME_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.PRIMKEY_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.ROLEID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.ACTIONIDS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource permissions where companyId = &#63; and name = &#63; and primKey = &#63; and roleId = &#63; and actionIds = &#63;.
@@ -6577,7 +6605,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName(), String.class.getName(),
 				Long.class.getName(), Long.class.getName()
-			});
+			},
+			ResourcePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.NAME_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.SCOPE_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.PRIMKEY_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.ROLEID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.ACTIONIDS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; and actionIds = &#63;.
@@ -7818,7 +7852,14 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName(), String.class.getName(),
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			ResourcePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.NAME_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.SCOPE_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.PRIMKEY_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.ROLEID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.OWNERID_COLUMN_BITMASK |
+			ResourcePermissionModelImpl.ACTIONIDS_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the resource permissions where companyId = &#63; and name = &#63; and scope = &#63; and primKey = &#63; and roleId = &#63; and ownerId = &#63; and actionIds = &#63;.

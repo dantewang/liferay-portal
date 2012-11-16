@@ -90,7 +90,8 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	public static final FinderPath FINDER_PATH_COUNT_BY_NAME = new FinderPath(ShardModelImpl.ENTITY_CACHE_ENABLED,
 			ShardModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByName",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			ShardModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the shards where name = &#63;.
@@ -446,7 +447,9 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(ShardModelImpl.ENTITY_CACHE_ENABLED,
 			ShardModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			ShardModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			ShardModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the shards where classNameId = &#63; and classPK = &#63;.

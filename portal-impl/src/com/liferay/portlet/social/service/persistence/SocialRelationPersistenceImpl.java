@@ -94,7 +94,8 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRelationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			SocialRelationModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social relations where uuid = &#63;.
@@ -642,7 +643,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRelationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			SocialRelationModelImpl.UUID_COLUMN_BITMASK |
+			SocialRelationModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social relations where uuid = &#63; and companyId = &#63;.
@@ -1235,7 +1238,8 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRelationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialRelationModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social relations where companyId = &#63;.
@@ -1748,7 +1752,8 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID1 = new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRelationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId1",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialRelationModelImpl.USERID1_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social relations where userId1 = &#63;.
@@ -2260,7 +2265,8 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID2 = new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRelationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId2",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialRelationModelImpl.USERID2_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social relations where userId2 = &#63;.
@@ -2772,7 +2778,8 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public static final FinderPath FINDER_PATH_COUNT_BY_TYPE = new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRelationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByType",
-			new String[] { Integer.class.getName() });
+			new String[] { Integer.class.getName() },
+			SocialRelationModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social relations where type = &#63;.
@@ -3279,7 +3286,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_T = new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRelationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_T",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			SocialRelationModelImpl.COMPANYID_COLUMN_BITMASK |
+			SocialRelationModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social relations where companyId = &#63; and type = &#63;.
@@ -3830,7 +3839,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public static final FinderPath FINDER_PATH_COUNT_BY_U1_U2 = new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRelationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU1_U2",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			SocialRelationModelImpl.USERID1_COLUMN_BITMASK |
+			SocialRelationModelImpl.USERID2_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social relations where userId1 = &#63; and userId2 = &#63;.
@@ -4384,7 +4395,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public static final FinderPath FINDER_PATH_COUNT_BY_U1_T = new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRelationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU1_T",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			SocialRelationModelImpl.USERID1_COLUMN_BITMASK |
+			SocialRelationModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social relations where userId1 = &#63; and type = &#63;.
@@ -4935,7 +4948,9 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public static final FinderPath FINDER_PATH_COUNT_BY_U2_T = new FinderPath(SocialRelationModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRelationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU2_T",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			SocialRelationModelImpl.USERID2_COLUMN_BITMASK |
+			SocialRelationModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social relations where userId2 = &#63; and type = &#63;.
@@ -5491,7 +5506,10 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			SocialRelationModelImpl.USERID1_COLUMN_BITMASK |
+			SocialRelationModelImpl.USERID2_COLUMN_BITMASK |
+			SocialRelationModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns the social relation where userId1 = &#63; and userId2 = &#63; and type = &#63; or throws a {@link com.liferay.portlet.social.NoSuchRelationException} if it could not be found.

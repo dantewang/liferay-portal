@@ -101,7 +101,8 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			AnnouncementsEntryModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the announcements entries where uuid = &#63;.
@@ -1044,7 +1045,9 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			AnnouncementsEntryModelImpl.UUID_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the announcements entries where uuid = &#63; and companyId = &#63;.
@@ -2052,7 +2055,8 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AnnouncementsEntryModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the announcements entries where userId = &#63;.
@@ -2922,7 +2926,9 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			AnnouncementsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the announcements entries where classNameId = &#63; and classPK = &#63;.
@@ -3859,7 +3865,10 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			AnnouncementsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.CLASSPK_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.ALERT_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the announcements entries where classNameId = &#63; and classPK = &#63; and alert = &#63;.

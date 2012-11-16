@@ -86,7 +86,8 @@ public class ClassNamePersistenceImpl extends BasePersistenceImpl<ClassName>
 	public static final FinderPath FINDER_PATH_COUNT_BY_VALUE = new FinderPath(ClassNameModelImpl.ENTITY_CACHE_ENABLED,
 			ClassNameModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByValue",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			ClassNameModelImpl.VALUE_COLUMN_BITMASK);
 
 	/**
 	 * Returns the class name where value = &#63; or throws a {@link com.liferay.portal.NoSuchClassNameException} if it could not be found.

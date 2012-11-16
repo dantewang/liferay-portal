@@ -93,7 +93,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(MDRRuleModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			MDRRuleModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the m d r rules where uuid = &#63;.
@@ -632,7 +633,9 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(MDRRuleModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			MDRRuleModelImpl.UUID_COLUMN_BITMASK |
+			MDRRuleModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the m d r rule where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.mobiledevicerules.NoSuchRuleException} if it could not be found.
@@ -894,7 +897,9 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MDRRuleModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			MDRRuleModelImpl.UUID_COLUMN_BITMASK |
+			MDRRuleModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the m d r rules where uuid = &#63; and companyId = &#63;.
@@ -1482,7 +1487,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	public static final FinderPath FINDER_PATH_COUNT_BY_RULEGROUPID = new FinderPath(MDRRuleModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRuleGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MDRRuleModelImpl.RULEGROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the m d r rules where ruleGroupId = &#63;.

@@ -93,7 +93,8 @@ public class UserNotificationEventPersistenceImpl extends BasePersistenceImpl<Us
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(UserNotificationEventModelImpl.ENTITY_CACHE_ENABLED,
 			UserNotificationEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			UserNotificationEventModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user notification events where uuid = &#63;.
@@ -645,7 +646,9 @@ public class UserNotificationEventPersistenceImpl extends BasePersistenceImpl<Us
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(UserNotificationEventModelImpl.ENTITY_CACHE_ENABLED,
 			UserNotificationEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			UserNotificationEventModelImpl.UUID_COLUMN_BITMASK |
+			UserNotificationEventModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user notification events where uuid = &#63; and companyId = &#63;.
@@ -1241,7 +1244,8 @@ public class UserNotificationEventPersistenceImpl extends BasePersistenceImpl<Us
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(UserNotificationEventModelImpl.ENTITY_CACHE_ENABLED,
 			UserNotificationEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserNotificationEventModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user notification events where userId = &#63;.
@@ -1755,7 +1759,9 @@ public class UserNotificationEventPersistenceImpl extends BasePersistenceImpl<Us
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_A = new FinderPath(UserNotificationEventModelImpl.ENTITY_CACHE_ENABLED,
 			UserNotificationEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU_A",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			UserNotificationEventModelImpl.USERID_COLUMN_BITMASK |
+			UserNotificationEventModelImpl.ARCHIVED_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user notification events where userId = &#63; and archived = &#63;.

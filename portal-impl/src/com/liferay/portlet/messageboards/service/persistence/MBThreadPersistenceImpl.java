@@ -105,7 +105,8 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBThreadModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards threads where groupId = &#63;.
@@ -970,7 +971,8 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public static final FinderPath FINDER_PATH_COUNT_BY_ROOTMESSAGEID = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRootMessageId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBThreadModelImpl.ROOTMESSAGEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the message boards threads where rootMessageId = &#63;.
@@ -1313,7 +1315,9 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBThreadModelImpl.GROUPID_COLUMN_BITMASK |
+			MBThreadModelImpl.CATEGORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards threads where groupId = &#63; and categoryId = &#63;.
@@ -2742,7 +2746,9 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_NOTC = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_NotC",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBThreadModelImpl.GROUPID_COLUMN_BITMASK |
+			MBThreadModelImpl.CATEGORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards threads where groupId = &#63; and categoryId &ne; &#63;.
@@ -3674,7 +3680,9 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			MBThreadModelImpl.GROUPID_COLUMN_BITMASK |
+			MBThreadModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards threads where groupId = &#63; and status = &#63;.
@@ -4598,7 +4606,9 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_P",
-			new String[] { Long.class.getName(), Double.class.getName() });
+			new String[] { Long.class.getName(), Double.class.getName() },
+			MBThreadModelImpl.CATEGORYID_COLUMN_BITMASK |
+			MBThreadModelImpl.PRIORITY_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards threads where categoryId = &#63; and priority = &#63;.
@@ -5152,7 +5162,9 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public static final FinderPath FINDER_PATH_COUNT_BY_L_P = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByL_P",
-			new String[] { Date.class.getName(), Double.class.getName() });
+			new String[] { Date.class.getName(), Double.class.getName() },
+			MBThreadModelImpl.LASTPOSTDATE_COLUMN_BITMASK |
+			MBThreadModelImpl.PRIORITY_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards threads where lastPostDate = &#63; and priority = &#63;.
@@ -5730,7 +5742,10 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 			FINDER_CLASS_NAME_COUNT, "countByG_C_L",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Date.class.getName()
-			});
+			},
+			MBThreadModelImpl.GROUPID_COLUMN_BITMASK |
+			MBThreadModelImpl.CATEGORYID_COLUMN_BITMASK |
+			MBThreadModelImpl.LASTPOSTDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards threads where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63;.
@@ -6765,7 +6780,10 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MBThreadModelImpl.GROUPID_COLUMN_BITMASK |
+			MBThreadModelImpl.CATEGORYID_COLUMN_BITMASK |
+			MBThreadModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards threads where groupId = &#63; and categoryId = &#63; and status = &#63;.
@@ -8308,7 +8326,10 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MBThreadModelImpl.GROUPID_COLUMN_BITMASK |
+			MBThreadModelImpl.CATEGORYID_COLUMN_BITMASK |
+			MBThreadModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards threads where groupId = &#63; and categoryId = &#63; and status &ne; &#63;.
@@ -9854,7 +9875,10 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MBThreadModelImpl.GROUPID_COLUMN_BITMASK |
+			MBThreadModelImpl.CATEGORYID_COLUMN_BITMASK |
+			MBThreadModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards threads where groupId = &#63; and categoryId &ne; &#63; and status = &#63;.
@@ -10845,7 +10869,10 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MBThreadModelImpl.GROUPID_COLUMN_BITMASK |
+			MBThreadModelImpl.CATEGORYID_COLUMN_BITMASK |
+			MBThreadModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards threads where groupId = &#63; and categoryId &ne; &#63; and status &ne; &#63;.

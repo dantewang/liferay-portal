@@ -100,7 +100,8 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			MBCategoryModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards categories where uuid = &#63;.
@@ -641,7 +642,9 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			MBCategoryModelImpl.UUID_COLUMN_BITMASK |
+			MBCategoryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the message boards category where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchCategoryException} if it could not be found.
@@ -903,7 +906,9 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			MBCategoryModelImpl.UUID_COLUMN_BITMASK |
+			MBCategoryModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards categories where uuid = &#63; and companyId = &#63;.
@@ -1495,7 +1500,8 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBCategoryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards categories where groupId = &#63;.
@@ -2362,7 +2368,8 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBCategoryModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards categories where companyId = &#63;.
@@ -2875,7 +2882,9 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBCategoryModelImpl.GROUPID_COLUMN_BITMASK |
+			MBCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards categories where groupId = &#63; and parentCategoryId = &#63;.

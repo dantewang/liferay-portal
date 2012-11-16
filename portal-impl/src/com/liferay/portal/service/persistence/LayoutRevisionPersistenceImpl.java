@@ -91,7 +91,8 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public static final FinderPath FINDER_PATH_COUNT_BY_LAYOUTSETBRANCHID = new FinderPath(LayoutRevisionModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLayoutSetBranchId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			LayoutRevisionModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout revisions where layoutSetBranchId = &#63;.
@@ -615,7 +616,8 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public static final FinderPath FINDER_PATH_COUNT_BY_PLID = new FinderPath(LayoutRevisionModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByPlid",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			LayoutRevisionModelImpl.PLID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout revisions where plid = &#63;.
@@ -1123,7 +1125,9 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public static final FinderPath FINDER_PATH_COUNT_BY_L_H = new FinderPath(LayoutRevisionModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByL_H",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			LayoutRevisionModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.HEAD_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout revisions where layoutSetBranchId = &#63; and head = &#63;.
@@ -1679,7 +1683,9 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public static final FinderPath FINDER_PATH_COUNT_BY_L_P = new FinderPath(LayoutRevisionModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByL_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			LayoutRevisionModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.PLID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout revisions where layoutSetBranchId = &#63; and plid = &#63;.
@@ -2233,7 +2239,9 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public static final FinderPath FINDER_PATH_COUNT_BY_L_S = new FinderPath(LayoutRevisionModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByL_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			LayoutRevisionModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout revisions where layoutSetBranchId = &#63; and status = &#63;.
@@ -2787,7 +2795,9 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public static final FinderPath FINDER_PATH_COUNT_BY_H_P = new FinderPath(LayoutRevisionModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByH_P",
-			new String[] { Boolean.class.getName(), Long.class.getName() });
+			new String[] { Boolean.class.getName(), Long.class.getName() },
+			LayoutRevisionModelImpl.HEAD_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.PLID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout revisions where head = &#63; and plid = &#63;.
@@ -3333,7 +3343,9 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_NOTS = new FinderPath(LayoutRevisionModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByP_NotS",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			LayoutRevisionModelImpl.PLID_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout revisions where plid = &#63; and status &ne; &#63;.
@@ -3886,7 +3898,10 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 			FINDER_CLASS_NAME_COUNT, "countByL_L_P",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			LayoutRevisionModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.LAYOUTBRANCHID_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.PLID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout revisions where layoutSetBranchId = &#63; and layoutBranchId = &#63; and plid = &#63;.
@@ -4488,7 +4503,10 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 			FINDER_CLASS_NAME_COUNT, "countByL_P_P",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			LayoutRevisionModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.PARENTLAYOUTREVISIONID_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.PLID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout revisions where layoutSetBranchId = &#63; and parentLayoutRevisionId = &#63; and plid = &#63;.
@@ -5102,7 +5120,10 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName()
-			});
+			},
+			LayoutRevisionModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.HEAD_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.PLID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the layout revisions where layoutSetBranchId = &#63; and head = &#63; and plid = &#63;.
@@ -5508,7 +5529,10 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			LayoutRevisionModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.PLID_COLUMN_BITMASK |
+			LayoutRevisionModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout revisions where layoutSetBranchId = &#63; and plid = &#63; and status = &#63;.

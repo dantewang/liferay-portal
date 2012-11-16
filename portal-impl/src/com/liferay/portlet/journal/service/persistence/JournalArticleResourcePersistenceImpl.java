@@ -95,7 +95,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(JournalArticleResourceModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleResourceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalArticleResourceModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal article resources where uuid = &#63;.
@@ -643,7 +644,9 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalArticleResourceModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleResourceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalArticleResourceModelImpl.UUID_COLUMN_BITMASK |
+			JournalArticleResourceModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal article resource where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchArticleResourceException} if it could not be found.
@@ -908,7 +911,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalArticleResourceModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleResourceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalArticleResourceModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal article resources where groupId = &#63;.
@@ -1418,7 +1422,9 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_A = new FinderPath(JournalArticleResourceModelImpl.ENTITY_CACHE_ENABLED,
 			JournalArticleResourceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_A",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalArticleResourceModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalArticleResourceModelImpl.ARTICLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal article resource where groupId = &#63; and articleId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchArticleResourceException} if it could not be found.

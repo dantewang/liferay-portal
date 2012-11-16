@@ -92,7 +92,8 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			WorkflowDefinitionLinkModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the workflow definition links where companyId = &#63;.
@@ -612,7 +613,10 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			WorkflowDefinitionLinkModelImpl.COMPANYID_COLUMN_BITMASK |
+			WorkflowDefinitionLinkModelImpl.WORKFLOWDEFINITIONNAME_COLUMN_BITMASK |
+			WorkflowDefinitionLinkModelImpl.WORKFLOWDEFINITIONVERSION_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the workflow definition links where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
@@ -1277,7 +1281,12 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName(), Long.class.getName()
-			});
+			},
+			WorkflowDefinitionLinkModelImpl.GROUPID_COLUMN_BITMASK |
+			WorkflowDefinitionLinkModelImpl.COMPANYID_COLUMN_BITMASK |
+			WorkflowDefinitionLinkModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			WorkflowDefinitionLinkModelImpl.CLASSPK_COLUMN_BITMASK |
+			WorkflowDefinitionLinkModelImpl.TYPEPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the workflow definition links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.

@@ -92,7 +92,8 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	public static final FinderPath FINDER_PATH_COUNT_BY_ROLEID = new FinderPath(ResourceTypePermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceTypePermissionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRoleId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ResourceTypePermissionModelImpl.ROLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource type permissions where roleId = &#63;.
@@ -610,7 +611,10 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Long.class.getName()
-			});
+			},
+			ResourceTypePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourceTypePermissionModelImpl.NAME_COLUMN_BITMASK |
+			ResourceTypePermissionModelImpl.ROLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource type permissions where companyId = &#63; and name = &#63; and roleId = &#63;.
@@ -1249,7 +1253,11 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Long.class.getName()
-			});
+			},
+			ResourceTypePermissionModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourceTypePermissionModelImpl.GROUPID_COLUMN_BITMASK |
+			ResourceTypePermissionModelImpl.NAME_COLUMN_BITMASK |
+			ResourceTypePermissionModelImpl.ROLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the resource type permission where companyId = &#63; and groupId = &#63; and name = &#63; and roleId = &#63; or throws a {@link com.liferay.portal.NoSuchResourceTypePermissionException} if it could not be found.

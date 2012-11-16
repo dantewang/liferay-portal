@@ -93,7 +93,8 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 	public static final FinderPath FINDER_PATH_COUNT_BY_ITEMID = new FinderPath(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemPriceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByItemId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ShoppingItemPriceModelImpl.ITEMID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the shopping item prices where itemId = &#63;.

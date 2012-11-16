@@ -91,7 +91,9 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(ResourceBlockModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceBlockModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			ResourceBlockModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourceBlockModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource blocks where companyId = &#63; and name = &#63;.
@@ -687,7 +689,10 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			ResourceBlockModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourceBlockModelImpl.GROUPID_COLUMN_BITMASK |
+			ResourceBlockModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource blocks where companyId = &#63; and groupId = &#63; and name = &#63;.
@@ -1322,7 +1327,11 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), String.class.getName()
-			});
+			},
+			ResourceBlockModelImpl.COMPANYID_COLUMN_BITMASK |
+			ResourceBlockModelImpl.GROUPID_COLUMN_BITMASK |
+			ResourceBlockModelImpl.NAME_COLUMN_BITMASK |
+			ResourceBlockModelImpl.PERMISSIONSHASH_COLUMN_BITMASK);
 
 	/**
 	 * Returns the resource block where companyId = &#63; and groupId = &#63; and name = &#63; and permissionsHash = &#63; or throws a {@link com.liferay.portal.NoSuchResourceBlockException} if it could not be found.

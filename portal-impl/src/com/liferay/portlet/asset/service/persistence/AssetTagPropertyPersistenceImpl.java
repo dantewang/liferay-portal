@@ -94,7 +94,8 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AssetTagPropertyModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset tag properties where companyId = &#63;.
@@ -607,7 +608,8 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	public static final FinderPath FINDER_PATH_COUNT_BY_TAGID = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByTagId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AssetTagPropertyModelImpl.TAGID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset tag properties where tagId = &#63;.
@@ -1118,7 +1120,9 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_K = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_K",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			AssetTagPropertyModelImpl.COMPANYID_COLUMN_BITMASK |
+			AssetTagPropertyModelImpl.KEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset tag properties where companyId = &#63; and key = &#63;.
@@ -1706,7 +1710,9 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_K = new FinderPath(AssetTagPropertyModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagPropertyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByT_K",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			AssetTagPropertyModelImpl.TAGID_COLUMN_BITMASK |
+			AssetTagPropertyModelImpl.KEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns the asset tag property where tagId = &#63; and key = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchTagPropertyException} if it could not be found.

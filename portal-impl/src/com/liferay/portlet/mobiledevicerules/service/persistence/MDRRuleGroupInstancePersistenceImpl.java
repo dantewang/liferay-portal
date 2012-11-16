@@ -99,7 +99,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			MDRRuleGroupInstanceModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the m d r rule group instances where uuid = &#63;.
@@ -648,7 +649,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			MDRRuleGroupInstanceModelImpl.UUID_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the m d r rule group instance where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException} if it could not be found.
@@ -911,7 +914,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			MDRRuleGroupInstanceModelImpl.UUID_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the m d r rule group instances where uuid = &#63; and companyId = &#63;.
@@ -1506,7 +1511,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MDRRuleGroupInstanceModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the m d r rule group instances where groupId = &#63;.
@@ -2381,7 +2387,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public static final FinderPath FINDER_PATH_COUNT_BY_RULEGROUPID = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRuleGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MDRRuleGroupInstanceModelImpl.RULEGROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the m d r rule group instances where ruleGroupId = &#63;.
@@ -2897,7 +2904,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(MDRRuleGroupInstanceModelImpl.ENTITY_CACHE_ENABLED,
 			MDRRuleGroupInstanceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MDRRuleGroupInstanceModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the m d r rule group instances where classNameId = &#63; and classPK = &#63;.
@@ -3456,7 +3465,10 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			FINDER_CLASS_NAME_COUNT, "countByG_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			MDRRuleGroupInstanceModelImpl.GROUPID_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the m d r rule group instances where groupId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -4455,7 +4467,10 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			FINDER_CLASS_NAME_COUNT, "countByC_C_R",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			MDRRuleGroupInstanceModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.CLASSPK_COLUMN_BITMASK |
+			MDRRuleGroupInstanceModelImpl.RULEGROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the m d r rule group instance where classNameId = &#63; and classPK = &#63; and ruleGroupId = &#63; or throws a {@link com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException} if it could not be found.

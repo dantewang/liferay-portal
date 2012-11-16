@@ -94,7 +94,8 @@ public class LayoutSetPrototypePersistenceImpl extends BasePersistenceImpl<Layou
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(LayoutSetPrototypeModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutSetPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			LayoutSetPrototypeModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout set prototypes where uuid = &#63;.
@@ -1040,7 +1041,9 @@ public class LayoutSetPrototypePersistenceImpl extends BasePersistenceImpl<Layou
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(LayoutSetPrototypeModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutSetPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			LayoutSetPrototypeModelImpl.UUID_COLUMN_BITMASK |
+			LayoutSetPrototypeModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout set prototypes where uuid = &#63; and companyId = &#63;.
@@ -2050,7 +2053,8 @@ public class LayoutSetPrototypePersistenceImpl extends BasePersistenceImpl<Layou
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(LayoutSetPrototypeModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutSetPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			LayoutSetPrototypeModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout set prototypes where companyId = &#63;.
@@ -2925,7 +2929,9 @@ public class LayoutSetPrototypePersistenceImpl extends BasePersistenceImpl<Layou
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_A = new FinderPath(LayoutSetPrototypeModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutSetPrototypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_A",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			LayoutSetPrototypeModelImpl.COMPANYID_COLUMN_BITMASK |
+			LayoutSetPrototypeModelImpl.ACTIVE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout set prototypes where companyId = &#63; and active = &#63;.

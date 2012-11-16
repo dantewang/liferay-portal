@@ -92,7 +92,8 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	public static final FinderPath FINDER_PATH_COUNT_BY_BUILDNAMESPACE = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
 			ServiceComponentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByBuildNamespace",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			ServiceComponentModelImpl.BUILDNAMESPACE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the service components where buildNamespace = &#63;.
@@ -651,7 +652,9 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	public static final FinderPath FINDER_PATH_COUNT_BY_BNS_BNU = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
 			ServiceComponentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByBNS_BNU",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			ServiceComponentModelImpl.BUILDNAMESPACE_COLUMN_BITMASK |
+			ServiceComponentModelImpl.BUILDNUMBER_COLUMN_BITMASK);
 
 	/**
 	 * Returns the service component where buildNamespace = &#63; and buildNumber = &#63; or throws a {@link com.liferay.portal.NoSuchServiceComponentException} if it could not be found.

@@ -98,7 +98,8 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	public static final FinderPath FINDER_PATH_COUNT_BY_SMALLIMAGEID = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countBySmallImageId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ShoppingItemModelImpl.SMALLIMAGEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the shopping items where smallImageId = &#63;.
@@ -441,7 +442,8 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	public static final FinderPath FINDER_PATH_COUNT_BY_MEDIUMIMAGEID = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByMediumImageId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ShoppingItemModelImpl.MEDIUMIMAGEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the shopping items where mediumImageId = &#63;.
@@ -785,7 +787,8 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	public static final FinderPath FINDER_PATH_COUNT_BY_LARGEIMAGEID = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLargeImageId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ShoppingItemModelImpl.LARGEIMAGEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the shopping items where largeImageId = &#63;.
@@ -1128,7 +1131,9 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			ShoppingItemModelImpl.GROUPID_COLUMN_BITMASK |
+			ShoppingItemModelImpl.CATEGORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the shopping items where groupId = &#63; and categoryId = &#63;.
@@ -2057,7 +2062,9 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(ShoppingItemModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_S",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			ShoppingItemModelImpl.COMPANYID_COLUMN_BITMASK |
+			ShoppingItemModelImpl.SKU_COLUMN_BITMASK);
 
 	/**
 	 * Returns the shopping item where companyId = &#63; and sku = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchItemException} if it could not be found.

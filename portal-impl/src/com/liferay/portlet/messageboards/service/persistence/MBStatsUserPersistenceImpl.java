@@ -92,7 +92,8 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MBStatsUserModelImpl.ENTITY_CACHE_ENABLED,
 			MBStatsUserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBStatsUserModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards stats users where groupId = &#63;.
@@ -602,7 +603,8 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(MBStatsUserModelImpl.ENTITY_CACHE_ENABLED,
 			MBStatsUserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBStatsUserModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards stats users where userId = &#63;.
@@ -1108,7 +1110,9 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(MBStatsUserModelImpl.ENTITY_CACHE_ENABLED,
 			MBStatsUserModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBStatsUserModelImpl.GROUPID_COLUMN_BITMASK |
+			MBStatsUserModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the message boards stats user where groupId = &#63; and userId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchStatsUserException} if it could not be found.
@@ -1346,7 +1350,10 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MBStatsUserModelImpl.GROUPID_COLUMN_BITMASK |
+			MBStatsUserModelImpl.USERID_COLUMN_BITMASK |
+			MBStatsUserModelImpl.MESSAGECOUNT_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards stats users where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.

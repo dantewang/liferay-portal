@@ -93,7 +93,8 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(SubscriptionModelImpl.ENTITY_CACHE_ENABLED,
 			SubscriptionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SubscriptionModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the subscriptions where userId = &#63;.
@@ -603,7 +604,9 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_C = new FinderPath(SubscriptionModelImpl.ENTITY_CACHE_ENABLED,
 			SubscriptionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			SubscriptionModelImpl.USERID_COLUMN_BITMASK |
+			SubscriptionModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the subscriptions where userId = &#63; and classNameId = &#63;.
@@ -1159,7 +1162,10 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 			FINDER_CLASS_NAME_COUNT, "countByC_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			SubscriptionModelImpl.COMPANYID_COLUMN_BITMASK |
+			SubscriptionModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SubscriptionModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the subscriptions where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -1755,7 +1761,11 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName()
-			});
+			},
+			SubscriptionModelImpl.COMPANYID_COLUMN_BITMASK |
+			SubscriptionModelImpl.USERID_COLUMN_BITMASK |
+			SubscriptionModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SubscriptionModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns the subscription where companyId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portal.NoSuchSubscriptionException} if it could not be found.

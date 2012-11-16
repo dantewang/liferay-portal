@@ -91,7 +91,8 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
 			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MembershipRequestModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the membership requests where groupId = &#63;.
@@ -605,7 +606,8 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
 			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MembershipRequestModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the membership requests where userId = &#63;.
@@ -1118,7 +1120,9 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(MembershipRequestModelImpl.ENTITY_CACHE_ENABLED,
 			MembershipRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			MembershipRequestModelImpl.GROUPID_COLUMN_BITMASK |
+			MembershipRequestModelImpl.STATUSID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the membership requests where groupId = &#63; and statusId = &#63;.
@@ -1675,7 +1679,10 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MembershipRequestModelImpl.GROUPID_COLUMN_BITMASK |
+			MembershipRequestModelImpl.USERID_COLUMN_BITMASK |
+			MembershipRequestModelImpl.STATUSID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the membership requests where groupId = &#63; and userId = &#63; and statusId = &#63;.

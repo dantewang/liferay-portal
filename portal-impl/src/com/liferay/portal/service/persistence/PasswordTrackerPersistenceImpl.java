@@ -90,7 +90,8 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(PasswordTrackerModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordTrackerModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			PasswordTrackerModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the password trackers where userId = &#63;.

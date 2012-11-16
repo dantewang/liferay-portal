@@ -118,7 +118,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			BlogsEntryModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where uuid = &#63;.
@@ -659,7 +660,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			BlogsEntryModelImpl.UUID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the blogs entry where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.blogs.NoSuchEntryException} if it could not be found.
@@ -921,7 +924,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			BlogsEntryModelImpl.UUID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where uuid = &#63; and companyId = &#63;.
@@ -1513,7 +1518,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where groupId = &#63;.
@@ -2379,7 +2385,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where companyId = &#63;.
@@ -2892,7 +2899,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_U = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where companyId = &#63; and userId = &#63;.
@@ -3445,7 +3454,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_LTD = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_LtD",
-			new String[] { Long.class.getName(), Date.class.getName() });
+			new String[] { Long.class.getName(), Date.class.getName() },
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63;.
@@ -4022,7 +4033,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_NotS",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where companyId = &#63; and status &ne; &#63;.
@@ -4575,7 +4588,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where companyId = &#63; and status = &#63;.
@@ -5124,7 +5139,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_UT = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_UT",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.URLTITLE_COLUMN_BITMASK);
 
 	/**
 	 * Returns the blogs entry where groupId = &#63; and urlTitle = &#63; or throws a {@link com.liferay.portlet.blogs.NoSuchEntryException} if it could not be found.
@@ -5386,7 +5403,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_LTD = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_LtD",
-			new String[] { Long.class.getName(), Date.class.getName() });
+			new String[] { Long.class.getName(), Date.class.getName() },
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where groupId = &#63; and displayDate &lt; &#63;.
@@ -6362,7 +6381,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_NotS",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where groupId = &#63; and status &ne; &#63;.
@@ -7292,7 +7313,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where groupId = &#63; and status = &#63;.
@@ -8220,7 +8243,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_LTD_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLtD_S",
-			new String[] { Date.class.getName(), Integer.class.getName() });
+			new String[] { Date.class.getName(), Integer.class.getName() },
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where displayDate &lt; &#63; and status = &#63;.
@@ -8800,7 +8825,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.USERID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
@@ -9395,7 +9423,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.USERID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
@@ -9989,7 +10020,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			new String[] {
 				Long.class.getName(), Date.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
@@ -10607,7 +10641,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			new String[] {
 				Long.class.getName(), Date.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
@@ -11222,7 +11259,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			FINDER_CLASS_NAME_COUNT, "countByG_U_LtD",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Date.class.getName()
-			});
+			},
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.USERID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63;.
@@ -12257,7 +12297,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.USERID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
@@ -13247,7 +13290,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.USERID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where groupId = &#63; and userId = &#63; and status = &#63;.
@@ -14235,7 +14281,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			new String[] {
 				Long.class.getName(), Date.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
@@ -15272,7 +15321,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			new String[] {
 				Long.class.getName(), Date.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
@@ -16307,7 +16359,11 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Date.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.USERID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
@@ -17407,7 +17463,11 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Date.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			BlogsEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.USERID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status = &#63;.

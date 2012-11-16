@@ -96,7 +96,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DLFileEntryMetadataModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileEntryMetadataModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			DLFileEntryMetadataModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file entry metadatas where uuid = &#63;.
@@ -648,7 +649,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	public static final FinderPath FINDER_PATH_COUNT_BY_FILEENTRYTYPEID = new FinderPath(DLFileEntryMetadataModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileEntryMetadataModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByFileEntryTypeId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DLFileEntryMetadataModelImpl.FILEENTRYTYPEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file entry metadatas where fileEntryTypeId = &#63;.
@@ -1176,7 +1178,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	public static final FinderPath FINDER_PATH_COUNT_BY_FILEENTRYID = new FinderPath(DLFileEntryMetadataModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileEntryMetadataModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByFileEntryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DLFileEntryMetadataModelImpl.FILEENTRYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file entry metadatas where fileEntryId = &#63;.
@@ -1692,7 +1695,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	public static final FinderPath FINDER_PATH_COUNT_BY_FILEVERSIONID = new FinderPath(DLFileEntryMetadataModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileEntryMetadataModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByFileVersionId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DLFileEntryMetadataModelImpl.FILEVERSIONID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file entry metadatas where fileVersionId = &#63;.
@@ -2212,7 +2216,9 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	public static final FinderPath FINDER_PATH_COUNT_BY_D_F = new FinderPath(DLFileEntryMetadataModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileEntryMetadataModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByD_F",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			DLFileEntryMetadataModelImpl.DDMSTRUCTUREID_COLUMN_BITMASK |
+			DLFileEntryMetadataModelImpl.FILEVERSIONID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the document library file entry metadata where DDMStructureId = &#63; and fileVersionId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException} if it could not be found.

@@ -91,7 +91,8 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	public static final FinderPath FINDER_PATH_COUNT_BY_NAME = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceActionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByName",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			ResourceActionModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the resource actions where name = &#63;.
@@ -636,7 +637,9 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_A = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceActionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByN_A",
-			new String[] { String.class.getName(), String.class.getName() });
+			new String[] { String.class.getName(), String.class.getName() },
+			ResourceActionModelImpl.NAME_COLUMN_BITMASK |
+			ResourceActionModelImpl.ACTIONID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the resource action where name = &#63; and actionId = &#63; or throws a {@link com.liferay.portal.NoSuchResourceActionException} if it could not be found.

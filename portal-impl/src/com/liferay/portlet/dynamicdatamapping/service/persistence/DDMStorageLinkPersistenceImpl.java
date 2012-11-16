@@ -94,7 +94,8 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			DDMStorageLinkModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m storage links where uuid = &#63;.
@@ -638,7 +639,8 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSPK = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByClassPK",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DDMStorageLinkModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns the d d m storage link where classPK = &#63; or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException} if it could not be found.
@@ -854,7 +856,8 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByStructureId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DDMStorageLinkModelImpl.STRUCTUREID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m storage links where structureId = &#63;.

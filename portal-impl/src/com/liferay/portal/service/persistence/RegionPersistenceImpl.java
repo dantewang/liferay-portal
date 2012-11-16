@@ -90,7 +90,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COUNTRYID = new FinderPath(RegionModelImpl.ENTITY_CACHE_ENABLED,
 			RegionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCountryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			RegionModelImpl.COUNTRYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the regions where countryId = &#63;.
@@ -598,7 +599,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	public static final FinderPath FINDER_PATH_COUNT_BY_ACTIVE = new FinderPath(RegionModelImpl.ENTITY_CACHE_ENABLED,
 			RegionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByActive",
-			new String[] { Boolean.class.getName() });
+			new String[] { Boolean.class.getName() },
+			RegionModelImpl.ACTIVE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the regions where active = &#63;.
@@ -1099,7 +1101,9 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_R = new FinderPath(RegionModelImpl.ENTITY_CACHE_ENABLED,
 			RegionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_R",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			RegionModelImpl.COUNTRYID_COLUMN_BITMASK |
+			RegionModelImpl.REGIONCODE_COLUMN_BITMASK);
 
 	/**
 	 * Returns the region where countryId = &#63; and regionCode = &#63; or throws a {@link com.liferay.portal.NoSuchRegionException} if it could not be found.
@@ -1361,7 +1365,9 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_A = new FinderPath(RegionModelImpl.ENTITY_CACHE_ENABLED,
 			RegionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_A",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			RegionModelImpl.COUNTRYID_COLUMN_BITMASK |
+			RegionModelImpl.ACTIVE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the regions where countryId = &#63; and active = &#63;.

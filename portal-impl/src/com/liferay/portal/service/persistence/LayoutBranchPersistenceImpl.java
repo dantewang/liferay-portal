@@ -90,7 +90,8 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 	public static final FinderPath FINDER_PATH_COUNT_BY_LAYOUTSETBRANCHID = new FinderPath(LayoutBranchModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutBranchModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLayoutSetBranchId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			LayoutBranchModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout branchs where layoutSetBranchId = &#63;.
@@ -612,7 +613,9 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 	public static final FinderPath FINDER_PATH_COUNT_BY_L_P = new FinderPath(LayoutBranchModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutBranchModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByL_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			LayoutBranchModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK |
+			LayoutBranchModelImpl.PLID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the layout branchs where layoutSetBranchId = &#63; and plid = &#63;.
@@ -1170,7 +1173,10 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			LayoutBranchModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK |
+			LayoutBranchModelImpl.PLID_COLUMN_BITMASK |
+			LayoutBranchModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the layout branch where layoutSetBranchId = &#63; and plid = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutBranchException} if it could not be found.
@@ -1455,7 +1461,10 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			LayoutBranchModelImpl.LAYOUTSETBRANCHID_COLUMN_BITMASK |
+			LayoutBranchModelImpl.PLID_COLUMN_BITMASK |
+			LayoutBranchModelImpl.MASTER_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the layout branchs where layoutSetBranchId = &#63; and plid = &#63; and master = &#63;.

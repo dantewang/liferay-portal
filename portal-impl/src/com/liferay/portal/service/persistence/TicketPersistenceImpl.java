@@ -90,7 +90,8 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 	public static final FinderPath FINDER_PATH_COUNT_BY_KEY = new FinderPath(TicketModelImpl.ENTITY_CACHE_ENABLED,
 			TicketModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByKey",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			TicketModelImpl.KEY_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the tickets where key = &#63;.

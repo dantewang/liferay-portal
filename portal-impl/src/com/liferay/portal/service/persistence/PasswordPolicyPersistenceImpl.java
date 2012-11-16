@@ -91,7 +91,9 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_DP",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			PasswordPolicyModelImpl.COMPANYID_COLUMN_BITMASK |
+			PasswordPolicyModelImpl.DEFAULTPOLICY_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the password policies where companyId = &#63; and defaultPolicy = &#63;.
@@ -461,7 +463,9 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			PasswordPolicyModelImpl.COMPANYID_COLUMN_BITMASK |
+			PasswordPolicyModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the password policy where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchPasswordPolicyException} if it could not be found.

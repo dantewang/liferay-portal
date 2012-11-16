@@ -104,7 +104,8 @@ public class BookmarksEntryPersistenceImpl extends BasePersistenceImpl<Bookmarks
 	public static final FinderPath FINDER_PATH_COUNT_BY_RESOURCEBLOCKID = new FinderPath(BookmarksEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByResourceBlockId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			BookmarksEntryModelImpl.RESOURCEBLOCKID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks entries where resourceBlockId = &#63;.
@@ -625,7 +626,8 @@ public class BookmarksEntryPersistenceImpl extends BasePersistenceImpl<Bookmarks
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(BookmarksEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			BookmarksEntryModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks entries where uuid = &#63;.
@@ -1171,7 +1173,9 @@ public class BookmarksEntryPersistenceImpl extends BasePersistenceImpl<Bookmarks
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(BookmarksEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			BookmarksEntryModelImpl.UUID_COLUMN_BITMASK |
+			BookmarksEntryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the bookmarks entry where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.bookmarks.NoSuchEntryException} if it could not be found.
@@ -1433,7 +1437,9 @@ public class BookmarksEntryPersistenceImpl extends BasePersistenceImpl<Bookmarks
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(BookmarksEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			BookmarksEntryModelImpl.UUID_COLUMN_BITMASK |
+			BookmarksEntryModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks entries where uuid = &#63; and companyId = &#63;.
@@ -2025,7 +2031,8 @@ public class BookmarksEntryPersistenceImpl extends BasePersistenceImpl<Bookmarks
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(BookmarksEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			BookmarksEntryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks entries where groupId = &#63;.
@@ -2835,7 +2842,9 @@ public class BookmarksEntryPersistenceImpl extends BasePersistenceImpl<Bookmarks
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(BookmarksEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			BookmarksEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BookmarksEntryModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks entries where groupId = &#63; and userId = &#63;.
@@ -3705,7 +3714,9 @@ public class BookmarksEntryPersistenceImpl extends BasePersistenceImpl<Bookmarks
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(BookmarksEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BookmarksEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_F",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			BookmarksEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			BookmarksEntryModelImpl.FOLDERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the bookmarks entries where groupId = &#63; and folderId = &#63;.

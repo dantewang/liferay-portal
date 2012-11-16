@@ -111,7 +111,8 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			CalEventModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the cal events where uuid = &#63;.
@@ -652,7 +653,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			CalEventModelImpl.UUID_COLUMN_BITMASK |
+			CalEventModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the cal event where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.calendar.NoSuchEventException} if it could not be found.
@@ -914,7 +917,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			CalEventModelImpl.UUID_COLUMN_BITMASK |
+			CalEventModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the cal events where uuid = &#63; and companyId = &#63;.
@@ -1505,7 +1510,8 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			CalEventModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the cal events where companyId = &#63;.
@@ -2015,7 +2021,8 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			CalEventModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the cal events where groupId = &#63;.
@@ -2879,7 +2886,8 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_NOTREMINDBY = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByNotRemindBy",
-			new String[] { Integer.class.getName() });
+			new String[] { Integer.class.getName() },
+			CalEventModelImpl.REMINDBY_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the cal events where remindBy &ne; &#63;.
@@ -3390,7 +3398,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_T = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_T",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
+			CalEventModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the cal events where groupId = &#63; and type = &#63;.
@@ -4936,7 +4946,9 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_R = new FinderPath(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_R",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
+			CalEventModelImpl.REPEATING_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the cal events where groupId = &#63; and repeating = &#63;.
@@ -5870,7 +5882,10 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			CalEventModelImpl.GROUPID_COLUMN_BITMASK |
+			CalEventModelImpl.TYPE_COLUMN_BITMASK |
+			CalEventModelImpl.REPEATING_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the cal events where groupId = &#63; and type = &#63; and repeating = &#63;.

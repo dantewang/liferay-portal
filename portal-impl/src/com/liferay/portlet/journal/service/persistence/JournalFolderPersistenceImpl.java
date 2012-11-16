@@ -98,7 +98,8 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalFolderModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal folders where uuid = &#63;.
@@ -642,7 +643,9 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalFolderModelImpl.UUID_COLUMN_BITMASK |
+			JournalFolderModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal folder where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchFolderException} if it could not be found.
@@ -904,7 +907,9 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalFolderModelImpl.UUID_COLUMN_BITMASK |
+			JournalFolderModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal folders where uuid = &#63; and companyId = &#63;.
@@ -1496,7 +1501,8 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalFolderModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal folders where groupId = &#63;.
@@ -2367,7 +2373,8 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalFolderModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal folders where companyId = &#63;.
@@ -2880,7 +2887,9 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			JournalFolderModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal folders where groupId = &#63; and parentFolderId = &#63;.
@@ -3813,7 +3822,9 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(JournalFolderModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalFolderModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalFolderModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the journal folders where groupId = &#63; and name = &#63;.
@@ -4213,7 +4224,10 @@ public class JournalFolderPersistenceImpl extends BasePersistenceImpl<JournalFol
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			JournalFolderModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK |
+			JournalFolderModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal folder where groupId = &#63; and parentFolderId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchFolderException} if it could not be found.

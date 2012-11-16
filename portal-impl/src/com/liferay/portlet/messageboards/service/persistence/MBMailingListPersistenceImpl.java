@@ -94,7 +94,8 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(MBMailingListModelImpl.ENTITY_CACHE_ENABLED,
 			MBMailingListModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			MBMailingListModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards mailing lists where uuid = &#63;.
@@ -638,7 +639,9 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(MBMailingListModelImpl.ENTITY_CACHE_ENABLED,
 			MBMailingListModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			MBMailingListModelImpl.UUID_COLUMN_BITMASK |
+			MBMailingListModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the message boards mailing list where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchMailingListException} if it could not be found.
@@ -900,7 +903,9 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MBMailingListModelImpl.ENTITY_CACHE_ENABLED,
 			MBMailingListModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			MBMailingListModelImpl.UUID_COLUMN_BITMASK |
+			MBMailingListModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards mailing lists where uuid = &#63; and companyId = &#63;.
@@ -1492,7 +1497,8 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	public static final FinderPath FINDER_PATH_COUNT_BY_ACTIVE = new FinderPath(MBMailingListModelImpl.ENTITY_CACHE_ENABLED,
 			MBMailingListModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByActive",
-			new String[] { Boolean.class.getName() });
+			new String[] { Boolean.class.getName() },
+			MBMailingListModelImpl.ACTIVE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards mailing lists where active = &#63;.
@@ -2000,7 +2006,9 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(MBMailingListModelImpl.ENTITY_CACHE_ENABLED,
 			MBMailingListModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBMailingListModelImpl.GROUPID_COLUMN_BITMASK |
+			MBMailingListModelImpl.CATEGORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the message boards mailing list where groupId = &#63; and categoryId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchMailingListException} if it could not be found.

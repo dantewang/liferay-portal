@@ -91,7 +91,8 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERGROUPID = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserGroupGroupRoleModelImpl.USERGROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user group group roles where userGroupId = &#63;.
@@ -607,7 +608,8 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserGroupGroupRoleModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user group group roles where groupId = &#63;.
@@ -1121,7 +1123,8 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 	public static final FinderPath FINDER_PATH_COUNT_BY_ROLEID = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRoleId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserGroupGroupRoleModelImpl.ROLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user group group roles where roleId = &#63;.
@@ -1634,7 +1637,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_G = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU_G",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			UserGroupGroupRoleModelImpl.USERGROUPID_COLUMN_BITMASK |
+			UserGroupGroupRoleModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user group group roles where userGroupId = &#63; and groupId = &#63;.
@@ -2189,7 +2194,9 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_R = new FinderPath(UserGroupGroupRoleModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupGroupRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_R",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			UserGroupGroupRoleModelImpl.GROUPID_COLUMN_BITMASK |
+			UserGroupGroupRoleModelImpl.ROLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user group group roles where groupId = &#63; and roleId = &#63;.

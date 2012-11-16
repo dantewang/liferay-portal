@@ -86,7 +86,8 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 	public static final FinderPath FINDER_PATH_COUNT_BY_SERVLETCONTEXTNAME = new FinderPath(ReleaseModelImpl.ENTITY_CACHE_ENABLED,
 			ReleaseModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByServletContextName",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			ReleaseModelImpl.SERVLETCONTEXTNAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the release where servletContextName = &#63; or throws a {@link com.liferay.portal.NoSuchReleaseException} if it could not be found.

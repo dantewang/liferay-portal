@@ -89,7 +89,8 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 	public static final FinderPath FINDER_PATH_COUNT_BY_ORGANIZATIONID = new FinderPath(OrgLaborModelImpl.ENTITY_CACHE_ENABLED,
 			OrgLaborModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByOrganizationId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			OrgLaborModelImpl.ORGANIZATIONID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the org labors where organizationId = &#63;.

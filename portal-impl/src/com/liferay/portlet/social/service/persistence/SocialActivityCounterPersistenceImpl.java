@@ -97,7 +97,9 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(SocialActivityCounterModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityCounterModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			SocialActivityCounterModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity counters where classNameId = &#63; and classPK = &#63;.
@@ -659,7 +661,11 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			SocialActivityCounterModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.CLASSPK_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.OWNERTYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activity counters where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
@@ -1312,7 +1318,13 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Integer.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			SocialActivityCounterModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.CLASSPK_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.NAME_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.OWNERTYPE_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.STARTPERIOD_COLUMN_BITMASK);
 
 	/**
 	 * Returns the social activity counter where groupId = &#63; and classNameId = &#63; and classPK = &#63; and name = &#63; and ownerType = &#63; and startPeriod = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivityCounterException} if it could not be found.
@@ -1671,7 +1683,13 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Integer.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			SocialActivityCounterModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.CLASSPK_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.NAME_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.OWNERTYPE_COLUMN_BITMASK |
+			SocialActivityCounterModelImpl.ENDPERIOD_COLUMN_BITMASK);
 
 	/**
 	 * Returns the social activity counter where groupId = &#63; and classNameId = &#63; and classPK = &#63; and name = &#63; and ownerType = &#63; and endPeriod = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivityCounterException} if it could not be found.

@@ -90,7 +90,8 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(PortletModelImpl.ENTITY_CACHE_ENABLED,
 			PortletModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			PortletModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the portlets where companyId = &#63;.
@@ -596,7 +597,9 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(PortletModelImpl.ENTITY_CACHE_ENABLED,
 			PortletModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_P",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			PortletModelImpl.COMPANYID_COLUMN_BITMASK |
+			PortletModelImpl.PORTLETID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the portlet where companyId = &#63; and portletId = &#63; or throws a {@link com.liferay.portal.NoSuchPortletException} if it could not be found.

@@ -93,7 +93,8 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DDMContentModelImpl.ENTITY_CACHE_ENABLED,
 			DDMContentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			DDMContentModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m contents where uuid = &#63;.
@@ -634,7 +635,9 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(DDMContentModelImpl.ENTITY_CACHE_ENABLED,
 			DDMContentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DDMContentModelImpl.UUID_COLUMN_BITMASK |
+			DDMContentModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the d d m content where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchContentException} if it could not be found.
@@ -896,7 +899,9 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DDMContentModelImpl.ENTITY_CACHE_ENABLED,
 			DDMContentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DDMContentModelImpl.UUID_COLUMN_BITMASK |
+			DDMContentModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m contents where uuid = &#63; and companyId = &#63;.
@@ -1488,7 +1493,8 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(DDMContentModelImpl.ENTITY_CACHE_ENABLED,
 			DDMContentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DDMContentModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m contents where groupId = &#63;.
@@ -1997,7 +2003,8 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(DDMContentModelImpl.ENTITY_CACHE_ENABLED,
 			DDMContentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DDMContentModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d m contents where companyId = &#63;.

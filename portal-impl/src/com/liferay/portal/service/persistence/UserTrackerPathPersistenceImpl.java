@@ -91,7 +91,8 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERTRACKERID = new FinderPath(UserTrackerPathModelImpl.ENTITY_CACHE_ENABLED,
 			UserTrackerPathModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserTrackerId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			UserTrackerPathModelImpl.USERTRACKERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the user tracker paths where userTrackerId = &#63;.

@@ -91,7 +91,8 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
 			PluginSettingModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			PluginSettingModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the plugin settings where companyId = &#63;.
@@ -608,7 +609,10 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
-			});
+			},
+			PluginSettingModelImpl.COMPANYID_COLUMN_BITMASK |
+			PluginSettingModelImpl.PLUGINID_COLUMN_BITMASK |
+			PluginSettingModelImpl.PLUGINTYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns the plugin setting where companyId = &#63; and pluginId = &#63; and pluginType = &#63; or throws a {@link com.liferay.portal.NoSuchPluginSettingException} if it could not be found.

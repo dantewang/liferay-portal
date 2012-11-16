@@ -100,7 +100,8 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	public static final FinderPath FINDER_PATH_COUNT_BY_ACTIVE = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByActive",
-			new String[] { Boolean.class.getName() });
+			new String[] { Boolean.class.getName() },
+			SCLicenseModelImpl.ACTIVE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the s c licenses where active = &#63;.
@@ -963,7 +964,9 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	public static final FinderPath FINDER_PATH_COUNT_BY_A_R = new FinderPath(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
 			SCLicenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByA_R",
-			new String[] { Boolean.class.getName(), Boolean.class.getName() });
+			new String[] { Boolean.class.getName(), Boolean.class.getName() },
+			SCLicenseModelImpl.ACTIVE_COLUMN_BITMASK |
+			SCLicenseModelImpl.RECOMMENDED_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the s c licenses where active = &#63; and recommended = &#63;.

@@ -109,7 +109,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			DLFolderModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library folders where uuid = &#63;.
@@ -650,7 +651,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DLFolderModelImpl.UUID_COLUMN_BITMASK |
+			DLFolderModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the document library folder where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFolderException} if it could not be found.
@@ -912,7 +915,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			DLFolderModelImpl.UUID_COLUMN_BITMASK |
+			DLFolderModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library folders where uuid = &#63; and companyId = &#63;.
@@ -1503,7 +1508,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DLFolderModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library folders where groupId = &#63;.
@@ -2368,7 +2374,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DLFolderModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library folders where companyId = &#63;.
@@ -2878,7 +2885,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	public static final FinderPath FINDER_PATH_COUNT_BY_REPOSITORYID = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRepositoryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DLFolderModelImpl.REPOSITORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the document library folders where repositoryId = &#63;.
@@ -3220,7 +3228,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			DLFolderModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library folders where groupId = &#63; and parentFolderId = &#63;.
@@ -4152,7 +4162,9 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_N = new FinderPath(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByP_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			DLFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK |
+			DLFolderModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library folders where parentFolderId = &#63; and name = &#63;.
@@ -4748,7 +4760,10 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName()
-			});
+			},
+			DLFolderModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFolderModelImpl.MOUNTPOINT_COLUMN_BITMASK |
+			DLFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63;.
@@ -5742,7 +5757,10 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			DLFolderModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK |
+			DLFolderModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the document library folder where groupId = &#63; and parentFolderId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFolderException} if it could not be found.
@@ -6027,7 +6045,10 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			DLFolderModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK |
+			DLFolderModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library folders where groupId = &#63; and parentFolderId = &#63; and status = &#63;.
@@ -7018,7 +7039,11 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName(), Boolean.class.getName()
-			});
+			},
+			DLFolderModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFolderModelImpl.MOUNTPOINT_COLUMN_BITMASK |
+			DLFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK |
+			DLFolderModelImpl.HIDDEN_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and hidden = &#63;.
@@ -8079,7 +8104,11 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName(), Integer.class.getName()
-			});
+			},
+			DLFolderModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFolderModelImpl.MOUNTPOINT_COLUMN_BITMASK |
+			DLFolderModelImpl.PARENTFOLDERID_COLUMN_BITMASK |
+			DLFolderModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library folders where groupId = &#63; and mountPoint = &#63; and parentFolderId = &#63; and status = &#63;.

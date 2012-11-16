@@ -92,7 +92,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DLFileRankModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file ranks where userId = &#63;.
@@ -599,7 +600,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	public static final FinderPath FINDER_PATH_COUNT_BY_FILEENTRYID = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByFileEntryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DLFileRankModelImpl.FILEENTRYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file ranks where fileEntryId = &#63;.
@@ -1112,7 +1114,9 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			DLFileRankModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFileRankModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file ranks where groupId = &#63; and userId = &#63;.
@@ -1668,7 +1672,10 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			DLFileRankModelImpl.GROUPID_COLUMN_BITMASK |
+			DLFileRankModelImpl.USERID_COLUMN_BITMASK |
+			DLFileRankModelImpl.ACTIVE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the document library file ranks where groupId = &#63; and userId = &#63; and active = &#63;.
@@ -2260,7 +2267,10 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 			FINDER_CLASS_NAME_COUNT, "countByC_U_F",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			DLFileRankModelImpl.COMPANYID_COLUMN_BITMASK |
+			DLFileRankModelImpl.USERID_COLUMN_BITMASK |
+			DLFileRankModelImpl.FILEENTRYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the document library file rank where companyId = &#63; and userId = &#63; and fileEntryId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileRankException} if it could not be found.

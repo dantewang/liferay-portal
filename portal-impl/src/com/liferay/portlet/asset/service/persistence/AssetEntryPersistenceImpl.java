@@ -115,7 +115,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AssetEntryModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset entries where companyId = &#63;.
@@ -628,7 +629,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_VISIBLE = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByVisible",
-			new String[] { Boolean.class.getName() });
+			new String[] { Boolean.class.getName() },
+			AssetEntryModelImpl.VISIBLE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset entries where visible = &#63;.
@@ -1137,7 +1139,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_PUBLISHDATE = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByPublishDate",
-			new String[] { Date.class.getName() });
+			new String[] { Date.class.getName() },
+			AssetEntryModelImpl.PUBLISHDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset entries where publishDate = &#63;.
@@ -1672,7 +1675,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_EXPIRATIONDATE = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByExpirationDate",
-			new String[] { Date.class.getName() });
+			new String[] { Date.class.getName() },
+			AssetEntryModelImpl.EXPIRATIONDATE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset entries where expirationDate = &#63;.
@@ -2215,7 +2219,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_LAYOUTUUID = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLayoutUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			AssetEntryModelImpl.LAYOUTUUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset entries where layoutUuid = &#63;.
@@ -2766,7 +2771,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_CU = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_CU",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			AssetEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			AssetEntryModelImpl.CLASSUUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the asset entries where groupId = &#63; and classUuid = &#63;.
@@ -3160,7 +3167,9 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			AssetEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			AssetEntryModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns the asset entry where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchEntryException} if it could not be found.

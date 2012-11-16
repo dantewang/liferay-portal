@@ -107,7 +107,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SCProductEntryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the s c product entries where groupId = &#63;.
@@ -979,7 +980,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SCProductEntryModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the s c product entries where companyId = &#63;.
@@ -1492,7 +1494,9 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			SCProductEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			SCProductEntryModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the s c product entries where groupId = &#63; and userId = &#63;.
@@ -2422,7 +2426,9 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	public static final FinderPath FINDER_PATH_COUNT_BY_RG_RA = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRG_RA",
-			new String[] { String.class.getName(), String.class.getName() });
+			new String[] { String.class.getName(), String.class.getName() },
+			SCProductEntryModelImpl.REPOGROUPID_COLUMN_BITMASK |
+			SCProductEntryModelImpl.REPOARTIFACTID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the s c product entries where repoGroupId = &#63; and repoArtifactId = &#63;.

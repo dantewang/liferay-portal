@@ -89,7 +89,8 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the email addresses where companyId = &#63;.
@@ -602,7 +603,8 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			EmailAddressModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the email addresses where userId = &#63;.
@@ -1112,7 +1114,9 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the email addresses where companyId = &#63; and classNameId = &#63;.
@@ -1668,7 +1672,10 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 			FINDER_CLASS_NAME_COUNT, "countByC_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -2263,7 +2270,11 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CLASSPK_COLUMN_BITMASK |
+			EmailAddressModelImpl.PRIMARY_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.

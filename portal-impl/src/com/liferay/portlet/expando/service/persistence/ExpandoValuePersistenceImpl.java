@@ -92,7 +92,8 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public static final FinderPath FINDER_PATH_COUNT_BY_TABLEID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByTableId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the expando values where tableId = &#63;.
@@ -603,7 +604,8 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public static final FinderPath FINDER_PATH_COUNT_BY_COLUMNID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByColumnId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the expando values where columnId = &#63;.
@@ -1116,7 +1118,8 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public static final FinderPath FINDER_PATH_COUNT_BY_ROWID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRowId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the expando values where rowId = &#63;.
@@ -1623,7 +1626,9 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByT_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the expando values where tableId = &#63; and columnId = &#63;.
@@ -2176,7 +2181,9 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_CPK = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByT_CPK",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the expando values where tableId = &#63; and classPK = &#63;.
@@ -2730,7 +2737,9 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_R = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByT_R",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the expando values where tableId = &#63; and rowId = &#63;.
@@ -3278,7 +3287,9 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_R = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_R",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the expando value where columnId = &#63; and rowId = &#63; or throws a {@link com.liferay.portlet.expando.NoSuchValueException} if it could not be found.
@@ -3512,7 +3523,9 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			ExpandoValueModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the expando values where classNameId = &#63; and classPK = &#63;.
@@ -4068,7 +4081,10 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			FINDER_CLASS_NAME_COUNT, "countByT_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns the expando value where tableId = &#63; and columnId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.expando.NoSuchValueException} if it could not be found.
@@ -4326,7 +4342,10 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.DATA_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the expando values where tableId = &#63; and columnId = &#63; and data = &#63;.

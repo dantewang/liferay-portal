@@ -91,7 +91,8 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MBBanModelImpl.ENTITY_CACHE_ENABLED,
 			MBBanModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBBanModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards bans where groupId = &#63;.
@@ -595,7 +596,8 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(MBBanModelImpl.ENTITY_CACHE_ENABLED,
 			MBBanModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBBanModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards bans where userId = &#63;.
@@ -1099,7 +1101,8 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public static final FinderPath FINDER_PATH_COUNT_BY_BANUSERID = new FinderPath(MBBanModelImpl.ENTITY_CACHE_ENABLED,
 			MBBanModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByBanUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBBanModelImpl.BANUSERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message boards bans where banUserId = &#63;.
@@ -1604,7 +1607,9 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_B = new FinderPath(MBBanModelImpl.ENTITY_CACHE_ENABLED,
 			MBBanModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_B",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBBanModelImpl.GROUPID_COLUMN_BITMASK |
+			MBBanModelImpl.BANUSERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the message boards ban where groupId = &#63; and banUserId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchBanException} if it could not be found.

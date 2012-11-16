@@ -91,7 +91,8 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 	public static final FinderPath FINDER_PATH_COUNT_BY_E1 = new FinderPath(AssetLinkModelImpl.ENTITY_CACHE_ENABLED,
 			AssetLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByE1",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AssetLinkModelImpl.ENTRYID1_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset links where entryId1 = &#63;.
@@ -597,7 +598,8 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 	public static final FinderPath FINDER_PATH_COUNT_BY_E2 = new FinderPath(AssetLinkModelImpl.ENTITY_CACHE_ENABLED,
 			AssetLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByE2",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AssetLinkModelImpl.ENTRYID2_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset links where entryId2 = &#63;.
@@ -1103,7 +1105,9 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 	public static final FinderPath FINDER_PATH_COUNT_BY_E_E = new FinderPath(AssetLinkModelImpl.ENTITY_CACHE_ENABLED,
 			AssetLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByE_E",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			AssetLinkModelImpl.ENTRYID1_COLUMN_BITMASK |
+			AssetLinkModelImpl.ENTRYID2_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset links where entryId1 = &#63; and entryId2 = &#63;.
@@ -1656,7 +1660,9 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 	public static final FinderPath FINDER_PATH_COUNT_BY_E1_T = new FinderPath(AssetLinkModelImpl.ENTITY_CACHE_ENABLED,
 			AssetLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByE1_T",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			AssetLinkModelImpl.ENTRYID1_COLUMN_BITMASK |
+			AssetLinkModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset links where entryId1 = &#63; and type = &#63;.
@@ -2206,7 +2212,9 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 	public static final FinderPath FINDER_PATH_COUNT_BY_E2_T = new FinderPath(AssetLinkModelImpl.ENTITY_CACHE_ENABLED,
 			AssetLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByE2_T",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			AssetLinkModelImpl.ENTRYID2_COLUMN_BITMASK |
+			AssetLinkModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset links where entryId2 = &#63; and type = &#63;.
@@ -2760,7 +2768,10 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			AssetLinkModelImpl.ENTRYID1_COLUMN_BITMASK |
+			AssetLinkModelImpl.ENTRYID2_COLUMN_BITMASK |
+			AssetLinkModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns the asset link where entryId1 = &#63; and entryId2 = &#63; and type = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchLinkException} if it could not be found.

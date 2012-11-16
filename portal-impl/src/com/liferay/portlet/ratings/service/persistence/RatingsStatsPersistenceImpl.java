@@ -88,7 +88,9 @@ public class RatingsStatsPersistenceImpl extends BasePersistenceImpl<RatingsStat
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(RatingsStatsModelImpl.ENTITY_CACHE_ENABLED,
 			RatingsStatsModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			RatingsStatsModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			RatingsStatsModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns the ratings stats where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.ratings.NoSuchStatsException} if it could not be found.

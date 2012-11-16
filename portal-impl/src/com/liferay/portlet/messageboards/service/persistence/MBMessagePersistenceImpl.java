@@ -115,7 +115,8 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			MBMessageModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where uuid = &#63;.
@@ -656,7 +657,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			MBMessageModelImpl.UUID_COLUMN_BITMASK |
+			MBMessageModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the message-boards message where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchMessageException} if it could not be found.
@@ -918,7 +921,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			MBMessageModelImpl.UUID_COLUMN_BITMASK |
+			MBMessageModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where uuid = &#63; and companyId = &#63;.
@@ -1509,7 +1514,8 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBMessageModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where groupId = &#63;.
@@ -2376,7 +2382,8 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBMessageModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where companyId = &#63;.
@@ -2888,7 +2895,8 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_THREADID = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByThreadId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBMessageModelImpl.THREADID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where threadId = &#63;.
@@ -3398,7 +3406,8 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_THREADREPLIES = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByThreadReplies",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBMessageModelImpl.THREADID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where threadId = &#63;.
@@ -3911,7 +3920,8 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			MBMessageModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where userId = &#63;.
@@ -4417,7 +4427,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBMessageModelImpl.GROUPID_COLUMN_BITMASK |
+			MBMessageModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where groupId = &#63; and userId = &#63;.
@@ -5345,7 +5357,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBMessageModelImpl.GROUPID_COLUMN_BITMASK |
+			MBMessageModelImpl.CATEGORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where groupId = &#63; and categoryId = &#63;.
@@ -6275,7 +6289,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			MBMessageModelImpl.GROUPID_COLUMN_BITMASK |
+			MBMessageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where groupId = &#63; and status = &#63;.
@@ -7201,7 +7217,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			MBMessageModelImpl.COMPANYID_COLUMN_BITMASK |
+			MBMessageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where companyId = &#63; and status = &#63;.
@@ -7753,7 +7771,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_C = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByU_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBMessageModelImpl.USERID_COLUMN_BITMASK |
+			MBMessageModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where userId = &#63; and classNameId = &#63;.
@@ -8570,7 +8590,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBMessageModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			MBMessageModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where classNameId = &#63; and classPK = &#63;.
@@ -9123,7 +9145,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_P = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByT_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBMessageModelImpl.THREADID_COLUMN_BITMASK |
+			MBMessageModelImpl.PARENTMESSAGEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where threadId = &#63; and parentMessageId = &#63;.
@@ -9677,7 +9701,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_A = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByT_A",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			MBMessageModelImpl.THREADID_COLUMN_BITMASK |
+			MBMessageModelImpl.ANSWER_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where threadId = &#63; and answer = &#63;.
@@ -10230,7 +10256,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_S = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByT_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			MBMessageModelImpl.THREADID_COLUMN_BITMASK |
+			MBMessageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where threadId = &#63; and status = &#63;.
@@ -10782,7 +10810,9 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_TR_S = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByTR_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			MBMessageModelImpl.THREADID_COLUMN_BITMASK |
+			MBMessageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where threadId = &#63; and status = &#63;.
@@ -11338,7 +11368,10 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MBMessageModelImpl.GROUPID_COLUMN_BITMASK |
+			MBMessageModelImpl.USERID_COLUMN_BITMASK |
+			MBMessageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where groupId = &#63; and userId = &#63; and status = &#63;.
@@ -12324,7 +12357,10 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 			FINDER_CLASS_NAME_COUNT, "countByG_C_T",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			MBMessageModelImpl.GROUPID_COLUMN_BITMASK |
+			MBMessageModelImpl.CATEGORYID_COLUMN_BITMASK |
+			MBMessageModelImpl.THREADID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where groupId = &#63; and categoryId = &#63; and threadId = &#63;.
@@ -13314,7 +13350,10 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MBMessageModelImpl.GROUPID_COLUMN_BITMASK |
+			MBMessageModelImpl.CATEGORYID_COLUMN_BITMASK |
+			MBMessageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where groupId = &#63; and categoryId = &#63; and status = &#63;.
@@ -14302,7 +14341,10 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 			FINDER_CLASS_NAME_COUNT, "countByU_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			MBMessageModelImpl.USERID_COLUMN_BITMASK |
+			MBMessageModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			MBMessageModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where userId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -14896,7 +14938,10 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MBMessageModelImpl.USERID_COLUMN_BITMASK |
+			MBMessageModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			MBMessageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where userId = &#63; and classNameId = &#63; and status = &#63;.
@@ -15783,7 +15828,10 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MBMessageModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			MBMessageModelImpl.CLASSPK_COLUMN_BITMASK |
+			MBMessageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where classNameId = &#63; and classPK = &#63; and status = &#63;.
@@ -16378,7 +16426,11 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			MBMessageModelImpl.GROUPID_COLUMN_BITMASK |
+			MBMessageModelImpl.CATEGORYID_COLUMN_BITMASK |
+			MBMessageModelImpl.THREADID_COLUMN_BITMASK |
+			MBMessageModelImpl.ANSWER_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where groupId = &#63; and categoryId = &#63; and threadId = &#63; and answer = &#63;.
@@ -17428,7 +17480,11 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MBMessageModelImpl.GROUPID_COLUMN_BITMASK |
+			MBMessageModelImpl.CATEGORYID_COLUMN_BITMASK |
+			MBMessageModelImpl.THREADID_COLUMN_BITMASK |
+			MBMessageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where groupId = &#63; and categoryId = &#63; and threadId = &#63; and status = &#63;.
@@ -18478,7 +18534,11 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
-			});
+			},
+			MBMessageModelImpl.USERID_COLUMN_BITMASK |
+			MBMessageModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			MBMessageModelImpl.CLASSPK_COLUMN_BITMASK |
+			MBMessageModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the message-boards messages where userId = &#63; and classNameId = &#63; and classPK = &#63; and status = &#63;.

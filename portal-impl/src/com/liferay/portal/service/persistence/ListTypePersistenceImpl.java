@@ -90,7 +90,8 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 	public static final FinderPath FINDER_PATH_COUNT_BY_TYPE = new FinderPath(ListTypeModelImpl.ENTITY_CACHE_ENABLED,
 			ListTypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByType",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			ListTypeModelImpl.TYPE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the list types where type = &#63;.

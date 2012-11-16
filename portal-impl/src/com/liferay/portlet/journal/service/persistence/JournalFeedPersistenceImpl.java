@@ -96,7 +96,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			JournalFeedModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal feeds where uuid = &#63;.
@@ -637,7 +638,9 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalFeedModelImpl.UUID_COLUMN_BITMASK |
+			JournalFeedModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal feed where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchFeedException} if it could not be found.
@@ -899,7 +902,9 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			JournalFeedModelImpl.UUID_COLUMN_BITMASK |
+			JournalFeedModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal feeds where uuid = &#63; and companyId = &#63;.
@@ -1491,7 +1496,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			JournalFeedModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the journal feeds where groupId = &#63;.
@@ -2355,7 +2361,9 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
 			JournalFeedModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_F",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			JournalFeedModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalFeedModelImpl.FEEDID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the journal feed where groupId = &#63; and feedId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchFeedException} if it could not be found.

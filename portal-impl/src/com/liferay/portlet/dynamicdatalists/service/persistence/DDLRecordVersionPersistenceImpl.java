@@ -94,7 +94,8 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	public static final FinderPath FINDER_PATH_COUNT_BY_RECORDID = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByRecordId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DDLRecordVersionModelImpl.RECORDID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d l record versions where recordId = &#63;.
@@ -604,7 +605,9 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_V = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByR_V",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			DDLRecordVersionModelImpl.RECORDID_COLUMN_BITMASK |
+			DDLRecordVersionModelImpl.VERSION_COLUMN_BITMASK);
 
 	/**
 	 * Returns the d d l record version where recordId = &#63; and version = &#63; or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException} if it could not be found.
@@ -866,7 +869,9 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_S = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByR_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			DDLRecordVersionModelImpl.RECORDID_COLUMN_BITMASK |
+			DDLRecordVersionModelImpl.STATUS_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d d l record versions where recordId = &#63; and status = &#63;.

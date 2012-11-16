@@ -92,7 +92,9 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(ExpandoTableModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoTableModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			ExpandoTableModelImpl.COMPANYID_COLUMN_BITMASK |
+			ExpandoTableModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the expando tables where companyId = &#63; and classNameId = &#63;.
@@ -650,7 +652,10 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			ExpandoTableModelImpl.COMPANYID_COLUMN_BITMASK |
+			ExpandoTableModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			ExpandoTableModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the expando table where companyId = &#63; and classNameId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.expando.NoSuchTableException} if it could not be found.

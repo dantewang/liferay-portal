@@ -103,7 +103,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() });
+			new String[] { String.class.getName() },
+			AssetCategoryModelImpl.UUID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset categories where uuid = &#63;.
@@ -647,7 +648,9 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			AssetCategoryModelImpl.UUID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the asset category where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchCategoryException} if it could not be found.
@@ -909,7 +912,9 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			AssetCategoryModelImpl.UUID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset categories where uuid = &#63; and companyId = &#63;.
@@ -1501,7 +1506,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AssetCategoryModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset categories where groupId = &#63;.
@@ -2373,7 +2379,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public static final FinderPath FINDER_PATH_COUNT_BY_PARENTCATEGORYID = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByParentCategoryId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AssetCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset categories where parentCategoryId = &#63;.
@@ -2895,7 +2902,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public static final FinderPath FINDER_PATH_COUNT_BY_VOCABULARYID = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByVocabularyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			AssetCategoryModelImpl.VOCABULARYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset categories where vocabularyId = &#63;.
@@ -3413,7 +3421,9 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_V = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByG_V",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			AssetCategoryModelImpl.GROUPID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.VOCABULARYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset categories where groupId = &#63; and vocabularyId = &#63;.
@@ -4346,7 +4356,9 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_N = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByP_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			AssetCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset categories where parentCategoryId = &#63; and name = &#63;.
@@ -4938,7 +4950,9 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_V = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByP_V",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			AssetCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.VOCABULARYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset categories where parentCategoryId = &#63; and vocabularyId = &#63;.
@@ -5495,7 +5509,9 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_V = new FinderPath(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByN_V",
-			new String[] { String.class.getName(), Long.class.getName() });
+			new String[] { String.class.getName(), Long.class.getName() },
+			AssetCategoryModelImpl.NAME_COLUMN_BITMASK |
+			AssetCategoryModelImpl.VOCABULARYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset categories where name = &#63; and vocabularyId = &#63;.
@@ -6091,7 +6107,10 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			AssetCategoryModelImpl.GROUPID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the asset categories where groupId = &#63; and parentCategoryId = &#63; and name = &#63;.
@@ -7160,7 +7179,10 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Long.class.getName()
-			});
+			},
+			AssetCategoryModelImpl.PARENTCATEGORYID_COLUMN_BITMASK |
+			AssetCategoryModelImpl.NAME_COLUMN_BITMASK |
+			AssetCategoryModelImpl.VOCABULARYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the asset category where parentCategoryId = &#63; and name = &#63; and vocabularyId = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchCategoryException} if it could not be found.

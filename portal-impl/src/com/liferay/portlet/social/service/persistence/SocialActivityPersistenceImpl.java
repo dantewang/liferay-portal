@@ -95,7 +95,8 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialActivityModelImpl.GROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activities where groupId = &#63;.
@@ -608,7 +609,8 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialActivityModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activities where companyId = &#63;.
@@ -1121,7 +1123,8 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialActivityModelImpl.USERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activities where userId = &#63;.
@@ -1633,7 +1636,8 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public static final FinderPath FINDER_PATH_COUNT_BY_MIRRORACTIVITYID = new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByMirrorActivityId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialActivityModelImpl.MIRRORACTIVITYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the social activities where mirrorActivityId = &#63;.
@@ -1979,7 +1983,8 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSNAMEID = new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByClassNameId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialActivityModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activities where classNameId = &#63;.
@@ -2493,7 +2498,8 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public static final FinderPath FINDER_PATH_COUNT_BY_RECEIVERUSERID = new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByReceiverUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			SocialActivityModelImpl.RECEIVERUSERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activities where receiverUserId = &#63;.
@@ -3013,7 +3019,9 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(SocialActivityModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			SocialActivityModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivityModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activities where classNameId = &#63; and classPK = &#63;.
@@ -3569,7 +3577,10 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 			FINDER_CLASS_NAME_COUNT, "countByM_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			SocialActivityModelImpl.MIRRORACTIVITYID_COLUMN_BITMASK |
+			SocialActivityModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivityModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activities where mirrorActivityId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -4175,7 +4186,13 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName(), Integer.class.getName(),
 				Long.class.getName()
-			});
+			},
+			SocialActivityModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityModelImpl.USERID_COLUMN_BITMASK |
+			SocialActivityModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivityModelImpl.CLASSPK_COLUMN_BITMASK |
+			SocialActivityModelImpl.TYPE_COLUMN_BITMASK |
+			SocialActivityModelImpl.RECEIVERUSERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the social activities where groupId = &#63; and userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63;.
@@ -4907,7 +4924,14 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(), Long.class.getName()
-			});
+			},
+			SocialActivityModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityModelImpl.USERID_COLUMN_BITMASK |
+			SocialActivityModelImpl.CREATEDATE_COLUMN_BITMASK |
+			SocialActivityModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			SocialActivityModelImpl.CLASSPK_COLUMN_BITMASK |
+			SocialActivityModelImpl.TYPE_COLUMN_BITMASK |
+			SocialActivityModelImpl.RECEIVERUSERID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the social activity where groupId = &#63; and userId = &#63; and createDate = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivityException} if it could not be found.

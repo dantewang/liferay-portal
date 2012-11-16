@@ -91,7 +91,8 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	public static final FinderPath FINDER_PATH_COUNT_BY_FILEID = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
 			DLSyncModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByFileId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			DLSyncModelImpl.FILEID_COLUMN_BITMASK);
 
 	/**
 	 * Returns the d l sync where fileId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchSyncException} if it could not be found.
@@ -307,7 +308,10 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 			FINDER_CLASS_NAME_COUNT, "countByC_M_R",
 			new String[] {
 				Long.class.getName(), Date.class.getName(), Long.class.getName()
-			});
+			},
+			DLSyncModelImpl.COMPANYID_COLUMN_BITMASK |
+			DLSyncModelImpl.MODIFIEDDATE_COLUMN_BITMASK |
+			DLSyncModelImpl.REPOSITORYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.

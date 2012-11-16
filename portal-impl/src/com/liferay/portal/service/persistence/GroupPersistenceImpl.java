@@ -122,7 +122,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
 			GroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			GroupModelImpl.COMPANYID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the groups where companyId = &#63;.
@@ -630,7 +631,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	public static final FinderPath FINDER_PATH_COUNT_BY_LIVEGROUPID = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
 			GroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByLiveGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName() },
+			GroupModelImpl.LIVEGROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns an ordered range of all the groups where liveGroupId = &#63;.
@@ -964,7 +966,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
 			GroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_P",
-			new String[] { Long.class.getName(), Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() },
+			GroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			GroupModelImpl.PARENTGROUPID_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the groups where companyId = &#63; and parentGroupId = &#63;.
@@ -1513,7 +1517,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
 			GroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_N",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			GroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			GroupModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the group where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchGroupException} if it could not be found.
@@ -1772,7 +1778,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_F = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
 			GroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_F",
-			new String[] { Long.class.getName(), String.class.getName() });
+			new String[] { Long.class.getName(), String.class.getName() },
+			GroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			GroupModelImpl.FRIENDLYURL_COLUMN_BITMASK);
 
 	/**
 	 * Returns the group where companyId = &#63; and friendlyURL = &#63; or throws a {@link com.liferay.portal.NoSuchGroupException} if it could not be found.
@@ -2034,7 +2042,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
 			GroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByC_S",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			GroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			GroupModelImpl.SITE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the groups where companyId = &#63; and site = &#63;.
@@ -2583,7 +2593,9 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_A = new FinderPath(GroupModelImpl.ENTITY_CACHE_ENABLED,
 			GroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_COUNT, "countByT_A",
-			new String[] { Integer.class.getName(), Boolean.class.getName() });
+			new String[] { Integer.class.getName(), Boolean.class.getName() },
+			GroupModelImpl.TYPE_COLUMN_BITMASK |
+			GroupModelImpl.ACTIVE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the groups where type = &#63; and active = &#63;.
@@ -3131,7 +3143,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 			FINDER_CLASS_NAME_COUNT, "countByC_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			});
+			},
+			GroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			GroupModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			GroupModelImpl.CLASSPK_COLUMN_BITMASK);
 
 	/**
 	 * Returns the group where companyId = &#63; and classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portal.NoSuchGroupException} if it could not be found.
@@ -3389,7 +3404,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
-			});
+			},
+			GroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			GroupModelImpl.PARENTGROUPID_COLUMN_BITMASK |
+			GroupModelImpl.SITE_COLUMN_BITMASK);
 
 	/**
 	 * Returns all the groups where companyId = &#63; and parentGroupId = &#63; and site = &#63;.
@@ -3982,7 +4000,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			GroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			GroupModelImpl.LIVEGROUPID_COLUMN_BITMASK |
+			GroupModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the group where companyId = &#63; and liveGroupId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchGroupException} if it could not be found.
@@ -4268,7 +4289,11 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				String.class.getName()
-			});
+			},
+			GroupModelImpl.COMPANYID_COLUMN_BITMASK |
+			GroupModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			GroupModelImpl.LIVEGROUPID_COLUMN_BITMASK |
+			GroupModelImpl.NAME_COLUMN_BITMASK);
 
 	/**
 	 * Returns the group where companyId = &#63; and classNameId = &#63; and liveGroupId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchGroupException} if it could not be found.
