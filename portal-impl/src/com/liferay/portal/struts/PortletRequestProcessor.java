@@ -21,11 +21,9 @@ import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
-import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -580,12 +578,10 @@ public class PortletRequestProcessor extends TilesRequestProcessor {
 				ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 					WebKeys.THEME_DISPLAY);
 
-				Layout layout = themeDisplay.getLayout();
-				PermissionChecker permissionChecker =
-					themeDisplay.getPermissionChecker();
-
 				if (!PortletPermissionUtil.contains(
-						permissionChecker, layout, portlet, ActionKeys.VIEW)) {
+						themeDisplay.getPermissionChecker(),
+						themeDisplay.getScopeGroupId(),
+						themeDisplay.getLayout(), portlet, ActionKeys.VIEW)) {
 
 					throw new PrincipalException();
 				}
