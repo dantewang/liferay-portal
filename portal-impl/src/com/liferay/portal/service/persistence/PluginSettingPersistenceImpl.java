@@ -67,31 +67,39 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 	 * Never modify or reference this class directly. Always use {@link PluginSettingUtil} to access the plugin setting persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = PluginSettingImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
 			PluginSettingModelImpl.FINDER_CACHE_ENABLED,
-			PluginSettingImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
-			new String[0]);
+			PluginSettingImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
 			PluginSettingModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_COMPANYID = new FinderPath(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
 			PluginSettingModelImpl.FINDER_CACHE_ENABLED,
-			PluginSettingImpl.class, FINDER_CLASS_NAME_LIST, "findByCompanyId",
+			PluginSettingImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByCompanyId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
+			PluginSettingModelImpl.FINDER_CACHE_ENABLED,
+			PluginSettingImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByCompanyId", new String[] { Long.class.getName() },
+			PluginSettingModelImpl.COMPANYID_COLUMN_BITMASK |
+			PluginSettingModelImpl.PLUGINSETTINGID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
 			PluginSettingModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() },
-			PluginSettingModelImpl.COMPANYID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the plugin settings where companyId = &#63;.
@@ -285,17 +293,20 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 	 */
 	public List<PluginSetting> findByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId, start, end, orderByComparator };
 		}
 
-		List<PluginSetting> list = (List<PluginSetting>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_COMPANYID,
+		List<PluginSetting> list = (List<PluginSetting>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -349,12 +360,10 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -598,14 +607,11 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 			PluginSettingModelImpl.PLUGINTYPE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_I_T = new FinderPath(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
 			PluginSettingModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_I_T",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_I_T",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
-			},
-			PluginSettingModelImpl.COMPANYID_COLUMN_BITMASK |
-			PluginSettingModelImpl.PLUGINID_COLUMN_BITMASK |
-			PluginSettingModelImpl.PLUGINTYPE_COLUMN_BITMASK);
+			});
 
 	/**
 	 * Returns the plugin setting where companyId = &#63; and pluginId = &#63; and pluginType = &#63; or throws a {@link com.liferay.portal.NoSuchPluginSettingException} if it could not be found.
@@ -955,8 +961,8 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 		EntityCacheUtil.clearCache(PluginSettingImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -971,16 +977,16 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 		EntityCacheUtil.removeResult(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
 			PluginSettingImpl.class, pluginSetting.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(pluginSetting);
 	}
 
 	@Override
 	public void clearCache(List<PluginSetting> pluginSettings) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (PluginSetting pluginSetting : pluginSettings) {
 			EntityCacheUtil.removeResult(PluginSettingModelImpl.ENTITY_CACHE_ENABLED,
@@ -1134,20 +1140,22 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !PluginSettingModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((pluginSettingModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_COMPANYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(pluginSettingModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
 					args);
 
 				args = new Object[] {
@@ -1155,6 +1163,8 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
 					args);
 			}
 		}
@@ -1498,7 +1508,8 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 	public void destroy() {
 		EntityCacheUtil.removeCache(PluginSettingImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

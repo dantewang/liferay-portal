@@ -69,30 +69,37 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	 * Never modify or reference this class directly. Always use {@link ExpandoValueUtil} to access the expando value persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = ExpandoValueImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_TABLEID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_TABLEID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByTableId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByTableId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TABLEID =
+		new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByTableId",
+			new String[] { Long.class.getName() },
+			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_TABLEID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByTableId",
-			new String[] { Long.class.getName() },
-			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByTableId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the expando values where tableId = &#63;.
@@ -285,17 +292,20 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	 */
 	public List<ExpandoValue> findByTableId(long tableId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TABLEID;
 			finderArgs = new Object[] { tableId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TABLEID;
 			finderArgs = new Object[] { tableId, start, end, orderByComparator };
 		}
 
-		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_TABLEID,
+		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -349,12 +359,10 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_TABLEID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_TABLEID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -585,20 +593,27 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	}
 
 	private static final String _FINDER_COLUMN_TABLEID_TABLEID_2 = "expandoValue.tableId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_COLUMNID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COLUMNID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByColumnId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByColumnId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COLUMNID =
+		new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByColumnId",
+			new String[] { Long.class.getName() },
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COLUMNID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByColumnId",
-			new String[] { Long.class.getName() },
-			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByColumnId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the expando values where columnId = &#63;.
@@ -792,17 +807,20 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	 */
 	public List<ExpandoValue> findByColumnId(long columnId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COLUMNID;
 			finderArgs = new Object[] { columnId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COLUMNID;
 			finderArgs = new Object[] { columnId, start, end, orderByComparator };
 		}
 
-		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_COLUMNID,
+		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -856,12 +874,10 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_COLUMNID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_COLUMNID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1093,20 +1109,26 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	}
 
 	private static final String _FINDER_COLUMN_COLUMNID_COLUMNID_2 = "expandoValue.columnId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_ROWID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ROWID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByRowId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByRowId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROWID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByRowId",
+			new String[] { Long.class.getName() },
+			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_ROWID = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByRowId",
-			new String[] { Long.class.getName() },
-			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRowId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the expando values where rowId = &#63;.
@@ -1298,17 +1320,20 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	 */
 	public List<ExpandoValue> findByRowId(long rowId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROWID;
 			finderArgs = new Object[] { rowId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ROWID;
 			finderArgs = new Object[] { rowId, start, end, orderByComparator };
 		}
 
-		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_ROWID,
+		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1362,12 +1387,10 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_ROWID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_ROWID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1595,21 +1618,26 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	}
 
 	private static final String _FINDER_COLUMN_ROWID_ROWID_2 = "expandoValue.rowId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_T_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_T_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByT_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByT_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_T_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
-			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByT_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByT_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
-			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK);
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_T_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByT_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the expando values where tableId = &#63; and columnId = &#63;.
@@ -1811,13 +1839,16 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	 */
 	public List<ExpandoValue> findByT_C(long tableId, long columnId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_C;
 			finderArgs = new Object[] { tableId, columnId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_T_C;
 			finderArgs = new Object[] {
 					tableId, columnId,
 					
@@ -1825,7 +1856,7 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				};
 		}
 
-		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_T_C,
+		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1884,11 +1915,10 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_T_C, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_T_C, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -2143,21 +2173,27 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 	private static final String _FINDER_COLUMN_T_C_TABLEID_2 = "expandoValue.tableId = ? AND ";
 	private static final String _FINDER_COLUMN_T_C_COLUMNID_2 = "expandoValue.columnId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_T_CPK = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_T_CPK = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByT_CPK",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByT_CPK",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_T_CPK = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
-			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByT_CPK",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_CPK = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByT_CPK",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
-			ExpandoValueModelImpl.CLASSPK_COLUMN_BITMASK);
+			ExpandoValueModelImpl.CLASSPK_COLUMN_BITMASK |
+			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_T_CPK = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByT_CPK",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the expando values where tableId = &#63; and classPK = &#63;.
@@ -2360,13 +2396,16 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public List<ExpandoValue> findByT_CPK(long tableId, long classPK,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_CPK;
 			finderArgs = new Object[] { tableId, classPK };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_T_CPK;
 			finderArgs = new Object[] {
 					tableId, classPK,
 					
@@ -2374,7 +2413,7 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				};
 		}
 
-		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_T_CPK,
+		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2433,12 +2472,10 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_T_CPK,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_T_CPK,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -2693,21 +2730,26 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 	private static final String _FINDER_COLUMN_T_CPK_TABLEID_2 = "expandoValue.tableId = ? AND ";
 	private static final String _FINDER_COLUMN_T_CPK_CLASSPK_2 = "expandoValue.classPK = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_T_R = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_T_R = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByT_R",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByT_R",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_T_R = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
-			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByT_R",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_R = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByT_R",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
-			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK);
+			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_T_R = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByT_R",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the expando values where tableId = &#63; and rowId = &#63;.
@@ -2909,13 +2951,16 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	 */
 	public List<ExpandoValue> findByT_R(long tableId, long rowId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_R;
 			finderArgs = new Object[] { tableId, rowId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_T_R;
 			finderArgs = new Object[] {
 					tableId, rowId,
 					
@@ -2923,7 +2968,7 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				};
 		}
 
-		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_T_R,
+		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2982,11 +3027,10 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_T_R, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_T_R, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -3247,10 +3291,8 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_R = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_R",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK |
-			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_R",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns the expando value where columnId = &#63; and rowId = &#63; or throws a {@link com.liferay.portlet.expando.NoSuchValueException} if it could not be found.
@@ -3467,21 +3509,28 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 	private static final String _FINDER_COLUMN_C_R_COLUMNID_2 = "expandoValue.columnId = ? AND ";
 	private static final String _FINDER_COLUMN_C_R_ROWID_2 = "expandoValue.rowId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_C_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByC_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
-			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			ExpandoValueModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			ExpandoValueModelImpl.CLASSPK_COLUMN_BITMASK);
+			ExpandoValueModelImpl.CLASSPK_COLUMN_BITMASK |
+			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK |
+			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the expando values where classNameId = &#63; and classPK = &#63;.
@@ -3684,13 +3733,16 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public List<ExpandoValue> findByC_C(long classNameId, long classPK,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] { classNameId, classPK };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] {
 					classNameId, classPK,
 					
@@ -3698,7 +3750,7 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				};
 		}
 
-		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C,
+		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -3757,11 +3809,10 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -4027,13 +4078,10 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			ExpandoValueModelImpl.CLASSPK_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_C_C = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByT_C_C",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByT_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			},
-			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
-			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK |
-			ExpandoValueModelImpl.CLASSPK_COLUMN_BITMASK);
+			});
 
 	/**
 	 * Returns the expando value where tableId = &#63; and columnId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.expando.NoSuchValueException} if it could not be found.
@@ -4270,9 +4318,9 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	private static final String _FINDER_COLUMN_T_C_C_TABLEID_2 = "expandoValue.tableId = ? AND ";
 	private static final String _FINDER_COLUMN_T_C_C_COLUMNID_2 = "expandoValue.columnId = ? AND ";
 	private static final String _FINDER_COLUMN_T_C_C_CLASSPK_2 = "expandoValue.classPK = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_T_C_D = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_T_C_D = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByT_C_D",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByT_C_D",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(),
@@ -4280,16 +4328,24 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_T_C_D = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
-			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByT_C_D",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_C_D = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, ExpandoValueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByT_C_D",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
 			},
 			ExpandoValueModelImpl.TABLEID_COLUMN_BITMASK |
 			ExpandoValueModelImpl.COLUMNID_COLUMN_BITMASK |
-			ExpandoValueModelImpl.DATA_COLUMN_BITMASK);
+			ExpandoValueModelImpl.DATA_COLUMN_BITMASK |
+			ExpandoValueModelImpl.ROWID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_T_C_D = new FinderPath(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
+			ExpandoValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByT_C_D",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName()
+			});
 
 	/**
 	 * Returns all the expando values where tableId = &#63; and columnId = &#63; and data = &#63;.
@@ -4512,13 +4568,16 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public List<ExpandoValue> findByT_C_D(long tableId, long columnId,
 		String data, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_C_D;
 			finderArgs = new Object[] { tableId, columnId, data };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_T_C_D;
 			finderArgs = new Object[] {
 					tableId, columnId, data,
 					
@@ -4526,7 +4585,7 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 				};
 		}
 
-		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_T_C_D,
+		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -4602,12 +4661,10 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_T_C_D,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_T_C_D,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -4959,8 +5016,8 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 		EntityCacheUtil.clearCache(ExpandoValueImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -4975,16 +5032,16 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 		EntityCacheUtil.removeResult(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
 			ExpandoValueImpl.class, expandoValue.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(expandoValue);
 	}
 
 	@Override
 	public void clearCache(List<ExpandoValue> expandoValues) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (ExpandoValue expandoValue : expandoValues) {
 			EntityCacheUtil.removeResult(ExpandoValueModelImpl.ENTITY_CACHE_ENABLED,
@@ -5142,66 +5199,80 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !ExpandoValueModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((expandoValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_TABLEID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TABLEID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getOriginalTableId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TABLEID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TABLEID,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getTableId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TABLEID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TABLEID,
+					args);
 			}
 
 			if ((expandoValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_COLUMNID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COLUMNID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getOriginalColumnId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COLUMNID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COLUMNID,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getColumnId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COLUMNID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COLUMNID,
+					args);
 			}
 
 			if ((expandoValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_ROWID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROWID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getOriginalRowId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ROWID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROWID,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getRowId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ROWID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROWID,
+					args);
 			}
 
 			if ((expandoValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_T_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getOriginalTableId()),
 						Long.valueOf(expandoValueModelImpl.getOriginalColumnId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_C,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getTableId()),
@@ -5209,16 +5280,20 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_C,
+					args);
 			}
 
 			if ((expandoValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_T_CPK.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_CPK.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getOriginalTableId()),
 						Long.valueOf(expandoValueModelImpl.getOriginalClassPK())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_CPK, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_CPK,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getTableId()),
@@ -5226,16 +5301,20 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_CPK, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_CPK,
+					args);
 			}
 
 			if ((expandoValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_T_R.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_R.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getOriginalTableId()),
 						Long.valueOf(expandoValueModelImpl.getOriginalRowId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_R, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_R,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getTableId()),
@@ -5243,16 +5322,20 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_R, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_R,
+					args);
 			}
 
 			if ((expandoValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_C_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getOriginalClassNameId()),
 						Long.valueOf(expandoValueModelImpl.getOriginalClassPK())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getClassNameId()),
@@ -5260,10 +5343,12 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
 			}
 
 			if ((expandoValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_T_C_D.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_C_D.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getOriginalTableId()),
 						Long.valueOf(expandoValueModelImpl.getOriginalColumnId()),
@@ -5272,6 +5357,8 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_C_D, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_C_D,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(expandoValueModelImpl.getTableId()),
@@ -5281,6 +5368,8 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_C_D, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_T_C_D,
+					args);
 			}
 		}
 
@@ -5641,7 +5730,8 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	public void destroy() {
 		EntityCacheUtil.removeCache(ExpandoValueImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = ExpandoColumnPersistence.class)

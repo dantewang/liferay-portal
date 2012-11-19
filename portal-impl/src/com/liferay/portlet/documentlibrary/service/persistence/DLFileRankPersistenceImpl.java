@@ -69,30 +69,36 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 * Never modify or reference this class directly. Always use {@link DLFileRankUtil} to access the document library file rank persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = DLFileRankImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, DLFileRankImpl.class,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_USERID = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, DLFileRankImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByUserId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
+		new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileRankModelImpl.FINDER_CACHE_ENABLED, DLFileRankImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
+			new String[] { Long.class.getName() },
+			DLFileRankModelImpl.USERID_COLUMN_BITMASK |
+			DLFileRankModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() },
-			DLFileRankModelImpl.USERID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the document library file ranks where userId = &#63;.
@@ -284,17 +290,20 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	public List<DLFileRank> findByUserId(long userId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
 			finderArgs = new Object[] { userId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
 			finderArgs = new Object[] { userId, start, end, orderByComparator };
 		}
 
-		List<DLFileRank> list = (List<DLFileRank>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_USERID,
+		List<DLFileRank> list = (List<DLFileRank>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -348,12 +357,10 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_USERID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_USERID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -581,20 +588,27 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	}
 
 	private static final String _FINDER_COLUMN_USERID_USERID_2 = "dlFileRank.userId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_FILEENTRYID = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_FILEENTRYID =
+		new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, DLFileRankImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByFileEntryId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByFileEntryId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FILEENTRYID =
+		new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileRankModelImpl.FINDER_CACHE_ENABLED, DLFileRankImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByFileEntryId",
+			new String[] { Long.class.getName() },
+			DLFileRankModelImpl.FILEENTRYID_COLUMN_BITMASK |
+			DLFileRankModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_FILEENTRYID = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByFileEntryId",
-			new String[] { Long.class.getName() },
-			DLFileRankModelImpl.FILEENTRYID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByFileEntryId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the document library file ranks where fileEntryId = &#63;.
@@ -788,17 +802,20 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	public List<DLFileRank> findByFileEntryId(long fileEntryId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FILEENTRYID;
 			finderArgs = new Object[] { fileEntryId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_FILEENTRYID;
 			finderArgs = new Object[] { fileEntryId, start, end, orderByComparator };
 		}
 
-		List<DLFileRank> list = (List<DLFileRank>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_FILEENTRYID,
+		List<DLFileRank> list = (List<DLFileRank>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -852,12 +869,10 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_FILEENTRYID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_FILEENTRYID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1089,21 +1104,26 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	}
 
 	private static final String _FINDER_COLUMN_FILEENTRYID_FILEENTRYID_2 = "dlFileRank.fileEntryId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_U = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, DLFileRankImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByG_U",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_U",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
-			DLFileRankModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_U",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileRankModelImpl.FINDER_CACHE_ENABLED, DLFileRankImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			DLFileRankModelImpl.GROUPID_COLUMN_BITMASK |
-			DLFileRankModelImpl.USERID_COLUMN_BITMASK);
+			DLFileRankModelImpl.USERID_COLUMN_BITMASK |
+			DLFileRankModelImpl.CREATEDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileRankModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_U",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the document library file ranks where groupId = &#63; and userId = &#63;.
@@ -1305,13 +1325,16 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	public List<DLFileRank> findByG_U(long groupId, long userId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U;
 			finderArgs = new Object[] { groupId, userId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U;
 			finderArgs = new Object[] {
 					groupId, userId,
 					
@@ -1319,7 +1342,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 				};
 		}
 
-		List<DLFileRank> list = (List<DLFileRank>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_U,
+		List<DLFileRank> list = (List<DLFileRank>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1378,11 +1401,10 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_U, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_U, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1636,9 +1658,9 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 	private static final String _FINDER_COLUMN_G_U_GROUPID_2 = "dlFileRank.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_U_USERID_2 = "dlFileRank.userId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_U_A = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_A = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, DLFileRankImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByG_U_A",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_U_A",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
@@ -1646,16 +1668,24 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_U_A = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
-			DLFileRankModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_U_A",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_A = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileRankModelImpl.FINDER_CACHE_ENABLED, DLFileRankImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U_A",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			},
 			DLFileRankModelImpl.GROUPID_COLUMN_BITMASK |
 			DLFileRankModelImpl.USERID_COLUMN_BITMASK |
-			DLFileRankModelImpl.ACTIVE_COLUMN_BITMASK);
+			DLFileRankModelImpl.ACTIVE_COLUMN_BITMASK |
+			DLFileRankModelImpl.CREATEDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_U_A = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileRankModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_U_A",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
 
 	/**
 	 * Returns all the document library file ranks where groupId = &#63; and userId = &#63; and active = &#63;.
@@ -1866,13 +1896,16 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	public List<DLFileRank> findByG_U_A(long groupId, long userId,
 		boolean active, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_A;
 			finderArgs = new Object[] { groupId, userId, active };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_A;
 			finderArgs = new Object[] {
 					groupId, userId, active,
 					
@@ -1880,7 +1913,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 				};
 		}
 
-		List<DLFileRank> list = (List<DLFileRank>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_U_A,
+		List<DLFileRank> list = (List<DLFileRank>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1944,12 +1977,10 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_U_A,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_U_A,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -2238,13 +2269,10 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 			DLFileRankModelImpl.FILEENTRYID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_U_F = new FinderPath(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_U_F",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_U_F",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			},
-			DLFileRankModelImpl.COMPANYID_COLUMN_BITMASK |
-			DLFileRankModelImpl.USERID_COLUMN_BITMASK |
-			DLFileRankModelImpl.FILEENTRYID_COLUMN_BITMASK);
+			});
 
 	/**
 	 * Returns the document library file rank where companyId = &#63; and userId = &#63; and fileEntryId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileRankException} if it could not be found.
@@ -2535,8 +2563,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 		EntityCacheUtil.clearCache(DLFileRankImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -2551,16 +2579,16 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 		EntityCacheUtil.removeResult(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileRankImpl.class, dlFileRank.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(dlFileRank);
 	}
 
 	@Override
 	public void clearCache(List<DLFileRank> dlFileRanks) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (DLFileRank dlFileRank : dlFileRanks) {
 			EntityCacheUtil.removeResult(DLFileRankModelImpl.ENTITY_CACHE_ENABLED,
@@ -2712,35 +2740,41 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !DLFileRankModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((dlFileRankModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_USERID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(dlFileRankModelImpl.getOriginalUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(dlFileRankModelImpl.getUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
 			}
 
 			if ((dlFileRankModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_FILEENTRYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FILEENTRYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(dlFileRankModelImpl.getOriginalFileEntryId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FILEENTRYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FILEENTRYID,
 					args);
 
 				args = new Object[] {
@@ -2749,16 +2783,20 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FILEENTRYID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FILEENTRYID,
+					args);
 			}
 
 			if ((dlFileRankModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_U.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(dlFileRankModelImpl.getOriginalGroupId()),
 						Long.valueOf(dlFileRankModelImpl.getOriginalUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(dlFileRankModelImpl.getGroupId()),
@@ -2766,10 +2804,12 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U,
+					args);
 			}
 
 			if ((dlFileRankModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_U_A.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_A.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(dlFileRankModelImpl.getOriginalGroupId()),
 						Long.valueOf(dlFileRankModelImpl.getOriginalUserId()),
@@ -2777,6 +2817,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_A,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(dlFileRankModelImpl.getGroupId()),
@@ -2785,6 +2827,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_A,
+					args);
 			}
 		}
 
@@ -3120,7 +3164,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	public void destroy() {
 		EntityCacheUtil.removeCache(DLFileRankImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = DLContentPersistence.class)

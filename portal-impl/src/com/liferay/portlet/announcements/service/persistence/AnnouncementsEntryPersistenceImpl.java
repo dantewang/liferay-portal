@@ -77,31 +77,39 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	 * Never modify or reference this class directly. Always use {@link AnnouncementsEntryUtil} to access the announcements entry persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = AnnouncementsEntryImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
-			new String[0]);
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_UUID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class, FINDER_CLASS_NAME_LIST, "findByUuid",
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
 			new String[] {
 				String.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
+			new String[] { String.class.getName() },
+			AnnouncementsEntryModelImpl.UUID_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.PRIORITY_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() },
-			AnnouncementsEntryModelImpl.UUID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the announcements entries where uuid = &#63;.
@@ -639,17 +647,20 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	 */
 	public List<AnnouncementsEntry> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid, start, end, orderByComparator };
 		}
 
-		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID,
+		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -715,12 +726,10 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1025,22 +1034,30 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	private static final String _FINDER_COLUMN_UUID_UUID_1 = "announcementsEntry.uuid IS NULL";
 	private static final String _FINDER_COLUMN_UUID_UUID_2 = "announcementsEntry.uuid = ?";
 	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(announcementsEntry.uuid IS NULL OR announcementsEntry.uuid = ?)";
-	public static final FinderPath FINDER_PATH_FIND_BY_UUID_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class, FINDER_CLASS_NAME_LIST,
-			"findByUuid_C",
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			AnnouncementsEntryModelImpl.UUID_COLUMN_BITMASK |
-			AnnouncementsEntryModelImpl.COMPANYID_COLUMN_BITMASK);
+			AnnouncementsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.PRIORITY_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the announcements entries where uuid = &#63; and companyId = &#63;.
@@ -1604,13 +1621,16 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	public List<AnnouncementsEntry> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] {
 					uuid, companyId,
 					
@@ -1618,7 +1638,7 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 				};
 		}
 
-		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID_C,
+		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1689,12 +1709,10 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID_C,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID_C,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -2029,21 +2047,29 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "announcementsEntry.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(announcementsEntry.uuid IS NULL OR announcementsEntry.uuid = ?) AND ";
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "announcementsEntry.companyId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_USERID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class, FINDER_CLASS_NAME_LIST,
-			"findByUserId",
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
+		new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
+			new String[] { Long.class.getName() },
+			AnnouncementsEntryModelImpl.USERID_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.PRIORITY_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() },
-			AnnouncementsEntryModelImpl.USERID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the announcements entries where userId = &#63;.
@@ -2546,17 +2572,20 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	 */
 	public List<AnnouncementsEntry> findByUserId(long userId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
 			finderArgs = new Object[] { userId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
 			finderArgs = new Object[] { userId, start, end, orderByComparator };
 		}
 
-		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_USERID,
+		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2610,12 +2639,10 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_USERID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_USERID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -2895,21 +2922,29 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	}
 
 	private static final String _FINDER_COLUMN_USERID_USERID_2 = "announcementsEntry.userId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class, FINDER_CLASS_NAME_LIST, "findByC_C",
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			AnnouncementsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			AnnouncementsEntryModelImpl.CLASSPK_COLUMN_BITMASK);
+			AnnouncementsEntryModelImpl.CLASSPK_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.PRIORITY_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the announcements entries where classNameId = &#63; and classPK = &#63;.
@@ -3436,13 +3471,16 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	public List<AnnouncementsEntry> findByC_C(long classNameId, long classPK,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] { classNameId, classPK };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] {
 					classNameId, classPK,
 					
@@ -3450,7 +3488,7 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 				};
 		}
 
-		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C,
+		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -3509,11 +3547,10 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -3822,10 +3859,10 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "announcementsEntry.classNameId = ? AND ";
 	private static final String _FINDER_COLUMN_C_C_CLASSPK_2 = "announcementsEntry.classPK = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_C_C_A = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_A = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
-			AnnouncementsEntryImpl.class, FINDER_CLASS_NAME_LIST,
-			"findByC_C_A",
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_A",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
@@ -3833,16 +3870,26 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_A = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_C_A",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED,
+			AnnouncementsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_A",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			},
 			AnnouncementsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
 			AnnouncementsEntryModelImpl.CLASSPK_COLUMN_BITMASK |
-			AnnouncementsEntryModelImpl.ALERT_COLUMN_BITMASK);
+			AnnouncementsEntryModelImpl.ALERT_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.PRIORITY_COLUMN_BITMASK |
+			AnnouncementsEntryModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_A = new FinderPath(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			AnnouncementsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_A",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
 
 	/**
 	 * Returns all the announcements entries where classNameId = &#63; and classPK = &#63; and alert = &#63;.
@@ -4395,13 +4442,16 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	public List<AnnouncementsEntry> findByC_C_A(long classNameId, long classPK,
 		boolean alert, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A;
 			finderArgs = new Object[] { classNameId, classPK, alert };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_A;
 			finderArgs = new Object[] {
 					classNameId, classPK, alert,
 					
@@ -4409,7 +4459,7 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 				};
 		}
 
-		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C_A,
+		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -4473,12 +4523,10 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C_A,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C_A,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -4864,8 +4912,8 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 		EntityCacheUtil.clearCache(AnnouncementsEntryImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -4880,14 +4928,14 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 		EntityCacheUtil.removeResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AnnouncementsEntryImpl.class, announcementsEntry.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@Override
 	public void clearCache(List<AnnouncementsEntry> announcementsEntries) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (AnnouncementsEntry announcementsEntry : announcementsEntries) {
 			EntityCacheUtil.removeResult(AnnouncementsEntryModelImpl.ENTITY_CACHE_ENABLED,
@@ -5038,34 +5086,40 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !AnnouncementsEntryModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((announcementsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_UUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						announcementsEntryModelImpl.getOriginalUuid()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 
 				args = new Object[] { announcementsEntryModelImpl.getUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 			}
 
 			if ((announcementsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_UUID_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						announcementsEntryModelImpl.getOriginalUuid(),
 						Long.valueOf(announcementsEntryModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
 
 				args = new Object[] {
 						announcementsEntryModelImpl.getUuid(),
@@ -5073,31 +5127,39 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
 			}
 
 			if ((announcementsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_USERID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(announcementsEntryModelImpl.getOriginalUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(announcementsEntryModelImpl.getUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
 			}
 
 			if ((announcementsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_C_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(announcementsEntryModelImpl.getOriginalClassNameId()),
 						Long.valueOf(announcementsEntryModelImpl.getOriginalClassPK())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(announcementsEntryModelImpl.getClassNameId()),
@@ -5105,10 +5167,12 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
 			}
 
 			if ((announcementsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_C_C_A.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(announcementsEntryModelImpl.getOriginalClassNameId()),
 						Long.valueOf(announcementsEntryModelImpl.getOriginalClassPK()),
@@ -5116,6 +5180,8 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(announcementsEntryModelImpl.getClassNameId()),
@@ -5124,6 +5190,8 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A,
+					args);
 			}
 		}
 
@@ -5442,7 +5510,8 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	public void destroy() {
 		EntityCacheUtil.removeCache(AnnouncementsEntryImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AnnouncementsDeliveryPersistence.class)

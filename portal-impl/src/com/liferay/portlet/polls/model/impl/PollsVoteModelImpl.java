@@ -94,6 +94,7 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	public static long CHOICEID_COLUMN_BITMASK = 1L;
 	public static long QUESTIONID_COLUMN_BITMASK = 2L;
 	public static long USERID_COLUMN_BITMASK = 4L;
+	public static long VOTEID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

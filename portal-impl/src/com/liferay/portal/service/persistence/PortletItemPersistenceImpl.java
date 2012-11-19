@@ -67,31 +67,36 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	 * Never modify or reference this class directly. Always use {@link PortletItemUtil} to access the portlet item persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = PortletItemImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 			PortletItemModelImpl.FINDER_CACHE_ENABLED, PortletItemImpl.class,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 			PortletItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_G_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 			PortletItemModelImpl.FINDER_CACHE_ENABLED, PortletItemImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByG_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
-			PortletItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+			PortletItemModelImpl.FINDER_CACHE_ENABLED, PortletItemImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			PortletItemModelImpl.GROUPID_COLUMN_BITMASK |
-			PortletItemModelImpl.CLASSNAMEID_COLUMN_BITMASK);
+			PortletItemModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			PortletItemModelImpl.PORTLETITEMID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+			PortletItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the portlet items where groupId = &#63; and classNameId = &#63;.
@@ -294,13 +299,16 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	public List<PortletItem> findByG_C(long groupId, long classNameId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C;
 			finderArgs = new Object[] { groupId, classNameId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C;
 			finderArgs = new Object[] {
 					groupId, classNameId,
 					
@@ -308,7 +316,7 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 				};
 		}
 
-		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_C,
+		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -367,11 +375,10 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_C, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_C, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -626,9 +633,9 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 	private static final String _FINDER_COLUMN_G_C_GROUPID_2 = "portletItem.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_C_CLASSNAMEID_2 = "portletItem.classNameId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_P_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 			PortletItemModelImpl.FINDER_CACHE_ENABLED, PortletItemImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByG_P_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_C",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Long.class.getName(),
@@ -636,16 +643,24 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
-			PortletItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_P_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+			PortletItemModelImpl.FINDER_CACHE_ENABLED, PortletItemImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_C",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Long.class.getName()
 			},
 			PortletItemModelImpl.GROUPID_COLUMN_BITMASK |
 			PortletItemModelImpl.PORTLETID_COLUMN_BITMASK |
-			PortletItemModelImpl.CLASSNAMEID_COLUMN_BITMASK);
+			PortletItemModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			PortletItemModelImpl.PORTLETITEMID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+			PortletItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_C",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				Long.class.getName()
+			});
 
 	/**
 	 * Returns all the portlet items where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
@@ -869,13 +884,16 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	public List<PortletItem> findByG_P_C(long groupId, String portletId,
 		long classNameId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_C;
 			finderArgs = new Object[] { groupId, portletId, classNameId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_C;
 			finderArgs = new Object[] {
 					groupId, portletId, classNameId,
 					
@@ -883,7 +901,7 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 				};
 		}
 
-		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P_C,
+		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -959,12 +977,10 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_C,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_C,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1256,9 +1272,9 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	private static final String _FINDER_COLUMN_G_P_C_PORTLETID_2 = "portletItem.portletId = ? AND ";
 	private static final String _FINDER_COLUMN_G_P_C_PORTLETID_3 = "(portletItem.portletId IS NULL OR portletItem.portletId = ?) AND ";
 	private static final String _FINDER_COLUMN_G_P_C_CLASSNAMEID_2 = "portletItem.classNameId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_N_P_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N_P_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 			PortletItemModelImpl.FINDER_CACHE_ENABLED, PortletItemImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByG_N_P_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_N_P_C",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName(), Long.class.getName(),
@@ -1266,9 +1282,10 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_N_P_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
-			PortletItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_N_P_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N_P_C =
+		new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+			PortletItemModelImpl.FINDER_CACHE_ENABLED, PortletItemImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_N_P_C",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName(), Long.class.getName()
@@ -1276,7 +1293,15 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 			PortletItemModelImpl.GROUPID_COLUMN_BITMASK |
 			PortletItemModelImpl.NAME_COLUMN_BITMASK |
 			PortletItemModelImpl.PORTLETID_COLUMN_BITMASK |
-			PortletItemModelImpl.CLASSNAMEID_COLUMN_BITMASK);
+			PortletItemModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			PortletItemModelImpl.PORTLETITEMID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_N_P_C = new FinderPath(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
+			PortletItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_N_P_C",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				String.class.getName(), Long.class.getName()
+			});
 
 	/**
 	 * Returns an ordered range of all the portlet items where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
@@ -1298,13 +1323,16 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	protected List<PortletItem> findByG_N_P_C(long groupId, String name,
 		String portletId, long classNameId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N_P_C;
 			finderArgs = new Object[] { groupId, name, portletId, classNameId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N_P_C;
 			finderArgs = new Object[] {
 					groupId, name, portletId, classNameId,
 					
@@ -1312,7 +1340,7 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 				};
 		}
 
-		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_N_P_C,
+		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1405,12 +1433,10 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_N_P_C,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_N_P_C,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1786,8 +1812,8 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 		EntityCacheUtil.clearCache(PortletItemImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -1802,14 +1828,14 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 		EntityCacheUtil.removeResult(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 			PortletItemImpl.class, portletItem.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@Override
 	public void clearCache(List<PortletItem> portletItems) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (PortletItem portletItem : portletItems) {
 			EntityCacheUtil.removeResult(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
@@ -1950,21 +1976,23 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !PortletItemModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((portletItemModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(portletItemModelImpl.getOriginalGroupId()),
 						Long.valueOf(portletItemModelImpl.getOriginalClassNameId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(portletItemModelImpl.getGroupId()),
@@ -1972,10 +2000,12 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C,
+					args);
 			}
 
 			if ((portletItemModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_P_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(portletItemModelImpl.getOriginalGroupId()),
 						
@@ -1984,6 +2014,8 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_C,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(portletItemModelImpl.getGroupId()),
@@ -1993,6 +2025,8 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_C,
+					args);
 			}
 		}
 
@@ -2301,7 +2335,8 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	public void destroy() {
 		EntityCacheUtil.removeCache(PortletItemImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

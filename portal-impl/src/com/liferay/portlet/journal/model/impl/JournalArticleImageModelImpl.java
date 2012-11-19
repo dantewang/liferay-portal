@@ -89,6 +89,7 @@ public class JournalArticleImageModelImpl extends BaseModelImpl<JournalArticleIm
 	public static long LANGUAGEID_COLUMN_BITMASK = 16L;
 	public static long TEMPIMAGE_COLUMN_BITMASK = 32L;
 	public static long VERSION_COLUMN_BITMASK = 64L;
+	public static long ARTICLEIMAGEID_COLUMN_BITMASK = 128L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.journal.model.JournalArticleImage"));
 

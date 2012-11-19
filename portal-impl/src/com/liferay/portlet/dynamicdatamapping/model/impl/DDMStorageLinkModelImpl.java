@@ -84,6 +84,7 @@ public class DDMStorageLinkModelImpl extends BaseModelImpl<DDMStorageLink>
 	public static long CLASSPK_COLUMN_BITMASK = 1L;
 	public static long STRUCTUREID_COLUMN_BITMASK = 2L;
 	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long STORAGELINKID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink"));
 

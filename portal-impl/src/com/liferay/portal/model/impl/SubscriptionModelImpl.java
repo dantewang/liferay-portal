@@ -90,6 +90,7 @@ public class SubscriptionModelImpl extends BaseModelImpl<Subscription>
 	public static long CLASSPK_COLUMN_BITMASK = 2L;
 	public static long COMPANYID_COLUMN_BITMASK = 4L;
 	public static long USERID_COLUMN_BITMASK = 8L;
+	public static long SUBSCRIPTIONID_COLUMN_BITMASK = 16L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.Subscription"));
 

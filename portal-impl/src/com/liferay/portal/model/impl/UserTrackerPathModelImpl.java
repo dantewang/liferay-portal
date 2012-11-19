@@ -79,6 +79,7 @@ public class UserTrackerPathModelImpl extends BaseModelImpl<UserTrackerPath>
 				"value.object.column.bitmask.enabled.com.liferay.portal.model.UserTrackerPath"),
 			true);
 	public static long USERTRACKERID_COLUMN_BITMASK = 1L;
+	public static long USERTRACKERPATHID_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.UserTrackerPath"));
 

@@ -101,6 +101,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 	public static long NAME_COLUMN_BITMASK = 4L;
 	public static long PORTLETID_COLUMN_BITMASK = 8L;
 	public static long UUID_COLUMN_BITMASK = 16L;
+	public static long REPOSITORYID_COLUMN_BITMASK = 32L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

@@ -86,6 +86,7 @@ public class JournalContentSearchModelImpl extends BaseModelImpl<JournalContentS
 	public static long LAYOUTID_COLUMN_BITMASK = 4L;
 	public static long PORTLETID_COLUMN_BITMASK = 8L;
 	public static long PRIVATELAYOUT_COLUMN_BITMASK = 16L;
+	public static long CONTENTSEARCHID_COLUMN_BITMASK = 32L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.journal.model.JournalContentSearch"));
 

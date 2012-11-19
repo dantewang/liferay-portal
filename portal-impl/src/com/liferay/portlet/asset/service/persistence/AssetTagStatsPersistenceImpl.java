@@ -68,31 +68,37 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 	 * Never modify or reference this class directly. Always use {@link AssetTagStatsUtil} to access the asset tag stats persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = AssetTagStatsImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagStatsModelImpl.FINDER_CACHE_ENABLED,
-			AssetTagStatsImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
-			new String[0]);
+			AssetTagStatsImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagStatsModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_TAGID = new FinderPath(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_TAGID = new FinderPath(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagStatsModelImpl.FINDER_CACHE_ENABLED,
-			AssetTagStatsImpl.class, FINDER_CLASS_NAME_LIST, "findByTagId",
+			AssetTagStatsImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByTagId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TAGID = new FinderPath(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
+			AssetTagStatsModelImpl.FINDER_CACHE_ENABLED,
+			AssetTagStatsImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByTagId", new String[] { Long.class.getName() },
+			AssetTagStatsModelImpl.TAGID_COLUMN_BITMASK |
+			AssetTagStatsModelImpl.ASSETCOUNT_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_TAGID = new FinderPath(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagStatsModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByTagId",
-			new String[] { Long.class.getName() },
-			AssetTagStatsModelImpl.TAGID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByTagId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the asset tag statses where tagId = &#63;.
@@ -285,17 +291,20 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 	 */
 	public List<AssetTagStats> findByTagId(long tagId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TAGID;
 			finderArgs = new Object[] { tagId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TAGID;
 			finderArgs = new Object[] { tagId, start, end, orderByComparator };
 		}
 
-		List<AssetTagStats> list = (List<AssetTagStats>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_TAGID,
+		List<AssetTagStats> list = (List<AssetTagStats>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -349,12 +358,10 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_TAGID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_TAGID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -584,9 +591,10 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 	}
 
 	private static final String _FINDER_COLUMN_TAGID_TAGID_2 = "assetTagStats.tagId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_CLASSNAMEID = new FinderPath(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_CLASSNAMEID =
+		new FinderPath(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagStatsModelImpl.FINDER_CACHE_ENABLED,
-			AssetTagStatsImpl.class, FINDER_CLASS_NAME_LIST,
+			AssetTagStatsImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByClassNameId",
 			new String[] {
 				Long.class.getName(),
@@ -594,11 +602,17 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID =
+		new FinderPath(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
+			AssetTagStatsModelImpl.FINDER_CACHE_ENABLED,
+			AssetTagStatsImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByClassNameId", new String[] { Long.class.getName() },
+			AssetTagStatsModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			AssetTagStatsModelImpl.ASSETCOUNT_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSNAMEID = new FinderPath(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagStatsModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByClassNameId",
-			new String[] { Long.class.getName() },
-			AssetTagStatsModelImpl.CLASSNAMEID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByClassNameId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the asset tag statses where classNameId = &#63;.
@@ -792,17 +806,20 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 	 */
 	public List<AssetTagStats> findByClassNameId(long classNameId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID;
 			finderArgs = new Object[] { classNameId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_CLASSNAMEID;
 			finderArgs = new Object[] { classNameId, start, end, orderByComparator };
 		}
 
-		List<AssetTagStats> list = (List<AssetTagStats>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_CLASSNAMEID,
+		List<AssetTagStats> list = (List<AssetTagStats>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -856,12 +873,10 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_CLASSNAMEID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_CLASSNAMEID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1101,10 +1116,8 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 			AssetTagStatsModelImpl.CLASSNAMEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_T_C = new FinderPath(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagStatsModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByT_C",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			AssetTagStatsModelImpl.TAGID_COLUMN_BITMASK |
-			AssetTagStatsModelImpl.CLASSNAMEID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByT_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns the asset tag stats where tagId = &#63; and classNameId = &#63; or throws a {@link com.liferay.portlet.asset.NoSuchTagStatsException} if it could not be found.
@@ -1376,8 +1389,8 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 		EntityCacheUtil.clearCache(AssetTagStatsImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -1392,16 +1405,16 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 		EntityCacheUtil.removeResult(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
 			AssetTagStatsImpl.class, assetTagStats.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(assetTagStats);
 	}
 
 	@Override
 	public void clearCache(List<AssetTagStats> assetTagStatses) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (AssetTagStats assetTagStats : assetTagStatses) {
 			EntityCacheUtil.removeResult(AssetTagStatsModelImpl.ENTITY_CACHE_ENABLED,
@@ -1552,35 +1565,41 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !AssetTagStatsModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((assetTagStatsModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_TAGID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TAGID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(assetTagStatsModelImpl.getOriginalTagId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TAGID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TAGID,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(assetTagStatsModelImpl.getTagId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TAGID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TAGID,
+					args);
 			}
 
 			if ((assetTagStatsModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_CLASSNAMEID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(assetTagStatsModelImpl.getOriginalClassNameId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID,
 					args);
 
 				args = new Object[] {
@@ -1588,6 +1607,8 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID,
 					args);
 			}
 		}
@@ -1919,7 +1940,8 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 	public void destroy() {
 		EntityCacheUtil.removeCache(AssetTagStatsImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AssetCategoryPersistence.class)

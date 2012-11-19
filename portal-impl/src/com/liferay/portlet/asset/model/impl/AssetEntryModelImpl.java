@@ -122,6 +122,7 @@ public class AssetEntryModelImpl extends BaseModelImpl<AssetEntry>
 	public static long LAYOUTUUID_COLUMN_BITMASK = 64L;
 	public static long PUBLISHDATE_COLUMN_BITMASK = 128L;
 	public static long VISIBLE_COLUMN_BITMASK = 256L;
+	public static long ENTRYID_COLUMN_BITMASK = 512L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

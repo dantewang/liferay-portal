@@ -70,31 +70,38 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 * Never modify or reference this class directly. Always use {@link DDMStorageLinkUtil} to access the d d m storage link persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = DDMStorageLinkImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
-			new String[0]);
+			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST, "findByUuid",
+			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid",
 			new String[] {
 				String.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
+			DDMStorageLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
+			new String[] { String.class.getName() },
+			DDMStorageLinkModelImpl.UUID_COLUMN_BITMASK |
+			DDMStorageLinkModelImpl.STORAGELINKID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() },
-			DDMStorageLinkModelImpl.UUID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the d d m storage links where uuid = &#63;.
@@ -299,17 +306,20 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 */
 	public List<DDMStorageLink> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid, start, end, orderByComparator };
 		}
 
-		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID,
+		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -375,12 +385,10 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -631,9 +639,8 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			DDMStorageLinkModelImpl.CLASSPK_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSPK = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByClassPK",
-			new String[] { Long.class.getName() },
-			DDMStorageLinkModelImpl.CLASSPK_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByClassPK",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns the d d m storage link where classPK = &#63; or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException} if it could not be found.
@@ -831,9 +838,10 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	}
 
 	private static final String _FINDER_COLUMN_CLASSPK_CLASSPK_2 = "ddmStorageLink.classPK = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_STRUCTUREID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID =
+		new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST,
+			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByStructureId",
 			new String[] {
 				Long.class.getName(),
@@ -841,11 +849,18 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID =
+		new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
+			DDMStorageLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStructureId",
+			new String[] { Long.class.getName() },
+			DDMStorageLinkModelImpl.STRUCTUREID_COLUMN_BITMASK |
+			DDMStorageLinkModelImpl.STORAGELINKID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByStructureId",
-			new String[] { Long.class.getName() },
-			DDMStorageLinkModelImpl.STRUCTUREID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStructureId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the d d m storage links where structureId = &#63;.
@@ -1039,17 +1054,20 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 */
 	public List<DDMStorageLink> findByStructureId(long structureId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
 			finderArgs = new Object[] { structureId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID;
 			finderArgs = new Object[] { structureId, start, end, orderByComparator };
 		}
 
-		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_STRUCTUREID,
+		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1103,12 +1121,10 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_STRUCTUREID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_STRUCTUREID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1392,8 +1408,8 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		EntityCacheUtil.clearCache(DDMStorageLinkImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -1408,16 +1424,16 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		EntityCacheUtil.removeResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkImpl.class, ddmStorageLink.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(ddmStorageLink);
 	}
 
 	@Override
 	public void clearCache(List<DDMStorageLink> ddmStorageLinks) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (DDMStorageLink ddmStorageLink : ddmStorageLinks) {
 			EntityCacheUtil.removeResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
@@ -1575,33 +1591,39 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !DDMStorageLinkModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((ddmStorageLinkModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_UUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						ddmStorageLinkModelImpl.getOriginalUuid()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 
 				args = new Object[] { ddmStorageLinkModelImpl.getUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 			}
 
 			if ((ddmStorageLinkModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_STRUCTUREID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(ddmStorageLinkModelImpl.getOriginalStructureId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
 					args);
 
 				args = new Object[] {
@@ -1609,6 +1631,8 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
 					args);
 			}
 		}
@@ -1937,7 +1961,8 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	public void destroy() {
 		EntityCacheUtil.removeCache(DDMStorageLinkImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = DDMContentPersistence.class)

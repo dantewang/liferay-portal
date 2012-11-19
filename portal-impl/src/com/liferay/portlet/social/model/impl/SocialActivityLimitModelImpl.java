@@ -92,6 +92,7 @@ public class SocialActivityLimitModelImpl extends BaseModelImpl<SocialActivityLi
 	public static long CLASSPK_COLUMN_BITMASK = 8L;
 	public static long GROUPID_COLUMN_BITMASK = 16L;
 	public static long USERID_COLUMN_BITMASK = 32L;
+	public static long ACTIVITYLIMITID_COLUMN_BITMASK = 64L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.social.model.SocialActivityLimit"));
 

@@ -69,20 +69,20 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 * Never modify or reference this class directly. Always use {@link DDLRecordVersionUtil} to access the d d l record version persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = DDLRecordVersionImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED,
-			DDLRecordVersionImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
-			new String[0]);
+			DDLRecordVersionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_RECORDID = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_RECORDID = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED,
-			DDLRecordVersionImpl.class, FINDER_CLASS_NAME_LIST,
+			DDLRecordVersionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByRecordId",
 			new String[] {
 				Long.class.getName(),
@@ -90,11 +90,18 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RECORDID =
+		new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED,
+			DDLRecordVersionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByRecordId",
+			new String[] { Long.class.getName() },
+			DDLRecordVersionModelImpl.RECORDID_COLUMN_BITMASK |
+			DDLRecordVersionModelImpl.RECORDVERSIONID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_RECORDID = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByRecordId",
-			new String[] { Long.class.getName() },
-			DDLRecordVersionModelImpl.RECORDID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRecordId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the d d l record versions where recordId = &#63;.
@@ -288,17 +295,20 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	public List<DDLRecordVersion> findByRecordId(long recordId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RECORDID;
 			finderArgs = new Object[] { recordId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RECORDID;
 			finderArgs = new Object[] { recordId, start, end, orderByComparator };
 		}
 
-		List<DDLRecordVersion> list = (List<DDLRecordVersion>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_RECORDID,
+		List<DDLRecordVersion> list = (List<DDLRecordVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -352,12 +362,10 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_RECORDID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_RECORDID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -597,10 +605,8 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 			DDLRecordVersionModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_V = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByR_V",
-			new String[] { Long.class.getName(), String.class.getName() },
-			DDLRecordVersionModelImpl.RECORDID_COLUMN_BITMASK |
-			DDLRecordVersionModelImpl.VERSION_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_V",
+			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
 	 * Returns the d d l record version where recordId = &#63; and version = &#63; or throws a {@link com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException} if it could not be found.
@@ -845,21 +851,28 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	private static final String _FINDER_COLUMN_R_V_VERSION_1 = "ddlRecordVersion.version IS NULL";
 	private static final String _FINDER_COLUMN_R_V_VERSION_2 = "ddlRecordVersion.version = ?";
 	private static final String _FINDER_COLUMN_R_V_VERSION_3 = "(ddlRecordVersion.version IS NULL OR ddlRecordVersion.version = ?)";
-	public static final FinderPath FINDER_PATH_FIND_BY_R_S = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_S = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED,
-			DDLRecordVersionImpl.class, FINDER_CLASS_NAME_LIST, "findByR_S",
+			DDLRecordVersionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByR_S",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_R_S = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
-			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByR_S",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED,
+			DDLRecordVersionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_S",
 			new String[] { Long.class.getName(), Integer.class.getName() },
 			DDLRecordVersionModelImpl.RECORDID_COLUMN_BITMASK |
-			DDLRecordVersionModelImpl.STATUS_COLUMN_BITMASK);
+			DDLRecordVersionModelImpl.STATUS_COLUMN_BITMASK |
+			DDLRecordVersionModelImpl.RECORDVERSIONID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_R_S = new FinderPath(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
+			DDLRecordVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
 
 	/**
 	 * Returns all the d d l record versions where recordId = &#63; and status = &#63;.
@@ -1062,13 +1075,16 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	public List<DDLRecordVersion> findByR_S(long recordId, int status,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S;
 			finderArgs = new Object[] { recordId, status };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_S;
 			finderArgs = new Object[] {
 					recordId, status,
 					
@@ -1076,7 +1092,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 				};
 		}
 
-		List<DDLRecordVersion> list = (List<DDLRecordVersion>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_R_S,
+		List<DDLRecordVersion> list = (List<DDLRecordVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1135,11 +1151,10 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_R_S, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_R_S, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1449,8 +1464,8 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 		EntityCacheUtil.clearCache(DDLRecordVersionImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -1465,16 +1480,16 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 		EntityCacheUtil.removeResult(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordVersionImpl.class, ddlRecordVersion.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(ddlRecordVersion);
 	}
 
 	@Override
 	public void clearCache(List<DDLRecordVersion> ddlRecordVersions) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (DDLRecordVersion ddlRecordVersion : ddlRecordVersions) {
 			EntityCacheUtil.removeResult(DDLRecordVersionModelImpl.ENTITY_CACHE_ENABLED,
@@ -1626,36 +1641,42 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !DDLRecordVersionModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((ddlRecordVersionModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_RECORDID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RECORDID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(ddlRecordVersionModelImpl.getOriginalRecordId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RECORDID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RECORDID,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(ddlRecordVersionModelImpl.getRecordId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RECORDID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RECORDID,
+					args);
 			}
 
 			if ((ddlRecordVersionModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_R_S.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(ddlRecordVersionModelImpl.getOriginalRecordId()),
 						Integer.valueOf(ddlRecordVersionModelImpl.getOriginalStatus())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(ddlRecordVersionModelImpl.getRecordId()),
@@ -1663,6 +1684,8 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S,
+					args);
 			}
 		}
 
@@ -2009,7 +2032,8 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	public void destroy() {
 		EntityCacheUtil.removeCache(DDLRecordVersionImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = DDLRecordPersistence.class)

@@ -90,6 +90,7 @@ public class ShoppingCartModelImpl extends BaseModelImpl<ShoppingCart>
 			true);
 	public static long GROUPID_COLUMN_BITMASK = 1L;
 	public static long USERID_COLUMN_BITMASK = 2L;
+	public static long CARTID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.shopping.model.ShoppingCart"));
 

@@ -83,6 +83,7 @@ public class RepositoryEntryModelImpl extends BaseModelImpl<RepositoryEntry>
 	public static long MAPPEDID_COLUMN_BITMASK = 2L;
 	public static long REPOSITORYID_COLUMN_BITMASK = 4L;
 	public static long UUID_COLUMN_BITMASK = 8L;
+	public static long REPOSITORYENTRYID_COLUMN_BITMASK = 16L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.RepositoryEntry"));
 

@@ -66,32 +66,40 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 	 * Never modify or reference this class directly. Always use {@link ResourceBlockPermissionUtil} to access the resource block permission persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = ResourceBlockPermissionImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceBlockPermissionModelImpl.FINDER_CACHE_ENABLED,
-			ResourceBlockPermissionImpl.class, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			ResourceBlockPermissionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceBlockPermissionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_RESOURCEBLOCKID = new FinderPath(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_RESOURCEBLOCKID =
+		new FinderPath(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceBlockPermissionModelImpl.FINDER_CACHE_ENABLED,
-			ResourceBlockPermissionImpl.class, FINDER_CLASS_NAME_LIST,
-			"findByResourceBlockId",
+			ResourceBlockPermissionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByResourceBlockId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEBLOCKID =
+		new FinderPath(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceBlockPermissionModelImpl.FINDER_CACHE_ENABLED,
+			ResourceBlockPermissionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByResourceBlockId",
+			new String[] { Long.class.getName() },
+			ResourceBlockPermissionModelImpl.RESOURCEBLOCKID_COLUMN_BITMASK |
+			ResourceBlockPermissionModelImpl.RESOURCEBLOCKPERMISSIONID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_RESOURCEBLOCKID = new FinderPath(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceBlockPermissionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByResourceBlockId",
-			new String[] { Long.class.getName() },
-			ResourceBlockPermissionModelImpl.RESOURCEBLOCKID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByResourceBlockId", new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the resource block permissions where resourceBlockId = &#63;.
@@ -290,13 +298,16 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 	public List<ResourceBlockPermission> findByResourceBlockId(
 		long resourceBlockId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEBLOCKID;
 			finderArgs = new Object[] { resourceBlockId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RESOURCEBLOCKID;
 			finderArgs = new Object[] {
 					resourceBlockId,
 					
@@ -304,7 +315,7 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 				};
 		}
 
-		List<ResourceBlockPermission> list = (List<ResourceBlockPermission>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_RESOURCEBLOCKID,
+		List<ResourceBlockPermission> list = (List<ResourceBlockPermission>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -358,12 +369,10 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_RESOURCEBLOCKID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_RESOURCEBLOCKID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -611,10 +620,8 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 			ResourceBlockPermissionModelImpl.ROLEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_R = new FinderPath(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceBlockPermissionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByR_R",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			ResourceBlockPermissionModelImpl.RESOURCEBLOCKID_COLUMN_BITMASK |
-			ResourceBlockPermissionModelImpl.ROLEID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_R",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns the resource block permission where resourceBlockId = &#63; and roleId = &#63; or throws a {@link com.liferay.portal.NoSuchResourceBlockPermissionException} if it could not be found.
@@ -890,8 +897,8 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 		EntityCacheUtil.clearCache(ResourceBlockPermissionImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -907,8 +914,8 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 			ResourceBlockPermissionImpl.class,
 			resourceBlockPermission.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(resourceBlockPermission);
 	}
@@ -916,8 +923,8 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 	@Override
 	public void clearCache(
 		List<ResourceBlockPermission> resourceBlockPermissions) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (ResourceBlockPermission resourceBlockPermission : resourceBlockPermissions) {
 			EntityCacheUtil.removeResult(ResourceBlockPermissionModelImpl.ENTITY_CACHE_ENABLED,
@@ -1071,20 +1078,22 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !ResourceBlockPermissionModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((resourceBlockPermissionModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_RESOURCEBLOCKID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEBLOCKID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(resourceBlockPermissionModelImpl.getOriginalResourceBlockId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEBLOCKID,
 					args);
 
 				args = new Object[] {
@@ -1092,6 +1101,8 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOURCEBLOCKID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEBLOCKID,
 					args);
 			}
 		}
@@ -1428,7 +1439,8 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 	public void destroy() {
 		EntityCacheUtil.removeCache(ResourceBlockPermissionImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

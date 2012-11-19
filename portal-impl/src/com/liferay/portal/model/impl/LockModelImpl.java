@@ -92,6 +92,7 @@ public class LockModelImpl extends BaseModelImpl<Lock> implements LockModel {
 	public static long KEY_COLUMN_BITMASK = 8L;
 	public static long OWNER_COLUMN_BITMASK = 16L;
 	public static long UUID_COLUMN_BITMASK = 32L;
+	public static long LOCKID_COLUMN_BITMASK = 64L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.Lock"));
 

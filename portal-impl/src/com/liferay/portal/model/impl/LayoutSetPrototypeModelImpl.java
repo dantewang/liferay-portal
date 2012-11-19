@@ -96,6 +96,7 @@ public class LayoutSetPrototypeModelImpl extends BaseModelImpl<LayoutSetPrototyp
 	public static long ACTIVE_COLUMN_BITMASK = 1L;
 	public static long COMPANYID_COLUMN_BITMASK = 2L;
 	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long LAYOUTSETPROTOTYPEID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

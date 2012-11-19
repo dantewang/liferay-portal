@@ -76,30 +76,36 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	 * Never modify or reference this class directly. Always use {@link TrashEntryUtil} to access the trash entry persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = TrashEntryImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, TrashEntryImpl.class,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_GROUPID = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, TrashEntryImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByGroupId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
+			TrashEntryModelImpl.FINDER_CACHE_ENABLED, TrashEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			TrashEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			TrashEntryModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() },
-			TrashEntryModelImpl.GROUPID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the trash entries where groupId = &#63;.
@@ -292,17 +298,20 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	 */
 	public List<TrashEntry> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId, start, end, orderByComparator };
 		}
 
-		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_GROUPID,
+		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -356,12 +365,10 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_GROUPID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_GROUPID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -590,20 +597,27 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	}
 
 	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "trashEntry.groupId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_COMPANYID = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, TrashEntryImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByCompanyId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
+			TrashEntryModelImpl.FINDER_CACHE_ENABLED, TrashEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			TrashEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			TrashEntryModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() },
-			TrashEntryModelImpl.COMPANYID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the trash entries where companyId = &#63;.
@@ -797,17 +811,20 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	 */
 	public List<TrashEntry> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId, start, end, orderByComparator };
 		}
 
-		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_COMPANYID,
+		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -861,12 +878,10 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1098,9 +1113,9 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	}
 
 	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "trashEntry.companyId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_LTCD = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_LTCD = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, TrashEntryImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByG_LtCD",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_LtCD",
 			new String[] {
 				Long.class.getName(), Date.class.getName(),
 				
@@ -1109,10 +1124,8 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_LTCD = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_LtCD",
-			new String[] { Long.class.getName(), Date.class.getName() },
-			TrashEntryModelImpl.GROUPID_COLUMN_BITMASK |
-			TrashEntryModelImpl.CREATEDATE_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_LtCD",
+			new String[] { Long.class.getName(), Date.class.getName() });
 
 	/**
 	 * Returns all the trash entries where groupId = &#63; and createDate &lt; &#63;.
@@ -1322,21 +1335,17 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public List<TrashEntry> findByG_LtCD(long groupId, Date createDate,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] { groupId, createDate };
-		}
-		else {
-			finderArgs = new Object[] {
-					groupId, createDate,
-					
-					start, end, orderByComparator
-				};
-		}
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_LTCD;
+		finderArgs = new Object[] {
+				groupId, createDate,
+				
+				start, end, orderByComparator
+			};
 
-		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_LTCD,
+		List<TrashEntry> list = (List<TrashEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1402,12 +1411,10 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_LTCD,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_LTCD,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1678,10 +1685,8 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 			TrashEntryModelImpl.CLASSPK_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			TrashEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			TrashEntryModelImpl.CLASSPK_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns the trash entry where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.trash.NoSuchEntryException} if it could not be found.
@@ -1952,8 +1957,8 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 		EntityCacheUtil.clearCache(TrashEntryImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -1968,16 +1973,16 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 		EntityCacheUtil.removeResult(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
 			TrashEntryImpl.class, trashEntry.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(trashEntry);
 	}
 
 	@Override
 	public void clearCache(List<TrashEntry> trashEntries) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (TrashEntry trashEntry : trashEntries) {
 			EntityCacheUtil.removeResult(TrashEntryModelImpl.ENTITY_CACHE_ENABLED,
@@ -2128,35 +2133,41 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !TrashEntryModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((trashEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_GROUPID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(trashEntryModelImpl.getOriginalGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(trashEntryModelImpl.getGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
 			}
 
 			if ((trashEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_COMPANYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(trashEntryModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
 					args);
 
 				args = new Object[] {
@@ -2164,6 +2175,8 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
 					args);
 			}
 		}
@@ -2504,7 +2517,7 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public static final FinderPath FINDER_PATH_GET_TRASHVERSIONS = new FinderPath(com.liferay.portlet.trash.model.impl.TrashVersionModelImpl.ENTITY_CACHE_ENABLED,
 			com.liferay.portlet.trash.model.impl.TrashVersionModelImpl.FINDER_CACHE_ENABLED,
 			com.liferay.portlet.trash.model.impl.TrashVersionImpl.class,
-			com.liferay.portlet.trash.service.persistence.TrashVersionPersistenceImpl.FINDER_CLASS_NAME_LIST,
+			com.liferay.portlet.trash.service.persistence.TrashVersionPersistenceImpl.FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"getTrashVersions",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
@@ -2595,7 +2608,7 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public static final FinderPath FINDER_PATH_GET_TRASHVERSIONS_SIZE = new FinderPath(com.liferay.portlet.trash.model.impl.TrashVersionModelImpl.ENTITY_CACHE_ENABLED,
 			com.liferay.portlet.trash.model.impl.TrashVersionModelImpl.FINDER_CACHE_ENABLED,
 			com.liferay.portlet.trash.model.impl.TrashVersionImpl.class,
-			com.liferay.portlet.trash.service.persistence.TrashVersionPersistenceImpl.FINDER_CLASS_NAME_COUNT,
+			com.liferay.portlet.trash.service.persistence.TrashVersionPersistenceImpl.FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"getTrashVersionsSize", new String[] { Long.class.getName() });
 
 	static {
@@ -2652,7 +2665,7 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public static final FinderPath FINDER_PATH_CONTAINS_TRASHVERSION = new FinderPath(com.liferay.portlet.trash.model.impl.TrashVersionModelImpl.ENTITY_CACHE_ENABLED,
 			com.liferay.portlet.trash.model.impl.TrashVersionModelImpl.FINDER_CACHE_ENABLED,
 			com.liferay.portlet.trash.model.impl.TrashVersionImpl.class,
-			com.liferay.portlet.trash.service.persistence.TrashVersionPersistenceImpl.FINDER_CLASS_NAME_COUNT,
+			com.liferay.portlet.trash.service.persistence.TrashVersionPersistenceImpl.FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"containsTrashVersion",
 			new String[] { Long.class.getName(), Long.class.getName() });
 
@@ -2736,7 +2749,8 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public void destroy() {
 		EntityCacheUtil.removeCache(TrashEntryImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = TrashEntryPersistence.class)

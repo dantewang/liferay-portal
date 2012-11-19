@@ -93,6 +93,7 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 	public static long PRIMKEY_COLUMN_BITMASK = 16L;
 	public static long ROLEID_COLUMN_BITMASK = 32L;
 	public static long SCOPE_COLUMN_BITMASK = 64L;
+	public static long RESOURCEPERMISSIONID_COLUMN_BITMASK = 128L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

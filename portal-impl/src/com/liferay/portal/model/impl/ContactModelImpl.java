@@ -119,6 +119,7 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 	public static long CLASSNAMEID_COLUMN_BITMASK = 2L;
 	public static long CLASSPK_COLUMN_BITMASK = 4L;
 	public static long COMPANYID_COLUMN_BITMASK = 8L;
+	public static long CONTACTID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

@@ -67,32 +67,40 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 	 * Never modify or reference this class directly. Always use {@link WorkflowDefinitionLinkUtil} to access the workflow definition link persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = WorkflowDefinitionLinkImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED,
-			WorkflowDefinitionLinkImpl.class, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			WorkflowDefinitionLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_COMPANYID = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED,
-			WorkflowDefinitionLinkImpl.class, FINDER_CLASS_NAME_LIST,
-			"findByCompanyId",
+			WorkflowDefinitionLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED,
+			WorkflowDefinitionLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			WorkflowDefinitionLinkModelImpl.COMPANYID_COLUMN_BITMASK |
+			WorkflowDefinitionLinkModelImpl.WORKFLOWDEFINITIONNAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() },
-			WorkflowDefinitionLinkModelImpl.COMPANYID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the workflow definition links where companyId = &#63;.
@@ -288,17 +296,20 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 	public List<WorkflowDefinitionLink> findByCompanyId(long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId, start, end, orderByComparator };
 		}
 
-		List<WorkflowDefinitionLink> list = (List<WorkflowDefinitionLink>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_COMPANYID,
+		List<WorkflowDefinitionLink> list = (List<WorkflowDefinitionLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -352,12 +363,10 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -589,10 +598,10 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 	}
 
 	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "workflowDefinitionLink.companyId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_C_W_W = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_W_W = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED,
-			WorkflowDefinitionLinkImpl.class, FINDER_CLASS_NAME_LIST,
-			"findByC_W_W",
+			WorkflowDefinitionLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_W_W",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName(),
@@ -600,9 +609,10 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_W_W = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
-			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_W_W",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_W_W = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED,
+			WorkflowDefinitionLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_W_W",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName()
@@ -610,6 +620,13 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 			WorkflowDefinitionLinkModelImpl.COMPANYID_COLUMN_BITMASK |
 			WorkflowDefinitionLinkModelImpl.WORKFLOWDEFINITIONNAME_COLUMN_BITMASK |
 			WorkflowDefinitionLinkModelImpl.WORKFLOWDEFINITIONVERSION_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_W_W = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_W_W",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				Integer.class.getName()
+			});
 
 	/**
 	 * Returns all the workflow definition links where companyId = &#63; and workflowDefinitionName = &#63; and workflowDefinitionVersion = &#63;.
@@ -842,15 +859,18 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 		String workflowDefinitionName, int workflowDefinitionVersion,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_W_W;
 			finderArgs = new Object[] {
 					companyId, workflowDefinitionName, workflowDefinitionVersion
 				};
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_W_W;
 			finderArgs = new Object[] {
 					companyId, workflowDefinitionName, workflowDefinitionVersion,
 					
@@ -858,7 +878,7 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 				};
 		}
 
-		List<WorkflowDefinitionLink> list = (List<WorkflowDefinitionLink>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_W_W,
+		List<WorkflowDefinitionLink> list = (List<WorkflowDefinitionLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -935,12 +955,10 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_W_W,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_W_W,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1251,10 +1269,11 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 	private static final String _FINDER_COLUMN_C_W_W_WORKFLOWDEFINITIONNAME_3 = "(workflowDefinitionLink.workflowDefinitionName IS NULL OR workflowDefinitionLink.workflowDefinitionName = ?) AND ";
 	private static final String _FINDER_COLUMN_C_W_W_WORKFLOWDEFINITIONVERSION_2 =
 		"workflowDefinitionLink.workflowDefinitionVersion = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_C_C_C_T = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_C_C_T =
+		new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED,
-			WorkflowDefinitionLinkImpl.class, FINDER_CLASS_NAME_LIST,
-			"findByG_C_C_C_T",
+			WorkflowDefinitionLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_C_C_C_T",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName(), Long.class.getName(),
@@ -1262,9 +1281,11 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_C_C_C_T = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
-			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_C_C_C_T",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C_T =
+		new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED,
+			WorkflowDefinitionLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_C_C_C_T",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName(), Long.class.getName()
@@ -1273,7 +1294,15 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 			WorkflowDefinitionLinkModelImpl.COMPANYID_COLUMN_BITMASK |
 			WorkflowDefinitionLinkModelImpl.CLASSNAMEID_COLUMN_BITMASK |
 			WorkflowDefinitionLinkModelImpl.CLASSPK_COLUMN_BITMASK |
-			WorkflowDefinitionLinkModelImpl.TYPEPK_COLUMN_BITMASK);
+			WorkflowDefinitionLinkModelImpl.TYPEPK_COLUMN_BITMASK |
+			WorkflowDefinitionLinkModelImpl.WORKFLOWDEFINITIONNAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_C_C_C_T = new FinderPath(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowDefinitionLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_C_C_C_T",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Long.class.getName(), Long.class.getName()
+			});
 
 	/**
 	 * Returns an ordered range of all the workflow definition links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63; and typePK = &#63;.
@@ -1296,15 +1325,18 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 	protected List<WorkflowDefinitionLink> findByG_C_C_C_T(long groupId,
 		long companyId, long classNameId, long classPK, long typePK, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C_T;
 			finderArgs = new Object[] {
 					groupId, companyId, classNameId, classPK, typePK
 				};
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_C_C_T;
 			finderArgs = new Object[] {
 					groupId, companyId, classNameId, classPK, typePK,
 					
@@ -1312,7 +1344,7 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 				};
 		}
 
-		List<WorkflowDefinitionLink> list = (List<WorkflowDefinitionLink>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_C_C_C_T,
+		List<WorkflowDefinitionLink> list = (List<WorkflowDefinitionLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1386,12 +1418,10 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_C_C_C_T,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_C_C_C_T,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1776,8 +1806,8 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 		EntityCacheUtil.clearCache(WorkflowDefinitionLinkImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -1793,14 +1823,14 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 			WorkflowDefinitionLinkImpl.class,
 			workflowDefinitionLink.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@Override
 	public void clearCache(List<WorkflowDefinitionLink> workflowDefinitionLinks) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (WorkflowDefinitionLink workflowDefinitionLink : workflowDefinitionLinks) {
 			EntityCacheUtil.removeResult(WorkflowDefinitionLinkModelImpl.ENTITY_CACHE_ENABLED,
@@ -1943,20 +1973,22 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !WorkflowDefinitionLinkModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((workflowDefinitionLinkModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_COMPANYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(workflowDefinitionLinkModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
 					args);
 
 				args = new Object[] {
@@ -1965,10 +1997,12 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
 			}
 
 			if ((workflowDefinitionLinkModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_C_W_W.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_W_W.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(workflowDefinitionLinkModelImpl.getOriginalCompanyId()),
 						
@@ -1977,6 +2011,8 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_W_W, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_W_W,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(workflowDefinitionLinkModelImpl.getCompanyId()),
@@ -1986,6 +2022,8 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_W_W, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_W_W,
+					args);
 			}
 		}
 
@@ -2301,7 +2339,8 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 	public void destroy() {
 		EntityCacheUtil.removeCache(WorkflowDefinitionLinkImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

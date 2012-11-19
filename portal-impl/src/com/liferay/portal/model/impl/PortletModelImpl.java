@@ -85,6 +85,7 @@ public class PortletModelImpl extends BaseModelImpl<Portlet>
 			true);
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long PORTLETID_COLUMN_BITMASK = 2L;
+	public static long ID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

@@ -96,6 +96,7 @@ public class SocialActivityCounterModelImpl extends BaseModelImpl<SocialActivity
 	public static long NAME_COLUMN_BITMASK = 16L;
 	public static long OWNERTYPE_COLUMN_BITMASK = 32L;
 	public static long STARTPERIOD_COLUMN_BITMASK = 64L;
+	public static long ACTIVITYCOUNTERID_COLUMN_BITMASK = 128L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.social.model.SocialActivityCounter"));
 

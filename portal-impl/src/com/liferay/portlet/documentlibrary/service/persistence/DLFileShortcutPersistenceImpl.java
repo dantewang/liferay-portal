@@ -75,31 +75,38 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 * Never modify or reference this class directly. Always use {@link DLFileShortcutUtil} to access the document library file shortcut persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = DLFileShortcutImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
-			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
-			new String[0]);
+			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_UUID = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
-			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST, "findByUuid",
+			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid",
 			new String[] {
 				String.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
+			DLFileShortcutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
+			new String[] { String.class.getName() },
+			DLFileShortcutModelImpl.UUID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() },
-			DLFileShortcutModelImpl.UUID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the document library file shortcuts where uuid = &#63;.
@@ -304,17 +311,20 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	public List<DLFileShortcut> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid, start, end, orderByComparator };
 		}
 
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID,
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -380,12 +390,10 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -638,10 +646,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			DLFileShortcutModelImpl.UUID_COLUMN_BITMASK |
-			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns the document library file shortcut where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFileShortcutException} if it could not be found.
@@ -886,21 +892,29 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "dlFileShortcut.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(dlFileShortcut.uuid IS NULL OR dlFileShortcut.uuid = ?) AND ";
 	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "dlFileShortcut.groupId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_UUID_C = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
-			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST, "findByUuid_C",
+			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid_C",
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
-			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
+			DLFileShortcutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			DLFileShortcutModelImpl.UUID_COLUMN_BITMASK |
-			DLFileShortcutModelImpl.COMPANYID_COLUMN_BITMASK);
+			DLFileShortcutModelImpl.COMPANYID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the document library file shortcuts where uuid = &#63; and companyId = &#63;.
@@ -1115,13 +1129,16 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public List<DLFileShortcut> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] {
 					uuid, companyId,
 					
@@ -1129,7 +1146,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				};
 		}
 
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID_C,
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1200,12 +1217,10 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID_C,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID_C,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1474,9 +1489,10 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "dlFileShortcut.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(dlFileShortcut.uuid IS NULL OR dlFileShortcut.uuid = ?) AND ";
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "dlFileShortcut.companyId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_TOFILEENTRYID = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_TOFILEENTRYID =
+		new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
-			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST,
+			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByToFileEntryId",
 			new String[] {
 				Long.class.getName(),
@@ -1484,11 +1500,18 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOFILEENTRYID =
+		new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
+			DLFileShortcutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByToFileEntryId",
+			new String[] { Long.class.getName() },
+			DLFileShortcutModelImpl.TOFILEENTRYID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_TOFILEENTRYID = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByToFileEntryId",
-			new String[] { Long.class.getName() },
-			DLFileShortcutModelImpl.TOFILEENTRYID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByToFileEntryId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the document library file shortcuts where toFileEntryId = &#63;.
@@ -1684,13 +1707,16 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public List<DLFileShortcut> findByToFileEntryId(long toFileEntryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOFILEENTRYID;
 			finderArgs = new Object[] { toFileEntryId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TOFILEENTRYID;
 			finderArgs = new Object[] {
 					toFileEntryId,
 					
@@ -1698,7 +1724,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				};
 		}
 
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_TOFILEENTRYID,
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1752,12 +1778,10 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_TOFILEENTRYID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_TOFILEENTRYID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1991,21 +2015,28 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	}
 
 	private static final String _FINDER_COLUMN_TOFILEENTRYID_TOFILEENTRYID_2 = "dlFileShortcut.toFileEntryId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_F = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
-			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST, "findByG_F",
+			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_F",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
-			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_F",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
+			DLFileShortcutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_F",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK |
-			DLFileShortcutModelImpl.FOLDERID_COLUMN_BITMASK);
+			DLFileShortcutModelImpl.FOLDERID_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_F",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the document library file shortcuts where groupId = &#63; and folderId = &#63;.
@@ -2532,13 +2563,16 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public List<DLFileShortcut> findByG_F(long groupId, long folderId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F;
 			finderArgs = new Object[] { groupId, folderId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F;
 			finderArgs = new Object[] {
 					groupId, folderId,
 					
@@ -2546,7 +2580,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				};
 		}
 
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_F,
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2605,11 +2639,10 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_F, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_F, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -2918,9 +2951,10 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	private static final String _FINDER_COLUMN_G_F_GROUPID_2 = "dlFileShortcut.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_F_FOLDERID_2 = "dlFileShortcut.folderId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_F_A = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F_A = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
-			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST, "findByG_F_A",
+			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_F_A",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
@@ -2928,16 +2962,25 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_F_A = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
-			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_F_A",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
+			DLFileShortcutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_F_A",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			},
 			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK |
 			DLFileShortcutModelImpl.FOLDERID_COLUMN_BITMASK |
-			DLFileShortcutModelImpl.ACTIVE_COLUMN_BITMASK);
+			DLFileShortcutModelImpl.ACTIVE_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_F_A = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_F_A",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
 
 	/**
 	 * Returns all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63;.
@@ -3487,13 +3530,16 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public List<DLFileShortcut> findByG_F_A(long groupId, long folderId,
 		boolean active, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A;
 			finderArgs = new Object[] { groupId, folderId, active };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F_A;
 			finderArgs = new Object[] {
 					groupId, folderId, active,
 					
@@ -3501,7 +3547,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				};
 		}
 
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_F_A,
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -3565,12 +3611,10 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_F_A,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_F_A,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -3907,9 +3951,10 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	private static final String _FINDER_COLUMN_G_F_A_GROUPID_2 = "dlFileShortcut.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_F_A_FOLDERID_2 = "dlFileShortcut.folderId = ? AND ";
 	private static final String _FINDER_COLUMN_G_F_A_ACTIVE_2 = "dlFileShortcut.active = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_F_A_S = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F_A_S = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
-			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST, "findByG_F_A_S",
+			DLFileShortcutImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_F_A_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(), Integer.class.getName(),
@@ -3917,9 +3962,11 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_F_A_S = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
-			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_F_A_S",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A_S =
+		new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED,
+			DLFileShortcutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_F_A_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(), Integer.class.getName()
@@ -3927,7 +3974,15 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			DLFileShortcutModelImpl.GROUPID_COLUMN_BITMASK |
 			DLFileShortcutModelImpl.FOLDERID_COLUMN_BITMASK |
 			DLFileShortcutModelImpl.ACTIVE_COLUMN_BITMASK |
-			DLFileShortcutModelImpl.STATUS_COLUMN_BITMASK);
+			DLFileShortcutModelImpl.STATUS_COLUMN_BITMASK |
+			DLFileShortcutModelImpl.FILESHORTCUTID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_F_A_S = new FinderPath(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
+			DLFileShortcutModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_F_A_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName(), Integer.class.getName()
+			});
 
 	/**
 	 * Returns all the document library file shortcuts where groupId = &#63; and folderId = &#63; and active = &#63; and status = &#63;.
@@ -4502,13 +4557,16 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public List<DLFileShortcut> findByG_F_A_S(long groupId, long folderId,
 		boolean active, int status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A_S;
 			finderArgs = new Object[] { groupId, folderId, active, status };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F_A_S;
 			finderArgs = new Object[] {
 					groupId, folderId, active, status,
 					
@@ -4516,7 +4574,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 				};
 		}
 
-		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_F_A_S,
+		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -4585,12 +4643,10 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_F_A_S,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_F_A_S,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -5009,8 +5065,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 		EntityCacheUtil.clearCache(DLFileShortcutImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -5025,16 +5081,16 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 		EntityCacheUtil.removeResult(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
 			DLFileShortcutImpl.class, dlFileShortcut.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(dlFileShortcut);
 	}
 
 	@Override
 	public void clearCache(List<DLFileShortcut> dlFileShortcuts) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (DLFileShortcut dlFileShortcut : dlFileShortcuts) {
 			EntityCacheUtil.removeResult(DLFileShortcutModelImpl.ENTITY_CACHE_ENABLED,
@@ -5195,34 +5251,40 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !DLFileShortcutModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((dlFileShortcutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_UUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						dlFileShortcutModelImpl.getOriginalUuid()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 
 				args = new Object[] { dlFileShortcutModelImpl.getUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 			}
 
 			if ((dlFileShortcutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_UUID_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						dlFileShortcutModelImpl.getOriginalUuid(),
 						Long.valueOf(dlFileShortcutModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
 
 				args = new Object[] {
 						dlFileShortcutModelImpl.getUuid(),
@@ -5230,15 +5292,19 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
 			}
 
 			if ((dlFileShortcutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_TOFILEENTRYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOFILEENTRYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(dlFileShortcutModelImpl.getOriginalToFileEntryId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TOFILEENTRYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOFILEENTRYID,
 					args);
 
 				args = new Object[] {
@@ -5247,16 +5313,20 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TOFILEENTRYID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOFILEENTRYID,
+					args);
 			}
 
 			if ((dlFileShortcutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_F.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(dlFileShortcutModelImpl.getOriginalGroupId()),
 						Long.valueOf(dlFileShortcutModelImpl.getOriginalFolderId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_F, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(dlFileShortcutModelImpl.getGroupId()),
@@ -5264,10 +5334,12 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_F, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F,
+					args);
 			}
 
 			if ((dlFileShortcutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_F_A.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(dlFileShortcutModelImpl.getOriginalGroupId()),
 						Long.valueOf(dlFileShortcutModelImpl.getOriginalFolderId()),
@@ -5275,6 +5347,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_F_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(dlFileShortcutModelImpl.getGroupId()),
@@ -5283,10 +5357,12 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_F_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A,
+					args);
 			}
 
 			if ((dlFileShortcutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_F_A_S.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A_S.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(dlFileShortcutModelImpl.getOriginalGroupId()),
 						Long.valueOf(dlFileShortcutModelImpl.getOriginalFolderId()),
@@ -5295,6 +5371,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_F_A_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A_S,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(dlFileShortcutModelImpl.getGroupId()),
@@ -5304,6 +5382,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_F_A_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_A_S,
+					args);
 			}
 		}
 
@@ -5647,7 +5727,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	public void destroy() {
 		EntityCacheUtil.removeCache(DLFileShortcutImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = DLContentPersistence.class)

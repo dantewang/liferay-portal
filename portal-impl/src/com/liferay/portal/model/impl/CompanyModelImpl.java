@@ -92,6 +92,7 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 	public static long MX_COLUMN_BITMASK = 2L;
 	public static long SYSTEM_COLUMN_BITMASK = 4L;
 	public static long WEBID_COLUMN_BITMASK = 8L;
+	public static long COMPANYID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

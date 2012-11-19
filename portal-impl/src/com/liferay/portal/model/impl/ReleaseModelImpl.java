@@ -84,6 +84,7 @@ public class ReleaseModelImpl extends BaseModelImpl<Release>
 				"value.object.column.bitmask.enabled.com.liferay.portal.model.Release"),
 			true);
 	public static long SERVLETCONTEXTNAME_COLUMN_BITMASK = 1L;
+	public static long RELEASEID_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.Release"));
 

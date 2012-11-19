@@ -78,6 +78,7 @@ public class ExpandoRowModelImpl extends BaseModelImpl<ExpandoRow>
 			true);
 	public static long CLASSPK_COLUMN_BITMASK = 1L;
 	public static long TABLEID_COLUMN_BITMASK = 2L;
+	public static long ROWID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.expando.model.ExpandoRow"));
 

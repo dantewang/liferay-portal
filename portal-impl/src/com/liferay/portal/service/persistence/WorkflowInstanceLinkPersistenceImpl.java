@@ -66,21 +66,21 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 	 * Never modify or reference this class directly. Always use {@link WorkflowInstanceLinkUtil} to access the workflow instance link persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = WorkflowInstanceLinkImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED,
-			WorkflowInstanceLinkImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
-			new String[0]);
+			WorkflowInstanceLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_G_C_C_C = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_C_C = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED,
-			WorkflowInstanceLinkImpl.class, FINDER_CLASS_NAME_LIST,
-			"findByG_C_C_C",
+			WorkflowInstanceLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_C_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName(),
@@ -88,9 +88,11 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_C_C_C = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
-			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_C_C_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C =
+		new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED,
+			WorkflowInstanceLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_C_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Long.class.getName()
@@ -98,7 +100,15 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 			WorkflowInstanceLinkModelImpl.GROUPID_COLUMN_BITMASK |
 			WorkflowInstanceLinkModelImpl.COMPANYID_COLUMN_BITMASK |
 			WorkflowInstanceLinkModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			WorkflowInstanceLinkModelImpl.CLASSPK_COLUMN_BITMASK);
+			WorkflowInstanceLinkModelImpl.CLASSPK_COLUMN_BITMASK |
+			WorkflowInstanceLinkModelImpl.CREATEDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_C_C_C = new FinderPath(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowInstanceLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_C_C_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Long.class.getName()
+			});
 
 	/**
 	 * Returns all the workflow instance links where groupId = &#63; and companyId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -324,13 +334,16 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 	public List<WorkflowInstanceLink> findByG_C_C_C(long groupId,
 		long companyId, long classNameId, long classPK, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C;
 			finderArgs = new Object[] { groupId, companyId, classNameId, classPK };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_C_C;
 			finderArgs = new Object[] {
 					groupId, companyId, classNameId, classPK,
 					
@@ -338,7 +351,7 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 				};
 		}
 
-		List<WorkflowInstanceLink> list = (List<WorkflowInstanceLink>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_C_C_C,
+		List<WorkflowInstanceLink> list = (List<WorkflowInstanceLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -407,12 +420,10 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_C_C_C,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_C_C_C,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -772,8 +783,8 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 		EntityCacheUtil.clearCache(WorkflowInstanceLinkImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -788,14 +799,14 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 		EntityCacheUtil.removeResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowInstanceLinkImpl.class, workflowInstanceLink.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@Override
 	public void clearCache(List<WorkflowInstanceLink> workflowInstanceLinks) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (WorkflowInstanceLink workflowInstanceLink : workflowInstanceLinks) {
 			EntityCacheUtil.removeResult(WorkflowInstanceLinkModelImpl.ENTITY_CACHE_ENABLED,
@@ -937,15 +948,15 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !WorkflowInstanceLinkModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((workflowInstanceLinkModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_C_C_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(workflowInstanceLinkModelImpl.getOriginalGroupId()),
 						Long.valueOf(workflowInstanceLinkModelImpl.getOriginalCompanyId()),
@@ -954,6 +965,8 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(workflowInstanceLinkModelImpl.getGroupId()),
@@ -963,6 +976,8 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C_C,
+					args);
 			}
 		}
 
@@ -1275,7 +1290,8 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 	public void destroy() {
 		EntityCacheUtil.removeCache(WorkflowInstanceLinkImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

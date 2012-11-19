@@ -94,6 +94,7 @@ public class LayoutBranchModelImpl extends BaseModelImpl<LayoutBranch>
 	public static long MASTER_COLUMN_BITMASK = 2L;
 	public static long NAME_COLUMN_BITMASK = 4L;
 	public static long PLID_COLUMN_BITMASK = 8L;
+	public static long LAYOUTBRANCHID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

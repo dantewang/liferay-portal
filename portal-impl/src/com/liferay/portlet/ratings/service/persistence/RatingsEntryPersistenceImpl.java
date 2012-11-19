@@ -72,31 +72,36 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	 * Never modify or reference this class directly. Always use {@link RatingsEntryUtil} to access the ratings entry persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = RatingsEntryImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, RatingsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_C_C = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, RatingsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByC_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, RatingsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			RatingsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			RatingsEntryModelImpl.CLASSPK_COLUMN_BITMASK);
+			RatingsEntryModelImpl.CLASSPK_COLUMN_BITMASK |
+			RatingsEntryModelImpl.ENTRYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the ratings entries where classNameId = &#63; and classPK = &#63;.
@@ -299,13 +304,16 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	public List<RatingsEntry> findByC_C(long classNameId, long classPK,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] { classNameId, classPK };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] {
 					classNameId, classPK,
 					
@@ -313,7 +321,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 				};
 		}
 
-		List<RatingsEntry> list = (List<RatingsEntry>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C,
+		List<RatingsEntry> list = (List<RatingsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -372,11 +380,10 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -642,13 +649,10 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 			RatingsEntryModelImpl.CLASSPK_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_C_C = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByU_C_C",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
-			},
-			RatingsEntryModelImpl.USERID_COLUMN_BITMASK |
-			RatingsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			RatingsEntryModelImpl.CLASSPK_COLUMN_BITMASK);
+			});
 
 	/**
 	 * Returns the ratings entry where userId = &#63; and classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.ratings.NoSuchEntryException} if it could not be found.
@@ -885,9 +889,9 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	private static final String _FINDER_COLUMN_U_C_C_USERID_2 = "ratingsEntry.userId = ? AND ";
 	private static final String _FINDER_COLUMN_U_C_C_CLASSNAMEID_2 = "ratingsEntry.classNameId = ? AND ";
 	private static final String _FINDER_COLUMN_U_C_C_CLASSPK_2 = "ratingsEntry.classPK = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_C_C_S = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_S = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, RatingsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByC_C_S",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Double.class.getName(),
@@ -895,16 +899,24 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_S = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_C_S",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_S = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, RatingsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Double.class.getName()
 			},
 			RatingsEntryModelImpl.CLASSNAMEID_COLUMN_BITMASK |
 			RatingsEntryModelImpl.CLASSPK_COLUMN_BITMASK |
-			RatingsEntryModelImpl.SCORE_COLUMN_BITMASK);
+			RatingsEntryModelImpl.SCORE_COLUMN_BITMASK |
+			RatingsEntryModelImpl.ENTRYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_S = new FinderPath(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			RatingsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Double.class.getName()
+			});
 
 	/**
 	 * Returns all the ratings entries where classNameId = &#63; and classPK = &#63; and score = &#63;.
@@ -1116,13 +1128,16 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	public List<RatingsEntry> findByC_C_S(long classNameId, long classPK,
 		double score, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_S;
 			finderArgs = new Object[] { classNameId, classPK, score };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_S;
 			finderArgs = new Object[] {
 					classNameId, classPK, score,
 					
@@ -1130,7 +1145,7 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 				};
 		}
 
-		List<RatingsEntry> list = (List<RatingsEntry>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C_S,
+		List<RatingsEntry> list = (List<RatingsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1194,12 +1209,10 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C_S,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C_S,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1531,8 +1544,8 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 		EntityCacheUtil.clearCache(RatingsEntryImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -1547,16 +1560,16 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 		EntityCacheUtil.removeResult(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RatingsEntryImpl.class, ratingsEntry.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(ratingsEntry);
 	}
 
 	@Override
 	public void clearCache(List<RatingsEntry> ratingsEntries) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (RatingsEntry ratingsEntry : ratingsEntries) {
 			EntityCacheUtil.removeResult(RatingsEntryModelImpl.ENTITY_CACHE_ENABLED,
@@ -1708,21 +1721,23 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !RatingsEntryModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((ratingsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_C_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(ratingsEntryModelImpl.getOriginalClassNameId()),
 						Long.valueOf(ratingsEntryModelImpl.getOriginalClassPK())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(ratingsEntryModelImpl.getClassNameId()),
@@ -1730,10 +1745,12 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
 			}
 
 			if ((ratingsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_C_C_S.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_S.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(ratingsEntryModelImpl.getOriginalClassNameId()),
 						Long.valueOf(ratingsEntryModelImpl.getOriginalClassPK()),
@@ -1741,6 +1758,8 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_S,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(ratingsEntryModelImpl.getClassNameId()),
@@ -1749,6 +1768,8 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_S,
+					args);
 			}
 		}
 
@@ -2086,7 +2107,8 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 	public void destroy() {
 		EntityCacheUtil.removeCache(RatingsEntryImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = RatingsEntryPersistence.class)

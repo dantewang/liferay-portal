@@ -101,6 +101,7 @@ public class MDRRuleGroupInstanceModelImpl extends BaseModelImpl<MDRRuleGroupIns
 	public static long GROUPID_COLUMN_BITMASK = 8L;
 	public static long RULEGROUPID_COLUMN_BITMASK = 16L;
 	public static long UUID_COLUMN_BITMASK = 32L;
+	public static long RULEGROUPINSTANCEID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

@@ -72,16 +72,16 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	 * Never modify or reference this class directly. Always use {@link DLSyncUtil} to access the d l sync persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = DLSyncImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
 			DLSyncModelImpl.FINDER_CACHE_ENABLED, DLSyncImpl.class,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
 			DLSyncModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_FETCH_BY_FILEID = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
 			DLSyncModelImpl.FINDER_CACHE_ENABLED, DLSyncImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByFileId",
@@ -89,9 +89,8 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 			DLSyncModelImpl.FILEID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_FILEID = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
 			DLSyncModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByFileId",
-			new String[] { Long.class.getName() },
-			DLSyncModelImpl.FILEID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByFileId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns the d l sync where fileId = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchSyncException} if it could not be found.
@@ -288,9 +287,9 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	}
 
 	private static final String _FINDER_COLUMN_FILEID_FILEID_2 = "dlSync.fileId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_C_M_R = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_M_R = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
 			DLSyncModelImpl.FINDER_CACHE_ENABLED, DLSyncImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByC_M_R",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_M_R",
 			new String[] {
 				Long.class.getName(), Date.class.getName(), Long.class.getName(),
 				
@@ -299,13 +298,10 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_M_R = new FinderPath(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
 			DLSyncModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_M_R",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_M_R",
 			new String[] {
 				Long.class.getName(), Date.class.getName(), Long.class.getName()
-			},
-			DLSyncModelImpl.COMPANYID_COLUMN_BITMASK |
-			DLSyncModelImpl.MODIFIEDDATE_COLUMN_BITMASK |
-			DLSyncModelImpl.REPOSITORYID_COLUMN_BITMASK);
+			});
 
 	/**
 	 * Returns all the d l syncs where companyId = &#63; and modifiedDate &ge; &#63; and repositoryId = &#63;.
@@ -525,21 +521,17 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	public List<DLSync> findByC_M_R(long companyId, Date modifiedDate,
 		long repositoryId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] { companyId, modifiedDate, repositoryId };
-		}
-		else {
-			finderArgs = new Object[] {
-					companyId, modifiedDate, repositoryId,
-					
-					start, end, orderByComparator
-				};
-		}
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_M_R;
+		finderArgs = new Object[] {
+				companyId, modifiedDate, repositoryId,
+				
+				start, end, orderByComparator
+			};
 
-		List<DLSync> list = (List<DLSync>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_M_R,
+		List<DLSync> list = (List<DLSync>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -609,12 +601,10 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_M_R,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_M_R,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -950,8 +940,8 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 		EntityCacheUtil.clearCache(DLSyncImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -966,16 +956,16 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 		EntityCacheUtil.removeResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
 			DLSyncImpl.class, dlSync.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(dlSync);
 	}
 
 	@Override
 	public void clearCache(List<DLSync> dlSyncs) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (DLSync dlSync : dlSyncs) {
 			EntityCacheUtil.removeResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
@@ -1121,10 +1111,10 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !DLSyncModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		EntityCacheUtil.putResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
@@ -1452,7 +1442,8 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	public void destroy() {
 		EntityCacheUtil.removeCache(DLSyncImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = DLContentPersistence.class)

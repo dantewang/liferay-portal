@@ -87,6 +87,7 @@ public class PluginSettingModelImpl extends BaseModelImpl<PluginSetting>
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long PLUGINID_COLUMN_BITMASK = 2L;
 	public static long PLUGINTYPE_COLUMN_BITMASK = 4L;
+	public static long PLUGINSETTINGID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

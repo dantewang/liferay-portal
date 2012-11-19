@@ -77,20 +77,21 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	 * Never modify or reference this class directly. Always use {@link SCProductVersionUtil} to access the s c product version persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = SCProductVersionImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionModelImpl.FINDER_CACHE_ENABLED,
-			SCProductVersionImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
-			new String[0]);
+			SCProductVersionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_PRODUCTENTRYID = new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_PRODUCTENTRYID =
+		new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionModelImpl.FINDER_CACHE_ENABLED,
-			SCProductVersionImpl.class, FINDER_CLASS_NAME_LIST,
+			SCProductVersionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByProductEntryId",
 			new String[] {
 				Long.class.getName(),
@@ -98,11 +99,18 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PRODUCTENTRYID =
+		new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductVersionModelImpl.FINDER_CACHE_ENABLED,
+			SCProductVersionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByProductEntryId",
+			new String[] { Long.class.getName() },
+			SCProductVersionModelImpl.PRODUCTENTRYID_COLUMN_BITMASK |
+			SCProductVersionModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_PRODUCTENTRYID = new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByProductEntryId",
-			new String[] { Long.class.getName() },
-			SCProductVersionModelImpl.PRODUCTENTRYID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByProductEntryId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the s c product versions where productEntryId = &#63;.
@@ -299,13 +307,16 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public List<SCProductVersion> findByProductEntryId(long productEntryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PRODUCTENTRYID;
 			finderArgs = new Object[] { productEntryId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PRODUCTENTRYID;
 			finderArgs = new Object[] {
 					productEntryId,
 					
@@ -313,7 +324,7 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				};
 		}
 
-		List<SCProductVersion> list = (List<SCProductVersion>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_PRODUCTENTRYID,
+		List<SCProductVersion> list = (List<SCProductVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -367,12 +378,10 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_PRODUCTENTRYID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_PRODUCTENTRYID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -606,9 +615,10 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	}
 
 	private static final String _FINDER_COLUMN_PRODUCTENTRYID_PRODUCTENTRYID_2 = "scProductVersion.productEntryId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_DIRECTDOWNLOADURL = new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_DIRECTDOWNLOADURL =
+		new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionModelImpl.FINDER_CACHE_ENABLED,
-			SCProductVersionImpl.class, FINDER_CLASS_NAME_LIST,
+			SCProductVersionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByDirectDownloadURL",
 			new String[] {
 				String.class.getName(),
@@ -616,11 +626,18 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_DIRECTDOWNLOADURL =
+		new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductVersionModelImpl.FINDER_CACHE_ENABLED,
+			SCProductVersionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByDirectDownloadURL", new String[] { String.class.getName() },
+			SCProductVersionModelImpl.DIRECTDOWNLOADURL_COLUMN_BITMASK |
+			SCProductVersionModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_DIRECTDOWNLOADURL = new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByDirectDownloadURL",
-			new String[] { String.class.getName() },
-			SCProductVersionModelImpl.DIRECTDOWNLOADURL_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByDirectDownloadURL", new String[] { String.class.getName() });
 
 	/**
 	 * Returns an ordered range of all the s c product versions where directDownloadURL = &#63;.
@@ -639,13 +656,16 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	protected List<SCProductVersion> findByDirectDownloadURL(
 		String directDownloadURL, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_DIRECTDOWNLOADURL;
 			finderArgs = new Object[] { directDownloadURL };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_DIRECTDOWNLOADURL;
 			finderArgs = new Object[] {
 					directDownloadURL,
 					
@@ -653,7 +673,7 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				};
 		}
 
-		List<SCProductVersion> list = (List<SCProductVersion>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_DIRECTDOWNLOADURL,
+		List<SCProductVersion> list = (List<SCProductVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -720,12 +740,10 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_DIRECTDOWNLOADURL,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_DIRECTDOWNLOADURL,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1029,8 +1047,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 		EntityCacheUtil.clearCache(SCProductVersionImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -1045,14 +1063,14 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 		EntityCacheUtil.removeResult(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionImpl.class, scProductVersion.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@Override
 	public void clearCache(List<SCProductVersion> scProductVersions) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (SCProductVersion scProductVersion : scProductVersions) {
 			EntityCacheUtil.removeResult(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
@@ -1203,20 +1221,22 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !SCProductVersionModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((scProductVersionModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_PRODUCTENTRYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PRODUCTENTRYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(scProductVersionModelImpl.getOriginalProductEntryId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PRODUCTENTRYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PRODUCTENTRYID,
 					args);
 
 				args = new Object[] {
@@ -1224,6 +1244,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PRODUCTENTRYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PRODUCTENTRYID,
 					args);
 			}
 		}
@@ -2037,7 +2059,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public void destroy() {
 		EntityCacheUtil.removeCache(SCProductVersionImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = SCFrameworkVersionPersistence.class)

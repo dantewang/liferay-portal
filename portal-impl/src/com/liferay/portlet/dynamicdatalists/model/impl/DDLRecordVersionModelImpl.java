@@ -96,6 +96,7 @@ public class DDLRecordVersionModelImpl extends BaseModelImpl<DDLRecordVersion>
 	public static long RECORDID_COLUMN_BITMASK = 1L;
 	public static long STATUS_COLUMN_BITMASK = 2L;
 	public static long VERSION_COLUMN_BITMASK = 4L;
+	public static long RECORDVERSIONID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion"));
 

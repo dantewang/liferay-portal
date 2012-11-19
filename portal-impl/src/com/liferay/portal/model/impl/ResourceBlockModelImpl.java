@@ -88,6 +88,7 @@ public class ResourceBlockModelImpl extends BaseModelImpl<ResourceBlock>
 	public static long GROUPID_COLUMN_BITMASK = 2L;
 	public static long NAME_COLUMN_BITMASK = 4L;
 	public static long PERMISSIONSHASH_COLUMN_BITMASK = 8L;
+	public static long RESOURCEBLOCKID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

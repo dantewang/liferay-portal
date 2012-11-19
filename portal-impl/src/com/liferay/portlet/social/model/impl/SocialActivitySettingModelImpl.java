@@ -92,6 +92,7 @@ public class SocialActivitySettingModelImpl extends BaseModelImpl<SocialActivity
 	public static long CLASSNAMEID_COLUMN_BITMASK = 2L;
 	public static long GROUPID_COLUMN_BITMASK = 4L;
 	public static long NAME_COLUMN_BITMASK = 8L;
+	public static long ACTIVITYSETTINGID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

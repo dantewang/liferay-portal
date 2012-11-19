@@ -77,30 +77,36 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 * Never modify or reference this class directly. Always use {@link LayoutUtil} to access the layout persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = LayoutImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_UUID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByUuid",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
 			new String[] {
 				String.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
+			new String[] { String.class.getName() },
+			LayoutModelImpl.UUID_COLUMN_BITMASK |
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIORITY_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() },
-			LayoutModelImpl.UUID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the layouts where uuid = &#63;.
@@ -303,17 +309,20 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public List<Layout> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid, start, end, orderByComparator };
 		}
 
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID,
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -378,12 +387,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -631,10 +638,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			LayoutModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			LayoutModelImpl.UUID_COLUMN_BITMASK |
-			LayoutModelImpl.GROUPID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns the layout where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
@@ -879,21 +884,28 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "layout.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(layout.uuid IS NULL OR layout.uuid = ?) AND ";
 	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "layout.groupId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_UUID_C = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByUuid_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			LayoutModelImpl.UUID_COLUMN_BITMASK |
-			LayoutModelImpl.COMPANYID_COLUMN_BITMASK);
+			LayoutModelImpl.COMPANYID_COLUMN_BITMASK |
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIORITY_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the layouts where uuid = &#63; and companyId = &#63;.
@@ -1107,13 +1119,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public List<Layout> findByUuid_C(String uuid, long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] {
 					uuid, companyId,
 					
@@ -1121,7 +1136,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				};
 		}
 
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID_C,
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1191,12 +1206,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID_C,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID_C,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1463,20 +1476,27 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "layout.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(layout.uuid IS NULL OR layout.uuid = ?) AND ";
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "layout.companyId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_GROUPID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByGroupId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIORITY_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() },
-			LayoutModelImpl.GROUPID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the layouts where groupId = &#63;.
@@ -1976,17 +1996,20 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public List<Layout> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId, start, end, orderByComparator };
 		}
 
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_GROUPID,
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2039,12 +2062,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_GROUPID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_GROUPID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -2319,20 +2340,28 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "layout.groupId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_COMPANYID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByCompanyId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			LayoutModelImpl.COMPANYID_COLUMN_BITMASK |
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIORITY_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() },
-			LayoutModelImpl.COMPANYID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the layouts where companyId = &#63;.
@@ -2525,17 +2554,20 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public List<Layout> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId, start, end, orderByComparator };
 		}
 
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_COMPANYID,
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2588,12 +2620,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -2822,20 +2852,28 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "layout.companyId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_ICONIMAGEID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ICONIMAGEID =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByIconImageId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByIconImageId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ICONIMAGEID =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByIconImageId",
+			new String[] { Long.class.getName() },
+			LayoutModelImpl.ICONIMAGEID_COLUMN_BITMASK |
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIORITY_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_ICONIMAGEID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByIconImageId",
-			new String[] { Long.class.getName() },
-			LayoutModelImpl.ICONIMAGEID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByIconImageId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns an ordered range of all the layouts where iconImageId = &#63;.
@@ -2853,17 +2891,20 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	protected List<Layout> findByIconImageId(long iconImageId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ICONIMAGEID;
 			finderArgs = new Object[] { iconImageId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ICONIMAGEID;
 			finderArgs = new Object[] { iconImageId, start, end, orderByComparator };
 		}
 
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_ICONIMAGEID,
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2916,12 +2957,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_ICONIMAGEID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_ICONIMAGEID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -3151,20 +3190,31 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	}
 
 	private static final String _FINDER_COLUMN_ICONIMAGEID_ICONIMAGEID_2 = "layout.iconImageId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_LAYOUTPROTOTYPEUUID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByLayoutPrototypeUuid",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByLayoutPrototypeUuid",
 			new String[] {
 				String.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByLayoutPrototypeUuid",
+			new String[] { String.class.getName() },
+			LayoutModelImpl.LAYOUTPROTOTYPEUUID_COLUMN_BITMASK |
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIORITY_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_LAYOUTPROTOTYPEUUID = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByLayoutPrototypeUuid",
-			new String[] { String.class.getName() },
-			LayoutModelImpl.LAYOUTPROTOTYPEUUID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByLayoutPrototypeUuid",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the layouts where layoutPrototypeUuid = &#63;.
@@ -3371,13 +3421,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByLayoutPrototypeUuid(String layoutPrototypeUuid,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID;
 			finderArgs = new Object[] { layoutPrototypeUuid };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID;
 			finderArgs = new Object[] {
 					layoutPrototypeUuid,
 					
@@ -3385,7 +3438,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				};
 		}
 
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_LAYOUTPROTOTYPEUUID,
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -3451,12 +3504,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_LAYOUTPROTOTYPEUUID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_LAYOUTPROTOTYPEUUID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -3707,22 +3758,32 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		"layout.layoutPrototypeUuid = ?";
 	private static final String _FINDER_COLUMN_LAYOUTPROTOTYPEUUID_LAYOUTPROTOTYPEUUID_3 =
 		"(layout.layoutPrototypeUuid IS NULL OR layout.layoutPrototypeUuid = ?)";
-	public static final FinderPath FINDER_PATH_FIND_BY_SOURCEPROTOTYPELAYOUTUUID =
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID =
 		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findBySourcePrototypeLayoutUuid",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findBySourcePrototypeLayoutUuid",
 			new String[] {
 				String.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findBySourcePrototypeLayoutUuid",
+			new String[] { String.class.getName() },
+			LayoutModelImpl.SOURCEPROTOTYPELAYOUTUUID_COLUMN_BITMASK |
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIORITY_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_SOURCEPROTOTYPELAYOUTUUID =
 		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countBySourcePrototypeLayoutUuid",
-			new String[] { String.class.getName() },
-			LayoutModelImpl.SOURCEPROTOTYPELAYOUTUUID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countBySourcePrototypeLayoutUuid",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the layouts where sourcePrototypeLayoutUuid = &#63;.
@@ -3931,13 +3992,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findBySourcePrototypeLayoutUuid(
 		String sourcePrototypeLayoutUuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID;
 			finderArgs = new Object[] { sourcePrototypeLayoutUuid };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID;
 			finderArgs = new Object[] {
 					sourcePrototypeLayoutUuid,
 					
@@ -3945,7 +4009,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				};
 		}
 
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_SOURCEPROTOTYPELAYOUTUUID,
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -4011,12 +4075,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_SOURCEPROTOTYPELAYOUTUUID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_SOURCEPROTOTYPELAYOUTUUID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -4276,21 +4338,27 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		"layout.sourcePrototypeLayoutUuid = ?";
 	private static final String _FINDER_COLUMN_SOURCEPROTOTYPELAYOUTUUID_SOURCEPROTOTYPELAYOUTUUID_3 =
 		"(layout.sourcePrototypeLayoutUuid IS NULL OR layout.sourcePrototypeLayoutUuid = ?)";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_P = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByG_P",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_P",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P",
 			new String[] { Long.class.getName(), Boolean.class.getName() },
 			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
-			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK);
+			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIORITY_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
 	 * Returns all the layouts where groupId = &#63; and privateLayout = &#63;.
@@ -4817,13 +4885,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByG_P(long groupId, boolean privateLayout,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P;
 			finderArgs = new Object[] { groupId, privateLayout };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P;
 			finderArgs = new Object[] {
 					groupId, privateLayout,
 					
@@ -4831,7 +4902,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				};
 		}
 
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P,
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -4889,11 +4960,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -5214,14 +5284,11 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			LayoutModelImpl.LAYOUTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_L = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_P_L",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_L",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName()
-			},
-			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
-			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
-			LayoutModelImpl.LAYOUTID_COLUMN_BITMASK);
+			});
 
 	/**
 	 * Returns the layout where groupId = &#63; and privateLayout = &#63; and layoutId = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
@@ -5458,9 +5525,9 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	private static final String _FINDER_COLUMN_G_P_L_GROUPID_2 = "layout.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_P_L_PRIVATELAYOUT_2 = "layout.privateLayout = ? AND ";
 	private static final String _FINDER_COLUMN_G_P_L_LAYOUTID_2 = "layout.layoutId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_P_P = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_P = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByG_P_P",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_P",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName(),
@@ -5468,16 +5535,24 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_P = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_P_P",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_P = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_P",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName()
 			},
 			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
 			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
-			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK);
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIORITY_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_P = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_P",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				Long.class.getName()
+			});
 
 	/**
 	 * Returns all the layouts where groupId = &#63; and privateLayout = &#63; and parentLayoutId = &#63;.
@@ -6029,13 +6104,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByG_P_P(long groupId, boolean privateLayout,
 		long parentLayoutId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_P;
 			finderArgs = new Object[] { groupId, privateLayout, parentLayoutId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_P;
 			finderArgs = new Object[] {
 					groupId, privateLayout, parentLayoutId,
 					
@@ -6043,7 +6121,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				};
 		}
 
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P_P,
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -6106,12 +6184,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_P,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_P,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -6462,14 +6538,11 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			LayoutModelImpl.FRIENDLYURL_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_F = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_P_F",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_F",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName()
-			},
-			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
-			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
-			LayoutModelImpl.FRIENDLYURL_COLUMN_BITMASK);
+			});
 
 	/**
 	 * Returns the layout where groupId = &#63; and privateLayout = &#63; and friendlyURL = &#63; or throws a {@link com.liferay.portal.NoSuchLayoutException} if it could not be found.
@@ -6734,9 +6807,9 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	private static final String _FINDER_COLUMN_G_P_F_FRIENDLYURL_1 = "layout.friendlyURL IS NULL";
 	private static final String _FINDER_COLUMN_G_P_F_FRIENDLYURL_2 = "layout.friendlyURL = ?";
 	private static final String _FINDER_COLUMN_G_P_F_FRIENDLYURL_3 = "(layout.friendlyURL IS NULL OR layout.friendlyURL = ?)";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_P_T = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_T = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByG_P_T",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_T",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName(),
@@ -6744,16 +6817,25 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_T = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_P_T",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_T = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_T",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName()
 			},
 			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
 			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
-			LayoutModelImpl.TYPE_COLUMN_BITMASK);
+			LayoutModelImpl.TYPE_COLUMN_BITMASK |
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIORITY_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_T = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_T",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				String.class.getName()
+			});
 
 	/**
 	 * Returns all the layouts where groupId = &#63; and privateLayout = &#63; and type = &#63;.
@@ -7336,13 +7418,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByG_P_T(long groupId, boolean privateLayout,
 		String type, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_T;
 			finderArgs = new Object[] { groupId, privateLayout, type };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_T;
 			finderArgs = new Object[] {
 					groupId, privateLayout, type,
 					
@@ -7350,7 +7435,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				};
 		}
 
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P_T,
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -7425,12 +7510,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_T,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_T,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -7793,9 +7876,9 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	private static final String _FINDER_COLUMN_G_P_T_TYPE_1 = "layout.type IS NULL";
 	private static final String _FINDER_COLUMN_G_P_T_TYPE_2 = "layout.type = ?";
 	private static final String _FINDER_COLUMN_G_P_T_TYPE_3 = "(layout.type IS NULL OR layout.type = ?)";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_P_SPLU = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_SPLU = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByG_P_SPLU",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_SPLU",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName(),
@@ -7803,16 +7886,26 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_SPLU = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
-			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_P_SPLU",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_SPLU =
+		new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, LayoutImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_SPLU",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName()
 			},
 			LayoutModelImpl.GROUPID_COLUMN_BITMASK |
 			LayoutModelImpl.PRIVATELAYOUT_COLUMN_BITMASK |
-			LayoutModelImpl.SOURCEPROTOTYPELAYOUTUUID_COLUMN_BITMASK);
+			LayoutModelImpl.SOURCEPROTOTYPELAYOUTUUID_COLUMN_BITMASK |
+			LayoutModelImpl.PARENTLAYOUTID_COLUMN_BITMASK |
+			LayoutModelImpl.PRIORITY_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_SPLU = new FinderPath(LayoutModelImpl.ENTITY_CACHE_ENABLED,
+			LayoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_SPLU",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				String.class.getName()
+			});
 
 	/**
 	 * Returns an ordered range of all the layouts where groupId = &#63; and privateLayout = &#63; and sourcePrototypeLayoutUuid = &#63;.
@@ -7833,15 +7926,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	protected List<Layout> findByG_P_SPLU(long groupId, boolean privateLayout,
 		String sourcePrototypeLayoutUuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_SPLU;
 			finderArgs = new Object[] {
 					groupId, privateLayout, sourcePrototypeLayoutUuid
 				};
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_SPLU;
 			finderArgs = new Object[] {
 					groupId, privateLayout, sourcePrototypeLayoutUuid,
 					
@@ -7849,7 +7945,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				};
 		}
 
-		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P_SPLU,
+		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -7925,12 +8021,10 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P_SPLU,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P_SPLU,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -8301,8 +8395,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		EntityCacheUtil.clearCache(LayoutImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -8317,16 +8411,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		EntityCacheUtil.removeResult(LayoutModelImpl.ENTITY_CACHE_ENABLED,
 			LayoutImpl.class, layout.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(layout);
 	}
 
 	@Override
 	public void clearCache(List<Layout> layouts) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (Layout layout : layouts) {
 			EntityCacheUtil.removeResult(LayoutModelImpl.ENTITY_CACHE_ENABLED,
@@ -8496,32 +8590,38 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !LayoutModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((layoutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_UUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] { layoutModelImpl.getOriginalUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 
 				args = new Object[] { layoutModelImpl.getUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 			}
 
 			if ((layoutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_UUID_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						layoutModelImpl.getOriginalUuid(),
 						Long.valueOf(layoutModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
 
 				args = new Object[] {
 						layoutModelImpl.getUuid(),
@@ -8529,58 +8629,74 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
 			}
 
 			if ((layoutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_GROUPID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(layoutModelImpl.getOriginalGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
 
 				args = new Object[] { Long.valueOf(layoutModelImpl.getGroupId()) };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
 			}
 
 			if ((layoutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_COMPANYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(layoutModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
 
 				args = new Object[] { Long.valueOf(layoutModelImpl.getCompanyId()) };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
 			}
 
 			if ((layoutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_LAYOUTPROTOTYPEUUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						layoutModelImpl.getOriginalLayoutPrototypeUuid()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LAYOUTPROTOTYPEUUID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID,
+					args);
 
 				args = new Object[] { layoutModelImpl.getLayoutPrototypeUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LAYOUTPROTOTYPEUUID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID,
+					args);
 			}
 
 			if ((layoutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_SOURCEPROTOTYPELAYOUTUUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						layoutModelImpl.getOriginalSourcePrototypeLayoutUuid()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SOURCEPROTOTYPELAYOUTUUID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID,
 					args);
 
 				args = new Object[] {
@@ -8589,16 +8705,20 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SOURCEPROTOTYPELAYOUTUUID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID,
+					args);
 			}
 
 			if ((layoutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_P.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(layoutModelImpl.getOriginalGroupId()),
 						Boolean.valueOf(layoutModelImpl.getOriginalPrivateLayout())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(layoutModelImpl.getGroupId()),
@@ -8606,10 +8726,12 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
 			}
 
 			if ((layoutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_P_P.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_P.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(layoutModelImpl.getOriginalGroupId()),
 						Boolean.valueOf(layoutModelImpl.getOriginalPrivateLayout()),
@@ -8617,6 +8739,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_P,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(layoutModelImpl.getGroupId()),
@@ -8625,10 +8749,12 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_P,
+					args);
 			}
 
 			if ((layoutModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_P_T.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_T.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(layoutModelImpl.getOriginalGroupId()),
 						Boolean.valueOf(layoutModelImpl.getOriginalPrivateLayout()),
@@ -8637,6 +8763,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_T, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_T,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(layoutModelImpl.getGroupId()),
@@ -8646,6 +8774,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_T, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_T,
+					args);
 			}
 		}
 
@@ -9051,7 +9181,8 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public void destroy() {
 		EntityCacheUtil.removeCache(LayoutImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

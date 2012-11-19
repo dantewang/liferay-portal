@@ -83,6 +83,7 @@ public class UserIdMapperModelImpl extends BaseModelImpl<UserIdMapper>
 	public static long EXTERNALUSERID_COLUMN_BITMASK = 1L;
 	public static long TYPE_COLUMN_BITMASK = 2L;
 	public static long USERID_COLUMN_BITMASK = 4L;
+	public static long USERIDMAPPERID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.UserIdMapper"));
 

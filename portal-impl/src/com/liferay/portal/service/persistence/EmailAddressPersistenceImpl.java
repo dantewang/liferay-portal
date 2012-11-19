@@ -66,30 +66,37 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	 * Never modify or reference this class directly. Always use {@link EmailAddressUtil} to access the email address persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = EmailAddressImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_COMPANYID = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByCompanyId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() },
-			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the email addresses where companyId = &#63;.
@@ -283,17 +290,20 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	 */
 	public List<EmailAddress> findByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId, start, end, orderByComparator };
 		}
 
-		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_COMPANYID,
+		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -347,12 +357,10 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -584,20 +592,26 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	}
 
 	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "emailAddress.companyId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_USERID = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByUserId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
+		new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
+			new String[] { Long.class.getName() },
+			EmailAddressModelImpl.USERID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUserId",
-			new String[] { Long.class.getName() },
-			EmailAddressModelImpl.USERID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the email addresses where userId = &#63;.
@@ -790,17 +804,20 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	 */
 	public List<EmailAddress> findByUserId(long userId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
 			finderArgs = new Object[] { userId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
 			finderArgs = new Object[] { userId, start, end, orderByComparator };
 		}
 
-		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_USERID,
+		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -854,12 +871,10 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_USERID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_USERID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1089,21 +1104,26 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	}
 
 	private static final String _FINDER_COLUMN_USERID_USERID_2 = "emailAddress.userId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByC_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
-			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK);
+			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			EmailAddressModelImpl.CREATEDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the email addresses where companyId = &#63; and classNameId = &#63;.
@@ -1306,13 +1326,16 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	public List<EmailAddress> findByC_C(long companyId, long classNameId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] { companyId, classNameId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] {
 					companyId, classNameId,
 					
@@ -1320,7 +1343,7 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				};
 		}
 
-		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C,
+		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1379,11 +1402,10 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1638,24 +1660,31 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 	private static final String _FINDER_COLUMN_C_C_COMPANYID_2 = "emailAddress.companyId = ? AND ";
 	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "emailAddress.classNameId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_C_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByC_C_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_C_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
 			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
 			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			EmailAddressModelImpl.CLASSPK_COLUMN_BITMASK);
+			EmailAddressModelImpl.CLASSPK_COLUMN_BITMASK |
+			EmailAddressModelImpl.CREATEDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName()
+			});
 
 	/**
 	 * Returns all the email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63;.
@@ -1867,13 +1896,16 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	public List<EmailAddress> findByC_C_C(long companyId, long classNameId,
 		long classPK, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C;
 			finderArgs = new Object[] { companyId, classNameId, classPK };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C;
 			finderArgs = new Object[] {
 					companyId, classNameId, classPK,
 					
@@ -1881,7 +1913,7 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				};
 		}
 
-		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C_C,
+		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1945,12 +1977,10 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C_C,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C_C,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -2228,9 +2258,9 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	private static final String _FINDER_COLUMN_C_C_C_COMPANYID_2 = "emailAddress.companyId = ? AND ";
 	private static final String _FINDER_COLUMN_C_C_C_CLASSNAMEID_2 = "emailAddress.classNameId = ? AND ";
 	private static final String _FINDER_COLUMN_C_C_C_CLASSPK_2 = "emailAddress.classPK = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_C_C_C_P = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C_P = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByC_C_C_P",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C_C_P",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
@@ -2238,9 +2268,10 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C_P = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
-			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_C_C_P",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P =
+		new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, EmailAddressImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C_C_P",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
@@ -2248,7 +2279,15 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 			EmailAddressModelImpl.COMPANYID_COLUMN_BITMASK |
 			EmailAddressModelImpl.CLASSNAMEID_COLUMN_BITMASK |
 			EmailAddressModelImpl.CLASSPK_COLUMN_BITMASK |
-			EmailAddressModelImpl.PRIMARY_COLUMN_BITMASK);
+			EmailAddressModelImpl.PRIMARY_COLUMN_BITMASK |
+			EmailAddressModelImpl.CREATEDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_C_P = new FinderPath(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
+			EmailAddressModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_C_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
 
 	/**
 	 * Returns all the email addresses where companyId = &#63; and classNameId = &#63; and classPK = &#63; and primary = &#63;.
@@ -2473,13 +2512,16 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	public List<EmailAddress> findByC_C_C_P(long companyId, long classNameId,
 		long classPK, boolean primary, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P;
 			finderArgs = new Object[] { companyId, classNameId, classPK, primary };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_C_P;
 			finderArgs = new Object[] {
 					companyId, classNameId, classPK, primary,
 					
@@ -2487,7 +2529,7 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				};
 		}
 
-		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C_C_P,
+		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2556,12 +2598,10 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C_C_P,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C_C_P,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -2914,8 +2954,8 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 		EntityCacheUtil.clearCache(EmailAddressImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -2930,14 +2970,14 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 		EntityCacheUtil.removeResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
 			EmailAddressImpl.class, emailAddress.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@Override
 	public void clearCache(List<EmailAddress> emailAddresses) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (EmailAddress emailAddress : emailAddresses) {
 			EntityCacheUtil.removeResult(EmailAddressModelImpl.ENTITY_CACHE_ENABLED,
@@ -3078,20 +3118,22 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !EmailAddressModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((emailAddressModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_COMPANYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
 					args);
 
 				args = new Object[] {
@@ -3100,31 +3142,39 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
 			}
 
 			if ((emailAddressModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_USERID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(emailAddressModelImpl.getOriginalUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(emailAddressModelImpl.getUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
 			}
 
 			if ((emailAddressModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_C_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId()),
 						Long.valueOf(emailAddressModelImpl.getOriginalClassNameId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(emailAddressModelImpl.getCompanyId()),
@@ -3132,10 +3182,12 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
 			}
 
 			if ((emailAddressModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_C_C_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId()),
 						Long.valueOf(emailAddressModelImpl.getOriginalClassNameId()),
@@ -3143,6 +3195,8 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(emailAddressModelImpl.getCompanyId()),
@@ -3151,10 +3205,12 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C,
+					args);
 			}
 
 			if ((emailAddressModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_C_C_C_P.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(emailAddressModelImpl.getOriginalCompanyId()),
 						Long.valueOf(emailAddressModelImpl.getOriginalClassNameId()),
@@ -3163,6 +3219,8 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(emailAddressModelImpl.getCompanyId()),
@@ -3172,6 +3230,8 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P,
+					args);
 			}
 		}
 
@@ -3482,7 +3542,8 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	public void destroy() {
 		EntityCacheUtil.removeCache(EmailAddressImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

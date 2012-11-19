@@ -88,6 +88,7 @@ public class PortletPreferencesModelImpl extends BaseModelImpl<PortletPreference
 	public static long OWNERTYPE_COLUMN_BITMASK = 2L;
 	public static long PLID_COLUMN_BITMASK = 4L;
 	public static long PORTLETID_COLUMN_BITMASK = 8L;
+	public static long PORTLETPREFERENCESID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

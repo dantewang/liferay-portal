@@ -83,6 +83,7 @@ public class ClassNameModelImpl extends BaseModelImpl<ClassName>
 				"value.object.column.bitmask.enabled.com.liferay.portal.model.ClassName"),
 			true);
 	public static long VALUE_COLUMN_BITMASK = 1L;
+	public static long CLASSNAMEID_COLUMN_BITMASK = 2L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

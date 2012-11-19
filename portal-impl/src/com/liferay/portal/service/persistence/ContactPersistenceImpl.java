@@ -66,30 +66,37 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * Never modify or reference this class directly. Always use {@link ContactUtil} to access the contact persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = ContactImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactModelImpl.FINDER_CACHE_ENABLED, ContactImpl.class,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_COMPANYID = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactModelImpl.FINDER_CACHE_ENABLED, ContactImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByCompanyId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
+			ContactModelImpl.FINDER_CACHE_ENABLED, ContactImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			ContactModelImpl.COMPANYID_COLUMN_BITMASK |
+			ContactModelImpl.CONTACTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByCompanyId",
-			new String[] { Long.class.getName() },
-			ContactModelImpl.COMPANYID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the contacts where companyId = &#63;.
@@ -283,17 +290,20 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	public List<Contact> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId, start, end, orderByComparator };
 		}
 
-		List<Contact> list = (List<Contact>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_COMPANYID,
+		List<Contact> list = (List<Contact>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -346,12 +356,10 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_COMPANYID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -580,20 +588,27 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	}
 
 	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "contact.companyId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_ACCOUNTID = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ACCOUNTID =
+		new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactModelImpl.FINDER_CACHE_ENABLED, ContactImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByAccountId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByAccountId",
 			new String[] {
 				Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACCOUNTID =
+		new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
+			ContactModelImpl.FINDER_CACHE_ENABLED, ContactImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByAccountId",
+			new String[] { Long.class.getName() },
+			ContactModelImpl.ACCOUNTID_COLUMN_BITMASK |
+			ContactModelImpl.CONTACTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_ACCOUNTID = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByAccountId",
-			new String[] { Long.class.getName() },
-			ContactModelImpl.ACCOUNTID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByAccountId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the contacts where accountId = &#63;.
@@ -787,17 +802,20 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	public List<Contact> findByAccountId(long accountId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACCOUNTID;
 			finderArgs = new Object[] { accountId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ACCOUNTID;
 			finderArgs = new Object[] { accountId, start, end, orderByComparator };
 		}
 
-		List<Contact> list = (List<Contact>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_ACCOUNTID,
+		List<Contact> list = (List<Contact>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -850,12 +868,10 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_ACCOUNTID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_ACCOUNTID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1084,21 +1100,26 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	}
 
 	private static final String _FINDER_COLUMN_ACCOUNTID_ACCOUNTID_2 = "contact.accountId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_C_C = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactModelImpl.FINDER_CACHE_ENABLED, ContactImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByC_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
-			ContactModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
+			ContactModelImpl.FINDER_CACHE_ENABLED, ContactImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			ContactModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			ContactModelImpl.CLASSPK_COLUMN_BITMASK);
+			ContactModelImpl.CLASSPK_COLUMN_BITMASK |
+			ContactModelImpl.CONTACTID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(ContactModelImpl.ENTITY_CACHE_ENABLED,
+			ContactModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the contacts where classNameId = &#63; and classPK = &#63;.
@@ -1300,13 +1321,16 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	public List<Contact> findByC_C(long classNameId, long classPK, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] { classNameId, classPK };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] {
 					classNameId, classPK,
 					
@@ -1314,7 +1338,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 				};
 		}
 
-		List<Contact> list = (List<Contact>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C,
+		List<Contact> list = (List<Contact>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1372,11 +1396,10 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_C, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_C, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1678,8 +1701,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 		EntityCacheUtil.clearCache(ContactImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -1694,14 +1717,14 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 		EntityCacheUtil.removeResult(ContactModelImpl.ENTITY_CACHE_ENABLED,
 			ContactImpl.class, contact.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@Override
 	public void clearCache(List<Contact> contacts) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (Contact contact : contacts) {
 			EntityCacheUtil.removeResult(ContactModelImpl.ENTITY_CACHE_ENABLED,
@@ -1839,20 +1862,22 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !ContactModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((contactModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_COMPANYID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(contactModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
 					args);
 
 				args = new Object[] {
@@ -1861,15 +1886,19 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
 			}
 
 			if ((contactModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_ACCOUNTID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACCOUNTID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(contactModelImpl.getOriginalAccountId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACCOUNTID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACCOUNTID,
 					args);
 
 				args = new Object[] {
@@ -1878,16 +1907,20 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACCOUNTID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACCOUNTID,
+					args);
 			}
 
 			if ((contactModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_C_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(contactModelImpl.getOriginalClassNameId()),
 						Long.valueOf(contactModelImpl.getOriginalClassPK())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(contactModelImpl.getClassNameId()),
@@ -1895,6 +1928,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
 			}
 		}
 
@@ -2223,7 +2258,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	public void destroy() {
 		EntityCacheUtil.removeCache(ContactImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

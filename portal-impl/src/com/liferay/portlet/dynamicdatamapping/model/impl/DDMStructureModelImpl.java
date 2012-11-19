@@ -110,6 +110,7 @@ public class DDMStructureModelImpl extends BaseModelImpl<DDMStructure>
 	public static long NAME_COLUMN_BITMASK = 16L;
 	public static long STRUCTUREKEY_COLUMN_BITMASK = 32L;
 	public static long UUID_COLUMN_BITMASK = 64L;
+	public static long STRUCTUREID_COLUMN_BITMASK = 128L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

@@ -106,6 +106,7 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 	public static long STATUS_COLUMN_BITMASK = 16L;
 	public static long TOFILEENTRYID_COLUMN_BITMASK = 32L;
 	public static long UUID_COLUMN_BITMASK = 64L;
+	public static long FILESHORTCUTID_COLUMN_BITMASK = 128L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

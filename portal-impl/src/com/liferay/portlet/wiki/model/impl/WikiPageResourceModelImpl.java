@@ -81,6 +81,7 @@ public class WikiPageResourceModelImpl extends BaseModelImpl<WikiPageResource>
 	public static long NODEID_COLUMN_BITMASK = 1L;
 	public static long TITLE_COLUMN_BITMASK = 2L;
 	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long RESOURCEPRIMKEY_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.wiki.model.WikiPageResource"));
 

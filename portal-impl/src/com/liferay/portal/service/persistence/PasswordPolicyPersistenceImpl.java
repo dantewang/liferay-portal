@@ -67,32 +67,39 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	 * Never modify or reference this class directly. Always use {@link PasswordPolicyUtil} to access the password policy persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = PasswordPolicyImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED,
-			PasswordPolicyImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
-			new String[0]);
+			PasswordPolicyImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED,
-			PasswordPolicyImpl.class, FINDER_CLASS_NAME_LIST, "findByC_DP",
+			PasswordPolicyImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByC_DP",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
-			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_DP",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
+			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED,
+			PasswordPolicyImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_DP",
 			new String[] { Long.class.getName(), Boolean.class.getName() },
 			PasswordPolicyModelImpl.COMPANYID_COLUMN_BITMASK |
-			PasswordPolicyModelImpl.DEFAULTPOLICY_COLUMN_BITMASK);
+			PasswordPolicyModelImpl.DEFAULTPOLICY_COLUMN_BITMASK |
+			PasswordPolicyModelImpl.PASSWORDPOLICYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_DP = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
+			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_DP",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
 	 * Returns an ordered range of all the password policies where companyId = &#63; and defaultPolicy = &#63;.
@@ -112,13 +119,16 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	protected List<PasswordPolicy> findByC_DP(long companyId,
 		boolean defaultPolicy, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_DP;
 			finderArgs = new Object[] { companyId, defaultPolicy };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_DP;
 			finderArgs = new Object[] {
 					companyId, defaultPolicy,
 					
@@ -126,7 +136,7 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 				};
 		}
 
-		List<PasswordPolicy> list = (List<PasswordPolicy>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_DP,
+		List<PasswordPolicy> list = (List<PasswordPolicy>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -185,12 +195,10 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_C_DP, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_C_DP,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -455,10 +463,8 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 			PasswordPolicyModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_N = new FinderPath(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByC_N",
-			new String[] { Long.class.getName(), String.class.getName() },
-			PasswordPolicyModelImpl.COMPANYID_COLUMN_BITMASK |
-			PasswordPolicyModelImpl.NAME_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_N",
+			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
 	 * Returns the password policy where companyId = &#63; and name = &#63; or throws a {@link com.liferay.portal.NoSuchPasswordPolicyException} if it could not be found.
@@ -758,8 +764,8 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 		EntityCacheUtil.clearCache(PasswordPolicyImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -774,16 +780,16 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 		EntityCacheUtil.removeResult(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
 			PasswordPolicyImpl.class, passwordPolicy.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(passwordPolicy);
 	}
 
 	@Override
 	public void clearCache(List<PasswordPolicy> passwordPolicies) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (PasswordPolicy passwordPolicy : passwordPolicies) {
 			EntityCacheUtil.removeResult(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
@@ -935,10 +941,10 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !PasswordPolicyModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		EntityCacheUtil.putResult(PasswordPolicyModelImpl.ENTITY_CACHE_ENABLED,
@@ -1300,7 +1306,8 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 	public void destroy() {
 		EntityCacheUtil.removeCache(PasswordPolicyImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

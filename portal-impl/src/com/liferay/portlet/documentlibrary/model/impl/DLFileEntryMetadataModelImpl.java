@@ -86,6 +86,7 @@ public class DLFileEntryMetadataModelImpl extends BaseModelImpl<DLFileEntryMetad
 	public static long FILEENTRYTYPEID_COLUMN_BITMASK = 4L;
 	public static long FILEVERSIONID_COLUMN_BITMASK = 8L;
 	public static long UUID_COLUMN_BITMASK = 16L;
+	public static long FILEENTRYMETADATAID_COLUMN_BITMASK = 32L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata"));
 

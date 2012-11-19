@@ -68,19 +68,19 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	 * Never modify or reference this class directly. Always use {@link ImageUtil} to access the image persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = ImageImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_LTSIZE = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_LTSIZE = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByLtSize",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByLtSize",
 			new String[] {
 				Integer.class.getName(),
 				
@@ -89,9 +89,8 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_LTSIZE = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByLtSize",
-			new String[] { Integer.class.getName() },
-			ImageModelImpl.SIZE_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByLtSize",
+			new String[] { Integer.class.getName() });
 
 	/**
 	 * Returns all the images where size &lt; &#63;.
@@ -282,17 +281,13 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	 */
 	public List<Image> findByLtSize(int size, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] { size };
-		}
-		else {
-			finderArgs = new Object[] { size, start, end, orderByComparator };
-		}
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_LTSIZE;
+		finderArgs = new Object[] { size, start, end, orderByComparator };
 
-		List<Image> list = (List<Image>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_LTSIZE,
+		List<Image> list = (List<Image>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -345,12 +340,10 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_LTSIZE,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_LTSIZE,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -622,8 +615,8 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 		EntityCacheUtil.clearCache(ImageImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -638,14 +631,14 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 		EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageImpl.class, image.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@Override
 	public void clearCache(List<Image> images) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (Image image : images) {
 			EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
@@ -781,10 +774,10 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !ImageModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
@@ -1086,7 +1079,8 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	public void destroy() {
 		EntityCacheUtil.removeCache(ImageImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

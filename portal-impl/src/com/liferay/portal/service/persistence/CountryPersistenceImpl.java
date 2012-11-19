@@ -67,16 +67,16 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 * Never modify or reference this class directly. Always use {@link CountryUtil} to access the country persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = CountryImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, CountryImpl.class,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_FETCH_BY_NAME = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, CountryImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByName",
@@ -84,9 +84,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			CountryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_NAME = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByName",
-			new String[] { String.class.getName() },
-			CountryModelImpl.NAME_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByName",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns the country where name = &#63; or throws a {@link com.liferay.portal.NoSuchCountryException} if it could not be found.
@@ -317,9 +316,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			CountryModelImpl.A2_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_A2 = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByA2",
-			new String[] { String.class.getName() },
-			CountryModelImpl.A2_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByA2",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns the country where a2 = &#63; or throws a {@link com.liferay.portal.NoSuchCountryException} if it could not be found.
@@ -548,9 +546,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			CountryModelImpl.A3_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_A3 = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByA3",
-			new String[] { String.class.getName() },
-			CountryModelImpl.A3_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByA3",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns the country where a3 = &#63; or throws a {@link com.liferay.portal.NoSuchCountryException} if it could not be found.
@@ -772,20 +769,26 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	private static final String _FINDER_COLUMN_A3_A3_1 = "country.a3 IS NULL";
 	private static final String _FINDER_COLUMN_A3_A3_2 = "country.a3 = ?";
 	private static final String _FINDER_COLUMN_A3_A3_3 = "(country.a3 IS NULL OR country.a3 = ?)";
-	public static final FinderPath FINDER_PATH_FIND_BY_ACTIVE = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, CountryImpl.class,
-			FINDER_CLASS_NAME_LIST, "findByActive",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByActive",
 			new String[] {
 				Boolean.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE =
+		new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
+			CountryModelImpl.FINDER_CACHE_ENABLED, CountryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByActive",
+			new String[] { Boolean.class.getName() },
+			CountryModelImpl.ACTIVE_COLUMN_BITMASK |
+			CountryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_ACTIVE = new FinderPath(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByActive",
-			new String[] { Boolean.class.getName() },
-			CountryModelImpl.ACTIVE_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByActive",
+			new String[] { Boolean.class.getName() });
 
 	/**
 	 * Returns all the countries where active = &#63;.
@@ -976,17 +979,20 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 */
 	public List<Country> findByActive(boolean active, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE;
 			finderArgs = new Object[] { active };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVE;
 			finderArgs = new Object[] { active, start, end, orderByComparator };
 		}
 
-		List<Country> list = (List<Country>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_ACTIVE,
+		List<Country> list = (List<Country>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1039,12 +1045,10 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_ACTIVE,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_ACTIVE,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1328,8 +1332,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 		EntityCacheUtil.clearCache(CountryImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -1344,16 +1348,16 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 		EntityCacheUtil.removeResult(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryImpl.class, country.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(country);
 	}
 
 	@Override
 	public void clearCache(List<Country> countries) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (Country country : countries) {
 			EntityCacheUtil.removeResult(CountryModelImpl.ENTITY_CACHE_ENABLED,
@@ -1504,26 +1508,30 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !CountryModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((countryModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_ACTIVE.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Boolean.valueOf(countryModelImpl.getOriginalActive())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVE, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE,
+					args);
 
 				args = new Object[] {
 						Boolean.valueOf(countryModelImpl.getActive())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVE, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE,
+					args);
 			}
 		}
 
@@ -1875,7 +1883,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	public void destroy() {
 		EntityCacheUtil.removeCache(CountryImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = AccountPersistence.class)

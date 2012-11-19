@@ -90,6 +90,7 @@ public class AnnouncementsDeliveryModelImpl extends BaseModelImpl<AnnouncementsD
 			true);
 	public static long TYPE_COLUMN_BITMASK = 1L;
 	public static long USERID_COLUMN_BITMASK = 2L;
+	public static long DELIVERYID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.

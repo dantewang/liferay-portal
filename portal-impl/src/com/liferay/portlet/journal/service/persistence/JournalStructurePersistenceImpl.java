@@ -76,31 +76,38 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	 * Never modify or reference this class directly. Always use {@link JournalStructureUtil} to access the journal structure persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static final String FINDER_CLASS_NAME_ENTITY = JournalStructureImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
-		".List";
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY +
-		".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List1";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
+		".List2";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
-			new String[0]);
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FIND_BY_UUID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST, "findByUuid",
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid",
 			new String[] {
 				String.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
+			new String[] { String.class.getName() },
+			JournalStructureModelImpl.UUID_COLUMN_BITMASK |
+			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUuid",
-			new String[] { String.class.getName() },
-			JournalStructureModelImpl.UUID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the journal structures where uuid = &#63;.
@@ -305,17 +312,20 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	 */
 	public List<JournalStructure> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid, start, end, orderByComparator };
 		}
 
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID,
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -381,12 +391,10 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -640,10 +648,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			JournalStructureModelImpl.UUID_COLUMN_BITMASK |
-			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns the journal structure where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchStructureException} if it could not be found.
@@ -888,21 +894,29 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "journalStructure.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(journalStructure.uuid IS NULL OR journalStructure.uuid = ?) AND ";
 	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "journalStructure.groupId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_UUID_C = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST, "findByUuid_C",
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid_C",
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByUuid_C",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			JournalStructureModelImpl.UUID_COLUMN_BITMASK |
-			JournalStructureModelImpl.COMPANYID_COLUMN_BITMASK);
+			JournalStructureModelImpl.COMPANYID_COLUMN_BITMASK |
+			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the journal structures where uuid = &#63; and companyId = &#63;.
@@ -1117,13 +1131,16 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public List<JournalStructure> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] {
 					uuid, companyId,
 					
@@ -1131,7 +1148,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				};
 		}
 
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID_C,
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -1202,12 +1219,10 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_UUID_C,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_UUID_C,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1476,9 +1491,9 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "journalStructure.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(journalStructure.uuid IS NULL OR journalStructure.uuid = ?) AND ";
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "journalStructure.companyId = ?";
-	public static final FinderPath FINDER_PATH_FIND_BY_GROUPID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByGroupId",
 			new String[] {
 				Long.class.getName(),
@@ -1486,11 +1501,18 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK |
+			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByGroupId",
-			new String[] { Long.class.getName() },
-			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the journal structures where groupId = &#63;.
@@ -2134,17 +2156,20 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	 */
 	public List<JournalStructure> findByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId, start, end, orderByComparator };
 		}
 
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_GROUPID,
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2198,12 +2223,10 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_GROUPID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_GROUPID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -2434,7 +2457,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				};
 		}
 
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_GROUPID,
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -2502,11 +2525,11 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_GROUPID,
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
 					finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_GROUPID,
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID,
 					finderArgs);
 
 				throw processException(e);
@@ -2779,9 +2802,10 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "journalStructure.groupId = ?";
 	private static final String _FINDER_COLUMN_GROUPID_GROUPID_5 = "(" +
 		_removeConjunction(_FINDER_COLUMN_GROUPID_GROUPID_2) + ")";
-	public static final FinderPath FINDER_PATH_FIND_BY_STRUCTUREID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByStructureId",
 			new String[] {
 				String.class.getName(),
@@ -2789,11 +2813,17 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByStructureId",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStructureId",
 			new String[] { String.class.getName() },
 			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStructureId",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the journal structures where structureId = &#63;.
@@ -3000,17 +3030,20 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public List<JournalStructure> findByStructureId(String structureId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
 			finderArgs = new Object[] { structureId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID;
 			finderArgs = new Object[] { structureId, start, end, orderByComparator };
 		}
 
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_STRUCTUREID,
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -3077,12 +3110,10 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_STRUCTUREID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_STRUCTUREID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -3329,9 +3360,10 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_1 = "journalStructure.structureId IS NULL";
 	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2 = "journalStructure.structureId = ?";
 	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_3 = "(journalStructure.structureId IS NULL OR journalStructure.structureId = ?)";
-	public static final FinderPath FINDER_PATH_FIND_BY_PARENTSTRUCTUREID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_PARENTSTRUCTUREID =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST,
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByParentStructureId",
 			new String[] {
 				String.class.getName(),
@@ -3339,11 +3371,18 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID =
+		new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByParentStructureId", new String[] { String.class.getName() },
+			JournalStructureModelImpl.PARENTSTRUCTUREID_COLUMN_BITMASK |
+			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByParentStructureId",
-			new String[] { String.class.getName() },
-			JournalStructureModelImpl.PARENTSTRUCTUREID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByParentStructureId", new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the journal structures where parentStructureId = &#63;.
@@ -3552,13 +3591,16 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public List<JournalStructure> findByParentStructureId(
 		String parentStructureId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID;
 			finderArgs = new Object[] { parentStructureId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PARENTSTRUCTUREID;
 			finderArgs = new Object[] {
 					parentStructureId,
 					
@@ -3566,7 +3608,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				};
 		}
 
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_PARENTSTRUCTUREID,
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -3633,12 +3675,10 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_PARENTSTRUCTUREID,
-					finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_PARENTSTRUCTUREID,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -3901,10 +3941,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_S",
-			new String[] { Long.class.getName(), String.class.getName() },
-			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK |
-			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
+			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
 	 * Returns the journal structure where groupId = &#63; and structureId = &#63; or throws a {@link com.liferay.portlet.journal.NoSuchStructureException} if it could not be found.
@@ -4151,21 +4189,28 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_1 = "journalStructure.structureId IS NULL";
 	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_2 = "journalStructure.structureId = ?";
 	private static final String _FINDER_COLUMN_G_S_STRUCTUREID_3 = "(journalStructure.structureId IS NULL OR journalStructure.structureId = ?)";
-	public static final FinderPath FINDER_PATH_FIND_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
-			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST, "findByG_P",
+			JournalStructureImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByG_P",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
-			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_COUNT, "countByG_P",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED,
+			JournalStructureImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P",
 			new String[] { Long.class.getName(), String.class.getName() },
 			JournalStructureModelImpl.GROUPID_COLUMN_BITMASK |
-			JournalStructureModelImpl.PARENTSTRUCTUREID_COLUMN_BITMASK);
+			JournalStructureModelImpl.PARENTSTRUCTUREID_COLUMN_BITMASK |
+			JournalStructureModelImpl.STRUCTUREID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
+			JournalStructureModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
+			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
 	 * Returns all the journal structures where groupId = &#63; and parentStructureId = &#63;.
@@ -4732,13 +4777,16 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public List<JournalStructure> findByG_P(long groupId,
 		String parentStructureId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P;
 			finderArgs = new Object[] { groupId, parentStructureId };
 		}
 		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P;
 			finderArgs = new Object[] {
 					groupId, parentStructureId,
 					
@@ -4746,7 +4794,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				};
 		}
 
-		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P,
+		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -4818,11 +4866,10 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_G_P, finderArgs,
-					list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_G_P, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -5223,8 +5270,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 		EntityCacheUtil.clearCache(JournalStructureImpl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -5239,16 +5286,16 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 		EntityCacheUtil.removeResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
 			JournalStructureImpl.class, journalStructure.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		clearUniqueFindersCache(journalStructure);
 	}
 
 	@Override
 	public void clearCache(List<JournalStructure> journalStructures) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (JournalStructure journalStructure : journalStructures) {
 			EntityCacheUtil.removeResult(JournalStructureModelImpl.ENTITY_CACHE_ENABLED,
@@ -5416,34 +5463,40 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew || !JournalStructureModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		else {
 			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_UUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						journalStructureModelImpl.getOriginalUuid()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 
 				args = new Object[] { journalStructureModelImpl.getUuid() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 			}
 
 			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_UUID_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						journalStructureModelImpl.getOriginalUuid(),
 						Long.valueOf(journalStructureModelImpl.getOriginalCompanyId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
 
 				args = new Object[] {
 						journalStructureModelImpl.getUuid(),
@@ -5451,45 +5504,57 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
 			}
 
 			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_GROUPID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(journalStructureModelImpl.getOriginalGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(journalStructureModelImpl.getGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
 			}
 
 			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_STRUCTUREID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						journalStructureModelImpl.getOriginalStructureId()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
+					args);
 
 				args = new Object[] { journalStructureModelImpl.getStructureId() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
+					args);
 			}
 
 			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						journalStructureModelImpl.getOriginalParentStructureId()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID,
 					args);
 
 				args = new Object[] {
@@ -5498,10 +5563,12 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PARENTSTRUCTUREID,
 					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID,
+					args);
 			}
 
 			if ((journalStructureModelImpl.getColumnBitmask() &
-					FINDER_PATH_COUNT_BY_G_P.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Long.valueOf(journalStructureModelImpl.getOriginalGroupId()),
 						
@@ -5509,6 +5576,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
 
 				args = new Object[] {
 						Long.valueOf(journalStructureModelImpl.getGroupId()),
@@ -5517,6 +5586,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P,
+					args);
 			}
 		}
 
@@ -5884,7 +5955,8 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public void destroy() {
 		EntityCacheUtil.removeCache(JournalStructureImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	@BeanReference(type = JournalArticlePersistence.class)
