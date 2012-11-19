@@ -36,6 +36,126 @@ public interface TicketPersistence extends BasePersistence<Ticket> {
 	 */
 
 	/**
+	* Returns the first ticket in the default ordered set defined by {@link TicketModelImpl#ORDER_BY_JPQL} where key = &#63;.
+	*
+	* @param key the key
+	* @return the first matching ticket
+	* @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Ticket findByKey_First(java.lang.String key)
+		throws com.liferay.portal.NoSuchTicketException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first ticket in the ordered set where key = &#63;.
+	*
+	* @param key the key
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching ticket
+	* @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Ticket findByKey_First(
+		java.lang.String key,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchTicketException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first ticket in the default ordered set defined by {@link TicketModelImpl#ORDER_BY_JPQL} where key = &#63;.
+	*
+	* @param key the key
+	* @return the first matching ticket, or <code>null</code> if a matching ticket could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Ticket fetchByKey_First(
+		java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first ticket in the ordered set where key = &#63;.
+	*
+	* @param key the key
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching ticket, or <code>null</code> if a matching ticket could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Ticket fetchByKey_First(
+		java.lang.String key,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last ticket in the default ordered set defined by {@link TicketModelImpl#ORDER_BY_JPQL} where key = &#63;.
+	*
+	* @param key the key
+	* @return the last matching ticket
+	* @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Ticket findByKey_Last(java.lang.String key)
+		throws com.liferay.portal.NoSuchTicketException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last ticket in the ordered set where key = &#63;.
+	*
+	* @param key the key
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching ticket
+	* @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Ticket findByKey_Last(
+		java.lang.String key,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchTicketException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last ticket in the default ordered set defined by {@link TicketModelImpl#ORDER_BY_JPQL} where key = &#63;.
+	*
+	* @param key the key
+	* @return the last matching ticket, or <code>null</code> if a matching ticket could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Ticket fetchByKey_Last(java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last ticket in the ordered set where key = &#63;.
+	*
+	* @param key the key
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching ticket, or <code>null</code> if a matching ticket could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.Ticket fetchByKey_Last(
+		java.lang.String key,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the tickets where key = &#63; from the database.
+	*
+	* @param key the key
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByKey(java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of tickets where key = &#63;.
+	*
+	* @param key the key
+	* @return the number of matching tickets
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByKey(java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Caches the ticket in the entity cache if it is enabled.
 	*
 	* @param ticket the ticket
@@ -97,40 +217,6 @@ public interface TicketPersistence extends BasePersistence<Ticket> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the ticket where key = &#63; or throws a {@link com.liferay.portal.NoSuchTicketException} if it could not be found.
-	*
-	* @param key the key
-	* @return the matching ticket
-	* @throws com.liferay.portal.NoSuchTicketException if a matching ticket could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Ticket findByKey(java.lang.String key)
-		throws com.liferay.portal.NoSuchTicketException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the ticket where key = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param key the key
-	* @return the matching ticket, or <code>null</code> if a matching ticket could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Ticket fetchByKey(java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the ticket where key = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param key the key
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching ticket, or <code>null</code> if a matching ticket could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Ticket fetchByKey(java.lang.String key,
-		boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the tickets.
 	*
 	* @return the tickets
@@ -173,32 +259,11 @@ public interface TicketPersistence extends BasePersistence<Ticket> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes the ticket where key = &#63; from the database.
-	*
-	* @param key the key
-	* @return the ticket that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.Ticket removeByKey(java.lang.String key)
-		throws com.liferay.portal.NoSuchTicketException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the tickets from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of tickets where key = &#63;.
-	*
-	* @param key the key
-	* @return the number of matching tickets
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByKey(java.lang.String key)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

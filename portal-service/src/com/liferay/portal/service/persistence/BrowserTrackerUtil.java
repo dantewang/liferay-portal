@@ -110,6 +110,73 @@ public class BrowserTrackerUtil {
 	}
 
 	/**
+	* Returns the browser tracker where userId = &#63; or throws a {@link com.liferay.portal.NoSuchBrowserTrackerException} if it could not be found.
+	*
+	* @param userId the user ID
+	* @return the matching browser tracker
+	* @throws com.liferay.portal.NoSuchBrowserTrackerException if a matching browser tracker could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.BrowserTracker findByUserId(
+		long userId)
+		throws com.liferay.portal.NoSuchBrowserTrackerException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUserId(userId);
+	}
+
+	/**
+	* Returns the browser tracker where userId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	*
+	* @param userId the user ID
+	* @return the matching browser tracker, or <code>null</code> if a matching browser tracker could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.BrowserTracker fetchByUserId(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId(userId);
+	}
+
+	/**
+	* Returns the browser tracker where userId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	*
+	* @param userId the user ID
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching browser tracker, or <code>null</code> if a matching browser tracker could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.BrowserTracker fetchByUserId(
+		long userId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId(userId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the browser tracker where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @return the browser tracker that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.BrowserTracker removeByUserId(
+		long userId)
+		throws com.liferay.portal.NoSuchBrowserTrackerException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByUserId(userId);
+	}
+
+	/**
+	* Returns the number of browser trackers where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching browser trackers
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUserId(userId);
+	}
+
+	/**
 	* Caches the browser tracker in the entity cache if it is enabled.
 	*
 	* @param browserTracker the browser tracker
@@ -190,47 +257,6 @@ public class BrowserTrackerUtil {
 	}
 
 	/**
-	* Returns the browser tracker where userId = &#63; or throws a {@link com.liferay.portal.NoSuchBrowserTrackerException} if it could not be found.
-	*
-	* @param userId the user ID
-	* @return the matching browser tracker
-	* @throws com.liferay.portal.NoSuchBrowserTrackerException if a matching browser tracker could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.BrowserTracker findByUserId(
-		long userId)
-		throws com.liferay.portal.NoSuchBrowserTrackerException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUserId(userId);
-	}
-
-	/**
-	* Returns the browser tracker where userId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param userId the user ID
-	* @return the matching browser tracker, or <code>null</code> if a matching browser tracker could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.BrowserTracker fetchByUserId(
-		long userId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByUserId(userId);
-	}
-
-	/**
-	* Returns the browser tracker where userId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param userId the user ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching browser tracker, or <code>null</code> if a matching browser tracker could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.BrowserTracker fetchByUserId(
-		long userId, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByUserId(userId, retrieveFromCache);
-	}
-
-	/**
 	* Returns all the browser trackers.
 	*
 	* @return the browser trackers
@@ -280,20 +306,6 @@ public class BrowserTrackerUtil {
 	}
 
 	/**
-	* Removes the browser tracker where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @return the browser tracker that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.BrowserTracker removeByUserId(
-		long userId)
-		throws com.liferay.portal.NoSuchBrowserTrackerException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByUserId(userId);
-	}
-
-	/**
 	* Removes all the browser trackers from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -301,18 +313,6 @@ public class BrowserTrackerUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of browser trackers where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching browser trackers
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUserId(userId);
 	}
 
 	/**

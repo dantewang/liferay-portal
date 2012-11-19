@@ -1,5 +1,13 @@
 <#assign liferay_ui = taglibLiferayHash["/WEB-INF/tld/liferay-ui.tld"] />
 
+<#assign assetEntryLocalService = serviceLocator.findService("com.liferay.portlet.asset.service.AssetEntryLocalService") />
+
+<#assign wikiPageClassName = "com.liferay.portlet.wiki.model.WikiPage" />
+
+<#assign assetEntry = assetEntryLocalService.getEntry(wikiPageClassName, entry.getResourcePrimKey()) />
+
+<#assign assetRenderer = assetEntry.getAssetRenderer() />
+
 <div class="taglib-header">
 	<h1 class="header-title">${entry.getTitle()}</h1>
 </div>
@@ -11,12 +19,6 @@
 
 	<@getPrintIcon />
 </div>
-
-<#assign assetEntryLocalService = serviceLocator.findService("com.liferay.portlet.asset.service.AssetEntryLocalService") />
-
-<#assign wikiPageClassName = "com.liferay.portlet.wiki.model.WikiPage" />
-
-<#assign assetEntry = assetEntryLocalService.getEntry(wikiPageClassName, entry.getResourcePrimKey()) />
 
 <div class="wiki-body">
 	<div class="wiki-info">
@@ -112,7 +114,6 @@
 					<#assign childNode = childPage.getNode() />
 
 					${viewPageURL.setParameter("nodeName", childNode.getName())}
-
 					${viewPageURL.setParameter("title", childPage.getTitle())}
 
 					<td>
@@ -134,8 +135,6 @@
 </#if>
 
 <@getDiscussion />
-
-<#assign assetRenderer = assetEntry.getAssetRenderer() />
 
 <#macro getAddChildPageIcon>
 	<#if assetRenderer.hasEditPermission(themeDisplay.getPermissionChecker())>
@@ -167,19 +166,6 @@
 		label=true
 		message='${entry.getAttachmentsFilesCount() + languageUtil.get(locale, "attachments")}'
 		url=viewPageAttachmentsURL?string
-	/>
-</#macro>
-
-<#macro getDetailsIcon>
-	<#assign viewPageDetailsURL = renderResponse.createRenderURL() />
-
-	${viewPageDetailsURL.setParameter("struts_action", "/wiki/view_page_details")}
-	${viewPageDetailsURL.setParameter("redirect", currentURL)}
-
-	<@liferay_ui["icon"]
-		image="history"
-		message="details"
-		url=viewPageDetailsURL?string
 	/>
 </#macro>
 
@@ -221,15 +207,27 @@
 	</#if>
 </#macro>
 
+<#macro getPageDetailsIcon>
+	<#assign viewPageDetailsURL = renderResponse.createRenderURL() />
+
+	${viewPageDetailsURL.setParameter("struts_action", "/wiki/view_page_details")}
+	${viewPageDetailsURL.setParameter("redirect", currentURL)}
+
+	<@liferay_ui["icon"]
+		image="history"
+		message="details"
+		url=viewPageDetailsURL?string
+	/>
+</#macro>
+
 <#macro getPrintIcon>
-	<#assign printPortletURL = renderResponse.createRenderURL() />
+	<#assign printURL = renderResponse.createRenderURL() />
 
-	${printPortletURL.setParameter("viewMode", "print")}
-	${printPortletURL.setWindowState("pop_up")}
+	${printURL.setParameter("viewMode", "print")}
+	${printURL.setWindowState("pop_up")}
 
-	<#assign formatParams = ["aui-helper-hidden-accessible", htmlUtil.escape(assetRenderer.getTitle(locale))] />
-	<#assign title = languageUtil.format(locale, "print-x-x", formatParams) />
-	<#assign taglibPrintURL = "javascript:Liferay.Util.openWindow({dialog: {width: 960}, id:'" + renderResponse.getNamespace() + "printAsset', title: '" + title + "', uri: '" + htmlUtil.escapeURL(printPortletURL.toString()) + "'});" />
+	<#assign title = languageUtil.format(locale, "print-x-x", ["aui-helper-hidden-accessible", htmlUtil.escape(assetRenderer.getTitle(locale))]) />
+	<#assign taglibPrintURL = "javascript:Liferay.Util.openWindow({dialog: {width: 960}, id:'" + renderResponse.getNamespace() + "printAsset', title: '" + title + "', uri: '" + htmlUtil.escapeURL(printURL.toString()) + "'});" />
 
 	<@liferay_ui["icon"]
 		image="print"

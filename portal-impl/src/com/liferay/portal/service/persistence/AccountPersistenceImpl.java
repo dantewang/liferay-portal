@@ -42,7 +42,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,12 +68,9 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(AccountModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(AccountModelImpl.ENTITY_CACHE_ENABLED,
 			AccountModelImpl.FINDER_CACHE_ENABLED, AccountImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(AccountModelImpl.ENTITY_CACHE_ENABLED,
-			AccountModelImpl.FINDER_CACHE_ENABLED, AccountImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AccountModelImpl.ENTITY_CACHE_ENABLED,
 			AccountModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -395,28 +391,27 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 		if (account == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				account = (Account)session.get(AccountImpl.class,
 						Long.valueOf(accountId));
+
+				if (account != null) {
+					cacheResult(account);
+				}
+				else {
+					EntityCacheUtil.putResult(AccountModelImpl.ENTITY_CACHE_ENABLED,
+						AccountImpl.class, accountId, _nullAccount);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(AccountModelImpl.ENTITY_CACHE_ENABLED,
+					AccountImpl.class, accountId);
 
 				throw processException(e);
 			}
 			finally {
-				if (account != null) {
-					cacheResult(account);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AccountModelImpl.ENTITY_CACHE_ENABLED,
-						AccountImpl.class, accountId, _nullAccount);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -465,20 +460,17 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 */
 	public List<Account> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
 			finderArgs = new Object[] { start, end, orderByComparator };
 		}
 
-		List<Account> list = (List<Account>)FinderCacheUtil.getResult(finderPath,
+		List<Account> list = (List<Account>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
 
 		if (list == null) {
@@ -497,7 +489,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_ACCOUNT;
+				sql = _SQL_SELECT_ACCOUNT.concat(AccountModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -507,30 +499,18 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<Account>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<Account>)QueryUtil.list(q, getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<Account>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FIND_ALL, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -568,18 +548,17 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 				Query q = session.createQuery(_SQL_COUNT_ACCOUNT);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -615,6 +594,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	public void destroy() {
 		EntityCacheUtil.removeCache(AccountImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
