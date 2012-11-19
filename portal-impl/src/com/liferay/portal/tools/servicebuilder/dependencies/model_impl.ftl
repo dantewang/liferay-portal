@@ -207,6 +207,14 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 
 				<#assign columnBitmask = columnBitmask * 2 >
 			</#list>
+
+			<#list orderList as order>
+				<#if !entity.finderColumnsList?seq_contains(order)>
+					public static long ${order.name?upper_case}_COLUMN_BITMASK = ${columnBitmask}L;
+
+					<#assign columnBitmask = columnBitmask * 2 >
+				</#if>
+			</#list>
 		</#if>
 	</#if>
 

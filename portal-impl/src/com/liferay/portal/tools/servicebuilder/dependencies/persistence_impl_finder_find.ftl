@@ -1140,30 +1140,39 @@
 	</#list>
 
 	int start, int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
-			finderArgs = new Object[] {
-				<#list finderColsList as finderCol>
-					${finderCol.name}
+		<#if !finder.hasCustomComparator()>
+			if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
+				finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case};
+				finderArgs = new Object[] {
+					<#list finderColsList as finderCol>
+						${finderCol.name}
 
-					<#if finderCol_has_next>
-						,
-					</#if>
-				</#list>
-			};
-		}
-		else {
-			finderArgs = new Object[] {
-				<#list finderColsList as finderCol>
-					${finderCol.name},
-				</#list>
+						<#if finderCol_has_next>
+							,
+						</#if>
+					</#list>
+				};
+			}
+			else {
+		</#if>
 
-				start, end, orderByComparator
-			};
-		}
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case};
+		finderArgs = new Object[] {
+			<#list finderColsList as finderCol>
+				${finderCol.name},
+			</#list>
 
-		List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs, this);
+			start, end, orderByComparator
+		};
+
+		<#if !finder.hasCustomComparator()>
+			}
+		</#if>
+
+		List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(finderPath, finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
 			for (${entity.name} ${entity.varName} : list) {
@@ -1207,10 +1216,10 @@
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs, list);
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -1663,7 +1672,7 @@
 				};
 			}
 
-			List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs, this);
+			List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case}, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
 				for (${entity.name} ${entity.varName} : list) {
@@ -1711,10 +1720,10 @@
 
 					cacheResult(list);
 
-					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs, list);
+					FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case}, finderArgs, list);
 				}
 				catch (Exception e) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_${finder.name?upper_case}, finderArgs);
+					FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_${finder.name?upper_case}, finderArgs);
 
 					throw processException(e);
 				}

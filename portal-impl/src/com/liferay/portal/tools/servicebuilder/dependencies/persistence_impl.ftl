@@ -99,9 +99,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 	public static final String FINDER_CLASS_NAME_ENTITY = ${entity.name}Impl.class.getName();
 
-	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY + ".List";
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY + ".List1";
 
-	public static final String FINDER_CLASS_NAME_COUNT = FINDER_CLASS_NAME_ENTITY + ".Count";
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY + ".List2";
 
 	<#assign columnBitmaskEnabled = (entity.finderColumnsList?size &gt; 0) && (entity.finderColumnsList?size &lt; 64)>
 
@@ -109,7 +109,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		${entity.name}ModelImpl.ENTITY_CACHE_ENABLED,
 		${entity.name}ModelImpl.FINDER_CACHE_ENABLED,
 		${entity.name}Impl.class,
-		FINDER_CLASS_NAME_LIST,
+		FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 		"findAll",
 		new String[0]);
 
@@ -117,7 +117,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		${entity.name}ModelImpl.ENTITY_CACHE_ENABLED,
 		${entity.name}ModelImpl.FINDER_CACHE_ENABLED,
 		Long.class,
-		FINDER_CLASS_NAME_COUNT,
+		FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 		"countAll",
 		new String[0]);
 
@@ -197,8 +197,8 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		EntityCacheUtil.clearCache(${entity.name}Impl.class.getName());
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	/**
@@ -212,8 +212,8 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	public void clearCache(${entity.name} ${entity.varName}) {
 		EntityCacheUtil.removeResult(${entity.name}ModelImpl.ENTITY_CACHE_ENABLED, ${entity.name}Impl.class, ${entity.varName}.getPrimaryKey());
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		<#if entity.getUniqueFinderList()?size &gt; 0>
 			clearUniqueFindersCache(${entity.varName});
@@ -222,8 +222,8 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 	@Override
 	public void clearCache(List<${entity.name}> ${entity.varNames}) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (${entity.name} ${entity.varName} : ${entity.varNames}) {
 			EntityCacheUtil.removeResult(${entity.name}ModelImpl.ENTITY_CACHE_ENABLED, ${entity.name}Impl.class, ${entity.varName}.getPrimaryKey());
@@ -528,7 +528,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			closeSession(session);
 		}
 
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
 		if (isNew
 			<#if columnBitmaskEnabled>
@@ -536,7 +536,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			</#if>
 			) {
 
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		<#if collectionFinderList?size != 0>
@@ -554,7 +554,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 					if (
 						<#if columnBitmaskEnabled>
-							(${entity.varName}ModelImpl.getColumnBitmask() & FINDER_PATH_COUNT_BY_${finder.name?upper_case}.getColumnBitmask()) != 0
+							(${entity.varName}ModelImpl.getColumnBitmask() & FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case}.getColumnBitmask()) != 0
 						<#else>
 							<#list finderColsList as finderCol>
 								<#if finderCol.isPrimitiveType()>
@@ -589,6 +589,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						};
 
 						FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, args);
+						FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case}, args);
 
 						args = new Object[] {
 							<#list finderColsList as finderCol>
@@ -609,6 +610,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						};
 
 						FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_${finder.name?upper_case}, args);
+						FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case}, args);
 					}
 				</#if>
 			</#list>
@@ -1023,7 +1025,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				<#else>
 					${tempEntity.packagePath}.model.impl.${tempEntity.name}ModelImpl.FINDER_CACHE_ENABLED,
 					${tempEntity.packagePath}.model.impl.${tempEntity.name}Impl.class,
-					${tempEntity.packagePath}.service.persistence.${tempEntity.name}PersistenceImpl.FINDER_CLASS_NAME_LIST,
+					${tempEntity.packagePath}.service.persistence.${tempEntity.name}PersistenceImpl.FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 				</#if>
 
 				"get${tempEntity.names}",
@@ -1121,7 +1123,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				<#else>
 					${tempEntity.packagePath}.model.impl.${tempEntity.name}ModelImpl.FINDER_CACHE_ENABLED,
 					${tempEntity.packagePath}.model.impl.${tempEntity.name}Impl.class,
-					${tempEntity.packagePath}.service.persistence.${tempEntity.name}PersistenceImpl.FINDER_CLASS_NAME_COUNT,
+					${tempEntity.packagePath}.service.persistence.${tempEntity.name}PersistenceImpl.FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 				</#if>
 
 				"get${tempEntity.names}Size",
@@ -1192,7 +1194,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				<#else>
 					${tempEntity.packagePath}.model.impl.${tempEntity.name}ModelImpl.FINDER_CACHE_ENABLED,
 					${tempEntity.packagePath}.model.impl.${tempEntity.name}Impl.class,
-					${tempEntity.packagePath}.service.persistence.${tempEntity.name}PersistenceImpl.FINDER_CLASS_NAME_COUNT,
+					${tempEntity.packagePath}.service.persistence.${tempEntity.name}PersistenceImpl.FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 				</#if>
 
 				"contains${tempEntity.name}",
@@ -1523,7 +1525,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				CacheRegistryUtil.clear(${entity.name}Impl.class.getName());
 				EntityCacheUtil.clearCache(${entity.name}Impl.class.getName());
 				FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-				FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+				FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 			}
 		}
 
@@ -1606,7 +1608,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				CacheRegistryUtil.clear(${entity.name}Impl.class.getName());
 				EntityCacheUtil.clearCache(${entity.name}Impl.class.getName());
 				FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-				FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+				FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 			}
 
 			${entity.varName}.setLeft${pkColumn.methodName}(left${pkColumn.methodName});
@@ -1740,7 +1742,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			CacheRegistryUtil.clear(${entity.name}Impl.class.getName());
 			EntityCacheUtil.clearCache(${entity.name}Impl.class.getName());
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_COUNT);
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		protected void updateChildrenTree(long ${scopeColumn.name}, List<Long> children${pkColumn.methodNames}, long delta) {
@@ -1799,7 +1801,8 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	public void destroy() {
 		EntityCacheUtil.removeCache(${entity.name}Impl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_COUNT);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
 	<#list referenceList as tempEntity>
