@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ClusterGroup;
 import com.liferay.portal.model.ModelListener;
@@ -42,6 +43,7 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -457,11 +459,13 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 	 */
 	public List<ClusterGroup> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -489,7 +493,11 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_CLUSTERGROUP.concat(ClusterGroupModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_CLUSTERGROUP;
+
+				if (pagination) {
+					sql = sql.concat(ClusterGroupModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -499,8 +507,18 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 
 				Query q = session.createQuery(sql);
 
-				list = (List<ClusterGroup>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<ClusterGroup>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ClusterGroup>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

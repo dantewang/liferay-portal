@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -59,6 +60,7 @@ import com.liferay.portlet.trash.service.persistence.TrashEntryPersistence;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -617,11 +619,13 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	 */
 	public List<MBThread> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
@@ -662,7 +666,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -679,8 +683,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(groupId);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1002,11 +1016,13 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	 */
 	protected List<MBThread> findByRootMessageId(long rootMessageId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROOTMESSAGEID;
 			finderArgs = new Object[] { rootMessageId };
 		}
@@ -1051,7 +1067,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1068,8 +1084,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(rootMessageId);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2012,11 +2038,13 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	 */
 	public List<MBThread> findByG_C(long groupId, long categoryId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C;
 			finderArgs = new Object[] { groupId, categoryId };
 		}
@@ -2064,7 +2092,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2083,8 +2111,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(categoryId);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2331,10 +2369,12 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { groupId, StringUtil.merge(categoryIds) };
 		}
 		else {
@@ -2399,7 +2439,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2420,8 +2460,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					qPos.add(categoryIds);
 				}
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -3284,6 +3334,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public List<MBThread> findByG_NotC(long groupId, long categoryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -3329,7 +3380,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3348,8 +3399,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(categoryId);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -4209,11 +4270,13 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	 */
 	public List<MBThread> findByG_S(long groupId, int status, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S;
 			finderArgs = new Object[] { groupId, status };
 		}
@@ -4261,7 +4324,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4280,8 +4343,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(status);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -4814,11 +4887,13 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public List<MBThread> findByC_P(long categoryId, double priority,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P;
 			finderArgs = new Object[] { categoryId, priority };
 		}
@@ -4866,7 +4941,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4885,8 +4960,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(priority);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -5376,11 +5461,13 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public List<MBThread> findByL_P(Date lastPostDate, double priority,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_L_P;
 			finderArgs = new Object[] { lastPostDate, priority };
 		}
@@ -5433,7 +5520,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -5454,8 +5541,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(priority);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -6319,11 +6416,13 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public List<MBThread> findByG_C_L(long groupId, long categoryId,
 		Date lastPostDate, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_L;
 			finderArgs = new Object[] { groupId, categoryId, lastPostDate };
 		}
@@ -6380,7 +6479,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -6403,8 +6502,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					qPos.add(CalendarUtil.getTimestamp(lastPostDate));
 				}
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -7513,11 +7622,13 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public List<MBThread> findByG_C_S(long groupId, long categoryId,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_S;
 			finderArgs = new Object[] { groupId, categoryId, status };
 		}
@@ -7568,7 +7679,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -7589,8 +7700,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(status);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -7856,10 +7977,12 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					groupId, StringUtil.merge(categoryIds), status
 				};
@@ -7935,7 +8058,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -7958,8 +8081,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(status);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -9054,6 +9187,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public List<MBThread> findByG_C_NotS(long groupId, long categoryId,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -9102,7 +9236,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -9123,8 +9257,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(status);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -9390,10 +9534,12 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					groupId, StringUtil.merge(categoryIds), status
 				};
@@ -9469,7 +9615,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -9492,8 +9638,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(status);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -10419,6 +10575,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public List<MBThread> findByG_NotC_S(long groupId, long categoryId,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -10467,7 +10624,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -10488,8 +10645,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(status);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -11402,6 +11569,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public List<MBThread> findByG_NotC_NotS(long groupId, long categoryId,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -11450,7 +11618,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBThreadModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -11471,8 +11639,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				qPos.add(status);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -12357,11 +12535,13 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	 */
 	public List<MBThread> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -12389,7 +12569,11 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_MBTHREAD.concat(MBThreadModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_MBTHREAD;
+
+				if (pagination) {
+					sql = sql.concat(MBThreadModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -12399,8 +12583,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<MBThread>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBThread>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

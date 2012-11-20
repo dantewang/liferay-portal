@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
@@ -52,6 +53,7 @@ import com.liferay.portlet.dynamicdatamapping.model.impl.DDMStructureModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -309,11 +311,13 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	 */
 	public List<DDMStructure> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -364,7 +368,7 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(DDMStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -383,8 +387,18 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 					qPos.add(uuid);
 				}
 
-				list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1122,11 +1136,13 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	public List<DDMStructure> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -1184,7 +1200,7 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(DDMStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1205,8 +1221,18 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 
 				qPos.add(companyId);
 
-				list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2149,11 +2175,13 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	 */
 	public List<DDMStructure> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
@@ -2194,7 +2222,7 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(DDMStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2211,8 +2239,18 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 
 				qPos.add(groupId);
 
-				list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2439,10 +2477,12 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 			return findByGroupId(groupIds[0], start, end, orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { StringUtil.merge(groupIds) };
 		}
 		else {
@@ -2497,7 +2537,7 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(DDMStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2516,8 +2556,18 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 					qPos.add(groupIds);
 				}
 
-				list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -3012,11 +3062,13 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	 */
 	public List<DDMStructure> findByClassNameId(long classNameId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID;
 			finderArgs = new Object[] { classNameId };
 		}
@@ -3057,7 +3109,7 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(DDMStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3074,8 +3126,18 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 
 				qPos.add(classNameId);
 
-				list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -3791,11 +3853,13 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	public List<DDMStructure> findByC_C(long companyId, long classNameId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] { companyId, classNameId };
 		}
@@ -3843,7 +3907,7 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(DDMStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3862,8 +3926,18 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 
 				qPos.add(classNameId);
 
-				list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -4776,11 +4850,13 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	public List<DDMStructure> findByG_N_D(long groupId, String name,
 		String description, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N_D;
 			finderArgs = new Object[] { groupId, name, description };
 		}
@@ -4852,7 +4928,7 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(DDMStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4877,8 +4953,18 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 					qPos.add(description);
 				}
 
-				list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -5889,11 +5975,13 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	 */
 	public List<DDMStructure> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -5921,7 +6009,11 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_DDMSTRUCTURE.concat(DDMStructureModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_DDMSTRUCTURE;
+
+				if (pagination) {
+					sql = sql.concat(DDMStructureModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -5931,8 +6023,18 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 
 				Query q = session.createQuery(sql);
 
-				list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DDMStructure>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

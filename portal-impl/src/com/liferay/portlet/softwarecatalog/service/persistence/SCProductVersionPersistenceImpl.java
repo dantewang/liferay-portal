@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -54,6 +55,7 @@ import com.liferay.portlet.softwarecatalog.model.impl.SCProductVersionModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -311,11 +313,13 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public List<SCProductVersion> findByProductEntryId(long productEntryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PRODUCTENTRYID;
 			finderArgs = new Object[] { productEntryId };
 		}
@@ -360,7 +364,7 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(SCProductVersionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -377,8 +381,18 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 				qPos.add(productEntryId);
 
-				list = (List<SCProductVersion>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<SCProductVersion>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SCProductVersion>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -660,11 +674,13 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	protected List<SCProductVersion> findByDirectDownloadURL(
 		String directDownloadURL, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_DIRECTDOWNLOADURL;
 			finderArgs = new Object[] { directDownloadURL };
 		}
@@ -720,7 +736,7 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(SCProductVersionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -739,8 +755,18 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 					qPos.add(directDownloadURL);
 				}
 
-				list = (List<SCProductVersion>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<SCProductVersion>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SCProductVersion>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1429,11 +1455,13 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	 */
 	public List<SCProductVersion> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -1461,7 +1489,11 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SCPRODUCTVERSION.concat(SCProductVersionModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_SCPRODUCTVERSION;
+
+				if (pagination) {
+					sql = sql.concat(SCProductVersionModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -1471,8 +1503,18 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 				Query q = session.createQuery(sql);
 
-				list = (List<SCProductVersion>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<SCProductVersion>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SCProductVersion>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1600,10 +1642,12 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public List<com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion> getSCFrameworkVersions(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { pk };
 		}
 		else {
@@ -1626,7 +1670,11 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 													 .concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETSCFRAMEWORKVERSIONS.concat(com.liferay.portlet.softwarecatalog.model.impl.SCFrameworkVersionModelImpl.ORDER_BY_SQL);
+					sql = _SQL_GETSCFRAMEWORKVERSIONS;
+
+					if (pagination) {
+						sql = sql.concat(com.liferay.portlet.softwarecatalog.model.impl.SCFrameworkVersionModelImpl.ORDER_BY_SQL);
+					}
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -1638,8 +1686,18 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 				qPos.add(pk);
 
-				list = (List<com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				scFrameworkVersionPersistence.cacheResult(list);
 

@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -53,6 +54,7 @@ import com.liferay.portlet.trash.model.impl.TrashEntryModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -301,11 +303,13 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	 */
 	public List<TrashEntry> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
@@ -346,7 +350,7 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -363,8 +367,18 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 
 				qPos.add(groupId);
 
-				list = (List<TrashEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<TrashEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<TrashEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -814,11 +828,13 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	 */
 	public List<TrashEntry> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -859,7 +875,7 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -876,8 +892,18 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 
 				qPos.add(companyId);
 
-				list = (List<TrashEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<TrashEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<TrashEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1338,6 +1364,7 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public List<TrashEntry> findByG_LtCD(long groupId, Date createDate,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -1388,7 +1415,7 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(TrashEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1409,8 +1436,18 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 					qPos.add(CalendarUtil.getTimestamp(createDate));
 				}
 
-				list = (List<TrashEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<TrashEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<TrashEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2380,11 +2417,13 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	 */
 	public List<TrashEntry> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2412,7 +2451,11 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_TRASHENTRY.concat(TrashEntryModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_TRASHENTRY;
+
+				if (pagination) {
+					sql = sql.concat(TrashEntryModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2422,8 +2465,18 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<TrashEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<TrashEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<TrashEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2551,10 +2604,12 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	public List<com.liferay.portlet.trash.model.TrashVersion> getTrashVersions(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { pk };
 		}
 		else {
@@ -2577,7 +2632,11 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 											   .concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETTRASHVERSIONS.concat(com.liferay.portlet.trash.model.impl.TrashVersionModelImpl.ORDER_BY_SQL);
+					sql = _SQL_GETTRASHVERSIONS;
+
+					if (pagination) {
+						sql = sql.concat(com.liferay.portlet.trash.model.impl.TrashVersionModelImpl.ORDER_BY_SQL);
+					}
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -2589,8 +2648,18 @@ public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 
 				qPos.add(pk);
 
-				list = (List<com.liferay.portlet.trash.model.TrashVersion>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<com.liferay.portlet.trash.model.TrashVersion>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<com.liferay.portlet.trash.model.TrashVersion>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				trashVersionPersistence.cacheResult(list);
 

@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -55,6 +56,7 @@ import com.liferay.portlet.expando.service.persistence.ExpandoValuePersistence;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -613,11 +615,13 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 */
 	public List<UserGroup> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -658,7 +662,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(UserGroupModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -675,8 +679,18 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 
 				qPos.add(companyId);
 
-				list = (List<UserGroup>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<UserGroup>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<UserGroup>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1506,11 +1520,13 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	public List<UserGroup> findByC_P(long companyId, long parentUserGroupId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P;
 			finderArgs = new Object[] { companyId, parentUserGroupId };
 		}
@@ -1558,7 +1574,7 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(UserGroupModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1577,8 +1593,18 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 
 				qPos.add(parentUserGroupId);
 
-				list = (List<UserGroup>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<UserGroup>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<UserGroup>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2653,11 +2679,13 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 */
 	public List<UserGroup> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2685,7 +2713,11 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_USERGROUP.concat(UserGroupModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_USERGROUP;
+
+				if (pagination) {
+					sql = sql.concat(UserGroupModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2695,8 +2727,18 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<UserGroup>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<UserGroup>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<UserGroup>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2823,10 +2865,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 */
 	public List<com.liferay.portal.model.Group> getGroups(long pk, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { pk };
 		}
 		else {
@@ -2849,7 +2893,11 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 										.concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETGROUPS.concat(com.liferay.portal.model.impl.GroupModelImpl.ORDER_BY_SQL);
+					sql = _SQL_GETGROUPS;
+
+					if (pagination) {
+						sql = sql.concat(com.liferay.portal.model.impl.GroupModelImpl.ORDER_BY_SQL);
+					}
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -2861,8 +2909,18 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 
 				qPos.add(pk);
 
-				list = (List<com.liferay.portal.model.Group>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<com.liferay.portal.model.Group>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<com.liferay.portal.model.Group>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				groupPersistence.cacheResult(list);
 
@@ -3296,10 +3354,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 */
 	public List<com.liferay.portal.model.Team> getTeams(long pk, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { pk };
 		}
 		else {
@@ -3322,7 +3382,11 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 									   .concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETTEAMS.concat(com.liferay.portal.model.impl.TeamModelImpl.ORDER_BY_SQL);
+					sql = _SQL_GETTEAMS;
+
+					if (pagination) {
+						sql = sql.concat(com.liferay.portal.model.impl.TeamModelImpl.ORDER_BY_SQL);
+					}
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -3333,8 +3397,18 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 
 				qPos.add(pk);
 
-				list = (List<com.liferay.portal.model.Team>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<com.liferay.portal.model.Team>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<com.liferay.portal.model.Team>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				teamPersistence.cacheResult(list);
 
@@ -3765,10 +3839,12 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 */
 	public List<com.liferay.portal.model.User> getUsers(long pk, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { pk };
 		}
 		else {
@@ -3791,7 +3867,11 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 									   .concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETUSERS.concat(com.liferay.portal.model.impl.UserModelImpl.ORDER_BY_SQL);
+					sql = _SQL_GETUSERS;
+
+					if (pagination) {
+						sql = sql.concat(com.liferay.portal.model.impl.UserModelImpl.ORDER_BY_SQL);
+					}
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -3803,8 +3883,18 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 
 				qPos.add(pk);
 
-				list = (List<com.liferay.portal.model.User>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<com.liferay.portal.model.User>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<com.liferay.portal.model.User>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				userPersistence.cacheResult(list);
 

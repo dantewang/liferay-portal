@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -45,6 +46,7 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -116,11 +118,13 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	 */
 	protected List<Shard> findByName(String name, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME;
 			finderArgs = new Object[] { name };
 		}
@@ -171,7 +175,7 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ShardModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -190,7 +194,18 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 					qPos.add(name);
 				}
 
-				list = (List<Shard>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Shard>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Shard>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -475,11 +490,13 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	 */
 	protected List<Shard> findByC_C(long classNameId, long classPK, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] { classNameId, classPK };
 		}
@@ -527,7 +544,7 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ShardModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -546,7 +563,18 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 
 				qPos.add(classPK);
 
-				list = (List<Shard>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Shard>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Shard>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -1179,11 +1207,13 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	 */
 	public List<Shard> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -1211,7 +1241,11 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SHARD.concat(ShardModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_SHARD;
+
+				if (pagination) {
+					sql = sql.concat(ShardModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -1221,7 +1255,18 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<Shard>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Shard>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Shard>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 

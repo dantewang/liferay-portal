@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
@@ -55,6 +56,7 @@ import com.liferay.portlet.announcements.model.impl.AnnouncementsEntryModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -651,11 +653,13 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	 */
 	public List<AnnouncementsEntry> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -706,7 +710,7 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AnnouncementsEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -725,8 +729,18 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 					qPos.add(uuid);
 				}
 
-				list = (List<AnnouncementsEntry>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1625,11 +1639,13 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	public List<AnnouncementsEntry> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -1687,7 +1703,7 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AnnouncementsEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1708,8 +1724,18 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 				qPos.add(companyId);
 
-				list = (List<AnnouncementsEntry>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2576,11 +2602,13 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	 */
 	public List<AnnouncementsEntry> findByUserId(long userId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
 			finderArgs = new Object[] { userId };
 		}
@@ -2621,7 +2649,7 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AnnouncementsEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2638,8 +2666,18 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 				qPos.add(userId);
 
-				list = (List<AnnouncementsEntry>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -3475,11 +3513,13 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	public List<AnnouncementsEntry> findByC_C(long classNameId, long classPK,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] { classNameId, classPK };
 		}
@@ -3527,7 +3567,7 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AnnouncementsEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3546,8 +3586,18 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 				qPos.add(classPK);
 
-				list = (List<AnnouncementsEntry>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -4446,11 +4496,13 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	public List<AnnouncementsEntry> findByC_C_A(long classNameId, long classPK,
 		boolean alert, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_A;
 			finderArgs = new Object[] { classNameId, classPK, alert };
 		}
@@ -4501,7 +4553,7 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AnnouncementsEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4522,8 +4574,18 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 				qPos.add(alert);
 
-				list = (List<AnnouncementsEntry>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -5379,11 +5441,13 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 	 */
 	public List<AnnouncementsEntry> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -5411,7 +5475,11 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_ANNOUNCEMENTSENTRY.concat(AnnouncementsEntryModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_ANNOUNCEMENTSENTRY;
+
+				if (pagination) {
+					sql = sql.concat(AnnouncementsEntryModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -5421,8 +5489,18 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 				Query q = session.createQuery(sql);
 
-				list = (List<AnnouncementsEntry>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AnnouncementsEntry>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 

@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.Company;
@@ -45,6 +46,7 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -348,11 +350,13 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	 */
 	protected List<Company> findByMx(String mx, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MX;
 			finderArgs = new Object[] { mx };
 		}
@@ -403,7 +407,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CompanyModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -422,7 +426,18 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 					qPos.add(mx);
 				}
 
-				list = (List<Company>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Company>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Company>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -704,11 +719,13 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	 */
 	protected List<Company> findByLogoId(long logoId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LOGOID;
 			finderArgs = new Object[] { logoId };
 		}
@@ -749,7 +766,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CompanyModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -766,7 +783,18 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 				qPos.add(logoId);
 
-				list = (List<Company>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Company>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Company>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1210,11 +1238,13 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	 */
 	public List<Company> findBySystem(boolean system, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SYSTEM;
 			finderArgs = new Object[] { system };
 		}
@@ -1255,7 +1285,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CompanyModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1272,7 +1302,18 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 				qPos.add(system);
 
-				list = (List<Company>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Company>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Company>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1940,11 +1981,13 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 	 */
 	public List<Company> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -1972,7 +2015,11 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_COMPANY.concat(CompanyModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_COMPANY;
+
+				if (pagination) {
+					sql = sql.concat(CompanyModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -1982,7 +2029,18 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<Company>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Company>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Company>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

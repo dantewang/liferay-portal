@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
@@ -48,6 +49,7 @@ import com.liferay.portlet.mobiledevicerules.model.impl.MDRActionModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -305,11 +307,13 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	 */
 	public List<MDRAction> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -360,7 +364,7 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MDRActionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -379,8 +383,18 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 					qPos.add(uuid);
 				}
 
-				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1116,11 +1130,13 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	 */
 	public List<MDRAction> findByUuid_C(String uuid, long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -1178,7 +1194,7 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MDRActionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1199,8 +1215,18 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 
 				qPos.add(companyId);
 
-				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1692,11 +1718,13 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	public List<MDRAction> findByRuleGroupInstanceId(long ruleGroupInstanceId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPINSTANCEID;
 			finderArgs = new Object[] { ruleGroupInstanceId };
 		}
@@ -1741,7 +1769,7 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MDRActionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1758,8 +1786,18 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 
 				qPos.add(ruleGroupInstanceId);
 
-				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2506,11 +2544,13 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	 */
 	public List<MDRAction> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2538,7 +2578,11 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_MDRACTION.concat(MDRActionModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_MDRACTION;
+
+				if (pagination) {
+					sql = sql.concat(MDRActionModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2548,8 +2592,18 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

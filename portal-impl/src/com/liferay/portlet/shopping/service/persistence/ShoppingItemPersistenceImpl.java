@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -53,6 +54,7 @@ import com.liferay.portlet.shopping.model.impl.ShoppingItemModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -127,11 +129,13 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	protected List<ShoppingItem> findBySmallImageId(long smallImageId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SMALLIMAGEID;
 			finderArgs = new Object[] { smallImageId };
 		}
@@ -176,7 +180,7 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ShoppingItemModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -193,8 +197,18 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 
 				qPos.add(smallImageId);
 
-				list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -473,11 +487,13 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	protected List<ShoppingItem> findByMediumImageId(long mediumImageId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEDIUMIMAGEID;
 			finderArgs = new Object[] { mediumImageId };
 		}
@@ -522,7 +538,7 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ShoppingItemModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -539,8 +555,18 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 
 				qPos.add(mediumImageId);
 
-				list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -820,11 +846,13 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	protected List<ShoppingItem> findByLargeImageId(long largeImageId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LARGEIMAGEID;
 			finderArgs = new Object[] { largeImageId };
 		}
@@ -869,7 +897,7 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ShoppingItemModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -886,8 +914,18 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 
 				qPos.add(largeImageId);
 
-				list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1673,11 +1711,13 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	public List<ShoppingItem> findByG_C(long groupId, long categoryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C;
 			finderArgs = new Object[] { groupId, categoryId };
 		}
@@ -1725,7 +1765,7 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ShoppingItemModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1744,8 +1784,18 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 
 				qPos.add(categoryId);
 
-				list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2798,11 +2848,13 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	 */
 	public List<ShoppingItem> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2830,7 +2882,11 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SHOPPINGITEM.concat(ShoppingItemModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_SHOPPINGITEM;
+
+				if (pagination) {
+					sql = sql.concat(ShoppingItemModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2840,8 +2896,18 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 
 				Query q = session.createQuery(sql);
 
-				list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ShoppingItem>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2969,10 +3035,12 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 	public List<com.liferay.portlet.shopping.model.ShoppingItemPrice> getShoppingItemPrices(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { pk };
 		}
 		else {
@@ -2995,7 +3063,11 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 													.concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETSHOPPINGITEMPRICES.concat(com.liferay.portlet.shopping.model.impl.ShoppingItemPriceModelImpl.ORDER_BY_SQL);
+					sql = _SQL_GETSHOPPINGITEMPRICES;
+
+					if (pagination) {
+						sql = sql.concat(com.liferay.portlet.shopping.model.impl.ShoppingItemPriceModelImpl.ORDER_BY_SQL);
+					}
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -3007,8 +3079,18 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 
 				qPos.add(pk);
 
-				list = (List<com.liferay.portlet.shopping.model.ShoppingItemPrice>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<com.liferay.portlet.shopping.model.ShoppingItemPrice>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<com.liferay.portlet.shopping.model.ShoppingItemPrice>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				shoppingItemPricePersistence.cacheResult(list);
 

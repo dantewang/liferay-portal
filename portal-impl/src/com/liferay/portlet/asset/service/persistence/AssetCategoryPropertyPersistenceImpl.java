@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -47,6 +48,7 @@ import com.liferay.portlet.asset.model.impl.AssetCategoryPropertyModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -302,11 +304,13 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 	public List<AssetCategoryProperty> findByCompanyId(long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -347,7 +351,7 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetCategoryPropertyModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -364,8 +368,18 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 
 				qPos.add(companyId);
 
-				list = (List<AssetCategoryProperty>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<AssetCategoryProperty>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetCategoryProperty>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -822,11 +836,13 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 	public List<AssetCategoryProperty> findByCategoryId(long categoryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CATEGORYID;
 			finderArgs = new Object[] { categoryId };
 		}
@@ -867,7 +883,7 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetCategoryPropertyModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -884,8 +900,18 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 
 				qPos.add(categoryId);
 
-				list = (List<AssetCategoryProperty>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<AssetCategoryProperty>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetCategoryProperty>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1360,11 +1386,13 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 	public List<AssetCategoryProperty> findByC_K(long companyId, String key,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K;
 			finderArgs = new Object[] { companyId, key };
 		}
@@ -1422,7 +1450,7 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetCategoryPropertyModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1443,8 +1471,18 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 					qPos.add(key);
 				}
 
-				list = (List<AssetCategoryProperty>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<AssetCategoryProperty>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetCategoryProperty>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2487,11 +2525,13 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 	 */
 	public List<AssetCategoryProperty> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2519,7 +2559,11 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_ASSETCATEGORYPROPERTY.concat(AssetCategoryPropertyModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_ASSETCATEGORYPROPERTY;
+
+				if (pagination) {
+					sql = sql.concat(AssetCategoryPropertyModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2529,8 +2573,18 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 
 				Query q = session.createQuery(sql);
 
-				list = (List<AssetCategoryProperty>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<AssetCategoryProperty>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetCategoryProperty>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 

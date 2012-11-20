@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
@@ -52,6 +53,7 @@ import com.liferay.portlet.mobiledevicerules.model.impl.MDRRuleGroupInstanceMode
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -315,11 +317,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public List<MDRRuleGroupInstance> findByUuid(String uuid, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -370,7 +374,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -389,8 +393,18 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 					qPos.add(uuid);
 				}
 
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1136,11 +1150,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -1198,7 +1214,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1219,8 +1235,18 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 				qPos.add(companyId);
 
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2025,11 +2051,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public List<MDRRuleGroupInstance> findByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
@@ -2070,7 +2098,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2087,8 +2115,18 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 				qPos.add(groupId);
 
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2593,11 +2631,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByRuleGroupId(long ruleGroupId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPID;
 			finderArgs = new Object[] { ruleGroupId };
 		}
@@ -2638,7 +2678,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2655,8 +2695,18 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 				qPos.add(ruleGroupId);
 
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -3120,11 +3170,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByC_C(long classNameId, long classPK,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] { classNameId, classPK };
 		}
@@ -3172,7 +3224,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3191,8 +3243,18 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 				qPos.add(classPK);
 
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -4037,11 +4099,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	public List<MDRRuleGroupInstance> findByG_C_C(long groupId,
 		long classNameId, long classPK, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C;
 			finderArgs = new Object[] { groupId, classNameId, classPK };
 		}
@@ -4092,7 +4156,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4113,8 +4177,18 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 				qPos.add(classPK);
 
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -5333,11 +5407,13 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	public List<MDRRuleGroupInstance> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -5365,7 +5441,11 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_MDRRULEGROUPINSTANCE.concat(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_MDRRULEGROUPINSTANCE;
+
+				if (pagination) {
+					sql = sql.concat(MDRRuleGroupInstanceModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -5375,8 +5455,18 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 				Query q = session.createQuery(sql);
 
-				list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MDRRuleGroupInstance>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 

@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
@@ -55,6 +56,7 @@ import com.liferay.portlet.ratings.service.persistence.RatingsStatsPersistence;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -312,11 +314,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public List<Layout> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -367,7 +371,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -386,7 +390,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					qPos.add(uuid);
 				}
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -1122,11 +1137,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public List<Layout> findByUuid_C(String uuid, long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -1184,7 +1201,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1205,7 +1222,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				qPos.add(companyId);
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -1999,11 +2027,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public List<Layout> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
@@ -2044,7 +2074,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2061,7 +2091,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				qPos.add(groupId);
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -2557,11 +2598,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public List<Layout> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -2602,7 +2645,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2619,7 +2662,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				qPos.add(companyId);
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -2894,11 +2948,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	protected List<Layout> findByIconImageId(long iconImageId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ICONIMAGEID;
 			finderArgs = new Object[] { iconImageId };
 		}
@@ -2939,7 +2995,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2956,7 +3012,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				qPos.add(iconImageId);
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -3424,11 +3491,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByLayoutPrototypeUuid(String layoutPrototypeUuid,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTPROTOTYPEUUID;
 			finderArgs = new Object[] { layoutPrototypeUuid };
 		}
@@ -3484,7 +3553,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3503,7 +3572,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					qPos.add(layoutPrototypeUuid);
 				}
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -3995,11 +4075,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findBySourcePrototypeLayoutUuid(
 		String sourcePrototypeLayoutUuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SOURCEPROTOTYPELAYOUTUUID;
 			finderArgs = new Object[] { sourcePrototypeLayoutUuid };
 		}
@@ -4055,7 +4137,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4074,7 +4156,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					qPos.add(sourcePrototypeLayoutUuid);
 				}
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -4888,11 +4981,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByG_P(long groupId, boolean privateLayout,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P;
 			finderArgs = new Object[] { groupId, privateLayout };
 		}
@@ -4940,7 +5035,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4959,7 +5054,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				qPos.add(privateLayout);
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -6107,11 +6213,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByG_P_P(long groupId, boolean privateLayout,
 		long parentLayoutId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_P;
 			finderArgs = new Object[] { groupId, privateLayout, parentLayoutId };
 		}
@@ -6162,7 +6270,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -6183,7 +6291,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				qPos.add(parentLayoutId);
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -7421,11 +7540,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	public List<Layout> findByG_P_T(long groupId, boolean privateLayout,
 		String type, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_T;
 			finderArgs = new Object[] { groupId, privateLayout, type };
 		}
@@ -7486,7 +7607,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -7509,7 +7630,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					qPos.add(type);
 				}
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -7929,11 +8061,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	protected List<Layout> findByG_P_SPLU(long groupId, boolean privateLayout,
 		String sourcePrototypeLayoutUuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_SPLU;
 			finderArgs = new Object[] {
 					groupId, privateLayout, sourcePrototypeLayoutUuid
@@ -7997,7 +8131,7 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(LayoutModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -8020,7 +8154,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					qPos.add(sourcePrototypeLayoutUuid);
 				}
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -9050,11 +9195,13 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 	 */
 	public List<Layout> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -9082,7 +9229,11 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_LAYOUT.concat(LayoutModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_LAYOUT;
+
+				if (pagination) {
+					sql = sql.concat(LayoutModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -9092,7 +9243,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<Layout>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Layout>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 

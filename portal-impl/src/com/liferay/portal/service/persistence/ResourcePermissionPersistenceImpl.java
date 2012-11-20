@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -46,6 +47,7 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -301,11 +303,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	 */
 	public List<ResourcePermission> findByScope(int scope, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SCOPE;
 			finderArgs = new Object[] { scope };
 		}
@@ -346,7 +350,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -363,8 +367,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 
 				qPos.add(scope);
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -591,10 +605,12 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 			return findByScope(scopes[0], start, end, orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { StringUtil.merge(scopes) };
 		}
 		else {
@@ -649,7 +665,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -668,8 +684,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 					qPos.add(scopes);
 				}
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1047,11 +1073,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	 */
 	public List<ResourcePermission> findByRoleId(long roleId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ROLEID;
 			finderArgs = new Object[] { roleId };
 		}
@@ -1092,7 +1120,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1109,8 +1137,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 
 				qPos.add(roleId);
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1578,6 +1616,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	public List<ResourcePermission> findByC_P(long companyId, String primKey,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -1634,7 +1673,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1655,8 +1694,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 					qPos.add(primKey);
 				}
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2185,11 +2234,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	public List<ResourcePermission> findByC_N_S(long companyId, String name,
 		int scope, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N_S;
 			finderArgs = new Object[] { companyId, name, scope };
 		}
@@ -2250,7 +2301,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2273,8 +2324,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 
 				qPos.add(scope);
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2826,11 +2887,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	public List<ResourcePermission> findByC_P_R(long companyId, String primKey,
 		long roleId, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_P_R;
 			finderArgs = new Object[] { companyId, primKey, roleId };
 		}
@@ -2892,7 +2955,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2915,8 +2978,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 
 				qPos.add(roleId);
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -3492,11 +3565,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	public List<ResourcePermission> findByC_N_S_P(long companyId, String name,
 		int scope, String primKey, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N_S_P;
 			finderArgs = new Object[] { companyId, name, scope, primKey };
 		}
@@ -3571,7 +3646,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3598,8 +3673,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 					qPos.add(primKey);
 				}
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -4212,11 +4297,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	public List<ResourcePermission> findByC_N_P_O(long companyId, String name,
 		String primKey, long ownerId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N_P_O;
 			finderArgs = new Object[] { companyId, name, primKey, ownerId };
 		}
@@ -4291,7 +4378,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4318,8 +4405,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 
 				qPos.add(ownerId);
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -4959,11 +5056,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	public List<ResourcePermission> findByC_N_S_P_R(long companyId,
 		String name, int scope, String primKey, long roleId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N_S_P_R;
 			finderArgs = new Object[] { companyId, name, scope, primKey, roleId };
 		}
@@ -5041,7 +5140,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -5070,8 +5169,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 
 				qPos.add(roleId);
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -5384,10 +5493,12 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				start, end, orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					companyId, name, scope, primKey, StringUtil.merge(roleIds)
 				};
@@ -5502,7 +5613,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -5533,8 +5644,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 					qPos.add(roleIds);
 				}
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -6139,11 +6260,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	public List<ResourcePermission> findByC_N_P_R_A(long companyId,
 		String name, String primKey, long roleId, long actionIds, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N_P_R_A;
 			finderArgs = new Object[] {
 					companyId, name, primKey, roleId, actionIds
@@ -6223,7 +6346,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -6252,8 +6375,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 
 				qPos.add(actionIds);
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -6935,11 +7068,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		String name, int scope, String primKey, long roleId, long actionIds,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N_S_P_R_A;
 			finderArgs = new Object[] {
 					companyId, name, scope, primKey, roleId, actionIds
@@ -7022,7 +7157,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -7053,8 +7188,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 
 				qPos.add(actionIds);
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -7387,10 +7532,12 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				roleIds[0], actionIds, start, end, orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					companyId, name, scope, primKey, StringUtil.merge(roleIds),
 					actionIds
@@ -7516,7 +7663,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -7549,8 +7696,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 
 				qPos.add(actionIds);
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -7947,11 +8104,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		String name, int scope, String primKey, long roleId, long ownerId,
 		long actionIds, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_N_S_P_R_O_A;
 			finderArgs = new Object[] {
 					companyId, name, scope, primKey, roleId, ownerId, actionIds
@@ -8037,7 +8196,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ResourcePermissionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -8070,8 +8229,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 
 				qPos.add(actionIds);
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -9132,11 +9301,13 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 	 */
 	public List<ResourcePermission> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -9164,7 +9335,11 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_RESOURCEPERMISSION.concat(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_RESOURCEPERMISSION;
+
+				if (pagination) {
+					sql = sql.concat(ResourcePermissionModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -9174,8 +9349,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 
 				Query q = session.createQuery(sql);
 
-				list = (List<ResourcePermission>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ResourcePermission>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 

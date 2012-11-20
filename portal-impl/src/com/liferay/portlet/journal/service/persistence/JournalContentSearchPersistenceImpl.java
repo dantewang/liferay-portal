@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -50,6 +51,7 @@ import com.liferay.portlet.journal.model.impl.JournalContentSearchModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -317,11 +319,13 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	public List<JournalContentSearch> findByPortletId(String portletId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PORTLETID;
 			finderArgs = new Object[] { portletId };
 		}
@@ -373,7 +377,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalContentSearchModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -392,8 +396,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 					qPos.add(portletId);
 				}
 
-				list = (List<JournalContentSearch>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -876,11 +890,13 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	public List<JournalContentSearch> findByArticleId(String articleId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ARTICLEID;
 			finderArgs = new Object[] { articleId };
 		}
@@ -932,7 +948,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalContentSearchModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -951,8 +967,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 					qPos.add(articleId);
 				}
 
-				list = (List<JournalContentSearch>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1430,11 +1456,13 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	public List<JournalContentSearch> findByG_P(long groupId,
 		boolean privateLayout, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P;
 			finderArgs = new Object[] { groupId, privateLayout };
 		}
@@ -1482,7 +1510,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalContentSearchModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1501,8 +1529,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				qPos.add(privateLayout);
 
-				list = (List<JournalContentSearch>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2004,11 +2042,13 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	public List<JournalContentSearch> findByG_A(long groupId, String articleId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A;
 			finderArgs = new Object[] { groupId, articleId };
 		}
@@ -2067,7 +2107,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalContentSearchModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2088,8 +2128,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 					qPos.add(articleId);
 				}
 
-				list = (List<JournalContentSearch>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2609,11 +2659,13 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	public List<JournalContentSearch> findByG_P_L(long groupId,
 		boolean privateLayout, long layoutId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L;
 			finderArgs = new Object[] { groupId, privateLayout, layoutId };
 		}
@@ -2664,7 +2716,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalContentSearchModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2685,8 +2737,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				qPos.add(layoutId);
 
-				list = (List<JournalContentSearch>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -3231,11 +3293,13 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	public List<JournalContentSearch> findByG_P_A(long groupId,
 		boolean privateLayout, String articleId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_A;
 			finderArgs = new Object[] { groupId, privateLayout, articleId };
 		}
@@ -3297,7 +3361,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalContentSearchModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3320,8 +3384,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 					qPos.add(articleId);
 				}
 
-				list = (List<JournalContentSearch>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -3894,11 +3968,13 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	public List<JournalContentSearch> findByG_P_L_P(long groupId,
 		boolean privateLayout, long layoutId, String portletId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L_P;
 			finderArgs = new Object[] {
 					groupId, privateLayout, layoutId, portletId
@@ -3965,7 +4041,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalContentSearchModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3990,8 +4066,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 					qPos.add(portletId);
 				}
 
-				list = (List<JournalContentSearch>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -5312,11 +5398,13 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	public List<JournalContentSearch> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -5344,7 +5432,11 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_JOURNALCONTENTSEARCH.concat(JournalContentSearchModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_JOURNALCONTENTSEARCH;
+
+				if (pagination) {
+					sql = sql.concat(JournalContentSearchModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -5354,8 +5446,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 				Query q = session.createQuery(sql);
 
-				list = (List<JournalContentSearch>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalContentSearch>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 

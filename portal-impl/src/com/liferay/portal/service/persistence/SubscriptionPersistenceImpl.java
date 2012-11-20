@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.Subscription;
@@ -48,6 +49,7 @@ import com.liferay.portlet.social.service.persistence.SocialActivityPersistence;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -295,11 +297,13 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 	 */
 	public List<Subscription> findByUserId(long userId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
 			finderArgs = new Object[] { userId };
 		}
@@ -340,7 +344,7 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(SubscriptionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -357,8 +361,18 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 
 				qPos.add(userId);
 
-				list = (List<Subscription>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<Subscription>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Subscription>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -817,11 +831,13 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 	public List<Subscription> findByU_C(long userId, long classNameId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_C;
 			finderArgs = new Object[] { userId, classNameId };
 		}
@@ -869,7 +885,7 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(SubscriptionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -888,8 +904,18 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 
 				qPos.add(classNameId);
 
-				list = (List<Subscription>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<Subscription>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Subscription>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1387,11 +1413,13 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 	public List<Subscription> findByC_C_C(long companyId, long classNameId,
 		long classPK, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C;
 			finderArgs = new Object[] { companyId, classNameId, classPK };
 		}
@@ -1442,7 +1470,7 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(SubscriptionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1463,8 +1491,18 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 
 				qPos.add(classPK);
 
-				list = (List<Subscription>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<Subscription>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Subscription>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2538,11 +2576,13 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 	 */
 	public List<Subscription> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2570,7 +2610,11 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SUBSCRIPTION.concat(SubscriptionModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_SUBSCRIPTION;
+
+				if (pagination) {
+					sql = sql.concat(SubscriptionModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2580,8 +2624,18 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 
 				Query q = session.createQuery(sql);
 
-				list = (List<Subscription>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<Subscription>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Subscription>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

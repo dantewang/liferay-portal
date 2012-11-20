@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
@@ -54,6 +55,7 @@ import com.liferay.portlet.journal.model.impl.JournalStructureModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -316,11 +318,13 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	 */
 	public List<JournalStructure> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -371,7 +375,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -390,8 +394,18 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					qPos.add(uuid);
 				}
 
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1135,11 +1149,13 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public List<JournalStructure> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -1197,7 +1213,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1218,8 +1234,18 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 				qPos.add(companyId);
 
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2164,11 +2190,13 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	 */
 	public List<JournalStructure> findByGroupId(long groupId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
@@ -2209,7 +2237,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2226,8 +2254,18 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 				qPos.add(groupId);
 
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2455,10 +2493,12 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 			return findByGroupId(groupIds[0], start, end, orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { StringUtil.merge(groupIds) };
 		}
 		else {
@@ -2513,7 +2553,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2532,8 +2572,18 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					qPos.add(groupIds);
 				}
 
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -3042,11 +3092,13 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public List<JournalStructure> findByStructureId(String structureId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
 			finderArgs = new Object[] { structureId };
 		}
@@ -3098,7 +3150,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3117,8 +3169,18 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					qPos.add(structureId);
 				}
 
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -3603,11 +3665,13 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public List<JournalStructure> findByParentStructureId(
 		String parentStructureId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTSTRUCTUREID;
 			finderArgs = new Object[] { parentStructureId };
 		}
@@ -3663,7 +3727,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3682,8 +3746,18 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					qPos.add(parentStructureId);
 				}
 
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -4789,11 +4863,13 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	public List<JournalStructure> findByG_P(long groupId,
 		String parentStructureId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P;
 			finderArgs = new Object[] { groupId, parentStructureId };
 		}
@@ -4852,7 +4928,7 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalStructureModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4873,8 +4949,18 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					qPos.add(parentStructureId);
 				}
 
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -5832,11 +5918,13 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 	 */
 	public List<JournalStructure> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -5864,7 +5952,11 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_JOURNALSTRUCTURE.concat(JournalStructureModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_JOURNALSTRUCTURE;
+
+				if (pagination) {
+					sql = sql.concat(JournalStructureModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -5874,8 +5966,18 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 				Query q = session.createQuery(sql);
 
-				list = (List<JournalStructure>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalStructure>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 

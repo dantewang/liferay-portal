@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
@@ -54,6 +55,7 @@ import com.liferay.portlet.softwarecatalog.model.impl.SCLicenseModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -609,11 +611,13 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	 */
 	public List<SCLicense> findByActive(boolean active, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE;
 			finderArgs = new Object[] { active };
 		}
@@ -654,7 +658,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -671,8 +675,18 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 
 				qPos.add(active);
 
-				list = (List<SCLicense>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<SCLicense>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SCLicense>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1498,11 +1512,13 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	public List<SCLicense> findByA_R(boolean active, boolean recommended,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_A_R;
 			finderArgs = new Object[] { active, recommended };
 		}
@@ -1550,7 +1566,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(SCLicenseModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1569,8 +1585,18 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 
 				qPos.add(recommended);
 
-				list = (List<SCLicense>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<SCLicense>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SCLicense>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2320,11 +2346,13 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	 */
 	public List<SCLicense> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2352,7 +2380,11 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SCLICENSE.concat(SCLicenseModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_SCLICENSE;
+
+				if (pagination) {
+					sql = sql.concat(SCLicenseModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2362,8 +2394,18 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<SCLicense>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<SCLicense>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SCLicense>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2491,10 +2533,12 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 	public List<com.liferay.portlet.softwarecatalog.model.SCProductEntry> getSCProductEntries(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { pk };
 		}
 		else {
@@ -2517,7 +2561,11 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 												  .concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETSCPRODUCTENTRIES.concat(com.liferay.portlet.softwarecatalog.model.impl.SCProductEntryModelImpl.ORDER_BY_SQL);
+					sql = _SQL_GETSCPRODUCTENTRIES;
+
+					if (pagination) {
+						sql = sql.concat(com.liferay.portlet.softwarecatalog.model.impl.SCProductEntryModelImpl.ORDER_BY_SQL);
+					}
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -2529,8 +2577,18 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 
 				qPos.add(pk);
 
-				list = (List<com.liferay.portlet.softwarecatalog.model.SCProductEntry>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<com.liferay.portlet.softwarecatalog.model.SCProductEntry>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<com.liferay.portlet.softwarecatalog.model.SCProductEntry>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				scProductEntryPersistence.cacheResult(list);
 

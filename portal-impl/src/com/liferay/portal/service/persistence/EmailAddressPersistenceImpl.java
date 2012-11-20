@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.ModelListener;
@@ -44,6 +45,7 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -293,11 +295,13 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	 */
 	public List<EmailAddress> findByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -338,7 +342,7 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -355,8 +359,18 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				qPos.add(companyId);
 
-				list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -807,11 +821,13 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	 */
 	public List<EmailAddress> findByUserId(long userId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
 			finderArgs = new Object[] { userId };
 		}
@@ -852,7 +868,7 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -869,8 +885,18 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				qPos.add(userId);
 
-				list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1329,11 +1355,13 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	public List<EmailAddress> findByC_C(long companyId, long classNameId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] { companyId, classNameId };
 		}
@@ -1381,7 +1409,7 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1400,8 +1428,18 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				qPos.add(classNameId);
 
-				list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1899,11 +1937,13 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	public List<EmailAddress> findByC_C_C(long companyId, long classNameId,
 		long classPK, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C;
 			finderArgs = new Object[] { companyId, classNameId, classPK };
 		}
@@ -1954,7 +1994,7 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1975,8 +2015,18 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				qPos.add(classPK);
 
-				list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2515,11 +2565,13 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	public List<EmailAddress> findByC_C_C_P(long companyId, long classNameId,
 		long classPK, boolean primary, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P;
 			finderArgs = new Object[] { companyId, classNameId, classPK, primary };
 		}
@@ -2573,7 +2625,7 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(EmailAddressModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2596,8 +2648,18 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				qPos.add(primary);
 
-				list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -3410,11 +3472,13 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 	 */
 	public List<EmailAddress> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -3442,7 +3506,11 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_EMAILADDRESS.concat(EmailAddressModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_EMAILADDRESS;
+
+				if (pagination) {
+					sql = sql.concat(EmailAddressModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -3452,8 +3520,18 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 				Query q = session.createQuery(sql);
 
-				list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<EmailAddress>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

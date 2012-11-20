@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
@@ -50,6 +51,7 @@ import com.liferay.portlet.polls.model.impl.PollsQuestionModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -311,11 +313,13 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 */
 	public List<PollsQuestion> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -366,7 +370,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(PollsQuestionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -385,8 +389,18 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 					qPos.add(uuid);
 				}
 
-				list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1127,11 +1141,13 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	public List<PollsQuestion> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -1189,7 +1205,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(PollsQuestionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1210,8 +1226,18 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 
 				qPos.add(companyId);
 
-				list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2011,11 +2037,13 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 */
 	public List<PollsQuestion> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
@@ -2056,7 +2084,7 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(PollsQuestionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2073,8 +2101,18 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 
 				qPos.add(groupId);
 
-				list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2866,11 +2904,13 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 	 */
 	public List<PollsQuestion> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2898,7 +2938,11 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_POLLSQUESTION.concat(PollsQuestionModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_POLLSQUESTION;
+
+				if (pagination) {
+					sql = sql.concat(PollsQuestionModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2908,8 +2952,18 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 
 				Query q = session.createQuery(sql);
 
-				list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<PollsQuestion>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

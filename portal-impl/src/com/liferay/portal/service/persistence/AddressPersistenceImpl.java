@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -44,6 +45,7 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -293,11 +295,13 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	 */
 	public List<Address> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -338,7 +342,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -355,7 +359,18 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 				qPos.add(companyId);
 
-				list = (List<Address>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -801,11 +816,13 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	 */
 	public List<Address> findByUserId(long userId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
 			finderArgs = new Object[] { userId };
 		}
@@ -846,7 +863,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -863,7 +880,18 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 				qPos.add(userId);
 
-				list = (List<Address>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1318,11 +1346,13 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	 */
 	public List<Address> findByC_C(long companyId, long classNameId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
 			finderArgs = new Object[] { companyId, classNameId };
 		}
@@ -1370,7 +1400,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1389,7 +1419,18 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 				qPos.add(classNameId);
 
-				list = (List<Address>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1886,11 +1927,13 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	public List<Address> findByC_C_C(long companyId, long classNameId,
 		long classPK, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C;
 			finderArgs = new Object[] { companyId, classNameId, classPK };
 		}
@@ -1941,7 +1984,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1962,7 +2005,18 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 				qPos.add(classPK);
 
-				list = (List<Address>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2498,11 +2552,13 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	public List<Address> findByC_C_C_M(long companyId, long classNameId,
 		long classPK, boolean mailing, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_M;
 			finderArgs = new Object[] { companyId, classNameId, classPK, mailing };
 		}
@@ -2556,7 +2612,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2579,7 +2635,18 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 				qPos.add(mailing);
 
-				list = (List<Address>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -3143,11 +3210,13 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	public List<Address> findByC_C_C_P(long companyId, long classNameId,
 		long classPK, boolean primary, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_C_P;
 			finderArgs = new Object[] { companyId, classNameId, classPK, primary };
 		}
@@ -3201,7 +3270,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AddressModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3224,7 +3293,18 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 				qPos.add(primary);
 
-				list = (List<Address>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -4061,11 +4141,13 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	 */
 	public List<Address> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -4093,7 +4175,11 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_ADDRESS.concat(AddressModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_ADDRESS;
+
+				if (pagination) {
+					sql = sql.concat(AddressModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -4103,7 +4189,18 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<Address>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Address>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

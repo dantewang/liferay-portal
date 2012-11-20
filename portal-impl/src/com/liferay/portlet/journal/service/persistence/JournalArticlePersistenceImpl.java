@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
@@ -64,6 +65,7 @@ import com.liferay.portlet.ratings.service.persistence.RatingsStatsPersistence;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -327,11 +329,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	 */
 	public List<JournalArticle> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -382,7 +386,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -401,8 +405,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(uuid);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1146,11 +1160,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -1208,7 +1224,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1229,8 +1245,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(companyId);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1724,11 +1750,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByResourcePrimKey(long resourcePrimKey,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEPRIMKEY;
 			finderArgs = new Object[] { resourcePrimKey };
 		}
@@ -1773,7 +1801,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1790,8 +1818,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(resourcePrimKey);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2558,11 +2596,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	 */
 	public List<JournalArticle> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
@@ -2603,7 +2643,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2620,8 +2660,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(groupId);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -3125,11 +3175,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	 */
 	public List<JournalArticle> findByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -3170,7 +3222,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3187,8 +3239,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(companyId);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -3657,11 +3719,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByStructureId(String structureId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
 			finderArgs = new Object[] { structureId };
 		}
@@ -3713,7 +3777,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3732,8 +3796,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(structureId);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -4216,11 +4290,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	 */
 	public List<JournalArticle> findByTemplateId(String templateId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TEMPLATEID;
 			finderArgs = new Object[] { templateId };
 		}
@@ -4271,7 +4347,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4290,8 +4366,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(templateId);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -4773,11 +4859,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	 */
 	public List<JournalArticle> findByLayoutUuid(String layoutUuid, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTUUID;
 			finderArgs = new Object[] { layoutUuid };
 		}
@@ -4828,7 +4916,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4847,8 +4935,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(layoutUuid);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -5319,11 +5417,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findBySmallImageId(long smallImageId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SMALLIMAGEID;
 			finderArgs = new Object[] { smallImageId };
 		}
@@ -5368,7 +5468,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -5385,8 +5485,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(smallImageId);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -5851,11 +5961,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByR_ST(long resourcePrimKey, int status,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_ST;
 			finderArgs = new Object[] { resourcePrimKey, status };
 		}
@@ -5903,7 +6015,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -5922,8 +6034,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(status);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -6732,11 +6854,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	 */
 	public List<JournalArticle> findByG_U(long groupId, long userId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U;
 			finderArgs = new Object[] { groupId, userId };
 		}
@@ -6784,7 +6908,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -6803,8 +6927,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(userId);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -7826,11 +7960,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_F(long groupId, long folderId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F;
 			finderArgs = new Object[] { groupId, folderId };
 		}
@@ -7878,7 +8014,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -7897,8 +8033,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(folderId);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -8145,10 +8291,12 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { groupId, StringUtil.merge(folderIds) };
 		}
 		else {
@@ -8213,7 +8361,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -8234,8 +8382,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(folderIds);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -9141,11 +9299,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_A(long groupId, String articleId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A;
 			finderArgs = new Object[] { groupId, articleId };
 		}
@@ -9204,7 +9364,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -9225,8 +9385,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(articleId);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -10153,11 +10323,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_UT(long groupId, String urlTitle,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_UT;
 			finderArgs = new Object[] { groupId, urlTitle };
 		}
@@ -10215,7 +10387,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -10236,8 +10408,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(urlTitle);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -11164,11 +11346,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_S(long groupId, String structureId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S;
 			finderArgs = new Object[] { groupId, structureId };
 		}
@@ -11227,7 +11411,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -11248,8 +11432,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(structureId);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -12176,11 +12370,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_T(long groupId, String templateId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T;
 			finderArgs = new Object[] { groupId, templateId };
 		}
@@ -12239,7 +12435,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -12260,8 +12456,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(templateId);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -13188,11 +13394,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_L(long groupId, String layoutUuid,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_L;
 			finderArgs = new Object[] { groupId, layoutUuid };
 		}
@@ -13251,7 +13459,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -13272,8 +13480,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(layoutUuid);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -14162,11 +14380,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	 */
 	public List<JournalArticle> findByG_ST(long groupId, int status, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_ST;
 			finderArgs = new Object[] { groupId, status };
 		}
@@ -14214,7 +14434,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -14233,8 +14453,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(status);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -14773,11 +15003,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByC_V(long companyId, double version,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_V;
 			finderArgs = new Object[] { companyId, version };
 		}
@@ -14825,7 +15057,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -14844,8 +15076,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(version);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -15332,11 +15574,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByC_ST(long companyId, int status,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_ST;
 			finderArgs = new Object[] { companyId, status };
 		}
@@ -15384,7 +15628,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -15403,8 +15647,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(status);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -16421,11 +16675,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_F_ST(long groupId, long folderId,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F_ST;
 			finderArgs = new Object[] { groupId, folderId, status };
 		}
@@ -16476,7 +16732,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -16497,8 +16753,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(status);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -16764,10 +17030,12 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					groupId, folderId, StringUtil.merge(statuses)
 				};
@@ -16842,7 +17110,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -16865,8 +17133,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(statuses);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -17803,11 +18081,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_C_C(long groupId, long classNameId,
 		long classPK, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_C;
 			finderArgs = new Object[] { groupId, classNameId, classPK };
 		}
@@ -17858,7 +18138,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -17879,8 +18159,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(classPK);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -18275,11 +18565,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	protected List<JournalArticle> findByG_C_S(long groupId, long classNameId,
 		String structureId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_S;
 			finderArgs = new Object[] { groupId, classNameId, structureId };
 		}
@@ -18341,7 +18633,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -18364,8 +18656,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(structureId);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -19281,11 +19583,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_C_T(long groupId, long classNameId,
 		String templateId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_T;
 			finderArgs = new Object[] { groupId, classNameId, templateId };
 		}
@@ -19347,7 +19651,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -19370,8 +19674,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(templateId);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -20358,11 +20672,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_C_L(long groupId, long classNameId,
 		String layoutUuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_L;
 			finderArgs = new Object[] { groupId, classNameId, layoutUuid };
 		}
@@ -20424,7 +20740,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -20447,8 +20763,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(layoutUuid);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -21394,11 +21720,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_U_C(long groupId, long userId,
 		long classNameId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_C;
 			finderArgs = new Object[] { groupId, userId, classNameId };
 		}
@@ -21449,7 +21777,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -21470,8 +21798,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(classNameId);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -22899,11 +23237,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_A_ST(long groupId, String articleId,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A_ST;
 			finderArgs = new Object[] { groupId, articleId, status };
 		}
@@ -22965,7 +23305,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -22988,8 +23328,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(status);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -23255,10 +23605,12 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					groupId, articleId, StringUtil.merge(statuses)
 				};
@@ -23344,7 +23696,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -23369,8 +23721,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 					qPos.add(statuses);
 				}
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -24401,11 +24763,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByG_UT_ST(long groupId, String urlTitle,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_UT_ST;
 			finderArgs = new Object[] { groupId, urlTitle, status };
 		}
@@ -24466,7 +24830,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -24489,8 +24853,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(status);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -25101,11 +25475,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	public List<JournalArticle> findByC_V_ST(long companyId, double version,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_V_ST;
 			finderArgs = new Object[] { companyId, version, status };
 		}
@@ -25156,7 +25532,7 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(JournalArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -25177,8 +25553,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				qPos.add(status);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -26587,11 +26973,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	 */
 	public List<JournalArticle> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -26619,7 +27007,11 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_JOURNALARTICLE.concat(JournalArticleModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_JOURNALARTICLE;
+
+				if (pagination) {
+					sql = sql.concat(JournalArticleModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -26629,8 +27021,18 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 
 				Query q = session.createQuery(sql);
 
-				list = (List<JournalArticle>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<JournalArticle>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 

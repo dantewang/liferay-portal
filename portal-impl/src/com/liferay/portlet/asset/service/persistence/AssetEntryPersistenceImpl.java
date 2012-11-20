@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -68,6 +69,7 @@ import com.liferay.portlet.wiki.service.persistence.WikiPageResourcePersistence;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -319,11 +321,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 */
 	public List<AssetEntry> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -364,7 +368,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -381,8 +385,18 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 
 				qPos.add(companyId);
 
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -833,11 +847,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 */
 	public List<AssetEntry> findByVisible(boolean visible, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_VISIBLE;
 			finderArgs = new Object[] { visible };
 		}
@@ -878,7 +894,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -895,8 +911,18 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 
 				qPos.add(visible);
 
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1353,11 +1379,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 */
 	public List<AssetEntry> findByPublishDate(Date publishDate, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PUBLISHDATE;
 			finderArgs = new Object[] { publishDate };
 		}
@@ -1403,7 +1431,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1422,8 +1450,18 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 					qPos.add(CalendarUtil.getTimestamp(publishDate));
 				}
 
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1892,11 +1930,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public List<AssetEntry> findByExpirationDate(Date expirationDate,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_EXPIRATIONDATE;
 			finderArgs = new Object[] { expirationDate };
 		}
@@ -1947,7 +1987,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1966,8 +2006,18 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 					qPos.add(CalendarUtil.getTimestamp(expirationDate));
 				}
 
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2442,11 +2492,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 */
 	public List<AssetEntry> findByLayoutUuid(String layoutUuid, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_LAYOUTUUID;
 			finderArgs = new Object[] { layoutUuid };
 		}
@@ -2497,7 +2549,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2516,8 +2568,18 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 					qPos.add(layoutUuid);
 				}
 
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2809,11 +2871,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	protected List<AssetEntry> findByG_CU(long groupId, String classUuid,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_CU;
 			finderArgs = new Object[] { groupId, classUuid };
 		}
@@ -2871,7 +2935,7 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2892,8 +2956,18 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 					qPos.add(classUuid);
 				}
 
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -3962,11 +4036,13 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 */
 	public List<AssetEntry> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -3994,7 +4070,11 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_ASSETENTRY.concat(AssetEntryModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_ASSETENTRY;
+
+				if (pagination) {
+					sql = sql.concat(AssetEntryModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -4004,8 +4084,18 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<AssetEntry>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -4133,10 +4223,12 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public List<com.liferay.portlet.asset.model.AssetCategory> getAssetCategories(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { pk };
 		}
 		else {
@@ -4159,7 +4251,11 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 												 .concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETASSETCATEGORIES.concat(com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl.ORDER_BY_SQL);
+					sql = _SQL_GETASSETCATEGORIES;
+
+					if (pagination) {
+						sql = sql.concat(com.liferay.portlet.asset.model.impl.AssetCategoryModelImpl.ORDER_BY_SQL);
+					}
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -4171,8 +4267,18 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 
 				qPos.add(pk);
 
-				list = (List<com.liferay.portlet.asset.model.AssetCategory>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<com.liferay.portlet.asset.model.AssetCategory>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<com.liferay.portlet.asset.model.AssetCategory>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				assetCategoryPersistence.cacheResult(list);
 
@@ -4619,10 +4725,12 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	public List<com.liferay.portlet.asset.model.AssetTag> getAssetTags(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { pk };
 		}
 		else {
@@ -4645,7 +4753,11 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 										   .concat(orderByComparator.getOrderBy());
 				}
 				else {
-					sql = _SQL_GETASSETTAGS.concat(com.liferay.portlet.asset.model.impl.AssetTagModelImpl.ORDER_BY_SQL);
+					sql = _SQL_GETASSETTAGS;
+
+					if (pagination) {
+						sql = sql.concat(com.liferay.portlet.asset.model.impl.AssetTagModelImpl.ORDER_BY_SQL);
+					}
 				}
 
 				SQLQuery q = session.createSQLQuery(sql);
@@ -4657,8 +4769,18 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 
 				qPos.add(pk);
 
-				list = (List<com.liferay.portlet.asset.model.AssetTag>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<com.liferay.portlet.asset.model.AssetTag>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<com.liferay.portlet.asset.model.AssetTag>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				assetTagPersistence.cacheResult(list);
 

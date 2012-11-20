@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.UserPersistence;
@@ -46,6 +47,7 @@ import com.liferay.portlet.shopping.model.impl.ShoppingOrderItemModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -298,11 +300,13 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 	 */
 	public List<ShoppingOrderItem> findByOrderId(long orderId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERID;
 			finderArgs = new Object[] { orderId };
 		}
@@ -343,7 +347,7 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(ShoppingOrderItemModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -360,8 +364,18 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 
 				qPos.add(orderId);
 
-				list = (List<ShoppingOrderItem>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<ShoppingOrderItem>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ShoppingOrderItem>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1013,11 +1027,13 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 	 */
 	public List<ShoppingOrderItem> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -1045,7 +1061,11 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SHOPPINGORDERITEM.concat(ShoppingOrderItemModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_SHOPPINGORDERITEM;
+
+				if (pagination) {
+					sql = sql.concat(ShoppingOrderItemModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -1055,8 +1075,18 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 
 				Query q = session.createQuery(sql);
 
-				list = (List<ShoppingOrderItem>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<ShoppingOrderItem>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<ShoppingOrderItem>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 

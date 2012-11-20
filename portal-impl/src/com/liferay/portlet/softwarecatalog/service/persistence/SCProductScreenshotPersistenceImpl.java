@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.ImagePersistence;
@@ -47,6 +48,7 @@ import com.liferay.portlet.softwarecatalog.model.impl.SCProductScreenshotModelIm
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -304,11 +306,13 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	public List<SCProductScreenshot> findByProductEntryId(long productEntryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PRODUCTENTRYID;
 			finderArgs = new Object[] { productEntryId };
 		}
@@ -353,7 +357,7 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(SCProductScreenshotModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -370,8 +374,18 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 
 				qPos.add(productEntryId);
 
-				list = (List<SCProductScreenshot>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<SCProductScreenshot>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SCProductScreenshot>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -655,11 +669,13 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	protected List<SCProductScreenshot> findByThumbnailId(long thumbnailId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_THUMBNAILID;
 			finderArgs = new Object[] { thumbnailId };
 		}
@@ -700,7 +716,7 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(SCProductScreenshotModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -717,8 +733,18 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 
 				qPos.add(thumbnailId);
 
-				list = (List<SCProductScreenshot>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<SCProductScreenshot>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SCProductScreenshot>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -999,11 +1025,13 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	protected List<SCProductScreenshot> findByFullImageId(long fullImageId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FULLIMAGEID;
 			finderArgs = new Object[] { fullImageId };
 		}
@@ -1044,7 +1072,7 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(SCProductScreenshotModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1061,8 +1089,18 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 
 				qPos.add(fullImageId);
 
-				list = (List<SCProductScreenshot>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<SCProductScreenshot>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SCProductScreenshot>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1341,11 +1379,13 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	protected List<SCProductScreenshot> findByP_P(long productEntryId,
 		int priority, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_P;
 			finderArgs = new Object[] { productEntryId, priority };
 		}
@@ -1393,7 +1433,7 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(SCProductScreenshotModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1412,8 +1452,18 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 
 				qPos.add(priority);
 
-				list = (List<SCProductScreenshot>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<SCProductScreenshot>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SCProductScreenshot>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2092,11 +2142,13 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	 */
 	public List<SCProductScreenshot> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2124,7 +2176,11 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SCPRODUCTSCREENSHOT.concat(SCProductScreenshotModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_SCPRODUCTSCREENSHOT;
+
+				if (pagination) {
+					sql = sql.concat(SCProductScreenshotModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2134,8 +2190,18 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 
 				Query q = session.createQuery(sql);
 
-				list = (List<SCProductScreenshot>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<SCProductScreenshot>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SCProductScreenshot>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 

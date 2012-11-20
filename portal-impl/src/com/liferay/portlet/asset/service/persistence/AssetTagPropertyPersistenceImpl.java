@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -47,6 +48,7 @@ import com.liferay.portlet.asset.model.impl.AssetTagPropertyModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -300,11 +302,13 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	 */
 	public List<AssetTagProperty> findByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -345,7 +349,7 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetTagPropertyModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -362,8 +366,18 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 
 				qPos.add(companyId);
 
-				list = (List<AssetTagProperty>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<AssetTagProperty>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetTagProperty>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -815,11 +829,13 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	 */
 	public List<AssetTagProperty> findByTagId(long tagId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TAGID;
 			finderArgs = new Object[] { tagId };
 		}
@@ -860,7 +876,7 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetTagPropertyModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -877,8 +893,18 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 
 				qPos.add(tagId);
 
-				list = (List<AssetTagProperty>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<AssetTagProperty>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetTagProperty>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1351,11 +1377,13 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	public List<AssetTagProperty> findByC_K(long companyId, String key,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_K;
 			finderArgs = new Object[] { companyId, key };
 		}
@@ -1413,7 +1441,7 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetTagPropertyModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1434,8 +1462,18 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 					qPos.add(key);
 				}
 
-				list = (List<AssetTagProperty>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<AssetTagProperty>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetTagProperty>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -2469,11 +2507,13 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 	 */
 	public List<AssetTagProperty> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2501,7 +2541,11 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_ASSETTAGPROPERTY.concat(AssetTagPropertyModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_ASSETTAGPROPERTY;
+
+				if (pagination) {
+					sql = sql.concat(AssetTagPropertyModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2511,8 +2555,18 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 
 				Query q = session.createQuery(sql);
 
-				list = (List<AssetTagProperty>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<AssetTagProperty>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetTagProperty>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
 
 				cacheResult(list);
 

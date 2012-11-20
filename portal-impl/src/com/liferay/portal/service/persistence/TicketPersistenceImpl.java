@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -45,6 +46,7 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -116,11 +118,13 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 	 */
 	protected List<Ticket> findByKey(String key, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KEY;
 			finderArgs = new Object[] { key };
 		}
@@ -171,7 +175,7 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(TicketModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -190,7 +194,18 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 					qPos.add(key);
 				}
 
-				list = (List<Ticket>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Ticket>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Ticket>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 
@@ -815,11 +830,13 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 	 */
 	public List<Ticket> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -847,7 +864,11 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_TICKET.concat(TicketModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_TICKET;
+
+				if (pagination) {
+					sql = sql.concat(TicketModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -857,7 +878,18 @@ public class TicketPersistenceImpl extends BasePersistenceImpl<Ticket>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<Ticket>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Ticket>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<Ticket>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
 
 				cacheResult(list);
 

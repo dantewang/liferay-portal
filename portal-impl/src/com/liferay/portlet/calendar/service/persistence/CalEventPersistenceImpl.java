@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
@@ -66,6 +67,7 @@ import com.liferay.portlet.social.service.persistence.SocialActivityPersistence;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -324,11 +326,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -379,7 +383,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -398,8 +402,18 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					qPos.add(uuid);
 				}
 
-				list = (List<CalEvent>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1136,11 +1150,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByUuid_C(String uuid, long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -1198,7 +1214,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1219,8 +1235,18 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 
 				qPos.add(companyId);
 
-				list = (List<CalEvent>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1711,11 +1737,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -1756,7 +1784,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1773,8 +1801,18 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 
 				qPos.add(companyId);
 
-				list = (List<CalEvent>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2531,11 +2569,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
@@ -2576,7 +2616,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2593,8 +2633,18 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 
 				qPos.add(groupId);
 
-				list = (List<CalEvent>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -3085,6 +3135,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByNotRemindBy(int remindBy, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -3123,7 +3174,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3140,8 +3191,18 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 
 				qPos.add(remindBy);
 
-				list = (List<CalEvent>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -4127,11 +4188,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByG_T(long groupId, String type, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T;
 			finderArgs = new Object[] { groupId, type };
 		}
@@ -4189,7 +4252,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4210,8 +4273,18 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					qPos.add(type);
 				}
 
-				list = (List<CalEvent>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -4453,10 +4526,12 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 			return findByG_T(groupId, types[0], start, end, orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { groupId, StringUtil.merge(types) };
 		}
 		else {
@@ -4532,7 +4607,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4553,8 +4628,18 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					qPos.add(types);
 				}
 
-				list = (List<CalEvent>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -5474,11 +5559,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findByG_R(long groupId, boolean repeating, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R;
 			finderArgs = new Object[] { groupId, repeating };
 		}
@@ -5526,7 +5613,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -5545,8 +5632,18 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 
 				qPos.add(repeating);
 
-				list = (List<CalEvent>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -6659,11 +6756,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	public List<CalEvent> findByG_T_R(long groupId, String type,
 		boolean repeating, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_T_R;
 			finderArgs = new Object[] { groupId, type, repeating };
 		}
@@ -6724,7 +6823,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -6747,8 +6846,18 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 
 				qPos.add(repeating);
 
-				list = (List<CalEvent>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -7014,10 +7123,12 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					groupId, StringUtil.merge(types), repeating
 				};
@@ -7104,7 +7215,7 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(CalEventModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -7127,8 +7238,18 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 
 				qPos.add(repeating);
 
-				list = (List<CalEvent>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -8164,11 +8285,13 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 */
 	public List<CalEvent> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -8196,7 +8319,11 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_CALEVENT.concat(CalEventModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_CALEVENT;
+
+				if (pagination) {
+					sql = sql.concat(CalEventModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -8206,8 +8333,18 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<CalEvent>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<CalEvent>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

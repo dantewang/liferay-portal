@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
@@ -55,6 +56,7 @@ import com.liferay.portlet.messageboards.model.impl.MBCategoryModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -313,11 +315,13 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 */
 	public List<MBCategory> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -368,7 +372,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -387,8 +391,18 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 					qPos.add(uuid);
 				}
 
-				list = (List<MBCategory>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1126,11 +1140,13 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	public List<MBCategory> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -1188,7 +1204,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1209,8 +1225,18 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 
 				qPos.add(companyId);
 
-				list = (List<MBCategory>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2009,11 +2035,13 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 */
 	public List<MBCategory> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
@@ -2054,7 +2082,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2071,8 +2099,18 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 
 				qPos.add(groupId);
 
-				list = (List<MBCategory>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2571,11 +2609,13 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 */
 	public List<MBCategory> findByCompanyId(long companyId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -2616,7 +2656,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2633,8 +2673,18 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 
 				qPos.add(companyId);
 
-				list = (List<MBCategory>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -3577,11 +3627,13 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	public List<MBCategory> findByG_P(long groupId, long parentCategoryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P;
 			finderArgs = new Object[] { groupId, parentCategoryId };
 		}
@@ -3629,7 +3681,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3648,8 +3700,18 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 
 				qPos.add(parentCategoryId);
 
-				list = (List<MBCategory>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -3896,10 +3958,12 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				orderByComparator);
 		}
 
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					groupId, StringUtil.merge(parentCategoryIds)
 				};
@@ -3966,7 +4030,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(MBCategoryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3987,8 +4051,18 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 					qPos.add(parentCategoryIds);
 				}
 
-				list = (List<MBCategory>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -4857,11 +4931,13 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	 */
 	public List<MBCategory> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -4889,7 +4965,11 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_MBCATEGORY.concat(MBCategoryModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_MBCATEGORY;
+
+				if (pagination) {
+					sql = sql.concat(MBCategoryModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -4899,8 +4979,18 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<MBCategory>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<MBCategory>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

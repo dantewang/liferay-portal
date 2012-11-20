@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -45,6 +46,7 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -302,11 +304,13 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	public List<PortletItem> findByG_C(long groupId, long classNameId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C;
 			finderArgs = new Object[] { groupId, classNameId };
 		}
@@ -354,7 +358,7 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(PortletItemModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -373,8 +377,18 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 				qPos.add(classNameId);
 
-				list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -887,11 +901,13 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	public List<PortletItem> findByG_P_C(long groupId, String portletId,
 		long classNameId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_C;
 			finderArgs = new Object[] { groupId, portletId, classNameId };
 		}
@@ -952,7 +968,7 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(PortletItemModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -975,8 +991,18 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 				qPos.add(classNameId);
 
-				list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1326,11 +1352,13 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	protected List<PortletItem> findByG_N_P_C(long groupId, String name,
 		String portletId, long classNameId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N_P_C;
 			finderArgs = new Object[] { groupId, name, portletId, classNameId };
 		}
@@ -1404,7 +1432,7 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(PortletItemModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1431,8 +1459,18 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 				qPos.add(classNameId);
 
-				list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2203,11 +2241,13 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	 */
 	public List<PortletItem> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2235,7 +2275,11 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_PORTLETITEM.concat(PortletItemModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_PORTLETITEM;
+
+				if (pagination) {
+					sql = sql.concat(PortletItemModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2245,8 +2289,18 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<PortletItem>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

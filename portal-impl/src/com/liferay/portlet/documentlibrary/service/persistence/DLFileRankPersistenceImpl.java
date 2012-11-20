@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.LayoutPersistence;
@@ -47,6 +48,7 @@ import com.liferay.portlet.documentlibrary.model.impl.DLFileRankModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -293,11 +295,13 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	public List<DLFileRank> findByUserId(long userId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
 			finderArgs = new Object[] { userId };
 		}
@@ -338,7 +342,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(DLFileRankModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -355,8 +359,18 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 				qPos.add(userId);
 
-				list = (List<DLFileRank>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<DLFileRank>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DLFileRank>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -805,11 +819,13 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	public List<DLFileRank> findByFileEntryId(long fileEntryId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FILEENTRYID;
 			finderArgs = new Object[] { fileEntryId };
 		}
@@ -850,7 +866,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(DLFileRankModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -867,8 +883,18 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 				qPos.add(fileEntryId);
 
-				list = (List<DLFileRank>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<DLFileRank>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DLFileRank>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1328,11 +1354,13 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	public List<DLFileRank> findByG_U(long groupId, long userId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U;
 			finderArgs = new Object[] { groupId, userId };
 		}
@@ -1380,7 +1408,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(DLFileRankModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1399,8 +1427,18 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 				qPos.add(userId);
 
-				list = (List<DLFileRank>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<DLFileRank>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DLFileRank>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1899,11 +1937,13 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	public List<DLFileRank> findByG_U_A(long groupId, long userId,
 		boolean active, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_A;
 			finderArgs = new Object[] { groupId, userId, active };
 		}
@@ -1954,7 +1994,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(DLFileRankModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1975,8 +2015,18 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 				qPos.add(active);
 
-				list = (List<DLFileRank>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<DLFileRank>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DLFileRank>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -3032,11 +3082,13 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	public List<DLFileRank> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -3064,7 +3116,11 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_DLFILERANK.concat(DLFileRankModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_DLFILERANK;
+
+				if (pagination) {
+					sql = sql.concat(DLFileRankModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -3074,8 +3130,18 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<DLFileRank>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<DLFileRank>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<DLFileRank>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 

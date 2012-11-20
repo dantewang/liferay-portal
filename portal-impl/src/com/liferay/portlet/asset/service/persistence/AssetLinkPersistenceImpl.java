@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.UserPersistence;
@@ -46,6 +47,7 @@ import com.liferay.portlet.asset.model.impl.AssetLinkModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -291,11 +293,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 	 */
 	public List<AssetLink> findByE1(long entryId1, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_E1;
 			finderArgs = new Object[] { entryId1 };
 		}
@@ -336,7 +340,7 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -353,8 +357,18 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 
 				qPos.add(entryId1);
 
-				list = (List<AssetLink>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -798,11 +812,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 	 */
 	public List<AssetLink> findByE2(long entryId2, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_E2;
 			finderArgs = new Object[] { entryId2 };
 		}
@@ -843,7 +859,7 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -860,8 +876,18 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 
 				qPos.add(entryId2);
 
-				list = (List<AssetLink>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1316,11 +1342,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 	 */
 	public List<AssetLink> findByE_E(long entryId1, long entryId2, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_E_E;
 			finderArgs = new Object[] { entryId1, entryId2 };
 		}
@@ -1368,7 +1396,7 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1387,8 +1415,18 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 
 				qPos.add(entryId2);
 
-				list = (List<AssetLink>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -1871,11 +1909,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 	 */
 	public List<AssetLink> findByE1_T(long entryId1, int type, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_E1_T;
 			finderArgs = new Object[] { entryId1, type };
 		}
@@ -1923,7 +1963,7 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1942,8 +1982,18 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 
 				qPos.add(type);
 
-				list = (List<AssetLink>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -2423,11 +2473,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 	 */
 	public List<AssetLink> findByE2_T(long entryId2, int type, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_E2_T;
 			finderArgs = new Object[] { entryId2, type };
 		}
@@ -2475,7 +2527,7 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-			else {
+			else if (pagination) {
 				query.append(AssetLinkModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2494,8 +2546,18 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 
 				qPos.add(type);
 
-				list = (List<AssetLink>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
@@ -3545,11 +3607,13 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 	 */
 	public List<AssetLink> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -3577,7 +3641,11 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_ASSETLINK.concat(AssetLinkModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_ASSETLINK;
+
+				if (pagination) {
+					sql = sql.concat(AssetLinkModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -3587,8 +3655,18 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 
 				Query q = session.createQuery(sql);
 
-				list = (List<AssetLink>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<AssetLink>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
 
 				cacheResult(list);
 
