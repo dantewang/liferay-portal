@@ -144,6 +144,26 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the social activity settings before and after the current social activity setting in the ordered set where groupId = &#63;.
+	*
+	* @param activitySettingId the primary key of the current social activity setting
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting[] findByGroupId_PrevAndNext(
+		long activitySettingId, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence()
+				   .findByGroupId_PrevAndNext(activitySettingId, groupId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social activity settings where groupId = &#63;.
 	*
 	* <p>
@@ -166,6 +186,21 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence().findByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first social activity setting in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -183,6 +218,19 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first social activity setting in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -195,6 +243,21 @@ public class SocialActivitySettingUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence().findByGroupId_Last(groupId);
 	}
 
 	/**
@@ -215,6 +278,19 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId);
+	}
+
+	/**
 	* Returns the last social activity setting in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -227,26 +303,6 @@ public class SocialActivitySettingUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the social activity settings before and after the current social activity setting in the ordered set where groupId = &#63;.
-	*
-	* @param activitySettingId the primary key of the current social activity setting
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social activity setting
-	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivitySetting[] findByGroupId_PrevAndNext(
-		long activitySettingId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivitySettingException {
-		return getPersistence()
-				   .findByGroupId_PrevAndNext(activitySettingId, groupId,
-			orderByComparator);
 	}
 
 	/**
@@ -307,6 +363,27 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the social activity settings before and after the current social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param activitySettingId the primary key of the current social activity setting
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting[] findByG_C_PrevAndNext(
+		long activitySettingId, long groupId, long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence()
+				   .findByG_C_PrevAndNext(activitySettingId, groupId,
+			classNameId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social activity settings where groupId = &#63; and classNameId = &#63;.
 	*
 	* <p>
@@ -331,6 +408,22 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @return the first matching social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByG_C_First(
+		long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence().findByG_C_First(groupId, classNameId);
+	}
+
+	/**
 	* Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -350,6 +443,20 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_C_First(
+		long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_C_First(groupId, classNameId);
+	}
+
+	/**
 	* Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -364,6 +471,22 @@ public class SocialActivitySettingUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_C_First(groupId, classNameId, orderByComparator);
+	}
+
+	/**
+	* Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @return the last matching social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByG_C_Last(
+		long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence().findByG_C_Last(groupId, classNameId);
 	}
 
 	/**
@@ -386,6 +509,20 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_C_Last(
+		long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_C_Last(groupId, classNameId);
+	}
+
+	/**
 	* Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -400,27 +537,6 @@ public class SocialActivitySettingUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_C_Last(groupId, classNameId, orderByComparator);
-	}
-
-	/**
-	* Returns the social activity settings before and after the current social activity setting in the ordered set where groupId = &#63; and classNameId = &#63;.
-	*
-	* @param activitySettingId the primary key of the current social activity setting
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social activity setting
-	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivitySetting[] findByG_C_PrevAndNext(
-		long activitySettingId, long groupId, long classNameId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivitySettingException {
-		return getPersistence()
-				   .findByG_C_PrevAndNext(activitySettingId, groupId,
-			classNameId, orderByComparator);
 	}
 
 	/**
@@ -483,6 +599,27 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the social activity settings before and after the current social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
+	*
+	* @param activitySettingId the primary key of the current social activity setting
+	* @param groupId the group ID
+	* @param activityType the activity type
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting[] findByG_A_PrevAndNext(
+		long activitySettingId, long groupId, int activityType,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence()
+				   .findByG_A_PrevAndNext(activitySettingId, groupId,
+			activityType, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social activity settings where groupId = &#63; and activityType = &#63;.
 	*
 	* <p>
@@ -507,6 +644,22 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and activityType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param activityType the activity type
+	* @return the first matching social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByG_A_First(
+		long groupId, int activityType)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence().findByG_A_First(groupId, activityType);
+	}
+
+	/**
 	* Returns the first social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
 	*
 	* @param groupId the group ID
@@ -526,6 +679,20 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and activityType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param activityType the activity type
+	* @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_A_First(
+		long groupId, int activityType)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_A_First(groupId, activityType);
+	}
+
+	/**
 	* Returns the first social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
 	*
 	* @param groupId the group ID
@@ -540,6 +707,22 @@ public class SocialActivitySettingUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_A_First(groupId, activityType, orderByComparator);
+	}
+
+	/**
+	* Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and activityType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param activityType the activity type
+	* @return the last matching social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByG_A_Last(
+		long groupId, int activityType)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence().findByG_A_Last(groupId, activityType);
 	}
 
 	/**
@@ -562,6 +745,20 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and activityType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param activityType the activity type
+	* @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_A_Last(
+		long groupId, int activityType)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_A_Last(groupId, activityType);
+	}
+
+	/**
 	* Returns the last social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
 	*
 	* @param groupId the group ID
@@ -576,27 +773,6 @@ public class SocialActivitySettingUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_A_Last(groupId, activityType, orderByComparator);
-	}
-
-	/**
-	* Returns the social activity settings before and after the current social activity setting in the ordered set where groupId = &#63; and activityType = &#63;.
-	*
-	* @param activitySettingId the primary key of the current social activity setting
-	* @param groupId the group ID
-	* @param activityType the activity type
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social activity setting
-	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivitySetting[] findByG_A_PrevAndNext(
-		long activitySettingId, long groupId, int activityType,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivitySettingException {
-		return getPersistence()
-				   .findByG_A_PrevAndNext(activitySettingId, groupId,
-			activityType, orderByComparator);
 	}
 
 	/**
@@ -662,6 +838,29 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the social activity settings before and after the current social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	*
+	* @param activitySettingId the primary key of the current social activity setting
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param activityType the activity type
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting[] findByG_C_A_PrevAndNext(
+		long activitySettingId, long groupId, long classNameId,
+		int activityType,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence()
+				   .findByG_C_A_PrevAndNext(activitySettingId, groupId,
+			classNameId, activityType, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social activity settings where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
 	*
 	* <p>
@@ -687,6 +886,24 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param activityType the activity type
+	* @return the first matching social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByG_C_A_First(
+		long groupId, long classNameId, int activityType)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence()
+				   .findByG_C_A_First(groupId, classNameId, activityType);
+	}
+
+	/**
 	* Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
 	*
 	* @param groupId the group ID
@@ -708,6 +925,22 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param activityType the activity type
+	* @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_C_A_First(
+		long groupId, long classNameId, int activityType)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_A_First(groupId, classNameId, activityType);
+	}
+
+	/**
 	* Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
 	*
 	* @param groupId the group ID
@@ -724,6 +957,24 @@ public class SocialActivitySettingUtil {
 		return getPersistence()
 				   .fetchByG_C_A_First(groupId, classNameId, activityType,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param activityType the activity type
+	* @return the last matching social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByG_C_A_Last(
+		long groupId, long classNameId, int activityType)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence()
+				   .findByG_C_A_Last(groupId, classNameId, activityType);
 	}
 
 	/**
@@ -748,6 +999,22 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
+	* Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param activityType the activity type
+	* @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_C_A_Last(
+		long groupId, long classNameId, int activityType)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_A_Last(groupId, classNameId, activityType);
+	}
+
+	/**
 	* Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
 	*
 	* @param groupId the group ID
@@ -764,29 +1031,6 @@ public class SocialActivitySettingUtil {
 		return getPersistence()
 				   .fetchByG_C_A_Last(groupId, classNameId, activityType,
 			orderByComparator);
-	}
-
-	/**
-	* Returns the social activity settings before and after the current social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63;.
-	*
-	* @param activitySettingId the primary key of the current social activity setting
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param activityType the activity type
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social activity setting
-	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a social activity setting with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivitySetting[] findByG_C_A_PrevAndNext(
-		long activitySettingId, long groupId, long classNameId,
-		int activityType,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivitySettingException {
-		return getPersistence()
-				   .findByG_C_A_PrevAndNext(activitySettingId, groupId,
-			classNameId, activityType, orderByComparator);
 	}
 
 	/**
@@ -819,77 +1063,180 @@ public class SocialActivitySettingUtil {
 	}
 
 	/**
-	* Returns the social activity setting where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63; or throws a {@link com.liferay.portlet.social.NoSuchActivitySettingException} if it could not be found.
+	* Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
 	*
 	* @param groupId the group ID
 	* @param classNameId the class name ID
 	* @param activityType the activity type
 	* @param name the name
-	* @return the matching social activity setting
+	* @return the first matching social activity setting
 	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.social.model.SocialActivitySetting findByG_C_A_N(
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByG_C_A_N_First(
 		long groupId, long classNameId, int activityType, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.social.NoSuchActivitySettingException {
 		return getPersistence()
-				   .findByG_C_A_N(groupId, classNameId, activityType, name);
+				   .findByG_C_A_N_First(groupId, classNameId, activityType, name);
 	}
 
 	/**
-	* Returns the social activity setting where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
 	*
 	* @param groupId the group ID
 	* @param classNameId the class name ID
 	* @param activityType the activity type
 	* @param name the name
-	* @return the matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_C_A_N(
-		long groupId, long classNameId, int activityType, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_A_N(groupId, classNameId, activityType, name);
-	}
-
-	/**
-	* Returns the social activity setting where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param activityType the activity type
-	* @param name the name
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_C_A_N(
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByG_C_A_N_First(
 		long groupId, long classNameId, int activityType,
-		java.lang.String name, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
 		return getPersistence()
-				   .fetchByG_C_A_N(groupId, classNameId, activityType, name,
-			retrieveFromCache);
+				   .findByG_C_A_N_First(groupId, classNameId, activityType,
+			name, orderByComparator);
 	}
 
 	/**
-	* Removes the social activity setting where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63; from the database.
+	* Returns the first social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
 	*
 	* @param groupId the group ID
 	* @param classNameId the class name ID
 	* @param activityType the activity type
 	* @param name the name
-	* @return the social activity setting that was removed
+	* @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.social.model.SocialActivitySetting removeByG_C_A_N(
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_C_A_N_First(
+		long groupId, long classNameId, int activityType, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_A_N_First(groupId, classNameId, activityType,
+			name);
+	}
+
+	/**
+	* Returns the first social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param activityType the activity type
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_C_A_N_First(
+		long groupId, long classNameId, int activityType,
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_A_N_First(groupId, classNameId, activityType,
+			name, orderByComparator);
+	}
+
+	/**
+	* Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param activityType the activity type
+	* @param name the name
+	* @return the last matching social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByG_C_A_N_Last(
 		long groupId, long classNameId, int activityType, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.social.NoSuchActivitySettingException {
 		return getPersistence()
-				   .removeByG_C_A_N(groupId, classNameId, activityType, name);
+				   .findByG_C_A_N_Last(groupId, classNameId, activityType, name);
+	}
+
+	/**
+	* Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param activityType the activity type
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching social activity setting
+	* @throws com.liferay.portlet.social.NoSuchActivitySettingException if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting findByG_C_A_N_Last(
+		long groupId, long classNameId, int activityType,
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivitySettingException {
+		return getPersistence()
+				   .findByG_C_A_N_Last(groupId, classNameId, activityType,
+			name, orderByComparator);
+	}
+
+	/**
+	* Returns the last social activity setting in the default ordered set defined by {@link SocialActivitySettingModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param activityType the activity type
+	* @param name the name
+	* @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_C_A_N_Last(
+		long groupId, long classNameId, int activityType, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_A_N_Last(groupId, classNameId, activityType, name);
+	}
+
+	/**
+	* Returns the last social activity setting in the ordered set where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param activityType the activity type
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching social activity setting, or <code>null</code> if a matching social activity setting could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivitySetting fetchByG_C_A_N_Last(
+		long groupId, long classNameId, int activityType,
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_A_N_Last(groupId, classNameId, activityType,
+			name, orderByComparator);
+	}
+
+	/**
+	* Removes all the social activity settings where groupId = &#63; and classNameId = &#63; and activityType = &#63; and name = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param activityType the activity type
+	* @param name the name
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C_A_N(long groupId, long classNameId,
+		int activityType, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByG_C_A_N(groupId, classNameId, activityType, name);
 	}
 
 	/**

@@ -143,6 +143,26 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
+	* Returns the social activity limits before and after the current social activity limit in the ordered set where userId = &#63;.
+	*
+	* @param activityLimitId the primary key of the current social activity limit
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social activity limit
+	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a social activity limit with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit[] findByUserId_PrevAndNext(
+		long activityLimitId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityLimitException {
+		return getPersistence()
+				   .findByUserId_PrevAndNext(activityLimitId, userId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social activity limits where userId = &#63;.
 	*
 	* <p>
@@ -165,6 +185,21 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
+	* Returns the first social activity limit in the default ordered set defined by {@link SocialActivityLimitModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching social activity limit
+	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a matching social activity limit could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit findByUserId_First(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityLimitException {
+		return getPersistence().findByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first social activity limit in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -182,6 +217,18 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
+	* Returns the first social activity limit in the default ordered set defined by {@link SocialActivityLimitModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching social activity limit, or <code>null</code> if a matching social activity limit could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first social activity limit in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -194,6 +241,21 @@ public class SocialActivityLimitUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_First(userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last social activity limit in the default ordered set defined by {@link SocialActivityLimitModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching social activity limit
+	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a matching social activity limit could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit findByUserId_Last(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityLimitException {
+		return getPersistence().findByUserId_Last(userId);
 	}
 
 	/**
@@ -214,6 +276,18 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
+	* Returns the last social activity limit in the default ordered set defined by {@link SocialActivityLimitModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching social activity limit, or <code>null</code> if a matching social activity limit could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit fetchByUserId_Last(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_Last(userId);
+	}
+
+	/**
 	* Returns the last social activity limit in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -226,26 +300,6 @@ public class SocialActivityLimitUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_Last(userId, orderByComparator);
-	}
-
-	/**
-	* Returns the social activity limits before and after the current social activity limit in the ordered set where userId = &#63;.
-	*
-	* @param activityLimitId the primary key of the current social activity limit
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social activity limit
-	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a social activity limit with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityLimit[] findByUserId_PrevAndNext(
-		long activityLimitId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityLimitException {
-		return getPersistence()
-				   .findByUserId_PrevAndNext(activityLimitId, userId,
-			orderByComparator);
 	}
 
 	/**
@@ -306,6 +360,27 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
+	* Returns the social activity limits before and after the current social activity limit in the ordered set where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param activityLimitId the primary key of the current social activity limit
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social activity limit
+	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a social activity limit with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit[] findByC_C_PrevAndNext(
+		long activityLimitId, long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityLimitException {
+		return getPersistence()
+				   .findByC_C_PrevAndNext(activityLimitId, classNameId,
+			classPK, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social activity limits where classNameId = &#63; and classPK = &#63;.
 	*
 	* <p>
@@ -330,6 +405,22 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
+	* Returns the first social activity limit in the default ordered set defined by {@link SocialActivityLimitModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the first matching social activity limit
+	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a matching social activity limit could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit findByC_C_First(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityLimitException {
+		return getPersistence().findByC_C_First(classNameId, classPK);
+	}
+
+	/**
 	* Returns the first social activity limit in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -349,6 +440,20 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
+	* Returns the first social activity limit in the default ordered set defined by {@link SocialActivityLimitModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the first matching social activity limit, or <code>null</code> if a matching social activity limit could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit fetchByC_C_First(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_C_First(classNameId, classPK);
+	}
+
+	/**
 	* Returns the first social activity limit in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -363,6 +468,22 @@ public class SocialActivityLimitUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_C_First(classNameId, classPK, orderByComparator);
+	}
+
+	/**
+	* Returns the last social activity limit in the default ordered set defined by {@link SocialActivityLimitModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching social activity limit
+	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a matching social activity limit could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit findByC_C_Last(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityLimitException {
+		return getPersistence().findByC_C_Last(classNameId, classPK);
 	}
 
 	/**
@@ -385,6 +506,20 @@ public class SocialActivityLimitUtil {
 	}
 
 	/**
+	* Returns the last social activity limit in the default ordered set defined by {@link SocialActivityLimitModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching social activity limit, or <code>null</code> if a matching social activity limit could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialActivityLimit fetchByC_C_Last(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_C_Last(classNameId, classPK);
+	}
+
+	/**
 	* Returns the last social activity limit in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -399,27 +534,6 @@ public class SocialActivityLimitUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_C_Last(classNameId, classPK, orderByComparator);
-	}
-
-	/**
-	* Returns the social activity limits before and after the current social activity limit in the ordered set where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param activityLimitId the primary key of the current social activity limit
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social activity limit
-	* @throws com.liferay.portlet.social.NoSuchActivityLimitException if a social activity limit with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialActivityLimit[] findByC_C_PrevAndNext(
-		long activityLimitId, long classNameId, long classPK,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityLimitException {
-		return getPersistence()
-				   .findByC_C_PrevAndNext(activityLimitId, classNameId,
-			classPK, orderByComparator);
 	}
 
 	/**

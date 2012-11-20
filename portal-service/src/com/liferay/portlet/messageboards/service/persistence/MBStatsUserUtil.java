@@ -143,6 +143,26 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the message boards stats users before and after the current message boards stats user in the ordered set where groupId = &#63;.
+	*
+	* @param statsUserId the primary key of the current message boards stats user
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next message boards stats user
+	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a message boards stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser[] findByGroupId_PrevAndNext(
+		long statsUserId, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException {
+		return getPersistence()
+				   .findByGroupId_PrevAndNext(statsUserId, groupId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the message boards stats users where groupId = &#63;.
 	*
 	* <p>
@@ -165,6 +185,21 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the first message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching message boards stats user
+	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException {
+		return getPersistence().findByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first message boards stats user in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -182,6 +217,19 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the first message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching message boards stats user, or <code>null</code> if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first message boards stats user in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -194,6 +242,21 @@ public class MBStatsUserUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching message boards stats user
+	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException {
+		return getPersistence().findByGroupId_Last(groupId);
 	}
 
 	/**
@@ -214,6 +277,19 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the last message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching message boards stats user, or <code>null</code> if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId);
+	}
+
+	/**
 	* Returns the last message boards stats user in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -226,26 +302,6 @@ public class MBStatsUserUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the message boards stats users before and after the current message boards stats user in the ordered set where groupId = &#63;.
-	*
-	* @param statsUserId the primary key of the current message boards stats user
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next message boards stats user
-	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a message boards stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBStatsUser[] findByGroupId_PrevAndNext(
-		long statsUserId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchStatsUserException {
-		return getPersistence()
-				   .findByGroupId_PrevAndNext(statsUserId, groupId,
-			orderByComparator);
 	}
 
 	/**
@@ -303,6 +359,26 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the message boards stats users before and after the current message boards stats user in the ordered set where userId = &#63;.
+	*
+	* @param statsUserId the primary key of the current message boards stats user
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next message boards stats user
+	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a message boards stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser[] findByUserId_PrevAndNext(
+		long statsUserId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException {
+		return getPersistence()
+				   .findByUserId_PrevAndNext(statsUserId, userId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the message boards stats users where userId = &#63;.
 	*
 	* <p>
@@ -325,6 +401,21 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the first message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching message boards stats user
+	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser findByUserId_First(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException {
+		return getPersistence().findByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first message boards stats user in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -342,6 +433,18 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the first message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching message boards stats user, or <code>null</code> if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first message boards stats user in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -354,6 +457,21 @@ public class MBStatsUserUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_First(userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching message boards stats user
+	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser findByUserId_Last(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException {
+		return getPersistence().findByUserId_Last(userId);
 	}
 
 	/**
@@ -374,6 +492,18 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the last message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching message boards stats user, or <code>null</code> if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser fetchByUserId_Last(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_Last(userId);
+	}
+
+	/**
 	* Returns the last message boards stats user in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -386,26 +516,6 @@ public class MBStatsUserUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_Last(userId, orderByComparator);
-	}
-
-	/**
-	* Returns the message boards stats users before and after the current message boards stats user in the ordered set where userId = &#63;.
-	*
-	* @param statsUserId the primary key of the current message boards stats user
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next message boards stats user
-	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a message boards stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBStatsUser[] findByUserId_PrevAndNext(
-		long statsUserId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchStatsUserException {
-		return getPersistence()
-				   .findByUserId_PrevAndNext(statsUserId, userId,
-			orderByComparator);
 	}
 
 	/**
@@ -542,6 +652,28 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the message boards stats users before and after the current message boards stats user in the ordered set where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
+	*
+	* @param statsUserId the primary key of the current message boards stats user
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param messageCount the message count
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next message boards stats user
+	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a message boards stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser[] findByG_NotU_NotM_PrevAndNext(
+		long statsUserId, long groupId, long userId, int messageCount,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException {
+		return getPersistence()
+				   .findByG_NotU_NotM_PrevAndNext(statsUserId, groupId, userId,
+			messageCount, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the message boards stats users where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
 	*
 	* <p>
@@ -567,6 +699,24 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the first message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param messageCount the message count
+	* @return the first matching message boards stats user
+	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser findByG_NotU_NotM_First(
+		long groupId, long userId, int messageCount)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException {
+		return getPersistence()
+				   .findByG_NotU_NotM_First(groupId, userId, messageCount);
+	}
+
+	/**
 	* Returns the first message boards stats user in the ordered set where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -588,6 +738,22 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the first message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param messageCount the message count
+	* @return the first matching message boards stats user, or <code>null</code> if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser fetchByG_NotU_NotM_First(
+		long groupId, long userId, int messageCount)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_NotU_NotM_First(groupId, userId, messageCount);
+	}
+
+	/**
 	* Returns the first message boards stats user in the ordered set where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -604,6 +770,24 @@ public class MBStatsUserUtil {
 		return getPersistence()
 				   .fetchByG_NotU_NotM_First(groupId, userId, messageCount,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param messageCount the message count
+	* @return the last matching message boards stats user
+	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser findByG_NotU_NotM_Last(
+		long groupId, long userId, int messageCount)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.messageboards.NoSuchStatsUserException {
+		return getPersistence()
+				   .findByG_NotU_NotM_Last(groupId, userId, messageCount);
 	}
 
 	/**
@@ -628,6 +812,22 @@ public class MBStatsUserUtil {
 	}
 
 	/**
+	* Returns the last message boards stats user in the default ordered set defined by {@link MBStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param messageCount the message count
+	* @return the last matching message boards stats user, or <code>null</code> if a matching message boards stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.messageboards.model.MBStatsUser fetchByG_NotU_NotM_Last(
+		long groupId, long userId, int messageCount)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_NotU_NotM_Last(groupId, userId, messageCount);
+	}
+
+	/**
 	* Returns the last message boards stats user in the ordered set where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -644,28 +844,6 @@ public class MBStatsUserUtil {
 		return getPersistence()
 				   .fetchByG_NotU_NotM_Last(groupId, userId, messageCount,
 			orderByComparator);
-	}
-
-	/**
-	* Returns the message boards stats users before and after the current message boards stats user in the ordered set where groupId = &#63; and userId &ne; &#63; and messageCount &ne; &#63;.
-	*
-	* @param statsUserId the primary key of the current message boards stats user
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param messageCount the message count
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next message boards stats user
-	* @throws com.liferay.portlet.messageboards.NoSuchStatsUserException if a message boards stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.messageboards.model.MBStatsUser[] findByG_NotU_NotM_PrevAndNext(
-		long statsUserId, long groupId, long userId, int messageCount,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.messageboards.NoSuchStatsUserException {
-		return getPersistence()
-				   .findByG_NotU_NotM_PrevAndNext(statsUserId, groupId, userId,
-			messageCount, orderByComparator);
 	}
 
 	/**

@@ -48,7 +48,6 @@ import com.liferay.portlet.social.model.impl.SocialRequestModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -93,14 +92,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED,
 			SocialRequestImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"findByUuid", new String[] { String.class.getName() },
-			SocialRequestModelImpl.UUID_COLUMN_BITMASK);
+			SocialRequestModelImpl.UUID_COLUMN_BITMASK |
+			SocialRequestModelImpl.REQUESTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -134,221 +134,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public List<SocialRequest> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social requests where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of social requests
-	 * @param end the upper bound of the range of social requests (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRequest> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRequest socialRequest : list) {
-				if (!Validator.equals(uuid, socialRequest.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByUuid_First(uuid, orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRequest> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByUuid_Last(uuid, orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<SocialRequest> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -473,7 +258,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -510,13 +294,275 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	}
 
 	/**
+	 * Returns an ordered range of all the social requests where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of social requests
+	 * @param end the upper bound of the range of social requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRequest> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if (!Validator.equals(uuid, socialRequest.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUuid_First(String uuid)
+		throws NoSuchRequestException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByUuid_First(uuid, orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUuid_First(String uuid)
+		throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRequest> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUuid_Last(String uuid)
+		throws NoSuchRequestException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUuid_Last(String uuid)
+		throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<SocialRequest> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social requests where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (SocialRequest socialRequest : findByUuid(uuid)) {
+		for (SocialRequest socialRequest : findByUuid(uuid, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(socialRequest);
 		}
 	}
@@ -529,10 +575,12 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
 		Object[] finderArgs = new Object[] { uuid };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -567,18 +615,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -697,8 +742,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
 
-			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -718,16 +761,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 				List<SocialRequest> list = q.list();
 
-				result = list;
-
-				SocialRequest socialRequest = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
 						finderArgs, list);
 				}
 				else {
-					socialRequest = list.get(0);
+					SocialRequest socialRequest = list.get(0);
+
+					result = socialRequest;
 
 					cacheResult(socialRequest);
 
@@ -738,28 +779,23 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 							finderArgs, socialRequest);
 					}
 				}
-
-				return socialRequest;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (SocialRequest)result;
-			}
+			return (SocialRequest)result;
 		}
 	}
 
@@ -788,10 +824,12 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
+
 		Object[] finderArgs = new Object[] { uuid, groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -830,18 +868,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -860,8 +895,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
 		new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
@@ -870,7 +905,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			"findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			SocialRequestModelImpl.UUID_COLUMN_BITMASK |
-			SocialRequestModelImpl.COMPANYID_COLUMN_BITMASK);
+			SocialRequestModelImpl.COMPANYID_COLUMN_BITMASK |
+			SocialRequestModelImpl.REQUESTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
@@ -907,245 +943,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public List<SocialRequest> findByUuid_C(String uuid, long companyId,
 		int start, int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social requests where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of social requests
-	 * @param end the upper bound of the range of social requests (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRequest> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRequest socialRequest : list) {
-				if (!Validator.equals(uuid, socialRequest.getUuid()) ||
-						(companyId != socialRequest.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByUuid_C_First(uuid, companyId,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRequest> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByUuid_C_Last(uuid, companyId,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<SocialRequest> list = findByUuid_C(uuid, companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1273,7 +1070,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -1312,6 +1108,295 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	}
 
 	/**
+	 * Returns an ordered range of all the social requests where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of social requests
+	 * @param end the upper bound of the range of social requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRequest> findByUuid_C(String uuid, long companyId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if (!Validator.equals(uuid, socialRequest.getUuid()) ||
+						(companyId != socialRequest.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchRequestException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByUuid_C_First(uuid, companyId,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRequest> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchRequestException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByUuid_C_Last(uuid, companyId,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<SocialRequest> list = findByUuid_C(uuid, companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social requests where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1320,7 +1405,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (SocialRequest socialRequest : findByUuid_C(uuid, companyId)) {
+		for (SocialRequest socialRequest : findByUuid_C(uuid, companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRequest);
 		}
 	}
@@ -1335,10 +1421,12 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+
 		Object[] finderArgs = new Object[] { uuid, companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1377,18 +1465,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1408,15 +1493,16 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
 		new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED,
 			SocialRequestImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"findByCompanyId", new String[] { Long.class.getName() },
-			SocialRequestModelImpl.COMPANYID_COLUMN_BITMASK);
+			SocialRequestModelImpl.COMPANYID_COLUMN_BITMASK |
+			SocialRequestModelImpl.REQUESTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
@@ -1451,212 +1537,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public List<SocialRequest> findByCompanyId(long companyId, int start,
 		int end) throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social requests where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of social requests
-	 * @param end the upper bound of the range of social requests (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRequest> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRequest socialRequest : list) {
-				if ((companyId != socialRequest.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByCompanyId_First(companyId,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRequest> list = findByCompanyId(companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByCompanyId_Last(companyId,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<SocialRequest> list = findByCompanyId(companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1771,7 +1651,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -1806,13 +1685,266 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	}
 
 	/**
+	 * Returns an ordered range of all the social requests where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of social requests
+	 * @param end the upper bound of the range of social requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRequest> findByCompanyId(long companyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((companyId != socialRequest.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByCompanyId_First(long companyId)
+		throws NoSuchRequestException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByCompanyId_First(companyId,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRequest> list = findByCompanyId(companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByCompanyId_Last(long companyId)
+		throws NoSuchRequestException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByCompanyId_Last(companyId,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByCompanyId_Last(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<SocialRequest> list = findByCompanyId(companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social requests where companyId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCompanyId(long companyId) throws SystemException {
-		for (SocialRequest socialRequest : findByCompanyId(companyId)) {
+		for (SocialRequest socialRequest : findByCompanyId(companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRequest);
 		}
 	}
@@ -1825,10 +1957,12 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByCompanyId(long companyId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
+
 		Object[] finderArgs = new Object[] { companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -1851,18 +1985,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1878,15 +2009,16 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID =
 		new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED,
 			SocialRequestImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"findByUserId", new String[] { Long.class.getName() },
-			SocialRequestModelImpl.USERID_COLUMN_BITMASK);
+			SocialRequestModelImpl.USERID_COLUMN_BITMASK |
+			SocialRequestModelImpl.REQUESTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
@@ -1920,211 +2052,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public List<SocialRequest> findByUserId(long userId, int start, int end)
 		throws SystemException {
 		return findByUserId(userId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social requests where userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId the user ID
-	 * @param start the lower bound of the range of social requests
-	 * @param end the upper bound of the range of social requests (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRequest> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId, start, end, orderByComparator };
-		}
-
-		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRequest socialRequest : list) {
-				if ((userId != socialRequest.getUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
-
-			query.append(_FINDER_COLUMN_USERID_USERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByUserId_First(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByUserId_First(userId,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRequest> list = findByUserId(userId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByUserId_Last(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByUserId_Last(userId,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUserId(userId);
-
-		List<SocialRequest> list = findByUserId(userId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2239,7 +2166,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -2274,13 +2200,265 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	}
 
 	/**
+	 * Returns an ordered range of all the social requests where userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of social requests
+	 * @param end the upper bound of the range of social requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRequest> findByUserId(long userId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
+			finderArgs = new Object[] { userId, start, end, orderByComparator };
+		}
+
+		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((userId != socialRequest.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
+
+			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUserId_First(long userId)
+		throws NoSuchRequestException, SystemException {
+		return findByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUserId_First(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByUserId_First(userId,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUserId_First(long userId)
+		throws SystemException {
+		return fetchByUserId_First(userId, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUserId_First(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRequest> list = findByUserId(userId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUserId_Last(long userId)
+		throws NoSuchRequestException, SystemException {
+		return findByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByUserId_Last(long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByUserId_Last(userId,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUserId_Last(long userId)
+		throws SystemException {
+		return fetchByUserId_Last(userId, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByUserId_Last(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUserId(userId);
+
+		List<SocialRequest> list = findByUserId(userId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social requests where userId = &#63; from the database.
 	 *
 	 * @param userId the user ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUserId(long userId) throws SystemException {
-		for (SocialRequest socialRequest : findByUserId(userId)) {
+		for (SocialRequest socialRequest : findByUserId(userId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRequest);
 		}
 	}
@@ -2293,10 +2471,12 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUserId(long userId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_USERID;
+
 		Object[] finderArgs = new Object[] { userId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_USERID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -2319,18 +2499,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				qPos.add(userId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_USERID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2347,15 +2524,16 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RECEIVERUSERID =
 		new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED,
 			SocialRequestImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"findByReceiverUserId", new String[] { Long.class.getName() },
-			SocialRequestModelImpl.RECEIVERUSERID_COLUMN_BITMASK);
+			SocialRequestModelImpl.RECEIVERUSERID_COLUMN_BITMASK |
+			SocialRequestModelImpl.REQUESTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_RECEIVERUSERID = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByReceiverUserId",
@@ -2390,217 +2568,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public List<SocialRequest> findByReceiverUserId(long receiverUserId,
 		int start, int end) throws SystemException {
 		return findByReceiverUserId(receiverUserId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social requests where receiverUserId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param start the lower bound of the range of social requests
-	 * @param end the upper bound of the range of social requests (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRequest> findByReceiverUserId(long receiverUserId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RECEIVERUSERID;
-			finderArgs = new Object[] { receiverUserId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RECEIVERUSERID;
-			finderArgs = new Object[] {
-					receiverUserId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRequest socialRequest : list) {
-				if ((receiverUserId != socialRequest.getReceiverUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
-
-			query.append(_FINDER_COLUMN_RECEIVERUSERID_RECEIVERUSERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(receiverUserId);
-
-				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where receiverUserId = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByReceiverUserId_First(long receiverUserId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByReceiverUserId_First(receiverUserId,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("receiverUserId=");
-		msg.append(receiverUserId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where receiverUserId = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByReceiverUserId_First(long receiverUserId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRequest> list = findByReceiverUserId(receiverUserId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where receiverUserId = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByReceiverUserId_Last(long receiverUserId,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByReceiverUserId_Last(receiverUserId,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("receiverUserId=");
-		msg.append(receiverUserId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where receiverUserId = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByReceiverUserId_Last(long receiverUserId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByReceiverUserId(receiverUserId);
-
-		List<SocialRequest> list = findByReceiverUserId(receiverUserId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2715,7 +2682,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -2750,6 +2716,263 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	}
 
 	/**
+	 * Returns an ordered range of all the social requests where receiverUserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param start the lower bound of the range of social requests
+	 * @param end the upper bound of the range of social requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRequest> findByReceiverUserId(long receiverUserId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RECEIVERUSERID;
+			finderArgs = new Object[] { receiverUserId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RECEIVERUSERID;
+			finderArgs = new Object[] {
+					receiverUserId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((receiverUserId != socialRequest.getReceiverUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
+
+			query.append(_FINDER_COLUMN_RECEIVERUSERID_RECEIVERUSERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(receiverUserId);
+
+				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByReceiverUserId_First(long receiverUserId)
+		throws NoSuchRequestException, SystemException {
+		return findByReceiverUserId_First(receiverUserId, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByReceiverUserId_First(long receiverUserId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByReceiverUserId_First(receiverUserId,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("receiverUserId=");
+		msg.append(receiverUserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByReceiverUserId_First(long receiverUserId)
+		throws SystemException {
+		return fetchByReceiverUserId_First(receiverUserId, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByReceiverUserId_First(long receiverUserId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRequest> list = findByReceiverUserId(receiverUserId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByReceiverUserId_Last(long receiverUserId)
+		throws NoSuchRequestException, SystemException {
+		return findByReceiverUserId_Last(receiverUserId, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByReceiverUserId_Last(long receiverUserId,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByReceiverUserId_Last(receiverUserId,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("receiverUserId=");
+		msg.append(receiverUserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByReceiverUserId_Last(long receiverUserId)
+		throws SystemException {
+		return fetchByReceiverUserId_Last(receiverUserId, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where receiverUserId = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByReceiverUserId_Last(long receiverUserId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByReceiverUserId(receiverUserId);
+
+		List<SocialRequest> list = findByReceiverUserId(receiverUserId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social requests where receiverUserId = &#63; from the database.
 	 *
 	 * @param receiverUserId the receiver user ID
@@ -2757,7 +2980,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	public void removeByReceiverUserId(long receiverUserId)
 		throws SystemException {
-		for (SocialRequest socialRequest : findByReceiverUserId(receiverUserId)) {
+		for (SocialRequest socialRequest : findByReceiverUserId(
+				receiverUserId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRequest);
 		}
 	}
@@ -2771,10 +2995,12 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	public int countByReceiverUserId(long receiverUserId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_RECEIVERUSERID;
+
 		Object[] finderArgs = new Object[] { receiverUserId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_RECEIVERUSERID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -2797,18 +3023,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				qPos.add(receiverUserId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RECEIVERUSERID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2824,8 +3047,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_S = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED,
@@ -2833,7 +3056,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			"findByU_S",
 			new String[] { Long.class.getName(), Integer.class.getName() },
 			SocialRequestModelImpl.USERID_COLUMN_BITMASK |
-			SocialRequestModelImpl.STATUS_COLUMN_BITMASK);
+			SocialRequestModelImpl.STATUS_COLUMN_BITMASK |
+			SocialRequestModelImpl.REQUESTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_S = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_S",
@@ -2870,232 +3094,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public List<SocialRequest> findByU_S(long userId, int status, int start,
 		int end) throws SystemException {
 		return findByU_S(userId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social requests where userId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param start the lower bound of the range of social requests
-	 * @param end the upper bound of the range of social requests (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRequest> findByU_S(long userId, int status, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_S;
-			finderArgs = new Object[] { userId, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_S;
-			finderArgs = new Object[] {
-					userId, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRequest socialRequest : list) {
-				if ((userId != socialRequest.getUserId()) ||
-						(status != socialRequest.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
-
-			query.append(_FINDER_COLUMN_U_S_USERID_2);
-
-			query.append(_FINDER_COLUMN_U_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				qPos.add(status);
-
-				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where userId = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByU_S_First(long userId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByU_S_First(userId, status,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where userId = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByU_S_First(long userId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRequest> list = findByU_S(userId, status, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where userId = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByU_S_Last(long userId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByU_S_Last(userId, status,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where userId = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByU_S_Last(long userId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByU_S(userId, status);
-
-		List<SocialRequest> list = findByU_S(userId, status, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3213,7 +3211,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -3250,6 +3247,282 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	}
 
 	/**
+	 * Returns an ordered range of all the social requests where userId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param start the lower bound of the range of social requests
+	 * @param end the upper bound of the range of social requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRequest> findByU_S(long userId, int status, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_S;
+			finderArgs = new Object[] { userId, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_S;
+			finderArgs = new Object[] {
+					userId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((userId != socialRequest.getUserId()) ||
+						(status != socialRequest.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
+
+			query.append(_FINDER_COLUMN_U_S_USERID_2);
+
+			query.append(_FINDER_COLUMN_U_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				qPos.add(status);
+
+				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param status the status
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByU_S_First(long userId, int status)
+		throws NoSuchRequestException, SystemException {
+		return findByU_S_First(userId, status, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where userId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByU_S_First(long userId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByU_S_First(userId, status,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param status the status
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByU_S_First(long userId, int status)
+		throws SystemException {
+		return fetchByU_S_First(userId, status, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where userId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByU_S_First(long userId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRequest> list = findByU_S(userId, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param status the status
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByU_S_Last(long userId, int status)
+		throws NoSuchRequestException, SystemException {
+		return findByU_S_Last(userId, status, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where userId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByU_S_Last(long userId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByU_S_Last(userId, status,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param status the status
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByU_S_Last(long userId, int status)
+		throws SystemException {
+		return fetchByU_S_Last(userId, status, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where userId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByU_S_Last(long userId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByU_S(userId, status);
+
+		List<SocialRequest> list = findByU_S(userId, status, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social requests where userId = &#63; and status = &#63; from the database.
 	 *
 	 * @param userId the user ID
@@ -3257,7 +3530,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByU_S(long userId, int status) throws SystemException {
-		for (SocialRequest socialRequest : findByU_S(userId, status)) {
+		for (SocialRequest socialRequest : findByU_S(userId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRequest);
 		}
 	}
@@ -3271,10 +3545,12 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByU_S(long userId, int status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_S;
+
 		Object[] finderArgs = new Object[] { userId, status };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_U_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -3301,18 +3577,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_S, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -3329,8 +3602,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED,
@@ -3338,7 +3611,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			"findByR_S",
 			new String[] { Long.class.getName(), Integer.class.getName() },
 			SocialRequestModelImpl.RECEIVERUSERID_COLUMN_BITMASK |
-			SocialRequestModelImpl.STATUS_COLUMN_BITMASK);
+			SocialRequestModelImpl.STATUS_COLUMN_BITMASK |
+			SocialRequestModelImpl.REQUESTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_S = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_S",
@@ -3375,233 +3649,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public List<SocialRequest> findByR_S(long receiverUserId, int status,
 		int start, int end) throws SystemException {
 		return findByR_S(receiverUserId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social requests where receiverUserId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param status the status
-	 * @param start the lower bound of the range of social requests
-	 * @param end the upper bound of the range of social requests (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRequest> findByR_S(long receiverUserId, int status,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S;
-			finderArgs = new Object[] { receiverUserId, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_S;
-			finderArgs = new Object[] {
-					receiverUserId, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRequest socialRequest : list) {
-				if ((receiverUserId != socialRequest.getReceiverUserId()) ||
-						(status != socialRequest.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
-
-			query.append(_FINDER_COLUMN_R_S_RECEIVERUSERID_2);
-
-			query.append(_FINDER_COLUMN_R_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(receiverUserId);
-
-				qPos.add(status);
-
-				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where receiverUserId = &#63; and status = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByR_S_First(long receiverUserId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByR_S_First(receiverUserId, status,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("receiverUserId=");
-		msg.append(receiverUserId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where receiverUserId = &#63; and status = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByR_S_First(long receiverUserId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRequest> list = findByR_S(receiverUserId, status, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where receiverUserId = &#63; and status = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByR_S_Last(long receiverUserId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByR_S_Last(receiverUserId, status,
-				orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("receiverUserId=");
-		msg.append(receiverUserId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where receiverUserId = &#63; and status = &#63;.
-	 *
-	 * @param receiverUserId the receiver user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByR_S_Last(long receiverUserId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByR_S(receiverUserId, status);
-
-		List<SocialRequest> list = findByR_S(receiverUserId, status, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3719,7 +3766,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -3756,6 +3802,283 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	}
 
 	/**
+	 * Returns an ordered range of all the social requests where receiverUserId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @param start the lower bound of the range of social requests
+	 * @param end the upper bound of the range of social requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRequest> findByR_S(long receiverUserId, int status,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S;
+			finderArgs = new Object[] { receiverUserId, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_S;
+			finderArgs = new Object[] {
+					receiverUserId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((receiverUserId != socialRequest.getReceiverUserId()) ||
+						(status != socialRequest.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
+
+			query.append(_FINDER_COLUMN_R_S_RECEIVERUSERID_2);
+
+			query.append(_FINDER_COLUMN_R_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(receiverUserId);
+
+				qPos.add(status);
+
+				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByR_S_First(long receiverUserId, int status)
+		throws NoSuchRequestException, SystemException {
+		return findByR_S_First(receiverUserId, status, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByR_S_First(long receiverUserId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByR_S_First(receiverUserId, status,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("receiverUserId=");
+		msg.append(receiverUserId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByR_S_First(long receiverUserId, int status)
+		throws SystemException {
+		return fetchByR_S_First(receiverUserId, status, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByR_S_First(long receiverUserId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRequest> list = findByR_S(receiverUserId, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByR_S_Last(long receiverUserId, int status)
+		throws NoSuchRequestException, SystemException {
+		return findByR_S_Last(receiverUserId, status, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByR_S_Last(long receiverUserId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByR_S_Last(receiverUserId, status,
+				orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("receiverUserId=");
+		msg.append(receiverUserId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByR_S_Last(long receiverUserId, int status)
+		throws SystemException {
+		return fetchByR_S_Last(receiverUserId, status, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByR_S_Last(long receiverUserId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByR_S(receiverUserId, status);
+
+		List<SocialRequest> list = findByR_S(receiverUserId, status, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social requests where receiverUserId = &#63; and status = &#63; from the database.
 	 *
 	 * @param receiverUserId the receiver user ID
@@ -3764,7 +4087,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	public void removeByR_S(long receiverUserId, int status)
 		throws SystemException {
-		for (SocialRequest socialRequest : findByR_S(receiverUserId, status)) {
+		for (SocialRequest socialRequest : findByR_S(receiverUserId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialRequest);
 		}
 	}
@@ -3779,10 +4103,12 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	public int countByR_S(long receiverUserId, int status)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_S;
+
 		Object[] finderArgs = new Object[] { receiverUserId, status };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -3809,18 +4135,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_S, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -3971,8 +4294,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 			query.append(_FINDER_COLUMN_U_C_C_T_R_RECEIVERUSERID_2);
 
-			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -3996,16 +4317,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 				List<SocialRequest> list = q.list();
 
-				result = list;
-
-				SocialRequest socialRequest = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_C_C_T_R,
 						finderArgs, list);
 				}
 				else {
-					socialRequest = list.get(0);
+					SocialRequest socialRequest = list.get(0);
+
+					result = socialRequest;
 
 					cacheResult(socialRequest);
 
@@ -4018,28 +4337,23 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 							finderArgs, socialRequest);
 					}
 				}
-
-				return socialRequest;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_C_C_T_R,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_C_C_T_R,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (SocialRequest)result;
-			}
+			return (SocialRequest)result;
 		}
 	}
 
@@ -4076,12 +4390,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	public int countByU_C_C_T_R(long userId, long classNameId, long classPK,
 		int type, long receiverUserId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_C_C_T_R;
+
 		Object[] finderArgs = new Object[] {
 				userId, classNameId, classPK, type, receiverUserId
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_U_C_C_T_R,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(6);
@@ -4120,18 +4436,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				qPos.add(receiverUserId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_C_C_T_R,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -4153,8 +4466,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(), Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_C_C_T_S =
 		new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
@@ -4169,7 +4482,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			SocialRequestModelImpl.CLASSNAMEID_COLUMN_BITMASK |
 			SocialRequestModelImpl.CLASSPK_COLUMN_BITMASK |
 			SocialRequestModelImpl.TYPE_COLUMN_BITMASK |
-			SocialRequestModelImpl.STATUS_COLUMN_BITMASK);
+			SocialRequestModelImpl.STATUS_COLUMN_BITMASK |
+			SocialRequestModelImpl.REQUESTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_C_C_T_S = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_C_C_T_S",
@@ -4217,283 +4531,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 		throws SystemException {
 		return findByU_C_C_T_S(userId, classNameId, classPK, type, status,
 			start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social requests where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId the user ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param status the status
-	 * @param start the lower bound of the range of social requests
-	 * @param end the upper bound of the range of social requests (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRequest> findByU_C_C_T_S(long userId, long classNameId,
-		long classPK, int type, int status, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_C_C_T_S;
-			finderArgs = new Object[] { userId, classNameId, classPK, type, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_C_C_T_S;
-			finderArgs = new Object[] {
-					userId, classNameId, classPK, type, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRequest socialRequest : list) {
-				if ((userId != socialRequest.getUserId()) ||
-						(classNameId != socialRequest.getClassNameId()) ||
-						(classPK != socialRequest.getClassPK()) ||
-						(type != socialRequest.getType()) ||
-						(status != socialRequest.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(7 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(7);
-			}
-
-			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
-
-			query.append(_FINDER_COLUMN_U_C_C_T_S_USERID_2);
-
-			query.append(_FINDER_COLUMN_U_C_C_T_S_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_U_C_C_T_S_CLASSPK_2);
-
-			query.append(_FINDER_COLUMN_U_C_C_T_S_TYPE_2);
-
-			query.append(_FINDER_COLUMN_U_C_C_T_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				qPos.add(type);
-
-				qPos.add(status);
-
-				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByU_C_C_T_S_First(long userId, long classNameId,
-		long classPK, int type, int status, OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByU_C_C_T_S_First(userId,
-				classNameId, classPK, type, status, orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(12);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByU_C_C_T_S_First(long userId, long classNameId,
-		long classPK, int type, int status, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<SocialRequest> list = findByU_C_C_T_S(userId, classNameId,
-				classPK, type, status, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByU_C_C_T_S_Last(long userId, long classNameId,
-		long classPK, int type, int status, OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByU_C_C_T_S_Last(userId,
-				classNameId, classPK, type, status, orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(12);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(", classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByU_C_C_T_S_Last(long userId, long classNameId,
-		long classPK, int type, int status, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByU_C_C_T_S(userId, classNameId, classPK, type, status);
-
-		List<SocialRequest> list = findByU_C_C_T_S(userId, classNameId,
-				classPK, type, status, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -4624,7 +4661,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -4667,6 +4703,351 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	}
 
 	/**
+	 * Returns an ordered range of all the social requests where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param status the status
+	 * @param start the lower bound of the range of social requests
+	 * @param end the upper bound of the range of social requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRequest> findByU_C_C_T_S(long userId, long classNameId,
+		long classPK, int type, int status, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_C_C_T_S;
+			finderArgs = new Object[] { userId, classNameId, classPK, type, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_C_C_T_S;
+			finderArgs = new Object[] {
+					userId, classNameId, classPK, type, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((userId != socialRequest.getUserId()) ||
+						(classNameId != socialRequest.getClassNameId()) ||
+						(classPK != socialRequest.getClassPK()) ||
+						(type != socialRequest.getType()) ||
+						(status != socialRequest.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(7 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(7);
+			}
+
+			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
+
+			query.append(_FINDER_COLUMN_U_C_C_T_S_USERID_2);
+
+			query.append(_FINDER_COLUMN_U_C_C_T_S_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_U_C_C_T_S_CLASSPK_2);
+
+			query.append(_FINDER_COLUMN_U_C_C_T_S_TYPE_2);
+
+			query.append(_FINDER_COLUMN_U_C_C_T_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				qPos.add(type);
+
+				qPos.add(status);
+
+				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param status the status
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByU_C_C_T_S_First(long userId, long classNameId,
+		long classPK, int type, int status)
+		throws NoSuchRequestException, SystemException {
+		return findByU_C_C_T_S_First(userId, classNameId, classPK, type,
+			status, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByU_C_C_T_S_First(long userId, long classNameId,
+		long classPK, int type, int status, OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByU_C_C_T_S_First(userId,
+				classNameId, classPK, type, status, orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(12);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param status the status
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByU_C_C_T_S_First(long userId, long classNameId,
+		long classPK, int type, int status) throws SystemException {
+		return fetchByU_C_C_T_S_First(userId, classNameId, classPK, type,
+			status, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByU_C_C_T_S_First(long userId, long classNameId,
+		long classPK, int type, int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<SocialRequest> list = findByU_C_C_T_S(userId, classNameId,
+				classPK, type, status, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param status the status
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByU_C_C_T_S_Last(long userId, long classNameId,
+		long classPK, int type, int status)
+		throws NoSuchRequestException, SystemException {
+		return findByU_C_C_T_S_Last(userId, classNameId, classPK, type, status,
+			null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByU_C_C_T_S_Last(long userId, long classNameId,
+		long classPK, int type, int status, OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByU_C_C_T_S_Last(userId,
+				classNameId, classPK, type, status, orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(12);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param status the status
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByU_C_C_T_S_Last(long userId, long classNameId,
+		long classPK, int type, int status) throws SystemException {
+		return fetchByU_C_C_T_S_Last(userId, classNameId, classPK, type,
+			status, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByU_C_C_T_S_Last(long userId, long classNameId,
+		long classPK, int type, int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByU_C_C_T_S(userId, classNameId, classPK, type, status);
+
+		List<SocialRequest> list = findByU_C_C_T_S(userId, classNameId,
+				classPK, type, status, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social requests where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63; from the database.
 	 *
 	 * @param userId the user ID
@@ -4679,7 +5060,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public void removeByU_C_C_T_S(long userId, long classNameId, long classPK,
 		int type, int status) throws SystemException {
 		for (SocialRequest socialRequest : findByU_C_C_T_S(userId, classNameId,
-				classPK, type, status)) {
+				classPK, type, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				null)) {
 			remove(socialRequest);
 		}
 	}
@@ -4697,12 +5079,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	public int countByU_C_C_T_S(long userId, long classNameId, long classPK,
 		int type, int status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_C_C_T_S;
+
 		Object[] finderArgs = new Object[] {
 				userId, classNameId, classPK, type, status
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_U_C_C_T_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(6);
@@ -4741,18 +5125,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_C_C_T_S,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -4775,8 +5156,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				Integer.class.getName(), Long.class.getName(),
 				Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_T_R_S =
 		new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
@@ -4792,7 +5173,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			SocialRequestModelImpl.CLASSPK_COLUMN_BITMASK |
 			SocialRequestModelImpl.TYPE_COLUMN_BITMASK |
 			SocialRequestModelImpl.RECEIVERUSERID_COLUMN_BITMASK |
-			SocialRequestModelImpl.STATUS_COLUMN_BITMASK);
+			SocialRequestModelImpl.STATUS_COLUMN_BITMASK |
+			SocialRequestModelImpl.REQUESTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C_T_R_S = new FinderPath(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C_T_R_S",
@@ -4841,288 +5223,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 		throws SystemException {
 		return findByC_C_T_R_S(classNameId, classPK, type, receiverUserId,
 			status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social requests where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param receiverUserId the receiver user ID
-	 * @param status the status
-	 * @param start the lower bound of the range of social requests
-	 * @param end the upper bound of the range of social requests (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social requests
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialRequest> findByC_C_T_R_S(long classNameId, long classPK,
-		int type, long receiverUserId, int status, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_T_R_S;
-			finderArgs = new Object[] {
-					classNameId, classPK, type, receiverUserId, status
-				};
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_T_R_S;
-			finderArgs = new Object[] {
-					classNameId, classPK, type, receiverUserId, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialRequest socialRequest : list) {
-				if ((classNameId != socialRequest.getClassNameId()) ||
-						(classPK != socialRequest.getClassPK()) ||
-						(type != socialRequest.getType()) ||
-						(receiverUserId != socialRequest.getReceiverUserId()) ||
-						(status != socialRequest.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(7 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(7);
-			}
-
-			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_T_R_S_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_T_R_S_CLASSPK_2);
-
-			query.append(_FINDER_COLUMN_C_C_T_R_S_TYPE_2);
-
-			query.append(_FINDER_COLUMN_C_C_T_R_S_RECEIVERUSERID_2);
-
-			query.append(_FINDER_COLUMN_C_C_T_R_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				qPos.add(type);
-
-				qPos.add(receiverUserId);
-
-				qPos.add(status);
-
-				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param receiverUserId the receiver user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByC_C_T_R_S_First(long classNameId, long classPK,
-		int type, long receiverUserId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByC_C_T_R_S_First(classNameId,
-				classPK, type, receiverUserId, status, orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(12);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(", receiverUserId=");
-		msg.append(receiverUserId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param receiverUserId the receiver user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByC_C_T_R_S_First(long classNameId, long classPK,
-		int type, long receiverUserId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialRequest> list = findByC_C_T_R_S(classNameId, classPK, type,
-				receiverUserId, status, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param receiverUserId the receiver user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request
-	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest findByC_C_T_R_S_Last(long classNameId, long classPK,
-		int type, long receiverUserId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchRequestException, SystemException {
-		SocialRequest socialRequest = fetchByC_C_T_R_S_Last(classNameId,
-				classPK, type, receiverUserId, status, orderByComparator);
-
-		if (socialRequest != null) {
-			return socialRequest;
-		}
-
-		StringBundler msg = new StringBundler(12);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("classNameId=");
-		msg.append(classNameId);
-
-		msg.append(", classPK=");
-		msg.append(classPK);
-
-		msg.append(", type=");
-		msg.append(type);
-
-		msg.append(", receiverUserId=");
-		msg.append(receiverUserId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchRequestException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param type the type
-	 * @param receiverUserId the receiver user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialRequest fetchByC_C_T_R_S_Last(long classNameId, long classPK,
-		int type, long receiverUserId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByC_C_T_R_S(classNameId, classPK, type,
-				receiverUserId, status);
-
-		List<SocialRequest> list = findByC_C_T_R_S(classNameId, classPK, type,
-				receiverUserId, status, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -5253,7 +5353,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				}
 			}
 		}
-
 		else {
 			query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
 		}
@@ -5296,6 +5395,356 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	}
 
 	/**
+	 * Returns an ordered range of all the social requests where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @param start the lower bound of the range of social requests
+	 * @param end the upper bound of the range of social requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social requests
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialRequest> findByC_C_T_R_S(long classNameId, long classPK,
+		int type, long receiverUserId, int status, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C_T_R_S;
+			finderArgs = new Object[] {
+					classNameId, classPK, type, receiverUserId, status
+				};
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C_T_R_S;
+			finderArgs = new Object[] {
+					classNameId, classPK, type, receiverUserId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((classNameId != socialRequest.getClassNameId()) ||
+						(classPK != socialRequest.getClassPK()) ||
+						(type != socialRequest.getType()) ||
+						(receiverUserId != socialRequest.getReceiverUserId()) ||
+						(status != socialRequest.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(7 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(7);
+			}
+
+			query.append(_SQL_SELECT_SOCIALREQUEST_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_T_R_S_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_T_R_S_CLASSPK_2);
+
+			query.append(_FINDER_COLUMN_C_C_T_R_S_TYPE_2);
+
+			query.append(_FINDER_COLUMN_C_C_T_R_S_RECEIVERUSERID_2);
+
+			query.append(_FINDER_COLUMN_C_C_T_R_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialRequestModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				qPos.add(type);
+
+				qPos.add(receiverUserId);
+
+				qPos.add(status);
+
+				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByC_C_T_R_S_First(long classNameId, long classPK,
+		int type, long receiverUserId, int status)
+		throws NoSuchRequestException, SystemException {
+		return findByC_C_T_R_S_First(classNameId, classPK, type,
+			receiverUserId, status, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByC_C_T_R_S_First(long classNameId, long classPK,
+		int type, long receiverUserId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByC_C_T_R_S_First(classNameId,
+				classPK, type, receiverUserId, status, orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(12);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(", receiverUserId=");
+		msg.append(receiverUserId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByC_C_T_R_S_First(long classNameId, long classPK,
+		int type, long receiverUserId, int status) throws SystemException {
+		return fetchByC_C_T_R_S_First(classNameId, classPK, type,
+			receiverUserId, status, null);
+	}
+
+	/**
+	 * Returns the first social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByC_C_T_R_S_First(long classNameId, long classPK,
+		int type, long receiverUserId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialRequest> list = findByC_C_T_R_S(classNameId, classPK, type,
+				receiverUserId, status, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByC_C_T_R_S_Last(long classNameId, long classPK,
+		int type, long receiverUserId, int status)
+		throws NoSuchRequestException, SystemException {
+		return findByC_C_T_R_S_Last(classNameId, classPK, type, receiverUserId,
+			status, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request
+	 * @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest findByC_C_T_R_S_Last(long classNameId, long classPK,
+		int type, long receiverUserId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchRequestException, SystemException {
+		SocialRequest socialRequest = fetchByC_C_T_R_S_Last(classNameId,
+				classPK, type, receiverUserId, status, orderByComparator);
+
+		if (socialRequest != null) {
+			return socialRequest;
+		}
+
+		StringBundler msg = new StringBundler(12);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(", receiverUserId=");
+		msg.append(receiverUserId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRequestException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByC_C_T_R_S_Last(long classNameId, long classPK,
+		int type, long receiverUserId, int status) throws SystemException {
+		return fetchByC_C_T_R_S_Last(classNameId, classPK, type,
+			receiverUserId, status, null);
+	}
+
+	/**
+	 * Returns the last social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param type the type
+	 * @param receiverUserId the receiver user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRequest fetchByC_C_T_R_S_Last(long classNameId, long classPK,
+		int type, long receiverUserId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_C_T_R_S(classNameId, classPK, type,
+				receiverUserId, status);
+
+		List<SocialRequest> list = findByC_C_T_R_S(classNameId, classPK, type,
+				receiverUserId, status, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social requests where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63; from the database.
 	 *
 	 * @param classNameId the class name ID
@@ -5308,7 +5757,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public void removeByC_C_T_R_S(long classNameId, long classPK, int type,
 		long receiverUserId, int status) throws SystemException {
 		for (SocialRequest socialRequest : findByC_C_T_R_S(classNameId,
-				classPK, type, receiverUserId, status)) {
+				classPK, type, receiverUserId, status, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(socialRequest);
 		}
 	}
@@ -5326,12 +5776,14 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	public int countByC_C_T_R_S(long classNameId, long classPK, int type,
 		long receiverUserId, int status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C_T_R_S;
+
 		Object[] finderArgs = new Object[] {
 				classNameId, classPK, type, receiverUserId, status
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C_T_R_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(6);
@@ -5370,18 +5822,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C_T_R_S,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -6025,28 +6474,27 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 		if (socialRequest == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				socialRequest = (SocialRequest)session.get(SocialRequestImpl.class,
 						Long.valueOf(requestId));
+
+				if (socialRequest != null) {
+					cacheResult(socialRequest);
+				}
+				else {
+					EntityCacheUtil.putResult(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
+						SocialRequestImpl.class, requestId, _nullSocialRequest);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
+					SocialRequestImpl.class, requestId);
 
 				throw processException(e);
 			}
 			finally {
-				if (socialRequest != null) {
-					cacheResult(socialRequest);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
-						SocialRequestImpl.class, requestId, _nullSocialRequest);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -6097,7 +6545,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public List<SocialRequest> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -6138,30 +6586,19 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<SocialRequest>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -6199,18 +6636,17 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				Query q = session.createQuery(_SQL_COUNT_SOCIALREQUEST);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -6246,6 +6682,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	public void destroy() {
 		EntityCacheUtil.removeCache(SocialRequestImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

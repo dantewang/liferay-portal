@@ -64,6 +64,22 @@ public interface ResourceActionPersistence extends BasePersistence<ResourceActio
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the resource actions before and after the current resource action in the ordered set where name = &#63;.
+	*
+	* @param resourceActionId the primary key of the current resource action
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next resource action
+	* @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceAction[] findByName_PrevAndNext(
+		long resourceActionId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchResourceActionException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the resource actions where name = &#63;.
 	*
 	* <p>
@@ -83,6 +99,19 @@ public interface ResourceActionPersistence extends BasePersistence<ResourceActio
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first resource action in the default ordered set defined by {@link ResourceActionModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	*
+	* @param name the name
+	* @return the first matching resource action
+	* @throws com.liferay.portal.NoSuchResourceActionException if a matching resource action could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceAction findByName_First(
+		java.lang.String name)
+		throws com.liferay.portal.NoSuchResourceActionException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first resource action in the ordered set where name = &#63;.
 	*
 	* @param name the name
@@ -98,6 +127,17 @@ public interface ResourceActionPersistence extends BasePersistence<ResourceActio
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first resource action in the default ordered set defined by {@link ResourceActionModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	*
+	* @param name the name
+	* @return the first matching resource action, or <code>null</code> if a matching resource action could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceAction fetchByName_First(
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first resource action in the ordered set where name = &#63;.
 	*
 	* @param name the name
@@ -109,6 +149,19 @@ public interface ResourceActionPersistence extends BasePersistence<ResourceActio
 		java.lang.String name,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last resource action in the default ordered set defined by {@link ResourceActionModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	*
+	* @param name the name
+	* @return the last matching resource action
+	* @throws com.liferay.portal.NoSuchResourceActionException if a matching resource action could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceAction findByName_Last(
+		java.lang.String name)
+		throws com.liferay.portal.NoSuchResourceActionException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last resource action in the ordered set where name = &#63;.
@@ -126,6 +179,17 @@ public interface ResourceActionPersistence extends BasePersistence<ResourceActio
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last resource action in the default ordered set defined by {@link ResourceActionModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	*
+	* @param name the name
+	* @return the last matching resource action, or <code>null</code> if a matching resource action could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceAction fetchByName_Last(
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last resource action in the ordered set where name = &#63;.
 	*
 	* @param name the name
@@ -137,22 +201,6 @@ public interface ResourceActionPersistence extends BasePersistence<ResourceActio
 		java.lang.String name,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the resource actions before and after the current resource action in the ordered set where name = &#63;.
-	*
-	* @param resourceActionId the primary key of the current resource action
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next resource action
-	* @throws com.liferay.portal.NoSuchResourceActionException if a resource action with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.ResourceAction[] findByName_PrevAndNext(
-		long resourceActionId, java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchResourceActionException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the resource actions where name = &#63; from the database.

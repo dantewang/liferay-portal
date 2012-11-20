@@ -111,63 +111,147 @@ public class PortalPreferencesUtil {
 	}
 
 	/**
-	* Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or throws a {@link com.liferay.portal.NoSuchPreferencesException} if it could not be found.
+	* Returns the first portal preferences in the default ordered set defined by {@link PortalPreferencesModelImpl#ORDER_BY_JPQL} where ownerId = &#63; and ownerType = &#63;.
 	*
 	* @param ownerId the owner ID
 	* @param ownerType the owner type
-	* @return the matching portal preferences
+	* @return the first matching portal preferences
 	* @throws com.liferay.portal.NoSuchPreferencesException if a matching portal preferences could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PortalPreferences findByO_O(
+	public static com.liferay.portal.model.PortalPreferences findByO_O_First(
 		long ownerId, int ownerType)
 		throws com.liferay.portal.NoSuchPreferencesException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByO_O(ownerId, ownerType);
+		return getPersistence().findByO_O_First(ownerId, ownerType);
 	}
 
 	/**
-	* Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first portal preferences in the ordered set where ownerId = &#63; and ownerType = &#63;.
 	*
 	* @param ownerId the owner ID
 	* @param ownerType the owner type
-	* @return the matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching portal preferences
+	* @throws com.liferay.portal.NoSuchPreferencesException if a matching portal preferences could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PortalPreferences fetchByO_O(
+	public static com.liferay.portal.model.PortalPreferences findByO_O_First(
+		long ownerId, int ownerType,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPreferencesException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByO_O_First(ownerId, ownerType, orderByComparator);
+	}
+
+	/**
+	* Returns the first portal preferences in the default ordered set defined by {@link PortalPreferencesModelImpl#ORDER_BY_JPQL} where ownerId = &#63; and ownerType = &#63;.
+	*
+	* @param ownerId the owner ID
+	* @param ownerType the owner type
+	* @return the first matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortalPreferences fetchByO_O_First(
 		long ownerId, int ownerType)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByO_O(ownerId, ownerType);
+		return getPersistence().fetchByO_O_First(ownerId, ownerType);
 	}
 
 	/**
-	* Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first portal preferences in the ordered set where ownerId = &#63; and ownerType = &#63;.
 	*
 	* @param ownerId the owner ID
 	* @param ownerType the owner type
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PortalPreferences fetchByO_O(
-		long ownerId, int ownerType, boolean retrieveFromCache)
+	public static com.liferay.portal.model.PortalPreferences fetchByO_O_First(
+		long ownerId, int ownerType,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByO_O(ownerId, ownerType, retrieveFromCache);
+		return getPersistence()
+				   .fetchByO_O_First(ownerId, ownerType, orderByComparator);
 	}
 
 	/**
-	* Removes the portal preferences where ownerId = &#63; and ownerType = &#63; from the database.
+	* Returns the last portal preferences in the default ordered set defined by {@link PortalPreferencesModelImpl#ORDER_BY_JPQL} where ownerId = &#63; and ownerType = &#63;.
 	*
 	* @param ownerId the owner ID
 	* @param ownerType the owner type
-	* @return the portal preferences that was removed
+	* @return the last matching portal preferences
+	* @throws com.liferay.portal.NoSuchPreferencesException if a matching portal preferences could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PortalPreferences removeByO_O(
+	public static com.liferay.portal.model.PortalPreferences findByO_O_Last(
 		long ownerId, int ownerType)
 		throws com.liferay.portal.NoSuchPreferencesException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByO_O(ownerId, ownerType);
+		return getPersistence().findByO_O_Last(ownerId, ownerType);
+	}
+
+	/**
+	* Returns the last portal preferences in the ordered set where ownerId = &#63; and ownerType = &#63;.
+	*
+	* @param ownerId the owner ID
+	* @param ownerType the owner type
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching portal preferences
+	* @throws com.liferay.portal.NoSuchPreferencesException if a matching portal preferences could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortalPreferences findByO_O_Last(
+		long ownerId, int ownerType,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPreferencesException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByO_O_Last(ownerId, ownerType, orderByComparator);
+	}
+
+	/**
+	* Returns the last portal preferences in the default ordered set defined by {@link PortalPreferencesModelImpl#ORDER_BY_JPQL} where ownerId = &#63; and ownerType = &#63;.
+	*
+	* @param ownerId the owner ID
+	* @param ownerType the owner type
+	* @return the last matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortalPreferences fetchByO_O_Last(
+		long ownerId, int ownerType)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByO_O_Last(ownerId, ownerType);
+	}
+
+	/**
+	* Returns the last portal preferences in the ordered set where ownerId = &#63; and ownerType = &#63;.
+	*
+	* @param ownerId the owner ID
+	* @param ownerType the owner type
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortalPreferences fetchByO_O_Last(
+		long ownerId, int ownerType,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByO_O_Last(ownerId, ownerType, orderByComparator);
+	}
+
+	/**
+	* Removes all the portal preferenceses where ownerId = &#63; and ownerType = &#63; from the database.
+	*
+	* @param ownerId the owner ID
+	* @param ownerType the owner type
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByO_O(long ownerId, int ownerType)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByO_O(ownerId, ownerType);
 	}
 
 	/**

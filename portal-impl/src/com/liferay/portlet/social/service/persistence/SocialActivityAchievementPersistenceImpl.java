@@ -48,7 +48,6 @@ import com.liferay.portlet.social.model.impl.SocialActivityAchievementModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -95,8 +94,8 @@ public class SocialActivityAchievementPersistenceImpl
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
 		new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
@@ -104,7 +103,8 @@ public class SocialActivityAchievementPersistenceImpl
 			SocialActivityAchievementImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
 			new String[] { Long.class.getName() },
-			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK);
+			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.ACTIVITYACHIEVEMENTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -138,209 +138,6 @@ public class SocialActivityAchievementPersistenceImpl
 	public List<SocialActivityAchievement> findByGroupId(long groupId,
 		int start, int end) throws SystemException {
 		return findByGroupId(groupId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activity achievements where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of social activity achievements
-	 * @param end the upper bound of the range of social activity achievements (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activity achievements
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivityAchievement> findByGroupId(long groupId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivityAchievement socialActivityAchievement : list) {
-				if ((groupId != socialActivityAchievement.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<SocialActivityAchievement>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity achievement in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity achievement
-	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityAchievementException, SystemException {
-		SocialActivityAchievement socialActivityAchievement = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (socialActivityAchievement != null) {
-			return socialActivityAchievement;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityAchievementException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity achievement in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SocialActivityAchievement> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity achievement in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity achievement
-	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityAchievementException, SystemException {
-		SocialActivityAchievement socialActivityAchievement = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (socialActivityAchievement != null) {
-			return socialActivityAchievement;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityAchievementException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity achievement in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<SocialActivityAchievement> list = findByGroupId(groupId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -456,6 +253,9 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -487,6 +287,259 @@ public class SocialActivityAchievementPersistenceImpl
 	}
 
 	/**
+	 * Returns an ordered range of all the social activity achievements where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of social activity achievements
+	 * @param end the upper bound of the range of social activity achievements (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activity achievements
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivityAchievement> findByGroupId(long groupId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityAchievement socialActivityAchievement : list) {
+				if ((groupId != socialActivityAchievement.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<SocialActivityAchievement>)QueryUtil.list(q,
+						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByGroupId_First(long groupId)
+		throws NoSuchActivityAchievementException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first social activity achievement in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityAchievementException, SystemException {
+		SocialActivityAchievement socialActivityAchievement = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (socialActivityAchievement != null) {
+			return socialActivityAchievement;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityAchievementException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first social activity achievement in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SocialActivityAchievement> list = findByGroupId(groupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByGroupId_Last(long groupId)
+		throws NoSuchActivityAchievementException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last social activity achievement in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityAchievementException, SystemException {
+		SocialActivityAchievement socialActivityAchievement = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (socialActivityAchievement != null) {
+			return socialActivityAchievement;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityAchievementException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last social activity achievement in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<SocialActivityAchievement> list = findByGroupId(groupId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activity achievements where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -494,7 +547,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
 		for (SocialActivityAchievement socialActivityAchievement : findByGroupId(
-				groupId)) {
+				groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivityAchievement);
 		}
 	}
@@ -507,10 +560,12 @@ public class SocialActivityAchievementPersistenceImpl
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByGroupId(long groupId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
+
 		Object[] finderArgs = new Object[] { groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -533,18 +588,15 @@ public class SocialActivityAchievementPersistenceImpl
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -560,8 +612,8 @@ public class SocialActivityAchievementPersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
@@ -569,7 +621,8 @@ public class SocialActivityAchievementPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
-			SocialActivityAchievementModelImpl.USERID_COLUMN_BITMASK);
+			SocialActivityAchievementModelImpl.USERID_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.ACTIVITYACHIEVEMENTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -607,230 +660,6 @@ public class SocialActivityAchievementPersistenceImpl
 	public List<SocialActivityAchievement> findByG_U(long groupId, long userId,
 		int start, int end) throws SystemException {
 		return findByG_U(groupId, userId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activity achievements where groupId = &#63; and userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param start the lower bound of the range of social activity achievements
-	 * @param end the upper bound of the range of social activity achievements (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activity achievements
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivityAchievement> findByG_U(long groupId, long userId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U;
-			finderArgs = new Object[] { groupId, userId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U;
-			finderArgs = new Object[] {
-					groupId, userId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivityAchievement socialActivityAchievement : list) {
-				if ((groupId != socialActivityAchievement.getGroupId()) ||
-						(userId != socialActivityAchievement.getUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_U_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_U_USERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(userId);
-
-				list = (List<SocialActivityAchievement>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and userId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity achievement
-	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement findByG_U_First(long groupId, long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityAchievementException, SystemException {
-		SocialActivityAchievement socialActivityAchievement = fetchByG_U_First(groupId,
-				userId, orderByComparator);
-
-		if (socialActivityAchievement != null) {
-			return socialActivityAchievement;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityAchievementException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and userId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement fetchByG_U_First(long groupId,
-		long userId, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<SocialActivityAchievement> list = findByG_U(groupId, userId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and userId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity achievement
-	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement findByG_U_Last(long groupId, long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityAchievementException, SystemException {
-		SocialActivityAchievement socialActivityAchievement = fetchByG_U_Last(groupId,
-				userId, orderByComparator);
-
-		if (socialActivityAchievement != null) {
-			return socialActivityAchievement;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityAchievementException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and userId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement fetchByG_U_Last(long groupId, long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_U(groupId, userId);
-
-		List<SocialActivityAchievement> list = findByG_U(groupId, userId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -949,6 +778,9 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -982,6 +814,284 @@ public class SocialActivityAchievementPersistenceImpl
 	}
 
 	/**
+	 * Returns an ordered range of all the social activity achievements where groupId = &#63; and userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of social activity achievements
+	 * @param end the upper bound of the range of social activity achievements (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activity achievements
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivityAchievement> findByG_U(long groupId, long userId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U;
+			finderArgs = new Object[] { groupId, userId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U;
+			finderArgs = new Object[] {
+					groupId, userId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityAchievement socialActivityAchievement : list) {
+				if ((groupId != socialActivityAchievement.getGroupId()) ||
+						(userId != socialActivityAchievement.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_U_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_U_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(userId);
+
+				list = (List<SocialActivityAchievement>)QueryUtil.list(q,
+						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @return the first matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_U_First(long groupId, long userId)
+		throws NoSuchActivityAchievementException, SystemException {
+		return findByG_U_First(groupId, userId, null);
+	}
+
+	/**
+	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_U_First(long groupId, long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityAchievementException, SystemException {
+		SocialActivityAchievement socialActivityAchievement = fetchByG_U_First(groupId,
+				userId, orderByComparator);
+
+		if (socialActivityAchievement != null) {
+			return socialActivityAchievement;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityAchievementException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_U_First(long groupId, long userId)
+		throws SystemException {
+		return fetchByG_U_First(groupId, userId, null);
+	}
+
+	/**
+	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_U_First(long groupId,
+		long userId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<SocialActivityAchievement> list = findByG_U(groupId, userId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @return the last matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_U_Last(long groupId, long userId)
+		throws NoSuchActivityAchievementException, SystemException {
+		return findByG_U_Last(groupId, userId, null);
+	}
+
+	/**
+	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_U_Last(long groupId, long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityAchievementException, SystemException {
+		SocialActivityAchievement socialActivityAchievement = fetchByG_U_Last(groupId,
+				userId, orderByComparator);
+
+		if (socialActivityAchievement != null) {
+			return socialActivityAchievement;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityAchievementException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_U_Last(long groupId, long userId)
+		throws SystemException {
+		return fetchByG_U_Last(groupId, userId, null);
+	}
+
+	/**
+	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_U_Last(long groupId, long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_U(groupId, userId);
+
+		List<SocialActivityAchievement> list = findByG_U(groupId, userId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activity achievements where groupId = &#63; and userId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -991,7 +1101,7 @@ public class SocialActivityAchievementPersistenceImpl
 	public void removeByG_U(long groupId, long userId)
 		throws SystemException {
 		for (SocialActivityAchievement socialActivityAchievement : findByG_U(
-				groupId, userId)) {
+				groupId, userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivityAchievement);
 		}
 	}
@@ -1005,10 +1115,12 @@ public class SocialActivityAchievementPersistenceImpl
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByG_U(long groupId, long userId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_U;
+
 		Object[] finderArgs = new Object[] { groupId, userId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_U,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1035,18 +1147,15 @@ public class SocialActivityAchievementPersistenceImpl
 				qPos.add(userId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -1063,8 +1172,8 @@ public class SocialActivityAchievementPersistenceImpl
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
@@ -1072,7 +1181,8 @@ public class SocialActivityAchievementPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_N",
 			new String[] { Long.class.getName(), String.class.getName() },
 			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
-			SocialActivityAchievementModelImpl.NAME_COLUMN_BITMASK);
+			SocialActivityAchievementModelImpl.NAME_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.ACTIVITYACHIEVEMENTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -1110,243 +1220,6 @@ public class SocialActivityAchievementPersistenceImpl
 	public List<SocialActivityAchievement> findByG_N(long groupId, String name,
 		int start, int end) throws SystemException {
 		return findByG_N(groupId, name, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activity achievements where groupId = &#63; and name = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param start the lower bound of the range of social activity achievements
-	 * @param end the upper bound of the range of social activity achievements (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activity achievements
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivityAchievement> findByG_N(long groupId, String name,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N;
-			finderArgs = new Object[] { groupId, name };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N;
-			finderArgs = new Object[] {
-					groupId, name,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivityAchievement socialActivityAchievement : list) {
-				if ((groupId != socialActivityAchievement.getGroupId()) ||
-						!Validator.equals(name,
-							socialActivityAchievement.getName())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_N_GROUPID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_G_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_N_NAME_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				list = (List<SocialActivityAchievement>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and name = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity achievement
-	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement findByG_N_First(long groupId, String name,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityAchievementException, SystemException {
-		SocialActivityAchievement socialActivityAchievement = fetchByG_N_First(groupId,
-				name, orderByComparator);
-
-		if (socialActivityAchievement != null) {
-			return socialActivityAchievement;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityAchievementException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and name = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement fetchByG_N_First(long groupId,
-		String name, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<SocialActivityAchievement> list = findByG_N(groupId, name, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and name = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity achievement
-	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement findByG_N_Last(long groupId, String name,
-		OrderByComparator orderByComparator)
-		throws NoSuchActivityAchievementException, SystemException {
-		SocialActivityAchievement socialActivityAchievement = fetchByG_N_Last(groupId,
-				name, orderByComparator);
-
-		if (socialActivityAchievement != null) {
-			return socialActivityAchievement;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", name=");
-		msg.append(name);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityAchievementException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and name = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param name the name
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement fetchByG_N_Last(long groupId, String name,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_N(groupId, name);
-
-		List<SocialActivityAchievement> list = findByG_N(groupId, name,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1475,6 +1348,9 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1510,6 +1386,297 @@ public class SocialActivityAchievementPersistenceImpl
 	}
 
 	/**
+	 * Returns an ordered range of all the social activity achievements where groupId = &#63; and name = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param start the lower bound of the range of social activity achievements
+	 * @param end the upper bound of the range of social activity achievements (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activity achievements
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivityAchievement> findByG_N(long groupId, String name,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_N;
+			finderArgs = new Object[] { groupId, name };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N;
+			finderArgs = new Object[] {
+					groupId, name,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityAchievement socialActivityAchievement : list) {
+				if ((groupId != socialActivityAchievement.getGroupId()) ||
+						!Validator.equals(name,
+							socialActivityAchievement.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_N_GROUPID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_G_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_N_NAME_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				list = (List<SocialActivityAchievement>)QueryUtil.list(q,
+						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the first matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_N_First(long groupId, String name)
+		throws NoSuchActivityAchievementException, SystemException {
+		return findByG_N_First(groupId, name, null);
+	}
+
+	/**
+	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_N_First(long groupId, String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityAchievementException, SystemException {
+		SocialActivityAchievement socialActivityAchievement = fetchByG_N_First(groupId,
+				name, orderByComparator);
+
+		if (socialActivityAchievement != null) {
+			return socialActivityAchievement;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityAchievementException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_N_First(long groupId, String name)
+		throws SystemException {
+		return fetchByG_N_First(groupId, name, null);
+	}
+
+	/**
+	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_N_First(long groupId,
+		String name, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<SocialActivityAchievement> list = findByG_N(groupId, name, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the last matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_N_Last(long groupId, String name)
+		throws NoSuchActivityAchievementException, SystemException {
+		return findByG_N_Last(groupId, name, null);
+	}
+
+	/**
+	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_N_Last(long groupId, String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchActivityAchievementException, SystemException {
+		SocialActivityAchievement socialActivityAchievement = fetchByG_N_Last(groupId,
+				name, orderByComparator);
+
+		if (socialActivityAchievement != null) {
+			return socialActivityAchievement;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityAchievementException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_N_Last(long groupId, String name)
+		throws SystemException {
+		return fetchByG_N_Last(groupId, name, null);
+	}
+
+	/**
+	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and name = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_N_Last(long groupId, String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_N(groupId, name);
+
+		List<SocialActivityAchievement> list = findByG_N(groupId, name,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activity achievements where groupId = &#63; and name = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -1519,7 +1686,7 @@ public class SocialActivityAchievementPersistenceImpl
 	public void removeByG_N(long groupId, String name)
 		throws SystemException {
 		for (SocialActivityAchievement socialActivityAchievement : findByG_N(
-				groupId, name)) {
+				groupId, name, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(socialActivityAchievement);
 		}
 	}
@@ -1533,10 +1700,12 @@ public class SocialActivityAchievementPersistenceImpl
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByG_N(long groupId, String name) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_N;
+
 		Object[] finderArgs = new Object[] { groupId, name };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_N,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1575,18 +1744,15 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_N, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -1605,8 +1771,8 @@ public class SocialActivityAchievementPersistenceImpl
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
@@ -1614,7 +1780,8 @@ public class SocialActivityAchievementPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_F",
 			new String[] { Long.class.getName(), Boolean.class.getName() },
 			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
-			SocialActivityAchievementModelImpl.FIRSTINGROUP_COLUMN_BITMASK);
+			SocialActivityAchievementModelImpl.FIRSTINGROUP_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.ACTIVITYACHIEVEMENTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_F = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -1652,231 +1819,6 @@ public class SocialActivityAchievementPersistenceImpl
 	public List<SocialActivityAchievement> findByG_F(long groupId,
 		boolean firstInGroup, int start, int end) throws SystemException {
 		return findByG_F(groupId, firstInGroup, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activity achievements where groupId = &#63; and firstInGroup = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param firstInGroup the first in group
-	 * @param start the lower bound of the range of social activity achievements
-	 * @param end the upper bound of the range of social activity achievements (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activity achievements
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivityAchievement> findByG_F(long groupId,
-		boolean firstInGroup, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F;
-			finderArgs = new Object[] { groupId, firstInGroup };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F;
-			finderArgs = new Object[] {
-					groupId, firstInGroup,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivityAchievement socialActivityAchievement : list) {
-				if ((groupId != socialActivityAchievement.getGroupId()) ||
-						(firstInGroup != socialActivityAchievement.getFirstInGroup())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_F_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_F_FIRSTINGROUP_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(firstInGroup);
-
-				list = (List<SocialActivityAchievement>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and firstInGroup = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param firstInGroup the first in group
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity achievement
-	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement findByG_F_First(long groupId,
-		boolean firstInGroup, OrderByComparator orderByComparator)
-		throws NoSuchActivityAchievementException, SystemException {
-		SocialActivityAchievement socialActivityAchievement = fetchByG_F_First(groupId,
-				firstInGroup, orderByComparator);
-
-		if (socialActivityAchievement != null) {
-			return socialActivityAchievement;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", firstInGroup=");
-		msg.append(firstInGroup);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityAchievementException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and firstInGroup = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param firstInGroup the first in group
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement fetchByG_F_First(long groupId,
-		boolean firstInGroup, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<SocialActivityAchievement> list = findByG_F(groupId, firstInGroup,
-				0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and firstInGroup = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param firstInGroup the first in group
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity achievement
-	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement findByG_F_Last(long groupId,
-		boolean firstInGroup, OrderByComparator orderByComparator)
-		throws NoSuchActivityAchievementException, SystemException {
-		SocialActivityAchievement socialActivityAchievement = fetchByG_F_Last(groupId,
-				firstInGroup, orderByComparator);
-
-		if (socialActivityAchievement != null) {
-			return socialActivityAchievement;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", firstInGroup=");
-		msg.append(firstInGroup);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityAchievementException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and firstInGroup = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param firstInGroup the first in group
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement fetchByG_F_Last(long groupId,
-		boolean firstInGroup, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_F(groupId, firstInGroup);
-
-		List<SocialActivityAchievement> list = findByG_F(groupId, firstInGroup,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1996,6 +1938,9 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2029,6 +1974,287 @@ public class SocialActivityAchievementPersistenceImpl
 	}
 
 	/**
+	 * Returns an ordered range of all the social activity achievements where groupId = &#63; and firstInGroup = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param firstInGroup the first in group
+	 * @param start the lower bound of the range of social activity achievements
+	 * @param end the upper bound of the range of social activity achievements (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activity achievements
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivityAchievement> findByG_F(long groupId,
+		boolean firstInGroup, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_F;
+			finderArgs = new Object[] { groupId, firstInGroup };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_F;
+			finderArgs = new Object[] {
+					groupId, firstInGroup,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityAchievement socialActivityAchievement : list) {
+				if ((groupId != socialActivityAchievement.getGroupId()) ||
+						(firstInGroup != socialActivityAchievement.getFirstInGroup())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_F_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_F_FIRSTINGROUP_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(firstInGroup);
+
+				list = (List<SocialActivityAchievement>)QueryUtil.list(q,
+						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param firstInGroup the first in group
+	 * @return the first matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_F_First(long groupId,
+		boolean firstInGroup)
+		throws NoSuchActivityAchievementException, SystemException {
+		return findByG_F_First(groupId, firstInGroup, null);
+	}
+
+	/**
+	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param firstInGroup the first in group
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_F_First(long groupId,
+		boolean firstInGroup, OrderByComparator orderByComparator)
+		throws NoSuchActivityAchievementException, SystemException {
+		SocialActivityAchievement socialActivityAchievement = fetchByG_F_First(groupId,
+				firstInGroup, orderByComparator);
+
+		if (socialActivityAchievement != null) {
+			return socialActivityAchievement;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", firstInGroup=");
+		msg.append(firstInGroup);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityAchievementException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param firstInGroup the first in group
+	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_F_First(long groupId,
+		boolean firstInGroup) throws SystemException {
+		return fetchByG_F_First(groupId, firstInGroup, null);
+	}
+
+	/**
+	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param firstInGroup the first in group
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_F_First(long groupId,
+		boolean firstInGroup, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<SocialActivityAchievement> list = findByG_F(groupId, firstInGroup,
+				0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param firstInGroup the first in group
+	 * @return the last matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_F_Last(long groupId,
+		boolean firstInGroup)
+		throws NoSuchActivityAchievementException, SystemException {
+		return findByG_F_Last(groupId, firstInGroup, null);
+	}
+
+	/**
+	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param firstInGroup the first in group
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_F_Last(long groupId,
+		boolean firstInGroup, OrderByComparator orderByComparator)
+		throws NoSuchActivityAchievementException, SystemException {
+		SocialActivityAchievement socialActivityAchievement = fetchByG_F_Last(groupId,
+				firstInGroup, orderByComparator);
+
+		if (socialActivityAchievement != null) {
+			return socialActivityAchievement;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", firstInGroup=");
+		msg.append(firstInGroup);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityAchievementException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param firstInGroup the first in group
+	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_F_Last(long groupId,
+		boolean firstInGroup) throws SystemException {
+		return fetchByG_F_Last(groupId, firstInGroup, null);
+	}
+
+	/**
+	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param firstInGroup the first in group
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_F_Last(long groupId,
+		boolean firstInGroup, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_F(groupId, firstInGroup);
+
+		List<SocialActivityAchievement> list = findByG_F(groupId, firstInGroup,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activity achievements where groupId = &#63; and firstInGroup = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -2038,7 +2264,8 @@ public class SocialActivityAchievementPersistenceImpl
 	public void removeByG_F(long groupId, boolean firstInGroup)
 		throws SystemException {
 		for (SocialActivityAchievement socialActivityAchievement : findByG_F(
-				groupId, firstInGroup)) {
+				groupId, firstInGroup, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				null)) {
 			remove(socialActivityAchievement);
 		}
 	}
@@ -2053,10 +2280,12 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	public int countByG_F(long groupId, boolean firstInGroup)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_F;
+
 		Object[] finderArgs = new Object[] { groupId, firstInGroup };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_F,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -2083,18 +2312,15 @@ public class SocialActivityAchievementPersistenceImpl
 				qPos.add(firstInGroup);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_F, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -2211,7 +2437,7 @@ public class SocialActivityAchievementPersistenceImpl
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(4);
+			StringBundler query = new StringBundler(5);
 
 			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
 
@@ -2252,16 +2478,14 @@ public class SocialActivityAchievementPersistenceImpl
 
 				List<SocialActivityAchievement> list = q.list();
 
-				result = list;
-
-				SocialActivityAchievement socialActivityAchievement = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_U_N,
 						finderArgs, list);
 				}
 				else {
-					socialActivityAchievement = list.get(0);
+					SocialActivityAchievement socialActivityAchievement = list.get(0);
+
+					result = socialActivityAchievement;
 
 					cacheResult(socialActivityAchievement);
 
@@ -2273,28 +2497,23 @@ public class SocialActivityAchievementPersistenceImpl
 							finderArgs, socialActivityAchievement);
 					}
 				}
-
-				return socialActivityAchievement;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_U_N,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_U_N,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (SocialActivityAchievement)result;
-			}
+			return (SocialActivityAchievement)result;
 		}
 	}
 
@@ -2326,10 +2545,12 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	public int countByG_U_N(long groupId, long userId, String name)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_U_N;
+
 		Object[] finderArgs = new Object[] { groupId, userId, name };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_U_N,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -2372,18 +2593,15 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U_N,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2404,8 +2622,8 @@ public class SocialActivityAchievementPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_F = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
@@ -2417,7 +2635,8 @@ public class SocialActivityAchievementPersistenceImpl
 			},
 			SocialActivityAchievementModelImpl.GROUPID_COLUMN_BITMASK |
 			SocialActivityAchievementModelImpl.USERID_COLUMN_BITMASK |
-			SocialActivityAchievementModelImpl.FIRSTINGROUP_COLUMN_BITMASK);
+			SocialActivityAchievementModelImpl.FIRSTINGROUP_COLUMN_BITMASK |
+			SocialActivityAchievementModelImpl.ACTIVITYACHIEVEMENTID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U_F = new FinderPath(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 			SocialActivityAchievementModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -2461,247 +2680,6 @@ public class SocialActivityAchievementPersistenceImpl
 		long userId, boolean firstInGroup, int start, int end)
 		throws SystemException {
 		return findByG_U_F(groupId, userId, firstInGroup, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the social activity achievements where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param firstInGroup the first in group
-	 * @param start the lower bound of the range of social activity achievements
-	 * @param end the upper bound of the range of social activity achievements (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching social activity achievements
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SocialActivityAchievement> findByG_U_F(long groupId,
-		long userId, boolean firstInGroup, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_F;
-			finderArgs = new Object[] { groupId, userId, firstInGroup };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_F;
-			finderArgs = new Object[] {
-					groupId, userId, firstInGroup,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SocialActivityAchievement socialActivityAchievement : list) {
-				if ((groupId != socialActivityAchievement.getGroupId()) ||
-						(userId != socialActivityAchievement.getUserId()) ||
-						(firstInGroup != socialActivityAchievement.getFirstInGroup())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
-
-			query.append(_FINDER_COLUMN_G_U_F_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_U_F_USERID_2);
-
-			query.append(_FINDER_COLUMN_G_U_F_FIRSTINGROUP_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(userId);
-
-				qPos.add(firstInGroup);
-
-				list = (List<SocialActivityAchievement>)QueryUtil.list(q,
-						getDialect(), start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param firstInGroup the first in group
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity achievement
-	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement findByG_U_F_First(long groupId,
-		long userId, boolean firstInGroup, OrderByComparator orderByComparator)
-		throws NoSuchActivityAchievementException, SystemException {
-		SocialActivityAchievement socialActivityAchievement = fetchByG_U_F_First(groupId,
-				userId, firstInGroup, orderByComparator);
-
-		if (socialActivityAchievement != null) {
-			return socialActivityAchievement;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", firstInGroup=");
-		msg.append(firstInGroup);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityAchievementException(msg.toString());
-	}
-
-	/**
-	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param firstInGroup the first in group
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement fetchByG_U_F_First(long groupId,
-		long userId, boolean firstInGroup, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<SocialActivityAchievement> list = findByG_U_F(groupId, userId,
-				firstInGroup, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param firstInGroup the first in group
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity achievement
-	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement findByG_U_F_Last(long groupId,
-		long userId, boolean firstInGroup, OrderByComparator orderByComparator)
-		throws NoSuchActivityAchievementException, SystemException {
-		SocialActivityAchievement socialActivityAchievement = fetchByG_U_F_Last(groupId,
-				userId, firstInGroup, orderByComparator);
-
-		if (socialActivityAchievement != null) {
-			return socialActivityAchievement;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", firstInGroup=");
-		msg.append(firstInGroup);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActivityAchievementException(msg.toString());
-	}
-
-	/**
-	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param firstInGroup the first in group
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SocialActivityAchievement fetchByG_U_F_Last(long groupId,
-		long userId, boolean firstInGroup, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByG_U_F(groupId, userId, firstInGroup);
-
-		List<SocialActivityAchievement> list = findByG_U_F(groupId, userId,
-				firstInGroup, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2826,6 +2804,9 @@ public class SocialActivityAchievementPersistenceImpl
 				}
 			}
 		}
+		else {
+			query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -2861,6 +2842,307 @@ public class SocialActivityAchievementPersistenceImpl
 	}
 
 	/**
+	 * Returns an ordered range of all the social activity achievements where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param firstInGroup the first in group
+	 * @param start the lower bound of the range of social activity achievements
+	 * @param end the upper bound of the range of social activity achievements (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching social activity achievements
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SocialActivityAchievement> findByG_U_F(long groupId,
+		long userId, boolean firstInGroup, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_F;
+			finderArgs = new Object[] { groupId, userId, firstInGroup };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_F;
+			finderArgs = new Object[] {
+					groupId, userId, firstInGroup,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityAchievement socialActivityAchievement : list) {
+				if ((groupId != socialActivityAchievement.getGroupId()) ||
+						(userId != socialActivityAchievement.getUserId()) ||
+						(firstInGroup != socialActivityAchievement.getFirstInGroup())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_SOCIALACTIVITYACHIEVEMENT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_U_F_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_U_F_USERID_2);
+
+			query.append(_FINDER_COLUMN_G_U_F_FIRSTINGROUP_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(userId);
+
+				qPos.add(firstInGroup);
+
+				list = (List<SocialActivityAchievement>)QueryUtil.list(q,
+						getDialect(), start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param firstInGroup the first in group
+	 * @return the first matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_U_F_First(long groupId,
+		long userId, boolean firstInGroup)
+		throws NoSuchActivityAchievementException, SystemException {
+		return findByG_U_F_First(groupId, userId, firstInGroup, null);
+	}
+
+	/**
+	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param firstInGroup the first in group
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_U_F_First(long groupId,
+		long userId, boolean firstInGroup, OrderByComparator orderByComparator)
+		throws NoSuchActivityAchievementException, SystemException {
+		SocialActivityAchievement socialActivityAchievement = fetchByG_U_F_First(groupId,
+				userId, firstInGroup, orderByComparator);
+
+		if (socialActivityAchievement != null) {
+			return socialActivityAchievement;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", firstInGroup=");
+		msg.append(firstInGroup);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityAchievementException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param firstInGroup the first in group
+	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_U_F_First(long groupId,
+		long userId, boolean firstInGroup) throws SystemException {
+		return fetchByG_U_F_First(groupId, userId, firstInGroup, null);
+	}
+
+	/**
+	 * Returns the first social activity achievement in the ordered set where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param firstInGroup the first in group
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_U_F_First(long groupId,
+		long userId, boolean firstInGroup, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<SocialActivityAchievement> list = findByG_U_F(groupId, userId,
+				firstInGroup, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param firstInGroup the first in group
+	 * @return the last matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_U_F_Last(long groupId,
+		long userId, boolean firstInGroup)
+		throws NoSuchActivityAchievementException, SystemException {
+		return findByG_U_F_Last(groupId, userId, firstInGroup, null);
+	}
+
+	/**
+	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param firstInGroup the first in group
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity achievement
+	 * @throws com.liferay.portlet.social.NoSuchActivityAchievementException if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement findByG_U_F_Last(long groupId,
+		long userId, boolean firstInGroup, OrderByComparator orderByComparator)
+		throws NoSuchActivityAchievementException, SystemException {
+		SocialActivityAchievement socialActivityAchievement = fetchByG_U_F_Last(groupId,
+				userId, firstInGroup, orderByComparator);
+
+		if (socialActivityAchievement != null) {
+			return socialActivityAchievement;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", firstInGroup=");
+		msg.append(firstInGroup);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActivityAchievementException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social activity achievement in the default ordered set defined by {@link SocialActivityAchievementModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param firstInGroup the first in group
+	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_U_F_Last(long groupId,
+		long userId, boolean firstInGroup) throws SystemException {
+		return fetchByG_U_F_Last(groupId, userId, firstInGroup, null);
+	}
+
+	/**
+	 * Returns the last social activity achievement in the ordered set where groupId = &#63; and userId = &#63; and firstInGroup = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param firstInGroup the first in group
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social activity achievement, or <code>null</code> if a matching social activity achievement could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialActivityAchievement fetchByG_U_F_Last(long groupId,
+		long userId, boolean firstInGroup, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_U_F(groupId, userId, firstInGroup);
+
+		List<SocialActivityAchievement> list = findByG_U_F(groupId, userId,
+				firstInGroup, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the social activity achievements where groupId = &#63; and userId = &#63; and firstInGroup = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -2871,7 +3153,8 @@ public class SocialActivityAchievementPersistenceImpl
 	public void removeByG_U_F(long groupId, long userId, boolean firstInGroup)
 		throws SystemException {
 		for (SocialActivityAchievement socialActivityAchievement : findByG_U_F(
-				groupId, userId, firstInGroup)) {
+				groupId, userId, firstInGroup, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(socialActivityAchievement);
 		}
 	}
@@ -2887,10 +3170,12 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	public int countByG_U_F(long groupId, long userId, boolean firstInGroup)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_U_F;
+
 		Object[] finderArgs = new Object[] { groupId, userId, firstInGroup };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_U_F,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -2921,18 +3206,15 @@ public class SocialActivityAchievementPersistenceImpl
 				qPos.add(firstInGroup);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U_F,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -3434,29 +3716,28 @@ public class SocialActivityAchievementPersistenceImpl
 		if (socialActivityAchievement == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				socialActivityAchievement = (SocialActivityAchievement)session.get(SocialActivityAchievementImpl.class,
 						Long.valueOf(activityAchievementId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (socialActivityAchievement != null) {
 					cacheResult(socialActivityAchievement);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
 						SocialActivityAchievementImpl.class,
 						activityAchievementId, _nullSocialActivityAchievement);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SocialActivityAchievementModelImpl.ENTITY_CACHE_ENABLED,
+					SocialActivityAchievementImpl.class, activityAchievementId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -3507,7 +3788,7 @@ public class SocialActivityAchievementPersistenceImpl
 	public List<SocialActivityAchievement> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -3538,7 +3819,7 @@ public class SocialActivityAchievementPersistenceImpl
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SOCIALACTIVITYACHIEVEMENT;
+				sql = _SQL_SELECT_SOCIALACTIVITYACHIEVEMENT.concat(SocialActivityAchievementModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -3548,30 +3829,19 @@ public class SocialActivityAchievementPersistenceImpl
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<SocialActivityAchievement>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<SocialActivityAchievement>)QueryUtil.list(q,
+						getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<SocialActivityAchievement>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3609,18 +3879,17 @@ public class SocialActivityAchievementPersistenceImpl
 				Query q = session.createQuery(_SQL_COUNT_SOCIALACTIVITYACHIEVEMENT);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -3656,6 +3925,7 @@ public class SocialActivityAchievementPersistenceImpl
 	public void destroy() {
 		EntityCacheUtil.removeCache(SocialActivityAchievementImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

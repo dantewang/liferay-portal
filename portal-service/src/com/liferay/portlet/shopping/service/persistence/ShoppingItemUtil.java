@@ -111,60 +111,138 @@ public class ShoppingItemUtil {
 	}
 
 	/**
-	* Returns the shopping item where smallImageId = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchItemException} if it could not be found.
+	* Returns the first shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
-	* @return the matching shopping item
+	* @return the first matching shopping item
 	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem findBySmallImageId(
+	public static com.liferay.portlet.shopping.model.ShoppingItem findBySmallImageId_First(
 		long smallImageId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().findBySmallImageId(smallImageId);
+		return getPersistence().findBySmallImageId_First(smallImageId);
 	}
 
 	/**
-	* Returns the shopping item where smallImageId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first shopping item in the ordered set where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
-	* @return the matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem fetchBySmallImageId(
+	public static com.liferay.portlet.shopping.model.ShoppingItem findBySmallImageId_First(
+		long smallImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence()
+				   .findBySmallImageId_First(smallImageId, orderByComparator);
+	}
+
+	/**
+	* Returns the first shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @return the first matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchBySmallImageId_First(
 		long smallImageId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchBySmallImageId(smallImageId);
+		return getPersistence().fetchBySmallImageId_First(smallImageId);
 	}
 
 	/**
-	* Returns the shopping item where smallImageId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first shopping item in the ordered set where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping item, or <code>null</code> if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem fetchBySmallImageId(
-		long smallImageId, boolean retrieveFromCache)
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchBySmallImageId_First(
+		long smallImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchBySmallImageId(smallImageId, retrieveFromCache);
+				   .fetchBySmallImageId_First(smallImageId, orderByComparator);
 	}
 
 	/**
-	* Removes the shopping item where smallImageId = &#63; from the database.
+	* Returns the last shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
 	*
 	* @param smallImageId the small image ID
-	* @return the shopping item that was removed
+	* @return the last matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem removeBySmallImageId(
+	public static com.liferay.portlet.shopping.model.ShoppingItem findBySmallImageId_Last(
 		long smallImageId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().removeBySmallImageId(smallImageId);
+		return getPersistence().findBySmallImageId_Last(smallImageId);
+	}
+
+	/**
+	* Returns the last shopping item in the ordered set where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem findBySmallImageId_Last(
+		long smallImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence()
+				   .findBySmallImageId_Last(smallImageId, orderByComparator);
+	}
+
+	/**
+	* Returns the last shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @return the last matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchBySmallImageId_Last(
+		long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchBySmallImageId_Last(smallImageId);
+	}
+
+	/**
+	* Returns the last shopping item in the ordered set where smallImageId = &#63;.
+	*
+	* @param smallImageId the small image ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchBySmallImageId_Last(
+		long smallImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchBySmallImageId_Last(smallImageId, orderByComparator);
+	}
+
+	/**
+	* Removes all the shopping items where smallImageId = &#63; from the database.
+	*
+	* @param smallImageId the small image ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeBySmallImageId(long smallImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeBySmallImageId(smallImageId);
 	}
 
 	/**
@@ -180,60 +258,138 @@ public class ShoppingItemUtil {
 	}
 
 	/**
-	* Returns the shopping item where mediumImageId = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchItemException} if it could not be found.
+	* Returns the first shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where mediumImageId = &#63;.
 	*
 	* @param mediumImageId the medium image ID
-	* @return the matching shopping item
+	* @return the first matching shopping item
 	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem findByMediumImageId(
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByMediumImageId_First(
 		long mediumImageId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().findByMediumImageId(mediumImageId);
+		return getPersistence().findByMediumImageId_First(mediumImageId);
 	}
 
 	/**
-	* Returns the shopping item where mediumImageId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first shopping item in the ordered set where mediumImageId = &#63;.
 	*
 	* @param mediumImageId the medium image ID
-	* @return the matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByMediumImageId(
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByMediumImageId_First(
+		long mediumImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence()
+				   .findByMediumImageId_First(mediumImageId, orderByComparator);
+	}
+
+	/**
+	* Returns the first shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where mediumImageId = &#63;.
+	*
+	* @param mediumImageId the medium image ID
+	* @return the first matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByMediumImageId_First(
 		long mediumImageId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByMediumImageId(mediumImageId);
+		return getPersistence().fetchByMediumImageId_First(mediumImageId);
 	}
 
 	/**
-	* Returns the shopping item where mediumImageId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first shopping item in the ordered set where mediumImageId = &#63;.
 	*
 	* @param mediumImageId the medium image ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping item, or <code>null</code> if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByMediumImageId(
-		long mediumImageId, boolean retrieveFromCache)
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByMediumImageId_First(
+		long mediumImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchByMediumImageId(mediumImageId, retrieveFromCache);
+				   .fetchByMediumImageId_First(mediumImageId, orderByComparator);
 	}
 
 	/**
-	* Removes the shopping item where mediumImageId = &#63; from the database.
+	* Returns the last shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where mediumImageId = &#63;.
 	*
 	* @param mediumImageId the medium image ID
-	* @return the shopping item that was removed
+	* @return the last matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem removeByMediumImageId(
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByMediumImageId_Last(
 		long mediumImageId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().removeByMediumImageId(mediumImageId);
+		return getPersistence().findByMediumImageId_Last(mediumImageId);
+	}
+
+	/**
+	* Returns the last shopping item in the ordered set where mediumImageId = &#63;.
+	*
+	* @param mediumImageId the medium image ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByMediumImageId_Last(
+		long mediumImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence()
+				   .findByMediumImageId_Last(mediumImageId, orderByComparator);
+	}
+
+	/**
+	* Returns the last shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where mediumImageId = &#63;.
+	*
+	* @param mediumImageId the medium image ID
+	* @return the last matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByMediumImageId_Last(
+		long mediumImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByMediumImageId_Last(mediumImageId);
+	}
+
+	/**
+	* Returns the last shopping item in the ordered set where mediumImageId = &#63;.
+	*
+	* @param mediumImageId the medium image ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByMediumImageId_Last(
+		long mediumImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByMediumImageId_Last(mediumImageId, orderByComparator);
+	}
+
+	/**
+	* Removes all the shopping items where mediumImageId = &#63; from the database.
+	*
+	* @param mediumImageId the medium image ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByMediumImageId(long mediumImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByMediumImageId(mediumImageId);
 	}
 
 	/**
@@ -249,60 +405,138 @@ public class ShoppingItemUtil {
 	}
 
 	/**
-	* Returns the shopping item where largeImageId = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchItemException} if it could not be found.
+	* Returns the first shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where largeImageId = &#63;.
 	*
 	* @param largeImageId the large image ID
-	* @return the matching shopping item
+	* @return the first matching shopping item
 	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem findByLargeImageId(
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByLargeImageId_First(
 		long largeImageId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().findByLargeImageId(largeImageId);
+		return getPersistence().findByLargeImageId_First(largeImageId);
 	}
 
 	/**
-	* Returns the shopping item where largeImageId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first shopping item in the ordered set where largeImageId = &#63;.
 	*
 	* @param largeImageId the large image ID
-	* @return the matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByLargeImageId(
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByLargeImageId_First(
+		long largeImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence()
+				   .findByLargeImageId_First(largeImageId, orderByComparator);
+	}
+
+	/**
+	* Returns the first shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where largeImageId = &#63;.
+	*
+	* @param largeImageId the large image ID
+	* @return the first matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByLargeImageId_First(
 		long largeImageId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByLargeImageId(largeImageId);
+		return getPersistence().fetchByLargeImageId_First(largeImageId);
 	}
 
 	/**
-	* Returns the shopping item where largeImageId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first shopping item in the ordered set where largeImageId = &#63;.
 	*
 	* @param largeImageId the large image ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping item, or <code>null</code> if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByLargeImageId(
-		long largeImageId, boolean retrieveFromCache)
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByLargeImageId_First(
+		long largeImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchByLargeImageId(largeImageId, retrieveFromCache);
+				   .fetchByLargeImageId_First(largeImageId, orderByComparator);
 	}
 
 	/**
-	* Removes the shopping item where largeImageId = &#63; from the database.
+	* Returns the last shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where largeImageId = &#63;.
 	*
 	* @param largeImageId the large image ID
-	* @return the shopping item that was removed
+	* @return the last matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem removeByLargeImageId(
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByLargeImageId_Last(
 		long largeImageId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence().removeByLargeImageId(largeImageId);
+		return getPersistence().findByLargeImageId_Last(largeImageId);
+	}
+
+	/**
+	* Returns the last shopping item in the ordered set where largeImageId = &#63;.
+	*
+	* @param largeImageId the large image ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByLargeImageId_Last(
+		long largeImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence()
+				   .findByLargeImageId_Last(largeImageId, orderByComparator);
+	}
+
+	/**
+	* Returns the last shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where largeImageId = &#63;.
+	*
+	* @param largeImageId the large image ID
+	* @return the last matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByLargeImageId_Last(
+		long largeImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByLargeImageId_Last(largeImageId);
+	}
+
+	/**
+	* Returns the last shopping item in the ordered set where largeImageId = &#63;.
+	*
+	* @param largeImageId the large image ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByLargeImageId_Last(
+		long largeImageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByLargeImageId_Last(largeImageId, orderByComparator);
+	}
+
+	/**
+	* Removes all the shopping items where largeImageId = &#63; from the database.
+	*
+	* @param largeImageId the large image ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByLargeImageId(long largeImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByLargeImageId(largeImageId);
 	}
 
 	/**
@@ -349,101 +583,6 @@ public class ShoppingItemUtil {
 		long groupId, long categoryId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByG_C(groupId, categoryId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the shopping items where groupId = &#63; and categoryId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param start the lower bound of the range of shopping items
-	* @param end the upper bound of the range of shopping items (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching shopping items
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portlet.shopping.model.ShoppingItem> findByG_C(
-		long groupId, long categoryId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C(groupId, categoryId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first shopping item in the ordered set where groupId = &#63; and categoryId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching shopping item
-	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem findByG_C_First(
-		long groupId, long categoryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence()
-				   .findByG_C_First(groupId, categoryId, orderByComparator);
-	}
-
-	/**
-	* Returns the first shopping item in the ordered set where groupId = &#63; and categoryId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching shopping item, or <code>null</code> if a matching shopping item could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByG_C_First(
-		long groupId, long categoryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_First(groupId, categoryId, orderByComparator);
-	}
-
-	/**
-	* Returns the last shopping item in the ordered set where groupId = &#63; and categoryId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching shopping item
-	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem findByG_C_Last(
-		long groupId, long categoryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchItemException {
-		return getPersistence()
-				   .findByG_C_Last(groupId, categoryId, orderByComparator);
-	}
-
-	/**
-	* Returns the last shopping item in the ordered set where groupId = &#63; and categoryId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param categoryId the category ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching shopping item, or <code>null</code> if a matching shopping item could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByG_C_Last(
-		long groupId, long categoryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_Last(groupId, categoryId, orderByComparator);
 	}
 
 	/**
@@ -544,6 +683,161 @@ public class ShoppingItemUtil {
 		return getPersistence()
 				   .filterFindByG_C_PrevAndNext(itemId, groupId, categoryId,
 			orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the shopping items where groupId = &#63; and categoryId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param start the lower bound of the range of shopping items
+	* @param end the upper bound of the range of shopping items (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching shopping items
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.shopping.model.ShoppingItem> findByG_C(
+		long groupId, long categoryId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C(groupId, categoryId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the first matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByG_C_First(
+		long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence().findByG_C_First(groupId, categoryId);
+	}
+
+	/**
+	* Returns the first shopping item in the ordered set where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByG_C_First(
+		long groupId, long categoryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence()
+				   .findByG_C_First(groupId, categoryId, orderByComparator);
+	}
+
+	/**
+	* Returns the first shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the first matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByG_C_First(
+		long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_C_First(groupId, categoryId);
+	}
+
+	/**
+	* Returns the first shopping item in the ordered set where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByG_C_First(
+		long groupId, long categoryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_First(groupId, categoryId, orderByComparator);
+	}
+
+	/**
+	* Returns the last shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the last matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByG_C_Last(
+		long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence().findByG_C_Last(groupId, categoryId);
+	}
+
+	/**
+	* Returns the last shopping item in the ordered set where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping item
+	* @throws com.liferay.portlet.shopping.NoSuchItemException if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem findByG_C_Last(
+		long groupId, long categoryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchItemException {
+		return getPersistence()
+				   .findByG_C_Last(groupId, categoryId, orderByComparator);
+	}
+
+	/**
+	* Returns the last shopping item in the default ordered set defined by {@link ShoppingItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @return the last matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByG_C_Last(
+		long groupId, long categoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_C_Last(groupId, categoryId);
+	}
+
+	/**
+	* Returns the last shopping item in the ordered set where groupId = &#63; and categoryId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param categoryId the category ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping item, or <code>null</code> if a matching shopping item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingItem fetchByG_C_Last(
+		long groupId, long categoryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_Last(groupId, categoryId, orderByComparator);
 	}
 
 	/**

@@ -141,6 +141,25 @@ public class PortletUtil {
 	}
 
 	/**
+	* Returns the portlets before and after the current portlet in the ordered set where companyId = &#63;.
+	*
+	* @param id the primary key of the current portlet
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next portlet
+	* @throws com.liferay.portal.NoSuchPortletException if a portlet with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Portlet[] findByCompanyId_PrevAndNext(
+		long id, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPortletException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByCompanyId_PrevAndNext(id, companyId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the portlets where companyId = &#63;.
 	*
 	* <p>
@@ -163,6 +182,21 @@ public class PortletUtil {
 	}
 
 	/**
+	* Returns the first portlet in the default ordered set defined by {@link PortletModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching portlet
+	* @throws com.liferay.portal.NoSuchPortletException if a matching portlet could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Portlet findByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.NoSuchPortletException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first portlet in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -181,6 +215,19 @@ public class PortletUtil {
 	}
 
 	/**
+	* Returns the first portlet in the default ordered set defined by {@link PortletModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching portlet, or <code>null</code> if a matching portlet could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Portlet fetchByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first portlet in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -194,6 +241,21 @@ public class PortletUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_First(companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last portlet in the default ordered set defined by {@link PortletModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching portlet
+	* @throws com.liferay.portal.NoSuchPortletException if a matching portlet could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Portlet findByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.NoSuchPortletException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByCompanyId_Last(companyId);
 	}
 
 	/**
@@ -215,6 +277,19 @@ public class PortletUtil {
 	}
 
 	/**
+	* Returns the last portlet in the default ordered set defined by {@link PortletModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching portlet, or <code>null</code> if a matching portlet could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Portlet fetchByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_Last(companyId);
+	}
+
+	/**
 	* Returns the last portlet in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -228,25 +303,6 @@ public class PortletUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_Last(companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the portlets before and after the current portlet in the ordered set where companyId = &#63;.
-	*
-	* @param id the primary key of the current portlet
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next portlet
-	* @throws com.liferay.portal.NoSuchPortletException if a portlet with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Portlet[] findByCompanyId_PrevAndNext(
-		long id, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchPortletException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByCompanyId_PrevAndNext(id, companyId, orderByComparator);
 	}
 
 	/**

@@ -66,6 +66,23 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the resource blocks before and after the current resource block in the ordered set where companyId = &#63; and name = &#63;.
+	*
+	* @param resourceBlockId the primary key of the current resource block
+	* @param companyId the company ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next resource block
+	* @throws com.liferay.portal.NoSuchResourceBlockException if a resource block with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlock[] findByC_N_PrevAndNext(
+		long resourceBlockId, long companyId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchResourceBlockException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the resource blocks where companyId = &#63; and name = &#63;.
 	*
 	* <p>
@@ -86,6 +103,20 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the first matching resource block
+	* @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlock findByC_N_First(
+		long companyId, java.lang.String name)
+		throws com.liferay.portal.NoSuchResourceBlockException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first resource block in the ordered set where companyId = &#63; and name = &#63;.
 	*
 	* @param companyId the company ID
@@ -102,6 +133,18 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the first matching resource block, or <code>null</code> if a matching resource block could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlock fetchByC_N_First(
+		long companyId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first resource block in the ordered set where companyId = &#63; and name = &#63;.
 	*
 	* @param companyId the company ID
@@ -114,6 +157,20 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 		long companyId, java.lang.String name,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the last matching resource block
+	* @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlock findByC_N_Last(
+		long companyId, java.lang.String name)
+		throws com.liferay.portal.NoSuchResourceBlockException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last resource block in the ordered set where companyId = &#63; and name = &#63;.
@@ -132,6 +189,18 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the last matching resource block, or <code>null</code> if a matching resource block could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlock fetchByC_N_Last(
+		long companyId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last resource block in the ordered set where companyId = &#63; and name = &#63;.
 	*
 	* @param companyId the company ID
@@ -144,23 +213,6 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 		long companyId, java.lang.String name,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the resource blocks before and after the current resource block in the ordered set where companyId = &#63; and name = &#63;.
-	*
-	* @param resourceBlockId the primary key of the current resource block
-	* @param companyId the company ID
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next resource block
-	* @throws com.liferay.portal.NoSuchResourceBlockException if a resource block with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.ResourceBlock[] findByC_N_PrevAndNext(
-		long resourceBlockId, long companyId, java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchResourceBlockException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the resource blocks where companyId = &#63; and name = &#63; from the database.
@@ -216,6 +268,25 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the resource blocks before and after the current resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
+	*
+	* @param resourceBlockId the primary key of the current resource block
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next resource block
+	* @throws com.liferay.portal.NoSuchResourceBlockException if a resource block with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlock[] findByC_G_N_PrevAndNext(
+		long resourceBlockId, long companyId, long groupId,
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchResourceBlockException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the resource blocks where companyId = &#63; and groupId = &#63; and name = &#63;.
 	*
 	* <p>
@@ -238,6 +309,21 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and groupId = &#63; and name = &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param name the name
+	* @return the first matching resource block
+	* @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlock findByC_G_N_First(
+		long companyId, long groupId, java.lang.String name)
+		throws com.liferay.portal.NoSuchResourceBlockException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
 	*
 	* @param companyId the company ID
@@ -255,6 +341,19 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and groupId = &#63; and name = &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param name the name
+	* @return the first matching resource block, or <code>null</code> if a matching resource block could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlock fetchByC_G_N_First(
+		long companyId, long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
 	*
 	* @param companyId the company ID
@@ -268,6 +367,21 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 		long companyId, long groupId, java.lang.String name,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and groupId = &#63; and name = &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param name the name
+	* @return the last matching resource block
+	* @throws com.liferay.portal.NoSuchResourceBlockException if a matching resource block could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlock findByC_G_N_Last(
+		long companyId, long groupId, java.lang.String name)
+		throws com.liferay.portal.NoSuchResourceBlockException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
@@ -287,6 +401,19 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last resource block in the default ordered set defined by {@link ResourceBlockModelImpl#ORDER_BY_JPQL} where companyId = &#63; and groupId = &#63; and name = &#63;.
+	*
+	* @param companyId the company ID
+	* @param groupId the group ID
+	* @param name the name
+	* @return the last matching resource block, or <code>null</code> if a matching resource block could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.ResourceBlock fetchByC_G_N_Last(
+		long companyId, long groupId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
 	*
 	* @param companyId the company ID
@@ -300,25 +427,6 @@ public interface ResourceBlockPersistence extends BasePersistence<ResourceBlock>
 		long companyId, long groupId, java.lang.String name,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the resource blocks before and after the current resource block in the ordered set where companyId = &#63; and groupId = &#63; and name = &#63;.
-	*
-	* @param resourceBlockId the primary key of the current resource block
-	* @param companyId the company ID
-	* @param groupId the group ID
-	* @param name the name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next resource block
-	* @throws com.liferay.portal.NoSuchResourceBlockException if a resource block with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.ResourceBlock[] findByC_G_N_PrevAndNext(
-		long resourceBlockId, long companyId, long groupId,
-		java.lang.String name,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchResourceBlockException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the resource blocks where companyId = &#63; and groupId = &#63; and name = &#63; from the database.

@@ -66,7 +66,6 @@ import com.liferay.portlet.wiki.model.impl.WikiPageModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -108,14 +107,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
 			new String[] { String.class.getName() },
-			WikiPageModelImpl.UUID_COLUMN_BITMASK);
+			WikiPageModelImpl.UUID_COLUMN_BITMASK |
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -148,221 +150,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if (!Validator.equals(uuid, wikiPage.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByUuid_First(uuid, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByUuid_Last(uuid, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<WikiPage> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -487,7 +274,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -524,13 +310,273 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if (!Validator.equals(uuid, wikiPage.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByUuid_First(String uuid)
+		throws NoSuchPageException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByUuid_First(uuid, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByUuid_First(String uuid) throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByUuid_Last(String uuid)
+		throws NoSuchPageException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByUuid_Last(String uuid) throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<WikiPage> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (WikiPage wikiPage : findByUuid(uuid)) {
+		for (WikiPage wikiPage : findByUuid(uuid, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -543,10 +589,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
 		Object[] finderArgs = new Object[] { uuid };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -581,18 +629,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -711,8 +756,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
 
-			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -732,16 +775,14 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 				List<WikiPage> list = q.list();
 
-				result = list;
-
-				WikiPage wikiPage = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
 						finderArgs, list);
 				}
 				else {
-					wikiPage = list.get(0);
+					WikiPage wikiPage = list.get(0);
+
+					result = wikiPage;
 
 					cacheResult(wikiPage);
 
@@ -752,28 +793,23 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 							finderArgs, wikiPage);
 					}
 				}
-
-				return wikiPage;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (WikiPage)result;
-			}
+			return (WikiPage)result;
 		}
 	}
 
@@ -802,10 +838,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
+
 		Object[] finderArgs = new Object[] { uuid, groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -844,18 +882,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -873,8 +908,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
 		new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
@@ -882,7 +917,10 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			WikiPageModelImpl.UUID_COLUMN_BITMASK |
-			WikiPageModelImpl.COMPANYID_COLUMN_BITMASK);
+			WikiPageModelImpl.COMPANYID_COLUMN_BITMASK |
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
@@ -919,244 +957,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByUuid_C(String uuid, long companyId, int start,
 		int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByUuid_C(String uuid, long companyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if (!Validator.equals(uuid, wikiPage.getUuid()) ||
-						(companyId != wikiPage.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByUuid_C_First(uuid, companyId,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByUuid_C_Last(uuid, companyId,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<WikiPage> list = findByUuid_C(uuid, companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1284,7 +1084,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -1323,6 +1122,294 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByUuid_C(String uuid, long companyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if (!Validator.equals(uuid, wikiPage.getUuid()) ||
+						(companyId != wikiPage.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchPageException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByUuid_C_First(uuid, companyId,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchPageException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByUuid_C_Last(uuid, companyId,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<WikiPage> list = findByUuid_C(uuid, companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1331,7 +1418,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (WikiPage wikiPage : findByUuid_C(uuid, companyId)) {
+		for (WikiPage wikiPage : findByUuid_C(uuid, companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -1346,10 +1434,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+
 		Object[] finderArgs = new Object[] { uuid, companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1388,18 +1478,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1417,15 +1504,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NODEID =
 		new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByNodeId",
 			new String[] { Long.class.getName() },
-			WikiPageModelImpl.NODEID_COLUMN_BITMASK);
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_NODEID = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByNodeId",
@@ -1458,209 +1547,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByNodeId(long nodeId, int start, int end)
 		throws SystemException {
 		return findByNodeId(nodeId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where nodeId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param nodeId the node ID
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByNodeId(long nodeId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NODEID;
-			finderArgs = new Object[] { nodeId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_NODEID;
-			finderArgs = new Object[] { nodeId, start, end, orderByComparator };
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((nodeId != wikiPage.getNodeId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_NODEID_NODEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(nodeId);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByNodeId_First(long nodeId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByNodeId_First(nodeId, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByNodeId_First(long nodeId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByNodeId(nodeId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByNodeId_Last(long nodeId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByNodeId_Last(nodeId, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByNodeId_Last(long nodeId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByNodeId(nodeId);
-
-		List<WikiPage> list = findByNodeId(nodeId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1775,7 +1661,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -1810,13 +1695,261 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where nodeId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param nodeId the node ID
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByNodeId(long nodeId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NODEID;
+			finderArgs = new Object[] { nodeId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_NODEID;
+			finderArgs = new Object[] { nodeId, start, end, orderByComparator };
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_NODEID_NODEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nodeId);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByNodeId_First(long nodeId)
+		throws NoSuchPageException, SystemException {
+		return findByNodeId_First(nodeId, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByNodeId_First(long nodeId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByNodeId_First(nodeId, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByNodeId_First(long nodeId) throws SystemException {
+		return fetchByNodeId_First(nodeId, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByNodeId_First(long nodeId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByNodeId(nodeId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByNodeId_Last(long nodeId)
+		throws NoSuchPageException, SystemException {
+		return findByNodeId_Last(nodeId, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByNodeId_Last(long nodeId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByNodeId_Last(nodeId, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByNodeId_Last(long nodeId) throws SystemException {
+		return fetchByNodeId_Last(nodeId, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByNodeId_Last(long nodeId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByNodeId(nodeId);
+
+		List<WikiPage> list = findByNodeId(nodeId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where nodeId = &#63; from the database.
 	 *
 	 * @param nodeId the node ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByNodeId(long nodeId) throws SystemException {
-		for (WikiPage wikiPage : findByNodeId(nodeId)) {
+		for (WikiPage wikiPage : findByNodeId(nodeId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -1829,10 +1962,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByNodeId(long nodeId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_NODEID;
+
 		Object[] finderArgs = new Object[] { nodeId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_NODEID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -1855,18 +1990,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(nodeId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NODEID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1881,15 +2013,18 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FORMAT =
 		new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByFormat",
 			new String[] { String.class.getName() },
-			WikiPageModelImpl.FORMAT_COLUMN_BITMASK);
+			WikiPageModelImpl.FORMAT_COLUMN_BITMASK |
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_FORMAT = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByFormat",
@@ -1922,221 +2057,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByFormat(String format, int start, int end)
 		throws SystemException {
 		return findByFormat(format, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where format = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param format the format
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByFormat(String format, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FORMAT;
-			finderArgs = new Object[] { format };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_FORMAT;
-			finderArgs = new Object[] { format, start, end, orderByComparator };
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if (!Validator.equals(format, wikiPage.getFormat())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			if (format == null) {
-				query.append(_FINDER_COLUMN_FORMAT_FORMAT_1);
-			}
-			else {
-				if (format.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_FORMAT_FORMAT_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_FORMAT_FORMAT_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (format != null) {
-					qPos.add(format);
-				}
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where format = &#63;.
-	 *
-	 * @param format the format
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByFormat_First(String format,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByFormat_First(format, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("format=");
-		msg.append(format);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where format = &#63;.
-	 *
-	 * @param format the format
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByFormat_First(String format,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByFormat(format, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where format = &#63;.
-	 *
-	 * @param format the format
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByFormat_Last(String format,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByFormat_Last(format, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("format=");
-		msg.append(format);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where format = &#63;.
-	 *
-	 * @param format the format
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByFormat_Last(String format,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByFormat(format);
-
-		List<WikiPage> list = findByFormat(format, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2261,7 +2181,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -2298,13 +2217,274 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where format = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param format the format
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByFormat(String format, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FORMAT;
+			finderArgs = new Object[] { format };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_FORMAT;
+			finderArgs = new Object[] { format, start, end, orderByComparator };
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if (!Validator.equals(format, wikiPage.getFormat())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			if (format == null) {
+				query.append(_FINDER_COLUMN_FORMAT_FORMAT_1);
+			}
+			else {
+				if (format.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_FORMAT_FORMAT_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_FORMAT_FORMAT_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (format != null) {
+					qPos.add(format);
+				}
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where format = &#63;.
+	 *
+	 * @param format the format
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByFormat_First(String format)
+		throws NoSuchPageException, SystemException {
+		return findByFormat_First(format, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where format = &#63;.
+	 *
+	 * @param format the format
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByFormat_First(String format,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByFormat_First(format, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("format=");
+		msg.append(format);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where format = &#63;.
+	 *
+	 * @param format the format
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByFormat_First(String format)
+		throws SystemException {
+		return fetchByFormat_First(format, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where format = &#63;.
+	 *
+	 * @param format the format
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByFormat_First(String format,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByFormat(format, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where format = &#63;.
+	 *
+	 * @param format the format
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByFormat_Last(String format)
+		throws NoSuchPageException, SystemException {
+		return findByFormat_Last(format, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where format = &#63;.
+	 *
+	 * @param format the format
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByFormat_Last(String format,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByFormat_Last(format, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("format=");
+		msg.append(format);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where format = &#63;.
+	 *
+	 * @param format the format
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByFormat_Last(String format) throws SystemException {
+		return fetchByFormat_Last(format, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where format = &#63;.
+	 *
+	 * @param format the format
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByFormat_Last(String format,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByFormat(format);
+
+		List<WikiPage> list = findByFormat(format, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where format = &#63; from the database.
 	 *
 	 * @param format the format
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByFormat(String format) throws SystemException {
-		for (WikiPage wikiPage : findByFormat(format)) {
+		for (WikiPage wikiPage : findByFormat(format, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -2317,10 +2497,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByFormat(String format) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_FORMAT;
+
 		Object[] finderArgs = new Object[] { format };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_FORMAT,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -2355,18 +2537,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FORMAT,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2383,15 +2562,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_N = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_N",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			WikiPageModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
-			WikiPageModelImpl.NODEID_COLUMN_BITMASK);
+			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_N = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_N",
@@ -2428,233 +2609,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByR_N(long resourcePrimKey, long nodeId,
 		int start, int end) throws SystemException {
 		return findByR_N(resourcePrimKey, nodeId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByR_N(long resourcePrimKey, long nodeId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_N;
-			finderArgs = new Object[] { resourcePrimKey, nodeId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_N;
-			finderArgs = new Object[] {
-					resourcePrimKey, nodeId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((resourcePrimKey != wikiPage.getResourcePrimKey()) ||
-						(nodeId != wikiPage.getNodeId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_R_N_RESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_R_N_NODEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				qPos.add(nodeId);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByR_N_First(long resourcePrimKey, long nodeId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByR_N_First(resourcePrimKey, nodeId,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("resourcePrimKey=");
-		msg.append(resourcePrimKey);
-
-		msg.append(", nodeId=");
-		msg.append(nodeId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByR_N_First(long resourcePrimKey, long nodeId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByR_N(resourcePrimKey, nodeId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByR_N_Last(long resourcePrimKey, long nodeId,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByR_N_Last(resourcePrimKey, nodeId,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("resourcePrimKey=");
-		msg.append(resourcePrimKey);
-
-		msg.append(", nodeId=");
-		msg.append(nodeId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByR_N_Last(long resourcePrimKey, long nodeId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByR_N(resourcePrimKey, nodeId);
-
-		List<WikiPage> list = findByR_N(resourcePrimKey, nodeId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -2772,7 +2726,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -2809,6 +2762,283 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByR_N(long resourcePrimKey, long nodeId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_N;
+			finderArgs = new Object[] { resourcePrimKey, nodeId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_N;
+			finderArgs = new Object[] {
+					resourcePrimKey, nodeId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((resourcePrimKey != wikiPage.getResourcePrimKey()) ||
+						(nodeId != wikiPage.getNodeId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_R_N_RESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_R_N_NODEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				qPos.add(nodeId);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_First(long resourcePrimKey, long nodeId)
+		throws NoSuchPageException, SystemException {
+		return findByR_N_First(resourcePrimKey, nodeId, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_First(long resourcePrimKey, long nodeId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByR_N_First(resourcePrimKey, nodeId,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("resourcePrimKey=");
+		msg.append(resourcePrimKey);
+
+		msg.append(", nodeId=");
+		msg.append(nodeId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_First(long resourcePrimKey, long nodeId)
+		throws SystemException {
+		return fetchByR_N_First(resourcePrimKey, nodeId, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_First(long resourcePrimKey, long nodeId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByR_N(resourcePrimKey, nodeId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_Last(long resourcePrimKey, long nodeId)
+		throws NoSuchPageException, SystemException {
+		return findByR_N_Last(resourcePrimKey, nodeId, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_Last(long resourcePrimKey, long nodeId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByR_N_Last(resourcePrimKey, nodeId,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("resourcePrimKey=");
+		msg.append(resourcePrimKey);
+
+		msg.append(", nodeId=");
+		msg.append(nodeId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_Last(long resourcePrimKey, long nodeId)
+		throws SystemException {
+		return fetchByR_N_Last(resourcePrimKey, nodeId, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_Last(long resourcePrimKey, long nodeId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByR_N(resourcePrimKey, nodeId);
+
+		List<WikiPage> list = findByR_N(resourcePrimKey, nodeId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; from the database.
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -2817,7 +3047,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByR_N(long resourcePrimKey, long nodeId)
 		throws SystemException {
-		for (WikiPage wikiPage : findByR_N(resourcePrimKey, nodeId)) {
+		for (WikiPage wikiPage : findByR_N(resourcePrimKey, nodeId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -2832,10 +3063,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByR_N(long resourcePrimKey, long nodeId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_N;
+
 		Object[] finderArgs = new Object[] { resourcePrimKey, nodeId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_N,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -2862,18 +3095,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(nodeId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_N, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -2889,15 +3119,16 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_T = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByN_T",
 			new String[] { Long.class.getName(), String.class.getName() },
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
-			WikiPageModelImpl.TITLE_COLUMN_BITMASK);
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_T = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_T",
@@ -2934,241 +3165,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByN_T(long nodeId, String title, int start,
 		int end) throws SystemException {
 		return findByN_T(nodeId, title, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and title = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByN_T(long nodeId, String title, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_T;
-			finderArgs = new Object[] { nodeId, title };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_T;
-			finderArgs = new Object[] {
-					nodeId, title,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((nodeId != wikiPage.getNodeId()) ||
-						!Validator.equals(title, wikiPage.getTitle())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_N_T_NODEID_2);
-
-			if (title == null) {
-				query.append(_FINDER_COLUMN_N_T_TITLE_1);
-			}
-			else {
-				if (title.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_N_T_TITLE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_N_T_TITLE_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(nodeId);
-
-				if (title != null) {
-					qPos.add(title);
-				}
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_T_First(long nodeId, String title,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_T_First(nodeId, title, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", title=");
-		msg.append(title);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_T_First(long nodeId, String title,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByN_T(nodeId, title, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_T_Last(long nodeId, String title,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_T_Last(nodeId, title, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", title=");
-		msg.append(title);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_T_Last(long nodeId, String title,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByN_T(nodeId, title);
-
-		List<WikiPage> list = findByN_T(nodeId, title, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3296,7 +3292,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -3335,6 +3330,291 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and title = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByN_T(long nodeId, String title, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_T;
+			finderArgs = new Object[] { nodeId, title };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_T;
+			finderArgs = new Object[] {
+					nodeId, title,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						!Validator.equals(title, wikiPage.getTitle())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_N_T_NODEID_2);
+
+			if (title == null) {
+				query.append(_FINDER_COLUMN_N_T_TITLE_1);
+			}
+			else {
+				if (title.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_N_T_TITLE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_N_T_TITLE_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nodeId);
+
+				if (title != null) {
+					qPos.add(title);
+				}
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_First(long nodeId, String title)
+		throws NoSuchPageException, SystemException {
+		return findByN_T_First(nodeId, title, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_First(long nodeId, String title,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_T_First(nodeId, title, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", title=");
+		msg.append(title);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_First(long nodeId, String title)
+		throws SystemException {
+		return fetchByN_T_First(nodeId, title, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_First(long nodeId, String title,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByN_T(nodeId, title, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_Last(long nodeId, String title)
+		throws NoSuchPageException, SystemException {
+		return findByN_T_Last(nodeId, title, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_Last(long nodeId, String title,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_T_Last(nodeId, title, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", title=");
+		msg.append(title);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_Last(long nodeId, String title)
+		throws SystemException {
+		return fetchByN_T_Last(nodeId, title, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_Last(long nodeId, String title,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByN_T(nodeId, title);
+
+		List<WikiPage> list = findByN_T(nodeId, title, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where nodeId = &#63; and title = &#63; from the database.
 	 *
 	 * @param nodeId the node ID
@@ -3343,7 +3623,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByN_T(long nodeId, String title)
 		throws SystemException {
-		for (WikiPage wikiPage : findByN_T(nodeId, title)) {
+		for (WikiPage wikiPage : findByN_T(nodeId, title, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -3357,10 +3638,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByN_T(long nodeId, String title) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_T;
+
 		Object[] finderArgs = new Object[] { nodeId, title };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_T,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -3399,18 +3682,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_T, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -3428,15 +3708,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByN_H",
 			new String[] { Long.class.getName(), Boolean.class.getName() },
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
-			WikiPageModelImpl.HEAD_COLUMN_BITMASK);
+			WikiPageModelImpl.HEAD_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_H = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_H",
@@ -3473,229 +3755,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByN_H(long nodeId, boolean head, int start,
 		int end) throws SystemException {
 		return findByN_H(nodeId, head, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and head = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByN_H(long nodeId, boolean head, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H;
-			finderArgs = new Object[] { nodeId, head };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_H;
-			finderArgs = new Object[] {
-					nodeId, head,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((nodeId != wikiPage.getNodeId()) ||
-						(head != wikiPage.getHead())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_N_H_NODEID_2);
-
-			query.append(_FINDER_COLUMN_N_H_HEAD_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(nodeId);
-
-				qPos.add(head);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_H_First(long nodeId, boolean head,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_H_First(nodeId, head, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_H_First(long nodeId, boolean head,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByN_H(nodeId, head, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_H_Last(long nodeId, boolean head,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_H_Last(nodeId, head, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_H_Last(long nodeId, boolean head,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByN_H(nodeId, head);
-
-		List<WikiPage> list = findByN_H(nodeId, head, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -3813,7 +3872,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -3850,6 +3908,279 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and head = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByN_H(long nodeId, boolean head, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H;
+			finderArgs = new Object[] { nodeId, head };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_H;
+			finderArgs = new Object[] {
+					nodeId, head,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						(head != wikiPage.getHead())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_N_H_NODEID_2);
+
+			query.append(_FINDER_COLUMN_N_H_HEAD_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nodeId);
+
+				qPos.add(head);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_First(long nodeId, boolean head)
+		throws NoSuchPageException, SystemException {
+		return findByN_H_First(nodeId, head, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_First(long nodeId, boolean head,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_H_First(nodeId, head, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_First(long nodeId, boolean head)
+		throws SystemException {
+		return fetchByN_H_First(nodeId, head, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_First(long nodeId, boolean head,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByN_H(nodeId, head, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_Last(long nodeId, boolean head)
+		throws NoSuchPageException, SystemException {
+		return findByN_H_Last(nodeId, head, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_Last(long nodeId, boolean head,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_H_Last(nodeId, head, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_Last(long nodeId, boolean head)
+		throws SystemException {
+		return fetchByN_H_Last(nodeId, head, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_Last(long nodeId, boolean head,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByN_H(nodeId, head);
+
+		List<WikiPage> list = findByN_H(nodeId, head, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where nodeId = &#63; and head = &#63; from the database.
 	 *
 	 * @param nodeId the node ID
@@ -3858,7 +4189,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByN_H(long nodeId, boolean head)
 		throws SystemException {
-		for (WikiPage wikiPage : findByN_H(nodeId, head)) {
+		for (WikiPage wikiPage : findByN_H(nodeId, head, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -3872,10 +4204,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByN_H(long nodeId, boolean head) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_H;
+
 		Object[] finderArgs = new Object[] { nodeId, head };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_H,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -3902,18 +4236,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(head);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_H, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -3929,15 +4260,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_P = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByN_P",
 			new String[] { Long.class.getName(), String.class.getName() },
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
-			WikiPageModelImpl.PARENTTITLE_COLUMN_BITMASK);
+			WikiPageModelImpl.PARENTTITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_P = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_P",
@@ -3974,244 +4307,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByN_P(long nodeId, String parentTitle, int start,
 		int end) throws SystemException {
 		return findByN_P(nodeId, parentTitle, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and parentTitle = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param nodeId the node ID
-	 * @param parentTitle the parent title
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByN_P(long nodeId, String parentTitle, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_P;
-			finderArgs = new Object[] { nodeId, parentTitle };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_P;
-			finderArgs = new Object[] {
-					nodeId, parentTitle,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((nodeId != wikiPage.getNodeId()) ||
-						!Validator.equals(parentTitle, wikiPage.getParentTitle())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_N_P_NODEID_2);
-
-			if (parentTitle == null) {
-				query.append(_FINDER_COLUMN_N_P_PARENTTITLE_1);
-			}
-			else {
-				if (parentTitle.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_N_P_PARENTTITLE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_N_P_PARENTTITLE_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(nodeId);
-
-				if (parentTitle != null) {
-					qPos.add(parentTitle);
-				}
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and parentTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param parentTitle the parent title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_P_First(long nodeId, String parentTitle,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_P_First(nodeId, parentTitle,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", parentTitle=");
-		msg.append(parentTitle);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and parentTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param parentTitle the parent title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_P_First(long nodeId, String parentTitle,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByN_P(nodeId, parentTitle, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and parentTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param parentTitle the parent title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_P_Last(long nodeId, String parentTitle,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_P_Last(nodeId, parentTitle,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", parentTitle=");
-		msg.append(parentTitle);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and parentTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param parentTitle the parent title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_P_Last(long nodeId, String parentTitle,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByN_P(nodeId, parentTitle);
-
-		List<WikiPage> list = findByN_P(nodeId, parentTitle, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -4339,7 +4434,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -4378,6 +4472,294 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and parentTitle = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param nodeId the node ID
+	 * @param parentTitle the parent title
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByN_P(long nodeId, String parentTitle, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_P;
+			finderArgs = new Object[] { nodeId, parentTitle };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_P;
+			finderArgs = new Object[] {
+					nodeId, parentTitle,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						!Validator.equals(parentTitle, wikiPage.getParentTitle())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_N_P_NODEID_2);
+
+			if (parentTitle == null) {
+				query.append(_FINDER_COLUMN_N_P_PARENTTITLE_1);
+			}
+			else {
+				if (parentTitle.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_N_P_PARENTTITLE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_N_P_PARENTTITLE_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nodeId);
+
+				if (parentTitle != null) {
+					qPos.add(parentTitle);
+				}
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param parentTitle the parent title
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_P_First(long nodeId, String parentTitle)
+		throws NoSuchPageException, SystemException {
+		return findByN_P_First(nodeId, parentTitle, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param parentTitle the parent title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_P_First(long nodeId, String parentTitle,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_P_First(nodeId, parentTitle,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", parentTitle=");
+		msg.append(parentTitle);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param parentTitle the parent title
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_P_First(long nodeId, String parentTitle)
+		throws SystemException {
+		return fetchByN_P_First(nodeId, parentTitle, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param parentTitle the parent title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_P_First(long nodeId, String parentTitle,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByN_P(nodeId, parentTitle, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param parentTitle the parent title
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_P_Last(long nodeId, String parentTitle)
+		throws NoSuchPageException, SystemException {
+		return findByN_P_Last(nodeId, parentTitle, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param parentTitle the parent title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_P_Last(long nodeId, String parentTitle,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_P_Last(nodeId, parentTitle,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", parentTitle=");
+		msg.append(parentTitle);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param parentTitle the parent title
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_P_Last(long nodeId, String parentTitle)
+		throws SystemException {
+		return fetchByN_P_Last(nodeId, parentTitle, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param parentTitle the parent title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_P_Last(long nodeId, String parentTitle,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByN_P(nodeId, parentTitle);
+
+		List<WikiPage> list = findByN_P(nodeId, parentTitle, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where nodeId = &#63; and parentTitle = &#63; from the database.
 	 *
 	 * @param nodeId the node ID
@@ -4386,7 +4768,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByN_P(long nodeId, String parentTitle)
 		throws SystemException {
-		for (WikiPage wikiPage : findByN_P(nodeId, parentTitle)) {
+		for (WikiPage wikiPage : findByN_P(nodeId, parentTitle,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -4401,10 +4784,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByN_P(long nodeId, String parentTitle)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_P;
+
 		Object[] finderArgs = new Object[] { nodeId, parentTitle };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_P,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -4443,18 +4828,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_P, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -4472,15 +4854,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_R = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByN_R",
 			new String[] { Long.class.getName(), String.class.getName() },
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
-			WikiPageModelImpl.REDIRECTTITLE_COLUMN_BITMASK);
+			WikiPageModelImpl.REDIRECTTITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_R = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_R",
@@ -4517,246 +4901,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByN_R(long nodeId, String redirectTitle,
 		int start, int end) throws SystemException {
 		return findByN_R(nodeId, redirectTitle, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and redirectTitle = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param nodeId the node ID
-	 * @param redirectTitle the redirect title
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByN_R(long nodeId, String redirectTitle,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_R;
-			finderArgs = new Object[] { nodeId, redirectTitle };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_R;
-			finderArgs = new Object[] {
-					nodeId, redirectTitle,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((nodeId != wikiPage.getNodeId()) ||
-						!Validator.equals(redirectTitle,
-							wikiPage.getRedirectTitle())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_N_R_NODEID_2);
-
-			if (redirectTitle == null) {
-				query.append(_FINDER_COLUMN_N_R_REDIRECTTITLE_1);
-			}
-			else {
-				if (redirectTitle.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_N_R_REDIRECTTITLE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_N_R_REDIRECTTITLE_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(nodeId);
-
-				if (redirectTitle != null) {
-					qPos.add(redirectTitle);
-				}
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and redirectTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param redirectTitle the redirect title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_R_First(long nodeId, String redirectTitle,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_R_First(nodeId, redirectTitle,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", redirectTitle=");
-		msg.append(redirectTitle);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and redirectTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param redirectTitle the redirect title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_R_First(long nodeId, String redirectTitle,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByN_R(nodeId, redirectTitle, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and redirectTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param redirectTitle the redirect title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_R_Last(long nodeId, String redirectTitle,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_R_Last(nodeId, redirectTitle,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", redirectTitle=");
-		msg.append(redirectTitle);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and redirectTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param redirectTitle the redirect title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_R_Last(long nodeId, String redirectTitle,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByN_R(nodeId, redirectTitle);
-
-		List<WikiPage> list = findByN_R(nodeId, redirectTitle, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -4884,7 +5028,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -4923,6 +5066,296 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and redirectTitle = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param nodeId the node ID
+	 * @param redirectTitle the redirect title
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByN_R(long nodeId, String redirectTitle,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_R;
+			finderArgs = new Object[] { nodeId, redirectTitle };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_R;
+			finderArgs = new Object[] {
+					nodeId, redirectTitle,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						!Validator.equals(redirectTitle,
+							wikiPage.getRedirectTitle())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_N_R_NODEID_2);
+
+			if (redirectTitle == null) {
+				query.append(_FINDER_COLUMN_N_R_REDIRECTTITLE_1);
+			}
+			else {
+				if (redirectTitle.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_N_R_REDIRECTTITLE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_N_R_REDIRECTTITLE_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nodeId);
+
+				if (redirectTitle != null) {
+					qPos.add(redirectTitle);
+				}
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and redirectTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param redirectTitle the redirect title
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_R_First(long nodeId, String redirectTitle)
+		throws NoSuchPageException, SystemException {
+		return findByN_R_First(nodeId, redirectTitle, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and redirectTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param redirectTitle the redirect title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_R_First(long nodeId, String redirectTitle,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_R_First(nodeId, redirectTitle,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", redirectTitle=");
+		msg.append(redirectTitle);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and redirectTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param redirectTitle the redirect title
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_R_First(long nodeId, String redirectTitle)
+		throws SystemException {
+		return fetchByN_R_First(nodeId, redirectTitle, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and redirectTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param redirectTitle the redirect title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_R_First(long nodeId, String redirectTitle,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByN_R(nodeId, redirectTitle, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and redirectTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param redirectTitle the redirect title
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_R_Last(long nodeId, String redirectTitle)
+		throws NoSuchPageException, SystemException {
+		return findByN_R_Last(nodeId, redirectTitle, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and redirectTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param redirectTitle the redirect title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_R_Last(long nodeId, String redirectTitle,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_R_Last(nodeId, redirectTitle,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", redirectTitle=");
+		msg.append(redirectTitle);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and redirectTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param redirectTitle the redirect title
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_R_Last(long nodeId, String redirectTitle)
+		throws SystemException {
+		return fetchByN_R_Last(nodeId, redirectTitle, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and redirectTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param redirectTitle the redirect title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_R_Last(long nodeId, String redirectTitle,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByN_R(nodeId, redirectTitle);
+
+		List<WikiPage> list = findByN_R(nodeId, redirectTitle, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where nodeId = &#63; and redirectTitle = &#63; from the database.
 	 *
 	 * @param nodeId the node ID
@@ -4931,7 +5364,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByN_R(long nodeId, String redirectTitle)
 		throws SystemException {
-		for (WikiPage wikiPage : findByN_R(nodeId, redirectTitle)) {
+		for (WikiPage wikiPage : findByN_R(nodeId, redirectTitle,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -4946,10 +5380,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByN_R(long nodeId, String redirectTitle)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_R;
+
 		Object[] finderArgs = new Object[] { nodeId, redirectTitle };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_R,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -4988,18 +5424,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_R, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -5017,15 +5450,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByN_S",
 			new String[] { Long.class.getName(), Integer.class.getName() },
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
-			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_S",
@@ -5062,229 +5497,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByN_S(long nodeId, int status, int start, int end)
 		throws SystemException {
 		return findByN_S(nodeId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByN_S(long nodeId, int status, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_S;
-			finderArgs = new Object[] { nodeId, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_S;
-			finderArgs = new Object[] {
-					nodeId, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((nodeId != wikiPage.getNodeId()) ||
-						(status != wikiPage.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_N_S_NODEID_2);
-
-			query.append(_FINDER_COLUMN_N_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(nodeId);
-
-				qPos.add(status);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_S_First(long nodeId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_S_First(nodeId, status, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_S_First(long nodeId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByN_S(nodeId, status, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_S_Last(long nodeId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_S_Last(nodeId, status, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_S_Last(long nodeId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByN_S(nodeId, status);
-
-		List<WikiPage> list = findByN_S(nodeId, status, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -5402,7 +5614,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -5439,6 +5650,279 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByN_S(long nodeId, int status, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_S;
+			finderArgs = new Object[] { nodeId, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_S;
+			finderArgs = new Object[] {
+					nodeId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_N_S_NODEID_2);
+
+			query.append(_FINDER_COLUMN_N_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nodeId);
+
+				qPos.add(status);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_S_First(long nodeId, int status)
+		throws NoSuchPageException, SystemException {
+		return findByN_S_First(nodeId, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_S_First(long nodeId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_S_First(nodeId, status, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_S_First(long nodeId, int status)
+		throws SystemException {
+		return fetchByN_S_First(nodeId, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_S_First(long nodeId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByN_S(nodeId, status, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_S_Last(long nodeId, int status)
+		throws NoSuchPageException, SystemException {
+		return findByN_S_Last(nodeId, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_S_Last(long nodeId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_S_Last(nodeId, status, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_S_Last(long nodeId, int status)
+		throws SystemException {
+		return fetchByN_S_Last(nodeId, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_S_Last(long nodeId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByN_S(nodeId, status);
+
+		List<WikiPage> list = findByN_S(nodeId, status, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where nodeId = &#63; and status = &#63; from the database.
 	 *
 	 * @param nodeId the node ID
@@ -5446,7 +5930,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByN_S(long nodeId, int status) throws SystemException {
-		for (WikiPage wikiPage : findByN_S(nodeId, status)) {
+		for (WikiPage wikiPage : findByN_S(nodeId, status, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -5460,10 +5945,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByN_S(long nodeId, int status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_S;
+
 		Object[] finderArgs = new Object[] { nodeId, status };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -5490,18 +5977,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_S, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -5625,8 +6109,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 			query.append(_FINDER_COLUMN_R_N_V_VERSION_2);
 
-			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -5646,16 +6128,14 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 				List<WikiPage> list = q.list();
 
-				result = list;
-
-				WikiPage wikiPage = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_N_V,
 						finderArgs, list);
 				}
 				else {
-					wikiPage = list.get(0);
+					WikiPage wikiPage = list.get(0);
+
+					result = wikiPage;
 
 					cacheResult(wikiPage);
 
@@ -5666,28 +6146,23 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 							finderArgs, wikiPage);
 					}
 				}
-
-				return wikiPage;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_N_V,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_N_V,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (WikiPage)result;
-			}
+			return (WikiPage)result;
 		}
 	}
 
@@ -5718,10 +6193,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByR_N_V(long resourcePrimKey, long nodeId, double version)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_N_V;
+
 		Object[] finderArgs = new Object[] { resourcePrimKey, nodeId, version };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_N_V,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -5752,18 +6229,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(version);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_N_V,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -5781,8 +6255,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_N_H = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
@@ -5793,7 +6267,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			},
 			WikiPageModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
-			WikiPageModelImpl.HEAD_COLUMN_BITMASK);
+			WikiPageModelImpl.HEAD_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_N_H = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_N_H",
@@ -5835,251 +6311,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByR_N_H(long resourcePrimKey, long nodeId,
 		boolean head, int start, int end) throws SystemException {
 		return findByR_N_H(resourcePrimKey, nodeId, head, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByR_N_H(long resourcePrimKey, long nodeId,
-		boolean head, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_N_H;
-			finderArgs = new Object[] { resourcePrimKey, nodeId, head };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_N_H;
-			finderArgs = new Object[] {
-					resourcePrimKey, nodeId, head,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((resourcePrimKey != wikiPage.getResourcePrimKey()) ||
-						(nodeId != wikiPage.getNodeId()) ||
-						(head != wikiPage.getHead())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_R_N_H_RESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_R_N_H_NODEID_2);
-
-			query.append(_FINDER_COLUMN_R_N_H_HEAD_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				qPos.add(nodeId);
-
-				qPos.add(head);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByR_N_H_First(long resourcePrimKey, long nodeId,
-		boolean head, OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByR_N_H_First(resourcePrimKey, nodeId, head,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("resourcePrimKey=");
-		msg.append(resourcePrimKey);
-
-		msg.append(", nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByR_N_H_First(long resourcePrimKey, long nodeId,
-		boolean head, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<WikiPage> list = findByR_N_H(resourcePrimKey, nodeId, head, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByR_N_H_Last(long resourcePrimKey, long nodeId,
-		boolean head, OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByR_N_H_Last(resourcePrimKey, nodeId, head,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("resourcePrimKey=");
-		msg.append(resourcePrimKey);
-
-		msg.append(", nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByR_N_H_Last(long resourcePrimKey, long nodeId,
-		boolean head, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByR_N_H(resourcePrimKey, nodeId, head);
-
-		List<WikiPage> list = findByR_N_H(resourcePrimKey, nodeId, head,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -6201,7 +6432,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -6240,6 +6470,305 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByR_N_H(long resourcePrimKey, long nodeId,
+		boolean head, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_N_H;
+			finderArgs = new Object[] { resourcePrimKey, nodeId, head };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_N_H;
+			finderArgs = new Object[] {
+					resourcePrimKey, nodeId, head,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((resourcePrimKey != wikiPage.getResourcePrimKey()) ||
+						(nodeId != wikiPage.getNodeId()) ||
+						(head != wikiPage.getHead())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_R_N_H_RESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_R_N_H_NODEID_2);
+
+			query.append(_FINDER_COLUMN_R_N_H_HEAD_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				qPos.add(nodeId);
+
+				qPos.add(head);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_H_First(long resourcePrimKey, long nodeId,
+		boolean head) throws NoSuchPageException, SystemException {
+		return findByR_N_H_First(resourcePrimKey, nodeId, head, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_H_First(long resourcePrimKey, long nodeId,
+		boolean head, OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByR_N_H_First(resourcePrimKey, nodeId, head,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("resourcePrimKey=");
+		msg.append(resourcePrimKey);
+
+		msg.append(", nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_H_First(long resourcePrimKey, long nodeId,
+		boolean head) throws SystemException {
+		return fetchByR_N_H_First(resourcePrimKey, nodeId, head, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_H_First(long resourcePrimKey, long nodeId,
+		boolean head, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<WikiPage> list = findByR_N_H(resourcePrimKey, nodeId, head, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_H_Last(long resourcePrimKey, long nodeId,
+		boolean head) throws NoSuchPageException, SystemException {
+		return findByR_N_H_Last(resourcePrimKey, nodeId, head, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_H_Last(long resourcePrimKey, long nodeId,
+		boolean head, OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByR_N_H_Last(resourcePrimKey, nodeId, head,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("resourcePrimKey=");
+		msg.append(resourcePrimKey);
+
+		msg.append(", nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_H_Last(long resourcePrimKey, long nodeId,
+		boolean head) throws SystemException {
+		return fetchByR_N_H_Last(resourcePrimKey, nodeId, head, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_H_Last(long resourcePrimKey, long nodeId,
+		boolean head, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByR_N_H(resourcePrimKey, nodeId, head);
+
+		List<WikiPage> list = findByR_N_H(resourcePrimKey, nodeId, head,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and head = &#63; from the database.
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -6249,7 +6778,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByR_N_H(long resourcePrimKey, long nodeId, boolean head)
 		throws SystemException {
-		for (WikiPage wikiPage : findByR_N_H(resourcePrimKey, nodeId, head)) {
+		for (WikiPage wikiPage : findByR_N_H(resourcePrimKey, nodeId, head,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -6265,10 +6795,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByR_N_H(long resourcePrimKey, long nodeId, boolean head)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_N_H;
+
 		Object[] finderArgs = new Object[] { resourcePrimKey, nodeId, head };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_N_H,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -6299,18 +6831,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(head);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_N_H,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -6328,8 +6857,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_N_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
@@ -6340,7 +6869,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			},
 			WikiPageModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
-			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_N_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_N_S",
@@ -6382,251 +6913,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByR_N_S(long resourcePrimKey, long nodeId,
 		int status, int start, int end) throws SystemException {
 		return findByR_N_S(resourcePrimKey, nodeId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByR_N_S(long resourcePrimKey, long nodeId,
-		int status, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_N_S;
-			finderArgs = new Object[] { resourcePrimKey, nodeId, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_N_S;
-			finderArgs = new Object[] {
-					resourcePrimKey, nodeId, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((resourcePrimKey != wikiPage.getResourcePrimKey()) ||
-						(nodeId != wikiPage.getNodeId()) ||
-						(status != wikiPage.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_R_N_S_RESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_R_N_S_NODEID_2);
-
-			query.append(_FINDER_COLUMN_R_N_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				qPos.add(nodeId);
-
-				qPos.add(status);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByR_N_S_First(long resourcePrimKey, long nodeId,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByR_N_S_First(resourcePrimKey, nodeId, status,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("resourcePrimKey=");
-		msg.append(resourcePrimKey);
-
-		msg.append(", nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByR_N_S_First(long resourcePrimKey, long nodeId,
-		int status, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<WikiPage> list = findByR_N_S(resourcePrimKey, nodeId, status, 0,
-				1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByR_N_S_Last(long resourcePrimKey, long nodeId,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByR_N_S_Last(resourcePrimKey, nodeId, status,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("resourcePrimKey=");
-		msg.append(resourcePrimKey);
-
-		msg.append(", nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByR_N_S_Last(long resourcePrimKey, long nodeId,
-		int status, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByR_N_S(resourcePrimKey, nodeId, status);
-
-		List<WikiPage> list = findByR_N_S(resourcePrimKey, nodeId, status,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -6748,7 +7034,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -6787,6 +7072,305 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByR_N_S(long resourcePrimKey, long nodeId,
+		int status, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_N_S;
+			finderArgs = new Object[] { resourcePrimKey, nodeId, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_N_S;
+			finderArgs = new Object[] {
+					resourcePrimKey, nodeId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((resourcePrimKey != wikiPage.getResourcePrimKey()) ||
+						(nodeId != wikiPage.getNodeId()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_R_N_S_RESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_R_N_S_NODEID_2);
+
+			query.append(_FINDER_COLUMN_R_N_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				qPos.add(nodeId);
+
+				qPos.add(status);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_S_First(long resourcePrimKey, long nodeId,
+		int status) throws NoSuchPageException, SystemException {
+		return findByR_N_S_First(resourcePrimKey, nodeId, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_S_First(long resourcePrimKey, long nodeId,
+		int status, OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByR_N_S_First(resourcePrimKey, nodeId, status,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("resourcePrimKey=");
+		msg.append(resourcePrimKey);
+
+		msg.append(", nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_S_First(long resourcePrimKey, long nodeId,
+		int status) throws SystemException {
+		return fetchByR_N_S_First(resourcePrimKey, nodeId, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_S_First(long resourcePrimKey, long nodeId,
+		int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<WikiPage> list = findByR_N_S(resourcePrimKey, nodeId, status, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_S_Last(long resourcePrimKey, long nodeId,
+		int status) throws NoSuchPageException, SystemException {
+		return findByR_N_S_Last(resourcePrimKey, nodeId, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByR_N_S_Last(long resourcePrimKey, long nodeId,
+		int status, OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByR_N_S_Last(resourcePrimKey, nodeId, status,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("resourcePrimKey=");
+		msg.append(resourcePrimKey);
+
+		msg.append(", nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_S_Last(long resourcePrimKey, long nodeId,
+		int status) throws SystemException {
+		return fetchByR_N_S_Last(resourcePrimKey, nodeId, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByR_N_S_Last(long resourcePrimKey, long nodeId,
+		int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByR_N_S(resourcePrimKey, nodeId, status);
+
+		List<WikiPage> list = findByR_N_S(resourcePrimKey, nodeId, status,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where resourcePrimKey = &#63; and nodeId = &#63; and status = &#63; from the database.
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -6796,7 +7380,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByR_N_S(long resourcePrimKey, long nodeId, int status)
 		throws SystemException {
-		for (WikiPage wikiPage : findByR_N_S(resourcePrimKey, nodeId, status)) {
+		for (WikiPage wikiPage : findByR_N_S(resourcePrimKey, nodeId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -6812,10 +7397,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByR_N_S(long resourcePrimKey, long nodeId, int status)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_N_S;
+
 		Object[] finderArgs = new Object[] { resourcePrimKey, nodeId, status };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_N_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -6846,18 +7433,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_N_S,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -6875,8 +7459,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_N_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
@@ -6887,7 +7471,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			},
 			WikiPageModelImpl.USERID_COLUMN_BITMASK |
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
-			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_N_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_N_S",
@@ -6929,249 +7515,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByU_N_S(long userId, long nodeId, int status,
 		int start, int end) throws SystemException {
 		return findByU_N_S(userId, nodeId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where userId = &#63; and nodeId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param userId the user ID
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByU_N_S(long userId, long nodeId, int status,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_N_S;
-			finderArgs = new Object[] { userId, nodeId, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_N_S;
-			finderArgs = new Object[] {
-					userId, nodeId, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((userId != wikiPage.getUserId()) ||
-						(nodeId != wikiPage.getNodeId()) ||
-						(status != wikiPage.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_U_N_S_USERID_2);
-
-			query.append(_FINDER_COLUMN_U_N_S_NODEID_2);
-
-			query.append(_FINDER_COLUMN_U_N_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				qPos.add(nodeId);
-
-				qPos.add(status);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where userId = &#63; and nodeId = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByU_N_S_First(long userId, long nodeId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByU_N_S_First(userId, nodeId, status,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(", nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where userId = &#63; and nodeId = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByU_N_S_First(long userId, long nodeId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByU_N_S(userId, nodeId, status, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where userId = &#63; and nodeId = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByU_N_S_Last(long userId, long nodeId, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByU_N_S_Last(userId, nodeId, status,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(", nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where userId = &#63; and nodeId = &#63; and status = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param nodeId the node ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByU_N_S_Last(long userId, long nodeId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByU_N_S(userId, nodeId, status);
-
-		List<WikiPage> list = findByU_N_S(userId, nodeId, status, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -7292,7 +7635,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -7331,6 +7673,303 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where userId = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByU_N_S(long userId, long nodeId, int status,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_N_S;
+			finderArgs = new Object[] { userId, nodeId, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_N_S;
+			finderArgs = new Object[] {
+					userId, nodeId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((userId != wikiPage.getUserId()) ||
+						(nodeId != wikiPage.getNodeId()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_U_N_S_USERID_2);
+
+			query.append(_FINDER_COLUMN_U_N_S_NODEID_2);
+
+			query.append(_FINDER_COLUMN_U_N_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				qPos.add(nodeId);
+
+				qPos.add(status);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where userId = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByU_N_S_First(long userId, long nodeId, int status)
+		throws NoSuchPageException, SystemException {
+		return findByU_N_S_First(userId, nodeId, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where userId = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByU_N_S_First(long userId, long nodeId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByU_N_S_First(userId, nodeId, status,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where userId = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByU_N_S_First(long userId, long nodeId, int status)
+		throws SystemException {
+		return fetchByU_N_S_First(userId, nodeId, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where userId = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByU_N_S_First(long userId, long nodeId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByU_N_S(userId, nodeId, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where userId = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByU_N_S_Last(long userId, long nodeId, int status)
+		throws NoSuchPageException, SystemException {
+		return findByU_N_S_Last(userId, nodeId, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where userId = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByU_N_S_Last(long userId, long nodeId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByU_N_S_Last(userId, nodeId, status,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where userId = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByU_N_S_Last(long userId, long nodeId, int status)
+		throws SystemException {
+		return fetchByU_N_S_Last(userId, nodeId, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where userId = &#63; and nodeId = &#63; and status = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param nodeId the node ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByU_N_S_Last(long userId, long nodeId, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByU_N_S(userId, nodeId, status);
+
+		List<WikiPage> list = findByU_N_S(userId, nodeId, status, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where userId = &#63; and nodeId = &#63; and status = &#63; from the database.
 	 *
 	 * @param userId the user ID
@@ -7340,7 +7979,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByU_N_S(long userId, long nodeId, int status)
 		throws SystemException {
-		for (WikiPage wikiPage : findByU_N_S(userId, nodeId, status)) {
+		for (WikiPage wikiPage : findByU_N_S(userId, nodeId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -7356,10 +7996,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByU_N_S(long userId, long nodeId, int status)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_N_S;
+
 		Object[] finderArgs = new Object[] { userId, nodeId, status };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_U_N_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -7390,18 +8032,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_N_S,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -7536,8 +8175,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 			query.append(_FINDER_COLUMN_N_T_V_VERSION_2);
 
-			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -7559,16 +8196,14 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 				List<WikiPage> list = q.list();
 
-				result = list;
-
-				WikiPage wikiPage = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_N_T_V,
 						finderArgs, list);
 				}
 				else {
-					wikiPage = list.get(0);
+					WikiPage wikiPage = list.get(0);
+
+					result = wikiPage;
 
 					cacheResult(wikiPage);
 
@@ -7580,28 +8215,23 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 							finderArgs, wikiPage);
 					}
 				}
-
-				return wikiPage;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_T_V,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_T_V,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (WikiPage)result;
-			}
+			return (WikiPage)result;
 		}
 	}
 
@@ -7632,10 +8262,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByN_T_V(long nodeId, String title, double version)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_T_V;
+
 		Object[] finderArgs = new Object[] { nodeId, title, version };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_T_V,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -7678,18 +8310,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(version);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_T_V,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -7709,8 +8338,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				Long.class.getName(), String.class.getName(),
 				Boolean.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_T_H = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
@@ -7721,7 +8350,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			},
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
 			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
-			WikiPageModelImpl.HEAD_COLUMN_BITMASK);
+			WikiPageModelImpl.HEAD_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_T_H = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_T_H",
@@ -7763,261 +8393,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByN_T_H(long nodeId, String title, boolean head,
 		int start, int end) throws SystemException {
 		return findByN_T_H(nodeId, title, head, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and title = &#63; and head = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param head the head
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByN_T_H(long nodeId, String title, boolean head,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_T_H;
-			finderArgs = new Object[] { nodeId, title, head };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_T_H;
-			finderArgs = new Object[] {
-					nodeId, title, head,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((nodeId != wikiPage.getNodeId()) ||
-						!Validator.equals(title, wikiPage.getTitle()) ||
-						(head != wikiPage.getHead())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_N_T_H_NODEID_2);
-
-			if (title == null) {
-				query.append(_FINDER_COLUMN_N_T_H_TITLE_1);
-			}
-			else {
-				if (title.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_N_T_H_TITLE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_N_T_H_TITLE_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_N_T_H_HEAD_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(nodeId);
-
-				if (title != null) {
-					qPos.add(title);
-				}
-
-				qPos.add(head);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63; and head = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_T_H_First(long nodeId, String title, boolean head,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_T_H_First(nodeId, title, head,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", title=");
-		msg.append(title);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63; and head = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_T_H_First(long nodeId, String title, boolean head,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByN_T_H(nodeId, title, head, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63; and head = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_T_H_Last(long nodeId, String title, boolean head,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_T_H_Last(nodeId, title, head,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", title=");
-		msg.append(title);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63; and head = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param head the head
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_T_H_Last(long nodeId, String title, boolean head,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByN_T_H(nodeId, title, head);
-
-		List<WikiPage> list = findByN_T_H(nodeId, title, head, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -8148,7 +8523,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -8189,6 +8563,315 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and title = &#63; and head = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param head the head
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByN_T_H(long nodeId, String title, boolean head,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_T_H;
+			finderArgs = new Object[] { nodeId, title, head };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_T_H;
+			finderArgs = new Object[] {
+					nodeId, title, head,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						!Validator.equals(title, wikiPage.getTitle()) ||
+						(head != wikiPage.getHead())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_N_T_H_NODEID_2);
+
+			if (title == null) {
+				query.append(_FINDER_COLUMN_N_T_H_TITLE_1);
+			}
+			else {
+				if (title.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_N_T_H_TITLE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_N_T_H_TITLE_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_N_T_H_HEAD_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nodeId);
+
+				if (title != null) {
+					qPos.add(title);
+				}
+
+				qPos.add(head);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param head the head
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_H_First(long nodeId, String title, boolean head)
+		throws NoSuchPageException, SystemException {
+		return findByN_T_H_First(nodeId, title, head, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_H_First(long nodeId, String title, boolean head,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_T_H_First(nodeId, title, head,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", title=");
+		msg.append(title);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param head the head
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_H_First(long nodeId, String title, boolean head)
+		throws SystemException {
+		return fetchByN_T_H_First(nodeId, title, head, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_H_First(long nodeId, String title, boolean head,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByN_T_H(nodeId, title, head, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param head the head
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_H_Last(long nodeId, String title, boolean head)
+		throws NoSuchPageException, SystemException {
+		return findByN_T_H_Last(nodeId, title, head, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_H_Last(long nodeId, String title, boolean head,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_T_H_Last(nodeId, title, head,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", title=");
+		msg.append(title);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param head the head
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_H_Last(long nodeId, String title, boolean head)
+		throws SystemException {
+		return fetchByN_T_H_Last(nodeId, title, head, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63; and head = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param head the head
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_H_Last(long nodeId, String title, boolean head,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByN_T_H(nodeId, title, head);
+
+		List<WikiPage> list = findByN_T_H(nodeId, title, head, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where nodeId = &#63; and title = &#63; and head = &#63; from the database.
 	 *
 	 * @param nodeId the node ID
@@ -8198,7 +8881,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByN_T_H(long nodeId, String title, boolean head)
 		throws SystemException {
-		for (WikiPage wikiPage : findByN_T_H(nodeId, title, head)) {
+		for (WikiPage wikiPage : findByN_T_H(nodeId, title, head,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -8214,10 +8898,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByN_T_H(long nodeId, String title, boolean head)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_T_H;
+
 		Object[] finderArgs = new Object[] { nodeId, title, head };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_T_H,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -8260,18 +8946,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(head);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_T_H,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -8291,8 +8974,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_T_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
@@ -8303,7 +8986,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			},
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
 			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
-			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_T_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_T_S",
@@ -8345,261 +9029,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByN_T_S(long nodeId, String title, int status,
 		int start, int end) throws SystemException {
 		return findByN_T_S(nodeId, title, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and title = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param status the status
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByN_T_S(long nodeId, String title, int status,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_T_S;
-			finderArgs = new Object[] { nodeId, title, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_T_S;
-			finderArgs = new Object[] {
-					nodeId, title, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((nodeId != wikiPage.getNodeId()) ||
-						!Validator.equals(title, wikiPage.getTitle()) ||
-						(status != wikiPage.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_N_T_S_NODEID_2);
-
-			if (title == null) {
-				query.append(_FINDER_COLUMN_N_T_S_TITLE_1);
-			}
-			else {
-				if (title.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_N_T_S_TITLE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_N_T_S_TITLE_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_N_T_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(nodeId);
-
-				if (title != null) {
-					qPos.add(title);
-				}
-
-				qPos.add(status);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_T_S_First(long nodeId, String title, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_T_S_First(nodeId, title, status,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", title=");
-		msg.append(title);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_T_S_First(long nodeId, String title, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByN_T_S(nodeId, title, status, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_T_S_Last(long nodeId, String title, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_T_S_Last(nodeId, title, status,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", title=");
-		msg.append(title);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param title the title
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_T_S_Last(long nodeId, String title, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByN_T_S(nodeId, title, status);
-
-		List<WikiPage> list = findByN_T_S(nodeId, title, status, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -8730,7 +9159,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -8771,6 +9199,315 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and title = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param status the status
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByN_T_S(long nodeId, String title, int status,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_T_S;
+			finderArgs = new Object[] { nodeId, title, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_T_S;
+			finderArgs = new Object[] {
+					nodeId, title, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						!Validator.equals(title, wikiPage.getTitle()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_N_T_S_NODEID_2);
+
+			if (title == null) {
+				query.append(_FINDER_COLUMN_N_T_S_TITLE_1);
+			}
+			else {
+				if (title.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_N_T_S_TITLE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_N_T_S_TITLE_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_N_T_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nodeId);
+
+				if (title != null) {
+					qPos.add(title);
+				}
+
+				qPos.add(status);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param status the status
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_S_First(long nodeId, String title, int status)
+		throws NoSuchPageException, SystemException {
+		return findByN_T_S_First(nodeId, title, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_S_First(long nodeId, String title, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_T_S_First(nodeId, title, status,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", title=");
+		msg.append(title);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param status the status
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_S_First(long nodeId, String title, int status)
+		throws SystemException {
+		return fetchByN_T_S_First(nodeId, title, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and title = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_S_First(long nodeId, String title, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByN_T_S(nodeId, title, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param status the status
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_S_Last(long nodeId, String title, int status)
+		throws NoSuchPageException, SystemException {
+		return findByN_T_S_Last(nodeId, title, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_T_S_Last(long nodeId, String title, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_T_S_Last(nodeId, title, status,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", title=");
+		msg.append(title);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and title = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param status the status
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_S_Last(long nodeId, String title, int status)
+		throws SystemException {
+		return fetchByN_T_S_Last(nodeId, title, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and title = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param title the title
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_T_S_Last(long nodeId, String title, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByN_T_S(nodeId, title, status);
+
+		List<WikiPage> list = findByN_T_S(nodeId, title, status, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where nodeId = &#63; and title = &#63; and status = &#63; from the database.
 	 *
 	 * @param nodeId the node ID
@@ -8780,7 +9517,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByN_T_S(long nodeId, String title, int status)
 		throws SystemException {
-		for (WikiPage wikiPage : findByN_T_S(nodeId, title, status)) {
+		for (WikiPage wikiPage : findByN_T_S(nodeId, title, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -8796,10 +9534,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByN_T_S(long nodeId, String title, int status)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_T_S;
+
 		Object[] finderArgs = new Object[] { nodeId, title, status };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_T_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -8842,18 +9582,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_T_S,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -8873,8 +9610,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H_P = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
@@ -8885,7 +9622,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			},
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
 			WikiPageModelImpl.HEAD_COLUMN_BITMASK |
-			WikiPageModelImpl.PARENTTITLE_COLUMN_BITMASK);
+			WikiPageModelImpl.PARENTTITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_H_P = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_H_P",
@@ -8927,263 +9666,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByN_H_P(long nodeId, boolean head,
 		String parentTitle, int start, int end) throws SystemException {
 		return findByN_H_P(nodeId, head, parentTitle, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param parentTitle the parent title
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByN_H_P(long nodeId, boolean head,
-		String parentTitle, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H_P;
-			finderArgs = new Object[] { nodeId, head, parentTitle };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_H_P;
-			finderArgs = new Object[] {
-					nodeId, head, parentTitle,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((nodeId != wikiPage.getNodeId()) ||
-						(head != wikiPage.getHead()) ||
-						!Validator.equals(parentTitle, wikiPage.getParentTitle())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_N_H_P_NODEID_2);
-
-			query.append(_FINDER_COLUMN_N_H_P_HEAD_2);
-
-			if (parentTitle == null) {
-				query.append(_FINDER_COLUMN_N_H_P_PARENTTITLE_1);
-			}
-			else {
-				if (parentTitle.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_N_H_P_PARENTTITLE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_N_H_P_PARENTTITLE_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(nodeId);
-
-				qPos.add(head);
-
-				if (parentTitle != null) {
-					qPos.add(parentTitle);
-				}
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param parentTitle the parent title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_H_P_First(long nodeId, boolean head,
-		String parentTitle, OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_H_P_First(nodeId, head, parentTitle,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(", parentTitle=");
-		msg.append(parentTitle);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param parentTitle the parent title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_H_P_First(long nodeId, boolean head,
-		String parentTitle, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<WikiPage> list = findByN_H_P(nodeId, head, parentTitle, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param parentTitle the parent title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_H_P_Last(long nodeId, boolean head,
-		String parentTitle, OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_H_P_Last(nodeId, head, parentTitle,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(", parentTitle=");
-		msg.append(parentTitle);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param parentTitle the parent title
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_H_P_Last(long nodeId, boolean head,
-		String parentTitle, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByN_H_P(nodeId, head, parentTitle);
-
-		List<WikiPage> list = findByN_H_P(nodeId, head, parentTitle, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -9314,7 +9796,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -9355,6 +9836,317 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByN_H_P(long nodeId, boolean head,
+		String parentTitle, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H_P;
+			finderArgs = new Object[] { nodeId, head, parentTitle };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_H_P;
+			finderArgs = new Object[] {
+					nodeId, head, parentTitle,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						(head != wikiPage.getHead()) ||
+						!Validator.equals(parentTitle, wikiPage.getParentTitle())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_N_H_P_NODEID_2);
+
+			query.append(_FINDER_COLUMN_N_H_P_HEAD_2);
+
+			if (parentTitle == null) {
+				query.append(_FINDER_COLUMN_N_H_P_PARENTTITLE_1);
+			}
+			else {
+				if (parentTitle.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_N_H_P_PARENTTITLE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_N_H_P_PARENTTITLE_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nodeId);
+
+				qPos.add(head);
+
+				if (parentTitle != null) {
+					qPos.add(parentTitle);
+				}
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_P_First(long nodeId, boolean head,
+		String parentTitle) throws NoSuchPageException, SystemException {
+		return findByN_H_P_First(nodeId, head, parentTitle, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_P_First(long nodeId, boolean head,
+		String parentTitle, OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_H_P_First(nodeId, head, parentTitle,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(", parentTitle=");
+		msg.append(parentTitle);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_P_First(long nodeId, boolean head,
+		String parentTitle) throws SystemException {
+		return fetchByN_H_P_First(nodeId, head, parentTitle, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_P_First(long nodeId, boolean head,
+		String parentTitle, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<WikiPage> list = findByN_H_P(nodeId, head, parentTitle, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_P_Last(long nodeId, boolean head,
+		String parentTitle) throws NoSuchPageException, SystemException {
+		return findByN_H_P_Last(nodeId, head, parentTitle, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_P_Last(long nodeId, boolean head,
+		String parentTitle, OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_H_P_Last(nodeId, head, parentTitle,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(", parentTitle=");
+		msg.append(parentTitle);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_P_Last(long nodeId, boolean head,
+		String parentTitle) throws SystemException {
+		return fetchByN_H_P_Last(nodeId, head, parentTitle, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_P_Last(long nodeId, boolean head,
+		String parentTitle, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByN_H_P(nodeId, head, parentTitle);
+
+		List<WikiPage> list = findByN_H_P(nodeId, head, parentTitle, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; from the database.
 	 *
 	 * @param nodeId the node ID
@@ -9364,7 +10156,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByN_H_P(long nodeId, boolean head, String parentTitle)
 		throws SystemException {
-		for (WikiPage wikiPage : findByN_H_P(nodeId, head, parentTitle)) {
+		for (WikiPage wikiPage : findByN_H_P(nodeId, head, parentTitle,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -9380,10 +10173,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByN_H_P(long nodeId, boolean head, String parentTitle)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_H_P;
+
 		Object[] finderArgs = new Object[] { nodeId, head, parentTitle };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_H_P,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -9426,18 +10221,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_H_P,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -9457,8 +10249,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				Long.class.getName(), Boolean.class.getName(),
 				Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, WikiPageImpl.class,
@@ -9469,7 +10261,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			},
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
 			WikiPageModelImpl.HEAD_COLUMN_BITMASK |
-			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_H_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_H_S",
@@ -9511,249 +10305,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findByN_H_S(long nodeId, boolean head, int status,
 		int start, int end) throws SystemException {
 		return findByN_H_S(nodeId, head, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and head = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param status the status
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByN_H_S(long nodeId, boolean head, int status,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H_S;
-			finderArgs = new Object[] { nodeId, head, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_H_S;
-			finderArgs = new Object[] {
-					nodeId, head, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((nodeId != wikiPage.getNodeId()) ||
-						(head != wikiPage.getHead()) ||
-						(status != wikiPage.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_N_H_S_NODEID_2);
-
-			query.append(_FINDER_COLUMN_N_H_S_HEAD_2);
-
-			query.append(_FINDER_COLUMN_N_H_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(nodeId);
-
-				qPos.add(head);
-
-				qPos.add(status);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_H_S_First(long nodeId, boolean head, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_H_S_First(nodeId, head, status,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_H_S_First(long nodeId, boolean head, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<WikiPage> list = findByN_H_S(nodeId, head, status, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_H_S_Last(long nodeId, boolean head, int status,
-		OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_H_S_Last(nodeId, head, status,
-				orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_H_S_Last(long nodeId, boolean head, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByN_H_S(nodeId, head, status);
-
-		List<WikiPage> list = findByN_H_S(nodeId, head, status, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -9874,7 +10425,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -9913,6 +10463,303 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and head = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param status the status
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByN_H_S(long nodeId, boolean head, int status,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H_S;
+			finderArgs = new Object[] { nodeId, head, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_H_S;
+			finderArgs = new Object[] {
+					nodeId, head, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						(head != wikiPage.getHead()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_N_H_S_NODEID_2);
+
+			query.append(_FINDER_COLUMN_N_H_S_HEAD_2);
+
+			query.append(_FINDER_COLUMN_N_H_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nodeId);
+
+				qPos.add(head);
+
+				qPos.add(status);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param status the status
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_S_First(long nodeId, boolean head, int status)
+		throws NoSuchPageException, SystemException {
+		return findByN_H_S_First(nodeId, head, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_S_First(long nodeId, boolean head, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_H_S_First(nodeId, head, status,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param status the status
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_S_First(long nodeId, boolean head, int status)
+		throws SystemException {
+		return fetchByN_H_S_First(nodeId, head, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_S_First(long nodeId, boolean head, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WikiPage> list = findByN_H_S(nodeId, head, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param status the status
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_S_Last(long nodeId, boolean head, int status)
+		throws NoSuchPageException, SystemException {
+		return findByN_H_S_Last(nodeId, head, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_S_Last(long nodeId, boolean head, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_H_S_Last(nodeId, head, status,
+				orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param status the status
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_S_Last(long nodeId, boolean head, int status)
+		throws SystemException {
+		return fetchByN_H_S_Last(nodeId, head, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_S_Last(long nodeId, boolean head, int status,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByN_H_S(nodeId, head, status);
+
+		List<WikiPage> list = findByN_H_S(nodeId, head, status, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where nodeId = &#63; and head = &#63; and status = &#63; from the database.
 	 *
 	 * @param nodeId the node ID
@@ -9922,7 +10769,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByN_H_S(long nodeId, boolean head, int status)
 		throws SystemException {
-		for (WikiPage wikiPage : findByN_H_S(nodeId, head, status)) {
+		for (WikiPage wikiPage : findByN_H_S(nodeId, head, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -9938,10 +10786,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByN_H_S(long nodeId, boolean head, int status)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_H_S;
+
 		Object[] finderArgs = new Object[] { nodeId, head, status };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_H_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -9972,18 +10822,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_H_S,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -10001,8 +10848,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				Long.class.getName(), Boolean.class.getName(),
 				String.class.getName(), Integer.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H_P_S =
 		new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
@@ -10015,7 +10862,9 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 			WikiPageModelImpl.NODEID_COLUMN_BITMASK |
 			WikiPageModelImpl.HEAD_COLUMN_BITMASK |
 			WikiPageModelImpl.PARENTTITLE_COLUMN_BITMASK |
-			WikiPageModelImpl.STATUS_COLUMN_BITMASK);
+			WikiPageModelImpl.STATUS_COLUMN_BITMASK |
+			WikiPageModelImpl.TITLE_COLUMN_BITMASK |
+			WikiPageModelImpl.VERSION_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_N_H_P_S = new FinderPath(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByN_H_P_S",
@@ -10060,279 +10909,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 		String parentTitle, int status, int start, int end)
 		throws SystemException {
 		return findByN_H_P_S(nodeId, head, parentTitle, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param parentTitle the parent title
-	 * @param status the status
-	 * @param start the lower bound of the range of wiki pages
-	 * @param end the upper bound of the range of wiki pages (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching wiki pages
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<WikiPage> findByN_H_P_S(long nodeId, boolean head,
-		String parentTitle, int status, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H_P_S;
-			finderArgs = new Object[] { nodeId, head, parentTitle, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_H_P_S;
-			finderArgs = new Object[] {
-					nodeId, head, parentTitle, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (WikiPage wikiPage : list) {
-				if ((nodeId != wikiPage.getNodeId()) ||
-						(head != wikiPage.getHead()) ||
-						!Validator.equals(parentTitle, wikiPage.getParentTitle()) ||
-						(status != wikiPage.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(6 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(6);
-			}
-
-			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_N_H_P_S_NODEID_2);
-
-			query.append(_FINDER_COLUMN_N_H_P_S_HEAD_2);
-
-			if (parentTitle == null) {
-				query.append(_FINDER_COLUMN_N_H_P_S_PARENTTITLE_1);
-			}
-			else {
-				if (parentTitle.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_N_H_P_S_PARENTTITLE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_N_H_P_S_PARENTTITLE_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_N_H_P_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(nodeId);
-
-				qPos.add(head);
-
-				if (parentTitle != null) {
-					qPos.add(parentTitle);
-				}
-
-				qPos.add(status);
-
-				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param parentTitle the parent title
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_H_P_S_First(long nodeId, boolean head,
-		String parentTitle, int status, OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_H_P_S_First(nodeId, head, parentTitle,
-				status, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(10);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(", parentTitle=");
-		msg.append(parentTitle);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param parentTitle the parent title
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_H_P_S_First(long nodeId, boolean head,
-		String parentTitle, int status, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<WikiPage> list = findByN_H_P_S(nodeId, head, parentTitle, status,
-				0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param parentTitle the parent title
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page
-	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage findByN_H_P_S_Last(long nodeId, boolean head,
-		String parentTitle, int status, OrderByComparator orderByComparator)
-		throws NoSuchPageException, SystemException {
-		WikiPage wikiPage = fetchByN_H_P_S_Last(nodeId, head, parentTitle,
-				status, orderByComparator);
-
-		if (wikiPage != null) {
-			return wikiPage;
-		}
-
-		StringBundler msg = new StringBundler(10);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("nodeId=");
-		msg.append(nodeId);
-
-		msg.append(", head=");
-		msg.append(head);
-
-		msg.append(", parentTitle=");
-		msg.append(parentTitle);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchPageException(msg.toString());
-	}
-
-	/**
-	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
-	 *
-	 * @param nodeId the node ID
-	 * @param head the head
-	 * @param parentTitle the parent title
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WikiPage fetchByN_H_P_S_Last(long nodeId, boolean head,
-		String parentTitle, int status, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByN_H_P_S(nodeId, head, parentTitle, status);
-
-		List<WikiPage> list = findByN_H_P_S(nodeId, head, parentTitle, status,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -10467,7 +11043,6 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				}
 			}
 		}
-
 		else {
 			query.append(WikiPageModelImpl.ORDER_BY_JPQL);
 		}
@@ -10510,6 +11085,339 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	}
 
 	/**
+	 * Returns an ordered range of all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param status the status
+	 * @param start the lower bound of the range of wiki pages
+	 * @param end the upper bound of the range of wiki pages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching wiki pages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<WikiPage> findByN_H_P_S(long nodeId, boolean head,
+		String parentTitle, int status, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_N_H_P_S;
+			finderArgs = new Object[] { nodeId, head, parentTitle, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_N_H_P_S;
+			finderArgs = new Object[] {
+					nodeId, head, parentTitle, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						(head != wikiPage.getHead()) ||
+						!Validator.equals(parentTitle, wikiPage.getParentTitle()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(6 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(6);
+			}
+
+			query.append(_SQL_SELECT_WIKIPAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_N_H_P_S_NODEID_2);
+
+			query.append(_FINDER_COLUMN_N_H_P_S_HEAD_2);
+
+			if (parentTitle == null) {
+				query.append(_FINDER_COLUMN_N_H_P_S_PARENTTITLE_1);
+			}
+			else {
+				if (parentTitle.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_N_H_P_S_PARENTTITLE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_N_H_P_S_PARENTTITLE_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_N_H_P_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(WikiPageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(nodeId);
+
+				qPos.add(head);
+
+				if (parentTitle != null) {
+					qPos.add(parentTitle);
+				}
+
+				qPos.add(status);
+
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param status the status
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_P_S_First(long nodeId, boolean head,
+		String parentTitle, int status)
+		throws NoSuchPageException, SystemException {
+		return findByN_H_P_S_First(nodeId, head, parentTitle, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_P_S_First(long nodeId, boolean head,
+		String parentTitle, int status, OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_H_P_S_First(nodeId, head, parentTitle,
+				status, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(", parentTitle=");
+		msg.append(parentTitle);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the first wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param status the status
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_P_S_First(long nodeId, boolean head,
+		String parentTitle, int status) throws SystemException {
+		return fetchByN_H_P_S_First(nodeId, head, parentTitle, status, null);
+	}
+
+	/**
+	 * Returns the first wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_P_S_First(long nodeId, boolean head,
+		String parentTitle, int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<WikiPage> list = findByN_H_P_S(nodeId, head, parentTitle, status,
+				0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param status the status
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_P_S_Last(long nodeId, boolean head,
+		String parentTitle, int status)
+		throws NoSuchPageException, SystemException {
+		return findByN_H_P_S_Last(nodeId, head, parentTitle, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page
+	 * @throws com.liferay.portlet.wiki.NoSuchPageException if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage findByN_H_P_S_Last(long nodeId, boolean head,
+		String parentTitle, int status, OrderByComparator orderByComparator)
+		throws NoSuchPageException, SystemException {
+		WikiPage wikiPage = fetchByN_H_P_S_Last(nodeId, head, parentTitle,
+				status, orderByComparator);
+
+		if (wikiPage != null) {
+			return wikiPage;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("nodeId=");
+		msg.append(nodeId);
+
+		msg.append(", head=");
+		msg.append(head);
+
+		msg.append(", parentTitle=");
+		msg.append(parentTitle);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPageException(msg.toString());
+	}
+
+	/**
+	 * Returns the last wiki page in the default ordered set defined by {@link WikiPageModelImpl#ORDER_BY_JPQL} where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param status the status
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_P_S_Last(long nodeId, boolean head,
+		String parentTitle, int status) throws SystemException {
+		return fetchByN_H_P_S_Last(nodeId, head, parentTitle, status, null);
+	}
+
+	/**
+	 * Returns the last wiki page in the ordered set where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63;.
+	 *
+	 * @param nodeId the node ID
+	 * @param head the head
+	 * @param parentTitle the parent title
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching wiki page, or <code>null</code> if a matching wiki page could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WikiPage fetchByN_H_P_S_Last(long nodeId, boolean head,
+		String parentTitle, int status, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByN_H_P_S(nodeId, head, parentTitle, status);
+
+		List<WikiPage> list = findByN_H_P_S(nodeId, head, parentTitle, status,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the wiki pages where nodeId = &#63; and head = &#63; and parentTitle = &#63; and status = &#63; from the database.
 	 *
 	 * @param nodeId the node ID
@@ -10520,7 +11428,8 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public void removeByN_H_P_S(long nodeId, boolean head, String parentTitle,
 		int status) throws SystemException {
-		for (WikiPage wikiPage : findByN_H_P_S(nodeId, head, parentTitle, status)) {
+		for (WikiPage wikiPage : findByN_H_P_S(nodeId, head, parentTitle,
+				status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(wikiPage);
 		}
 	}
@@ -10537,10 +11446,12 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	 */
 	public int countByN_H_P_S(long nodeId, boolean head, String parentTitle,
 		int status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_N_H_P_S;
+
 		Object[] finderArgs = new Object[] { nodeId, head, parentTitle, status };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_N_H_P_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(5);
@@ -10587,18 +11498,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_N_H_P_S,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -11494,28 +12402,27 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 		if (wikiPage == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				wikiPage = (WikiPage)session.get(WikiPageImpl.class,
 						Long.valueOf(pageId));
+
+				if (wikiPage != null) {
+					cacheResult(wikiPage);
+				}
+				else {
+					EntityCacheUtil.putResult(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
+						WikiPageImpl.class, pageId, _nullWikiPage);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
+					WikiPageImpl.class, pageId);
 
 				throw processException(e);
 			}
 			finally {
-				if (wikiPage != null) {
-					cacheResult(wikiPage);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(WikiPageModelImpl.ENTITY_CACHE_ENABLED,
-						WikiPageImpl.class, pageId, _nullWikiPage);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -11565,7 +12472,7 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public List<WikiPage> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -11606,30 +12513,19 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<WikiPage>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<WikiPage>)QueryUtil.list(q, getDialect(), start,
+						end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<WikiPage>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -11667,18 +12563,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 				Query q = session.createQuery(_SQL_COUNT_WIKIPAGE);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -11714,6 +12609,7 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 	public void destroy() {
 		EntityCacheUtil.removeCache(WikiPageImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

@@ -66,6 +66,22 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the shopping carts before and after the current shopping cart in the ordered set where groupId = &#63;.
+	*
+	* @param cartId the primary key of the current shopping cart
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next shopping cart
+	* @throws com.liferay.portlet.shopping.NoSuchCartException if a shopping cart with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart[] findByGroupId_PrevAndNext(
+		long cartId, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCartException;
+
+	/**
 	* Returns an ordered range of all the shopping carts where groupId = &#63;.
 	*
 	* <p>
@@ -85,6 +101,19 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first shopping cart in the default ordered set defined by {@link ShoppingCartModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching shopping cart
+	* @throws com.liferay.portlet.shopping.NoSuchCartException if a matching shopping cart could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCartException;
+
+	/**
 	* Returns the first shopping cart in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -100,6 +129,17 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 			com.liferay.portlet.shopping.NoSuchCartException;
 
 	/**
+	* Returns the first shopping cart in the default ordered set defined by {@link ShoppingCartModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching shopping cart, or <code>null</code> if a matching shopping cart could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first shopping cart in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -111,6 +151,19 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last shopping cart in the default ordered set defined by {@link ShoppingCartModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching shopping cart
+	* @throws com.liferay.portlet.shopping.NoSuchCartException if a matching shopping cart could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCartException;
 
 	/**
 	* Returns the last shopping cart in the ordered set where groupId = &#63;.
@@ -128,6 +181,17 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 			com.liferay.portlet.shopping.NoSuchCartException;
 
 	/**
+	* Returns the last shopping cart in the default ordered set defined by {@link ShoppingCartModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching shopping cart, or <code>null</code> if a matching shopping cart could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last shopping cart in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -139,22 +203,6 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the shopping carts before and after the current shopping cart in the ordered set where groupId = &#63;.
-	*
-	* @param cartId the primary key of the current shopping cart
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next shopping cart
-	* @throws com.liferay.portlet.shopping.NoSuchCartException if a shopping cart with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCart[] findByGroupId_PrevAndNext(
-		long cartId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchCartException;
 
 	/**
 	* Removes all the shopping carts where groupId = &#63; from the database.
@@ -203,6 +251,22 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the shopping carts before and after the current shopping cart in the ordered set where userId = &#63;.
+	*
+	* @param cartId the primary key of the current shopping cart
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next shopping cart
+	* @throws com.liferay.portlet.shopping.NoSuchCartException if a shopping cart with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart[] findByUserId_PrevAndNext(
+		long cartId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCartException;
+
+	/**
 	* Returns an ordered range of all the shopping carts where userId = &#63;.
 	*
 	* <p>
@@ -222,6 +286,19 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first shopping cart in the default ordered set defined by {@link ShoppingCartModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching shopping cart
+	* @throws com.liferay.portlet.shopping.NoSuchCartException if a matching shopping cart could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart findByUserId_First(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCartException;
+
+	/**
 	* Returns the first shopping cart in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -237,6 +314,16 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 			com.liferay.portlet.shopping.NoSuchCartException;
 
 	/**
+	* Returns the first shopping cart in the default ordered set defined by {@link ShoppingCartModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching shopping cart, or <code>null</code> if a matching shopping cart could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first shopping cart in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -248,6 +335,19 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 		long userId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last shopping cart in the default ordered set defined by {@link ShoppingCartModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching shopping cart
+	* @throws com.liferay.portlet.shopping.NoSuchCartException if a matching shopping cart could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart findByUserId_Last(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchCartException;
 
 	/**
 	* Returns the last shopping cart in the ordered set where userId = &#63;.
@@ -265,6 +365,16 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 			com.liferay.portlet.shopping.NoSuchCartException;
 
 	/**
+	* Returns the last shopping cart in the default ordered set defined by {@link ShoppingCartModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching shopping cart, or <code>null</code> if a matching shopping cart could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCart fetchByUserId_Last(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last shopping cart in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -276,22 +386,6 @@ public interface ShoppingCartPersistence extends BasePersistence<ShoppingCart> {
 		long userId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the shopping carts before and after the current shopping cart in the ordered set where userId = &#63;.
-	*
-	* @param cartId the primary key of the current shopping cart
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next shopping cart
-	* @throws com.liferay.portlet.shopping.NoSuchCartException if a shopping cart with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingCart[] findByUserId_PrevAndNext(
-		long cartId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchCartException;
 
 	/**
 	* Removes all the shopping carts where userId = &#63; from the database.

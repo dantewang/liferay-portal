@@ -66,6 +66,22 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the d d m storage links before and after the current d d m storage link in the ordered set where uuid = &#63;.
+	*
+	* @param storageLinkId the primary key of the current d d m storage link
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next d d m storage link
+	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a d d m storage link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink[] findByUuid_PrevAndNext(
+		long storageLinkId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
+
+	/**
 	* Returns an ordered range of all the d d m storage links where uuid = &#63;.
 	*
 	* <p>
@@ -85,6 +101,19 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first d d m storage link in the default ordered set defined by {@link DDMStorageLinkModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching d d m storage link
+	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a matching d d m storage link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
+
+	/**
 	* Returns the first d d m storage link in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -100,6 +129,17 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
 
 	/**
+	* Returns the first d d m storage link in the default ordered set defined by {@link DDMStorageLinkModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching d d m storage link, or <code>null</code> if a matching d d m storage link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first d d m storage link in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -111,6 +151,19 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last d d m storage link in the default ordered set defined by {@link DDMStorageLinkModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching d d m storage link
+	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a matching d d m storage link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
 
 	/**
 	* Returns the last d d m storage link in the ordered set where uuid = &#63;.
@@ -128,6 +181,17 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
 
 	/**
+	* Returns the last d d m storage link in the default ordered set defined by {@link DDMStorageLinkModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching d d m storage link, or <code>null</code> if a matching d d m storage link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last d d m storage link in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -139,22 +203,6 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the d d m storage links before and after the current d d m storage link in the ordered set where uuid = &#63;.
-	*
-	* @param storageLinkId the primary key of the current d d m storage link
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next d d m storage link
-	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a d d m storage link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink[] findByUuid_PrevAndNext(
-		long storageLinkId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
 
 	/**
 	* Removes all the d d m storage links where uuid = &#63; from the database.
@@ -262,6 +310,22 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the d d m storage links before and after the current d d m storage link in the ordered set where structureId = &#63;.
+	*
+	* @param storageLinkId the primary key of the current d d m storage link
+	* @param structureId the structure ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next d d m storage link
+	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a d d m storage link with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink[] findByStructureId_PrevAndNext(
+		long storageLinkId, long structureId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
+
+	/**
 	* Returns an ordered range of all the d d m storage links where structureId = &#63;.
 	*
 	* <p>
@@ -281,6 +345,19 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first d d m storage link in the default ordered set defined by {@link DDMStorageLinkModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the first matching d d m storage link
+	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a matching d d m storage link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink findByStructureId_First(
+		long structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
+
+	/**
 	* Returns the first d d m storage link in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -296,6 +373,17 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
 
 	/**
+	* Returns the first d d m storage link in the default ordered set defined by {@link DDMStorageLinkModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the first matching d d m storage link, or <code>null</code> if a matching d d m storage link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink fetchByStructureId_First(
+		long structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first d d m storage link in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -307,6 +395,19 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 		long structureId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last d d m storage link in the default ordered set defined by {@link DDMStorageLinkModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the last matching d d m storage link
+	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a matching d d m storage link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink findByStructureId_Last(
+		long structureId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
 
 	/**
 	* Returns the last d d m storage link in the ordered set where structureId = &#63;.
@@ -324,6 +425,17 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
 
 	/**
+	* Returns the last d d m storage link in the default ordered set defined by {@link DDMStorageLinkModelImpl#ORDER_BY_JPQL} where structureId = &#63;.
+	*
+	* @param structureId the structure ID
+	* @return the last matching d d m storage link, or <code>null</code> if a matching d d m storage link could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink fetchByStructureId_Last(
+		long structureId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last d d m storage link in the ordered set where structureId = &#63;.
 	*
 	* @param structureId the structure ID
@@ -335,22 +447,6 @@ public interface DDMStorageLinkPersistence extends BasePersistence<DDMStorageLin
 		long structureId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the d d m storage links before and after the current d d m storage link in the ordered set where structureId = &#63;.
-	*
-	* @param storageLinkId the primary key of the current d d m storage link
-	* @param structureId the structure ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next d d m storage link
-	* @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a d d m storage link with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink[] findByStructureId_PrevAndNext(
-		long storageLinkId, long structureId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
 
 	/**
 	* Removes all the d d m storage links where structureId = &#63; from the database.

@@ -142,6 +142,26 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the document library file ranks before and after the current document library file rank in the ordered set where userId = &#63;.
+	*
+	* @param fileRankId the primary key of the current document library file rank
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a document library file rank with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank[] findByUserId_PrevAndNext(
+		long fileRankId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence()
+				   .findByUserId_PrevAndNext(fileRankId, userId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the document library file ranks where userId = &#63;.
 	*
 	* <p>
@@ -164,6 +184,21 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the first document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank findByUserId_First(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence().findByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first document library file rank in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -181,6 +216,18 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the first document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching document library file rank, or <code>null</code> if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first document library file rank in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -193,6 +240,21 @@ public class DLFileRankUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_First(userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank findByUserId_Last(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence().findByUserId_Last(userId);
 	}
 
 	/**
@@ -213,6 +275,18 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the last document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching document library file rank, or <code>null</code> if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank fetchByUserId_Last(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_Last(userId);
+	}
+
+	/**
 	* Returns the last document library file rank in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -225,26 +299,6 @@ public class DLFileRankUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_Last(userId, orderByComparator);
-	}
-
-	/**
-	* Returns the document library file ranks before and after the current document library file rank in the ordered set where userId = &#63;.
-	*
-	* @param fileRankId the primary key of the current document library file rank
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library file rank
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a document library file rank with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileRank[] findByUserId_PrevAndNext(
-		long fileRankId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
-		return getPersistence()
-				   .findByUserId_PrevAndNext(fileRankId, userId,
-			orderByComparator);
 	}
 
 	/**
@@ -303,6 +357,26 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the document library file ranks before and after the current document library file rank in the ordered set where fileEntryId = &#63;.
+	*
+	* @param fileRankId the primary key of the current document library file rank
+	* @param fileEntryId the file entry ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a document library file rank with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank[] findByFileEntryId_PrevAndNext(
+		long fileRankId, long fileEntryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence()
+				   .findByFileEntryId_PrevAndNext(fileRankId, fileEntryId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the document library file ranks where fileEntryId = &#63;.
 	*
 	* <p>
@@ -325,6 +399,21 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the first document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where fileEntryId = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @return the first matching document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank findByFileEntryId_First(
+		long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence().findByFileEntryId_First(fileEntryId);
+	}
+
+	/**
 	* Returns the first document library file rank in the ordered set where fileEntryId = &#63;.
 	*
 	* @param fileEntryId the file entry ID
@@ -343,6 +432,19 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the first document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where fileEntryId = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @return the first matching document library file rank, or <code>null</code> if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank fetchByFileEntryId_First(
+		long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByFileEntryId_First(fileEntryId);
+	}
+
+	/**
 	* Returns the first document library file rank in the ordered set where fileEntryId = &#63;.
 	*
 	* @param fileEntryId the file entry ID
@@ -356,6 +458,21 @@ public class DLFileRankUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByFileEntryId_First(fileEntryId, orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where fileEntryId = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @return the last matching document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank findByFileEntryId_Last(
+		long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence().findByFileEntryId_Last(fileEntryId);
 	}
 
 	/**
@@ -377,6 +494,19 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the last document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where fileEntryId = &#63;.
+	*
+	* @param fileEntryId the file entry ID
+	* @return the last matching document library file rank, or <code>null</code> if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank fetchByFileEntryId_Last(
+		long fileEntryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByFileEntryId_Last(fileEntryId);
+	}
+
+	/**
 	* Returns the last document library file rank in the ordered set where fileEntryId = &#63;.
 	*
 	* @param fileEntryId the file entry ID
@@ -390,26 +520,6 @@ public class DLFileRankUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByFileEntryId_Last(fileEntryId, orderByComparator);
-	}
-
-	/**
-	* Returns the document library file ranks before and after the current document library file rank in the ordered set where fileEntryId = &#63;.
-	*
-	* @param fileRankId the primary key of the current document library file rank
-	* @param fileEntryId the file entry ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library file rank
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a document library file rank with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileRank[] findByFileEntryId_PrevAndNext(
-		long fileRankId, long fileEntryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
-		return getPersistence()
-				   .findByFileEntryId_PrevAndNext(fileRankId, fileEntryId,
-			orderByComparator);
 	}
 
 	/**
@@ -470,6 +580,27 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the document library file ranks before and after the current document library file rank in the ordered set where groupId = &#63; and userId = &#63;.
+	*
+	* @param fileRankId the primary key of the current document library file rank
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a document library file rank with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank[] findByG_U_PrevAndNext(
+		long fileRankId, long groupId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence()
+				   .findByG_U_PrevAndNext(fileRankId, groupId, userId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the document library file ranks where groupId = &#63; and userId = &#63;.
 	*
 	* <p>
@@ -493,6 +624,22 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the first document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the first matching document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank findByG_U_First(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence().findByG_U_First(groupId, userId);
+	}
+
+	/**
 	* Returns the first document library file rank in the ordered set where groupId = &#63; and userId = &#63;.
 	*
 	* @param groupId the group ID
@@ -512,6 +659,20 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the first document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the first matching document library file rank, or <code>null</code> if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank fetchByG_U_First(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_First(groupId, userId);
+	}
+
+	/**
 	* Returns the first document library file rank in the ordered set where groupId = &#63; and userId = &#63;.
 	*
 	* @param groupId the group ID
@@ -526,6 +687,22 @@ public class DLFileRankUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_U_First(groupId, userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the last matching document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank findByG_U_Last(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence().findByG_U_Last(groupId, userId);
 	}
 
 	/**
@@ -548,6 +725,20 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the last document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @return the last matching document library file rank, or <code>null</code> if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank fetchByG_U_Last(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_Last(groupId, userId);
+	}
+
+	/**
 	* Returns the last document library file rank in the ordered set where groupId = &#63; and userId = &#63;.
 	*
 	* @param groupId the group ID
@@ -562,27 +753,6 @@ public class DLFileRankUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_U_Last(groupId, userId, orderByComparator);
-	}
-
-	/**
-	* Returns the document library file ranks before and after the current document library file rank in the ordered set where groupId = &#63; and userId = &#63;.
-	*
-	* @param fileRankId the primary key of the current document library file rank
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library file rank
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a document library file rank with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileRank[] findByG_U_PrevAndNext(
-		long fileRankId, long groupId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
-		return getPersistence()
-				   .findByG_U_PrevAndNext(fileRankId, groupId, userId,
-			orderByComparator);
 	}
 
 	/**
@@ -647,6 +817,28 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the document library file ranks before and after the current document library file rank in the ordered set where groupId = &#63; and userId = &#63; and active = &#63;.
+	*
+	* @param fileRankId the primary key of the current document library file rank
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a document library file rank with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank[] findByG_U_A_PrevAndNext(
+		long fileRankId, long groupId, long userId, boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence()
+				   .findByG_U_A_PrevAndNext(fileRankId, groupId, userId,
+			active, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the document library file ranks where groupId = &#63; and userId = &#63; and active = &#63;.
 	*
 	* <p>
@@ -672,6 +864,23 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the first document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param active the active
+	* @return the first matching document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank findByG_U_A_First(
+		long groupId, long userId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence().findByG_U_A_First(groupId, userId, active);
+	}
+
+	/**
 	* Returns the first document library file rank in the ordered set where groupId = &#63; and userId = &#63; and active = &#63;.
 	*
 	* @param groupId the group ID
@@ -692,6 +901,21 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the first document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param active the active
+	* @return the first matching document library file rank, or <code>null</code> if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank fetchByG_U_A_First(
+		long groupId, long userId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_A_First(groupId, userId, active);
+	}
+
+	/**
 	* Returns the first document library file rank in the ordered set where groupId = &#63; and userId = &#63; and active = &#63;.
 	*
 	* @param groupId the group ID
@@ -708,6 +932,23 @@ public class DLFileRankUtil {
 		return getPersistence()
 				   .fetchByG_U_A_First(groupId, userId, active,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param active the active
+	* @return the last matching document library file rank
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank findByG_U_A_Last(
+		long groupId, long userId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
+		return getPersistence().findByG_U_A_Last(groupId, userId, active);
 	}
 
 	/**
@@ -731,6 +972,21 @@ public class DLFileRankUtil {
 	}
 
 	/**
+	* Returns the last document library file rank in the default ordered set defined by {@link DLFileRankModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and active = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param active the active
+	* @return the last matching document library file rank, or <code>null</code> if a matching document library file rank could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileRank fetchByG_U_A_Last(
+		long groupId, long userId, boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_A_Last(groupId, userId, active);
+	}
+
+	/**
 	* Returns the last document library file rank in the ordered set where groupId = &#63; and userId = &#63; and active = &#63;.
 	*
 	* @param groupId the group ID
@@ -746,28 +1002,6 @@ public class DLFileRankUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_U_A_Last(groupId, userId, active, orderByComparator);
-	}
-
-	/**
-	* Returns the document library file ranks before and after the current document library file rank in the ordered set where groupId = &#63; and userId = &#63; and active = &#63;.
-	*
-	* @param fileRankId the primary key of the current document library file rank
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next document library file rank
-	* @throws com.liferay.portlet.documentlibrary.NoSuchFileRankException if a document library file rank with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLFileRank[] findByG_U_A_PrevAndNext(
-		long fileRankId, long groupId, long userId, boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchFileRankException {
-		return getPersistence()
-				   .findByG_U_A_PrevAndNext(fileRankId, groupId, userId,
-			active, orderByComparator);
 	}
 
 	/**

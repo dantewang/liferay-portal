@@ -144,6 +144,27 @@ public class PortletItemUtil {
 	}
 
 	/**
+	* Returns the portlet items before and after the current portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param portletItemId the primary key of the current portlet item
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next portlet item
+	* @throws com.liferay.portal.NoSuchPortletItemException if a portlet item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem[] findByG_C_PrevAndNext(
+		long portletItemId, long groupId, long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPortletItemException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_PrevAndNext(portletItemId, groupId, classNameId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the portlet items where groupId = &#63; and classNameId = &#63;.
 	*
 	* <p>
@@ -168,6 +189,22 @@ public class PortletItemUtil {
 	}
 
 	/**
+	* Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @return the first matching portlet item
+	* @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem findByG_C_First(
+		long groupId, long classNameId)
+		throws com.liferay.portal.NoSuchPortletItemException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_C_First(groupId, classNameId);
+	}
+
+	/**
 	* Returns the first portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -187,6 +224,20 @@ public class PortletItemUtil {
 	}
 
 	/**
+	* Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem fetchByG_C_First(
+		long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_C_First(groupId, classNameId);
+	}
+
+	/**
 	* Returns the first portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -201,6 +252,22 @@ public class PortletItemUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_C_First(groupId, classNameId, orderByComparator);
+	}
+
+	/**
+	* Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @return the last matching portlet item
+	* @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem findByG_C_Last(
+		long groupId, long classNameId)
+		throws com.liferay.portal.NoSuchPortletItemException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_C_Last(groupId, classNameId);
 	}
 
 	/**
@@ -223,6 +290,20 @@ public class PortletItemUtil {
 	}
 
 	/**
+	* Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem fetchByG_C_Last(
+		long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_C_Last(groupId, classNameId);
+	}
+
+	/**
 	* Returns the last portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -237,27 +318,6 @@ public class PortletItemUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_C_Last(groupId, classNameId, orderByComparator);
-	}
-
-	/**
-	* Returns the portlet items before and after the current portlet item in the ordered set where groupId = &#63; and classNameId = &#63;.
-	*
-	* @param portletItemId the primary key of the current portlet item
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next portlet item
-	* @throws com.liferay.portal.NoSuchPortletItemException if a portlet item with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PortletItem[] findByG_C_PrevAndNext(
-		long portletItemId, long groupId, long classNameId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchPortletItemException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_PrevAndNext(portletItemId, groupId, classNameId,
-			orderByComparator);
 	}
 
 	/**
@@ -323,6 +383,29 @@ public class PortletItemUtil {
 	}
 
 	/**
+	* Returns the portlet items before and after the current portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	*
+	* @param portletItemId the primary key of the current portlet item
+	* @param groupId the group ID
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next portlet item
+	* @throws com.liferay.portal.NoSuchPortletItemException if a portlet item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem[] findByG_P_C_PrevAndNext(
+		long portletItemId, long groupId, java.lang.String portletId,
+		long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPortletItemException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_P_C_PrevAndNext(portletItemId, groupId, portletId,
+			classNameId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the portlet items where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
 	*
 	* <p>
@@ -349,6 +432,24 @@ public class PortletItemUtil {
 	}
 
 	/**
+	* Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @return the first matching portlet item
+	* @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem findByG_P_C_First(
+		long groupId, java.lang.String portletId, long classNameId)
+		throws com.liferay.portal.NoSuchPortletItemException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_P_C_First(groupId, portletId, classNameId);
+	}
+
+	/**
 	* Returns the first portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -370,6 +471,22 @@ public class PortletItemUtil {
 	}
 
 	/**
+	* Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem fetchByG_P_C_First(
+		long groupId, java.lang.String portletId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_P_C_First(groupId, portletId, classNameId);
+	}
+
+	/**
 	* Returns the first portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -386,6 +503,23 @@ public class PortletItemUtil {
 		return getPersistence()
 				   .fetchByG_P_C_First(groupId, portletId, classNameId,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @return the last matching portlet item
+	* @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem findByG_P_C_Last(
+		long groupId, java.lang.String portletId, long classNameId)
+		throws com.liferay.portal.NoSuchPortletItemException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_P_C_Last(groupId, portletId, classNameId);
 	}
 
 	/**
@@ -410,6 +544,22 @@ public class PortletItemUtil {
 	}
 
 	/**
+	* Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem fetchByG_P_C_Last(
+		long groupId, java.lang.String portletId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_P_C_Last(groupId, portletId, classNameId);
+	}
+
+	/**
 	* Returns the last portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -426,29 +576,6 @@ public class PortletItemUtil {
 		return getPersistence()
 				   .fetchByG_P_C_Last(groupId, portletId, classNameId,
 			orderByComparator);
-	}
-
-	/**
-	* Returns the portlet items before and after the current portlet item in the ordered set where groupId = &#63; and portletId = &#63; and classNameId = &#63;.
-	*
-	* @param portletItemId the primary key of the current portlet item
-	* @param groupId the group ID
-	* @param portletId the portlet ID
-	* @param classNameId the class name ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next portlet item
-	* @throws com.liferay.portal.NoSuchPortletItemException if a portlet item with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.PortletItem[] findByG_P_C_PrevAndNext(
-		long portletItemId, long groupId, java.lang.String portletId,
-		long classNameId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchPortletItemException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_P_C_PrevAndNext(portletItemId, groupId, portletId,
-			classNameId, orderByComparator);
 	}
 
 	/**
@@ -481,80 +608,182 @@ public class PortletItemUtil {
 	}
 
 	/**
-	* Returns the portlet item where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; or throws a {@link com.liferay.portal.NoSuchPortletItemException} if it could not be found.
+	* Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
 	* @param name the name
 	* @param portletId the portlet ID
 	* @param classNameId the class name ID
-	* @return the matching portlet item
+	* @return the first matching portlet item
 	* @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PortletItem findByG_N_P_C(
+	public static com.liferay.portal.model.PortletItem findByG_N_P_C_First(
 		long groupId, java.lang.String name, java.lang.String portletId,
 		long classNameId)
 		throws com.liferay.portal.NoSuchPortletItemException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .findByG_N_P_C(groupId, name, portletId, classNameId);
+				   .findByG_N_P_C_First(groupId, name, portletId, classNameId);
 	}
 
 	/**
-	* Returns the portlet item where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first portlet item in the ordered set where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
 	* @param name the name
 	* @param portletId the portlet ID
 	* @param classNameId the class name ID
-	* @return the matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching portlet item
+	* @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PortletItem fetchByG_N_P_C(
+	public static com.liferay.portal.model.PortletItem findByG_N_P_C_First(
+		long groupId, java.lang.String name, java.lang.String portletId,
+		long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPortletItemException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_N_P_C_First(groupId, name, portletId, classNameId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem fetchByG_N_P_C_First(
 		long groupId, java.lang.String name, java.lang.String portletId,
 		long classNameId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchByG_N_P_C(groupId, name, portletId, classNameId);
+				   .fetchByG_N_P_C_First(groupId, name, portletId, classNameId);
 	}
 
 	/**
-	* Returns the portlet item where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first portlet item in the ordered set where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
 	* @param name the name
 	* @param portletId the portlet ID
 	* @param classNameId the class name ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching portlet item, or <code>null</code> if a matching portlet item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PortletItem fetchByG_N_P_C(
+	public static com.liferay.portal.model.PortletItem fetchByG_N_P_C_First(
 		long groupId, java.lang.String name, java.lang.String portletId,
-		long classNameId, boolean retrieveFromCache)
+		long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchByG_N_P_C(groupId, name, portletId, classNameId,
-			retrieveFromCache);
+				   .fetchByG_N_P_C_First(groupId, name, portletId, classNameId,
+			orderByComparator);
 	}
 
 	/**
-	* Removes the portlet item where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; from the database.
+	* Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
 	* @param name the name
 	* @param portletId the portlet ID
 	* @param classNameId the class name ID
-	* @return the portlet item that was removed
+	* @return the last matching portlet item
+	* @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PortletItem removeByG_N_P_C(
+	public static com.liferay.portal.model.PortletItem findByG_N_P_C_Last(
 		long groupId, java.lang.String name, java.lang.String portletId,
 		long classNameId)
 		throws com.liferay.portal.NoSuchPortletItemException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .removeByG_N_P_C(groupId, name, portletId, classNameId);
+				   .findByG_N_P_C_Last(groupId, name, portletId, classNameId);
+	}
+
+	/**
+	* Returns the last portlet item in the ordered set where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching portlet item
+	* @throws com.liferay.portal.NoSuchPortletItemException if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem findByG_N_P_C_Last(
+		long groupId, java.lang.String name, java.lang.String portletId,
+		long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPortletItemException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_N_P_C_Last(groupId, name, portletId, classNameId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last portlet item in the default ordered set defined by {@link PortletItemModelImpl#ORDER_BY_JPQL} where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem fetchByG_N_P_C_Last(
+		long groupId, java.lang.String name, java.lang.String portletId,
+		long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_N_P_C_Last(groupId, name, portletId, classNameId);
+	}
+
+	/**
+	* Returns the last portlet item in the ordered set where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching portlet item, or <code>null</code> if a matching portlet item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PortletItem fetchByG_N_P_C_Last(
+		long groupId, java.lang.String name, java.lang.String portletId,
+		long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_N_P_C_Last(groupId, name, portletId, classNameId,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the portlet items where groupId = &#63; and name = &#63; and portletId = &#63; and classNameId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param name the name
+	* @param portletId the portlet ID
+	* @param classNameId the class name ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_N_P_C(long groupId, java.lang.String name,
+		java.lang.String portletId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_N_P_C(groupId, name, portletId, classNameId);
 	}
 
 	/**

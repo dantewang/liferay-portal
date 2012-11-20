@@ -66,6 +66,22 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the blogs stats users before and after the current blogs stats user in the ordered set where groupId = &#63;.
+	*
+	* @param statsUserId the primary key of the current blogs stats user
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser[] findByGroupId_PrevAndNext(
+		long statsUserId, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
 	* Returns an ordered range of all the blogs stats users where groupId = &#63;.
 	*
 	* <p>
@@ -85,6 +101,19 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
 	* Returns the first blogs stats user in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -100,6 +129,17 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Returns the first blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching blogs stats user, or <code>null</code> if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first blogs stats user in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -111,6 +151,19 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
 	* Returns the last blogs stats user in the ordered set where groupId = &#63;.
@@ -128,6 +181,17 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Returns the last blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching blogs stats user, or <code>null</code> if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last blogs stats user in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -139,22 +203,6 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the blogs stats users before and after the current blogs stats user in the ordered set where groupId = &#63;.
-	*
-	* @param statsUserId the primary key of the current blogs stats user
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs stats user
-	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsStatsUser[] findByGroupId_PrevAndNext(
-		long statsUserId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
 	* Removes all the blogs stats users where groupId = &#63; from the database.
@@ -203,6 +251,22 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the blogs stats users before and after the current blogs stats user in the ordered set where userId = &#63;.
+	*
+	* @param statsUserId the primary key of the current blogs stats user
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser[] findByUserId_PrevAndNext(
+		long statsUserId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
 	* Returns an ordered range of all the blogs stats users where userId = &#63;.
 	*
 	* <p>
@@ -222,6 +286,19 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser findByUserId_First(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
 	* Returns the first blogs stats user in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -237,6 +314,16 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Returns the first blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching blogs stats user, or <code>null</code> if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first blogs stats user in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -248,6 +335,19 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		long userId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser findByUserId_Last(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
 	* Returns the last blogs stats user in the ordered set where userId = &#63;.
@@ -265,6 +365,16 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Returns the last blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching blogs stats user, or <code>null</code> if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByUserId_Last(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last blogs stats user in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -276,22 +386,6 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		long userId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the blogs stats users before and after the current blogs stats user in the ordered set where userId = &#63;.
-	*
-	* @param statsUserId the primary key of the current blogs stats user
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs stats user
-	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsStatsUser[] findByUserId_PrevAndNext(
-		long statsUserId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
 	* Removes all the blogs stats users where userId = &#63; from the database.
@@ -406,6 +500,23 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the blogs stats users before and after the current blogs stats user in the ordered set where groupId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param statsUserId the primary key of the current blogs stats user
+	* @param groupId the group ID
+	* @param entryCount the entry count
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser[] findByG_NotE_PrevAndNext(
+		long statsUserId, long groupId, int entryCount,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
 	* Returns an ordered range of all the blogs stats users where groupId = &#63; and entryCount &ne; &#63;.
 	*
 	* <p>
@@ -426,6 +537,20 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param entryCount the entry count
+	* @return the first matching blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser findByG_NotE_First(
+		long groupId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
 	* Returns the first blogs stats user in the ordered set where groupId = &#63; and entryCount &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -442,6 +567,18 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Returns the first blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param entryCount the entry count
+	* @return the first matching blogs stats user, or <code>null</code> if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByG_NotE_First(
+		long groupId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first blogs stats user in the ordered set where groupId = &#63; and entryCount &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -454,6 +591,20 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		long groupId, int entryCount,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param entryCount the entry count
+	* @return the last matching blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser findByG_NotE_Last(
+		long groupId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
 	* Returns the last blogs stats user in the ordered set where groupId = &#63; and entryCount &ne; &#63;.
@@ -472,6 +623,18 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Returns the last blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where groupId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param groupId the group ID
+	* @param entryCount the entry count
+	* @return the last matching blogs stats user, or <code>null</code> if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByG_NotE_Last(
+		long groupId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last blogs stats user in the ordered set where groupId = &#63; and entryCount &ne; &#63;.
 	*
 	* @param groupId the group ID
@@ -484,23 +647,6 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		long groupId, int entryCount,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the blogs stats users before and after the current blogs stats user in the ordered set where groupId = &#63; and entryCount &ne; &#63;.
-	*
-	* @param statsUserId the primary key of the current blogs stats user
-	* @param groupId the group ID
-	* @param entryCount the entry count
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs stats user
-	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsStatsUser[] findByG_NotE_PrevAndNext(
-		long statsUserId, long groupId, int entryCount,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
 	* Removes all the blogs stats users where groupId = &#63; and entryCount &ne; &#63; from the database.
@@ -554,6 +700,23 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the blogs stats users before and after the current blogs stats user in the ordered set where companyId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param statsUserId the primary key of the current blogs stats user
+	* @param companyId the company ID
+	* @param entryCount the entry count
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser[] findByC_NotE_PrevAndNext(
+		long statsUserId, long companyId, int entryCount,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
 	* Returns an ordered range of all the blogs stats users where companyId = &#63; and entryCount &ne; &#63;.
 	*
 	* <p>
@@ -574,6 +737,20 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param entryCount the entry count
+	* @return the first matching blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser findByC_NotE_First(
+		long companyId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
 	* Returns the first blogs stats user in the ordered set where companyId = &#63; and entryCount &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -590,6 +767,18 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Returns the first blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param entryCount the entry count
+	* @return the first matching blogs stats user, or <code>null</code> if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByC_NotE_First(
+		long companyId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first blogs stats user in the ordered set where companyId = &#63; and entryCount &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -602,6 +791,20 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		long companyId, int entryCount,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param entryCount the entry count
+	* @return the last matching blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser findByC_NotE_Last(
+		long companyId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
 	* Returns the last blogs stats user in the ordered set where companyId = &#63; and entryCount &ne; &#63;.
@@ -620,6 +823,18 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Returns the last blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where companyId = &#63; and entryCount &ne; &#63;.
+	*
+	* @param companyId the company ID
+	* @param entryCount the entry count
+	* @return the last matching blogs stats user, or <code>null</code> if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByC_NotE_Last(
+		long companyId, int entryCount)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last blogs stats user in the ordered set where companyId = &#63; and entryCount &ne; &#63;.
 	*
 	* @param companyId the company ID
@@ -632,23 +847,6 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		long companyId, int entryCount,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the blogs stats users before and after the current blogs stats user in the ordered set where companyId = &#63; and entryCount &ne; &#63;.
-	*
-	* @param statsUserId the primary key of the current blogs stats user
-	* @param companyId the company ID
-	* @param entryCount the entry count
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs stats user
-	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsStatsUser[] findByC_NotE_PrevAndNext(
-		long statsUserId, long companyId, int entryCount,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
 	* Removes all the blogs stats users where companyId = &#63; and entryCount &ne; &#63; from the database.
@@ -702,6 +900,23 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the blogs stats users before and after the current blogs stats user in the ordered set where userId = &#63; and lastPostDate = &#63;.
+	*
+	* @param statsUserId the primary key of the current blogs stats user
+	* @param userId the user ID
+	* @param lastPostDate the last post date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser[] findByU_L_PrevAndNext(
+		long statsUserId, long userId, java.util.Date lastPostDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
 	* Returns an ordered range of all the blogs stats users where userId = &#63; and lastPostDate = &#63;.
 	*
 	* <p>
@@ -722,6 +937,20 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63; and lastPostDate = &#63;.
+	*
+	* @param userId the user ID
+	* @param lastPostDate the last post date
+	* @return the first matching blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser findByU_L_First(
+		long userId, java.util.Date lastPostDate)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
+
+	/**
 	* Returns the first blogs stats user in the ordered set where userId = &#63; and lastPostDate = &#63;.
 	*
 	* @param userId the user ID
@@ -738,6 +967,18 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Returns the first blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63; and lastPostDate = &#63;.
+	*
+	* @param userId the user ID
+	* @param lastPostDate the last post date
+	* @return the first matching blogs stats user, or <code>null</code> if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByU_L_First(
+		long userId, java.util.Date lastPostDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first blogs stats user in the ordered set where userId = &#63; and lastPostDate = &#63;.
 	*
 	* @param userId the user ID
@@ -750,6 +991,20 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		long userId, java.util.Date lastPostDate,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63; and lastPostDate = &#63;.
+	*
+	* @param userId the user ID
+	* @param lastPostDate the last post date
+	* @return the last matching blogs stats user
+	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser findByU_L_Last(
+		long userId, java.util.Date lastPostDate)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
 	* Returns the last blogs stats user in the ordered set where userId = &#63; and lastPostDate = &#63;.
@@ -768,6 +1023,18 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
+	* Returns the last blogs stats user in the default ordered set defined by {@link BlogsStatsUserModelImpl#ORDER_BY_JPQL} where userId = &#63; and lastPostDate = &#63;.
+	*
+	* @param userId the user ID
+	* @param lastPostDate the last post date
+	* @return the last matching blogs stats user, or <code>null</code> if a matching blogs stats user could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.blogs.model.BlogsStatsUser fetchByU_L_Last(
+		long userId, java.util.Date lastPostDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last blogs stats user in the ordered set where userId = &#63; and lastPostDate = &#63;.
 	*
 	* @param userId the user ID
@@ -780,23 +1047,6 @@ public interface BlogsStatsUserPersistence extends BasePersistence<BlogsStatsUse
 		long userId, java.util.Date lastPostDate,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the blogs stats users before and after the current blogs stats user in the ordered set where userId = &#63; and lastPostDate = &#63;.
-	*
-	* @param statsUserId the primary key of the current blogs stats user
-	* @param userId the user ID
-	* @param lastPostDate the last post date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next blogs stats user
-	* @throws com.liferay.portlet.blogs.NoSuchStatsUserException if a blogs stats user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.blogs.model.BlogsStatsUser[] findByU_L_PrevAndNext(
-		long statsUserId, long userId, java.util.Date lastPostDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.blogs.NoSuchStatsUserException;
 
 	/**
 	* Removes all the blogs stats users where userId = &#63; and lastPostDate = &#63; from the database.

@@ -46,7 +46,6 @@ import com.liferay.portlet.shopping.model.impl.ShoppingItemFieldModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -91,8 +90,8 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ITEMID =
 		new FinderPath(ShoppingItemFieldModelImpl.ENTITY_CACHE_ENABLED,
@@ -100,7 +99,8 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 			ShoppingItemFieldImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByItemId",
 			new String[] { Long.class.getName() },
-			ShoppingItemFieldModelImpl.ITEMID_COLUMN_BITMASK);
+			ShoppingItemFieldModelImpl.ITEMID_COLUMN_BITMASK |
+			ShoppingItemFieldModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_ITEMID = new FinderPath(ShoppingItemFieldModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemFieldModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByItemId",
@@ -134,212 +134,6 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 	public List<ShoppingItemField> findByItemId(long itemId, int start, int end)
 		throws SystemException {
 		return findByItemId(itemId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the shopping item fields where itemId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param itemId the item ID
-	 * @param start the lower bound of the range of shopping item fields
-	 * @param end the upper bound of the range of shopping item fields (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching shopping item fields
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ShoppingItemField> findByItemId(long itemId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ITEMID;
-			finderArgs = new Object[] { itemId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ITEMID;
-			finderArgs = new Object[] { itemId, start, end, orderByComparator };
-		}
-
-		List<ShoppingItemField> list = (List<ShoppingItemField>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (ShoppingItemField shoppingItemField : list) {
-				if ((itemId != shoppingItemField.getItemId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SHOPPINGITEMFIELD_WHERE);
-
-			query.append(_FINDER_COLUMN_ITEMID_ITEMID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(ShoppingItemFieldModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(itemId);
-
-				list = (List<ShoppingItemField>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first shopping item field in the ordered set where itemId = &#63;.
-	 *
-	 * @param itemId the item ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching shopping item field
-	 * @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingItemField findByItemId_First(long itemId,
-		OrderByComparator orderByComparator)
-		throws NoSuchItemFieldException, SystemException {
-		ShoppingItemField shoppingItemField = fetchByItemId_First(itemId,
-				orderByComparator);
-
-		if (shoppingItemField != null) {
-			return shoppingItemField;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("itemId=");
-		msg.append(itemId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchItemFieldException(msg.toString());
-	}
-
-	/**
-	 * Returns the first shopping item field in the ordered set where itemId = &#63;.
-	 *
-	 * @param itemId the item ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching shopping item field, or <code>null</code> if a matching shopping item field could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingItemField fetchByItemId_First(long itemId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<ShoppingItemField> list = findByItemId(itemId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last shopping item field in the ordered set where itemId = &#63;.
-	 *
-	 * @param itemId the item ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching shopping item field
-	 * @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingItemField findByItemId_Last(long itemId,
-		OrderByComparator orderByComparator)
-		throws NoSuchItemFieldException, SystemException {
-		ShoppingItemField shoppingItemField = fetchByItemId_Last(itemId,
-				orderByComparator);
-
-		if (shoppingItemField != null) {
-			return shoppingItemField;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("itemId=");
-		msg.append(itemId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchItemFieldException(msg.toString());
-	}
-
-	/**
-	 * Returns the last shopping item field in the ordered set where itemId = &#63;.
-	 *
-	 * @param itemId the item ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching shopping item field, or <code>null</code> if a matching shopping item field could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingItemField fetchByItemId_Last(long itemId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByItemId(itemId);
-
-		List<ShoppingItemField> list = findByItemId(itemId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -454,7 +248,6 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 				}
 			}
 		}
-
 		else {
 			query.append(ShoppingItemFieldModelImpl.ORDER_BY_JPQL);
 		}
@@ -489,13 +282,266 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 	}
 
 	/**
+	 * Returns an ordered range of all the shopping item fields where itemId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param itemId the item ID
+	 * @param start the lower bound of the range of shopping item fields
+	 * @param end the upper bound of the range of shopping item fields (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching shopping item fields
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ShoppingItemField> findByItemId(long itemId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ITEMID;
+			finderArgs = new Object[] { itemId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ITEMID;
+			finderArgs = new Object[] { itemId, start, end, orderByComparator };
+		}
+
+		List<ShoppingItemField> list = (List<ShoppingItemField>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingItemField shoppingItemField : list) {
+				if ((itemId != shoppingItemField.getItemId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SHOPPINGITEMFIELD_WHERE);
+
+			query.append(_FINDER_COLUMN_ITEMID_ITEMID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(ShoppingItemFieldModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(itemId);
+
+				list = (List<ShoppingItemField>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first shopping item field in the default ordered set defined by {@link ShoppingItemFieldModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	 *
+	 * @param itemId the item ID
+	 * @return the first matching shopping item field
+	 * @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingItemField findByItemId_First(long itemId)
+		throws NoSuchItemFieldException, SystemException {
+		return findByItemId_First(itemId, null);
+	}
+
+	/**
+	 * Returns the first shopping item field in the ordered set where itemId = &#63;.
+	 *
+	 * @param itemId the item ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shopping item field
+	 * @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingItemField findByItemId_First(long itemId,
+		OrderByComparator orderByComparator)
+		throws NoSuchItemFieldException, SystemException {
+		ShoppingItemField shoppingItemField = fetchByItemId_First(itemId,
+				orderByComparator);
+
+		if (shoppingItemField != null) {
+			return shoppingItemField;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("itemId=");
+		msg.append(itemId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchItemFieldException(msg.toString());
+	}
+
+	/**
+	 * Returns the first shopping item field in the default ordered set defined by {@link ShoppingItemFieldModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	 *
+	 * @param itemId the item ID
+	 * @return the first matching shopping item field, or <code>null</code> if a matching shopping item field could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingItemField fetchByItemId_First(long itemId)
+		throws SystemException {
+		return fetchByItemId_First(itemId, null);
+	}
+
+	/**
+	 * Returns the first shopping item field in the ordered set where itemId = &#63;.
+	 *
+	 * @param itemId the item ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shopping item field, or <code>null</code> if a matching shopping item field could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingItemField fetchByItemId_First(long itemId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<ShoppingItemField> list = findByItemId(itemId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last shopping item field in the default ordered set defined by {@link ShoppingItemFieldModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	 *
+	 * @param itemId the item ID
+	 * @return the last matching shopping item field
+	 * @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingItemField findByItemId_Last(long itemId)
+		throws NoSuchItemFieldException, SystemException {
+		return findByItemId_Last(itemId, null);
+	}
+
+	/**
+	 * Returns the last shopping item field in the ordered set where itemId = &#63;.
+	 *
+	 * @param itemId the item ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shopping item field
+	 * @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingItemField findByItemId_Last(long itemId,
+		OrderByComparator orderByComparator)
+		throws NoSuchItemFieldException, SystemException {
+		ShoppingItemField shoppingItemField = fetchByItemId_Last(itemId,
+				orderByComparator);
+
+		if (shoppingItemField != null) {
+			return shoppingItemField;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("itemId=");
+		msg.append(itemId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchItemFieldException(msg.toString());
+	}
+
+	/**
+	 * Returns the last shopping item field in the default ordered set defined by {@link ShoppingItemFieldModelImpl#ORDER_BY_JPQL} where itemId = &#63;.
+	 *
+	 * @param itemId the item ID
+	 * @return the last matching shopping item field, or <code>null</code> if a matching shopping item field could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingItemField fetchByItemId_Last(long itemId)
+		throws SystemException {
+		return fetchByItemId_Last(itemId, null);
+	}
+
+	/**
+	 * Returns the last shopping item field in the ordered set where itemId = &#63;.
+	 *
+	 * @param itemId the item ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shopping item field, or <code>null</code> if a matching shopping item field could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingItemField fetchByItemId_Last(long itemId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByItemId(itemId);
+
+		List<ShoppingItemField> list = findByItemId(itemId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the shopping item fields where itemId = &#63; from the database.
 	 *
 	 * @param itemId the item ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByItemId(long itemId) throws SystemException {
-		for (ShoppingItemField shoppingItemField : findByItemId(itemId)) {
+		for (ShoppingItemField shoppingItemField : findByItemId(itemId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(shoppingItemField);
 		}
 	}
@@ -508,10 +554,12 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByItemId(long itemId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_ITEMID;
+
 		Object[] finderArgs = new Object[] { itemId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ITEMID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -534,18 +582,15 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 				qPos.add(itemId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ITEMID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -891,29 +936,28 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 		if (shoppingItemField == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				shoppingItemField = (ShoppingItemField)session.get(ShoppingItemFieldImpl.class,
 						Long.valueOf(itemFieldId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (shoppingItemField != null) {
 					cacheResult(shoppingItemField);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(ShoppingItemFieldModelImpl.ENTITY_CACHE_ENABLED,
 						ShoppingItemFieldImpl.class, itemFieldId,
 						_nullShoppingItemField);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ShoppingItemFieldModelImpl.ENTITY_CACHE_ENABLED,
+					ShoppingItemFieldImpl.class, itemFieldId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -964,7 +1008,7 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 	public List<ShoppingItemField> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -1005,30 +1049,19 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<ShoppingItemField>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<ShoppingItemField>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<ShoppingItemField>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1066,18 +1099,17 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 				Query q = session.createQuery(_SQL_COUNT_SHOPPINGITEMFIELD);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1113,6 +1145,7 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 	public void destroy() {
 		EntityCacheUtil.removeCache(ShoppingItemFieldImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

@@ -68,6 +68,23 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the social activity counters before and after the current social activity counter in the ordered set where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param activityCounterId the primary key of the current social activity counter
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social activity counter
+	* @throws com.liferay.portlet.social.NoSuchActivityCounterException if a social activity counter with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.social.model.SocialActivityCounter[] findByC_C_PrevAndNext(
+		long activityCounterId, long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityCounterException;
+
+	/**
 	* Returns an ordered range of all the social activity counters where classNameId = &#63; and classPK = &#63;.
 	*
 	* <p>
@@ -88,6 +105,20 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first social activity counter in the default ordered set defined by {@link SocialActivityCounterModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the first matching social activity counter
+	* @throws com.liferay.portlet.social.NoSuchActivityCounterException if a matching social activity counter could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.social.model.SocialActivityCounter findByC_C_First(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityCounterException;
+
+	/**
 	* Returns the first social activity counter in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -104,6 +135,18 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 			com.liferay.portlet.social.NoSuchActivityCounterException;
 
 	/**
+	* Returns the first social activity counter in the default ordered set defined by {@link SocialActivityCounterModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the first matching social activity counter, or <code>null</code> if a matching social activity counter could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.social.model.SocialActivityCounter fetchByC_C_First(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first social activity counter in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -116,6 +159,20 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 		long classNameId, long classPK,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last social activity counter in the default ordered set defined by {@link SocialActivityCounterModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching social activity counter
+	* @throws com.liferay.portlet.social.NoSuchActivityCounterException if a matching social activity counter could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.social.model.SocialActivityCounter findByC_C_Last(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityCounterException;
 
 	/**
 	* Returns the last social activity counter in the ordered set where classNameId = &#63; and classPK = &#63;.
@@ -134,6 +191,18 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 			com.liferay.portlet.social.NoSuchActivityCounterException;
 
 	/**
+	* Returns the last social activity counter in the default ordered set defined by {@link SocialActivityCounterModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching social activity counter, or <code>null</code> if a matching social activity counter could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.social.model.SocialActivityCounter fetchByC_C_Last(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last social activity counter in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -146,23 +215,6 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 		long classNameId, long classPK,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the social activity counters before and after the current social activity counter in the ordered set where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param activityCounterId the primary key of the current social activity counter
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social activity counter
-	* @throws com.liferay.portlet.social.NoSuchActivityCounterException if a social activity counter with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.social.model.SocialActivityCounter[] findByC_C_PrevAndNext(
-		long activityCounterId, long classNameId, long classPK,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityCounterException;
 
 	/**
 	* Removes all the social activity counters where classNameId = &#63; and classPK = &#63; from the database.
@@ -220,6 +272,26 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 		int end) throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the social activity counters before and after the current social activity counter in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
+	*
+	* @param activityCounterId the primary key of the current social activity counter
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param ownerType the owner type
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social activity counter
+	* @throws com.liferay.portlet.social.NoSuchActivityCounterException if a social activity counter with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.social.model.SocialActivityCounter[] findByG_C_C_O_PrevAndNext(
+		long activityCounterId, long groupId, long classNameId, long classPK,
+		int ownerType,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityCounterException;
+
+	/**
 	* Returns an ordered range of all the social activity counters where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
 	*
 	* <p>
@@ -243,6 +315,22 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first social activity counter in the default ordered set defined by {@link SocialActivityCounterModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param ownerType the owner type
+	* @return the first matching social activity counter
+	* @throws com.liferay.portlet.social.NoSuchActivityCounterException if a matching social activity counter could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.social.model.SocialActivityCounter findByG_C_C_O_First(
+		long groupId, long classNameId, long classPK, int ownerType)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityCounterException;
+
+	/**
 	* Returns the first social activity counter in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
 	*
 	* @param groupId the group ID
@@ -261,6 +349,20 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 			com.liferay.portlet.social.NoSuchActivityCounterException;
 
 	/**
+	* Returns the first social activity counter in the default ordered set defined by {@link SocialActivityCounterModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param ownerType the owner type
+	* @return the first matching social activity counter, or <code>null</code> if a matching social activity counter could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.social.model.SocialActivityCounter fetchByG_C_C_O_First(
+		long groupId, long classNameId, long classPK, int ownerType)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first social activity counter in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
 	*
 	* @param groupId the group ID
@@ -275,6 +377,22 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 		long groupId, long classNameId, long classPK, int ownerType,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last social activity counter in the default ordered set defined by {@link SocialActivityCounterModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param ownerType the owner type
+	* @return the last matching social activity counter
+	* @throws com.liferay.portlet.social.NoSuchActivityCounterException if a matching social activity counter could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.social.model.SocialActivityCounter findByG_C_C_O_Last(
+		long groupId, long classNameId, long classPK, int ownerType)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchActivityCounterException;
 
 	/**
 	* Returns the last social activity counter in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
@@ -295,6 +413,20 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 			com.liferay.portlet.social.NoSuchActivityCounterException;
 
 	/**
+	* Returns the last social activity counter in the default ordered set defined by {@link SocialActivityCounterModelImpl#ORDER_BY_JPQL} where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param ownerType the owner type
+	* @return the last matching social activity counter, or <code>null</code> if a matching social activity counter could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.social.model.SocialActivityCounter fetchByG_C_C_O_Last(
+		long groupId, long classNameId, long classPK, int ownerType)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last social activity counter in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
 	*
 	* @param groupId the group ID
@@ -309,26 +441,6 @@ public interface SocialActivityCounterPersistence extends BasePersistence<Social
 		long groupId, long classNameId, long classPK, int ownerType,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the social activity counters before and after the current social activity counter in the ordered set where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63;.
-	*
-	* @param activityCounterId the primary key of the current social activity counter
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param ownerType the owner type
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social activity counter
-	* @throws com.liferay.portlet.social.NoSuchActivityCounterException if a social activity counter with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.social.model.SocialActivityCounter[] findByG_C_C_O_PrevAndNext(
-		long activityCounterId, long groupId, long classNameId, long classPK,
-		int ownerType,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchActivityCounterException;
 
 	/**
 	* Removes all the social activity counters where groupId = &#63; and classNameId = &#63; and classPK = &#63; and ownerType = &#63; from the database.

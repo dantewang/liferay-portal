@@ -145,6 +145,27 @@ public class ExpandoTableUtil {
 	}
 
 	/**
+	* Returns the expando tables before and after the current expando table in the ordered set where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param tableId the primary key of the current expando table
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next expando table
+	* @throws com.liferay.portlet.expando.NoSuchTableException if a expando table with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.expando.model.ExpandoTable[] findByC_C_PrevAndNext(
+		long tableId, long companyId, long classNameId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchTableException {
+		return getPersistence()
+				   .findByC_C_PrevAndNext(tableId, companyId, classNameId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the expando tables where companyId = &#63; and classNameId = &#63;.
 	*
 	* <p>
@@ -169,6 +190,22 @@ public class ExpandoTableUtil {
 	}
 
 	/**
+	* Returns the first expando table in the default ordered set defined by {@link ExpandoTableModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @return the first matching expando table
+	* @throws com.liferay.portlet.expando.NoSuchTableException if a matching expando table could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.expando.model.ExpandoTable findByC_C_First(
+		long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchTableException {
+		return getPersistence().findByC_C_First(companyId, classNameId);
+	}
+
+	/**
 	* Returns the first expando table in the ordered set where companyId = &#63; and classNameId = &#63;.
 	*
 	* @param companyId the company ID
@@ -188,6 +225,20 @@ public class ExpandoTableUtil {
 	}
 
 	/**
+	* Returns the first expando table in the default ordered set defined by {@link ExpandoTableModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @return the first matching expando table, or <code>null</code> if a matching expando table could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.expando.model.ExpandoTable fetchByC_C_First(
+		long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_C_First(companyId, classNameId);
+	}
+
+	/**
 	* Returns the first expando table in the ordered set where companyId = &#63; and classNameId = &#63;.
 	*
 	* @param companyId the company ID
@@ -202,6 +253,22 @@ public class ExpandoTableUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_C_First(companyId, classNameId, orderByComparator);
+	}
+
+	/**
+	* Returns the last expando table in the default ordered set defined by {@link ExpandoTableModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @return the last matching expando table
+	* @throws com.liferay.portlet.expando.NoSuchTableException if a matching expando table could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.expando.model.ExpandoTable findByC_C_Last(
+		long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.expando.NoSuchTableException {
+		return getPersistence().findByC_C_Last(companyId, classNameId);
 	}
 
 	/**
@@ -224,6 +291,20 @@ public class ExpandoTableUtil {
 	}
 
 	/**
+	* Returns the last expando table in the default ordered set defined by {@link ExpandoTableModelImpl#ORDER_BY_JPQL} where companyId = &#63; and classNameId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param classNameId the class name ID
+	* @return the last matching expando table, or <code>null</code> if a matching expando table could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.expando.model.ExpandoTable fetchByC_C_Last(
+		long companyId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_C_Last(companyId, classNameId);
+	}
+
+	/**
 	* Returns the last expando table in the ordered set where companyId = &#63; and classNameId = &#63;.
 	*
 	* @param companyId the company ID
@@ -238,27 +319,6 @@ public class ExpandoTableUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_C_Last(companyId, classNameId, orderByComparator);
-	}
-
-	/**
-	* Returns the expando tables before and after the current expando table in the ordered set where companyId = &#63; and classNameId = &#63;.
-	*
-	* @param tableId the primary key of the current expando table
-	* @param companyId the company ID
-	* @param classNameId the class name ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next expando table
-	* @throws com.liferay.portlet.expando.NoSuchTableException if a expando table with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.expando.model.ExpandoTable[] findByC_C_PrevAndNext(
-		long tableId, long companyId, long classNameId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.expando.NoSuchTableException {
-		return getPersistence()
-				   .findByC_C_PrevAndNext(tableId, companyId, classNameId,
-			orderByComparator);
 	}
 
 	/**

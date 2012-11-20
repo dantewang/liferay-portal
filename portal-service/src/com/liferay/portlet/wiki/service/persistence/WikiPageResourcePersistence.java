@@ -66,6 +66,22 @@ public interface WikiPageResourcePersistence extends BasePersistence<WikiPageRes
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the wiki page resources before and after the current wiki page resource in the ordered set where uuid = &#63;.
+	*
+	* @param resourcePrimKey the primary key of the current wiki page resource
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next wiki page resource
+	* @throws com.liferay.portlet.wiki.NoSuchPageResourceException if a wiki page resource with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPageResource[] findByUuid_PrevAndNext(
+		long resourcePrimKey, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.wiki.NoSuchPageResourceException;
+
+	/**
 	* Returns an ordered range of all the wiki page resources where uuid = &#63;.
 	*
 	* <p>
@@ -85,6 +101,19 @@ public interface WikiPageResourcePersistence extends BasePersistence<WikiPageRes
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first wiki page resource in the default ordered set defined by {@link WikiPageResourceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching wiki page resource
+	* @throws com.liferay.portlet.wiki.NoSuchPageResourceException if a matching wiki page resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPageResource findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.wiki.NoSuchPageResourceException;
+
+	/**
 	* Returns the first wiki page resource in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -100,6 +129,17 @@ public interface WikiPageResourcePersistence extends BasePersistence<WikiPageRes
 			com.liferay.portlet.wiki.NoSuchPageResourceException;
 
 	/**
+	* Returns the first wiki page resource in the default ordered set defined by {@link WikiPageResourceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching wiki page resource, or <code>null</code> if a matching wiki page resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPageResource fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first wiki page resource in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -111,6 +151,19 @@ public interface WikiPageResourcePersistence extends BasePersistence<WikiPageRes
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last wiki page resource in the default ordered set defined by {@link WikiPageResourceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching wiki page resource
+	* @throws com.liferay.portlet.wiki.NoSuchPageResourceException if a matching wiki page resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPageResource findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.wiki.NoSuchPageResourceException;
 
 	/**
 	* Returns the last wiki page resource in the ordered set where uuid = &#63;.
@@ -128,6 +181,17 @@ public interface WikiPageResourcePersistence extends BasePersistence<WikiPageRes
 			com.liferay.portlet.wiki.NoSuchPageResourceException;
 
 	/**
+	* Returns the last wiki page resource in the default ordered set defined by {@link WikiPageResourceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching wiki page resource, or <code>null</code> if a matching wiki page resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.wiki.model.WikiPageResource fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last wiki page resource in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -139,22 +203,6 @@ public interface WikiPageResourcePersistence extends BasePersistence<WikiPageRes
 		java.lang.String uuid,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the wiki page resources before and after the current wiki page resource in the ordered set where uuid = &#63;.
-	*
-	* @param resourcePrimKey the primary key of the current wiki page resource
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next wiki page resource
-	* @throws com.liferay.portlet.wiki.NoSuchPageResourceException if a wiki page resource with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.wiki.model.WikiPageResource[] findByUuid_PrevAndNext(
-		long resourcePrimKey, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.wiki.NoSuchPageResourceException;
 
 	/**
 	* Removes all the wiki page resources where uuid = &#63; from the database.

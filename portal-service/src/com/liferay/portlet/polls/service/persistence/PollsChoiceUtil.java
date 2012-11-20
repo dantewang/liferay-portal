@@ -143,6 +143,25 @@ public class PollsChoiceUtil {
 	}
 
 	/**
+	* Returns the polls choices before and after the current polls choice in the ordered set where uuid = &#63;.
+	*
+	* @param choiceId the primary key of the current polls choice
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next polls choice
+	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a polls choice with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.polls.model.PollsChoice[] findByUuid_PrevAndNext(
+		long choiceId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchChoiceException {
+		return getPersistence()
+				   .findByUuid_PrevAndNext(choiceId, uuid, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the polls choices where uuid = &#63;.
 	*
 	* <p>
@@ -164,6 +183,21 @@ public class PollsChoiceUtil {
 	}
 
 	/**
+	* Returns the first polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching polls choice
+	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.polls.model.PollsChoice findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchChoiceException {
+		return getPersistence().findByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first polls choice in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -181,6 +215,19 @@ public class PollsChoiceUtil {
 	}
 
 	/**
+	* Returns the first polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.polls.model.PollsChoice fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first polls choice in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -193,6 +240,21 @@ public class PollsChoiceUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching polls choice
+	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.polls.model.PollsChoice findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchChoiceException {
+		return getPersistence().findByUuid_Last(uuid);
 	}
 
 	/**
@@ -213,6 +275,19 @@ public class PollsChoiceUtil {
 	}
 
 	/**
+	* Returns the last polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.polls.model.PollsChoice fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_Last(uuid);
+	}
+
+	/**
 	* Returns the last polls choice in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -225,25 +300,6 @@ public class PollsChoiceUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_Last(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the polls choices before and after the current polls choice in the ordered set where uuid = &#63;.
-	*
-	* @param choiceId the primary key of the current polls choice
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next polls choice
-	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a polls choice with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.polls.model.PollsChoice[] findByUuid_PrevAndNext(
-		long choiceId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.polls.NoSuchChoiceException {
-		return getPersistence()
-				   .findByUuid_PrevAndNext(choiceId, uuid, orderByComparator);
 	}
 
 	/**
@@ -302,6 +358,26 @@ public class PollsChoiceUtil {
 	}
 
 	/**
+	* Returns the polls choices before and after the current polls choice in the ordered set where questionId = &#63;.
+	*
+	* @param choiceId the primary key of the current polls choice
+	* @param questionId the question ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next polls choice
+	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a polls choice with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.polls.model.PollsChoice[] findByQuestionId_PrevAndNext(
+		long choiceId, long questionId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchChoiceException {
+		return getPersistence()
+				   .findByQuestionId_PrevAndNext(choiceId, questionId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the polls choices where questionId = &#63;.
 	*
 	* <p>
@@ -324,6 +400,21 @@ public class PollsChoiceUtil {
 	}
 
 	/**
+	* Returns the first polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where questionId = &#63;.
+	*
+	* @param questionId the question ID
+	* @return the first matching polls choice
+	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.polls.model.PollsChoice findByQuestionId_First(
+		long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchChoiceException {
+		return getPersistence().findByQuestionId_First(questionId);
+	}
+
+	/**
 	* Returns the first polls choice in the ordered set where questionId = &#63;.
 	*
 	* @param questionId the question ID
@@ -342,6 +433,19 @@ public class PollsChoiceUtil {
 	}
 
 	/**
+	* Returns the first polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where questionId = &#63;.
+	*
+	* @param questionId the question ID
+	* @return the first matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.polls.model.PollsChoice fetchByQuestionId_First(
+		long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByQuestionId_First(questionId);
+	}
+
+	/**
 	* Returns the first polls choice in the ordered set where questionId = &#63;.
 	*
 	* @param questionId the question ID
@@ -355,6 +459,21 @@ public class PollsChoiceUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByQuestionId_First(questionId, orderByComparator);
+	}
+
+	/**
+	* Returns the last polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where questionId = &#63;.
+	*
+	* @param questionId the question ID
+	* @return the last matching polls choice
+	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a matching polls choice could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.polls.model.PollsChoice findByQuestionId_Last(
+		long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.polls.NoSuchChoiceException {
+		return getPersistence().findByQuestionId_Last(questionId);
 	}
 
 	/**
@@ -376,6 +495,19 @@ public class PollsChoiceUtil {
 	}
 
 	/**
+	* Returns the last polls choice in the default ordered set defined by {@link PollsChoiceModelImpl#ORDER_BY_JPQL} where questionId = &#63;.
+	*
+	* @param questionId the question ID
+	* @return the last matching polls choice, or <code>null</code> if a matching polls choice could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.polls.model.PollsChoice fetchByQuestionId_Last(
+		long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByQuestionId_Last(questionId);
+	}
+
+	/**
 	* Returns the last polls choice in the ordered set where questionId = &#63;.
 	*
 	* @param questionId the question ID
@@ -389,26 +521,6 @@ public class PollsChoiceUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByQuestionId_Last(questionId, orderByComparator);
-	}
-
-	/**
-	* Returns the polls choices before and after the current polls choice in the ordered set where questionId = &#63;.
-	*
-	* @param choiceId the primary key of the current polls choice
-	* @param questionId the question ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next polls choice
-	* @throws com.liferay.portlet.polls.NoSuchChoiceException if a polls choice with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.polls.model.PollsChoice[] findByQuestionId_PrevAndNext(
-		long choiceId, long questionId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.polls.NoSuchChoiceException {
-		return getPersistence()
-				   .findByQuestionId_PrevAndNext(choiceId, questionId,
-			orderByComparator);
 	}
 
 	/**

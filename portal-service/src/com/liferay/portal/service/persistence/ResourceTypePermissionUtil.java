@@ -143,6 +143,26 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
+	* Returns the resource type permissions before and after the current resource type permission in the ordered set where roleId = &#63;.
+	*
+	* @param resourceTypePermissionId the primary key of the current resource type permission
+	* @param roleId the role ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next resource type permission
+	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a resource type permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission[] findByRoleId_PrevAndNext(
+		long resourceTypePermissionId, long roleId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchResourceTypePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByRoleId_PrevAndNext(resourceTypePermissionId, roleId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the resource type permissions where roleId = &#63;.
 	*
 	* <p>
@@ -165,6 +185,21 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
+	* Returns the first resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the first matching resource type permission
+	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission findByRoleId_First(
+		long roleId)
+		throws com.liferay.portal.NoSuchResourceTypePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByRoleId_First(roleId);
+	}
+
+	/**
 	* Returns the first resource type permission in the ordered set where roleId = &#63;.
 	*
 	* @param roleId the role ID
@@ -182,6 +217,18 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
+	* Returns the first resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the first matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission fetchByRoleId_First(
+		long roleId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByRoleId_First(roleId);
+	}
+
+	/**
 	* Returns the first resource type permission in the ordered set where roleId = &#63;.
 	*
 	* @param roleId the role ID
@@ -194,6 +241,21 @@ public class ResourceTypePermissionUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByRoleId_First(roleId, orderByComparator);
+	}
+
+	/**
+	* Returns the last resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the last matching resource type permission
+	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission findByRoleId_Last(
+		long roleId)
+		throws com.liferay.portal.NoSuchResourceTypePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByRoleId_Last(roleId);
 	}
 
 	/**
@@ -214,6 +276,18 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
+	* Returns the last resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where roleId = &#63;.
+	*
+	* @param roleId the role ID
+	* @return the last matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission fetchByRoleId_Last(
+		long roleId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByRoleId_Last(roleId);
+	}
+
+	/**
 	* Returns the last resource type permission in the ordered set where roleId = &#63;.
 	*
 	* @param roleId the role ID
@@ -226,26 +300,6 @@ public class ResourceTypePermissionUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByRoleId_Last(roleId, orderByComparator);
-	}
-
-	/**
-	* Returns the resource type permissions before and after the current resource type permission in the ordered set where roleId = &#63;.
-	*
-	* @param resourceTypePermissionId the primary key of the current resource type permission
-	* @param roleId the role ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next resource type permission
-	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a resource type permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourceTypePermission[] findByRoleId_PrevAndNext(
-		long resourceTypePermissionId, long roleId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchResourceTypePermissionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByRoleId_PrevAndNext(resourceTypePermissionId, roleId,
-			orderByComparator);
 	}
 
 	/**
@@ -308,6 +362,29 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
+	* Returns the resource type permissions before and after the current resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
+	*
+	* @param resourceTypePermissionId the primary key of the current resource type permission
+	* @param companyId the company ID
+	* @param name the name
+	* @param roleId the role ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next resource type permission
+	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a resource type permission with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission[] findByC_N_R_PrevAndNext(
+		long resourceTypePermissionId, long companyId, java.lang.String name,
+		long roleId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchResourceTypePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_N_R_PrevAndNext(resourceTypePermissionId,
+			companyId, name, roleId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the resource type permissions where companyId = &#63; and name = &#63; and roleId = &#63;.
 	*
 	* <p>
@@ -333,6 +410,23 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
+	* Returns the first resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63; and roleId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param roleId the role ID
+	* @return the first matching resource type permission
+	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission findByC_N_R_First(
+		long companyId, java.lang.String name, long roleId)
+		throws com.liferay.portal.NoSuchResourceTypePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByC_N_R_First(companyId, name, roleId);
+	}
+
+	/**
 	* Returns the first resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
 	*
 	* @param companyId the company ID
@@ -353,6 +447,21 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
+	* Returns the first resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63; and roleId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param roleId the role ID
+	* @return the first matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission fetchByC_N_R_First(
+		long companyId, java.lang.String name, long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_N_R_First(companyId, name, roleId);
+	}
+
+	/**
 	* Returns the first resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
 	*
 	* @param companyId the company ID
@@ -369,6 +478,23 @@ public class ResourceTypePermissionUtil {
 		return getPersistence()
 				   .fetchByC_N_R_First(companyId, name, roleId,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63; and roleId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param roleId the role ID
+	* @return the last matching resource type permission
+	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a matching resource type permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission findByC_N_R_Last(
+		long companyId, java.lang.String name, long roleId)
+		throws com.liferay.portal.NoSuchResourceTypePermissionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByC_N_R_Last(companyId, name, roleId);
 	}
 
 	/**
@@ -392,6 +518,21 @@ public class ResourceTypePermissionUtil {
 	}
 
 	/**
+	* Returns the last resource type permission in the default ordered set defined by {@link ResourceTypePermissionModelImpl#ORDER_BY_JPQL} where companyId = &#63; and name = &#63; and roleId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @param roleId the role ID
+	* @return the last matching resource type permission, or <code>null</code> if a matching resource type permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.ResourceTypePermission fetchByC_N_R_Last(
+		long companyId, java.lang.String name, long roleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_N_R_Last(companyId, name, roleId);
+	}
+
+	/**
 	* Returns the last resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
 	*
 	* @param companyId the company ID
@@ -407,29 +548,6 @@ public class ResourceTypePermissionUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_N_R_Last(companyId, name, roleId, orderByComparator);
-	}
-
-	/**
-	* Returns the resource type permissions before and after the current resource type permission in the ordered set where companyId = &#63; and name = &#63; and roleId = &#63;.
-	*
-	* @param resourceTypePermissionId the primary key of the current resource type permission
-	* @param companyId the company ID
-	* @param name the name
-	* @param roleId the role ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next resource type permission
-	* @throws com.liferay.portal.NoSuchResourceTypePermissionException if a resource type permission with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.ResourceTypePermission[] findByC_N_R_PrevAndNext(
-		long resourceTypePermissionId, long companyId, java.lang.String name,
-		long roleId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchResourceTypePermissionException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByC_N_R_PrevAndNext(resourceTypePermissionId,
-			companyId, name, roleId, orderByComparator);
 	}
 
 	/**

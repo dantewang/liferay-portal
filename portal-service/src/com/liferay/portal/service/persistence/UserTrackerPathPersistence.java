@@ -64,6 +64,22 @@ public interface UserTrackerPathPersistence extends BasePersistence<UserTrackerP
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the user tracker paths before and after the current user tracker path in the ordered set where userTrackerId = &#63;.
+	*
+	* @param userTrackerPathId the primary key of the current user tracker path
+	* @param userTrackerId the user tracker ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next user tracker path
+	* @throws com.liferay.portal.NoSuchUserTrackerPathException if a user tracker path with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserTrackerPath[] findByUserTrackerId_PrevAndNext(
+		long userTrackerPathId, long userTrackerId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserTrackerPathException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns an ordered range of all the user tracker paths where userTrackerId = &#63;.
 	*
 	* <p>
@@ -83,6 +99,19 @@ public interface UserTrackerPathPersistence extends BasePersistence<UserTrackerP
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user tracker path in the default ordered set defined by {@link UserTrackerPathModelImpl#ORDER_BY_JPQL} where userTrackerId = &#63;.
+	*
+	* @param userTrackerId the user tracker ID
+	* @return the first matching user tracker path
+	* @throws com.liferay.portal.NoSuchUserTrackerPathException if a matching user tracker path could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserTrackerPath findByUserTrackerId_First(
+		long userTrackerId)
+		throws com.liferay.portal.NoSuchUserTrackerPathException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user tracker path in the ordered set where userTrackerId = &#63;.
 	*
 	* @param userTrackerId the user tracker ID
@@ -98,6 +127,17 @@ public interface UserTrackerPathPersistence extends BasePersistence<UserTrackerP
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first user tracker path in the default ordered set defined by {@link UserTrackerPathModelImpl#ORDER_BY_JPQL} where userTrackerId = &#63;.
+	*
+	* @param userTrackerId the user tracker ID
+	* @return the first matching user tracker path, or <code>null</code> if a matching user tracker path could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserTrackerPath fetchByUserTrackerId_First(
+		long userTrackerId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first user tracker path in the ordered set where userTrackerId = &#63;.
 	*
 	* @param userTrackerId the user tracker ID
@@ -109,6 +149,19 @@ public interface UserTrackerPathPersistence extends BasePersistence<UserTrackerP
 		long userTrackerId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last user tracker path in the default ordered set defined by {@link UserTrackerPathModelImpl#ORDER_BY_JPQL} where userTrackerId = &#63;.
+	*
+	* @param userTrackerId the user tracker ID
+	* @return the last matching user tracker path
+	* @throws com.liferay.portal.NoSuchUserTrackerPathException if a matching user tracker path could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserTrackerPath findByUserTrackerId_Last(
+		long userTrackerId)
+		throws com.liferay.portal.NoSuchUserTrackerPathException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the last user tracker path in the ordered set where userTrackerId = &#63;.
@@ -126,6 +179,17 @@ public interface UserTrackerPathPersistence extends BasePersistence<UserTrackerP
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the last user tracker path in the default ordered set defined by {@link UserTrackerPathModelImpl#ORDER_BY_JPQL} where userTrackerId = &#63;.
+	*
+	* @param userTrackerId the user tracker ID
+	* @return the last matching user tracker path, or <code>null</code> if a matching user tracker path could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.model.UserTrackerPath fetchByUserTrackerId_Last(
+		long userTrackerId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last user tracker path in the ordered set where userTrackerId = &#63;.
 	*
 	* @param userTrackerId the user tracker ID
@@ -137,22 +201,6 @@ public interface UserTrackerPathPersistence extends BasePersistence<UserTrackerP
 		long userTrackerId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user tracker paths before and after the current user tracker path in the ordered set where userTrackerId = &#63;.
-	*
-	* @param userTrackerPathId the primary key of the current user tracker path
-	* @param userTrackerId the user tracker ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next user tracker path
-	* @throws com.liferay.portal.NoSuchUserTrackerPathException if a user tracker path with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.model.UserTrackerPath[] findByUserTrackerId_PrevAndNext(
-		long userTrackerPathId, long userTrackerId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserTrackerPathException,
-			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the user tracker paths where userTrackerId = &#63; from the database.

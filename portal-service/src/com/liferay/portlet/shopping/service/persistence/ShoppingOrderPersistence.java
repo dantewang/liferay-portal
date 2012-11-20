@@ -66,81 +66,6 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns an ordered range of all the shopping orders where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of shopping orders
-	* @param end the upper bound of the range of shopping orders (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching shopping orders
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portlet.shopping.model.ShoppingOrder> findByGroupId(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first shopping order in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder findByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchOrderException;
-
-	/**
-	* Returns the first shopping order in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last shopping order in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder findByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchOrderException;
-
-	/**
-	* Returns the last shopping order in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns the shopping orders before and after the current shopping order in the ordered set where groupId = &#63;.
 	*
 	* @param orderId the primary key of the current shopping order
@@ -218,6 +143,129 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns an ordered range of all the shopping orders where groupId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param start the lower bound of the range of shopping orders
+	* @param end the upper bound of the range of shopping orders (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching shopping orders
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portlet.shopping.model.ShoppingOrder> findByGroupId(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the first shopping order in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first shopping order in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByGroupId_First(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the last shopping order in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last shopping order in the ordered set where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByGroupId_Last(
+		long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the shopping orders where groupId = &#63; from the database.
@@ -307,52 +355,117 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the shopping order where ppTxnId = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
+	* Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where ppTxnId = &#63;.
 	*
 	* @param ppTxnId the pp txn ID
-	* @return the matching shopping order
+	* @return the first matching shopping order
 	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder findByPPTxnId(
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByPPTxnId_First(
 		java.lang.String ppTxnId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchOrderException;
 
 	/**
-	* Returns the shopping order where ppTxnId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first shopping order in the ordered set where ppTxnId = &#63;.
 	*
 	* @param ppTxnId the pp txn ID
-	* @return the matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByPPTxnId(
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByPPTxnId_First(
+		java.lang.String ppTxnId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where ppTxnId = &#63;.
+	*
+	* @param ppTxnId the pp txn ID
+	* @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByPPTxnId_First(
 		java.lang.String ppTxnId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the shopping order where ppTxnId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first shopping order in the ordered set where ppTxnId = &#63;.
 	*
 	* @param ppTxnId the pp txn ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByPPTxnId(
-		java.lang.String ppTxnId, boolean retrieveFromCache)
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByPPTxnId_First(
+		java.lang.String ppTxnId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes the shopping order where ppTxnId = &#63; from the database.
+	* Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where ppTxnId = &#63;.
 	*
 	* @param ppTxnId the pp txn ID
-	* @return the shopping order that was removed
+	* @return the last matching shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder removeByPPTxnId(
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByPPTxnId_Last(
 		java.lang.String ppTxnId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the last shopping order in the ordered set where ppTxnId = &#63;.
+	*
+	* @param ppTxnId the pp txn ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByPPTxnId_Last(
+		java.lang.String ppTxnId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where ppTxnId = &#63;.
+	*
+	* @param ppTxnId the pp txn ID
+	* @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByPPTxnId_Last(
+		java.lang.String ppTxnId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last shopping order in the ordered set where ppTxnId = &#63;.
+	*
+	* @param ppTxnId the pp txn ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByPPTxnId_Last(
+		java.lang.String ppTxnId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the shopping orders where ppTxnId = &#63; from the database.
+	*
+	* @param ppTxnId the pp txn ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByPPTxnId(java.lang.String ppTxnId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the number of shopping orders where ppTxnId = &#63;.
@@ -395,92 +508,6 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	public java.util.List<com.liferay.portlet.shopping.model.ShoppingOrder> findByG_U_PPPS(
 		long groupId, long userId, java.lang.String ppPaymentStatus, int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param ppPaymentStatus the pp payment status
-	* @param start the lower bound of the range of shopping orders
-	* @param end the upper bound of the range of shopping orders (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching shopping orders
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portlet.shopping.model.ShoppingOrder> findByG_U_PPPS(
-		long groupId, long userId, java.lang.String ppPaymentStatus, int start,
-		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param ppPaymentStatus the pp payment status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder findByG_U_PPPS_First(
-		long groupId, long userId, java.lang.String ppPaymentStatus,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchOrderException;
-
-	/**
-	* Returns the first shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param ppPaymentStatus the pp payment status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByG_U_PPPS_First(
-		long groupId, long userId, java.lang.String ppPaymentStatus,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param ppPaymentStatus the pp payment status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder findByG_U_PPPS_Last(
-		long groupId, long userId, java.lang.String ppPaymentStatus,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.shopping.NoSuchOrderException;
-
-	/**
-	* Returns the last shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
-	*
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param ppPaymentStatus the pp payment status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByG_U_PPPS_Last(
-		long groupId, long userId, java.lang.String ppPaymentStatus,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the shopping orders before and after the current shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
@@ -573,6 +600,148 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns an ordered range of all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @param start the lower bound of the range of shopping orders
+	* @param end the upper bound of the range of shopping orders (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching shopping orders
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portlet.shopping.model.ShoppingOrder> findByG_U_PPPS(
+		long groupId, long userId, java.lang.String ppPaymentStatus, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @return the first matching shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByG_U_PPPS_First(
+		long groupId, long userId, java.lang.String ppPaymentStatus)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the first shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByG_U_PPPS_First(
+		long groupId, long userId, java.lang.String ppPaymentStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the first shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByG_U_PPPS_First(
+		long groupId, long userId, java.lang.String ppPaymentStatus)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByG_U_PPPS_First(
+		long groupId, long userId, java.lang.String ppPaymentStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @return the last matching shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByG_U_PPPS_Last(
+		long groupId, long userId, java.lang.String ppPaymentStatus)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the last shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping order
+	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder findByG_U_PPPS_Last(
+		long groupId, long userId, java.lang.String ppPaymentStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.shopping.NoSuchOrderException;
+
+	/**
+	* Returns the last shopping order in the default ordered set defined by {@link ShoppingOrderModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByG_U_PPPS_Last(
+		long groupId, long userId, java.lang.String ppPaymentStatus)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param ppPaymentStatus the pp payment status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shopping order, or <code>null</code> if a matching shopping order could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchByG_U_PPPS_Last(
+		long groupId, long userId, java.lang.String ppPaymentStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Removes all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63; from the database.

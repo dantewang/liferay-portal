@@ -66,6 +66,22 @@ public interface AnnouncementsFlagPersistence extends BasePersistence<Announceme
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the announcements flags before and after the current announcements flag in the ordered set where entryId = &#63;.
+	*
+	* @param flagId the primary key of the current announcements flag
+	* @param entryId the entry ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next announcements flag
+	* @throws com.liferay.portlet.announcements.NoSuchFlagException if a announcements flag with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.announcements.model.AnnouncementsFlag[] findByEntryId_PrevAndNext(
+		long flagId, long entryId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.announcements.NoSuchFlagException;
+
+	/**
 	* Returns an ordered range of all the announcements flags where entryId = &#63;.
 	*
 	* <p>
@@ -85,6 +101,19 @@ public interface AnnouncementsFlagPersistence extends BasePersistence<Announceme
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the first announcements flag in the default ordered set defined by {@link AnnouncementsFlagModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	*
+	* @param entryId the entry ID
+	* @return the first matching announcements flag
+	* @throws com.liferay.portlet.announcements.NoSuchFlagException if a matching announcements flag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.announcements.model.AnnouncementsFlag findByEntryId_First(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.announcements.NoSuchFlagException;
+
+	/**
 	* Returns the first announcements flag in the ordered set where entryId = &#63;.
 	*
 	* @param entryId the entry ID
@@ -100,6 +129,17 @@ public interface AnnouncementsFlagPersistence extends BasePersistence<Announceme
 			com.liferay.portlet.announcements.NoSuchFlagException;
 
 	/**
+	* Returns the first announcements flag in the default ordered set defined by {@link AnnouncementsFlagModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	*
+	* @param entryId the entry ID
+	* @return the first matching announcements flag, or <code>null</code> if a matching announcements flag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.announcements.model.AnnouncementsFlag fetchByEntryId_First(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the first announcements flag in the ordered set where entryId = &#63;.
 	*
 	* @param entryId the entry ID
@@ -111,6 +151,19 @@ public interface AnnouncementsFlagPersistence extends BasePersistence<Announceme
 		long entryId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last announcements flag in the default ordered set defined by {@link AnnouncementsFlagModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	*
+	* @param entryId the entry ID
+	* @return the last matching announcements flag
+	* @throws com.liferay.portlet.announcements.NoSuchFlagException if a matching announcements flag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.announcements.model.AnnouncementsFlag findByEntryId_Last(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.announcements.NoSuchFlagException;
 
 	/**
 	* Returns the last announcements flag in the ordered set where entryId = &#63;.
@@ -128,6 +181,17 @@ public interface AnnouncementsFlagPersistence extends BasePersistence<Announceme
 			com.liferay.portlet.announcements.NoSuchFlagException;
 
 	/**
+	* Returns the last announcements flag in the default ordered set defined by {@link AnnouncementsFlagModelImpl#ORDER_BY_JPQL} where entryId = &#63;.
+	*
+	* @param entryId the entry ID
+	* @return the last matching announcements flag, or <code>null</code> if a matching announcements flag could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.announcements.model.AnnouncementsFlag fetchByEntryId_Last(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the last announcements flag in the ordered set where entryId = &#63;.
 	*
 	* @param entryId the entry ID
@@ -139,22 +203,6 @@ public interface AnnouncementsFlagPersistence extends BasePersistence<Announceme
 		long entryId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the announcements flags before and after the current announcements flag in the ordered set where entryId = &#63;.
-	*
-	* @param flagId the primary key of the current announcements flag
-	* @param entryId the entry ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next announcements flag
-	* @throws com.liferay.portlet.announcements.NoSuchFlagException if a announcements flag with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portlet.announcements.model.AnnouncementsFlag[] findByEntryId_PrevAndNext(
-		long flagId, long entryId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.announcements.NoSuchFlagException;
 
 	/**
 	* Removes all the announcements flags where entryId = &#63; from the database.

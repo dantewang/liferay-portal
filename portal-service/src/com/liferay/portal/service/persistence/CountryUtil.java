@@ -343,6 +343,26 @@ public class CountryUtil {
 	}
 
 	/**
+	* Returns the countries before and after the current country in the ordered set where active = &#63;.
+	*
+	* @param countryId the primary key of the current country
+	* @param active the active
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next country
+	* @throws com.liferay.portal.NoSuchCountryException if a country with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Country[] findByActive_PrevAndNext(
+		long countryId, boolean active,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchCountryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByActive_PrevAndNext(countryId, active,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the countries where active = &#63;.
 	*
 	* <p>
@@ -365,6 +385,21 @@ public class CountryUtil {
 	}
 
 	/**
+	* Returns the first country in the default ordered set defined by {@link CountryModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the first matching country
+	* @throws com.liferay.portal.NoSuchCountryException if a matching country could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Country findByActive_First(
+		boolean active)
+		throws com.liferay.portal.NoSuchCountryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByActive_First(active);
+	}
+
+	/**
 	* Returns the first country in the ordered set where active = &#63;.
 	*
 	* @param active the active
@@ -382,6 +417,19 @@ public class CountryUtil {
 	}
 
 	/**
+	* Returns the first country in the default ordered set defined by {@link CountryModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the first matching country, or <code>null</code> if a matching country could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Country fetchByActive_First(
+		boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByActive_First(active);
+	}
+
+	/**
 	* Returns the first country in the ordered set where active = &#63;.
 	*
 	* @param active the active
@@ -394,6 +442,21 @@ public class CountryUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByActive_First(active, orderByComparator);
+	}
+
+	/**
+	* Returns the last country in the default ordered set defined by {@link CountryModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the last matching country
+	* @throws com.liferay.portal.NoSuchCountryException if a matching country could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Country findByActive_Last(
+		boolean active)
+		throws com.liferay.portal.NoSuchCountryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByActive_Last(active);
 	}
 
 	/**
@@ -414,6 +477,19 @@ public class CountryUtil {
 	}
 
 	/**
+	* Returns the last country in the default ordered set defined by {@link CountryModelImpl#ORDER_BY_JPQL} where active = &#63;.
+	*
+	* @param active the active
+	* @return the last matching country, or <code>null</code> if a matching country could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Country fetchByActive_Last(
+		boolean active)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByActive_Last(active);
+	}
+
+	/**
 	* Returns the last country in the ordered set where active = &#63;.
 	*
 	* @param active the active
@@ -426,26 +502,6 @@ public class CountryUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByActive_Last(active, orderByComparator);
-	}
-
-	/**
-	* Returns the countries before and after the current country in the ordered set where active = &#63;.
-	*
-	* @param countryId the primary key of the current country
-	* @param active the active
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next country
-	* @throws com.liferay.portal.NoSuchCountryException if a country with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.Country[] findByActive_PrevAndNext(
-		long countryId, boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchCountryException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByActive_PrevAndNext(countryId, active,
-			orderByComparator);
 	}
 
 	/**

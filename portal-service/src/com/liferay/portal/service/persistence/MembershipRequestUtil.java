@@ -143,6 +143,26 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the membership requests before and after the current membership request in the ordered set where groupId = &#63;.
+	*
+	* @param membershipRequestId the primary key of the current membership request
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest[] findByGroupId_PrevAndNext(
+		long membershipRequestId, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByGroupId_PrevAndNext(membershipRequestId, groupId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the membership requests where groupId = &#63;.
 	*
 	* <p>
@@ -165,6 +185,21 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the first membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first membership request in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -182,6 +217,19 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the first membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching membership request, or <code>null</code> if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first membership request in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -194,6 +242,21 @@ public class MembershipRequestUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByGroupId_Last(groupId);
 	}
 
 	/**
@@ -214,6 +277,19 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the last membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching membership request, or <code>null</code> if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId);
+	}
+
+	/**
 	* Returns the last membership request in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -226,26 +302,6 @@ public class MembershipRequestUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the membership requests before and after the current membership request in the ordered set where groupId = &#63;.
-	*
-	* @param membershipRequestId the primary key of the current membership request
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next membership request
-	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.MembershipRequest[] findByGroupId_PrevAndNext(
-		long membershipRequestId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchMembershipRequestException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByGroupId_PrevAndNext(membershipRequestId, groupId,
-			orderByComparator);
 	}
 
 	/**
@@ -303,6 +359,26 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the membership requests before and after the current membership request in the ordered set where userId = &#63;.
+	*
+	* @param membershipRequestId the primary key of the current membership request
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest[] findByUserId_PrevAndNext(
+		long membershipRequestId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByUserId_PrevAndNext(membershipRequestId, userId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the membership requests where userId = &#63;.
 	*
 	* <p>
@@ -325,6 +401,21 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the first membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest findByUserId_First(
+		long userId)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first membership request in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -342,6 +433,18 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the first membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching membership request, or <code>null</code> if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first membership request in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -354,6 +457,21 @@ public class MembershipRequestUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_First(userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest findByUserId_Last(
+		long userId)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUserId_Last(userId);
 	}
 
 	/**
@@ -374,6 +492,18 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the last membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching membership request, or <code>null</code> if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest fetchByUserId_Last(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_Last(userId);
+	}
+
+	/**
 	* Returns the last membership request in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -386,26 +516,6 @@ public class MembershipRequestUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_Last(userId, orderByComparator);
-	}
-
-	/**
-	* Returns the membership requests before and after the current membership request in the ordered set where userId = &#63;.
-	*
-	* @param membershipRequestId the primary key of the current membership request
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next membership request
-	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.MembershipRequest[] findByUserId_PrevAndNext(
-		long membershipRequestId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchMembershipRequestException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByUserId_PrevAndNext(membershipRequestId, userId,
-			orderByComparator);
 	}
 
 	/**
@@ -466,6 +576,27 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the membership requests before and after the current membership request in the ordered set where groupId = &#63; and statusId = &#63;.
+	*
+	* @param membershipRequestId the primary key of the current membership request
+	* @param groupId the group ID
+	* @param statusId the status ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest[] findByG_S_PrevAndNext(
+		long membershipRequestId, long groupId, int statusId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_S_PrevAndNext(membershipRequestId, groupId,
+			statusId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the membership requests where groupId = &#63; and statusId = &#63;.
 	*
 	* <p>
@@ -489,6 +620,22 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the first membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and statusId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param statusId the status ID
+	* @return the first matching membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest findByG_S_First(
+		long groupId, int statusId)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_S_First(groupId, statusId);
+	}
+
+	/**
 	* Returns the first membership request in the ordered set where groupId = &#63; and statusId = &#63;.
 	*
 	* @param groupId the group ID
@@ -508,6 +655,20 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the first membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and statusId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param statusId the status ID
+	* @return the first matching membership request, or <code>null</code> if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest fetchByG_S_First(
+		long groupId, int statusId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_S_First(groupId, statusId);
+	}
+
+	/**
 	* Returns the first membership request in the ordered set where groupId = &#63; and statusId = &#63;.
 	*
 	* @param groupId the group ID
@@ -522,6 +683,22 @@ public class MembershipRequestUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_S_First(groupId, statusId, orderByComparator);
+	}
+
+	/**
+	* Returns the last membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and statusId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param statusId the status ID
+	* @return the last matching membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest findByG_S_Last(
+		long groupId, int statusId)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_S_Last(groupId, statusId);
 	}
 
 	/**
@@ -544,6 +721,20 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the last membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and statusId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param statusId the status ID
+	* @return the last matching membership request, or <code>null</code> if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest fetchByG_S_Last(
+		long groupId, int statusId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_S_Last(groupId, statusId);
+	}
+
+	/**
 	* Returns the last membership request in the ordered set where groupId = &#63; and statusId = &#63;.
 	*
 	* @param groupId the group ID
@@ -558,27 +749,6 @@ public class MembershipRequestUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_S_Last(groupId, statusId, orderByComparator);
-	}
-
-	/**
-	* Returns the membership requests before and after the current membership request in the ordered set where groupId = &#63; and statusId = &#63;.
-	*
-	* @param membershipRequestId the primary key of the current membership request
-	* @param groupId the group ID
-	* @param statusId the status ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next membership request
-	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.MembershipRequest[] findByG_S_PrevAndNext(
-		long membershipRequestId, long groupId, int statusId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchMembershipRequestException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_S_PrevAndNext(membershipRequestId, groupId,
-			statusId, orderByComparator);
 	}
 
 	/**
@@ -644,6 +814,28 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the membership requests before and after the current membership request in the ordered set where groupId = &#63; and userId = &#63; and statusId = &#63;.
+	*
+	* @param membershipRequestId the primary key of the current membership request
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param statusId the status ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest[] findByG_U_S_PrevAndNext(
+		long membershipRequestId, long groupId, long userId, int statusId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_U_S_PrevAndNext(membershipRequestId, groupId,
+			userId, statusId, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the membership requests where groupId = &#63; and userId = &#63; and statusId = &#63;.
 	*
 	* <p>
@@ -669,6 +861,23 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the first membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and statusId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param statusId the status ID
+	* @return the first matching membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest findByG_U_S_First(
+		long groupId, long userId, int statusId)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_U_S_First(groupId, userId, statusId);
+	}
+
+	/**
 	* Returns the first membership request in the ordered set where groupId = &#63; and userId = &#63; and statusId = &#63;.
 	*
 	* @param groupId the group ID
@@ -690,6 +899,21 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the first membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and statusId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param statusId the status ID
+	* @return the first matching membership request, or <code>null</code> if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest fetchByG_U_S_First(
+		long groupId, long userId, int statusId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_S_First(groupId, userId, statusId);
+	}
+
+	/**
 	* Returns the first membership request in the ordered set where groupId = &#63; and userId = &#63; and statusId = &#63;.
 	*
 	* @param groupId the group ID
@@ -706,6 +930,23 @@ public class MembershipRequestUtil {
 		return getPersistence()
 				   .fetchByG_U_S_First(groupId, userId, statusId,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and statusId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param statusId the status ID
+	* @return the last matching membership request
+	* @throws com.liferay.portal.NoSuchMembershipRequestException if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest findByG_U_S_Last(
+		long groupId, long userId, int statusId)
+		throws com.liferay.portal.NoSuchMembershipRequestException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_U_S_Last(groupId, userId, statusId);
 	}
 
 	/**
@@ -730,6 +971,21 @@ public class MembershipRequestUtil {
 	}
 
 	/**
+	* Returns the last membership request in the default ordered set defined by {@link MembershipRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63; and statusId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param userId the user ID
+	* @param statusId the status ID
+	* @return the last matching membership request, or <code>null</code> if a matching membership request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.MembershipRequest fetchByG_U_S_Last(
+		long groupId, long userId, int statusId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_U_S_Last(groupId, userId, statusId);
+	}
+
+	/**
 	* Returns the last membership request in the ordered set where groupId = &#63; and userId = &#63; and statusId = &#63;.
 	*
 	* @param groupId the group ID
@@ -746,28 +1002,6 @@ public class MembershipRequestUtil {
 		return getPersistence()
 				   .fetchByG_U_S_Last(groupId, userId, statusId,
 			orderByComparator);
-	}
-
-	/**
-	* Returns the membership requests before and after the current membership request in the ordered set where groupId = &#63; and userId = &#63; and statusId = &#63;.
-	*
-	* @param membershipRequestId the primary key of the current membership request
-	* @param groupId the group ID
-	* @param userId the user ID
-	* @param statusId the status ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next membership request
-	* @throws com.liferay.portal.NoSuchMembershipRequestException if a membership request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.MembershipRequest[] findByG_U_S_PrevAndNext(
-		long membershipRequestId, long groupId, long userId, int statusId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchMembershipRequestException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_U_S_PrevAndNext(membershipRequestId, groupId,
-			userId, statusId, orderByComparator);
 	}
 
 	/**

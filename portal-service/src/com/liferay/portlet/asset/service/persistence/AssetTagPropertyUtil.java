@@ -143,6 +143,26 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the asset tag properties before and after the current asset tag property in the ordered set where companyId = &#63;.
+	*
+	* @param tagPropertyId the primary key of the current asset tag property
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset tag property
+	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a asset tag property with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty[] findByCompanyId_PrevAndNext(
+		long tagPropertyId, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagPropertyException {
+		return getPersistence()
+				   .findByCompanyId_PrevAndNext(tagPropertyId, companyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset tag properties where companyId = &#63;.
 	*
 	* <p>
@@ -165,6 +185,21 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the first asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching asset tag property
+	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty findByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagPropertyException {
+		return getPersistence().findByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first asset tag property in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -183,6 +218,19 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the first asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching asset tag property, or <code>null</code> if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty fetchByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first asset tag property in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -196,6 +244,21 @@ public class AssetTagPropertyUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_First(companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching asset tag property
+	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty findByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagPropertyException {
+		return getPersistence().findByCompanyId_Last(companyId);
 	}
 
 	/**
@@ -217,6 +280,19 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the last asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching asset tag property, or <code>null</code> if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty fetchByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_Last(companyId);
+	}
+
+	/**
 	* Returns the last asset tag property in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -230,26 +306,6 @@ public class AssetTagPropertyUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_Last(companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the asset tag properties before and after the current asset tag property in the ordered set where companyId = &#63;.
-	*
-	* @param tagPropertyId the primary key of the current asset tag property
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset tag property
-	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a asset tag property with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTagProperty[] findByCompanyId_PrevAndNext(
-		long tagPropertyId, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagPropertyException {
-		return getPersistence()
-				   .findByCompanyId_PrevAndNext(tagPropertyId, companyId,
-			orderByComparator);
 	}
 
 	/**
@@ -307,6 +363,26 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the asset tag properties before and after the current asset tag property in the ordered set where tagId = &#63;.
+	*
+	* @param tagPropertyId the primary key of the current asset tag property
+	* @param tagId the tag ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset tag property
+	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a asset tag property with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty[] findByTagId_PrevAndNext(
+		long tagPropertyId, long tagId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagPropertyException {
+		return getPersistence()
+				   .findByTagId_PrevAndNext(tagPropertyId, tagId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset tag properties where tagId = &#63;.
 	*
 	* <p>
@@ -328,6 +404,21 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the first asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where tagId = &#63;.
+	*
+	* @param tagId the tag ID
+	* @return the first matching asset tag property
+	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty findByTagId_First(
+		long tagId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagPropertyException {
+		return getPersistence().findByTagId_First(tagId);
+	}
+
+	/**
 	* Returns the first asset tag property in the ordered set where tagId = &#63;.
 	*
 	* @param tagId the tag ID
@@ -345,6 +436,18 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the first asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where tagId = &#63;.
+	*
+	* @param tagId the tag ID
+	* @return the first matching asset tag property, or <code>null</code> if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty fetchByTagId_First(
+		long tagId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByTagId_First(tagId);
+	}
+
+	/**
 	* Returns the first asset tag property in the ordered set where tagId = &#63;.
 	*
 	* @param tagId the tag ID
@@ -357,6 +460,21 @@ public class AssetTagPropertyUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByTagId_First(tagId, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where tagId = &#63;.
+	*
+	* @param tagId the tag ID
+	* @return the last matching asset tag property
+	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty findByTagId_Last(
+		long tagId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagPropertyException {
+		return getPersistence().findByTagId_Last(tagId);
 	}
 
 	/**
@@ -377,6 +495,18 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the last asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where tagId = &#63;.
+	*
+	* @param tagId the tag ID
+	* @return the last matching asset tag property, or <code>null</code> if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty fetchByTagId_Last(
+		long tagId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByTagId_Last(tagId);
+	}
+
+	/**
 	* Returns the last asset tag property in the ordered set where tagId = &#63;.
 	*
 	* @param tagId the tag ID
@@ -389,26 +519,6 @@ public class AssetTagPropertyUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByTagId_Last(tagId, orderByComparator);
-	}
-
-	/**
-	* Returns the asset tag properties before and after the current asset tag property in the ordered set where tagId = &#63;.
-	*
-	* @param tagPropertyId the primary key of the current asset tag property
-	* @param tagId the tag ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset tag property
-	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a asset tag property with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTagProperty[] findByTagId_PrevAndNext(
-		long tagPropertyId, long tagId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagPropertyException {
-		return getPersistence()
-				   .findByTagId_PrevAndNext(tagPropertyId, tagId,
-			orderByComparator);
 	}
 
 	/**
@@ -469,6 +579,27 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the asset tag properties before and after the current asset tag property in the ordered set where companyId = &#63; and key = &#63;.
+	*
+	* @param tagPropertyId the primary key of the current asset tag property
+	* @param companyId the company ID
+	* @param key the key
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next asset tag property
+	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a asset tag property with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty[] findByC_K_PrevAndNext(
+		long tagPropertyId, long companyId, java.lang.String key,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagPropertyException {
+		return getPersistence()
+				   .findByC_K_PrevAndNext(tagPropertyId, companyId, key,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the asset tag properties where companyId = &#63; and key = &#63;.
 	*
 	* <p>
@@ -492,6 +623,22 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the first asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and key = &#63;.
+	*
+	* @param companyId the company ID
+	* @param key the key
+	* @return the first matching asset tag property
+	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty findByC_K_First(
+		long companyId, java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagPropertyException {
+		return getPersistence().findByC_K_First(companyId, key);
+	}
+
+	/**
 	* Returns the first asset tag property in the ordered set where companyId = &#63; and key = &#63;.
 	*
 	* @param companyId the company ID
@@ -511,6 +658,20 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the first asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and key = &#63;.
+	*
+	* @param companyId the company ID
+	* @param key the key
+	* @return the first matching asset tag property, or <code>null</code> if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty fetchByC_K_First(
+		long companyId, java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_K_First(companyId, key);
+	}
+
+	/**
 	* Returns the first asset tag property in the ordered set where companyId = &#63; and key = &#63;.
 	*
 	* @param companyId the company ID
@@ -525,6 +686,22 @@ public class AssetTagPropertyUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_K_First(companyId, key, orderByComparator);
+	}
+
+	/**
+	* Returns the last asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and key = &#63;.
+	*
+	* @param companyId the company ID
+	* @param key the key
+	* @return the last matching asset tag property
+	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty findByC_K_Last(
+		long companyId, java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.asset.NoSuchTagPropertyException {
+		return getPersistence().findByC_K_Last(companyId, key);
 	}
 
 	/**
@@ -546,6 +723,20 @@ public class AssetTagPropertyUtil {
 	}
 
 	/**
+	* Returns the last asset tag property in the default ordered set defined by {@link AssetTagPropertyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and key = &#63;.
+	*
+	* @param companyId the company ID
+	* @param key the key
+	* @return the last matching asset tag property, or <code>null</code> if a matching asset tag property could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.asset.model.AssetTagProperty fetchByC_K_Last(
+		long companyId, java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_K_Last(companyId, key);
+	}
+
+	/**
 	* Returns the last asset tag property in the ordered set where companyId = &#63; and key = &#63;.
 	*
 	* @param companyId the company ID
@@ -560,27 +751,6 @@ public class AssetTagPropertyUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByC_K_Last(companyId, key, orderByComparator);
-	}
-
-	/**
-	* Returns the asset tag properties before and after the current asset tag property in the ordered set where companyId = &#63; and key = &#63;.
-	*
-	* @param tagPropertyId the primary key of the current asset tag property
-	* @param companyId the company ID
-	* @param key the key
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next asset tag property
-	* @throws com.liferay.portlet.asset.NoSuchTagPropertyException if a asset tag property with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.asset.model.AssetTagProperty[] findByC_K_PrevAndNext(
-		long tagPropertyId, long companyId, java.lang.String key,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.asset.NoSuchTagPropertyException {
-		return getPersistence()
-				   .findByC_K_PrevAndNext(tagPropertyId, companyId, key,
-			orderByComparator);
 	}
 
 	/**

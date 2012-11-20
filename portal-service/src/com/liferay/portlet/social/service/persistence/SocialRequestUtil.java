@@ -143,6 +143,25 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the social requests before and after the current social request in the ordered set where uuid = &#63;.
+	*
+	* @param requestId the primary key of the current social request
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest[] findByUuid_PrevAndNext(
+		long requestId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByUuid_PrevAndNext(requestId, uuid, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social requests where uuid = &#63;.
 	*
 	* <p>
@@ -164,6 +183,21 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -181,6 +215,19 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_First(uuid);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -193,6 +240,21 @@ public class SocialRequestUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByUuid_Last(uuid);
 	}
 
 	/**
@@ -213,6 +275,19 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_Last(uuid);
+	}
+
+	/**
 	* Returns the last social request in the ordered set where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -225,25 +300,6 @@ public class SocialRequestUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUuid_Last(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the social requests before and after the current social request in the ordered set where uuid = &#63;.
-	*
-	* @param requestId the primary key of the current social request
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social request
-	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest[] findByUuid_PrevAndNext(
-		long requestId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence()
-				   .findByUuid_PrevAndNext(requestId, uuid, orderByComparator);
 	}
 
 	/**
@@ -377,6 +433,27 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the social requests before and after the current social request in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param requestId the primary key of the current social request
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest[] findByUuid_C_PrevAndNext(
+		long requestId, java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByUuid_C_PrevAndNext(requestId, uuid, companyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social requests where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
@@ -400,6 +477,22 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -419,6 +512,20 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_First(uuid, companyId);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -433,6 +540,22 @@ public class SocialRequestUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByUuid_C_First(uuid, companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByUuid_C_Last(uuid, companyId);
 	}
 
 	/**
@@ -455,6 +578,20 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_Last(uuid, companyId);
+	}
+
+	/**
 	* Returns the last social request in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -469,27 +606,6 @@ public class SocialRequestUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByUuid_C_Last(uuid, companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the social requests before and after the current social request in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param requestId the primary key of the current social request
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social request
-	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest[] findByUuid_C_PrevAndNext(
-		long requestId, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence()
-				   .findByUuid_C_PrevAndNext(requestId, uuid, companyId,
-			orderByComparator);
 	}
 
 	/**
@@ -550,6 +666,26 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the social requests before and after the current social request in the ordered set where companyId = &#63;.
+	*
+	* @param requestId the primary key of the current social request
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest[] findByCompanyId_PrevAndNext(
+		long requestId, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByCompanyId_PrevAndNext(requestId, companyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social requests where companyId = &#63;.
 	*
 	* <p>
@@ -572,6 +708,21 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -590,6 +741,19 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -603,6 +767,21 @@ public class SocialRequestUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_First(companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByCompanyId_Last(companyId);
 	}
 
 	/**
@@ -624,6 +803,19 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_Last(companyId);
+	}
+
+	/**
 	* Returns the last social request in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -637,26 +829,6 @@ public class SocialRequestUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_Last(companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the social requests before and after the current social request in the ordered set where companyId = &#63;.
-	*
-	* @param requestId the primary key of the current social request
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social request
-	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest[] findByCompanyId_PrevAndNext(
-		long requestId, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence()
-				   .findByCompanyId_PrevAndNext(requestId, companyId,
-			orderByComparator);
 	}
 
 	/**
@@ -714,6 +886,26 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the social requests before and after the current social request in the ordered set where userId = &#63;.
+	*
+	* @param requestId the primary key of the current social request
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest[] findByUserId_PrevAndNext(
+		long requestId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByUserId_PrevAndNext(requestId, userId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social requests where userId = &#63;.
 	*
 	* <p>
@@ -736,6 +928,21 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByUserId_First(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -753,6 +960,18 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByUserId_First(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_First(userId);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -765,6 +984,21 @@ public class SocialRequestUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_First(userId, orderByComparator);
+	}
+
+	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByUserId_Last(
+		long userId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByUserId_Last(userId);
 	}
 
 	/**
@@ -785,6 +1019,18 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByUserId_Last(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUserId_Last(userId);
+	}
+
+	/**
 	* Returns the last social request in the ordered set where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -797,26 +1043,6 @@ public class SocialRequestUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByUserId_Last(userId, orderByComparator);
-	}
-
-	/**
-	* Returns the social requests before and after the current social request in the ordered set where userId = &#63;.
-	*
-	* @param requestId the primary key of the current social request
-	* @param userId the user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social request
-	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest[] findByUserId_PrevAndNext(
-		long requestId, long userId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence()
-				   .findByUserId_PrevAndNext(requestId, userId,
-			orderByComparator);
 	}
 
 	/**
@@ -875,6 +1101,26 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the social requests before and after the current social request in the ordered set where receiverUserId = &#63;.
+	*
+	* @param requestId the primary key of the current social request
+	* @param receiverUserId the receiver user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest[] findByReceiverUserId_PrevAndNext(
+		long requestId, long receiverUserId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByReceiverUserId_PrevAndNext(requestId, receiverUserId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social requests where receiverUserId = &#63;.
 	*
 	* <p>
@@ -898,6 +1144,21 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the first matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByReceiverUserId_First(
+		long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByReceiverUserId_First(receiverUserId);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where receiverUserId = &#63;.
 	*
 	* @param receiverUserId the receiver user ID
@@ -916,6 +1177,19 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByReceiverUserId_First(
+		long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByReceiverUserId_First(receiverUserId);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where receiverUserId = &#63;.
 	*
 	* @param receiverUserId the receiver user ID
@@ -930,6 +1204,21 @@ public class SocialRequestUtil {
 		return getPersistence()
 				   .fetchByReceiverUserId_First(receiverUserId,
 			orderByComparator);
+	}
+
+	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the last matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByReceiverUserId_Last(
+		long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByReceiverUserId_Last(receiverUserId);
 	}
 
 	/**
@@ -951,6 +1240,19 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByReceiverUserId_Last(
+		long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByReceiverUserId_Last(receiverUserId);
+	}
+
+	/**
 	* Returns the last social request in the ordered set where receiverUserId = &#63;.
 	*
 	* @param receiverUserId the receiver user ID
@@ -964,26 +1266,6 @@ public class SocialRequestUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByReceiverUserId_Last(receiverUserId, orderByComparator);
-	}
-
-	/**
-	* Returns the social requests before and after the current social request in the ordered set where receiverUserId = &#63;.
-	*
-	* @param requestId the primary key of the current social request
-	* @param receiverUserId the receiver user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social request
-	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest[] findByReceiverUserId_PrevAndNext(
-		long requestId, long receiverUserId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence()
-				   .findByReceiverUserId_PrevAndNext(requestId, receiverUserId,
-			orderByComparator);
 	}
 
 	/**
@@ -1044,6 +1326,27 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the social requests before and after the current social request in the ordered set where userId = &#63; and status = &#63;.
+	*
+	* @param requestId the primary key of the current social request
+	* @param userId the user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest[] findByU_S_PrevAndNext(
+		long requestId, long userId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByU_S_PrevAndNext(requestId, userId, status,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social requests where userId = &#63; and status = &#63;.
 	*
 	* <p>
@@ -1067,6 +1370,22 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and status = &#63;.
+	*
+	* @param userId the user ID
+	* @param status the status
+	* @return the first matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByU_S_First(
+		long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByU_S_First(userId, status);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where userId = &#63; and status = &#63;.
 	*
 	* @param userId the user ID
@@ -1086,6 +1405,20 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and status = &#63;.
+	*
+	* @param userId the user ID
+	* @param status the status
+	* @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByU_S_First(
+		long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByU_S_First(userId, status);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where userId = &#63; and status = &#63;.
 	*
 	* @param userId the user ID
@@ -1100,6 +1433,22 @@ public class SocialRequestUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByU_S_First(userId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and status = &#63;.
+	*
+	* @param userId the user ID
+	* @param status the status
+	* @return the last matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByU_S_Last(
+		long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByU_S_Last(userId, status);
 	}
 
 	/**
@@ -1121,6 +1470,20 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and status = &#63;.
+	*
+	* @param userId the user ID
+	* @param status the status
+	* @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByU_S_Last(
+		long userId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByU_S_Last(userId, status);
+	}
+
+	/**
 	* Returns the last social request in the ordered set where userId = &#63; and status = &#63;.
 	*
 	* @param userId the user ID
@@ -1135,27 +1498,6 @@ public class SocialRequestUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByU_S_Last(userId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the social requests before and after the current social request in the ordered set where userId = &#63; and status = &#63;.
-	*
-	* @param requestId the primary key of the current social request
-	* @param userId the user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social request
-	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest[] findByU_S_PrevAndNext(
-		long requestId, long userId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence()
-				   .findByU_S_PrevAndNext(requestId, userId, status,
-			orderByComparator);
 	}
 
 	/**
@@ -1218,6 +1560,27 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the social requests before and after the current social request in the ordered set where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param requestId the primary key of the current social request
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest[] findByR_S_PrevAndNext(
+		long requestId, long receiverUserId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByR_S_PrevAndNext(requestId, receiverUserId, status,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social requests where receiverUserId = &#63; and status = &#63;.
 	*
 	* <p>
@@ -1242,6 +1605,22 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the first matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByR_S_First(
+		long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByR_S_First(receiverUserId, status);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where receiverUserId = &#63; and status = &#63;.
 	*
 	* @param receiverUserId the receiver user ID
@@ -1261,6 +1640,20 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByR_S_First(
+		long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByR_S_First(receiverUserId, status);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where receiverUserId = &#63; and status = &#63;.
 	*
 	* @param receiverUserId the receiver user ID
@@ -1275,6 +1668,22 @@ public class SocialRequestUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByR_S_First(receiverUserId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the last matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByR_S_Last(
+		long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence().findByR_S_Last(receiverUserId, status);
 	}
 
 	/**
@@ -1297,6 +1706,20 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByR_S_Last(
+		long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByR_S_Last(receiverUserId, status);
+	}
+
+	/**
 	* Returns the last social request in the ordered set where receiverUserId = &#63; and status = &#63;.
 	*
 	* @param receiverUserId the receiver user ID
@@ -1311,27 +1734,6 @@ public class SocialRequestUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByR_S_Last(receiverUserId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the social requests before and after the current social request in the ordered set where receiverUserId = &#63; and status = &#63;.
-	*
-	* @param requestId the primary key of the current social request
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social request
-	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest[] findByR_S_PrevAndNext(
-		long requestId, long receiverUserId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence()
-				   .findByR_S_PrevAndNext(requestId, receiverUserId, status,
-			orderByComparator);
 	}
 
 	/**
@@ -1507,6 +1909,31 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the social requests before and after the current social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	*
+	* @param requestId the primary key of the current social request
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest[] findByU_C_C_T_S_PrevAndNext(
+		long requestId, long userId, long classNameId, long classPK, int type,
+		int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByU_C_C_T_S_PrevAndNext(requestId, userId, classNameId,
+			classPK, type, status, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social requests where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
 	*
 	* <p>
@@ -1535,6 +1962,27 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param status the status
+	* @return the first matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByU_C_C_T_S_First(
+		long userId, long classNameId, long classPK, int type, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByU_C_C_T_S_First(userId, classNameId, classPK, type,
+			status);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
 	*
 	* @param userId the user ID
@@ -1558,6 +2006,25 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param status the status
+	* @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByU_C_C_T_S_First(
+		long userId, long classNameId, long classPK, int type, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByU_C_C_T_S_First(userId, classNameId, classPK, type,
+			status);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
 	*
 	* @param userId the user ID
@@ -1576,6 +2043,27 @@ public class SocialRequestUtil {
 		return getPersistence()
 				   .fetchByU_C_C_T_S_First(userId, classNameId, classPK, type,
 			status, orderByComparator);
+	}
+
+	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param status the status
+	* @return the last matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByU_C_C_T_S_Last(
+		long userId, long classNameId, long classPK, int type, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByU_C_C_T_S_Last(userId, classNameId, classPK, type,
+			status);
 	}
 
 	/**
@@ -1602,6 +2090,25 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param status the status
+	* @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByU_C_C_T_S_Last(
+		long userId, long classNameId, long classPK, int type, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByU_C_C_T_S_Last(userId, classNameId, classPK, type,
+			status);
+	}
+
+	/**
 	* Returns the last social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
 	*
 	* @param userId the user ID
@@ -1620,31 +2127,6 @@ public class SocialRequestUtil {
 		return getPersistence()
 				   .fetchByU_C_C_T_S_Last(userId, classNameId, classPK, type,
 			status, orderByComparator);
-	}
-
-	/**
-	* Returns the social requests before and after the current social request in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63; and type = &#63; and status = &#63;.
-	*
-	* @param requestId the primary key of the current social request
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social request
-	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest[] findByU_C_C_T_S_PrevAndNext(
-		long requestId, long userId, long classNameId, long classPK, int type,
-		int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence()
-				   .findByU_C_C_T_S_PrevAndNext(requestId, userId, classNameId,
-			classPK, type, status, orderByComparator);
 	}
 
 	/**
@@ -1728,6 +2210,31 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the social requests before and after the current social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param requestId the primary key of the current social request
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest[] findByC_C_T_R_S_PrevAndNext(
+		long requestId, long classNameId, long classPK, int type,
+		long receiverUserId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByC_C_T_R_S_PrevAndNext(requestId, classNameId,
+			classPK, type, receiverUserId, status, orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the social requests where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
 	*
 	* <p>
@@ -1756,6 +2263,28 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the first matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByC_C_T_R_S_First(
+		long classNameId, long classPK, int type, long receiverUserId,
+		int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByC_C_T_R_S_First(classNameId, classPK, type,
+			receiverUserId, status);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -1780,6 +2309,25 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the first social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the first matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByC_C_T_R_S_First(
+		long classNameId, long classPK, int type, long receiverUserId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_C_T_R_S_First(classNameId, classPK, type,
+			receiverUserId, status);
+	}
+
+	/**
 	* Returns the first social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -1799,6 +2347,28 @@ public class SocialRequestUtil {
 		return getPersistence()
 				   .fetchByC_C_T_R_S_First(classNameId, classPK, type,
 			receiverUserId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the last matching social request
+	* @throws com.liferay.portlet.social.NoSuchRequestException if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest findByC_C_T_R_S_Last(
+		long classNameId, long classPK, int type, long receiverUserId,
+		int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.social.NoSuchRequestException {
+		return getPersistence()
+				   .findByC_C_T_R_S_Last(classNameId, classPK, type,
+			receiverUserId, status);
 	}
 
 	/**
@@ -1826,6 +2396,25 @@ public class SocialRequestUtil {
 	}
 
 	/**
+	* Returns the last social request in the default ordered set defined by {@link SocialRequestModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param type the type
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the last matching social request, or <code>null</code> if a matching social request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.social.model.SocialRequest fetchByC_C_T_R_S_Last(
+		long classNameId, long classPK, int type, long receiverUserId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_C_T_R_S_Last(classNameId, classPK, type,
+			receiverUserId, status);
+	}
+
+	/**
 	* Returns the last social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -1845,31 +2434,6 @@ public class SocialRequestUtil {
 		return getPersistence()
 				   .fetchByC_C_T_R_S_Last(classNameId, classPK, type,
 			receiverUserId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the social requests before and after the current social request in the ordered set where classNameId = &#63; and classPK = &#63; and type = &#63; and receiverUserId = &#63; and status = &#63;.
-	*
-	* @param requestId the primary key of the current social request
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @param type the type
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next social request
-	* @throws com.liferay.portlet.social.NoSuchRequestException if a social request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.social.model.SocialRequest[] findByC_C_T_R_S_PrevAndNext(
-		long requestId, long classNameId, long classPK, int type,
-		long receiverUserId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.social.NoSuchRequestException {
-		return getPersistence()
-				   .findByC_C_T_R_S_PrevAndNext(requestId, classNameId,
-			classPK, type, receiverUserId, status, orderByComparator);
 	}
 
 	/**

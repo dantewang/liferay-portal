@@ -143,6 +143,26 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the trash entries before and after the current trash entry in the ordered set where groupId = &#63;.
+	*
+	* @param entryId the primary key of the current trash entry
+	* @param groupId the group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next trash entry
+	* @throws com.liferay.portlet.trash.NoSuchEntryException if a trash entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry[] findByGroupId_PrevAndNext(
+		long entryId, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException {
+		return getPersistence()
+				   .findByGroupId_PrevAndNext(entryId, groupId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the trash entries where groupId = &#63;.
 	*
 	* <p>
@@ -165,6 +185,21 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching trash entry
+	* @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry findByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException {
+		return getPersistence().findByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first trash entry in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -182,6 +217,19 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry fetchByGroupId_First(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_First(groupId);
+	}
+
+	/**
 	* Returns the first trash entry in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -194,6 +242,21 @@ public class TrashEntryUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
+	}
+
+	/**
+	* Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching trash entry
+	* @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry findByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException {
+		return getPersistence().findByGroupId_Last(groupId);
 	}
 
 	/**
@@ -214,6 +277,19 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry fetchByGroupId_Last(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByGroupId_Last(groupId);
+	}
+
+	/**
 	* Returns the last trash entry in the ordered set where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -226,26 +302,6 @@ public class TrashEntryUtil {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
-	}
-
-	/**
-	* Returns the trash entries before and after the current trash entry in the ordered set where groupId = &#63;.
-	*
-	* @param entryId the primary key of the current trash entry
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next trash entry
-	* @throws com.liferay.portlet.trash.NoSuchEntryException if a trash entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.trash.model.TrashEntry[] findByGroupId_PrevAndNext(
-		long entryId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.trash.NoSuchEntryException {
-		return getPersistence()
-				   .findByGroupId_PrevAndNext(entryId, groupId,
-			orderByComparator);
 	}
 
 	/**
@@ -304,6 +360,26 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the trash entries before and after the current trash entry in the ordered set where companyId = &#63;.
+	*
+	* @param entryId the primary key of the current trash entry
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next trash entry
+	* @throws com.liferay.portlet.trash.NoSuchEntryException if a trash entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry[] findByCompanyId_PrevAndNext(
+		long entryId, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException {
+		return getPersistence()
+				   .findByCompanyId_PrevAndNext(entryId, companyId,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the trash entries where companyId = &#63;.
 	*
 	* <p>
@@ -326,6 +402,21 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching trash entry
+	* @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry findByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException {
+		return getPersistence().findByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first trash entry in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -344,6 +435,19 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry fetchByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_First(companyId);
+	}
+
+	/**
 	* Returns the first trash entry in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -357,6 +461,21 @@ public class TrashEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_First(companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching trash entry
+	* @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry findByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException {
+		return getPersistence().findByCompanyId_Last(companyId);
 	}
 
 	/**
@@ -378,6 +497,19 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry fetchByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_Last(companyId);
+	}
+
+	/**
 	* Returns the last trash entry in the ordered set where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -391,26 +523,6 @@ public class TrashEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByCompanyId_Last(companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the trash entries before and after the current trash entry in the ordered set where companyId = &#63;.
-	*
-	* @param entryId the primary key of the current trash entry
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next trash entry
-	* @throws com.liferay.portlet.trash.NoSuchEntryException if a trash entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.trash.model.TrashEntry[] findByCompanyId_PrevAndNext(
-		long entryId, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.trash.NoSuchEntryException {
-		return getPersistence()
-				   .findByCompanyId_PrevAndNext(entryId, companyId,
-			orderByComparator);
 	}
 
 	/**
@@ -471,6 +583,27 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the trash entries before and after the current trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
+	*
+	* @param entryId the primary key of the current trash entry
+	* @param groupId the group ID
+	* @param createDate the create date
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next trash entry
+	* @throws com.liferay.portlet.trash.NoSuchEntryException if a trash entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry[] findByG_LtCD_PrevAndNext(
+		long entryId, long groupId, java.util.Date createDate,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException {
+		return getPersistence()
+				   .findByG_LtCD_PrevAndNext(entryId, groupId, createDate,
+			orderByComparator);
+	}
+
+	/**
 	* Returns an ordered range of all the trash entries where groupId = &#63; and createDate &lt; &#63;.
 	*
 	* <p>
@@ -495,6 +628,22 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and createDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param createDate the create date
+	* @return the first matching trash entry
+	* @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry findByG_LtCD_First(
+		long groupId, java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException {
+		return getPersistence().findByG_LtCD_First(groupId, createDate);
+	}
+
+	/**
 	* Returns the first trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
 	*
 	* @param groupId the group ID
@@ -514,6 +663,20 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the first trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and createDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param createDate the create date
+	* @return the first matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry fetchByG_LtCD_First(
+		long groupId, java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_LtCD_First(groupId, createDate);
+	}
+
+	/**
 	* Returns the first trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
 	*
 	* @param groupId the group ID
@@ -528,6 +691,22 @@ public class TrashEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_LtCD_First(groupId, createDate, orderByComparator);
+	}
+
+	/**
+	* Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and createDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param createDate the create date
+	* @return the last matching trash entry
+	* @throws com.liferay.portlet.trash.NoSuchEntryException if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry findByG_LtCD_Last(
+		long groupId, java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.trash.NoSuchEntryException {
+		return getPersistence().findByG_LtCD_Last(groupId, createDate);
 	}
 
 	/**
@@ -550,6 +729,20 @@ public class TrashEntryUtil {
 	}
 
 	/**
+	* Returns the last trash entry in the default ordered set defined by {@link TrashEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and createDate &lt; &#63;.
+	*
+	* @param groupId the group ID
+	* @param createDate the create date
+	* @return the last matching trash entry, or <code>null</code> if a matching trash entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry fetchByG_LtCD_Last(
+		long groupId, java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_LtCD_Last(groupId, createDate);
+	}
+
+	/**
 	* Returns the last trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
 	*
 	* @param groupId the group ID
@@ -564,27 +757,6 @@ public class TrashEntryUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .fetchByG_LtCD_Last(groupId, createDate, orderByComparator);
-	}
-
-	/**
-	* Returns the trash entries before and after the current trash entry in the ordered set where groupId = &#63; and createDate &lt; &#63;.
-	*
-	* @param entryId the primary key of the current trash entry
-	* @param groupId the group ID
-	* @param createDate the create date
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next trash entry
-	* @throws com.liferay.portlet.trash.NoSuchEntryException if a trash entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portlet.trash.model.TrashEntry[] findByG_LtCD_PrevAndNext(
-		long entryId, long groupId, java.util.Date createDate,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.trash.NoSuchEntryException {
-		return getPersistence()
-				   .findByG_LtCD_PrevAndNext(entryId, groupId, createDate,
-			orderByComparator);
 	}
 
 	/**

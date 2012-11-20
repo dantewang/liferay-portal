@@ -110,64 +110,148 @@ public class PasswordPolicyUtil {
 	}
 
 	/**
-	* Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or throws a {@link com.liferay.portal.NoSuchPasswordPolicyException} if it could not be found.
+	* Returns the first password policy in the default ordered set defined by {@link PasswordPolicyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultPolicy = &#63;.
 	*
 	* @param companyId the company ID
 	* @param defaultPolicy the default policy
-	* @return the matching password policy
+	* @return the first matching password policy
 	* @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PasswordPolicy findByC_DP(
+	public static com.liferay.portal.model.PasswordPolicy findByC_DP_First(
 		long companyId, boolean defaultPolicy)
 		throws com.liferay.portal.NoSuchPasswordPolicyException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByC_DP(companyId, defaultPolicy);
+		return getPersistence().findByC_DP_First(companyId, defaultPolicy);
 	}
 
 	/**
-	* Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first password policy in the ordered set where companyId = &#63; and defaultPolicy = &#63;.
 	*
 	* @param companyId the company ID
 	* @param defaultPolicy the default policy
-	* @return the matching password policy, or <code>null</code> if a matching password policy could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching password policy
+	* @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PasswordPolicy fetchByC_DP(
+	public static com.liferay.portal.model.PasswordPolicy findByC_DP_First(
+		long companyId, boolean defaultPolicy,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPasswordPolicyException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_DP_First(companyId, defaultPolicy, orderByComparator);
+	}
+
+	/**
+	* Returns the first password policy in the default ordered set defined by {@link PasswordPolicyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultPolicy = &#63;.
+	*
+	* @param companyId the company ID
+	* @param defaultPolicy the default policy
+	* @return the first matching password policy, or <code>null</code> if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordPolicy fetchByC_DP_First(
 		long companyId, boolean defaultPolicy)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByC_DP(companyId, defaultPolicy);
+		return getPersistence().fetchByC_DP_First(companyId, defaultPolicy);
 	}
 
 	/**
-	* Returns the password policy where companyId = &#63; and defaultPolicy = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first password policy in the ordered set where companyId = &#63; and defaultPolicy = &#63;.
 	*
 	* @param companyId the company ID
 	* @param defaultPolicy the default policy
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching password policy, or <code>null</code> if a matching password policy could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching password policy, or <code>null</code> if a matching password policy could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PasswordPolicy fetchByC_DP(
-		long companyId, boolean defaultPolicy, boolean retrieveFromCache)
+	public static com.liferay.portal.model.PasswordPolicy fetchByC_DP_First(
+		long companyId, boolean defaultPolicy,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchByC_DP(companyId, defaultPolicy, retrieveFromCache);
+				   .fetchByC_DP_First(companyId, defaultPolicy,
+			orderByComparator);
 	}
 
 	/**
-	* Removes the password policy where companyId = &#63; and defaultPolicy = &#63; from the database.
+	* Returns the last password policy in the default ordered set defined by {@link PasswordPolicyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultPolicy = &#63;.
 	*
 	* @param companyId the company ID
 	* @param defaultPolicy the default policy
-	* @return the password policy that was removed
+	* @return the last matching password policy
+	* @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.PasswordPolicy removeByC_DP(
+	public static com.liferay.portal.model.PasswordPolicy findByC_DP_Last(
 		long companyId, boolean defaultPolicy)
 		throws com.liferay.portal.NoSuchPasswordPolicyException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByC_DP(companyId, defaultPolicy);
+		return getPersistence().findByC_DP_Last(companyId, defaultPolicy);
+	}
+
+	/**
+	* Returns the last password policy in the ordered set where companyId = &#63; and defaultPolicy = &#63;.
+	*
+	* @param companyId the company ID
+	* @param defaultPolicy the default policy
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching password policy
+	* @throws com.liferay.portal.NoSuchPasswordPolicyException if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordPolicy findByC_DP_Last(
+		long companyId, boolean defaultPolicy,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchPasswordPolicyException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_DP_Last(companyId, defaultPolicy, orderByComparator);
+	}
+
+	/**
+	* Returns the last password policy in the default ordered set defined by {@link PasswordPolicyModelImpl#ORDER_BY_JPQL} where companyId = &#63; and defaultPolicy = &#63;.
+	*
+	* @param companyId the company ID
+	* @param defaultPolicy the default policy
+	* @return the last matching password policy, or <code>null</code> if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordPolicy fetchByC_DP_Last(
+		long companyId, boolean defaultPolicy)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_DP_Last(companyId, defaultPolicy);
+	}
+
+	/**
+	* Returns the last password policy in the ordered set where companyId = &#63; and defaultPolicy = &#63;.
+	*
+	* @param companyId the company ID
+	* @param defaultPolicy the default policy
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching password policy, or <code>null</code> if a matching password policy could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.PasswordPolicy fetchByC_DP_Last(
+		long companyId, boolean defaultPolicy,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_DP_Last(companyId, defaultPolicy, orderByComparator);
+	}
+
+	/**
+	* Removes all the password policies where companyId = &#63; and defaultPolicy = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param defaultPolicy the default policy
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_DP(long companyId, boolean defaultPolicy)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_DP(companyId, defaultPolicy);
 	}
 
 	/**

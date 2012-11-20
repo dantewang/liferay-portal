@@ -54,7 +54,6 @@ import com.liferay.portlet.softwarecatalog.model.impl.SCProductVersionModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -101,8 +100,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PRODUCTENTRYID =
 		new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
@@ -110,7 +109,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 			SCProductVersionImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByProductEntryId",
 			new String[] { Long.class.getName() },
-			SCProductVersionModelImpl.PRODUCTENTRYID_COLUMN_BITMASK);
+			SCProductVersionModelImpl.PRODUCTENTRYID_COLUMN_BITMASK |
+			SCProductVersionModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_PRODUCTENTRYID = new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByProductEntryId",
@@ -145,217 +145,6 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public List<SCProductVersion> findByProductEntryId(long productEntryId,
 		int start, int end) throws SystemException {
 		return findByProductEntryId(productEntryId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the s c product versions where productEntryId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param productEntryId the product entry ID
-	 * @param start the lower bound of the range of s c product versions
-	 * @param end the upper bound of the range of s c product versions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching s c product versions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SCProductVersion> findByProductEntryId(long productEntryId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PRODUCTENTRYID;
-			finderArgs = new Object[] { productEntryId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PRODUCTENTRYID;
-			finderArgs = new Object[] {
-					productEntryId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SCProductVersion> list = (List<SCProductVersion>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SCProductVersion scProductVersion : list) {
-				if ((productEntryId != scProductVersion.getProductEntryId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SCPRODUCTVERSION_WHERE);
-
-			query.append(_FINDER_COLUMN_PRODUCTENTRYID_PRODUCTENTRYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SCProductVersionModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(productEntryId);
-
-				list = (List<SCProductVersion>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first s c product version in the ordered set where productEntryId = &#63;.
-	 *
-	 * @param productEntryId the product entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c product version
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductVersion findByProductEntryId_First(long productEntryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchProductVersionException, SystemException {
-		SCProductVersion scProductVersion = fetchByProductEntryId_First(productEntryId,
-				orderByComparator);
-
-		if (scProductVersion != null) {
-			return scProductVersion;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("productEntryId=");
-		msg.append(productEntryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchProductVersionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first s c product version in the ordered set where productEntryId = &#63;.
-	 *
-	 * @param productEntryId the product entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c product version, or <code>null</code> if a matching s c product version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductVersion fetchByProductEntryId_First(long productEntryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SCProductVersion> list = findByProductEntryId(productEntryId, 0,
-				1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last s c product version in the ordered set where productEntryId = &#63;.
-	 *
-	 * @param productEntryId the product entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c product version
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductVersion findByProductEntryId_Last(long productEntryId,
-		OrderByComparator orderByComparator)
-		throws NoSuchProductVersionException, SystemException {
-		SCProductVersion scProductVersion = fetchByProductEntryId_Last(productEntryId,
-				orderByComparator);
-
-		if (scProductVersion != null) {
-			return scProductVersion;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("productEntryId=");
-		msg.append(productEntryId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchProductVersionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last s c product version in the ordered set where productEntryId = &#63;.
-	 *
-	 * @param productEntryId the product entry ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c product version, or <code>null</code> if a matching s c product version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductVersion fetchByProductEntryId_Last(long productEntryId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByProductEntryId(productEntryId);
-
-		List<SCProductVersion> list = findByProductEntryId(productEntryId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -472,7 +261,6 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				}
 			}
 		}
-
 		else {
 			query.append(SCProductVersionModelImpl.ORDER_BY_JPQL);
 		}
@@ -507,6 +295,263 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	}
 
 	/**
+	 * Returns an ordered range of all the s c product versions where productEntryId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param productEntryId the product entry ID
+	 * @param start the lower bound of the range of s c product versions
+	 * @param end the upper bound of the range of s c product versions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching s c product versions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SCProductVersion> findByProductEntryId(long productEntryId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PRODUCTENTRYID;
+			finderArgs = new Object[] { productEntryId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PRODUCTENTRYID;
+			finderArgs = new Object[] {
+					productEntryId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SCProductVersion> list = (List<SCProductVersion>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SCProductVersion scProductVersion : list) {
+				if ((productEntryId != scProductVersion.getProductEntryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SCPRODUCTVERSION_WHERE);
+
+			query.append(_FINDER_COLUMN_PRODUCTENTRYID_PRODUCTENTRYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SCProductVersionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(productEntryId);
+
+				list = (List<SCProductVersion>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where productEntryId = &#63;.
+	 *
+	 * @param productEntryId the product entry ID
+	 * @return the first matching s c product version
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion findByProductEntryId_First(long productEntryId)
+		throws NoSuchProductVersionException, SystemException {
+		return findByProductEntryId_First(productEntryId, null);
+	}
+
+	/**
+	 * Returns the first s c product version in the ordered set where productEntryId = &#63;.
+	 *
+	 * @param productEntryId the product entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product version
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion findByProductEntryId_First(long productEntryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchProductVersionException, SystemException {
+		SCProductVersion scProductVersion = fetchByProductEntryId_First(productEntryId,
+				orderByComparator);
+
+		if (scProductVersion != null) {
+			return scProductVersion;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("productEntryId=");
+		msg.append(productEntryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductVersionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where productEntryId = &#63;.
+	 *
+	 * @param productEntryId the product entry ID
+	 * @return the first matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion fetchByProductEntryId_First(long productEntryId)
+		throws SystemException {
+		return fetchByProductEntryId_First(productEntryId, null);
+	}
+
+	/**
+	 * Returns the first s c product version in the ordered set where productEntryId = &#63;.
+	 *
+	 * @param productEntryId the product entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion fetchByProductEntryId_First(long productEntryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SCProductVersion> list = findByProductEntryId(productEntryId, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where productEntryId = &#63;.
+	 *
+	 * @param productEntryId the product entry ID
+	 * @return the last matching s c product version
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion findByProductEntryId_Last(long productEntryId)
+		throws NoSuchProductVersionException, SystemException {
+		return findByProductEntryId_Last(productEntryId, null);
+	}
+
+	/**
+	 * Returns the last s c product version in the ordered set where productEntryId = &#63;.
+	 *
+	 * @param productEntryId the product entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product version
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion findByProductEntryId_Last(long productEntryId,
+		OrderByComparator orderByComparator)
+		throws NoSuchProductVersionException, SystemException {
+		SCProductVersion scProductVersion = fetchByProductEntryId_Last(productEntryId,
+				orderByComparator);
+
+		if (scProductVersion != null) {
+			return scProductVersion;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("productEntryId=");
+		msg.append(productEntryId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductVersionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where productEntryId = &#63;.
+	 *
+	 * @param productEntryId the product entry ID
+	 * @return the last matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion fetchByProductEntryId_Last(long productEntryId)
+		throws SystemException {
+		return fetchByProductEntryId_Last(productEntryId, null);
+	}
+
+	/**
+	 * Returns the last s c product version in the ordered set where productEntryId = &#63;.
+	 *
+	 * @param productEntryId the product entry ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion fetchByProductEntryId_Last(long productEntryId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByProductEntryId(productEntryId);
+
+		List<SCProductVersion> list = findByProductEntryId(productEntryId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the s c product versions where productEntryId = &#63; from the database.
 	 *
 	 * @param productEntryId the product entry ID
@@ -515,7 +560,7 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public void removeByProductEntryId(long productEntryId)
 		throws SystemException {
 		for (SCProductVersion scProductVersion : findByProductEntryId(
-				productEntryId)) {
+				productEntryId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(scProductVersion);
 		}
 	}
@@ -529,10 +574,12 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	 */
 	public int countByProductEntryId(long productEntryId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_PRODUCTENTRYID;
+
 		Object[] finderArgs = new Object[] { productEntryId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_PRODUCTENTRYID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -555,18 +602,15 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				qPos.add(productEntryId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PRODUCTENTRYID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -575,91 +619,88 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	}
 
 	private static final String _FINDER_COLUMN_PRODUCTENTRYID_PRODUCTENTRYID_2 = "scProductVersion.productEntryId = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL = new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_DIRECTDOWNLOADURL =
+		new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionModelImpl.FINDER_CACHE_ENABLED,
-			SCProductVersionImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByDirectDownloadURL",
-			new String[] { String.class.getName() },
-			SCProductVersionModelImpl.DIRECTDOWNLOADURL_COLUMN_BITMASK);
+			SCProductVersionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByDirectDownloadURL",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_DIRECTDOWNLOADURL =
+		new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductVersionModelImpl.FINDER_CACHE_ENABLED,
+			SCProductVersionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByDirectDownloadURL", new String[] { String.class.getName() },
+			SCProductVersionModelImpl.DIRECTDOWNLOADURL_COLUMN_BITMASK |
+			SCProductVersionModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_DIRECTDOWNLOADURL = new FinderPath(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"countByDirectDownloadURL", new String[] { String.class.getName() });
 
 	/**
-	 * Returns the s c product version where directDownloadURL = &#63; or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductVersionException} if it could not be found.
+	 * Returns an ordered range of all the s c product versions where directDownloadURL = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param directDownloadURL the direct download u r l
-	 * @return the matching s c product version
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
+	 * @param start the lower bound of the range of s c product versions
+	 * @param end the upper bound of the range of s c product versions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching s c product versions
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SCProductVersion findByDirectDownloadURL(String directDownloadURL)
-		throws NoSuchProductVersionException, SystemException {
-		SCProductVersion scProductVersion = fetchByDirectDownloadURL(directDownloadURL);
+	protected List<SCProductVersion> findByDirectDownloadURL(
+		String directDownloadURL, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (scProductVersion == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("directDownloadURL=");
-			msg.append(directDownloadURL);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchProductVersionException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_DIRECTDOWNLOADURL;
+			finderArgs = new Object[] { directDownloadURL };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_DIRECTDOWNLOADURL;
+			finderArgs = new Object[] {
+					directDownloadURL,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		return scProductVersion;
-	}
+		List<SCProductVersion> list = (List<SCProductVersion>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the s c product version where directDownloadURL = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param directDownloadURL the direct download u r l
-	 * @return the matching s c product version, or <code>null</code> if a matching s c product version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductVersion fetchByDirectDownloadURL(String directDownloadURL)
-		throws SystemException {
-		return fetchByDirectDownloadURL(directDownloadURL, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (SCProductVersion scProductVersion : list) {
+				if (!Validator.equals(directDownloadURL,
+							scProductVersion.getDirectDownloadURL())) {
+					list = null;
 
-	/**
-	 * Returns the s c product version where directDownloadURL = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param directDownloadURL the direct download u r l
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching s c product version, or <code>null</code> if a matching s c product version could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductVersion fetchByDirectDownloadURL(String directDownloadURL,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { directDownloadURL };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
-					finderArgs, this);
-		}
-
-		if (result instanceof SCProductVersion) {
-			SCProductVersion scProductVersion = (SCProductVersion)result;
-
-			if (!Validator.equals(directDownloadURL,
-						scProductVersion.getDirectDownloadURL())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_SCPRODUCTVERSION_WHERE);
 
@@ -675,7 +716,13 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				}
 			}
 
-			query.append(SCProductVersionModelImpl.ORDER_BY_JPQL);
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SCProductVersionModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -692,65 +739,196 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 					qPos.add(directDownloadURL);
 				}
 
-				List<SCProductVersion> list = q.list();
+				list = (List<SCProductVersion>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-				result = list;
+				cacheResult(list);
 
-				SCProductVersion scProductVersion = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
-						finderArgs, list);
-				}
-				else {
-					scProductVersion = list.get(0);
-
-					cacheResult(scProductVersion);
-
-					if ((scProductVersion.getDirectDownloadURL() == null) ||
-							!scProductVersion.getDirectDownloadURL()
-												 .equals(directDownloadURL)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
-							finderArgs, scProductVersion);
-					}
-				}
-
-				return scProductVersion;
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (SCProductVersion)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the s c product version where directDownloadURL = &#63; from the database.
+	 * Returns the first s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where directDownloadURL = &#63;.
 	 *
 	 * @param directDownloadURL the direct download u r l
-	 * @return the s c product version that was removed
+	 * @return the first matching s c product version
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SCProductVersion removeByDirectDownloadURL(String directDownloadURL)
+	public SCProductVersion findByDirectDownloadURL_First(
+		String directDownloadURL)
 		throws NoSuchProductVersionException, SystemException {
-		SCProductVersion scProductVersion = findByDirectDownloadURL(directDownloadURL);
+		return findByDirectDownloadURL_First(directDownloadURL, null);
+	}
 
-		return remove(scProductVersion);
+	/**
+	 * Returns the first s c product version in the ordered set where directDownloadURL = &#63;.
+	 *
+	 * @param directDownloadURL the direct download u r l
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product version
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion findByDirectDownloadURL_First(
+		String directDownloadURL, OrderByComparator orderByComparator)
+		throws NoSuchProductVersionException, SystemException {
+		SCProductVersion scProductVersion = fetchByDirectDownloadURL_First(directDownloadURL,
+				orderByComparator);
+
+		if (scProductVersion != null) {
+			return scProductVersion;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("directDownloadURL=");
+		msg.append(directDownloadURL);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductVersionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where directDownloadURL = &#63;.
+	 *
+	 * @param directDownloadURL the direct download u r l
+	 * @return the first matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion fetchByDirectDownloadURL_First(
+		String directDownloadURL) throws SystemException {
+		return fetchByDirectDownloadURL_First(directDownloadURL, null);
+	}
+
+	/**
+	 * Returns the first s c product version in the ordered set where directDownloadURL = &#63;.
+	 *
+	 * @param directDownloadURL the direct download u r l
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion fetchByDirectDownloadURL_First(
+		String directDownloadURL, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<SCProductVersion> list = findByDirectDownloadURL(directDownloadURL,
+				0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where directDownloadURL = &#63;.
+	 *
+	 * @param directDownloadURL the direct download u r l
+	 * @return the last matching s c product version
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion findByDirectDownloadURL_Last(
+		String directDownloadURL)
+		throws NoSuchProductVersionException, SystemException {
+		return findByDirectDownloadURL_Last(directDownloadURL, null);
+	}
+
+	/**
+	 * Returns the last s c product version in the ordered set where directDownloadURL = &#63;.
+	 *
+	 * @param directDownloadURL the direct download u r l
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product version
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductVersionException if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion findByDirectDownloadURL_Last(
+		String directDownloadURL, OrderByComparator orderByComparator)
+		throws NoSuchProductVersionException, SystemException {
+		SCProductVersion scProductVersion = fetchByDirectDownloadURL_Last(directDownloadURL,
+				orderByComparator);
+
+		if (scProductVersion != null) {
+			return scProductVersion;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("directDownloadURL=");
+		msg.append(directDownloadURL);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductVersionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last s c product version in the default ordered set defined by {@link SCProductVersionModelImpl#ORDER_BY_JPQL} where directDownloadURL = &#63;.
+	 *
+	 * @param directDownloadURL the direct download u r l
+	 * @return the last matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion fetchByDirectDownloadURL_Last(
+		String directDownloadURL) throws SystemException {
+		return fetchByDirectDownloadURL_Last(directDownloadURL, null);
+	}
+
+	/**
+	 * Returns the last s c product version in the ordered set where directDownloadURL = &#63;.
+	 *
+	 * @param directDownloadURL the direct download u r l
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product version, or <code>null</code> if a matching s c product version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductVersion fetchByDirectDownloadURL_Last(
+		String directDownloadURL, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByDirectDownloadURL(directDownloadURL);
+
+		List<SCProductVersion> list = findByDirectDownloadURL(directDownloadURL,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the s c product versions where directDownloadURL = &#63; from the database.
+	 *
+	 * @param directDownloadURL the direct download u r l
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByDirectDownloadURL(String directDownloadURL)
+		throws SystemException {
+		for (SCProductVersion scProductVersion : findByDirectDownloadURL(
+				directDownloadURL, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(scProductVersion);
+		}
 	}
 
 	/**
@@ -762,10 +940,12 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	 */
 	public int countByDirectDownloadURL(String directDownloadURL)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_DIRECTDOWNLOADURL;
+
 		Object[] finderArgs = new Object[] { directDownloadURL };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_DIRECTDOWNLOADURL,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -800,18 +980,15 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_DIRECTDOWNLOADURL,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -834,10 +1011,6 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public void cacheResult(SCProductVersion scProductVersion) {
 		EntityCacheUtil.putResult(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionImpl.class, scProductVersion.getPrimaryKey(),
-			scProductVersion);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
-			new Object[] { scProductVersion.getDirectDownloadURL() },
 			scProductVersion);
 
 		scProductVersion.resetOriginalValues();
@@ -896,8 +1069,6 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(scProductVersion);
 	}
 
 	@Override
@@ -908,14 +1079,7 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 		for (SCProductVersion scProductVersion : scProductVersions) {
 			EntityCacheUtil.removeResult(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 				SCProductVersionImpl.class, scProductVersion.getPrimaryKey());
-
-			clearUniqueFindersCache(scProductVersion);
 		}
-	}
-
-	protected void clearUniqueFindersCache(SCProductVersion scProductVersion) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
-			new Object[] { scProductVersion.getDirectDownloadURL() });
 	}
 
 	/**
@@ -1094,30 +1258,6 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 			SCProductVersionImpl.class, scProductVersion.getPrimaryKey(),
 			scProductVersion);
 
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
-				new Object[] { scProductVersion.getDirectDownloadURL() },
-				scProductVersion);
-		}
-		else {
-			if ((scProductVersionModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						scProductVersionModelImpl.getOriginalDirectDownloadURL()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_DIRECTDOWNLOADURL,
-					args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
-					args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
-					new Object[] { scProductVersion.getDirectDownloadURL() },
-					scProductVersion);
-			}
-		}
-
 		return scProductVersion;
 	}
 
@@ -1218,29 +1358,28 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 		if (scProductVersion == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				scProductVersion = (SCProductVersion)session.get(SCProductVersionImpl.class,
 						Long.valueOf(productVersionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (scProductVersion != null) {
 					cacheResult(scProductVersion);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 						SCProductVersionImpl.class, productVersionId,
 						_nullSCProductVersion);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
+					SCProductVersionImpl.class, productVersionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1291,7 +1430,7 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public List<SCProductVersion> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -1332,30 +1471,19 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<SCProductVersion>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<SCProductVersion>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<SCProductVersion>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1393,18 +1521,17 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				Query q = session.createQuery(_SQL_COUNT_SCPRODUCTVERSION);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1448,8 +1575,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 			SCProductVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME,
 			"getSCFrameworkVersions",
 			new String[] {
-				Long.class.getName(), "java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
 			});
 
 	static {
@@ -1473,7 +1600,15 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public List<com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion> getSCFrameworkVersions(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		Object[] finderArgs = new Object[] { pk, start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { pk };
+		}
+		else {
+			finderArgs = new Object[] { pk, start, end, orderByComparator };
+		}
 
 		List<com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion> list = (List<com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion>)FinderCacheUtil.getResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS,
 				finderArgs, this);
@@ -1505,22 +1640,19 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 				list = (List<com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				scFrameworkVersionPersistence.cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS,
-						finderArgs);
-				}
-				else {
-					scFrameworkVersionPersistence.cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1567,18 +1699,17 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 				qPos.add(pk);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS_SIZE,
 					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_SCFRAMEWORKVERSIONS_SIZE,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1612,17 +1743,15 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 			try {
 				value = Boolean.valueOf(containsSCFrameworkVersion.contains(
 							pk, scFrameworkVersionPK));
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (value == null) {
-					value = Boolean.FALSE;
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_SCFRAMEWORKVERSION,
 					finderArgs, value);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_SCFRAMEWORKVERSION,
+					finderArgs);
+
+				throw processException(e);
 			}
 		}
 
@@ -1937,6 +2066,7 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	public void destroy() {
 		EntityCacheUtil.removeCache(SCProductVersionImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

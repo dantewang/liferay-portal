@@ -48,7 +48,6 @@ import com.liferay.portlet.mobiledevicerules.model.impl.MDRActionModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -90,14 +89,15 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
 			MDRActionModelImpl.FINDER_CACHE_ENABLED, MDRActionImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
 			new String[] { String.class.getName() },
-			MDRActionModelImpl.UUID_COLUMN_BITMASK);
+			MDRActionModelImpl.UUID_COLUMN_BITMASK |
+			MDRActionModelImpl.ACTIONID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
 			MDRActionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
@@ -130,217 +130,6 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	public List<MDRAction> findByUuid(String uuid, int start, int end)
 		throws SystemException {
 		return findByUuid(uuid, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the m d r actions where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param start the lower bound of the range of m d r actions
-	 * @param end the upper bound of the range of m d r actions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching m d r actions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MDRAction> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
-		}
-
-		List<MDRAction> list = (List<MDRAction>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MDRAction mdrAction : list) {
-				if (!Validator.equals(uuid, mdrAction.getUuid())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_MDRACTION_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first m d r action in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r action
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchActionException, SystemException {
-		MDRAction mdrAction = fetchByUuid_First(uuid, orderByComparator);
-
-		if (mdrAction != null) {
-			return mdrAction;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first m d r action in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r action, or <code>null</code> if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<MDRAction> list = findByUuid(uuid, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last m d r action in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r action
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
-		throws NoSuchActionException, SystemException {
-		MDRAction mdrAction = fetchByUuid_Last(uuid, orderByComparator);
-
-		if (mdrAction != null) {
-			return mdrAction;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last m d r action in the ordered set where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r action, or <code>null</code> if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid(uuid);
-
-		List<MDRAction> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -465,6 +254,9 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				}
 			}
 		}
+		else {
+			query.append(MDRActionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -498,13 +290,273 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	}
 
 	/**
+	 * Returns an ordered range of all the m d r actions where uuid = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param start the lower bound of the range of m d r actions
+	 * @param end the upper bound of the range of m d r actions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching m d r actions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MDRAction> findByUuid(String uuid, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
+			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+		}
+
+		List<MDRAction> list = (List<MDRAction>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MDRAction mdrAction : list) {
+				if (!Validator.equals(uuid, mdrAction.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_MDRACTION_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MDRActionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByUuid_First(String uuid)
+		throws NoSuchActionException, SystemException {
+		return findByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first m d r action in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByUuid_First(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchActionException, SystemException {
+		MDRAction mdrAction = fetchByUuid_First(uuid, orderByComparator);
+
+		if (mdrAction != null) {
+			return mdrAction;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the first matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByUuid_First(String uuid) throws SystemException {
+		return fetchByUuid_First(uuid, null);
+	}
+
+	/**
+	 * Returns the first m d r action in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<MDRAction> list = findByUuid(uuid, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByUuid_Last(String uuid)
+		throws NoSuchActionException, SystemException {
+		return findByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last m d r action in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByUuid_Last(String uuid,
+		OrderByComparator orderByComparator)
+		throws NoSuchActionException, SystemException {
+		MDRAction mdrAction = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (mdrAction != null) {
+			return mdrAction;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the last matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByUuid_Last(String uuid) throws SystemException {
+		return fetchByUuid_Last(uuid, null);
+	}
+
+	/**
+	 * Returns the last m d r action in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid(uuid);
+
+		List<MDRAction> list = findByUuid(uuid, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the m d r actions where uuid = &#63; from the database.
 	 *
 	 * @param uuid the uuid
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByUuid(String uuid) throws SystemException {
-		for (MDRAction mdrAction : findByUuid(uuid)) {
+		for (MDRAction mdrAction : findByUuid(uuid, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(mdrAction);
 		}
 	}
@@ -517,10 +569,12 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
 		Object[] finderArgs = new Object[] { uuid };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -555,18 +609,15 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -667,7 +718,7 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_MDRACTION_WHERE);
 
@@ -704,16 +755,14 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 
 				List<MDRAction> list = q.list();
 
-				result = list;
-
-				MDRAction mdrAction = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
 						finderArgs, list);
 				}
 				else {
-					mdrAction = list.get(0);
+					MDRAction mdrAction = list.get(0);
+
+					result = mdrAction;
 
 					cacheResult(mdrAction);
 
@@ -724,28 +773,23 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 							finderArgs, mdrAction);
 					}
 				}
-
-				return mdrAction;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (MDRAction)result;
-			}
+			return (MDRAction)result;
 		}
 	}
 
@@ -774,10 +818,12 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	 */
 	public int countByUUID_G(String uuid, long groupId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
+
 		Object[] finderArgs = new Object[] { uuid, groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -816,18 +862,15 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -845,8 +888,8 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 			new String[] {
 				String.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
 		new FinderPath(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
@@ -854,7 +897,8 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() },
 			MDRActionModelImpl.UUID_COLUMN_BITMASK |
-			MDRActionModelImpl.COMPANYID_COLUMN_BITMASK);
+			MDRActionModelImpl.COMPANYID_COLUMN_BITMASK |
+			MDRActionModelImpl.ACTIONID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
 			MDRActionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
@@ -891,240 +935,6 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	public List<MDRAction> findByUuid_C(String uuid, long companyId, int start,
 		int end) throws SystemException {
 		return findByUuid_C(uuid, companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the m d r actions where uuid = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of m d r actions
-	 * @param end the upper bound of the range of m d r actions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching m d r actions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MDRAction> findByUuid_C(String uuid, long companyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<MDRAction> list = (List<MDRAction>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MDRAction mdrAction : list) {
-				if (!Validator.equals(uuid, mdrAction.getUuid()) ||
-						(companyId != mdrAction.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_MDRACTION_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first m d r action in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r action
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActionException, SystemException {
-		MDRAction mdrAction = fetchByUuid_C_First(uuid, companyId,
-				orderByComparator);
-
-		if (mdrAction != null) {
-			return mdrAction;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first m d r action in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r action, or <code>null</code> if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<MDRAction> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last m d r action in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r action
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActionException, SystemException {
-		MDRAction mdrAction = fetchByUuid_C_Last(uuid, companyId,
-				orderByComparator);
-
-		if (mdrAction != null) {
-			return mdrAction;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("uuid=");
-		msg.append(uuid);
-
-		msg.append(", companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last m d r action in the ordered set where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r action, or <code>null</code> if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUuid_C(uuid, companyId);
-
-		List<MDRAction> list = findByUuid_C(uuid, companyId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1252,6 +1062,9 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				}
 			}
 		}
+		else {
+			query.append(MDRActionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1287,6 +1100,294 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	}
 
 	/**
+	 * Returns an ordered range of all the m d r actions where uuid = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of m d r actions
+	 * @param end the upper bound of the range of m d r actions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching m d r actions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MDRAction> findByUuid_C(String uuid, long companyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<MDRAction> list = (List<MDRAction>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MDRAction mdrAction : list) {
+				if (!Validator.equals(uuid, mdrAction.getUuid()) ||
+						(companyId != mdrAction.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_MDRACTION_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+				}
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MDRActionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByUuid_C_First(String uuid, long companyId)
+		throws NoSuchActionException, SystemException {
+		return findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first m d r action in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActionException, SystemException {
+		MDRAction mdrAction = fetchByUuid_C_First(uuid, companyId,
+				orderByComparator);
+
+		if (mdrAction != null) {
+			return mdrAction;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the first matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByUuid_C_First(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the first m d r action in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByUuid_C_First(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<MDRAction> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByUuid_C_Last(String uuid, long companyId)
+		throws NoSuchActionException, SystemException {
+		return findByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last m d r action in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActionException, SystemException {
+		MDRAction mdrAction = fetchByUuid_C_Last(uuid, companyId,
+				orderByComparator);
+
+		if (mdrAction != null) {
+			return mdrAction;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the last matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByUuid_C_Last(String uuid, long companyId)
+		throws SystemException {
+		return fetchByUuid_C_Last(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the last m d r action in the ordered set where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByUuid_C_Last(String uuid, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUuid_C(uuid, companyId);
+
+		List<MDRAction> list = findByUuid_C(uuid, companyId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the m d r actions where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
@@ -1295,7 +1396,8 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	 */
 	public void removeByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		for (MDRAction mdrAction : findByUuid_C(uuid, companyId)) {
+		for (MDRAction mdrAction : findByUuid_C(uuid, companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(mdrAction);
 		}
 	}
@@ -1310,10 +1412,12 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	 */
 	public int countByUuid_C(String uuid, long companyId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+
 		Object[] finderArgs = new Object[] { uuid, companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1352,18 +1456,15 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1383,15 +1484,16 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPINSTANCEID =
 		new FinderPath(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
 			MDRActionModelImpl.FINDER_CACHE_ENABLED, MDRActionImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"findByRuleGroupInstanceId", new String[] { Long.class.getName() },
-			MDRActionModelImpl.RULEGROUPINSTANCEID_COLUMN_BITMASK);
+			MDRActionModelImpl.RULEGROUPINSTANCEID_COLUMN_BITMASK |
+			MDRActionModelImpl.ACTIONID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_RULEGROUPINSTANCEID = new FinderPath(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
 			MDRActionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
@@ -1426,214 +1528,6 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	public List<MDRAction> findByRuleGroupInstanceId(long ruleGroupInstanceId,
 		int start, int end) throws SystemException {
 		return findByRuleGroupInstanceId(ruleGroupInstanceId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the m d r actions where ruleGroupInstanceId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param ruleGroupInstanceId the rule group instance ID
-	 * @param start the lower bound of the range of m d r actions
-	 * @param end the upper bound of the range of m d r actions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching m d r actions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<MDRAction> findByRuleGroupInstanceId(long ruleGroupInstanceId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPINSTANCEID;
-			finderArgs = new Object[] { ruleGroupInstanceId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RULEGROUPINSTANCEID;
-			finderArgs = new Object[] {
-					ruleGroupInstanceId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<MDRAction> list = (List<MDRAction>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (MDRAction mdrAction : list) {
-				if ((ruleGroupInstanceId != mdrAction.getRuleGroupInstanceId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(2);
-			}
-
-			query.append(_SQL_SELECT_MDRACTION_WHERE);
-
-			query.append(_FINDER_COLUMN_RULEGROUPINSTANCEID_RULEGROUPINSTANCEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(ruleGroupInstanceId);
-
-				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first m d r action in the ordered set where ruleGroupInstanceId = &#63;.
-	 *
-	 * @param ruleGroupInstanceId the rule group instance ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r action
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction findByRuleGroupInstanceId_First(long ruleGroupInstanceId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActionException, SystemException {
-		MDRAction mdrAction = fetchByRuleGroupInstanceId_First(ruleGroupInstanceId,
-				orderByComparator);
-
-		if (mdrAction != null) {
-			return mdrAction;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("ruleGroupInstanceId=");
-		msg.append(ruleGroupInstanceId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first m d r action in the ordered set where ruleGroupInstanceId = &#63;.
-	 *
-	 * @param ruleGroupInstanceId the rule group instance ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching m d r action, or <code>null</code> if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction fetchByRuleGroupInstanceId_First(
-		long ruleGroupInstanceId, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<MDRAction> list = findByRuleGroupInstanceId(ruleGroupInstanceId,
-				0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last m d r action in the ordered set where ruleGroupInstanceId = &#63;.
-	 *
-	 * @param ruleGroupInstanceId the rule group instance ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r action
-	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction findByRuleGroupInstanceId_Last(long ruleGroupInstanceId,
-		OrderByComparator orderByComparator)
-		throws NoSuchActionException, SystemException {
-		MDRAction mdrAction = fetchByRuleGroupInstanceId_Last(ruleGroupInstanceId,
-				orderByComparator);
-
-		if (mdrAction != null) {
-			return mdrAction;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("ruleGroupInstanceId=");
-		msg.append(ruleGroupInstanceId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchActionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last m d r action in the ordered set where ruleGroupInstanceId = &#63;.
-	 *
-	 * @param ruleGroupInstanceId the rule group instance ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching m d r action, or <code>null</code> if a matching m d r action could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MDRAction fetchByRuleGroupInstanceId_Last(long ruleGroupInstanceId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByRuleGroupInstanceId(ruleGroupInstanceId);
-
-		List<MDRAction> list = findByRuleGroupInstanceId(ruleGroupInstanceId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1748,6 +1642,9 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				}
 			}
 		}
+		else {
+			query.append(MDRActionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1779,6 +1676,264 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	}
 
 	/**
+	 * Returns an ordered range of all the m d r actions where ruleGroupInstanceId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param ruleGroupInstanceId the rule group instance ID
+	 * @param start the lower bound of the range of m d r actions
+	 * @param end the upper bound of the range of m d r actions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching m d r actions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MDRAction> findByRuleGroupInstanceId(long ruleGroupInstanceId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RULEGROUPINSTANCEID;
+			finderArgs = new Object[] { ruleGroupInstanceId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RULEGROUPINSTANCEID;
+			finderArgs = new Object[] {
+					ruleGroupInstanceId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<MDRAction> list = (List<MDRAction>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MDRAction mdrAction : list) {
+				if ((ruleGroupInstanceId != mdrAction.getRuleGroupInstanceId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_MDRACTION_WHERE);
+
+			query.append(_FINDER_COLUMN_RULEGROUPINSTANCEID_RULEGROUPINSTANCEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(MDRActionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(ruleGroupInstanceId);
+
+				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
+						end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where ruleGroupInstanceId = &#63;.
+	 *
+	 * @param ruleGroupInstanceId the rule group instance ID
+	 * @return the first matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByRuleGroupInstanceId_First(long ruleGroupInstanceId)
+		throws NoSuchActionException, SystemException {
+		return findByRuleGroupInstanceId_First(ruleGroupInstanceId, null);
+	}
+
+	/**
+	 * Returns the first m d r action in the ordered set where ruleGroupInstanceId = &#63;.
+	 *
+	 * @param ruleGroupInstanceId the rule group instance ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByRuleGroupInstanceId_First(long ruleGroupInstanceId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActionException, SystemException {
+		MDRAction mdrAction = fetchByRuleGroupInstanceId_First(ruleGroupInstanceId,
+				orderByComparator);
+
+		if (mdrAction != null) {
+			return mdrAction;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("ruleGroupInstanceId=");
+		msg.append(ruleGroupInstanceId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where ruleGroupInstanceId = &#63;.
+	 *
+	 * @param ruleGroupInstanceId the rule group instance ID
+	 * @return the first matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByRuleGroupInstanceId_First(long ruleGroupInstanceId)
+		throws SystemException {
+		return fetchByRuleGroupInstanceId_First(ruleGroupInstanceId, null);
+	}
+
+	/**
+	 * Returns the first m d r action in the ordered set where ruleGroupInstanceId = &#63;.
+	 *
+	 * @param ruleGroupInstanceId the rule group instance ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByRuleGroupInstanceId_First(
+		long ruleGroupInstanceId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<MDRAction> list = findByRuleGroupInstanceId(ruleGroupInstanceId,
+				0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where ruleGroupInstanceId = &#63;.
+	 *
+	 * @param ruleGroupInstanceId the rule group instance ID
+	 * @return the last matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByRuleGroupInstanceId_Last(long ruleGroupInstanceId)
+		throws NoSuchActionException, SystemException {
+		return findByRuleGroupInstanceId_Last(ruleGroupInstanceId, null);
+	}
+
+	/**
+	 * Returns the last m d r action in the ordered set where ruleGroupInstanceId = &#63;.
+	 *
+	 * @param ruleGroupInstanceId the rule group instance ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r action
+	 * @throws com.liferay.portlet.mobiledevicerules.NoSuchActionException if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction findByRuleGroupInstanceId_Last(long ruleGroupInstanceId,
+		OrderByComparator orderByComparator)
+		throws NoSuchActionException, SystemException {
+		MDRAction mdrAction = fetchByRuleGroupInstanceId_Last(ruleGroupInstanceId,
+				orderByComparator);
+
+		if (mdrAction != null) {
+			return mdrAction;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("ruleGroupInstanceId=");
+		msg.append(ruleGroupInstanceId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchActionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last m d r action in the default ordered set defined by {@link MDRActionModelImpl#ORDER_BY_JPQL} where ruleGroupInstanceId = &#63;.
+	 *
+	 * @param ruleGroupInstanceId the rule group instance ID
+	 * @return the last matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByRuleGroupInstanceId_Last(long ruleGroupInstanceId)
+		throws SystemException {
+		return fetchByRuleGroupInstanceId_Last(ruleGroupInstanceId, null);
+	}
+
+	/**
+	 * Returns the last m d r action in the ordered set where ruleGroupInstanceId = &#63;.
+	 *
+	 * @param ruleGroupInstanceId the rule group instance ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching m d r action, or <code>null</code> if a matching m d r action could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MDRAction fetchByRuleGroupInstanceId_Last(long ruleGroupInstanceId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByRuleGroupInstanceId(ruleGroupInstanceId);
+
+		List<MDRAction> list = findByRuleGroupInstanceId(ruleGroupInstanceId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the m d r actions where ruleGroupInstanceId = &#63; from the database.
 	 *
 	 * @param ruleGroupInstanceId the rule group instance ID
@@ -1787,7 +1942,7 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	public void removeByRuleGroupInstanceId(long ruleGroupInstanceId)
 		throws SystemException {
 		for (MDRAction mdrAction : findByRuleGroupInstanceId(
-				ruleGroupInstanceId)) {
+				ruleGroupInstanceId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(mdrAction);
 		}
 	}
@@ -1801,10 +1956,12 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	 */
 	public int countByRuleGroupInstanceId(long ruleGroupInstanceId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_RULEGROUPINSTANCEID;
+
 		Object[] finderArgs = new Object[] { ruleGroupInstanceId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_RULEGROUPINSTANCEID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -1827,18 +1984,15 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				qPos.add(ruleGroupInstanceId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RULEGROUPINSTANCEID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2282,28 +2436,27 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 		if (mdrAction == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				mdrAction = (MDRAction)session.get(MDRActionImpl.class,
 						Long.valueOf(actionId));
+
+				if (mdrAction != null) {
+					cacheResult(mdrAction);
+				}
+				else {
+					EntityCacheUtil.putResult(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
+						MDRActionImpl.class, actionId, _nullMDRAction);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
+					MDRActionImpl.class, actionId);
 
 				throw processException(e);
 			}
 			finally {
-				if (mdrAction != null) {
-					cacheResult(mdrAction);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MDRActionModelImpl.ENTITY_CACHE_ENABLED,
-						MDRActionImpl.class, actionId, _nullMDRAction);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2354,7 +2507,7 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	public List<MDRAction> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -2385,7 +2538,7 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_MDRACTION;
+				sql = _SQL_SELECT_MDRACTION.concat(MDRActionModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -2395,30 +2548,19 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+				list = (List<MDRAction>)QueryUtil.list(q, getDialect(), start,
+						end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<MDRAction>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2456,18 +2598,17 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 				Query q = session.createQuery(_SQL_COUNT_MDRACTION);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -2503,6 +2644,7 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	public void destroy() {
 		EntityCacheUtil.removeCache(MDRActionImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

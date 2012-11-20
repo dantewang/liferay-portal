@@ -60,7 +60,6 @@ import com.liferay.portlet.softwarecatalog.model.impl.SCProductEntryModelImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -106,8 +105,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
 		new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
@@ -115,7 +114,9 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			SCProductEntryImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
 			new String[] { Long.class.getName() },
-			SCProductEntryModelImpl.GROUPID_COLUMN_BITMASK);
+			SCProductEntryModelImpl.GROUPID_COLUMN_BITMASK |
+			SCProductEntryModelImpl.MODIFIEDDATE_COLUMN_BITMASK |
+			SCProductEntryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
@@ -149,212 +150,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	public List<SCProductEntry> findByGroupId(long groupId, int start, int end)
 		throws SystemException {
 		return findByGroupId(groupId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the s c product entries where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of s c product entries
-	 * @param end the upper bound of the range of s c product entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching s c product entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SCProductEntry> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<SCProductEntry> list = (List<SCProductEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SCProductEntry scProductEntry : list) {
-				if ((groupId != scProductEntry.getGroupId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SCPRODUCTENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				list = (List<SCProductEntry>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first s c product entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c product entry
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchProductEntryException, SystemException {
-		SCProductEntry scProductEntry = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (scProductEntry != null) {
-			return scProductEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchProductEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first s c product entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SCProductEntry> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last s c product entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c product entry
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
-		throws NoSuchProductEntryException, SystemException {
-		SCProductEntry scProductEntry = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (scProductEntry != null) {
-			return scProductEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchProductEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last s c product entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
-
-		List<SCProductEntry> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -469,7 +264,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				}
 			}
 		}
-
 		else {
 			query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
 		}
@@ -587,7 +381,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
@@ -768,7 +561,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
@@ -817,13 +609,266 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	}
 
 	/**
+	 * Returns an ordered range of all the s c product entries where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of s c product entries
+	 * @param end the upper bound of the range of s c product entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching s c product entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SCProductEntry> findByGroupId(long groupId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
+			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+		}
+
+		List<SCProductEntry> list = (List<SCProductEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SCProductEntry scProductEntry : list) {
+				if ((groupId != scProductEntry.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SCPRODUCTENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				list = (List<SCProductEntry>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByGroupId_First(long groupId)
+		throws NoSuchProductEntryException, SystemException {
+		return findByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first s c product entry in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByGroupId_First(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchProductEntryException, SystemException {
+		SCProductEntry scProductEntry = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (scProductEntry != null) {
+			return scProductEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the first matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByGroupId_First(long groupId)
+		throws SystemException {
+		return fetchByGroupId_First(groupId, null);
+	}
+
+	/**
+	 * Returns the first s c product entry in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SCProductEntry> list = findByGroupId(groupId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByGroupId_Last(long groupId)
+		throws NoSuchProductEntryException, SystemException {
+		return findByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last s c product entry in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchProductEntryException, SystemException {
+		SCProductEntry scProductEntry = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (scProductEntry != null) {
+			return scProductEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the last matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByGroupId_Last(long groupId)
+		throws SystemException {
+		return fetchByGroupId_Last(groupId, null);
+	}
+
+	/**
+	 * Returns the last s c product entry in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByGroupId(groupId);
+
+		List<SCProductEntry> list = findByGroupId(groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the s c product entries where groupId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByGroupId(long groupId) throws SystemException {
-		for (SCProductEntry scProductEntry : findByGroupId(groupId)) {
+		for (SCProductEntry scProductEntry : findByGroupId(groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(scProductEntry);
 		}
 	}
@@ -836,10 +881,12 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByGroupId(long groupId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
+
 		Object[] finderArgs = new Object[] { groupId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -862,18 +909,15 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -938,8 +982,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
 		new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
@@ -947,7 +991,9 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			SCProductEntryImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
 			new String[] { Long.class.getName() },
-			SCProductEntryModelImpl.COMPANYID_COLUMN_BITMASK);
+			SCProductEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			SCProductEntryModelImpl.MODIFIEDDATE_COLUMN_BITMASK |
+			SCProductEntryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
@@ -982,212 +1028,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	public List<SCProductEntry> findByCompanyId(long companyId, int start,
 		int end) throws SystemException {
 		return findByCompanyId(companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the s c product entries where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of s c product entries
-	 * @param end the upper bound of the range of s c product entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching s c product entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SCProductEntry> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<SCProductEntry> list = (List<SCProductEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SCProductEntry scProductEntry : list) {
-				if ((companyId != scProductEntry.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_SCPRODUCTENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<SCProductEntry>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first s c product entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c product entry
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchProductEntryException, SystemException {
-		SCProductEntry scProductEntry = fetchByCompanyId_First(companyId,
-				orderByComparator);
-
-		if (scProductEntry != null) {
-			return scProductEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchProductEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first s c product entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SCProductEntry> list = findByCompanyId(companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last s c product entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c product entry
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchProductEntryException, SystemException {
-		SCProductEntry scProductEntry = fetchByCompanyId_Last(companyId,
-				orderByComparator);
-
-		if (scProductEntry != null) {
-			return scProductEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchProductEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last s c product entry in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<SCProductEntry> list = findByCompanyId(companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1302,7 +1142,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				}
 			}
 		}
-
 		else {
 			query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
 		}
@@ -1337,13 +1176,266 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	}
 
 	/**
+	 * Returns an ordered range of all the s c product entries where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of s c product entries
+	 * @param end the upper bound of the range of s c product entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching s c product entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SCProductEntry> findByCompanyId(long companyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<SCProductEntry> list = (List<SCProductEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SCProductEntry scProductEntry : list) {
+				if ((companyId != scProductEntry.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SCPRODUCTENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				list = (List<SCProductEntry>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByCompanyId_First(long companyId)
+		throws NoSuchProductEntryException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first s c product entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchProductEntryException, SystemException {
+		SCProductEntry scProductEntry = fetchByCompanyId_First(companyId,
+				orderByComparator);
+
+		if (scProductEntry != null) {
+			return scProductEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first s c product entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SCProductEntry> list = findByCompanyId(companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByCompanyId_Last(long companyId)
+		throws NoSuchProductEntryException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last s c product entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchProductEntryException, SystemException {
+		SCProductEntry scProductEntry = fetchByCompanyId_Last(companyId,
+				orderByComparator);
+
+		if (scProductEntry != null) {
+			return scProductEntry;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByCompanyId_Last(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last s c product entry in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<SCProductEntry> list = findByCompanyId(companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the s c product entries where companyId = &#63; from the database.
 	 *
 	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void removeByCompanyId(long companyId) throws SystemException {
-		for (SCProductEntry scProductEntry : findByCompanyId(companyId)) {
+		for (SCProductEntry scProductEntry : findByCompanyId(companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(scProductEntry);
 		}
 	}
@@ -1356,10 +1448,12 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByCompanyId(long companyId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
+
 		Object[] finderArgs = new Object[] { companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -1382,18 +1476,15 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -1409,8 +1500,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
@@ -1418,7 +1509,9 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			SCProductEntryModelImpl.GROUPID_COLUMN_BITMASK |
-			SCProductEntryModelImpl.USERID_COLUMN_BITMASK);
+			SCProductEntryModelImpl.USERID_COLUMN_BITMASK |
+			SCProductEntryModelImpl.MODIFIEDDATE_COLUMN_BITMASK |
+			SCProductEntryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_U",
@@ -1455,232 +1548,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	public List<SCProductEntry> findByG_U(long groupId, long userId, int start,
 		int end) throws SystemException {
 		return findByG_U(groupId, userId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the s c product entries where groupId = &#63; and userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param start the lower bound of the range of s c product entries
-	 * @param end the upper bound of the range of s c product entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching s c product entries
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<SCProductEntry> findByG_U(long groupId, long userId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U;
-			finderArgs = new Object[] { groupId, userId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U;
-			finderArgs = new Object[] {
-					groupId, userId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<SCProductEntry> list = (List<SCProductEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (SCProductEntry scProductEntry : list) {
-				if ((groupId != scProductEntry.getGroupId()) ||
-						(userId != scProductEntry.getUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_SCPRODUCTENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_G_U_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_U_USERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(userId);
-
-				list = (List<SCProductEntry>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first s c product entry in the ordered set where groupId = &#63; and userId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c product entry
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry findByG_U_First(long groupId, long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchProductEntryException, SystemException {
-		SCProductEntry scProductEntry = fetchByG_U_First(groupId, userId,
-				orderByComparator);
-
-		if (scProductEntry != null) {
-			return scProductEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchProductEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first s c product entry in the ordered set where groupId = &#63; and userId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry fetchByG_U_First(long groupId, long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<SCProductEntry> list = findByG_U(groupId, userId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last s c product entry in the ordered set where groupId = &#63; and userId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c product entry
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry findByG_U_Last(long groupId, long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchProductEntryException, SystemException {
-		SCProductEntry scProductEntry = fetchByG_U_Last(groupId, userId,
-				orderByComparator);
-
-		if (scProductEntry != null) {
-			return scProductEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchProductEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last s c product entry in the ordered set where groupId = &#63; and userId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry fetchByG_U_Last(long groupId, long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_U(groupId, userId);
-
-		List<SCProductEntry> list = findByG_U(groupId, userId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1798,7 +1665,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				}
 			}
 		}
-
 		else {
 			query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
 		}
@@ -1924,7 +1790,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
@@ -2110,7 +1975,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
@@ -2161,6 +2025,282 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	}
 
 	/**
+	 * Returns an ordered range of all the s c product entries where groupId = &#63; and userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of s c product entries
+	 * @param end the upper bound of the range of s c product entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching s c product entries
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<SCProductEntry> findByG_U(long groupId, long userId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U;
+			finderArgs = new Object[] { groupId, userId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U;
+			finderArgs = new Object[] {
+					groupId, userId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<SCProductEntry> list = (List<SCProductEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SCProductEntry scProductEntry : list) {
+				if ((groupId != scProductEntry.getGroupId()) ||
+						(userId != scProductEntry.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_SCPRODUCTENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_U_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_U_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(userId);
+
+				list = (List<SCProductEntry>)QueryUtil.list(q, getDialect(),
+						start, end);
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @return the first matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByG_U_First(long groupId, long userId)
+		throws NoSuchProductEntryException, SystemException {
+		return findByG_U_First(groupId, userId, null);
+	}
+
+	/**
+	 * Returns the first s c product entry in the ordered set where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByG_U_First(long groupId, long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchProductEntryException, SystemException {
+		SCProductEntry scProductEntry = fetchByG_U_First(groupId, userId,
+				orderByComparator);
+
+		if (scProductEntry != null) {
+			return scProductEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @return the first matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByG_U_First(long groupId, long userId)
+		throws SystemException {
+		return fetchByG_U_First(groupId, userId, null);
+	}
+
+	/**
+	 * Returns the first s c product entry in the ordered set where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByG_U_First(long groupId, long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SCProductEntry> list = findByG_U(groupId, userId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @return the last matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByG_U_Last(long groupId, long userId)
+		throws NoSuchProductEntryException, SystemException {
+		return findByG_U_Last(groupId, userId, null);
+	}
+
+	/**
+	 * Returns the last s c product entry in the ordered set where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByG_U_Last(long groupId, long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchProductEntryException, SystemException {
+		SCProductEntry scProductEntry = fetchByG_U_Last(groupId, userId,
+				orderByComparator);
+
+		if (scProductEntry != null) {
+			return scProductEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @return the last matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByG_U_Last(long groupId, long userId)
+		throws SystemException {
+		return fetchByG_U_Last(groupId, userId, null);
+	}
+
+	/**
+	 * Returns the last s c product entry in the ordered set where groupId = &#63; and userId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByG_U_Last(long groupId, long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_U(groupId, userId);
+
+		List<SCProductEntry> list = findByG_U(groupId, userId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Removes all the s c product entries where groupId = &#63; and userId = &#63; from the database.
 	 *
 	 * @param groupId the group ID
@@ -2169,7 +2309,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	public void removeByG_U(long groupId, long userId)
 		throws SystemException {
-		for (SCProductEntry scProductEntry : findByG_U(groupId, userId)) {
+		for (SCProductEntry scProductEntry : findByG_U(groupId, userId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(scProductEntry);
 		}
 	}
@@ -2183,10 +2324,12 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByG_U(long groupId, long userId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_U;
+
 		Object[] finderArgs = new Object[] { groupId, userId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_U,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -2213,18 +2356,15 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				qPos.add(userId);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_U, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -2288,99 +2428,91 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 	private static final String _FINDER_COLUMN_G_U_GROUPID_2 = "scProductEntry.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_U_USERID_2 = "scProductEntry.userId = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_RG_RA = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_RG_RA = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
-			SCProductEntryImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByRG_RA",
+			SCProductEntryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByRG_RA",
+			new String[] {
+				String.class.getName(), String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RG_RA = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+			SCProductEntryModelImpl.FINDER_CACHE_ENABLED,
+			SCProductEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByRG_RA",
 			new String[] { String.class.getName(), String.class.getName() },
 			SCProductEntryModelImpl.REPOGROUPID_COLUMN_BITMASK |
-			SCProductEntryModelImpl.REPOARTIFACTID_COLUMN_BITMASK);
+			SCProductEntryModelImpl.REPOARTIFACTID_COLUMN_BITMASK |
+			SCProductEntryModelImpl.MODIFIEDDATE_COLUMN_BITMASK |
+			SCProductEntryModelImpl.NAME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_RG_RA = new FinderPath(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRG_RA",
 			new String[] { String.class.getName(), String.class.getName() });
 
 	/**
-	 * Returns the s c product entry where repoGroupId = &#63; and repoArtifactId = &#63; or throws a {@link com.liferay.portlet.softwarecatalog.NoSuchProductEntryException} if it could not be found.
+	 * Returns an ordered range of all the s c product entries where repoGroupId = &#63; and repoArtifactId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param repoGroupId the repo group ID
 	 * @param repoArtifactId the repo artifact ID
-	 * @return the matching s c product entry
-	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @param start the lower bound of the range of s c product entries
+	 * @param end the upper bound of the range of s c product entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching s c product entries
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SCProductEntry findByRG_RA(String repoGroupId, String repoArtifactId)
-		throws NoSuchProductEntryException, SystemException {
-		SCProductEntry scProductEntry = fetchByRG_RA(repoGroupId, repoArtifactId);
+	protected List<SCProductEntry> findByRG_RA(String repoGroupId,
+		String repoArtifactId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (scProductEntry == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("repoGroupId=");
-			msg.append(repoGroupId);
-
-			msg.append(", repoArtifactId=");
-			msg.append(repoArtifactId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchProductEntryException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RG_RA;
+			finderArgs = new Object[] { repoGroupId, repoArtifactId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_RG_RA;
+			finderArgs = new Object[] {
+					repoGroupId, repoArtifactId,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		return scProductEntry;
-	}
+		List<SCProductEntry> list = (List<SCProductEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the s c product entry where repoGroupId = &#63; and repoArtifactId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param repoGroupId the repo group ID
-	 * @param repoArtifactId the repo artifact ID
-	 * @return the matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry fetchByRG_RA(String repoGroupId, String repoArtifactId)
-		throws SystemException {
-		return fetchByRG_RA(repoGroupId, repoArtifactId, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (SCProductEntry scProductEntry : list) {
+				if (!Validator.equals(repoGroupId,
+							scProductEntry.getRepoGroupId()) ||
+						!Validator.equals(repoArtifactId,
+							scProductEntry.getRepoArtifactId())) {
+					list = null;
 
-	/**
-	 * Returns the s c product entry where repoGroupId = &#63; and repoArtifactId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param repoGroupId the repo group ID
-	 * @param repoArtifactId the repo artifact ID
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SCProductEntry fetchByRG_RA(String repoGroupId,
-		String repoArtifactId, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { repoGroupId, repoArtifactId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_RG_RA,
-					finderArgs, this);
-		}
-
-		if (result instanceof SCProductEntry) {
-			SCProductEntry scProductEntry = (SCProductEntry)result;
-
-			if (!Validator.equals(repoGroupId, scProductEntry.getRepoGroupId()) ||
-					!Validator.equals(repoArtifactId,
-						scProductEntry.getRepoArtifactId())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(4);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
 
 			query.append(_SQL_SELECT_SCPRODUCTENTRY_WHERE);
 
@@ -2408,7 +2540,13 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				}
 			}
 
-			query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(SCProductEntryModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -2429,69 +2567,211 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 					qPos.add(repoArtifactId);
 				}
 
-				List<SCProductEntry> list = q.list();
+				list = (List<SCProductEntry>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-				result = list;
+				cacheResult(list);
 
-				SCProductEntry scProductEntry = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_RG_RA,
-						finderArgs, list);
-				}
-				else {
-					scProductEntry = list.get(0);
-
-					cacheResult(scProductEntry);
-
-					if ((scProductEntry.getRepoGroupId() == null) ||
-							!scProductEntry.getRepoGroupId().equals(repoGroupId) ||
-							(scProductEntry.getRepoArtifactId() == null) ||
-							!scProductEntry.getRepoArtifactId()
-											   .equals(repoArtifactId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_RG_RA,
-							finderArgs, scProductEntry);
-					}
-				}
-
-				return scProductEntry;
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_RG_RA,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (SCProductEntry)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the s c product entry where repoGroupId = &#63; and repoArtifactId = &#63; from the database.
+	 * Returns the first s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where repoGroupId = &#63; and repoArtifactId = &#63;.
 	 *
 	 * @param repoGroupId the repo group ID
 	 * @param repoArtifactId the repo artifact ID
-	 * @return the s c product entry that was removed
+	 * @return the first matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SCProductEntry removeByRG_RA(String repoGroupId,
+	public SCProductEntry findByRG_RA_First(String repoGroupId,
 		String repoArtifactId)
 		throws NoSuchProductEntryException, SystemException {
-		SCProductEntry scProductEntry = findByRG_RA(repoGroupId, repoArtifactId);
+		return findByRG_RA_First(repoGroupId, repoArtifactId, null);
+	}
 
-		return remove(scProductEntry);
+	/**
+	 * Returns the first s c product entry in the ordered set where repoGroupId = &#63; and repoArtifactId = &#63;.
+	 *
+	 * @param repoGroupId the repo group ID
+	 * @param repoArtifactId the repo artifact ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByRG_RA_First(String repoGroupId,
+		String repoArtifactId, OrderByComparator orderByComparator)
+		throws NoSuchProductEntryException, SystemException {
+		SCProductEntry scProductEntry = fetchByRG_RA_First(repoGroupId,
+				repoArtifactId, orderByComparator);
+
+		if (scProductEntry != null) {
+			return scProductEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("repoGroupId=");
+		msg.append(repoGroupId);
+
+		msg.append(", repoArtifactId=");
+		msg.append(repoArtifactId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where repoGroupId = &#63; and repoArtifactId = &#63;.
+	 *
+	 * @param repoGroupId the repo group ID
+	 * @param repoArtifactId the repo artifact ID
+	 * @return the first matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByRG_RA_First(String repoGroupId,
+		String repoArtifactId) throws SystemException {
+		return fetchByRG_RA_First(repoGroupId, repoArtifactId, null);
+	}
+
+	/**
+	 * Returns the first s c product entry in the ordered set where repoGroupId = &#63; and repoArtifactId = &#63;.
+	 *
+	 * @param repoGroupId the repo group ID
+	 * @param repoArtifactId the repo artifact ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByRG_RA_First(String repoGroupId,
+		String repoArtifactId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<SCProductEntry> list = findByRG_RA(repoGroupId, repoArtifactId, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where repoGroupId = &#63; and repoArtifactId = &#63;.
+	 *
+	 * @param repoGroupId the repo group ID
+	 * @param repoArtifactId the repo artifact ID
+	 * @return the last matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByRG_RA_Last(String repoGroupId,
+		String repoArtifactId)
+		throws NoSuchProductEntryException, SystemException {
+		return findByRG_RA_Last(repoGroupId, repoArtifactId, null);
+	}
+
+	/**
+	 * Returns the last s c product entry in the ordered set where repoGroupId = &#63; and repoArtifactId = &#63;.
+	 *
+	 * @param repoGroupId the repo group ID
+	 * @param repoArtifactId the repo artifact ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product entry
+	 * @throws com.liferay.portlet.softwarecatalog.NoSuchProductEntryException if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry findByRG_RA_Last(String repoGroupId,
+		String repoArtifactId, OrderByComparator orderByComparator)
+		throws NoSuchProductEntryException, SystemException {
+		SCProductEntry scProductEntry = fetchByRG_RA_Last(repoGroupId,
+				repoArtifactId, orderByComparator);
+
+		if (scProductEntry != null) {
+			return scProductEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("repoGroupId=");
+		msg.append(repoGroupId);
+
+		msg.append(", repoArtifactId=");
+		msg.append(repoArtifactId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProductEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last s c product entry in the default ordered set defined by {@link SCProductEntryModelImpl#ORDER_BY_JPQL} where repoGroupId = &#63; and repoArtifactId = &#63;.
+	 *
+	 * @param repoGroupId the repo group ID
+	 * @param repoArtifactId the repo artifact ID
+	 * @return the last matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByRG_RA_Last(String repoGroupId,
+		String repoArtifactId) throws SystemException {
+		return fetchByRG_RA_Last(repoGroupId, repoArtifactId, null);
+	}
+
+	/**
+	 * Returns the last s c product entry in the ordered set where repoGroupId = &#63; and repoArtifactId = &#63;.
+	 *
+	 * @param repoGroupId the repo group ID
+	 * @param repoArtifactId the repo artifact ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s c product entry, or <code>null</code> if a matching s c product entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SCProductEntry fetchByRG_RA_Last(String repoGroupId,
+		String repoArtifactId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByRG_RA(repoGroupId, repoArtifactId);
+
+		List<SCProductEntry> list = findByRG_RA(repoGroupId, repoArtifactId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the s c product entries where repoGroupId = &#63; and repoArtifactId = &#63; from the database.
+	 *
+	 * @param repoGroupId the repo group ID
+	 * @param repoArtifactId the repo artifact ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByRG_RA(String repoGroupId, String repoArtifactId)
+		throws SystemException {
+		for (SCProductEntry scProductEntry : findByRG_RA(repoGroupId,
+				repoArtifactId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(scProductEntry);
+		}
 	}
 
 	/**
@@ -2504,10 +2784,12 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	public int countByRG_RA(String repoGroupId, String repoArtifactId)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_RG_RA;
+
 		Object[] finderArgs = new Object[] { repoGroupId, repoArtifactId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_RG_RA,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -2558,18 +2840,15 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RG_RA,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -2593,13 +2872,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 		EntityCacheUtil.putResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryImpl.class, scProductEntry.getPrimaryKey(),
 			scProductEntry);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_RG_RA,
-			new Object[] {
-				scProductEntry.getRepoGroupId(),
-				
-			scProductEntry.getRepoArtifactId()
-			}, scProductEntry);
 
 		scProductEntry.resetOriginalValues();
 	}
@@ -2656,8 +2928,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(scProductEntry);
 	}
 
 	@Override
@@ -2668,18 +2938,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 		for (SCProductEntry scProductEntry : scProductEntries) {
 			EntityCacheUtil.removeResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 				SCProductEntryImpl.class, scProductEntry.getPrimaryKey());
-
-			clearUniqueFindersCache(scProductEntry);
 		}
-	}
-
-	protected void clearUniqueFindersCache(SCProductEntry scProductEntry) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_RG_RA,
-			new Object[] {
-				scProductEntry.getRepoGroupId(),
-				
-			scProductEntry.getRepoArtifactId()
-			});
 	}
 
 	/**
@@ -2898,36 +3157,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			SCProductEntryImpl.class, scProductEntry.getPrimaryKey(),
 			scProductEntry);
 
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_RG_RA,
-				new Object[] {
-					scProductEntry.getRepoGroupId(),
-					
-				scProductEntry.getRepoArtifactId()
-				}, scProductEntry);
-		}
-		else {
-			if ((scProductEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_RG_RA.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						scProductEntryModelImpl.getOriginalRepoGroupId(),
-						
-						scProductEntryModelImpl.getOriginalRepoArtifactId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RG_RA, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_RG_RA, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_RG_RA,
-					new Object[] {
-						scProductEntry.getRepoGroupId(),
-						
-					scProductEntry.getRepoArtifactId()
-					}, scProductEntry);
-			}
-		}
-
 		return scProductEntry;
 	}
 
@@ -3031,29 +3260,28 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 		if (scProductEntry == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				scProductEntry = (SCProductEntry)session.get(SCProductEntryImpl.class,
 						Long.valueOf(productEntryId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (scProductEntry != null) {
 					cacheResult(scProductEntry);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 						SCProductEntryImpl.class, productEntryId,
 						_nullSCProductEntry);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
+					SCProductEntryImpl.class, productEntryId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -3104,7 +3332,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	public List<SCProductEntry> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -3145,30 +3373,19 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<SCProductEntry>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+				list = (List<SCProductEntry>)QueryUtil.list(q, getDialect(),
+						start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<SCProductEntry>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3206,18 +3423,17 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				Query q = session.createQuery(_SQL_COUNT_SCPRODUCTENTRY);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -3261,8 +3477,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			SCProductEntryModelImpl.MAPPING_TABLE_SCLICENSES_SCPRODUCTENTRIES_NAME,
 			"getSCLicenses",
 			new String[] {
-				Long.class.getName(), "java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
 			});
 
 	static {
@@ -3286,7 +3502,15 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	public List<com.liferay.portlet.softwarecatalog.model.SCLicense> getSCLicenses(
 		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		Object[] finderArgs = new Object[] { pk, start, end, orderByComparator };
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderArgs = new Object[] { pk };
+		}
+		else {
+			finderArgs = new Object[] { pk, start, end, orderByComparator };
+		}
 
 		List<com.liferay.portlet.softwarecatalog.model.SCLicense> list = (List<com.liferay.portlet.softwarecatalog.model.SCLicense>)FinderCacheUtil.getResult(FINDER_PATH_GET_SCLICENSES,
 				finderArgs, this);
@@ -3318,22 +3542,19 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 				list = (List<com.liferay.portlet.softwarecatalog.model.SCLicense>)QueryUtil.list(q,
 						getDialect(), start, end);
+
+				scLicensePersistence.cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_GET_SCLICENSES,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_SCLICENSES,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_GET_SCLICENSES,
-						finderArgs);
-				}
-				else {
-					scLicensePersistence.cacheResult(list);
-
-					FinderCacheUtil.putResult(FINDER_PATH_GET_SCLICENSES,
-						finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3380,18 +3601,17 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				qPos.add(pk);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_GET_SCLICENSES_SIZE,
 					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_GET_SCLICENSES_SIZE,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -3425,17 +3645,15 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			try {
 				value = Boolean.valueOf(containsSCLicense.contains(pk,
 							scLicensePK));
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (value == null) {
-					value = Boolean.FALSE;
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_CONTAINS_SCLICENSE,
 					finderArgs, value);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_CONTAINS_SCLICENSE,
+					finderArgs);
+
+				throw processException(e);
 			}
 		}
 
@@ -3744,6 +3962,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	public void destroy() {
 		EntityCacheUtil.removeCache(SCProductEntryImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

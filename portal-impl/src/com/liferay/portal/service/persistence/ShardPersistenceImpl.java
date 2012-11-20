@@ -45,7 +45,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -81,88 +80,78 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ShardModelImpl.ENTITY_CACHE_ENABLED,
 			ShardModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_FETCH_BY_NAME = new FinderPath(ShardModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_NAME = new FinderPath(ShardModelImpl.ENTITY_CACHE_ENABLED,
 			ShardModelImpl.FINDER_CACHE_ENABLED, ShardImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByName",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByName",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME = new FinderPath(ShardModelImpl.ENTITY_CACHE_ENABLED,
+			ShardModelImpl.FINDER_CACHE_ENABLED, ShardImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByName",
 			new String[] { String.class.getName() },
-			ShardModelImpl.NAME_COLUMN_BITMASK);
+			ShardModelImpl.NAME_COLUMN_BITMASK |
+			ShardModelImpl.SHARDID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_NAME = new FinderPath(ShardModelImpl.ENTITY_CACHE_ENABLED,
 			ShardModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByName",
 			new String[] { String.class.getName() });
 
 	/**
-	 * Returns the shard where name = &#63; or throws a {@link com.liferay.portal.NoSuchShardException} if it could not be found.
+	 * Returns an ordered range of all the shards where name = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param name the name
-	 * @return the matching shard
-	 * @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
+	 * @param start the lower bound of the range of shards
+	 * @param end the upper bound of the range of shards (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching shards
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Shard findByName(String name)
-		throws NoSuchShardException, SystemException {
-		Shard shard = fetchByName(name);
+	protected List<Shard> findByName(String name, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (shard == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("name=");
-			msg.append(name);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchShardException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME;
+			finderArgs = new Object[] { name };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_NAME;
+			finderArgs = new Object[] { name, start, end, orderByComparator };
 		}
 
-		return shard;
-	}
+		List<Shard> list = (List<Shard>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the shard where name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param name the name
-	 * @return the matching shard, or <code>null</code> if a matching shard could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Shard fetchByName(String name) throws SystemException {
-		return fetchByName(name, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (Shard shard : list) {
+				if (!Validator.equals(name, shard.getName())) {
+					list = null;
 
-	/**
-	 * Returns the shard where name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param name the name
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching shard, or <code>null</code> if a matching shard could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Shard fetchByName(String name, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { name };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_NAME,
-					finderArgs, this);
-		}
-
-		if (result instanceof Shard) {
-			Shard shard = (Shard)result;
-
-			if (!Validator.equals(name, shard.getName())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(2);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
 
 			query.append(_SQL_SELECT_SHARD_WHERE);
 
@@ -176,6 +165,14 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 				else {
 					query.append(_FINDER_COLUMN_NAME_NAME_2);
 				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(ShardModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -193,64 +190,184 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 					qPos.add(name);
 				}
 
-				List<Shard> list = q.list();
+				list = (List<Shard>)QueryUtil.list(q, getDialect(), start, end);
 
-				result = list;
+				cacheResult(list);
 
-				Shard shard = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
-						finderArgs, list);
-				}
-				else {
-					shard = list.get(0);
-
-					cacheResult(shard);
-
-					if ((shard.getName() == null) ||
-							!shard.getName().equals(name)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
-							finderArgs, shard);
-					}
-				}
-
-				return shard;
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Shard)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the shard where name = &#63; from the database.
+	 * Returns the first shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where name = &#63;.
 	 *
 	 * @param name the name
-	 * @return the shard that was removed
+	 * @return the first matching shard
+	 * @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Shard removeByName(String name)
+	public Shard findByName_First(String name)
 		throws NoSuchShardException, SystemException {
-		Shard shard = findByName(name);
+		return findByName_First(name, null);
+	}
 
-		return remove(shard);
+	/**
+	 * Returns the first shard in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shard
+	 * @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard findByName_First(String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchShardException, SystemException {
+		Shard shard = fetchByName_First(name, orderByComparator);
+
+		if (shard != null) {
+			return shard;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchShardException(msg.toString());
+	}
+
+	/**
+	 * Returns the first shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the first matching shard, or <code>null</code> if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard fetchByName_First(String name) throws SystemException {
+		return fetchByName_First(name, null);
+	}
+
+	/**
+	 * Returns the first shard in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shard, or <code>null</code> if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard fetchByName_First(String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Shard> list = findByName(name, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the last matching shard
+	 * @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard findByName_Last(String name)
+		throws NoSuchShardException, SystemException {
+		return findByName_Last(name, null);
+	}
+
+	/**
+	 * Returns the last shard in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shard
+	 * @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard findByName_Last(String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchShardException, SystemException {
+		Shard shard = fetchByName_Last(name, orderByComparator);
+
+		if (shard != null) {
+			return shard;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchShardException(msg.toString());
+	}
+
+	/**
+	 * Returns the last shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the last matching shard, or <code>null</code> if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard fetchByName_Last(String name) throws SystemException {
+		return fetchByName_Last(name, null);
+	}
+
+	/**
+	 * Returns the last shard in the ordered set where name = &#63;.
+	 *
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shard, or <code>null</code> if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard fetchByName_Last(String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByName(name);
+
+		List<Shard> list = findByName(name, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the shards where name = &#63; from the database.
+	 *
+	 * @param name the name
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByName(String name) throws SystemException {
+		for (Shard shard : findByName(name, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(shard);
+		}
 	}
 
 	/**
@@ -261,10 +378,12 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByName(String name) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_NAME;
+
 		Object[] finderArgs = new Object[] { name };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_NAME,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -299,18 +418,15 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -321,103 +437,99 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	private static final String _FINDER_COLUMN_NAME_NAME_1 = "shard.name IS NULL";
 	private static final String _FINDER_COLUMN_NAME_NAME_2 = "shard.name = ?";
 	private static final String _FINDER_COLUMN_NAME_NAME_3 = "(shard.name IS NULL OR shard.name = ?)";
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_C = new FinderPath(ShardModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(ShardModelImpl.ENTITY_CACHE_ENABLED,
 			ShardModelImpl.FINDER_CACHE_ENABLED, ShardImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(ShardModelImpl.ENTITY_CACHE_ENABLED,
+			ShardModelImpl.FINDER_CACHE_ENABLED, ShardImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
 			new String[] { Long.class.getName(), Long.class.getName() },
 			ShardModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			ShardModelImpl.CLASSPK_COLUMN_BITMASK);
+			ShardModelImpl.CLASSPK_COLUMN_BITMASK |
+			ShardModelImpl.SHARDID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(ShardModelImpl.ENTITY_CACHE_ENABLED,
 			ShardModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
 			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
-	 * Returns the shard where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portal.NoSuchShardException} if it could not be found.
+	 * Returns an ordered range of all the shards where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param classNameId the class name ID
 	 * @param classPK the class p k
-	 * @return the matching shard
-	 * @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
+	 * @param start the lower bound of the range of shards
+	 * @param end the upper bound of the range of shards (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching shards
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Shard findByC_C(long classNameId, long classPK)
-		throws NoSuchShardException, SystemException {
-		Shard shard = fetchByC_C(classNameId, classPK);
+	protected List<Shard> findByC_C(long classNameId, long classPK, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (shard == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("classNameId=");
-			msg.append(classNameId);
-
-			msg.append(", classPK=");
-			msg.append(classPK);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchShardException(msg.toString());
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] { classNameId, classPK };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
+			finderArgs = new Object[] {
+					classNameId, classPK,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		return shard;
-	}
+		List<Shard> list = (List<Shard>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-	/**
-	 * Returns the shard where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @return the matching shard, or <code>null</code> if a matching shard could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Shard fetchByC_C(long classNameId, long classPK)
-		throws SystemException {
-		return fetchByC_C(classNameId, classPK, true);
-	}
+		if ((list != null) && !list.isEmpty()) {
+			for (Shard shard : list) {
+				if ((classNameId != shard.getClassNameId()) ||
+						(classPK != shard.getClassPK())) {
+					list = null;
 
-	/**
-	 * Returns the shard where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching shard, or <code>null</code> if a matching shard could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Shard fetchByC_C(long classNameId, long classPK,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { classNameId, classPK };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_C,
-					finderArgs, this);
-		}
-
-		if (result instanceof Shard) {
-			Shard shard = (Shard)result;
-
-			if ((classNameId != shard.getClassNameId()) ||
-					(classPK != shard.getClassPK())) {
-				result = null;
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
 
 			query.append(_SQL_SELECT_SHARD_WHERE);
 
 			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
 
 			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else {
+				query.append(ShardModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -434,65 +546,204 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 
 				qPos.add(classPK);
 
-				List<Shard> list = q.list();
+				list = (List<Shard>)QueryUtil.list(q, getDialect(), start, end);
 
-				result = list;
+				cacheResult(list);
 
-				Shard shard = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-						finderArgs, list);
-				}
-				else {
-					shard = list.get(0);
-
-					cacheResult(shard);
-
-					if ((shard.getClassNameId() != classNameId) ||
-							(shard.getClassPK() != classPK)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-							finderArgs, shard);
-					}
-				}
-
-				return shard;
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (Shard)result;
-			}
-		}
+
+		return list;
 	}
 
 	/**
-	 * Removes the shard where classNameId = &#63; and classPK = &#63; from the database.
+	 * Returns the first shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
 	 *
 	 * @param classNameId the class name ID
 	 * @param classPK the class p k
-	 * @return the shard that was removed
+	 * @return the first matching shard
+	 * @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public Shard removeByC_C(long classNameId, long classPK)
+	public Shard findByC_C_First(long classNameId, long classPK)
 		throws NoSuchShardException, SystemException {
-		Shard shard = findByC_C(classNameId, classPK);
+		return findByC_C_First(classNameId, classPK, null);
+	}
 
-		return remove(shard);
+	/**
+	 * Returns the first shard in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shard
+	 * @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard findByC_C_First(long classNameId, long classPK,
+		OrderByComparator orderByComparator)
+		throws NoSuchShardException, SystemException {
+		Shard shard = fetchByC_C_First(classNameId, classPK, orderByComparator);
+
+		if (shard != null) {
+			return shard;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchShardException(msg.toString());
+	}
+
+	/**
+	 * Returns the first shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the first matching shard, or <code>null</code> if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard fetchByC_C_First(long classNameId, long classPK)
+		throws SystemException {
+		return fetchByC_C_First(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the first shard in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching shard, or <code>null</code> if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard fetchByC_C_First(long classNameId, long classPK,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Shard> list = findByC_C(classNameId, classPK, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching shard
+	 * @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard findByC_C_Last(long classNameId, long classPK)
+		throws NoSuchShardException, SystemException {
+		return findByC_C_Last(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last shard in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shard
+	 * @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard findByC_C_Last(long classNameId, long classPK,
+		OrderByComparator orderByComparator)
+		throws NoSuchShardException, SystemException {
+		Shard shard = fetchByC_C_Last(classNameId, classPK, orderByComparator);
+
+		if (shard != null) {
+			return shard;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchShardException(msg.toString());
+	}
+
+	/**
+	 * Returns the last shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the last matching shard, or <code>null</code> if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard fetchByC_C_Last(long classNameId, long classPK)
+		throws SystemException {
+		return fetchByC_C_Last(classNameId, classPK, null);
+	}
+
+	/**
+	 * Returns the last shard in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching shard, or <code>null</code> if a matching shard could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Shard fetchByC_C_Last(long classNameId, long classPK,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByC_C(classNameId, classPK);
+
+		List<Shard> list = findByC_C(classNameId, classPK, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the shards where classNameId = &#63; and classPK = &#63; from the database.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_C(long classNameId, long classPK)
+		throws SystemException {
+		for (Shard shard : findByC_C(classNameId, classPK, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(shard);
+		}
 	}
 
 	/**
@@ -505,10 +756,12 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	 */
 	public int countByC_C(long classNameId, long classPK)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C;
+
 		Object[] finderArgs = new Object[] { classNameId, classPK };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -535,18 +788,15 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 				qPos.add(classPK);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
-					count);
-
 				closeSession(session);
 			}
 		}
@@ -565,15 +815,6 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	public void cacheResult(Shard shard) {
 		EntityCacheUtil.putResult(ShardModelImpl.ENTITY_CACHE_ENABLED,
 			ShardImpl.class, shard.getPrimaryKey(), shard);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
-			new Object[] { shard.getName() }, shard);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-			new Object[] {
-				Long.valueOf(shard.getClassNameId()),
-				Long.valueOf(shard.getClassPK())
-			}, shard);
 
 		shard.resetOriginalValues();
 	}
@@ -629,8 +870,6 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(shard);
 	}
 
 	@Override
@@ -641,20 +880,7 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 		for (Shard shard : shards) {
 			EntityCacheUtil.removeResult(ShardModelImpl.ENTITY_CACHE_ENABLED,
 				ShardImpl.class, shard.getPrimaryKey());
-
-			clearUniqueFindersCache(shard);
 		}
-	}
-
-	protected void clearUniqueFindersCache(Shard shard) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
-			new Object[] { shard.getName() });
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C,
-			new Object[] {
-				Long.valueOf(shard.getClassNameId()),
-				Long.valueOf(shard.getClassPK())
-			});
 	}
 
 	/**
@@ -764,8 +990,6 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 
 		boolean isNew = shard.isNew();
 
-		ShardModelImpl shardModelImpl = (ShardModelImpl)shard;
-
 		Session session = null;
 
 		try {
@@ -795,48 +1019,6 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 
 		EntityCacheUtil.putResult(ShardModelImpl.ENTITY_CACHE_ENABLED,
 			ShardImpl.class, shard.getPrimaryKey(), shard);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
-				new Object[] { shard.getName() }, shard);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-				new Object[] {
-					Long.valueOf(shard.getClassNameId()),
-					Long.valueOf(shard.getClassPK())
-				}, shard);
-		}
-		else {
-			if ((shardModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_NAME.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] { shardModelImpl.getOriginalName() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
-					new Object[] { shard.getName() }, shard);
-			}
-
-			if ((shardModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_C_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(shardModelImpl.getOriginalClassNameId()),
-						Long.valueOf(shardModelImpl.getOriginalClassPK())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-					new Object[] {
-						Long.valueOf(shard.getClassNameId()),
-						Long.valueOf(shard.getClassPK())
-					}, shard);
-			}
-		}
 
 		return shard;
 	}
@@ -928,28 +1110,27 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 		if (shard == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				shard = (Shard)session.get(ShardImpl.class,
 						Long.valueOf(shardId));
+
+				if (shard != null) {
+					cacheResult(shard);
+				}
+				else {
+					EntityCacheUtil.putResult(ShardModelImpl.ENTITY_CACHE_ENABLED,
+						ShardImpl.class, shardId, _nullShard);
+				}
 			}
 			catch (Exception e) {
-				hasException = true;
+				EntityCacheUtil.removeResult(ShardModelImpl.ENTITY_CACHE_ENABLED,
+					ShardImpl.class, shardId);
 
 				throw processException(e);
 			}
 			finally {
-				if (shard != null) {
-					cacheResult(shard);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ShardModelImpl.ENTITY_CACHE_ENABLED,
-						ShardImpl.class, shardId, _nullShard);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -999,7 +1180,7 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	public List<Shard> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
@@ -1030,7 +1211,7 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SHARD;
+				sql = _SQL_SELECT_SHARD.concat(ShardModelImpl.ORDER_BY_JPQL);
 			}
 
 			Session session = null;
@@ -1040,30 +1221,18 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
-					list = (List<Shard>)QueryUtil.list(q, getDialect(), start,
-							end, false);
+				list = (List<Shard>)QueryUtil.list(q, getDialect(), start, end);
 
-					Collections.sort(list);
-				}
-				else {
-					list = (List<Shard>)QueryUtil.list(q, getDialect(), start,
-							end);
-				}
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1101,18 +1270,17 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 				Query q = session.createQuery(_SQL_COUNT_SHARD);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1148,6 +1316,7 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	public void destroy() {
 		EntityCacheUtil.removeCache(ShardImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 

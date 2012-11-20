@@ -142,96 +142,6 @@ public class UserGroupUtil {
 	}
 
 	/**
-	* Returns an ordered range of all the user groups where companyId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param companyId the company ID
-	* @param start the lower bound of the range of user groups
-	* @param end the upper bound of the range of user groups (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching user groups
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portal.model.UserGroup> findByCompanyId(
-		long companyId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByCompanyId(companyId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first user group in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching user group
-	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.UserGroup findByCompanyId_First(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserGroupException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByCompanyId_First(companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the first user group in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching user group, or <code>null</code> if a matching user group could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.UserGroup fetchByCompanyId_First(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByCompanyId_First(companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the last user group in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching user group
-	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.UserGroup findByCompanyId_Last(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserGroupException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByCompanyId_Last(companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the last user group in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching user group, or <code>null</code> if a matching user group could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.UserGroup fetchByCompanyId_Last(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByCompanyId_Last(companyId, orderByComparator);
-	}
-
-	/**
 	* Returns the user groups before and after the current user group in the ordered set where companyId = &#63;.
 	*
 	* @param userGroupId the primary key of the current user group
@@ -327,6 +237,152 @@ public class UserGroupUtil {
 	}
 
 	/**
+	* Returns an ordered range of all the user groups where companyId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param start the lower bound of the range of user groups
+	* @param end the upper bound of the range of user groups (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching user groups
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portal.model.UserGroup> findByCompanyId(
+		long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByCompanyId(companyId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first user group in the default ordered set defined by {@link UserGroupModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching user group
+	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup findByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.NoSuchUserGroupException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByCompanyId_First(companyId);
+	}
+
+	/**
+	* Returns the first user group in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user group
+	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup findByCompanyId_First(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserGroupException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByCompanyId_First(companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the first user group in the default ordered set defined by {@link UserGroupModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching user group, or <code>null</code> if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup fetchByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_First(companyId);
+	}
+
+	/**
+	* Returns the first user group in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user group, or <code>null</code> if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup fetchByCompanyId_First(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByCompanyId_First(companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last user group in the default ordered set defined by {@link UserGroupModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching user group
+	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup findByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.NoSuchUserGroupException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByCompanyId_Last(companyId);
+	}
+
+	/**
+	* Returns the last user group in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user group
+	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup findByCompanyId_Last(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserGroupException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByCompanyId_Last(companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last user group in the default ordered set defined by {@link UserGroupModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching user group, or <code>null</code> if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup fetchByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCompanyId_Last(companyId);
+	}
+
+	/**
+	* Returns the last user group in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user group, or <code>null</code> if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup fetchByCompanyId_Last(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByCompanyId_Last(companyId, orderByComparator);
+	}
+
+	/**
 	* Removes all the user groups where companyId = &#63; from the database.
 	*
 	* @param companyId the company ID
@@ -394,106 +450,6 @@ public class UserGroupUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
 				   .findByC_P(companyId, parentUserGroupId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the user groups where companyId = &#63; and parentUserGroupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param companyId the company ID
-	* @param parentUserGroupId the parent user group ID
-	* @param start the lower bound of the range of user groups
-	* @param end the upper bound of the range of user groups (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching user groups
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portal.model.UserGroup> findByC_P(
-		long companyId, long parentUserGroupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByC_P(companyId, parentUserGroupId, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first user group in the ordered set where companyId = &#63; and parentUserGroupId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param parentUserGroupId the parent user group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching user group
-	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.UserGroup findByC_P_First(
-		long companyId, long parentUserGroupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserGroupException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByC_P_First(companyId, parentUserGroupId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first user group in the ordered set where companyId = &#63; and parentUserGroupId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param parentUserGroupId the parent user group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching user group, or <code>null</code> if a matching user group could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.UserGroup fetchByC_P_First(
-		long companyId, long parentUserGroupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByC_P_First(companyId, parentUserGroupId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last user group in the ordered set where companyId = &#63; and parentUserGroupId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param parentUserGroupId the parent user group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching user group
-	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.UserGroup findByC_P_Last(
-		long companyId, long parentUserGroupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.NoSuchUserGroupException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByC_P_Last(companyId, parentUserGroupId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last user group in the ordered set where companyId = &#63; and parentUserGroupId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param parentUserGroupId the parent user group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching user group, or <code>null</code> if a matching user group could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.model.UserGroup fetchByC_P_Last(
-		long companyId, long parentUserGroupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByC_P_Last(companyId, parentUserGroupId,
-			orderByComparator);
 	}
 
 	/**
@@ -595,6 +551,166 @@ public class UserGroupUtil {
 		return getPersistence()
 				   .filterFindByC_P_PrevAndNext(userGroupId, companyId,
 			parentUserGroupId, orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the user groups where companyId = &#63; and parentUserGroupId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @param start the lower bound of the range of user groups
+	* @param end the upper bound of the range of user groups (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching user groups
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portal.model.UserGroup> findByC_P(
+		long companyId, long parentUserGroupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_P(companyId, parentUserGroupId, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first user group in the default ordered set defined by {@link UserGroupModelImpl#ORDER_BY_JPQL} where companyId = &#63; and parentUserGroupId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @return the first matching user group
+	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup findByC_P_First(
+		long companyId, long parentUserGroupId)
+		throws com.liferay.portal.NoSuchUserGroupException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByC_P_First(companyId, parentUserGroupId);
+	}
+
+	/**
+	* Returns the first user group in the ordered set where companyId = &#63; and parentUserGroupId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user group
+	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup findByC_P_First(
+		long companyId, long parentUserGroupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserGroupException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_P_First(companyId, parentUserGroupId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first user group in the default ordered set defined by {@link UserGroupModelImpl#ORDER_BY_JPQL} where companyId = &#63; and parentUserGroupId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @return the first matching user group, or <code>null</code> if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup fetchByC_P_First(
+		long companyId, long parentUserGroupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_P_First(companyId, parentUserGroupId);
+	}
+
+	/**
+	* Returns the first user group in the ordered set where companyId = &#63; and parentUserGroupId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching user group, or <code>null</code> if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup fetchByC_P_First(
+		long companyId, long parentUserGroupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_P_First(companyId, parentUserGroupId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last user group in the default ordered set defined by {@link UserGroupModelImpl#ORDER_BY_JPQL} where companyId = &#63; and parentUserGroupId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @return the last matching user group
+	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup findByC_P_Last(
+		long companyId, long parentUserGroupId)
+		throws com.liferay.portal.NoSuchUserGroupException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByC_P_Last(companyId, parentUserGroupId);
+	}
+
+	/**
+	* Returns the last user group in the ordered set where companyId = &#63; and parentUserGroupId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user group
+	* @throws com.liferay.portal.NoSuchUserGroupException if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup findByC_P_Last(
+		long companyId, long parentUserGroupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchUserGroupException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_P_Last(companyId, parentUserGroupId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last user group in the default ordered set defined by {@link UserGroupModelImpl#ORDER_BY_JPQL} where companyId = &#63; and parentUserGroupId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @return the last matching user group, or <code>null</code> if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup fetchByC_P_Last(
+		long companyId, long parentUserGroupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_P_Last(companyId, parentUserGroupId);
+	}
+
+	/**
+	* Returns the last user group in the ordered set where companyId = &#63; and parentUserGroupId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param parentUserGroupId the parent user group ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching user group, or <code>null</code> if a matching user group could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.UserGroup fetchByC_P_Last(
+		long companyId, long parentUserGroupId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_P_Last(companyId, parentUserGroupId,
+			orderByComparator);
 	}
 
 	/**

@@ -108,59 +108,134 @@ public class ShardUtil {
 	}
 
 	/**
-	* Returns the shard where name = &#63; or throws a {@link com.liferay.portal.NoSuchShardException} if it could not be found.
+	* Returns the first shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where name = &#63;.
 	*
 	* @param name the name
-	* @return the matching shard
+	* @return the first matching shard
 	* @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.Shard findByName(
+	public static com.liferay.portal.model.Shard findByName_First(
 		java.lang.String name)
 		throws com.liferay.portal.NoSuchShardException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByName(name);
+		return getPersistence().findByName_First(name);
 	}
 
 	/**
-	* Returns the shard where name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first shard in the ordered set where name = &#63;.
 	*
 	* @param name the name
-	* @return the matching shard, or <code>null</code> if a matching shard could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shard
+	* @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.Shard fetchByName(
+	public static com.liferay.portal.model.Shard findByName_First(
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchShardException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByName_First(name, orderByComparator);
+	}
+
+	/**
+	* Returns the first shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	*
+	* @param name the name
+	* @return the first matching shard, or <code>null</code> if a matching shard could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Shard fetchByName_First(
 		java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByName(name);
+		return getPersistence().fetchByName_First(name);
 	}
 
 	/**
-	* Returns the shard where name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first shard in the ordered set where name = &#63;.
 	*
 	* @param name the name
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching shard, or <code>null</code> if a matching shard could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shard, or <code>null</code> if a matching shard could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.Shard fetchByName(
-		java.lang.String name, boolean retrieveFromCache)
+	public static com.liferay.portal.model.Shard fetchByName_First(
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByName(name, retrieveFromCache);
+		return getPersistence().fetchByName_First(name, orderByComparator);
 	}
 
 	/**
-	* Removes the shard where name = &#63; from the database.
+	* Returns the last shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where name = &#63;.
 	*
 	* @param name the name
-	* @return the shard that was removed
+	* @return the last matching shard
+	* @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.Shard removeByName(
+	public static com.liferay.portal.model.Shard findByName_Last(
 		java.lang.String name)
 		throws com.liferay.portal.NoSuchShardException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByName(name);
+		return getPersistence().findByName_Last(name);
+	}
+
+	/**
+	* Returns the last shard in the ordered set where name = &#63;.
+	*
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shard
+	* @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Shard findByName_Last(
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchShardException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByName_Last(name, orderByComparator);
+	}
+
+	/**
+	* Returns the last shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where name = &#63;.
+	*
+	* @param name the name
+	* @return the last matching shard, or <code>null</code> if a matching shard could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Shard fetchByName_Last(
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByName_Last(name);
+	}
+
+	/**
+	* Returns the last shard in the ordered set where name = &#63;.
+	*
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shard, or <code>null</code> if a matching shard could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Shard fetchByName_Last(
+		java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByName_Last(name, orderByComparator);
+	}
+
+	/**
+	* Removes all the shards where name = &#63; from the database.
+	*
+	* @param name the name
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByName(java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByName(name);
 	}
 
 	/**
@@ -176,64 +251,147 @@ public class ShardUtil {
 	}
 
 	/**
-	* Returns the shard where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portal.NoSuchShardException} if it could not be found.
+	* Returns the first shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
 	* @param classPK the class p k
-	* @return the matching shard
+	* @return the first matching shard
 	* @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.Shard findByC_C(long classNameId,
-		long classPK)
+	public static com.liferay.portal.model.Shard findByC_C_First(
+		long classNameId, long classPK)
 		throws com.liferay.portal.NoSuchShardException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByC_C(classNameId, classPK);
+		return getPersistence().findByC_C_First(classNameId, classPK);
 	}
 
 	/**
-	* Returns the shard where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	* Returns the first shard in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
 	* @param classPK the class p k
-	* @return the matching shard, or <code>null</code> if a matching shard could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shard
+	* @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.Shard fetchByC_C(long classNameId,
-		long classPK)
+	public static com.liferay.portal.model.Shard findByC_C_First(
+		long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchShardException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_C_First(classNameId, classPK, orderByComparator);
+	}
+
+	/**
+	* Returns the first shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the first matching shard, or <code>null</code> if a matching shard could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Shard fetchByC_C_First(
+		long classNameId, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByC_C(classNameId, classPK);
+		return getPersistence().fetchByC_C_First(classNameId, classPK);
 	}
 
 	/**
-	* Returns the shard where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	* Returns the first shard in the ordered set where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
 	* @param classPK the class p k
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching shard, or <code>null</code> if a matching shard could not be found
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching shard, or <code>null</code> if a matching shard could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.Shard fetchByC_C(long classNameId,
-		long classPK, boolean retrieveFromCache)
+	public static com.liferay.portal.model.Shard fetchByC_C_First(
+		long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .fetchByC_C(classNameId, classPK, retrieveFromCache);
+				   .fetchByC_C_First(classNameId, classPK, orderByComparator);
 	}
 
 	/**
-	* Removes the shard where classNameId = &#63; and classPK = &#63; from the database.
+	* Returns the last shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
 	* @param classPK the class p k
-	* @return the shard that was removed
+	* @return the last matching shard
+	* @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.portal.model.Shard removeByC_C(long classNameId,
-		long classPK)
+	public static com.liferay.portal.model.Shard findByC_C_Last(
+		long classNameId, long classPK)
 		throws com.liferay.portal.NoSuchShardException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByC_C(classNameId, classPK);
+		return getPersistence().findByC_C_Last(classNameId, classPK);
+	}
+
+	/**
+	* Returns the last shard in the ordered set where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shard
+	* @throws com.liferay.portal.NoSuchShardException if a matching shard could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Shard findByC_C_Last(
+		long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.NoSuchShardException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByC_C_Last(classNameId, classPK, orderByComparator);
+	}
+
+	/**
+	* Returns the last shard in the default ordered set defined by {@link ShardModelImpl#ORDER_BY_JPQL} where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the last matching shard, or <code>null</code> if a matching shard could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Shard fetchByC_C_Last(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_C_Last(classNameId, classPK);
+	}
+
+	/**
+	* Returns the last shard in the ordered set where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching shard, or <code>null</code> if a matching shard could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Shard fetchByC_C_Last(
+		long classNameId, long classPK,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByC_C_Last(classNameId, classPK, orderByComparator);
+	}
+
+	/**
+	* Removes all the shards where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_C(classNameId, classPK);
 	}
 
 	/**
