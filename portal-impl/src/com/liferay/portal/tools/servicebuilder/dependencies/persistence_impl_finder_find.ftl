@@ -1140,11 +1140,13 @@
 	</#list>
 
 	int start, int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		<#if !finder.hasCustomComparator()>
 			if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
+				pagination = false;
 				finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_${finder.name?upper_case};
 				finderArgs = new Object[] {
 					<#list finderColsList as finderCol>
@@ -1197,7 +1199,9 @@
 		}
 
 		if (list == null) {
+			<#assign checkPagination = true>
 			<#include "persistence_impl_find_by_query.ftl">
+			<#assign checkPagination = false>
 
 			String sql = query.toString();
 
@@ -1212,7 +1216,16 @@
 
 				<#include "persistence_impl_finder_qpos.ftl">
 
-				list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1695,9 +1708,11 @@
 				</#if>
 			}
 
+			boolean pagination = true;
 			Object[] finderArgs = null;
 
 			if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
+				pagination = false;
 				finderArgs = new Object[] {
 					<#list finderColsList as finderCol>
 						<#if finderCol.hasArrayableOperator()>
@@ -1755,7 +1770,9 @@
 			}
 
 			if (list == null) {
+				<#assign checkPagination = true>
 				<#include "persistence_impl_find_by_arrayable_query.ftl">
+				<#assign checkPagination = false>
 
 				String sql = query.toString();
 
@@ -1770,7 +1787,16 @@
 
 					<#include "persistence_impl_finder_arrayable_qpos.ftl">
 
-					list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
+					if (!pagination) {
+						list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end, false);
+
+						Collections.sort(list);
+
+						list = new UnmodifiableList(list);
+					}
+					else {
+						list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
+					}
 
 					cacheResult(list);
 

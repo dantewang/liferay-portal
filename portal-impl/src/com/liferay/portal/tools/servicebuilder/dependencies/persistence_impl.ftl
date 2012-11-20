@@ -51,6 +51,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
@@ -892,10 +893,12 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * @throws SystemException if a system exception occurred
 	 */
 	public List<${entity.name}> findAll(int start, int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -920,7 +923,11 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_${entity.alias?upper_case}.concat(${entity.name}ModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_${entity.alias?upper_case};
+
+				if (pagination) {
+					sql = sql.concat(${entity.name}ModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -930,7 +937,16 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 				Query q = session.createQuery(sql);
 
-				list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<${entity.name}>)QueryUtil.list(q, getDialect(), start, end);
+				}
 
 				cacheResult(list);
 
@@ -1069,9 +1085,11 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			 * @throws SystemException if a system exception occurred
 			 */
 			public List<${tempEntity.packagePath}.model.${tempEntity.name}> get${tempEntity.names}(${entity.PKClassName} pk, int start, int end, OrderByComparator orderByComparator) throws SystemException {
+				boolean pagination = true;
 				Object[] finderArgs = null;
 
 				if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
+					pagination = false;
 					finderArgs = new Object[] {pk};
 				}
 				else {
@@ -1094,7 +1112,11 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 							sql = _SQL_GET${tempEntity.names?upper_case}.concat(ORDER_BY_CLAUSE).concat(orderByComparator.getOrderBy());
 						}
 						else {
-							sql = _SQL_GET${tempEntity.names?upper_case}.concat(${tempEntity.packagePath}.model.impl.${tempEntity.name}ModelImpl.ORDER_BY_SQL);
+							sql = _SQL_GET${tempEntity.names?upper_case};
+
+							if (pagination) {
+								sql = sql.concat(${tempEntity.packagePath}.model.impl.${tempEntity.name}ModelImpl.ORDER_BY_SQL);
+							}
 						}
 
 						SQLQuery q = session.createSQLQuery(sql);
@@ -1105,7 +1127,16 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 						qPos.add(pk);
 
-						list = (List<${tempEntity.packagePath}.model.${tempEntity.name}>)QueryUtil.list(q, getDialect(), start, end);
+						if (!pagination) {
+							list = (List<${tempEntity.packagePath}.model.${tempEntity.name}>)QueryUtil.list(q, getDialect(), start, end, false);
+
+							Collections.sort(list);
+
+							list = new UnmodifiableList(list);
+						}
+						else {
+							list = (List<${tempEntity.packagePath}.model.${tempEntity.name}>)QueryUtil.list(q, getDialect(), start, end);
+						}
 
 						${tempEntity.varName}Persistence.cacheResult(list);
 
