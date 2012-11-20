@@ -36,80 +36,89 @@
 	}
 
 	searchContainer.setEmptyResultsMessage(emptyResultsMessage);
-	%>
 
-	<liferay-ui:search-container-results>
+	String messageInfo = "";
 
-		<%
-		if (useAssetEntryQuery) {
-			AssetEntryQuery assetEntryQuery = new AssetEntryQuery(MBMessage.class.getName(), searchContainer);
+    do { %>
+		<liferay-ui:search-container-results>
 
-			assetEntryQuery.setExcludeZeroViewCount(false);
+			<%
+			if (useAssetEntryQuery) {
+				AssetEntryQuery assetEntryQuery = new AssetEntryQuery(MBMessage.class.getName(), searchContainer);
 
-			results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
-			total = AssetEntryServiceUtil.getEntriesCount(assetEntryQuery);
-		}
-		else if (topLink.equals("my-posts")) {
-			results = MBThreadServiceUtil.getGroupThreads(scopeGroupId, groupThreadsUserId, WorkflowConstants.STATUS_ANY, searchContainer.getStart(), searchContainer.getEnd());
-			total = MBThreadServiceUtil.getGroupThreadsCount(scopeGroupId, groupThreadsUserId, WorkflowConstants.STATUS_ANY);
-		}
-		else if (topLink.equals("my-subscriptions")) {
-			results = MBThreadServiceUtil.getGroupThreads(scopeGroupId, groupThreadsUserId, WorkflowConstants.STATUS_APPROVED, true, searchContainer.getStart(), searchContainer.getEnd());
-			total = MBThreadServiceUtil.getGroupThreadsCount(scopeGroupId, groupThreadsUserId, WorkflowConstants.STATUS_APPROVED, true);
-		}
-		else if (topLink.equals("recent-posts")) {
-			Calendar calendar = Calendar.getInstance();
+				assetEntryQuery.setExcludeZeroViewCount(false);
 
-			int offset = GetterUtil.getInteger(recentPostsDateOffset);
+				results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
+				total = AssetEntryServiceUtil.getEntriesCount(assetEntryQuery);
+			}
+			else if (topLink.equals("my-posts")) {
+				results = MBThreadServiceUtil.getGroupThreads(scopeGroupId, groupThreadsUserId, WorkflowConstants.STATUS_ANY, searchContainer.getStart(), searchContainer.getEnd());
+				total = MBThreadServiceUtil.getGroupThreadsCount(scopeGroupId, groupThreadsUserId, WorkflowConstants.STATUS_ANY);
+			}
+			else if (topLink.equals("my-subscriptions")) {
+				results = MBThreadServiceUtil.getGroupThreads(scopeGroupId, groupThreadsUserId, WorkflowConstants.STATUS_APPROVED, true, searchContainer.getStart(), searchContainer.getEnd());
+				total = MBThreadServiceUtil.getGroupThreadsCount(scopeGroupId, groupThreadsUserId, WorkflowConstants.STATUS_APPROVED, true);
+			}
+			else if (topLink.equals("recent-posts")) {
+				int pageNumber = _RANDOM.nextInt(_PAGE_NUMBER);
+				int start = pageNumber * _THREAD_NUMBER_PER_PAGE;
+				int end = start + _THREAD_NUMBER_PER_PAGE;
+				Calendar calendar = Calendar.getInstance();
 
-			calendar.add(Calendar.DATE, -offset);
+				int offset = GetterUtil.getInteger(recentPostsDateOffset);
 
-			results = MBThreadServiceUtil.getGroupThreads(scopeGroupId, groupThreadsUserId, calendar.getTime(), WorkflowConstants.STATUS_APPROVED, searchContainer.getStart(), searchContainer.getEnd());
-			total = MBThreadServiceUtil.getGroupThreadsCount(scopeGroupId, groupThreadsUserId, calendar.getTime(), WorkflowConstants.STATUS_APPROVED);
-		}
+				calendar.add(Calendar.DATE, -offset);
 
-		pageContext.setAttribute("results", results);
-		pageContext.setAttribute("total", total);
-		%>
+				results = MBThreadServiceUtil.getGroupThreads(scopeGroupId, groupThreadsUserId, calendar.getTime(), WorkflowConstants.STATUS_APPROVED, start, end);
+				total = MBThreadServiceUtil.getGroupThreadsCount(scopeGroupId, groupThreadsUserId, calendar.getTime(), WorkflowConstants.STATUS_APPROVED);
+			}
 
-	</liferay-ui:search-container-results>
+			pageContext.setAttribute("results", results);
+			pageContext.setAttribute("total", total);
+			%>
 
-	<liferay-ui:search-container-row
-		className="com.liferay.portal.model.BaseModel"
-		keyProperty="primaryKeyObj"
-		modelVar="result"
-	>
+		</liferay-ui:search-container-results>
 
-		<%@ include file="/html/portlet/message_boards/cast_result.jspf" %>
+		<liferay-ui:search-container-row
+			className="com.liferay.portal.model.BaseModel"
+			keyProperty="primaryKeyObj"
+			modelVar="result"
+		>
 
-		<%
-		MBMessage message = null;
+			<%@ include file="/html/portlet/message_boards/cast_result.jspf" %>
 
-		try {
-			message = MBMessageLocalServiceUtil.getMessage(thread.getRootMessageId());
-		}
-		catch (NoSuchMessageException nsme) {
-			_log.error("Thread requires missing root message id " + thread.getRootMessageId());
+			<%
+			MBMessage message = null;
 
-			message = new MBMessageImpl();
+			try {
+				message = MBMessageLocalServiceUtil.getMessage(thread.getRootMessageId());
+			}
+			catch (NoSuchMessageException nsme) {
+				_log.error("Thread requires missing root message id " + thread.getRootMessageId());
 
-			row.setSkip(true);
-		}
+				message = new MBMessageImpl();
 
-		message = message.toEscapedModel();
+				row.setSkip(true);
+			}
 
-		row.setBold(!MBThreadFlagLocalServiceUtil.hasThreadFlag(themeDisplay.getUserId(), thread));
-		row.setObject(new Object[] {message, threadSubscriptionClassPKs});
-		row.setRestricted(!MBMessagePermission.contains(permissionChecker, message, ActionKeys.VIEW));
-		%>
+			message = message.toEscapedModel();
 
-		<liferay-portlet:renderURL varImpl="rowURL">
-			<portlet:param name="struts_action" value="/message_boards/view_message" />
-			<portlet:param name="messageId" value="<%= String.valueOf(message.getMessageId()) %>" />
-		</liferay-portlet:renderURL>
+			row.setBold(!MBThreadFlagLocalServiceUtil.hasThreadFlag(themeDisplay.getUserId(), thread));
+			row.setObject(new Object[] {message, threadSubscriptionClassPKs});
+			row.setRestricted(!MBMessagePermission.contains(permissionChecker, message, ActionKeys.VIEW));
+			messageInfo += thread.getCategoryId() + "," + thread.getThreadId() + "," + thread.getRootMessageId() + "|";
+			%>
 
-		<%@ include file="/html/portlet/message_boards/user_thread_columns.jspf" %>
-	</liferay-ui:search-container-row>
+			<liferay-portlet:renderURL varImpl="rowURL">
+				<portlet:param name="struts_action" value="/message_boards/view_message" />
+				<portlet:param name="messageId" value="<%= String.valueOf(message.getMessageId()) %>" />
+			</liferay-portlet:renderURL>
+
+			<%@ include file="/html/portlet/message_boards/user_thread_columns.jspf" %>
+		</liferay-ui:search-container-row>
+	<%} while ((messageInfo.length() == 0) && topLink.equals("recent-posts"));%>
+
+	<p><%= "@@@" + messageInfo.substring(0, messageInfo.length() - 1) + "$$$"%></p>
 
 	<liferay-ui:search-iterator />
 </liferay-ui:search-container>

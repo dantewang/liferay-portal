@@ -1,0 +1,2 @@
+insert into JournalArticle values 
+('00000000-0000-0000-0000-0000000b', 110288, 110286, 1, 110252, 0, '', now(), now(), 0, 0, 0, '110287', 1, '<?xml version="1.0" encoding="UTF-8"?><root available-locales="en_US" default-locale="en_US"><Title language-id="en_US">Test Journal Article</Title></root>', 'test journal article', '', '<?xml version="1.0"?><root available-locales="en_US" default-locale="en_US"><static-content language-id="en_US">&lt;p&gt;a&lt;/p&gt;</static-content></root>', 'general', '', '', '', now(), null, null, 1, 0, 0, '', 0, 0, '', now());
